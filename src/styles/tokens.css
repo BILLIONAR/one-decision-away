@@ -1,0 +1,85 @@
+:root {
+  /* Variation 3 Design Aesthetic Constants */
+  --bg: #fdfcf9;
+  --ink: #1a1a1a;
+  --accent: #b8533c;
+  --bg-elevated: #ffffff;
+  --bg-muted: #f4f1ea;
+  --bg-inset: #ece8e0;
+  --border: rgba(26, 26, 26, 0.08);
+  --border-strong: rgba(26, 26, 26, 0.18);
+  --ink-faint: rgba(26, 26, 26, 0.5);
+
+  /* Semantic System Mapping */
+  --fg: #1a1a1a;
+  --fg-muted: rgba(26, 26, 26, 0.65);
+  --fg-subtle: rgba(26, 26, 26, 0.45);
+  --accent-soft: rgba(184, 83, 60, 0.12);
+  --color-coral: #b8533c;
+  --color-sage: #708879;
+  --color-slate: #1a1a1a;
+  --color-sand: #d4a373;
+  --color-navy: #263238;
+  --success: #708879;
+  --success-soft: #eaf1ed;
+  --danger: #b8533c;
+  --danger-soft: #fbf0ed;
+
+  /* Two Futures Colors */
+  --future-building: #708879;
+  --future-allowing: #8a969c;
+
+  /* Typography */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Restrained & Clean Borders & Radii */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-full: 9999px;
+
+  /* Minimal Hairline Depth */
+  --shadow-sm: 0 1px 2px rgba(26, 26, 26, 0.04);
+  --shadow-md: 0 4px 12px rgba(26, 26, 26, 0.05);
+  --shadow-lg: 0 12px 28px rgba(26, 26, 26, 0.08);
+}
+
+:root[data-theme="dark"], html.dark {
+  /* Brand Constants in Dark / Midnight Context */
+  --bg: #0e0f10;
+  --ink: #f7f6f2;
+  --accent: #e06d53;
+  --bg-elevated: #161819;
+  --bg-muted: #1e2023;
+  --bg-inset: #090a0b;
+  --border: rgba(247, 246, 242, 0.09);
+  --border-strong: rgba(247, 246, 242, 0.22);
+  --ink-faint: rgba(247, 246, 242, 0.5);
+
+  --fg: #f7f6f2;
+  --fg-muted: rgba(247, 246, 242, 0.7);
+  --fg-subtle: rgba(247, 246, 242, 0.45);
+  --accent-soft: rgba(224, 109, 83, 0.18);
+  --color-coral: #e06d53;
+  --color-sage: #8fa896;
+  --color-slate: #f7f6f2;
+  --color-sand: #e0b488;
+  --color-navy: #90a4ae;
+  --success: #8fa896;
+  --success-soft: #14281c;
+  --danger: #e06d53;
+  --danger-soft: #2e1715;
+
+  /* Two Futures Colors */
+  --future-building: #8fa896;
+  --future-allowing: #7c8890;
+
+  /* Shadows for dark mode */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.75);
+}

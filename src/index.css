@@ -1,0 +1,159 @@
+@import "tailwindcss";
+@import "./styles/tokens.css";
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  body {
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+  code, kbd, samp, pre, .font-mono {
+    font-family: var(--font-mono);
+  }
+}
+
+::selection {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+/* Variation 3 Custom Slider Input */
+input[type="range"].variation3-slider {
+  width: 100%;
+  height: 2px;
+  background: var(--border);
+  appearance: none;
+  cursor: pointer;
+  outline: none;
+}
+input[type="range"].variation3-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 36px;
+  height: 18px;
+  background: var(--bg);
+  border: 1px solid var(--fg);
+  border-radius: 0px;
+  cursor: pointer;
+  transition: transform 0.1s ease, border-color 0.1s ease;
+}
+input[type="range"].variation3-slider::-webkit-slider-thumb:hover {
+  border-color: var(--accent);
+  transform: scale(1.05);
+}
+input[type="range"].variation3-slider::-moz-range-thumb {
+  width: 36px;
+  height: 18px;
+  background: var(--bg);
+  border: 1px solid var(--fg);
+  border-radius: 0px;
+  cursor: pointer;
+}
+
+/* Editorial Specific Utility Classes */
+.vertical-text {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.asymmetric-border {
+  border-left: 1px solid var(--fg);
+  border-bottom: 1px solid var(--fg);
+}
+
+.editorial-hairline {
+  width: 48px;
+  height: 1px;
+  background-color: var(--fg);
+}
+
+.editorial-divider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--border);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--fg-muted);
+}
+
+/* Safe area insets for mobile */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+}
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* In Vision Board Card Entrance Animations */
+@keyframes visionCardEnter {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(16px);
+  }
+  60% {
+    opacity: 0.95;
+    transform: scale(1.02) translateY(-2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes visionNewGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+  }
+  40% {
+    box-shadow: 0 0 0 8px rgba(245, 158, 11, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+  }
+}
+
+.animate-vision-enter {
+  animation: visionCardEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-vision-new {
+  animation: visionCardEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both, visionNewGlow 3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Focus Timer Completion Alert — Screen Border Pulse */
+@keyframes focusBorderPulse {
+  0%, 100% {
+    box-shadow: inset 0 0 0 4px rgba(42, 157, 143, 0.45), inset 0 0 35px rgba(42, 157, 143, 0.25);
+    border-color: rgba(42, 157, 143, 0.7);
+  }
+  50% {
+    box-shadow: inset 0 0 0 8px rgba(224, 122, 95, 0.85), inset 0 0 65px rgba(224, 122, 95, 0.45);
+    border-color: rgba(224, 122, 95, 0.95);
+  }
+}
+
+.animate-focus-screen-pulse {
+  animation: focusBorderPulse 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+
