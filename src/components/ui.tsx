@@ -131,9 +131,10 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   hasError?: boolean;
 }
 
-export const Input: React.FC<InputProps> = ({ className = '', hasError, id, ...props }) => {
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className = '', hasError, id, ...props }, ref) => {
   return (
     <input
+      ref={ref}
       id={id}
       className={`w-full h-11 px-3.5 bg-[var(--bg-muted)] text-[var(--fg)] border ${
         hasError ? 'border-[var(--danger)]' : 'border-transparent'
@@ -141,7 +142,8 @@ export const Input: React.FC<InputProps> = ({ className = '', hasError, id, ...p
       {...props}
     />
   );
-};
+});
+Input.displayName = 'Input';
 
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   hasError?: boolean;

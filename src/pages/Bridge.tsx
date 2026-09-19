@@ -34,13 +34,10 @@ export const Bridge: React.FC = () => {
 
     await addMission({
       title: bridge.nextMilestone || t('Execute next milestone for {itemName}', { itemName }),
-      description: t('Linked Reality Bridge: {itemName}. Target: ${cost}.', { itemName, cost: bridge.realCostUsd.toLocaleString() }),
+      note: t('Linked Reality Bridge: {itemName}. Target: ${cost}.', { itemName, cost: bridge.realCostUsd.toLocaleString() }),
       area: 'Money',
       type: 'weekly_mission',
       difficulty: 'medium',
-      estimatedMinutes: 60,
-      rewardDreamDollar: 450,
-      status: 'active',
       isOneDecision: false,
     });
   };

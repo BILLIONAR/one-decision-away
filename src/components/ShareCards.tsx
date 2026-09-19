@@ -135,11 +135,11 @@ export const ShareVisionBoardButton: React.FC<{ className?: string }> = ({ class
   const items = (data.inVisionItemIds || [])
     .map((id) => {
       const m = all.find((i) => i.id === id);
-      if (m) return { name: m.name, image: m.customImageUrl, dd: m.dreamDollarPrice };
+      if (m) return { name: m.name, image: m.customImageUrl as string | undefined, dd: m.dreamDollarPrice };
       const e = EXPLORE_DREAM_ITEMS.find((i) => i.id === id);
-      return e ? { name: e.name, image: e.imageUrl, dd: e.dreamDollarPrice } : null;
+      return e ? { name: e.name, image: e.imageUrl as string | undefined, dd: e.dreamDollarPrice } : null;
     })
-    .filter((x): x is { name: string; image?: string; dd: number } => !!x)
+    .filter((x): x is { name: string; image: string | undefined; dd: number } => x !== null)
     .slice(0, 6);
   const balance = computeLedgerBalance(data.transactions);
   const total = items.reduce((a, i) => a + i.dd, 0);

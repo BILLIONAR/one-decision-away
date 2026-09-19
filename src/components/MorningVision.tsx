@@ -22,14 +22,15 @@ export const MorningVision: React.FC = () => {
     const ids = data.inVisionItemIds || [];
     if (ids.length === 0) return null;
     const all = [...SEED_MARKET_ITEMS, ...(data.customMarketItems || [])];
+    type Candidate = { name: string; image: string; dd: number; why?: string };
     const candidates = ids
-      .map((id) => {
+      .map((id): Candidate | null => {
         const m = all.find((i) => i.id === id);
         if (m && m.customImageUrl) return { name: m.name, image: m.customImageUrl, dd: m.dreamDollarPrice, why: m.whyWanted };
         const e = EXPLORE_DREAM_ITEMS.find((i) => i.id === id);
-        return e ? { name: e.name, image: e.imageUrl, dd: e.dreamDollarPrice, why: e.whyWanted } : null;
+        return e && e.imageUrl ? { name: e.name, image: e.imageUrl, dd: e.dreamDollarPrice, why: e.whyWanted } : null;
       })
-      .filter((x): x is { name: string; image: string; dd: number; why?: string } => !!x && !!x.image);
+      .filter((x): x is Candidate => x !== null && x.image.length > 0);
     if (candidates.length === 0) return null;
     // rotate deterministically by day
     const dayIndex = Math.floor(Date.now() / 86400000);

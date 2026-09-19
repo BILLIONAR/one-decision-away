@@ -943,7 +943,7 @@ export const DailyMicroHabits: React.FC = () => {
         isOpen={isGoalModalOpen}
         onClose={() => setIsGoalModalOpen(false)}
         onSave={async (goalData) => {
-          const created = await addGoal(goalData);
+          const created = await addGoal({ ...goalData, status: goalData.status ?? 'active' });
           if (created) {
             setNewGoalId(created.id);
           }

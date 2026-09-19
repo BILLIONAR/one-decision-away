@@ -328,7 +328,7 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
             margin={{ top: 12, right: 8, left: -4, bottom: 0 }}
             onMouseMove={(state) => {
               if (state && state.activeTooltipIndex !== undefined) {
-                setHoveredIndex(state.activeTooltipIndex);
+                setHoveredIndex(Number(state.activeTooltipIndex));
               }
             }}
             onMouseLeave={() => setHoveredIndex(null)}
