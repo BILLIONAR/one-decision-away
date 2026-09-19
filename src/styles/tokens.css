@@ -1,82 +1,85 @@
 :root {
-  /* Variation 3 Design Aesthetic Constants */
-  --bg: #fdfcf9;
-  --ink: #1a1a1a;
-  --accent: #b8533c;
-  --bg-elevated: #ffffff;
-  --bg-muted: #f4f1ea;
-  --bg-inset: #ece8e0;
-  --border: rgba(26, 26, 26, 0.08);
-  --border-strong: rgba(26, 26, 26, 0.18);
-  --ink-faint: rgba(26, 26, 26, 0.5);
+  /* One Decision Away — "Paper" system: white, near-black, one deep green. Two neutrals + one accent. */
+  --bg: #FFFFFF;
+  --ink: #111111;
+  --accent: #1F5F3F;
+  --bg-elevated: #FFFFFF;
+  --bg-muted: #F3F3F1;
+  --bg-inset: #ECECEA;
+  --border: #E4E4E1;
+  --border-strong: #C9C9C6;
+  --ink-faint: #8A8A87;
 
   /* Semantic System Mapping */
-  --fg: #1a1a1a;
-  --fg-muted: rgba(26, 26, 26, 0.65);
-  --fg-subtle: rgba(26, 26, 26, 0.45);
-  --accent-soft: rgba(184, 83, 60, 0.12);
-  --color-coral: #b8533c;
-  --color-sage: #708879;
-  --color-slate: #1a1a1a;
-  --color-sand: #d4a373;
-  --color-navy: #263238;
-  --success: #708879;
-  --success-soft: #eaf1ed;
-  --danger: #b8533c;
-  --danger-soft: #fbf0ed;
+  --fg: #111111;
+  --fg-muted: #6F6F6C;
+  --fg-subtle: #8A8A87;
+  --accent-soft: #E7F0EA;
+  --color-coral: #1F5F3F;
+  --color-sage: #1F5F3F;
+  --color-slate: #111111;
+  --color-sand: #3F3F3F;
+  --color-navy: #14402B;
+  --success: #1F5F3F;
+  --success-soft: #E7F0EA;
+  --danger: #B3261E;
+  --danger-soft: #FCEBEA;
+  --money: #1F5F3F;
+  --money-soft: #E7F0EA;
 
   /* Two Futures Colors */
-  --future-building: #708879;
-  --future-allowing: #8a969c;
+  --future-building: #1F5F3F;
+  --future-allowing: #C9C9C6;
 
   /* Typography */
-  --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Geist', 'Manrope', system-ui, sans-serif;
+  --font-sans: 'Geist', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  /* Restrained & Clean Borders & Radii */
-  --radius-xs: 2px;
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --radius-xl: 12px;
+  /* Soft, generous radii */
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
   --radius-full: 9999px;
 
-  /* Minimal Hairline Depth */
-  --shadow-sm: 0 1px 2px rgba(26, 26, 26, 0.04);
-  --shadow-md: 0 4px 12px rgba(26, 26, 26, 0.05);
-  --shadow-lg: 0 12px 28px rgba(26, 26, 26, 0.08);
+  /* Hairline depth, no heavy shadows */
+  --shadow-sm: none;
+  --shadow-md: 0 1px 2px rgba(17, 17, 17, 0.04);
+  --shadow-lg: 0 12px 28px rgba(17, 17, 17, 0.08);
 }
 
 :root[data-theme="dark"], html.dark {
-  /* Brand Constants in Dark / Midnight Context */
-  --bg: #0e0f10;
-  --ink: #f7f6f2;
-  --accent: #e06d53;
-  --bg-elevated: #161819;
-  --bg-muted: #1e2023;
-  --bg-inset: #090a0b;
-  --border: rgba(247, 246, 242, 0.09);
-  --border-strong: rgba(247, 246, 242, 0.22);
-  --ink-faint: rgba(247, 246, 242, 0.5);
+  --bg: #0F0F0F;
+  --ink: #F3F3F1;
+  --accent: #7BB08F;
+  --bg-elevated: #171717;
+  --bg-muted: #1F1F1F;
+  --bg-inset: #0A0A0A;
+  --border: #2A2A2A;
+  --border-strong: #3F3F3F;
+  --ink-faint: #8A8A87;
 
-  --fg: #f7f6f2;
-  --fg-muted: rgba(247, 246, 242, 0.7);
-  --fg-subtle: rgba(247, 246, 242, 0.45);
-  --accent-soft: rgba(224, 109, 83, 0.18);
-  --color-coral: #e06d53;
-  --color-sage: #8fa896;
-  --color-slate: #f7f6f2;
-  --color-sand: #e0b488;
-  --color-navy: #90a4ae;
-  --success: #8fa896;
-  --success-soft: #14281c;
-  --danger: #e06d53;
-  --danger-soft: #2e1715;
+  --fg: #F3F3F1;
+  --fg-muted: #A3A3A0;
+  --fg-subtle: #8A8A87;
+  --accent-soft: #1B2B22;
+  --color-coral: #7BB08F;
+  --color-sage: #7BB08F;
+  --color-slate: #F3F3F1;
+  --color-sand: #3F3F3F;
+  --color-navy: #A9CDB6;
+  --success: #7BB08F;
+  --success-soft: #1B2B22;
+  --danger: #E5766F;
+  --danger-soft: #3A1F1D;
+  --money: #7BB08F;
+  --money-soft: #1B2B22;
 
   /* Two Futures Colors */
-  --future-building: #8fa896;
-  --future-allowing: #7c8890;
+  --future-building: #7BB08F;
+  --future-allowing: #4A4A4A;
 
   /* Shadows for dark mode */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);

@@ -1,37 +1,41 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useApp } from '../store/useApp';
-import { LanguagePicker } from '../components/LanguagePicker';
-import {
-  Compass,
-  CheckSquare,
-  ShoppingBag,
-  Sparkles,
-  TrendingUp,
-  Columns,
-  UserCheck,
-  Award,
-  CreditCard,
-  Layers,
-  PieChart,
-  Calendar,
-  Settings as SettingsIcon,
-  Crown,
-  Menu,
-  X,
-  ExternalLink,
-  RotateCcw,
-  Sun,
-  Moon,
-  BookOpen,
-} from 'lucide-react';
+import { Sun, Star, BookOpen, User, X, ArrowLeft } from 'lucide-react';
 import { computeLedgerBalance } from '../services/economy';
 import { FocusLockView } from '../components/FocusLockView';
 import { QuickDreamJournalModal } from '../components/QuickDreamJournalModal';
 import { useT } from '../i18n';
+import { Logo } from '../components/Logo';
 
 interface AppShellProps {
   children: React.ReactNode;
 }
+
+/** The four primary destinations. Everything else is reachable from "Me". */
+export const PRIMARY_TABS = [
+  { key: 'today', path: '/app', icon: Sun },
+  { key: 'dreams', path: '/app/dreams', icon: Star },
+  { key: 'notebook', path: '/app/notebook', icon: BookOpen },
+  { key: 'me', path: '/app/me', icon: User },
+] as const;
+
+/** Legacy / secondary routes grouped under "Me" — which tab they belong to for highlighting. */
+const SECONDARY_ROUTE_PARENT: Record<string, string> = {
+  '/app/market': '/app/dreams',
+  '/app/life': '/app/dreams',
+  '/app/missions': '/app',
+  '/app/progress': '/app/me',
+  '/app/two-futures': '/app/me',
+  '/app/future-self': '/app/me',
+  '/app/score': '/app/me',
+  '/app/life-score': '/app/me',
+  '/app/bank': '/app/me',
+  '/app/bridge': '/app/me',
+  '/app/budget': '/app/me',
+  '/app/seasons': '/app/me',
+  '/app/upgrade': '/app/me',
+  '/app/settings': '/app/me',
+};
 
 export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   const {
@@ -40,65 +44,45 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
     setActiveRoute,
     toast,
     hideToast,
-    resetToDemo,
     isFocusLocked,
-    toggleTheme,
     isSimulatingFocusAlert,
     isQuickJournalOpen,
-    openQuickJournal,
     closeQuickJournal,
   } = useApp();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = useT();
 
-  const isMac = typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform || '');
-
   const balance = data ? computeLedgerBalance(data.transactions) : 0;
-  const currentTheme = data?.profile?.theme || 'light';
-
-  const mainNavItems = [
-    { label: t('Life OS'), path: '/app', icon: Compass },
-    { label: t('Missions'), path: '/app/missions', icon: CheckSquare },
-    { label: t('Market'), path: '/app/market', icon: ShoppingBag },
-    { label: t('My Life'), path: '/app/life', icon: Sparkles },
-    { label: t('Progress'), path: '/app/progress', icon: TrendingUp },
-  ];
-
-  const moreNavItems = [
-    { label: t('Notebook'), path: '/app/notebook', icon: BookOpen },
-    { label: t('Two Futures'), path: '/app/two-futures', icon: Columns },
-    { label: t('Future Self'), path: '/app/future-self', icon: UserCheck },
-    { label: t('Future Life Score'), path: '/app/life-score', icon: Award },
-    { label: t('Dream Bank'), path: '/app/bank', icon: CreditCard },
-    { label: t('Reality Bridge'), path: '/app/bridge', icon: Layers },
-    { label: t('Life Budget'), path: '/app/budget', icon: PieChart },
-    { label: t('Seasons'), path: '/app/seasons', icon: Calendar },
-    { label: t('Settings'), path: '/app/settings', icon: SettingsIcon },
-  ];
-
-  const handleNav = (path: string) => {
-    setActiveRoute(path);
-    setMobileMenuOpen(false);
+  const labels: Record<string, string> = {
+    today: t('Today'),
+    dreams: t('Dreams'),
+    notebook: t('Notebook'),
+    me: t('Me'),
   };
+
+  const activeTabPath = SECONDARY_ROUTE_PARENT[activeRoute] ?? activeRoute;
+  const isSecondary = activeRoute in SECONDARY_ROUTE_PARENT;
+
+  const handleNav = (path: string) => setActiveRoute(path);
 
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] flex flex-col md:flex-row">
-      {/* Toast Notification */}
+      {/* Toast */}
       {toast && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 max-w-md w-full px-4 animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 max-w-md w-[calc(100%-2rem)] animate-in fade-in slide-in-from-top-2 duration-200">
           <div
-            className={`p-4 rounded-[var(--radius-md)] border shadow-[var(--shadow-md)] flex items-center justify-between gap-3 text-sm ${
+            role="status"
+            className={`px-4 py-3 rounded-[var(--radius-md)] border flex items-center justify-between gap-3 text-sm shadow-[var(--shadow-lg)] ${
               toast.type === 'error'
                 ? 'bg-[var(--danger-soft)] text-[var(--danger)] border-[var(--danger)]/30'
-                : toast.type === 'info'
-                ? 'bg-[var(--bg-elevated)] text-[var(--fg)] border-[var(--border)]'
-                : 'bg-[var(--success-soft)] text-[var(--color-slate)] border-[var(--color-sage)]/30'
+                : 'bg-[var(--fg)] text-[var(--bg)] border-transparent'
             }`}
           >
-            <span className="font-medium leading-relaxed">{toast.message}</span>
+            <span className="font-medium leading-snug">{toast.message}</span>
             <button
+              type="button"
               onClick={hideToast}
-              className="text-[var(--fg-subtle)] hover:text-[var(--fg)] p-1 rounded-sm cursor-pointer"
+              aria-label={t('Dismiss')}
+              className="opacity-70 hover:opacity-100 p-1 rounded-sm cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -106,315 +90,101 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
         </div>
       )}
 
-      {/* Desktop Left Sidebar */}
-      <aside className="hidden md:flex flex-col w-64 lg:w-72 bg-[var(--bg-elevated)] border-r border-[var(--border)] shrink-0 h-screen sticky top-0 overflow-y-auto p-6 justify-between">
-        <div className="space-y-6">
-          {/* Brand Header */}
-          <div
-            onClick={() => handleNav('/app')}
-            className="cursor-pointer group flex flex-col pt-1"
-          >
-            <span className="font-display font-semibold text-[1.45rem] tracking-normal text-[var(--fg)] group-hover:text-[var(--accent)] transition-colors leading-none">
-              {t('One Decision Away')}
-            </span>
-            <span className="text-[10px] tracking-[0.2em] uppercase text-[var(--fg-subtle)] mt-2 font-sans">
-              {t('AurelyStudio System OS')}
-            </span>
-            <div className="w-8 h-[1px] bg-[var(--border-strong)] mt-4" />
-          </div>
-
-          {/* D$ Balance Widget */}
-          <div
-            onClick={() => handleNav('/app/bank')}
-            className="p-3.5 bg-[var(--bg-muted)] border border-[var(--border)] rounded-[var(--radius-xs)] cursor-pointer hover:border-[var(--fg)] transition-all group relative overflow-hidden"
-          >
-            <div className="flex items-center justify-between text-[10px] uppercase tracking-wider text-[var(--fg-muted)] mb-1 font-sans">
-              <span className="tracking-[0.15em] text-[var(--ink-faint)]">{t('Dream Bank')}</span>
-              <span className="text-[9px] font-bold tracking-widest uppercase px-1.5 py-0.5 bg-[var(--bg-elevated)] text-[var(--fg)] border border-[var(--border)]">
-                {t('Verified')}
-              </span>
-            </div>
-            <div className="text-2xl font-semibold font-display text-[var(--fg)] group-hover:text-[var(--accent)] transition-colors">
-              D$ {balance.toLocaleString()}
-            </div>
-          </div>
-
-          {/* Global Quick Journal Shortcut Button (Cmd/Ctrl + K) */}
-          <button
-            type="button"
-            onClick={openQuickJournal}
-            className="w-full flex items-center justify-between px-3 py-2 bg-[var(--bg-elevated)] hover:bg-[var(--bg-muted)] border border-[var(--border)] hover:border-[var(--accent)] rounded-[var(--radius-xs)] text-xs text-[var(--fg)] transition-all cursor-pointer group"
-            title={t('Quick Dream Journal Entry ({key})', { key: isMac ? '⌘K' : 'Ctrl+K' })}
-          >
-            <div className="flex items-center gap-2">
-              <BookOpen className="w-3.5 h-3.5 text-[var(--color-sage)] group-hover:scale-110 transition-transform" />
-              <span className="font-medium text-[11px] tracking-wide">{t('Quick Journal')}</span>
-            </div>
-            <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-muted)] border border-[var(--border)] font-mono text-[9px] font-medium text-[var(--fg-muted)] group-hover:text-[var(--fg)]">
-              {isMac ? '⌘K' : 'Ctrl+K'}
-            </kbd>
-          </button>
-
-          {/* Main Navigation */}
-          <nav className="space-y-1">
-            <span className="text-[10px] uppercase tracking-[0.15em] text-[var(--ink-faint)] block mb-2 px-1 font-sans">
-              {t('Core Folios')}
-            </span>
-            {mainNavItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeRoute === item.path;
-              return (
-                <button
-                  key={item.path}
-                  onClick={() => handleNav(item.path)}
-                  className={`w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-[var(--radius-xs)] text-[13px] transition-colors cursor-pointer text-left ${
-                    isActive
-                      ? 'font-bold text-[var(--accent)] bg-[var(--accent-soft)]/40'
-                      : 'text-[var(--fg)] opacity-80 hover:opacity-100 hover:bg-[var(--bg-muted)]'
-                  }`}
-                >
-                  <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-[var(--accent)]' : 'text-[var(--fg-muted)]'}`} />
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
-          </nav>
-
-          {/* Secondary "More" Navigation */}
-          <nav className="space-y-1 pt-3 border-t border-[var(--border)]">
-            <span className="text-[10px] uppercase tracking-[0.15em] text-[var(--ink-faint)] block mb-2 px-1 font-sans">
-              {t('Modules')}
-            </span>
-            {moreNavItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeRoute === item.path;
-              return (
-                <button
-                  key={item.path}
-                  onClick={() => handleNav(item.path)}
-                  className={`w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-[var(--radius-xs)] text-[13px] transition-colors cursor-pointer text-left ${
-                    isActive
-                      ? 'font-bold text-[var(--accent)] bg-[var(--accent-soft)]/40'
-                      : 'text-[var(--fg)] opacity-80 hover:opacity-100 hover:bg-[var(--bg-muted)]'
-                  }`}
-                >
-                  <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-[var(--accent)]' : 'text-[var(--fg-subtle)]'}`} />
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
-          </nav>
-        </div>
-
-        {/* Footer / Upgrade & Public Funnel Link */}
-        <div className="space-y-3 pt-4 border-t border-[var(--border)]">
-          <button
-            onClick={() => handleNav('/app/upgrade')}
-            className="w-full flex items-center justify-between p-2.5 bg-[var(--bg-muted)] border border-[var(--border-strong)] rounded-[var(--radius-xs)] text-xs font-medium text-[var(--fg)] hover:border-[var(--fg)] transition-colors cursor-pointer"
-          >
-            <div className="flex items-center gap-2">
-              <Crown className="w-3.5 h-3.5 text-[var(--color-coral)]" />
-              <span className="font-semibold text-[11px] uppercase tracking-wider">{t('Pro Edition')}</span>
-            </div>
-            <span className="text-[9px] font-bold uppercase tracking-widest px-1.5 py-0.5 bg-[var(--fg)] text-[var(--bg)] rounded-[var(--radius-xs)]">
-              {data?.subscription.plan === 'pro' ? t('Active') : t('Upgrade')}
-            </span>
-          </button>
-
-          {/* Language */}
-          <div className="flex items-center justify-between p-2 rounded-[var(--radius-xs)] bg-[var(--bg-muted)] border border-[var(--border)] text-xs">
-            <LanguagePicker />
-          </div>
-
-          {/* Quick Theme Toggle & Utility */}
-          <div className="flex items-center justify-between p-2 rounded-[var(--radius-xs)] bg-[var(--bg-muted)] border border-[var(--border)] text-xs">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-              {currentTheme === 'dark' ? t('Midnight Theme') : t('Editorial Theme')}
-            </span>
-            <button
-              onClick={toggleTheme}
-              className="flex items-center gap-1.5 px-2 py-0.5 rounded-[var(--radius-xs)] bg-[var(--bg-elevated)] text-[var(--fg)] border border-[var(--border)] hover:border-[var(--fg)] text-[10px] font-semibold uppercase tracking-wider transition-colors cursor-pointer"
-              title={currentTheme === 'dark' ? t('Switch to Editorial Light Theme') : t('Switch to Midnight Dark Theme')}
-            >
-              {currentTheme === 'dark' ? (
-                <>
-                  <Sun className="w-3 h-3 text-amber-400" />
-                  <span>{t('Light')}</span>
-                </>
-              ) : (
-                <>
-                  <Moon className="w-3 h-3 text-[var(--fg-muted)]" />
-                  <span>{t('Dark')}</span>
-                </>
-              )}
-            </button>
-          </div>
-
-          <div className="flex items-center justify-between text-[10px] uppercase tracking-wider text-[var(--fg-subtle)] px-1">
-            <button
-              onClick={() => handleNav('/two-futures')}
-              className="hover:text-[var(--fg)] flex items-center gap-1 cursor-pointer"
-            >
-              {t('Public Funnel')} <ExternalLink className="w-3 h-3" />
-            </button>
-            <button
-              onClick={resetToDemo}
-              title={t('Reset state to initial sample data')}
-              className="hover:text-[var(--fg)] flex items-center gap-1 cursor-pointer"
-            >
-              <RotateCcw className="w-3 h-3" /> {t('Reset Demo')}
-            </button>
-          </div>
-
-          <div className="text-[11px] text-[var(--ink-faint)] leading-relaxed pt-3 border-t border-[var(--border)] font-sans">
-            {t('Vol. 01 — Edition')}<br />
-            {t('AurelyStudio System OS')}
-          </div>
-        </div>
-      </aside>
-
-      {/* Mobile Top Bar */}
-      <header className="md:hidden flex items-center justify-between px-4 py-3 bg-[var(--bg-elevated)] border-b border-[var(--border)] sticky top-0 z-30 pt-safe">
-        <div
+      {/* Desktop sidebar */}
+      <aside className="hidden md:flex flex-col w-60 bg-[var(--bg)] border-r border-[var(--border)] shrink-0 h-screen sticky top-0 p-5 gap-6">
+        <button
+          type="button"
           onClick={() => handleNav('/app')}
-          className="cursor-pointer"
+          className="flex items-center gap-2.5 cursor-pointer text-left"
+          aria-label={t('One Decision Away')}
         >
-          <span className="font-display font-bold text-lg text-[var(--fg)]">
-            {t('One Decision Away')}
-          </span>
-          <span className="text-[10px] block text-[var(--fg-subtle)]">{t('by AurelyStudio')}</span>
-        </div>
+          <Logo className="w-7 h-7" />
+          <span className="font-semibold text-[15px] tracking-tight">{t('One Decision Away')}</span>
+        </button>
 
-        <div className="flex items-center gap-2">
-          <button
-            onClick={openQuickJournal}
-            className="p-1.5 rounded-[var(--radius-sm)] text-[var(--color-sage)] hover:text-[var(--fg)] hover:bg-[var(--bg-muted)] cursor-pointer flex items-center gap-1 bg-[var(--bg-muted)] border border-[var(--border)]"
-            title={t('Quick Dream Journal Entry ({key})', { key: isMac ? '⌘K' : 'Ctrl+K' })}
-            aria-label={t('Quick Journal Entry')}
-          >
-            <BookOpen className="w-4 h-4" />
-            <span className="text-[10px] font-bold font-mono">⌘K</span>
-          </button>
-
-          <button
-            onClick={toggleTheme}
-            className="p-1.5 rounded-[var(--radius-sm)] text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-muted)] cursor-pointer"
-            title={currentTheme === 'dark' ? t('Switch to Editorial Light Theme') : t('Switch to Midnight Dark Theme')}
-            aria-label={t('Toggle Theme')}
-          >
-            {currentTheme === 'dark' ? (
-              <Sun className="w-4 h-4 text-amber-400" />
-            ) : (
-              <Moon className="w-4 h-4" />
-            )}
-          </button>
-
-          <button
-            onClick={() => handleNav('/app/bank')}
-            className="px-2.5 py-1 bg-[var(--bg-muted)] border border-[var(--border)] rounded-full text-xs font-bold text-[var(--color-sage)] flex items-center gap-1.5 cursor-pointer"
-          >
-            <span>D$</span>
-            <span>{balance.toLocaleString()}</span>
-          </button>
-
-          <button
-            onClick={() => setMobileMenuOpen(true)}
-            className="p-1.5 rounded-[var(--radius-sm)] text-[var(--fg)] hover:bg-[var(--bg-muted)] cursor-pointer"
-            aria-label={t('Open Navigation Menu')}
-          >
-            <Menu className="w-5 h-5" />
-          </button>
-        </div>
-      </header>
-
-      {/* Mobile Menu Drawer */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 bg-[rgba(38,50,56,0.6)] backdrop-blur-xs flex justify-end">
-          <div className="w-4/5 max-w-xs bg-[var(--bg-elevated)] h-full p-5 flex flex-col justify-between overflow-y-auto">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
-                <span className="font-display font-bold text-base">{t('Menu')}</span>
-                <button
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="p-1 text-[var(--fg-subtle)] hover:text-[var(--fg)]"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              <div className="space-y-1">
-                {[...mainNavItems, ...moreNavItems].map((item) => {
-                  const Icon = item.icon;
-                  const isActive = activeRoute === item.path;
-                  return (
-                    <button
-                      key={item.path}
-                      onClick={() => handleNav(item.path)}
-                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-[var(--radius-md)] text-sm font-medium transition-colors ${
-                        isActive
-                          ? 'bg-[var(--color-slate)] text-white'
-                          : 'text-[var(--fg-muted)] hover:bg-[var(--bg-muted)]'
-                      }`}
-                    >
-                      <Icon className="w-4 h-4 shrink-0" />
-                      <span>{item.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-[var(--border)] space-y-2">
-              <button
-                onClick={() => handleNav('/app/upgrade')}
-                className="w-full py-2 bg-[var(--accent-soft)] text-[var(--color-coral)] font-semibold rounded-[var(--radius-md)] text-xs text-center"
-              >
-                {t('Pro Plan ($6.99/mo)')}
-              </button>
-              <button
-                onClick={() => handleNav('/two-futures')}
-                className="w-full text-xs text-[var(--fg-muted)] text-center py-1 hover:underline"
-              >
-                {t('Public Two Futures Funnel')}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Main Content Viewport */}
-      <main className="flex-1 overflow-y-auto pb-24 md:pb-12 min-h-screen">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          {children}
-        </div>
-      </main>
-
-      {/* Mobile Bottom Tab Bar (5 primary tabs) */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--bg-elevated)]/95 backdrop-blur-md border-t border-[var(--border)] z-30 pb-safe">
-        <div className="grid grid-cols-5 h-14">
-          {mainNavItems.map((item) => {
+        <nav className="flex flex-col gap-1" aria-label={t('Main')}>
+          {PRIMARY_TABS.map((item) => {
             const Icon = item.icon;
-            const isActive = activeRoute === item.path;
+            const isActive = activeTabPath === item.path;
             return (
               <button
                 key={item.path}
+                type="button"
                 onClick={() => handleNav(item.path)}
-                className={`flex flex-col items-center justify-center gap-0.5 text-[10px] font-medium transition-colors ${
-                  isActive ? 'text-[var(--color-slate)] font-bold' : 'text-[var(--fg-subtle)]'
+                aria-current={isActive ? 'page' : undefined}
+                className={`w-full flex items-center gap-3 px-3 h-11 rounded-[var(--radius-sm)] text-[14px] transition-colors cursor-pointer text-left ${
+                  isActive
+                    ? 'bg-[var(--bg-muted)] text-[var(--fg)] font-semibold'
+                    : 'text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-muted)]'
                 }`}
               >
-                <Icon className={`w-5 h-5 ${isActive ? 'stroke-[2.2]' : 'stroke-[1.7]'}`} />
-                <span>{item.label}</span>
+                <Icon className="w-[18px] h-[18px] shrink-0" strokeWidth={isActive ? 2.2 : 1.8} />
+                <span>{labels[item.key]}</span>
+              </button>
+            );
+          })}
+        </nav>
+
+        <button
+          type="button"
+          onClick={() => handleNav('/app/bank')}
+          className="mt-auto flex flex-col gap-0.5 p-4 rounded-[var(--radius-md)] bg-[var(--bg-muted)] cursor-pointer text-left hover:bg-[var(--bg-inset)] transition-colors"
+        >
+          <span className="text-[12px] text-[var(--fg-muted)]">{t('Balance')}</span>
+          <span className="text-[20px] font-semibold text-[var(--accent)] tracking-tight">D$ {balance.toLocaleString()}</span>
+        </button>
+      </aside>
+
+      {/* Mobile top bar: only on secondary pages, gives a way back */}
+      {isSecondary && (
+        <header className="md:hidden sticky top-0 z-30 bg-[var(--bg)]/95 backdrop-blur border-b border-[var(--border)] pt-safe">
+          <div className="h-12 px-2 flex items-center">
+            <button
+              type="button"
+              onClick={() => handleNav(activeTabPath)}
+              className="flex items-center gap-1.5 h-10 px-2 rounded-[var(--radius-sm)] text-[14px] font-medium text-[var(--fg)] cursor-pointer"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              {labels[PRIMARY_TABS.find((p) => p.path === activeTabPath)?.key ?? 'me']}
+            </button>
+          </div>
+        </header>
+      )}
+
+      {/* Content */}
+      <main className="flex-1 min-w-0 overflow-y-auto pb-28 md:pb-12 min-h-screen">
+        <div className="max-w-2xl mx-auto px-5 sm:px-6 pt-6 md:pt-10">{children}</div>
+      </main>
+
+      {/* Mobile bottom tabs */}
+      <nav
+        className="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--bg)]/95 backdrop-blur-md border-t border-[var(--border)] z-30 pb-safe"
+        aria-label={t('Main')}
+      >
+        <div className="grid grid-cols-4 h-16">
+          {PRIMARY_TABS.map((item) => {
+            const Icon = item.icon;
+            const isActive = activeTabPath === item.path;
+            return (
+              <button
+                key={item.path}
+                type="button"
+                onClick={() => handleNav(item.path)}
+                aria-current={isActive ? 'page' : undefined}
+                className={`flex flex-col items-center justify-center gap-1 text-[11px] transition-colors cursor-pointer ${
+                  isActive ? 'text-[var(--fg)] font-semibold' : 'text-[var(--fg-subtle)] font-medium'
+                }`}
+              >
+                <Icon className="w-[22px] h-[22px]" strokeWidth={isActive ? 2.2 : 1.8} />
+                <span>{labels[item.key]}</span>
               </button>
             );
           })}
         </div>
       </nav>
 
-      {/* Focus Mode Fullscreen Lock Overlay */}
       {isFocusLocked && <FocusLockView />}
 
-      {/* Focus Timer 0 Simulation Screen Pulsing Border Alert */}
       {isSimulatingFocusAlert && !isFocusLocked && (
         <div
           id="focus-simulation-screen-pulse"
@@ -423,11 +193,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
         />
       )}
 
-      {/* Global Quick Dream Journal Modal (Cmd/Ctrl + K) */}
-      <QuickDreamJournalModal
-        isOpen={isQuickJournalOpen}
-        onClose={closeQuickJournal}
-      />
+      <QuickDreamJournalModal isOpen={isQuickJournalOpen} onClose={closeQuickJournal} />
     </div>
   );
 };

@@ -4,7 +4,10 @@ import { AppShell } from './layout/AppShell';
 import { Landing } from './pages/Landing';
 import { useT } from './i18n';
 const PublicTwoFutures = lazy(() => import('./pages/PublicTwoFutures').then((m) => ({ default: m.PublicTwoFutures })));
-import { Home } from './pages/Home';
+import { Today } from './pages/Today';
+import { Onboarding } from './components/Onboarding';
+const Dreams = lazy(() => import('./pages/Dreams').then((m) => ({ default: m.Dreams })));
+const Me = lazy(() => import('./pages/Me').then((m) => ({ default: m.Me })));
 const Missions = lazy(() => import('./pages/Missions').then((m) => ({ default: m.Missions })));
 const Market = lazy(() => import('./pages/Market').then((m) => ({ default: m.Market })));
 const MyLife = lazy(() => import('./pages/MyLife').then((m) => ({ default: m.MyLife })));
@@ -31,7 +34,7 @@ const RouteFallback: React.FC = () => {
 };
 
 const AppRouter: React.FC = () => {
-  const { activeRoute, isLoading } = useApp();
+  const { activeRoute, isLoading, data } = useApp();
   const t = useT();
 
   if (isLoading) {
@@ -58,11 +61,20 @@ const AppRouter: React.FC = () => {
     );
   }
 
+  // First run: 3-step onboarding replaces the shell until completed
+  if (data && data.profile.onboardingStep !== 'completed') {
+    return <Onboarding />;
+  }
+
   // In-App Routes inside AppShell
   const renderAppContent = () => {
     switch (activeRoute) {
       case '/app':
-        return <Home />;
+        return <Today />;
+      case '/app/dreams':
+        return <Dreams />;
+      case '/app/me':
+        return <Me />;
       case '/app/missions':
         return <Missions />;
       case '/app/market':
@@ -93,7 +105,7 @@ const AppRouter: React.FC = () => {
       case '/app/notebook':
         return <Notebook />;
       default:
-        return <Home />;
+        return <Today />;
     }
   };
 

@@ -4,7 +4,7 @@ import type { Locale } from '../i18n';
  * by AurelyStudio
  */
 
-export type OnboardingStep = 'life_score' | 'two_futures' | 'future_self' | 'completed';
+export type OnboardingStep = 'welcome' | 'dream' | 'decision' | 'life_score' | 'two_futures' | 'future_self' | 'completed';
 
 export interface Profile {
   id: string;

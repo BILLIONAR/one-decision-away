@@ -13,8 +13,13 @@
   }
   h1, h2, h3, .font-display {
     font-family: var(--font-display);
-    letter-spacing: -0.01em;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    font-style: normal;
   }
+  /* Paper system: no italic display type, no letter-spaced micro labels */
+  .font-display.italic, h1.italic, h2.italic, h3.italic { font-style: normal; }
+  button, input, select, textarea { font-family: inherit; }
   code, kbd, samp, pre, .font-mono {
     font-family: var(--font-mono);
   }
