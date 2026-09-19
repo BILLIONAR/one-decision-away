@@ -24,6 +24,7 @@ import { MicroHabit, MicroHabitCategory } from '../types/models';
 import { PREDEFINED_CATEGORIES, CategoryConfig, HabitBestStreakIndicator } from './DailyMicroHabits';
 import { calculateBestMicroHabitStreak } from '../services/microHabitsService';
 import { resolveCategoryConfig } from '../utils/categoryHelpers';
+import { useT, N_ } from '../i18n';
 
 interface DayHabitStats {
   dateKey: string; // YYYY-MM-DD
@@ -50,6 +51,7 @@ interface CategoryConsistencyStat {
 
 export const WeeklyMicroHabitsSummary: React.FC = () => {
   const { data, startFocusSession } = useApp();
+  const t = useT();
   const [selectedDayKey, setSelectedDayKey] = useState<string | null>(null);
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string>('ALL');
   const [showHabitDetails, setShowHabitDetails] = useState<boolean>(false);
@@ -264,16 +266,16 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
     if (otherHabits.length > 0) {
       const otherConfig: CategoryConfig = {
         id: 'Mindset' as MicroHabitCategory,
-        label: 'Other Routines',
+        label: N_('Other Routines'),
         icon: Folder,
         badgeVariant: 'slate',
-        description: 'Other user micro-habits',
+        description: N_('Other user micro-habits'),
         colorClass: 'text-[var(--fg-muted)]',
         bgClass: 'bg-[var(--bg-muted)]',
         borderClass: 'border-[var(--border)]',
-        soundCueName: 'Standard Chime',
-        soundCueDetail: 'Clean completion tone',
-        hapticDetail: 'Confirmation tap [30ms]',
+        soundCueName: N_('Standard Chime'),
+        soundCueDetail: N_('Clean completion tone'),
+        hapticDetail: N_('Confirmation tap [30ms]'),
       };
 
       const totalExpected = otherHabits.length * 7;
@@ -352,11 +354,11 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
         <div className="flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-[var(--color-sage)]" />
           <h3 className="text-base font-bold font-display text-[var(--fg)]">
-            Weekly Micro-Habit Trends
+            {t('Weekly Micro-Habit Trends')}
           </h3>
         </div>
         <p className="text-xs text-[var(--fg-muted)]">
-          No micro-habits found. Create your first 5-minute habit on the Home page to start tracking weekly category trends.
+          {t('No micro-habits found. Create your first 5-minute habit on the Home page to start tracking weekly category trends.')}
         </p>
       </Card>
     );
@@ -376,25 +378,25 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
       case 'anchor':
         return (
           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-tight bg-[var(--color-sage)]/15 text-[var(--color-sage)] border border-[var(--color-sage)]/30">
-            <CheckCircle2 className="w-3 h-3" /> Anchor Domain
+            <CheckCircle2 className="w-3 h-3" /> {t('Anchor Domain')}
           </span>
         );
       case 'strong':
         return (
           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-tight bg-[var(--color-navy)]/10 text-[var(--color-navy)] border border-[var(--color-navy)]/30">
-            <TrendingUp className="w-3 h-3" /> Strong Rhythm
+            <TrendingUp className="w-3 h-3" /> {t('Strong Rhythm')}
           </span>
         );
       case 'building':
         return (
           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-tight bg-[var(--color-coral)]/10 text-[var(--color-coral)] border border-[var(--color-coral)]/30">
-            <Flame className="w-3 h-3" /> Building Momentum
+            <Flame className="w-3 h-3" /> {t('Building Momentum')}
           </span>
         );
       default:
         return (
           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium tracking-tight bg-[var(--bg-muted)] text-[var(--fg-muted)] border border-[var(--border)]">
-            Developing
+            {t('Developing')}
           </span>
         );
     }
@@ -418,13 +420,13 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
             </div>
             <div>
               <h3 className="text-base sm:text-lg font-bold font-display text-[var(--fg)] flex items-center gap-2">
-                Weekly Micro-Habit Trends
+                {t('Weekly Micro-Habit Trends')}
                 <Badge variant="sage" className="text-[10px] uppercase tracking-wider font-bold">
-                  Rolling 7 Days
+                  {t('Rolling 7 Days')}
                 </Badge>
               </h3>
               <p className="text-xs text-[var(--fg-muted)] mt-0.5">
-                Multi-category consistency analysis identifying your strongest foundational habits and execution rhythms.
+                {t('Multi-category consistency analysis identifying your strongest foundational habits and execution rhythms.')}
               </p>
             </div>
           </div>
@@ -434,10 +436,10 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
         <div className="flex items-center gap-2 self-start sm:self-auto">
           <div className="px-3 py-1.5 rounded-[var(--radius-sm)] bg-[var(--bg-muted)] border border-[var(--border)] text-right">
             <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-              Weekly Consistency
+              {t('Weekly Consistency')}
             </div>
             <div className="text-sm font-bold font-display text-[var(--color-sage)]">
-              {overallConsistencyPct}% Rate
+              {t('{pct}% Rate', { pct: overallConsistencyPct })}
             </div>
           </div>
         </div>
@@ -452,10 +454,10 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
         >
           <div className="flex items-center justify-between">
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[var(--color-sage)] text-white shadow-xs">
-              <Award className="w-3 h-3" /> Most Consistent Domain
+              <Award className="w-3 h-3" /> {t('Most Consistent Domain')}
             </span>
             <span className="text-[11px] font-mono font-bold text-[var(--color-sage)]">
-              #1 Domain
+              {t('#1 Domain')}
             </span>
           </div>
 
@@ -483,7 +485,7 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <h4 className="text-base font-bold font-display text-[var(--fg)] truncate">
-                      {mostConsistentCategory.config.label}
+                      {t(mostConsistentCategory.config.label)}
                     </h4>
                     {mostConsistentCategory.config.isCustom && (
                       <span
@@ -494,33 +496,33 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
                           color: mostConsistentCategory.config.color,
                         }}
                       >
-                        Custom
+                        {t('Custom')}
                       </span>
                     )}
                   </div>
                   <div className="text-xs text-[var(--fg-muted)] flex items-center gap-2">
-                    <span>{mostConsistentCategory.habits.length} active {mostConsistentCategory.habits.length === 1 ? 'routine' : 'routines'}</span>
+                    <span>{mostConsistentCategory.habits.length === 1 ? t('1 active routine') : t('{n} active routines', { n: mostConsistentCategory.habits.length })}</span>
                     <span>•</span>
                     <span className="text-[var(--color-sage)] font-semibold">
-                      {mostConsistentCategory.daysActiveCount} of 7 days active
+                      {t('{n} of 7 days active', { n: mostConsistentCategory.daysActiveCount })}
                     </span>
                   </div>
                 </div>
               </div>
 
               <div className="mt-3 pt-2.5 border-t border-[var(--border)] flex items-center justify-between text-xs">
-                <span className="text-[var(--fg-muted)]">Domain Consistency Score:</span>
+                <span className="text-[var(--fg-muted)]">{t('Domain Consistency Score:')}</span>
                 <span className="font-bold text-sm text-[var(--color-sage)]">
                   {mostConsistentCategory.consistencyPct}%
                 </span>
               </div>
               <p className="text-[11px] text-[var(--fg-subtle)] mt-1.5 leading-relaxed">
-                Your anchor execution pillar. Pair developing routines directly after these habits for seamless habit stacking.
+                {t('Your anchor execution pillar. Pair developing routines directly after these habits for seamless habit stacking.')}
               </p>
             </div>
           ) : (
             <p className="text-xs text-[var(--fg-muted)] py-2">
-              Complete your daily micro-habits to calculate your leading category.
+              {t('Complete your daily micro-habits to calculate your leading category.')}
             </p>
           )}
         </div>
@@ -529,11 +531,11 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
         <div className="p-4 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--bg-muted)] space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-muted)] flex items-center gap-1">
-              <TrendingUp className="w-3 h-3 text-[var(--color-coral)]" /> Secondary Domain
+              <TrendingUp className="w-3 h-3 text-[var(--color-coral)]" /> {t('Secondary Domain')}
             </span>
             {runnerUpCategory && (
               <span className="text-[11px] font-mono font-bold text-[var(--fg-muted)]">
-                #2 Domain
+                {t('#2 Domain')}
               </span>
             )}
           </div>
@@ -562,7 +564,7 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <h4 className="text-sm font-bold font-display text-[var(--fg)] truncate">
-                      {runnerUpCategory.config.label}
+                      {t(runnerUpCategory.config.label)}
                     </h4>
                     {runnerUpCategory.config.isCustom && (
                       <span
@@ -573,29 +575,29 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
                           color: runnerUpCategory.config.color,
                         }}
                       >
-                        Custom
+                        {t('Custom')}
                       </span>
                     )}
                   </div>
                   <div className="text-[11px] text-[var(--fg-muted)]">
-                    {runnerUpCategory.totalCompletedInWeek} executions across 7 days
+                    {t('{n} executions across 7 days', { n: runnerUpCategory.totalCompletedInWeek })}
                   </div>
                 </div>
               </div>
 
               <div className="mt-3 pt-2 border-t border-[var(--border)] flex items-center justify-between text-xs">
-                <span className="text-[var(--fg-muted)]">Consistency Rate:</span>
+                <span className="text-[var(--fg-muted)]">{t('Consistency Rate:')}</span>
                 <span className="font-bold text-[var(--fg)]">
                   {runnerUpCategory.consistencyPct}%
                 </span>
               </div>
               <p className="text-[11px] text-[var(--fg-subtle)] mt-1.5 leading-relaxed">
-                Strong momentum. A few additional executions this week can elevate this to anchor status.
+                {t('Strong momentum. A few additional executions this week can elevate this to anchor status.')}
               </p>
             </div>
           ) : (
             <div className="text-xs text-[var(--fg-muted)] py-3">
-              Add habits in a second category to compare cross-domain momentum.
+              {t('Add habits in a second category to compare cross-domain momentum.')}
             </div>
           )}
         </div>
@@ -603,7 +605,7 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
         {/* Card 3: Weekly Output & Daily Rhythm */}
         <div className="p-4 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--bg-muted)] space-y-3">
           <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-muted)] block">
-            Weekly Execution Rhythm
+            {t('Weekly Execution Rhythm')}
           </span>
 
           <div className="grid grid-cols-2 gap-3 pt-0.5">
@@ -611,24 +613,24 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
               <div className="text-2xl font-bold font-display text-[var(--fg)]">
                 {totalWeeklyCompletions}
               </div>
-              <div className="text-[11px] text-[var(--fg-muted)]">Total Wins (7d)</div>
+              <div className="text-[11px] text-[var(--fg-muted)]">{t('Total Wins (7d)')}</div>
             </div>
             <div>
               <div className="text-2xl font-bold font-display text-[var(--color-coral)]">
                 {activeDaysCount} <span className="text-xs font-normal text-[var(--fg-muted)]">/ 7</span>
               </div>
-              <div className="text-[11px] text-[var(--fg-muted)]">Active Days</div>
+              <div className="text-[11px] text-[var(--fg-muted)]">{t('Active Days')}</div>
             </div>
           </div>
 
           <div className="pt-2 border-t border-[var(--border)] flex items-center justify-between text-xs">
-            <span className="text-[var(--fg-muted)]">Daily Average:</span>
-            <span className="font-semibold text-[var(--fg)]">{avgDailyCompletions} habits/day</span>
+            <span className="text-[var(--fg-muted)]">{t('Daily Average:')}</span>
+            <span className="font-semibold text-[var(--fg)]">{t('{n} habits/day', { n: avgDailyCompletions })}</span>
           </div>
 
           <div className="flex items-center justify-between text-xs">
-            <span className="text-[var(--fg-muted)]">Tracked Routines:</span>
-            <span className="font-semibold text-[var(--fg)]">{totalHabitsCount} active</span>
+            <span className="text-[var(--fg-muted)]">{t('Tracked Routines:')}</span>
+            <span className="font-semibold text-[var(--fg)]">{t('{n} active', { n: totalHabitsCount })}</span>
           </div>
         </div>
       </div>
@@ -639,10 +641,10 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--fg)] flex items-center gap-1.5">
               <Calendar className="w-3.5 h-3.5 text-[var(--color-sage)]" />
-              7-Day Daily Completion Breakdown
+              {t('7-Day Daily Completion Breakdown')}
             </h4>
             <p className="text-[11px] text-[var(--fg-muted)]">
-              Daily habit completions across the week. Click any day to inspect completed actions.
+              {t('Daily habit completions across the week. Click any day to inspect completed actions.')}
             </p>
           </div>
 
@@ -652,7 +654,7 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
               onClick={() => setSelectedDayKey(null)}
               className="text-[11px] text-[var(--color-coral)] hover:underline self-start sm:self-auto cursor-pointer"
             >
-              Clear day filter (Showing {selectedDayData?.dayLabel})
+              {t('Clear day filter (Showing {day})', { day: selectedDayData?.dayLabel ?? '' })}
             </button>
           )}
         </div>
@@ -682,7 +684,7 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
                 <div className="text-[11px] font-bold text-[var(--fg)] flex items-center gap-1">
                   <span>{day.dayLabel}</span>
                   {day.isToday && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-coral)]" title="Today" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-coral)]" title={t('Today')} />
                   )}
                 </div>
                 <div className="text-[10px] text-[var(--fg-subtle)] font-mono">
@@ -708,7 +710,7 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
                 </div>
 
                 <div className="text-[9px] text-[var(--fg-muted)] leading-none mt-0.5">
-                  {day.completedCount === 1 ? 'habit' : 'habits'}
+                  {day.completedCount === 1 ? t('habit') : t('habits')}
                 </div>
               </button>
             );
@@ -721,14 +723,14 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-[var(--fg)] flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-[var(--color-sage)]" />
-                Completed on {selectedDayData.fullDateLabel} ({selectedDayData.completedCount} micro-actions)
+                {t('Completed on {date} ({n} micro-actions)', { date: selectedDayData.fullDateLabel, n: selectedDayData.completedCount })}
               </span>
               <button
                 type="button"
                 onClick={() => setSelectedDayKey(null)}
                 className="text-[11px] text-[var(--fg-muted)] hover:text-[var(--fg)] cursor-pointer"
               >
-                Close
+                {t('Close')}
               </button>
             </div>
 
@@ -765,7 +767,7 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
                         }
                       >
                         <HIcon className="w-2.5 h-2.5" />
-                        <span>{hConfig.label}</span>
+                        <span>{t(hConfig.label)}</span>
                       </span>
                     </div>
                   );
@@ -773,7 +775,7 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
               </div>
             ) : (
               <p className="text-xs text-[var(--fg-muted)]">
-                No micro-habits were recorded on this day.
+                {t('No micro-habits were recorded on this day.')}
               </p>
             )}
           </div>
@@ -786,10 +788,10 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--fg)] flex items-center gap-1.5">
               <Award className="w-3.5 h-3.5 text-[var(--color-coral)]" />
-              Category Consistency Rankings
+              {t('Category Consistency Rankings')}
             </h4>
             <p className="text-[11px] text-[var(--fg-muted)]">
-              Ranked by 7-day completion rate across all defined micro-routines.
+              {t('Ranked by 7-day completion rate across all defined micro-routines.')}
             </p>
           </div>
 
@@ -805,7 +807,7 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
                     : 'bg-[var(--bg)] text-[var(--fg-muted)] hover:text-[var(--fg)] border-[var(--border)]'
                 }`}
               >
-                All ({categoryStats.length})
+                {t('All ({n})', { n: categoryStats.length })}
               </button>
               {categoryStats.map((c) => (
                 <button
@@ -824,7 +826,7 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
                       style={{ backgroundColor: c.config.color }}
                     />
                   )}
-                  <span>{c.config.label}</span>
+                  <span>{t(c.config.label)}</span>
                 </button>
               ))}
             </div>
@@ -883,7 +885,7 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-sm font-bold text-[var(--fg)]">
-                          {cat.config.label}
+                          {t(cat.config.label)}
                         </span>
                         {cat.config.isCustom && (
                           <span
@@ -894,25 +896,25 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
                               color: cat.config.color,
                             }}
                           >
-                            Custom Domain
+                            {t('Custom Domain')}
                           </span>
                         )}
                         {getStatusBadge(cat.status)}
                         {isTopRanked && (
                           <Badge variant="sage" className="text-[10px]">
-                            Most Consistent
+                            {t('Most Consistent')}
                           </Badge>
                         )}
                       </div>
                       <p className="text-[11px] text-[var(--fg-muted)] truncate mt-0.5">
-                        {cat.habits.length} {cat.habits.length === 1 ? 'routine' : 'routines'} • {cat.config.description}
+                        {cat.habits.length === 1 ? t('1 routine') : t('{n} routines', { n: cat.habits.length })} • {t(cat.config.description)}
                       </p>
                     </div>
                   </div>
 
                   {/* 7-Day Day-by-Day Bubbles */}
                   <div className="flex items-center gap-4 shrink-0 justify-between sm:justify-end">
-                    <div className="flex items-center gap-1" title="7-day completion rhythm">
+                    <div className="flex items-center gap-1" title={t('7-day completion rhythm')}>
                       {cat.dayCompletions.map((done, dayIdx) => (
                         <div
                           key={dayIdx}
@@ -931,7 +933,7 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
                                 }
                               : undefined
                           }
-                          title={`${sevenDays[dayIdx]?.dayLabel}: ${done ? 'Completed' : 'Not completed'}`}
+                          title={`${sevenDays[dayIdx]?.dayLabel}: ${done ? t('Completed') : t('Not completed')}`}
                         >
                           {done ? '✓' : sevenDays[dayIdx]?.dayLabel.charAt(0)}
                         </div>
@@ -1002,17 +1004,17 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
       <div className="p-4 rounded-[var(--radius-md)] bg-[var(--bg-muted)] border border-[var(--border)] space-y-2">
         <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[var(--fg)]">
           <Sparkles className="w-3.5 h-3.5 text-[var(--color-sage)]" />
-          Behavioral Trend Takeaway & Habit Stacking Insight
+          {t('Behavioral Trend Takeaway & Habit Stacking Insight')}
         </div>
         <p className="text-xs text-[var(--fg-subtle)] leading-relaxed">
           {mostConsistentCategory ? (
             <>
-              Your highest-momentum life domain this week is{' '}
-              <strong className="text-[var(--fg)]">{mostConsistentCategory.config.label}</strong> with a{' '}
-              <strong className="text-[var(--color-sage)]">{mostConsistentCategory.consistencyPct}% execution rate</strong> across {mostConsistentCategory.daysActiveCount} days. To eliminate friction in lower-frequency categories, attach a 2-minute version of that action immediately after completing your daily {mostConsistentCategory.config.label} routine.
+              {t('Your highest-momentum life domain this week is')}{' '}
+              <strong className="text-[var(--fg)]">{t(mostConsistentCategory.config.label)}</strong>{' '}{t('with a')}{' '}
+              <strong className="text-[var(--color-sage)]">{t('{pct}% execution rate', { pct: mostConsistentCategory.consistencyPct })}</strong>{' '}{t('across {n} days. To eliminate friction in lower-frequency categories, attach a 2-minute version of that action immediately after completing your daily {label} routine.', { n: mostConsistentCategory.daysActiveCount, label: t(mostConsistentCategory.config.label) })}
             </>
           ) : (
-            'Micro-habits are designed to be too small to fail (under 5 minutes). Consistent daily wins across multiple life domains compound into massive directional trajectory.'
+            t('Micro-habits are designed to be too small to fail (under 5 minutes). Consistent daily wins across multiple life domains compound into massive directional trajectory.')
           )}
         </p>
       </div>

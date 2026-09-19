@@ -21,10 +21,12 @@ import {
   getRandomAffirmation,
 } from '../data/affirmations';
 import { soundSynthesizer } from '../utils/soundSynthesizer';
+import { useT } from '../i18n';
 
 const FAVORITES_STORAGE_KEY = 'mylife_favorite_affirmations';
 
 export const DailyAffirmationWidget: React.FC<{ className?: string }> = ({ className = '' }) => {
+  const t = useT();
   const { showToast } = useApp();
 
   // Daily quote as default, with capability to shuffle or switch category
@@ -88,7 +90,7 @@ export const DailyAffirmationWidget: React.FC<{ className?: string }> = ({ class
       const next = getRandomAffirmation(currentAffirmation.id, selectedCategory);
       setCurrentAffirmation(next);
       setIsShuffling(false);
-      showToast('✨ Rolled new daily affirmation', 'info');
+      showToast(t('✨ Rolled new daily affirmation'), 'info');
     }, 250);
   };
 
@@ -103,11 +105,11 @@ export const DailyAffirmationWidget: React.FC<{ className?: string }> = ({ class
     let next: string[];
     if (isFavorited) {
       next = favorites.filter((id) => id !== currentAffirmation.id);
-      showToast('Removed quote from saved favorites', 'info');
+      showToast(t('Removed quote from saved favorites'), 'info');
     } else {
       next = [...favorites, currentAffirmation.id];
       soundSynthesizer.playTapChime();
-      showToast('❤️ Saved to your favorite mantras', 'success');
+      showToast(t('❤️ Saved to your favorite mantras'), 'success');
     }
     setFavorites(next);
     try {
@@ -118,11 +120,11 @@ export const DailyAffirmationWidget: React.FC<{ className?: string }> = ({ class
   };
 
   const handleCopy = () => {
-    const text = `"${currentAffirmation.quote}" — ${currentAffirmation.author}\n\nDaily Focus: ${currentAffirmation.reflection}`;
+    const text = `"${t(currentAffirmation.quote)}" — ${currentAffirmation.author}\n\n${t('Daily Focus: {reflection}', { reflection: t(currentAffirmation.reflection) })}`;
     navigator.clipboard.writeText(text);
     setCopied(true);
     soundSynthesizer.playTapChime();
-    showToast('Quote copied to clipboard', 'success');
+    showToast(t('Quote copied to clipboard'), 'success');
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -150,7 +152,7 @@ export const DailyAffirmationWidget: React.FC<{ className?: string }> = ({ class
           <div>
             <div className="flex items-center gap-1.5">
               <span className="text-xs font-bold uppercase tracking-wider text-[var(--fg)]">
-                Daily Affirmation
+                {t('Daily Affirmation')}
               </span>
               <span className="text-[10px] text-[var(--fg-subtle)] font-medium flex items-center gap-1">
                 <Calendar className="w-3 h-3" />
@@ -163,7 +165,7 @@ export const DailyAffirmationWidget: React.FC<{ className?: string }> = ({ class
         {/* Right Controls: Category Pills / Shuffle / Favorite */}
         <div className="flex items-center gap-1.5">
           <Badge variant="subtle" className="text-[10px] py-0.5 px-2 font-medium">
-            {currentAffirmation.category}
+            {t(currentAffirmation.category)}
           </Badge>
 
           <button
@@ -174,7 +176,7 @@ export const DailyAffirmationWidget: React.FC<{ className?: string }> = ({ class
                 ? 'text-rose-500 bg-rose-500/10'
                 : 'text-[var(--fg-subtle)] hover:text-rose-500 hover:bg-[var(--bg-muted)]'
             }`}
-            title={isFavorited ? 'Remove from favorites' : 'Save to favorite mantras'}
+            title={isFavorited ? t('Remove from favorites') : t('Save to favorite mantras')}
           >
             <Heart className={`w-3.5 h-3.5 ${isFavorited ? 'fill-current' : ''}`} />
           </button>
@@ -183,7 +185,7 @@ export const DailyAffirmationWidget: React.FC<{ className?: string }> = ({ class
             type="button"
             onClick={handleCopy}
             className="p-1.5 rounded-full text-[var(--fg-subtle)] hover:text-[var(--fg)] hover:bg-[var(--bg-muted)] transition-colors cursor-pointer"
-            title="Copy quote"
+            title={t('Copy quote')}
           >
             {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
           </button>
@@ -193,10 +195,10 @@ export const DailyAffirmationWidget: React.FC<{ className?: string }> = ({ class
             onClick={handleShuffle}
             disabled={isShuffling}
             className="flex items-center gap-1 px-2 py-1 text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 rounded-[var(--radius-sm)] transition-colors cursor-pointer"
-            title="Roll a new random daily quote"
+            title={t('Roll a new random daily quote')}
           >
             <Shuffle className={`w-3 h-3 ${isShuffling ? 'animate-spin' : ''}`} />
-            <span>Randomize</span>
+            <span>{t('Randomize')}</span>
           </button>
         </div>
       </div>
@@ -208,7 +210,7 @@ export const DailyAffirmationWidget: React.FC<{ className?: string }> = ({ class
           <div className="py-4 text-center space-y-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-amber-500/20 p-4 animate-in fade-in">
             <div className="flex items-center justify-center gap-2 text-xs font-bold text-amber-500 uppercase tracking-widest">
               <Wind className="w-4 h-4 animate-pulse" />
-              <span>Mindful Affirmation Pause</span>
+              <span>{t('Mindful Affirmation Pause')}</span>
             </div>
 
             <div className="relative flex items-center justify-center my-3">
@@ -222,14 +224,14 @@ export const DailyAffirmationWidget: React.FC<{ className?: string }> = ({ class
                 }`}
               >
                 <div className="text-center">
-                  <div className="text-xs font-bold">{breathPhase}</div>
+                  <div className="text-xs font-bold">{t(breathPhase)}</div>
                   <div className="text-sm font-mono font-extrabold">{breathCount}s</div>
                 </div>
               </div>
             </div>
 
             <p className="text-xs italic text-[var(--fg-muted)] max-w-md mx-auto">
-              "{currentAffirmation.quote}"
+              "{t(currentAffirmation.quote)}"
             </p>
 
             <button
@@ -237,7 +239,7 @@ export const DailyAffirmationWidget: React.FC<{ className?: string }> = ({ class
               onClick={handleToggleBreath}
               className="text-[11px] text-[var(--fg-subtle)] hover:text-[var(--fg)] underline cursor-pointer"
             >
-              Exit Breathing Mode
+              {t('Exit Breathing Mode')}
             </button>
           </div>
         ) : (
@@ -247,7 +249,7 @@ export const DailyAffirmationWidget: React.FC<{ className?: string }> = ({ class
               <Quote className="w-4 h-4 text-amber-500/50 shrink-0 mt-0.5" />
               <div className="space-y-1.5 flex-1 min-w-0">
                 <blockquote className="text-sm sm:text-base font-serif italic text-[var(--fg)] leading-relaxed">
-                  "{currentAffirmation.quote}"
+                  "{t(currentAffirmation.quote)}"
                 </blockquote>
                 <div className="text-xs font-semibold text-[var(--fg-muted)] flex items-center gap-1.5">
                   <span>— {currentAffirmation.author}</span>
@@ -259,9 +261,9 @@ export const DailyAffirmationWidget: React.FC<{ className?: string }> = ({ class
             <div className="mt-2.5 pt-2.5 border-t border-[var(--border)]/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
               <div className="text-[11px] text-[var(--fg-muted)] flex items-center gap-1.5">
                 <span className="font-bold text-amber-500 uppercase tracking-wider text-[10px]">
-                  Daily Prompt:
+                  {t('Daily Prompt:')}
                 </span>
-                <span className="line-clamp-1">{currentAffirmation.actionCue}</span>
+                <span className="line-clamp-1">{t(currentAffirmation.actionCue)}</span>
               </div>
 
               <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
@@ -269,22 +271,22 @@ export const DailyAffirmationWidget: React.FC<{ className?: string }> = ({ class
                   type="button"
                   onClick={handleToggleBreath}
                   className="text-[11px] font-medium text-[var(--fg-subtle)] hover:text-amber-500 flex items-center gap-1 transition-colors cursor-pointer"
-                  title="Pause and breathe with this affirmation for 15 seconds"
+                  title={t('Pause and breathe with this affirmation for 15 seconds')}
                 >
                   <Wind className="w-3 h-3" />
-                  <span>Reflect</span>
+                  <span>{t('Reflect')}</span>
                 </button>
 
                 {/* Quick Theme Selector Dropdown */}
                 <select
-                  aria-label="Filter category"
+                  aria-label={t('Filter category')}
                   value={selectedCategory}
                   onChange={(e) => handleCategoryChange(e.target.value)}
                   className="text-[11px] py-0.5 px-1.5 rounded-[var(--radius-sm)] bg-[var(--bg-muted)] border border-[var(--border)] text-[var(--fg-muted)] focus:outline-none cursor-pointer"
                 >
                   {categories.map((cat) => (
                     <option key={cat} value={cat}>
-                      {cat === 'All' ? 'All Themes' : cat}
+                      {cat === 'All' ? t('All Themes') : t(cat)}
                     </option>
                   ))}
                 </select>

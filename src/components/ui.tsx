@@ -1,5 +1,6 @@
 import React from 'react';
 import { LucideIcon, X } from 'lucide-react';
+import { useT } from '../i18n';
 
 /* -------------------------------- Button -------------------------------- */
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -229,6 +230,7 @@ export const Progress: React.FC<ProgressProps> = ({
   className = '',
   showLabel = false,
 }) => {
+  const t = useT();
   const clamped = Math.min(100, Math.max(0, value));
 
   const colors = {
@@ -241,7 +243,7 @@ export const Progress: React.FC<ProgressProps> = ({
     <div className={`w-full ${className}`}>
       {showLabel && (
         <div className="flex justify-between text-[10px] uppercase tracking-wider text-[var(--fg-muted)] font-semibold mb-1.5">
-          <span>Progress</span>
+          <span>{t('Progress')}</span>
           <span>{Math.round(clamped)}%</span>
         </div>
       )}
@@ -308,6 +310,7 @@ export const Modal: React.FC<ModalProps> = ({
   children,
   maxWidth = 'md',
 }) => {
+  const t = useT();
   if (!isOpen) return null;
 
   const maxWidthStyles = {
@@ -326,7 +329,7 @@ export const Modal: React.FC<ModalProps> = ({
         <div className="flex items-start justify-between p-6 border-b border-[var(--border)]">
           <div>
             <span className="font-sans text-[9px] uppercase tracking-[0.25em] text-[var(--fg-subtle)] block mb-1">
-              Dialogue Window
+              {t('Dialogue Window')}
             </span>
             <h3 className="text-xl font-bold font-display text-[var(--fg)] leading-tight">{title}</h3>
             {subtitle && <p className="text-xs text-[var(--fg-muted)] mt-1 leading-relaxed">{subtitle}</p>}
@@ -334,7 +337,7 @@ export const Modal: React.FC<ModalProps> = ({
           <button
             onClick={onClose}
             className="w-7 h-7 rounded-full border border-[var(--border-strong)] flex items-center justify-center text-[var(--fg-subtle)] hover:text-[var(--fg)] hover:border-[var(--fg)] transition-colors cursor-pointer"
-            aria-label="Close dialog"
+            aria-label={t('Close dialog')}
           >
             <X className="w-3.5 h-3.5" />
           </button>
@@ -400,12 +403,13 @@ export const Empty: React.FC<EmptyProps> = ({
   onAction,
   className = '',
 }) => {
+  const t = useT();
   return (
     <div
       className={`flex flex-col items-center justify-center p-8 text-center bg-[var(--bg-muted)] border border-[var(--border)] rounded-[var(--radius-sm)] relative ${className}`}
     >
       <div className="text-[9px] font-sans uppercase tracking-[0.3em] opacity-50 mb-3">
-        Fig. 00 — State
+        {t('Fig. 00 — State')}
       </div>
       {Icon && (
         <div className="w-10 h-10 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-strong)] flex items-center justify-center text-[var(--fg-muted)] mb-3">
@@ -434,15 +438,17 @@ export const Skeleton: React.FC<{ className?: string }> = ({ className = 'h-4 w-
 
 /* -------------------------------- Disclaimer -------------------------------- */
 export const Disclaimer: React.FC<{ text?: string; className?: string }> = ({
-  text = 'Dream Dollars is a virtual simulation economy with no cash value. Purchases and allocations are symbolic.',
+  text,
   className = '',
 }) => {
+  const t = useT();
+  const body = text ?? t('Dream Dollars is a virtual simulation economy with no cash value. Purchases and allocations are symbolic.');
   return (
     <div
       className={`p-3.5 bg-[var(--bg-muted)] border border-[var(--border)] rounded-[var(--radius-xs)] text-xs text-[var(--fg-muted)] leading-relaxed flex items-start gap-2.5 ${className}`}
     >
-      <span className="font-bold text-[10px] uppercase tracking-wider text-[var(--fg)] shrink-0 mt-0.5">Note:</span>
-      <span>{text}</span>
+      <span className="font-bold text-[10px] uppercase tracking-wider text-[var(--fg)] shrink-0 mt-0.5">{t('Note:')}</span>
+      <span>{body}</span>
     </div>
   );
 };
@@ -465,13 +471,14 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
   issueNumber,
   className = '',
 }) => {
+  const t = useT();
   return (
     <div className={`mb-8 pb-4 border-b border-[var(--border)] ${className}`}>
       <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4">
         <div>
           <div className="flex items-center gap-3 mb-1.5">
             <span className="font-sans text-[9px] font-semibold uppercase tracking-[0.3em] text-[var(--fg-subtle)]">
-              {issueNumber || 'One Decision Away — OS'}
+              {issueNumber || t('One Decision Away — OS')}
             </span>
             {badge && <Badge variant="sage">{badge}</Badge>}
           </div>

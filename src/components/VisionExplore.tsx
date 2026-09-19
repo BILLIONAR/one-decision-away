@@ -36,13 +36,14 @@ import { SEED_MARKET_ITEMS } from '../data/seed';
 import { MarketCategory, MarketItem } from '../types/models';
 import { triggerGoldConfetti } from '../utils/confetti';
 import { computeLedgerBalance, estimateDailyEarningPace, daysToAfford } from '../services/economy';
+import { useT, N_ } from '../i18n';
 
 const BUDGET_TIERS: { key: string; label: string; min: number; max: number }[] = [
-  { key: 'all', label: 'Any budget', min: 0, max: Infinity },
-  { key: 'starter', label: 'Under $10k', min: 0, max: 10000 },
-  { key: 'mid', label: '$10k – $100k', min: 10000, max: 100000 },
-  { key: 'high', label: '$100k – $1M', min: 100000, max: 1000000 },
-  { key: 'ultra', label: '$1M+', min: 1000000, max: Infinity },
+  { key: 'all', label: N_('Any budget'), min: 0, max: Infinity },
+  { key: 'starter', label: N_('Under $10k'), min: 0, max: 10000 },
+  { key: 'mid', label: N_('$10k – $100k'), min: 10000, max: 100000 },
+  { key: 'high', label: N_('$100k – $1M'), min: 100000, max: 1000000 },
+  { key: 'ultra', label: N_('$1M+'), min: 1000000, max: Infinity },
 ];
 
 type SortKey = 'featured' | 'price_asc' | 'price_desc' | 'dd_asc';
@@ -52,6 +53,7 @@ interface VisionExploreProps {
 }
 
 export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal }) => {
+  const t = useT();
   const { data, pinExploreDream, showToast, setActiveRoute } = useApp();
 
   const [selectedCategoryKey, setSelectedCategoryKey] = useState<string>('all');
@@ -112,7 +114,7 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
         (item.whyWanted && item.whyWanted.toLowerCase().includes(q)) ||
         item.highlights.some((h) => h.toLowerCase().includes(q));
 
-      const tier = BUDGET_TIERS.find((t) => t.key === budgetKey) || BUDGET_TIERS[0];
+      const tier = BUDGET_TIERS.find((b) => b.key === budgetKey) || BUDGET_TIERS[0];
       const matchesBudget = item.realPriceUsd >= tier.min && item.realPriceUsd < tier.max;
       const matchesAffordable = !affordableOnly || item.dreamDollarPrice <= balance;
 
@@ -200,20 +202,20 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
           <div className="space-y-1.5 max-w-xl">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[var(--color-sage)]/10 text-[var(--color-sage)] text-xs font-semibold">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Curated Vision & Luxury Gallery</span>
+              <span>{t('Curated Vision & Luxury Gallery')}</span>
             </div>
             <h2 className="text-xl sm:text-2xl font-bold font-display text-[var(--fg)]">
-              Inspire Your Vision, Choose, and Add to Your Market
+              {t('Inspire Your Vision, Choose, and Add to Your Market')}
             </h2>
             <p className="text-xs sm:text-sm text-[var(--fg-muted)] leading-relaxed">
-              Pick your favorites from the world's finest architecture, supercars and one-of-a-kind experiences, then <strong>pin them to your Vision Board</strong> and <strong>add them to your Dream Market</strong> in one click.
+              {t("Pick your favorites from the world's finest architecture, supercars and one-of-a-kind experiences, then")} <strong>{t('pin them to your Vision Board')}</strong> {t('and')} <strong>{t('add them to your Dream Market')}</strong> {t('in one click.')}
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
             <div className="p-3 bg-[var(--bg)] border border-[var(--border)] rounded-[var(--radius-md)] text-center min-w-[120px]">
               <span className="text-[10px] uppercase tracking-wider font-semibold text-[var(--fg-muted)] block">
-                Pinned on Board
+                {t('Pinned on Board')}
               </span>
               <div className="text-xl font-bold font-display text-amber-500 flex items-center justify-center gap-1">
                 <Star className="w-4 h-4 fill-current" />
@@ -229,7 +231,7 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
                 onClick={onOpenCustomModal}
                 className="h-full whitespace-nowrap"
               >
-                Take Your Own Photo
+                {t('Take Your Own Photo')}
               </Button>
             )}
           </div>
@@ -259,7 +261,7 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
                   <span className={isSelected ? 'text-[var(--bg)]' : 'text-[var(--color-sage)]'}>
                     {getCategoryIcon(cat.iconName)}
                   </span>
-                  <span>{cat.label}</span>
+                  <span>{t(cat.label)}</span>
                   <span
                     className={`text-[10px] px-1.5 py-0.2 rounded-full ${
                       isSelected
@@ -281,7 +283,7 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by model, location, villa name or feature (e.g. Porsche, Como, Villa, V12, Yacht, Kyoto)…"
+              placeholder={t('Search by model, location, villa name or feature (e.g. Porsche, Como, Villa, V12, Yacht, Kyoto)…')}
               className="w-full pl-9 pr-4 py-2 text-xs bg-[var(--bg)] border border-[var(--border)] rounded-[var(--radius-md)] text-[var(--fg)] placeholder:text-[var(--fg-subtle)] focus:outline-none focus:border-[var(--color-sage)] transition-colors"
             />
             {searchQuery && (
@@ -289,7 +291,7 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
                 onClick={() => setSearchQuery('')}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[var(--fg-muted)] hover:text-[var(--fg)] cursor-pointer"
               >
-                Clear
+                {t('Clear')}
               </button>
             )}
           </div>
@@ -297,31 +299,31 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
           {/* Budget ladder, sort & affordability — makes browsing feel like shopping */}
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 pt-1">
             <div className="flex flex-wrap gap-1.5 flex-1">
-              {BUDGET_TIERS.map((t) => (
+              {BUDGET_TIERS.map((tier) => (
                 <button
-                  key={t.key}
+                  key={tier.key}
                   type="button"
-                  onClick={() => setBudgetKey(t.key)}
+                  onClick={() => setBudgetKey(tier.key)}
                   className={`px-2.5 py-1 rounded-full text-[11px] font-semibold border transition-all cursor-pointer ${
-                    budgetKey === t.key
+                    budgetKey === tier.key
                       ? 'bg-[var(--fg)] text-[var(--bg)] border-[var(--fg)]'
                       : 'bg-[var(--bg)] text-[var(--fg-muted)] border-[var(--border)] hover:text-[var(--fg)]'
                   }`}
                 >
-                  {t.label}
+                  {t(tier.label)}
                 </button>
               ))}
               <button
                 type="button"
                 onClick={() => setAffordableOnly(!affordableOnly)}
-                title="Show only dreams you can buy with your current Dream Dollars"
+                title={t('Show only dreams you can buy with your current Dream Dollars')}
                 className={`px-2.5 py-1 rounded-full text-[11px] font-bold border transition-all cursor-pointer ${
                   affordableOnly
                     ? 'bg-[var(--color-sage)] text-white border-[var(--color-sage)]'
                     : 'bg-[var(--color-sage)]/10 text-[var(--color-sage)] border-[var(--color-sage)]/30'
                 }`}
               >
-                ✓ Affordable now ({affordableCount})
+                {t('✓ Affordable now ({n})', { n: affordableCount })}
               </button>
             </div>
             <select
@@ -329,10 +331,10 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
               onChange={(e) => setSortKey(e.target.value as SortKey)}
               className="px-2.5 py-1.5 text-[11px] font-semibold bg-[var(--bg)] border border-[var(--border)] rounded-[var(--radius-xs)] text-[var(--fg)] cursor-pointer"
             >
-              <option value="featured">Sort: Featured</option>
-              <option value="price_asc">Price: low to high</option>
-              <option value="price_desc">Price: high to low</option>
-              <option value="dd_asc">Closest to my D$ balance</option>
+              <option value="featured">{t('Sort: Featured')}</option>
+              <option value="price_asc">{t('Price: low to high')}</option>
+              <option value="price_desc">{t('Price: high to low')}</option>
+              <option value="dd_asc">{t('Closest to my D$ balance')}</option>
             </select>
           </div>
         </div>
@@ -344,14 +346,14 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <h4 className="text-sm font-bold text-[var(--fg)] flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[var(--color-sage)]" /> Start here — your first-week dreams
+                <Sparkles className="w-4 h-4 text-[var(--color-sage)]" /> {t('Start here — your first-week dreams')}
               </h4>
               <p className="text-[11px] text-[var(--fg-muted)]">
-                Small enough to buy within days at your current pace (~D$ {pace.perDay.toLocaleString()}/day). The first purchase is the one that makes it real.
+                {t('Small enough to buy within days at your current pace (~D$ {pace}/day). The first purchase is the one that makes it real.', { pace: pace.perDay.toLocaleString() })}
               </p>
             </div>
             <span className="text-[11px] font-semibold text-[var(--color-sage)] self-start sm:self-auto">
-              Balance: D$ {balance.toLocaleString()}
+              {t('Balance: D$ {balance}', { balance: balance.toLocaleString() })}
             </span>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
@@ -368,10 +370,10 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
                     <img src={item.imageUrl} alt={item.name} referrerPolicy="no-referrer" loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   </div>
                   <div className="p-2">
-                    <div className="text-[11px] font-bold text-[var(--fg)] leading-snug line-clamp-2">{item.name}</div>
+                    <div className="text-[11px] font-bold text-[var(--fg)] leading-snug line-clamp-2">{t(item.name)}</div>
                     <div className="flex items-center justify-between mt-1 text-[10px]">
                       <span className="font-mono font-bold text-[var(--fg)]">D$ {item.dreamDollarPrice.toLocaleString()}</span>
-                      <span className={d === 0 ? 'text-[var(--color-sage)] font-bold' : 'text-[var(--fg-subtle)]'}>{d === 0 ? 'Now' : `~${d}d`}</span>
+                      <span className={d === 0 ? 'text-[var(--color-sage)] font-bold' : 'text-[var(--fg-subtle)]'}>{d === 0 ? t('Now') : t('~{n}d', { n: d })}</span>
                     </div>
                   </div>
                 </button>
@@ -386,13 +388,13 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
         <div className="p-12 text-center border-2 border-dashed border-[var(--border)] rounded-[var(--radius-xl)] bg-[var(--bg-elevated)] space-y-3">
           <Search className="w-8 h-8 text-[var(--fg-muted)] mx-auto opacity-60" />
           <h4 className="font-display font-bold text-base text-[var(--fg)]">
-            No Dreams Match Your Search
+            {t('No Dreams Match Your Search')}
           </h4>
           <p className="text-xs text-[var(--fg-muted)] max-w-sm mx-auto">
-            No results for "{searchQuery}". Reset the filter or add your own custom photo.
+            {t('No results for "{query}". Reset the filter or add your own custom photo.', { query: searchQuery })}
           </p>
           <Button variant="outline" size="sm" onClick={() => setSearchQuery('')}>
-            Reset Search
+            {t('Reset Search')}
           </Button>
         </div>
       ) : (
@@ -424,14 +426,14 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
                   />
                   {isOwned ? null : canAfford ? (
                     <span className="absolute top-12 right-2 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[var(--color-sage)] text-white shadow-sm">
-                      ✓ Affordable now
+                      {t('✓ Affordable now')}
                     </span>
                   ) : (
                     <span
                       className="absolute top-12 right-2 px-2 py-0.5 rounded-full text-[10px] font-bold bg-black/55 text-white backdrop-blur-sm"
-                      title={`${pctToAfford}% funded · at ~D$ ${pace.perDay.toLocaleString()}/day${pace.isBaseline ? ' (one One Decision a day)' : ' (your recent pace)'}`}
+                      title={t('{pct}% funded · at ~D$ {pace}/day {note}', { pct: pctToAfford, pace: pace.perDay.toLocaleString(), note: pace.isBaseline ? t('(one One Decision a day)') : t('(your recent pace)') })}
                     >
-                      ~{daysLeft} day{daysLeft === 1 ? '' : 's'} at your pace
+                      {daysLeft === 1 ? t('~1 day at your pace') : t('~{n} days at your pace', { n: daysLeft })}
                     </span>
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none" />
@@ -439,7 +441,7 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
                   {/* Top Badges */}
                   <div className="absolute top-2.5 left-2.5 flex flex-wrap items-center gap-1.5">
                     <Badge variant="subtle" className="backdrop-blur-xs bg-black/60 text-white border-0 text-[10px]">
-                      {item.category}
+                      {t(item.category)}
                     </Badge>
                     {item.location && (
                       <span className="bg-black/60 backdrop-blur-xs text-white/90 text-[10px] px-2 py-0.5 rounded flex items-center gap-1">
@@ -457,7 +459,7 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
                         ? 'bg-amber-500 text-white ring-2 ring-white/50 scale-105'
                         : 'bg-black/60 text-white/80 hover:bg-black/90 hover:text-white hover:scale-105'
                     }`}
-                    title={pinned ? 'Remove from Vision Board' : 'Pin to Vision Board & Add to Market'}
+                    title={pinned ? t('Remove from Vision Board') : t('Pin to Vision Board & Add to Market')}
                   >
                     <Star className={`w-4 h-4 ${pinned ? 'fill-current' : ''}`} />
                   </button>
@@ -481,10 +483,10 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
                       onClick={() => setSelectedItemForDetail(item)}
                     >
                       <h3 className="font-display font-bold text-sm text-[var(--fg)] group-hover:text-[var(--color-sage)] transition-colors line-clamp-1">
-                        {item.name}
+                        {t(item.name)}
                       </h3>
                       <p className="text-xs text-[var(--fg-muted)] line-clamp-2 mt-1 leading-relaxed">
-                        {item.description}
+                        {t(item.description)}
                       </p>
                     </div>
 
@@ -496,7 +498,7 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
                             key={idx}
                             className="text-[10px] px-2 py-0.5 bg-[var(--bg-muted)] text-[var(--fg-subtle)] rounded border border-[var(--border)]"
                           >
-                            {hl}
+                            {t(hl)}
                           </span>
                         ))}
                       </div>
@@ -505,7 +507,7 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
                     {/* Why Wanted Anchor Quote */}
                     {item.whyWanted && (
                       <div className="p-2.5 bg-[var(--bg-muted)]/80 rounded-[var(--radius-sm)] border border-[var(--border)] text-[11px] text-[var(--fg-subtle)] italic line-clamp-2">
-                        "{item.whyWanted}"
+                        "{t(item.whyWanted)}"
                       </div>
                     )}
                   </div>
@@ -519,7 +521,7 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
                         className="flex-1 py-1.5 px-3 rounded-[var(--radius-md)] bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-amber-500/20 transition-all cursor-pointer"
                       >
                         <Check className="w-3.5 h-3.5 text-amber-500" />
-                        <span>Pinned to Vision ⭐</span>
+                        <span>{t('Pinned to Vision ⭐')}</span>
                       </button>
                     ) : (
                       <Button
@@ -529,7 +531,7 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
                         onClick={(e) => handleTogglePin(item, e)}
                         className="flex-1 text-xs"
                       >
-                        Add to Vision & Market
+                        {t('Add to Vision & Market')}
                       </Button>
                     )}
 
@@ -538,7 +540,7 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
                       size="sm"
                       icon={Eye}
                       onClick={() => setSelectedItemForDetail(item)}
-                      title="View details"
+                      title={t('View details')}
                       className="px-2.5"
                     />
 
@@ -546,10 +548,10 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
                       variant="ghost"
                       size="sm"
                       onClick={(e) => handleOpenCustomize(item, e)}
-                      title="Customize & add"
+                      title={t('Customize & add')}
                       className="text-xs text-[var(--fg-muted)] hover:text-[var(--fg)] px-2"
                     >
-                      Customize
+                      {t('Customize')}
                     </Button>
                   </div>
                 </div>
@@ -564,8 +566,8 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
         <Modal
           isOpen={true}
           onClose={() => setSelectedItemForDetail(null)}
-          title={selectedItemForDetail.name}
-          subtitle={`${selectedItemForDetail.category} · ${selectedItemForDetail.location || 'Global Luxury'}`}
+          title={t(selectedItemForDetail.name)}
+          subtitle={`${t(selectedItemForDetail.category)} · ${selectedItemForDetail.location || t('Global Luxury')}`}
           maxWidth="lg"
         >
           <div className="space-y-4">
@@ -579,7 +581,7 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
               />
               <div className="absolute top-3 left-3 flex items-center gap-2">
                 <Badge variant="subtle" className="backdrop-blur-xs bg-black/75 text-white border-0">
-                  {selectedItemForDetail.category}
+                  {t(selectedItemForDetail.category)}
                 </Badge>
                 {selectedItemForDetail.location && (
                   <span className="bg-black/75 backdrop-blur-xs text-white text-xs px-2.5 py-1 rounded flex items-center gap-1">
@@ -602,14 +604,14 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
             {/* Description & Details */}
             <div className="space-y-3">
               <p className="text-xs sm:text-sm text-[var(--fg)] leading-relaxed">
-                {selectedItemForDetail.description}
+                {t(selectedItemForDetail.description)}
               </p>
 
               {/* Highlights */}
               {selectedItemForDetail.highlights && (
                 <div className="space-y-1.5">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-                    Highlights & Features:
+                    {t('Highlights & Features:')}
                   </span>
                   <div className="flex flex-wrap gap-1.5">
                     {selectedItemForDetail.highlights.map((hl, idx) => (
@@ -617,7 +619,7 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
                         key={idx}
                         className="text-xs px-2.5 py-1 bg-[var(--bg-muted)] text-[var(--fg)] rounded border border-[var(--border)] font-medium"
                       >
-                        ✨ {hl}
+                        ✨ {t(hl)}
                       </span>
                     ))}
                   </div>
@@ -628,19 +630,19 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                 <div className="p-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)] space-y-1">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-sage)] block">
-                    Emotional Anchor & Identity Standard
+                    {t('Emotional Anchor & Identity Standard')}
                   </span>
                   <p className="text-xs text-[var(--fg)] italic">
-                    "{selectedItemForDetail.whyWanted}"
+                    "{t(selectedItemForDetail.whyWanted)}"
                   </p>
                 </div>
 
                 <div className="p-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)] space-y-1">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-coral)] block">
-                    First Concrete Step
+                    {t('First Concrete Step')}
                   </span>
                   <p className="text-xs text-[var(--fg)]">
-                    {selectedItemForDetail.firstRealStep}
+                    {t(selectedItemForDetail.firstRealStep)}
                   </p>
                 </div>
               </div>
@@ -652,7 +654,7 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
                 variant="ghost"
                 onClick={() => setSelectedItemForDetail(null)}
               >
-                Close
+                {t('Close')}
               </Button>
 
               <div className="flex items-center gap-2">
@@ -665,7 +667,7 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
                     handleOpenCustomize(item);
                   }}
                 >
-                  Customize & Add
+                  {t('Customize & Add')}
                 </Button>
 
                 <Button
@@ -677,8 +679,8 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
                   }}
                 >
                   {isItemPinned(selectedItemForDetail)
-                    ? 'Remove from Vision'
-                    : 'Pin to Vision & Add to Market ⭐'}
+                    ? t('Remove from Vision')
+                    : t('Pin to Vision & Add to Market ⭐')}
                 </Button>
               </div>
             </div>
@@ -694,22 +696,22 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
             setIsCustomizeOpen(false);
             setCustomItemTarget(null);
           }}
-          title="Customize This Dream & Add to Vision"
-          subtitle={`Adapt the "${customItemTarget.name}" template to your own goals and budget.`}
+          title={t('Customize This Dream & Add to Vision')}
+          subtitle={t('Adapt the "{name}" template to your own goals and budget.', { name: customItemTarget.name })}
           maxWidth="md"
         >
           <form onSubmit={handleSaveCustomizedDream} className="space-y-4">
-            <Field id="custom-explore-name" label="Goal / Dream Title" required>
+            <Field id="custom-explore-name" label={t('Goal / Dream Title')} required>
               <Input
                 id="custom-explore-name"
                 value={customName}
                 onChange={(e) => setCustomName(e.target.value)}
-                placeholder="e.g. Porsche 911 GT3 RS Guards Red"
+                placeholder={t('e.g. Porsche 911 GT3 RS Guards Red')}
               />
             </Field>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <Field id="custom-explore-usd" label="Estimated Real Value ($ USD)">
+              <Field id="custom-explore-usd" label={t('Estimated Real Value ($ USD)')}>
                 <Input
                   id="custom-explore-usd"
                   type="number"
@@ -723,7 +725,7 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
                 />
               </Field>
 
-              <Field id="custom-explore-dprice" label="Dream Dollar Price (D$)">
+              <Field id="custom-explore-dprice" label={t('Dream Dollar Price (D$)')}>
                 <Input
                   id="custom-explore-dprice"
                   type="number"
@@ -736,7 +738,7 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
 
             <Field
               id="custom-explore-why"
-              label="Why Do You Want This? (Your Emotional Anchor)"
+              label={t('Why Do You Want This? (Your Emotional Anchor)')}
             >
               <Textarea
                 id="custom-explore-why"
@@ -748,7 +750,7 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
 
             <Field
               id="custom-explore-step"
-              label="Your First Concrete Real-World Step"
+              label={t('Your First Concrete Real-World Step')}
             >
               <Input
                 id="custom-explore-step"
@@ -766,10 +768,10 @@ export const VisionExplore: React.FC<VisionExploreProps> = ({ onOpenCustomModal 
                   setCustomItemTarget(null);
                 }}
               >
-                Cancel
+                {t('Cancel')}
               </Button>
               <Button variant="primary" type="submit">
-                Save & Pin to Vision ⭐
+                {t('Save & Pin to Vision ⭐')}
               </Button>
             </div>
           </form>

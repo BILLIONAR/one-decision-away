@@ -26,6 +26,7 @@ import { getBaseReward } from '../services/economy';
 import { soundSynthesizer } from '../utils/soundSynthesizer';
 import { voiceGuide } from '../utils/voiceGuide';
 import { GUIDED_MEDITATIONS, GuidedMeditation, INTENT_LABELS } from '../data/guidedMeditations';
+import { useT } from '../i18n';
 
 interface FocusTimerHubProps {
   initialMission?: Mission | null;
@@ -47,6 +48,7 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
   initialMission,
   onMissionSelected,
 }) => {
+  const t = useT();
   const { data, startFocusSession } = useApp();
 
   const [selectedMissionId, setSelectedMissionId] = useState<string>(
@@ -84,74 +86,74 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
   const selectedMission = activeMissions.find((m) => m.id === selectedMissionId);
 
   const presets = [
-    { label: '7m Meditation', value: 7, tag: 'Reset & Calm', track: 'meditation_432hz' as FocusSoundTrack },
-    { label: '8m Deep Peace', value: 8, tag: 'Theta Waves', track: 'theta_meditation' as FocusSoundTrack },
-    { label: '15m Sprint', value: 15, tag: 'High Velocity', track: 'binaural' as FocusSoundTrack },
-    { label: '25m Pomodoro', value: 25, tag: 'Standard', track: 'binaural' as FocusSoundTrack },
-    { label: '45m Deep Work', value: 45, tag: 'Recommended', track: 'binaural' as FocusSoundTrack },
-    { label: '60m Flow State', value: 60, tag: 'Endurance', track: 'rain' as FocusSoundTrack },
+    { label: t('7m Meditation'), value: 7, tag: t('Reset & Calm'), track: 'meditation_432hz' as FocusSoundTrack },
+    { label: t('8m Deep Peace'), value: 8, tag: t('Theta Waves'), track: 'theta_meditation' as FocusSoundTrack },
+    { label: t('15m Sprint'), value: 15, tag: t('High Velocity'), track: 'binaural' as FocusSoundTrack },
+    { label: t('25m Pomodoro'), value: 25, tag: t('Standard'), track: 'binaural' as FocusSoundTrack },
+    { label: t('45m Deep Work'), value: 45, tag: t('Recommended'), track: 'binaural' as FocusSoundTrack },
+    { label: t('60m Flow State'), value: 60, tag: t('Endurance'), track: 'rain' as FocusSoundTrack },
   ];
 
   const meditationSessions: MeditationQuickSession[] = [
     {
       id: 'med-432',
-      title: '7 min • 432 Hz Mental Calm & Healing',
+      title: t('7 min • 432 Hz Mental Calm & Healing'),
       durationMinutes: 7,
       track: 'meditation_432hz',
       hzBadge: '432 Hz',
-      subtitle: 'Natural tuning & mental clearing',
-      description: 'The Verdi tuning; quiets mental noise and cortisol, and rebalances your natural rhythm.',
-      benefits: ['Stress relief', 'Cognitive clarity', 'Inner stillness'],
+      subtitle: t('Natural tuning & mental clearing'),
+      description: t('The Verdi tuning; quiets mental noise and cortisol, and rebalances your natural rhythm.'),
+      benefits: [t('Stress relief'), t('Cognitive clarity'), t('Inner stillness')],
     },
     {
       id: 'med-528',
-      title: '8 min • 528 Hz Heart & Transformation',
+      title: t('8 min • 528 Hz Heart & Transformation'),
       durationMinutes: 8,
       track: 'solfeggio_528hz',
       hzBadge: '528 Hz',
-      subtitle: 'Solfeggio "miracle" tone & renewal',
-      description: 'The frequency of transformation and love; releases heaviness in the chest and opens gratitude.',
-      benefits: ['Renewal', 'Heart opening', 'Emotional lift'],
+      subtitle: t('Solfeggio "miracle" tone & renewal'),
+      description: t('The frequency of transformation and love; releases heaviness in the chest and opens gratitude.'),
+      benefits: [t('Renewal'), t('Heart opening'), t('Emotional lift')],
     },
     {
       id: 'med-theta',
-      title: '7 min • Theta 6 Hz Deep Trance',
+      title: t('7 min • Theta 6 Hz Deep Trance'),
       durationMinutes: 7,
       track: 'theta_meditation',
       hzBadge: 'Theta 6 Hz',
-      subtitle: 'Monk brainwaves & deep inward turn',
-      description: '6 Hz theta binaural beats guide the mind into deep meditation and intuitive quiet.',
-      benefits: ['Subconscious reset', 'Deep trance', 'Intuitive clarity'],
+      subtitle: t('Monk brainwaves & deep inward turn'),
+      description: t('6 Hz theta binaural beats guide the mind into deep meditation and intuitive quiet.'),
+      benefits: [t('Subconscious reset'), t('Deep trance'), t('Intuitive clarity')],
     },
     {
       id: 'med-tibetan',
-      title: '8 min • Tibetan Bowls & Zen Temple',
+      title: t('8 min • Tibetan Bowls & Zen Temple'),
       durationMinutes: 8,
       track: 'tibetan_bowls',
-      hzBadge: 'Zen Gong',
-      subtitle: 'Himalayan bowls & body awareness',
-      description: 'Singing bowls and temple gong tones anchor the mind firmly in the present moment.',
-      benefits: ['Mindfulness', 'Body scan', 'Burnout reset'],
+      hzBadge: t('Zen Gong'),
+      subtitle: t('Himalayan bowls & body awareness'),
+      description: t('Singing bowls and temple gong tones anchor the mind firmly in the present moment.'),
+      benefits: [t('Mindfulness'), t('Body scan'), t('Burnout reset')],
     },
     {
       id: 'med-396',
-      title: '7 min • 396 Hz Release Stress & Fear',
+      title: t('7 min • 396 Hz Release Stress & Fear'),
       durationMinutes: 7,
       track: 'solfeggio_396hz',
       hzBadge: '396 Hz',
-      subtitle: 'Root grounding & releasing negativity',
-      description: 'The root frequency; releases buried anxiety, guilt and mental weight.',
-      benefits: ['Grounding', 'Safety', 'Muscle release'],
+      subtitle: t('Root grounding & releasing negativity'),
+      description: t('The root frequency; releases buried anxiety, guilt and mental weight.'),
+      benefits: [t('Grounding'), t('Safety'), t('Muscle release')],
     },
     {
       id: 'med-639',
-      title: '8 min • 639 Hz Heart Harmony & Peace',
+      title: t('8 min • 639 Hz Heart Harmony & Peace'),
       durationMinutes: 8,
       track: 'solfeggio_639hz',
       hzBadge: '639 Hz',
-      subtitle: 'Compassion, empathy & emotional balance',
-      description: 'Harmony in relationships and peace with yourself; a warm frequency bath for the heart.',
-      benefits: ['Emotional healing', 'Compassion', 'Inner peace'],
+      subtitle: t('Compassion, empathy & emotional balance'),
+      description: t('Harmony in relationships and peace with yourself; a warm frequency bath for the heart.'),
+      benefits: [t('Emotional healing'), t('Compassion'), t('Inner peace')],
     },
   ];
 
@@ -161,12 +163,12 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
     sublabel: string;
     icon: React.FC<{ className?: string }>;
   }[] = [
-    { id: 'meditation_432hz', label: '432 Hz Healing', sublabel: 'Universal harmony', icon: Sparkles },
-    { id: 'solfeggio_528hz', label: '528 Hz Miracle', sublabel: 'Cellular renewal', icon: Heart },
-    { id: 'theta_meditation', label: 'Theta 6 Hz', sublabel: 'Deep trance', icon: Brain },
-    { id: 'tibetan_bowls', label: 'Tibetan Bowls', sublabel: 'Zen temple', icon: Bell },
-    { id: 'solfeggio_396hz', label: '396 Hz Release', sublabel: 'Stress & fear', icon: Flame },
-    { id: 'solfeggio_639hz', label: '639 Hz Harmony', sublabel: 'Heart chakra', icon: Sun },
+    { id: 'meditation_432hz', label: t('432 Hz Healing'), sublabel: t('Universal harmony'), icon: Sparkles },
+    { id: 'solfeggio_528hz', label: t('528 Hz Miracle'), sublabel: t('Cellular renewal'), icon: Heart },
+    { id: 'theta_meditation', label: t('Theta 6 Hz'), sublabel: t('Deep trance'), icon: Brain },
+    { id: 'tibetan_bowls', label: t('Tibetan Bowls'), sublabel: t('Zen temple'), icon: Bell },
+    { id: 'solfeggio_396hz', label: t('396 Hz Release'), sublabel: t('Stress & fear'), icon: Flame },
+    { id: 'solfeggio_639hz', label: t('639 Hz Harmony'), sublabel: t('Heart chakra'), icon: Sun },
   ];
 
   const ambientSoundscapes: {
@@ -175,12 +177,12 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
     sublabel: string;
     icon: React.FC<{ className?: string }>;
   }[] = [
-    { id: 'binaural', label: 'Binaural 10 Hz', sublabel: 'Alpha focus', icon: Headphones },
-    { id: 'rain', label: 'Gentle Rain', sublabel: 'Acoustic rain', icon: CloudRain },
-    { id: 'waves', label: 'Ocean Waves', sublabel: 'Rhythmic surf', icon: Waves },
-    { id: 'brown_noise', label: 'Deep Noise', sublabel: 'Noise masking', icon: Wind },
-    { id: 'fireplace', label: 'Fireplace', sublabel: 'Warm crackle', icon: Flame },
-    { id: 'silence', label: 'Silence', sublabel: 'Mute', icon: VolumeX },
+    { id: 'binaural', label: t('Binaural 10 Hz'), sublabel: t('Alpha focus'), icon: Headphones },
+    { id: 'rain', label: t('Gentle Rain'), sublabel: t('Acoustic rain'), icon: CloudRain },
+    { id: 'waves', label: t('Ocean Waves'), sublabel: t('Rhythmic surf'), icon: Waves },
+    { id: 'brown_noise', label: t('Deep Noise'), sublabel: t('Noise masking'), icon: Wind },
+    { id: 'fireplace', label: t('Fireplace'), sublabel: t('Warm crackle'), icon: Flame },
+    { id: 'silence', label: t('Silence'), sublabel: t('Mute'), icon: VolumeX },
   ];
 
   const handleTogglePreview = (track: FocusSoundTrack) => {
@@ -224,7 +226,7 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
       });
     } else {
       startFocusSession({
-        missionTitle: customGoal.trim() || (durationMinutes <= 8 ? '🧘 Meditation & Renewal Session' : 'Deep Work Sprint'),
+        missionTitle: customGoal.trim() || (durationMinutes <= 8 ? t('🧘 Meditation & Renewal Session') : t('Deep Work Sprint')),
         durationMinutes,
         soundTrack,
       });
@@ -249,7 +251,7 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
     setVoiceSampleId(null);
 
     startFocusSession({
-      missionTitle: `${meditation.emoji} ${meditation.title}`,
+      missionTitle: `${meditation.emoji} ${t(meditation.title)}`,
       durationMinutes: meditation.durationMinutes,
       soundTrack: meditation.track,
       guidedMeditationId: meditation.id,
@@ -274,7 +276,7 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
       setVoiceEnabled(true);
     }
     setVoiceSampleId(meditation.id);
-    voiceGuide.speak(meditation.cues[0]?.text || meditation.description);
+    voiceGuide.speak(t(meditation.cues[0]?.text || meditation.description));
   };
 
   const estimatedReward = selectedMission
@@ -305,14 +307,14 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-base font-bold font-display text-[var(--fg)]">
-                Focus & Meditation Engine
+                {t('Focus & Meditation Engine')}
               </h2>
               <span className="px-2 py-0.5 bg-[var(--color-sage)]/15 text-[var(--color-sage)] text-[10px] font-bold uppercase tracking-wider rounded-md">
-                Guided • Frequencies • Deep Work
+                {t('Guided • Frequencies • Deep Work')}
               </span>
             </div>
             <p className="text-xs text-[var(--fg-muted)]">
-              Fullscreen attention lock, voice-guided meditations, 7–8 minute frequency baths and deep work soundscapes.
+              {t('Fullscreen attention lock, voice-guided meditations, 7–8 minute frequency baths and deep work soundscapes.')}
             </p>
           </div>
         </div>
@@ -321,10 +323,10 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
         <div className="flex items-center gap-3 self-start sm:self-auto bg-[var(--bg-muted)] px-3 py-1.5 rounded-[var(--radius-sm)] border border-[var(--border)]">
           <div className="text-right">
             <span className="text-[10px] uppercase font-bold text-[var(--fg-subtle)] block">
-              Focus today
+              {t('Focus today')}
             </span>
             <span className="text-xs font-bold text-[var(--fg)]">
-              {todayTotalFocusMinutes} min
+              {t('{n} min', { n: todayTotalFocusMinutes })}
             </span>
           </div>
           <Zap className="w-4 h-4 text-[var(--color-coral)]" />
@@ -340,13 +342,13 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
             </div>
             <div>
               <h3 className="text-sm font-bold text-[var(--fg)] flex items-center gap-2">
-                <span>🎧 Guided Meditations</span>
+                <span>{t('🎧 Guided Meditations')}</span>
                 <span className="text-[10px] font-semibold px-2 py-0.5 bg-[var(--color-sage)]/15 text-[var(--color-sage)] rounded-full">
-                  Voice-led • 10 sessions
+                  {t('Voice-led • 10 sessions')}
                 </span>
               </h3>
               <p className="text-[11px] text-[var(--fg-muted)]">
-                A calm voice guides you step by step over a frequency soundscape. Relaxation, dopamine reset, manifestation, belief, motivation and more.
+                {t('A calm voice guides you step by step over a frequency soundscape. Relaxation, dopamine reset, manifestation, belief, motivation and more.')}
               </p>
             </div>
           </div>
@@ -361,14 +363,14 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
                     ? 'bg-[var(--color-sage)] text-white border-[var(--color-sage)]'
                     : 'bg-[var(--bg-muted)] text-[var(--fg-muted)] border-[var(--border)]'
                 }`}
-                title="Toggle spoken guidance (uses your device's built-in voice)"
+                title={t("Toggle spoken guidance (uses your device's built-in voice)")}
               >
                 {voiceEnabled ? <Mic className="w-3.5 h-3.5" /> : <MicOff className="w-3.5 h-3.5" />}
-                <span>Voice {voiceEnabled ? 'On' : 'Off'}</span>
+                <span>{voiceEnabled ? t('Voice On') : t('Voice Off')}</span>
               </button>
             ) : (
               <span className="px-3 py-1.5 rounded-full text-[10px] font-semibold bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/30">
-                Voice not supported here — guidance shows as on-screen text
+                {t('Voice not supported here — guidance shows as on-screen text')}
               </span>
             )}
           </div>
@@ -385,23 +387,23 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-xl leading-none">{m.emoji}</span>
-                    <span className="text-[10px] font-mono font-bold text-[var(--fg-muted)]">⏱ {m.durationMinutes} min</span>
+                    <span className="text-[10px] font-mono font-bold text-[var(--fg-muted)]">{t('⏱ {n} min', { n: m.durationMinutes })}</span>
                   </div>
                   <div>
                     <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--color-sage)]">
-                      {INTENT_LABELS[m.intent]}
+                      {t(INTENT_LABELS[m.intent])}
                     </span>
-                    <h4 className="text-xs font-bold text-[var(--fg)] leading-snug">{m.title}</h4>
-                    <p className="text-[11px] italic text-[var(--fg-subtle)] mt-0.5">{m.tagline}</p>
+                    <h4 className="text-xs font-bold text-[var(--fg)] leading-snug">{t(m.title)}</h4>
+                    <p className="text-[11px] italic text-[var(--fg-subtle)] mt-0.5">{t(m.tagline)}</p>
                   </div>
-                  <p className="text-[11px] text-[var(--fg-muted)] leading-relaxed line-clamp-3">{m.description}</p>
+                  <p className="text-[11px] text-[var(--fg-muted)] leading-relaxed line-clamp-3">{t(m.description)}</p>
                   <div className="flex flex-wrap gap-1 pt-1">
                     {m.benefits.map((b, i) => (
                       <span
                         key={i}
                         className="text-[9px] px-1.5 py-0.5 bg-[var(--bg-muted)] text-[var(--fg-subtle)] rounded border border-[var(--border)]"
                       >
-                        {b}
+                        {t(b)}
                       </span>
                     ))}
                   </div>
@@ -412,7 +414,7 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
                     <button
                       type="button"
                       onClick={() => handleVoiceSample(m)}
-                      title={isSampling ? 'Stop sample' : 'Hear the voice'}
+                      title={isSampling ? t('Stop sample') : t('Hear the voice')}
                       className={`px-2 py-1.5 text-[11px] font-semibold rounded-[var(--radius-xs)] border transition-all flex items-center gap-1 cursor-pointer ${
                         isSampling
                           ? 'bg-[var(--color-coral)] text-white border-[var(--color-coral)] animate-pulse'
@@ -428,7 +430,7 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
                     className="flex-1 py-1.5 px-2 bg-[var(--fg)] text-[var(--bg)] font-bold text-[11px] rounded-[var(--radius-xs)] hover:opacity-90 transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
                   >
                     <Play className="w-3 h-3 fill-current" />
-                    <span>Start</span>
+                    <span>{t('Start')}</span>
                   </button>
                 </div>
               </div>
@@ -446,26 +448,26 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
             </div>
             <div>
               <h3 className="text-sm font-bold text-[var(--fg)] flex items-center gap-2">
-                <span>🧘 7–8 Minute Frequency Sessions</span>
+                <span>{t('🧘 7–8 Minute Frequency Sessions')}</span>
                 <span className="text-[10px] font-semibold px-2 py-0.5 bg-[var(--color-sage)]/15 text-[var(--color-sage)] rounded-full">
-                  Quick start
+                  {t('Quick start')}
                 </span>
               </h3>
               <p className="text-[11px] text-[var(--fg-muted)]">
-                Silent, sound-only sessions. Refresh the mind, shake off tension, or tune in before deep work.
+                {t('Silent, sound-only sessions. Refresh the mind, shake off tension, or tune in before deep work.')}
               </p>
             </div>
           </div>
           {previewingTrack && (
             <div className="flex items-center gap-2 px-2.5 py-1 bg-[var(--color-sage)]/10 border border-[var(--color-sage)]/30 rounded-full self-start sm:self-auto">
               <span className="w-2 h-2 rounded-full bg-[var(--color-sage)] animate-ping" />
-              <span className="text-[11px] font-bold text-[var(--color-sage)]">Preview playing…</span>
+              <span className="text-[11px] font-bold text-[var(--color-sage)]">{t('Preview playing…')}</span>
               <button
                 type="button"
                 onClick={() => handleTogglePreview(previewingTrack)}
                 className="text-[10px] underline ml-1 font-bold cursor-pointer text-[var(--fg)] hover:text-[var(--color-coral)]"
               >
-                Stop
+                {t('Stop')}
               </button>
             </div>
           )}
@@ -492,7 +494,7 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
                       <span>{session.hzBadge}</span>
                     </span>
                     <span className="text-[11px] font-mono font-bold text-[var(--fg-muted)]">
-                      ⏱ {session.durationMinutes} min
+                      {t('⏱ {n} min', { n: session.durationMinutes })}
                     </span>
                   </div>
 
@@ -519,7 +521,7 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
                   <button
                     type="button"
                     onClick={() => handleTogglePreview(session.track)}
-                    title={isPlayingThis ? 'Stop preview' : 'Preview this frequency'}
+                    title={isPlayingThis ? t('Stop preview') : t('Preview this frequency')}
                     className={`px-2.5 py-1.5 text-[11px] font-semibold rounded-[var(--radius-xs)] border transition-all flex items-center gap-1.5 cursor-pointer ${
                       isPlayingThis
                         ? 'bg-[var(--color-coral)] text-white border-[var(--color-coral)] animate-pulse'
@@ -529,12 +531,12 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
                     {isPlayingThis ? (
                       <>
                         <Pause className="w-3 h-3" />
-                        <span>Stop</span>
+                        <span>{t('Stop')}</span>
                       </>
                     ) : (
                       <>
                         <Volume2 className="w-3 h-3" />
-                        <span>Listen</span>
+                        <span>{t('Listen')}</span>
                       </>
                     )}
                   </button>
@@ -545,7 +547,7 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
                     className="flex-1 py-1.5 px-3 bg-[var(--fg)] text-[var(--bg)] font-bold text-[11px] rounded-[var(--radius-xs)] hover:opacity-90 transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
                   >
                     <Play className="w-3 h-3 fill-current" />
-                    <span>Start ({session.durationMinutes}m)</span>
+                    <span>{t('Start ({n}m)', { n: session.durationMinutes })}</span>
                   </button>
                 </div>
               </div>
@@ -560,9 +562,9 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
         <div className="lg:col-span-7 space-y-4">
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-[var(--fg)] flex items-center justify-between">
-              <span>1. Choose a mission or intention</span>
+              <span>{t('1. Choose a mission or intention')}</span>
               <span className="text-[11px] font-normal text-[var(--fg-muted)]">
-                {activeMissions.length} active missions
+                {t('{n} active missions', { n: activeMissions.length })}
               </span>
             </label>
             <select
@@ -570,10 +572,10 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
               onChange={(e) => handleSelectMission(e.target.value)}
               className="w-full px-3 py-2 text-xs bg-[var(--bg)] border border-[var(--border)] rounded-[var(--radius-xs)] text-[var(--fg)] font-medium focus:outline-none focus:border-[var(--color-sage)]"
             >
-              <option value="custom">✍️ Free intention / meditation goal</option>
+              <option value="custom">{t('✍️ Free intention / meditation goal')}</option>
               {activeMissions.map((m) => (
                 <option key={m.id} value={m.id}>
-                  {m.isOneDecision ? '★ [ONE DECISION] ' : `[${m.area}] `} {m.title} (
+                  {m.isOneDecision ? t('★ [ONE DECISION] ') : `[${t(m.area)}] `} {m.title} (
                   {m.estimatedMinutes || 30}m)
                 </option>
               ))}
@@ -583,13 +585,13 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
           {selectedMissionId === 'custom' && (
             <div className="space-y-1.5 animate-in fade-in duration-200">
               <label className="text-[11px] font-semibold text-[var(--fg-muted)]">
-                Name your intention (optional)
+                {t('Name your intention (optional)')}
               </label>
               <input
                 type="text"
                 value={customGoal}
                 onChange={(e) => setCustomGoal(e.target.value)}
-                placeholder="e.g. 7 min breathing with 432 Hz, or 45 min writing the landing page"
+                placeholder={t('e.g. 7 min breathing with 432 Hz, or 45 min writing the landing page')}
                 className="w-full px-3 py-2 text-xs bg-[var(--bg)] border border-[var(--border)] rounded-[var(--radius-xs)] text-[var(--fg)] focus:outline-none focus:border-[var(--color-sage)]"
               />
             </div>
@@ -597,9 +599,9 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
 
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-[var(--fg)] flex items-center justify-between">
-              <span>2. Pick a duration</span>
+              <span>{t('2. Pick a duration')}</span>
               <span className="text-[11px] font-semibold text-[var(--color-sage)]">
-                {durationMinutes} min selected
+                {t('{n} min selected', { n: durationMinutes })}
               </span>
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
@@ -641,7 +643,7 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
                 onClick={() => setCustomInputOpen(!customInputOpen)}
                 className="text-[11px] font-semibold text-[var(--fg-muted)] hover:text-[var(--fg)] underline cursor-pointer"
               >
-                {customInputOpen ? 'Hide custom duration' : 'Set a custom number of minutes…'}
+                {customInputOpen ? t('Hide custom duration') : t('Set a custom number of minutes…')}
               </button>
               {customInputOpen && (
                 <div className="flex items-center gap-1.5">
@@ -653,7 +655,7 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
                     onChange={(e) => setDurationMinutes(parseInt(e.target.value) || 25)}
                     className="w-20 px-2 py-1 text-xs bg-[var(--bg)] border border-[var(--border)] rounded-[var(--radius-xs)] text-[var(--fg)]"
                   />
-                  <span className="text-xs text-[var(--fg-muted)]">min</span>
+                  <span className="text-xs text-[var(--fg-muted)]">{t('min')}</span>
                 </div>
               )}
             </div>
@@ -666,9 +668,9 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-[var(--fg)] flex items-center gap-1.5">
                 <Headphones className="w-3.5 h-3.5 text-[var(--color-sage)]" />
-                <span>Sound & Frequency</span>
+                <span>{t('Sound & Frequency')}</span>
               </span>
-              <span className="text-[10px] text-[var(--fg-subtle)]">Web Audio synthesis</span>
+              <span className="text-[10px] text-[var(--fg-subtle)]">{t('Web Audio synthesis')}</span>
             </div>
 
             <div className="flex rounded-[var(--radius-xs)] bg-[var(--bg)] p-0.5 border border-[var(--border)] text-[11px] font-semibold">
@@ -681,7 +683,7 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
                     : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
                 }`}
               >
-                🧘 Frequencies (432/528 Hz)
+                {t('🧘 Frequencies (432/528 Hz)')}
               </button>
               <button
                 type="button"
@@ -692,7 +694,7 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
                     : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
                 }`}
               >
-                🌿 Nature & Focus
+                {t('🌿 Nature & Focus')}
               </button>
             </div>
 
@@ -736,7 +738,7 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
                           e.stopPropagation();
                           handleTogglePreview(opt.id);
                         }}
-                        title={isPlayingThis ? 'Stop preview' : 'Play test sound'}
+                        title={isPlayingThis ? t('Stop preview') : t('Play test sound')}
                         className={`p-1 rounded cursor-pointer ml-1 ${
                           isActive
                             ? 'text-[var(--bg)] hover:bg-white/20'
@@ -754,7 +756,7 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
 
           <div className="pt-3 border-t border-[var(--border)] space-y-3">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-[var(--fg-muted)]">Estimated reward:</span>
+              <span className="text-[var(--fg-muted)]">{t('Estimated reward:')}</span>
               <span className="font-bold text-[var(--color-sage)]">
                 + D$ {estimatedReward.toLocaleString()}
               </span>
@@ -767,7 +769,7 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
             >
               <Play className="w-4 h-4 fill-current group-hover:scale-110 transition-transform" />
               <span>
-                {durationMinutes <= 8 ? 'Start Meditation' : 'Lock Into Focus'} ({durationMinutes}m)
+                {durationMinutes <= 8 ? t('Start Meditation ({n}m)', { n: durationMinutes }) : t('Lock Into Focus ({n}m)', { n: durationMinutes })}
               </span>
             </button>
           </div>

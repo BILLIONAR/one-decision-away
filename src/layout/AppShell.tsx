@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../store/useApp';
+import { LanguagePicker } from '../components/LanguagePicker';
 import {
   Compass,
   CheckSquare,
@@ -26,6 +27,7 @@ import {
 import { computeLedgerBalance } from '../services/economy';
 import { FocusLockView } from '../components/FocusLockView';
 import { QuickDreamJournalModal } from '../components/QuickDreamJournalModal';
+import { useT } from '../i18n';
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -47,6 +49,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
     closeQuickJournal,
   } = useApp();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const t = useT();
 
   const isMac = typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform || '');
 
@@ -54,22 +57,22 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   const currentTheme = data?.profile?.theme || 'light';
 
   const mainNavItems = [
-    { label: 'Life OS', path: '/app', icon: Compass },
-    { label: 'Missions', path: '/app/missions', icon: CheckSquare },
-    { label: 'Market', path: '/app/market', icon: ShoppingBag },
-    { label: 'My Life', path: '/app/life', icon: Sparkles },
-    { label: 'Progress', path: '/app/progress', icon: TrendingUp },
+    { label: t('Life OS'), path: '/app', icon: Compass },
+    { label: t('Missions'), path: '/app/missions', icon: CheckSquare },
+    { label: t('Market'), path: '/app/market', icon: ShoppingBag },
+    { label: t('My Life'), path: '/app/life', icon: Sparkles },
+    { label: t('Progress'), path: '/app/progress', icon: TrendingUp },
   ];
 
   const moreNavItems = [
-    { label: 'Two Futures', path: '/app/two-futures', icon: Columns },
-    { label: 'Future Self', path: '/app/future-self', icon: UserCheck },
-    { label: 'Future Life Score', path: '/app/life-score', icon: Award },
-    { label: 'Dream Bank', path: '/app/bank', icon: CreditCard },
-    { label: 'Reality Bridge', path: '/app/bridge', icon: Layers },
-    { label: 'Life Budget', path: '/app/budget', icon: PieChart },
-    { label: 'Seasons', path: '/app/seasons', icon: Calendar },
-    { label: 'Settings', path: '/app/settings', icon: SettingsIcon },
+    { label: t('Two Futures'), path: '/app/two-futures', icon: Columns },
+    { label: t('Future Self'), path: '/app/future-self', icon: UserCheck },
+    { label: t('Future Life Score'), path: '/app/life-score', icon: Award },
+    { label: t('Dream Bank'), path: '/app/bank', icon: CreditCard },
+    { label: t('Reality Bridge'), path: '/app/bridge', icon: Layers },
+    { label: t('Life Budget'), path: '/app/budget', icon: PieChart },
+    { label: t('Seasons'), path: '/app/seasons', icon: Calendar },
+    { label: t('Settings'), path: '/app/settings', icon: SettingsIcon },
   ];
 
   const handleNav = (path: string) => {
@@ -111,10 +114,10 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
             className="cursor-pointer group flex flex-col pt-1"
           >
             <span className="font-display font-semibold text-[1.45rem] tracking-normal text-[var(--fg)] group-hover:text-[var(--accent)] transition-colors leading-none">
-              One Decision Away
+              {t('One Decision Away')}
             </span>
             <span className="text-[10px] tracking-[0.2em] uppercase text-[var(--fg-subtle)] mt-2 font-sans">
-              AurelyStudio System OS
+              {t('AurelyStudio System OS')}
             </span>
             <div className="w-8 h-[1px] bg-[var(--border-strong)] mt-4" />
           </div>
@@ -125,9 +128,9 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
             className="p-3.5 bg-[var(--bg-muted)] border border-[var(--border)] rounded-[var(--radius-xs)] cursor-pointer hover:border-[var(--fg)] transition-all group relative overflow-hidden"
           >
             <div className="flex items-center justify-between text-[10px] uppercase tracking-wider text-[var(--fg-muted)] mb-1 font-sans">
-              <span className="tracking-[0.15em] text-[var(--ink-faint)]">Dream Bank</span>
+              <span className="tracking-[0.15em] text-[var(--ink-faint)]">{t('Dream Bank')}</span>
               <span className="text-[9px] font-bold tracking-widest uppercase px-1.5 py-0.5 bg-[var(--bg-elevated)] text-[var(--fg)] border border-[var(--border)]">
-                Verified
+                {t('Verified')}
               </span>
             </div>
             <div className="text-2xl font-semibold font-display text-[var(--fg)] group-hover:text-[var(--accent)] transition-colors">
@@ -140,11 +143,11 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
             type="button"
             onClick={openQuickJournal}
             className="w-full flex items-center justify-between px-3 py-2 bg-[var(--bg-elevated)] hover:bg-[var(--bg-muted)] border border-[var(--border)] hover:border-[var(--accent)] rounded-[var(--radius-xs)] text-xs text-[var(--fg)] transition-all cursor-pointer group"
-            title={`Quick Dream Journal Entry (${isMac ? '⌘K' : 'Ctrl+K'})`}
+            title={t('Quick Dream Journal Entry ({key})', { key: isMac ? '⌘K' : 'Ctrl+K' })}
           >
             <div className="flex items-center gap-2">
               <BookOpen className="w-3.5 h-3.5 text-[var(--color-sage)] group-hover:scale-110 transition-transform" />
-              <span className="font-medium text-[11px] tracking-wide">Quick Journal</span>
+              <span className="font-medium text-[11px] tracking-wide">{t('Quick Journal')}</span>
             </div>
             <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-muted)] border border-[var(--border)] font-mono text-[9px] font-medium text-[var(--fg-muted)] group-hover:text-[var(--fg)]">
               {isMac ? '⌘K' : 'Ctrl+K'}
@@ -154,7 +157,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           {/* Main Navigation */}
           <nav className="space-y-1">
             <span className="text-[10px] uppercase tracking-[0.15em] text-[var(--ink-faint)] block mb-2 px-1 font-sans">
-              Core Folios
+              {t('Core Folios')}
             </span>
             {mainNavItems.map((item) => {
               const Icon = item.icon;
@@ -179,7 +182,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           {/* Secondary "More" Navigation */}
           <nav className="space-y-1 pt-3 border-t border-[var(--border)]">
             <span className="text-[10px] uppercase tracking-[0.15em] text-[var(--ink-faint)] block mb-2 px-1 font-sans">
-              Modules
+              {t('Modules')}
             </span>
             {moreNavItems.map((item) => {
               const Icon = item.icon;
@@ -210,32 +213,37 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           >
             <div className="flex items-center gap-2">
               <Crown className="w-3.5 h-3.5 text-[var(--color-coral)]" />
-              <span className="font-semibold text-[11px] uppercase tracking-wider">Pro Edition</span>
+              <span className="font-semibold text-[11px] uppercase tracking-wider">{t('Pro Edition')}</span>
             </div>
             <span className="text-[9px] font-bold uppercase tracking-widest px-1.5 py-0.5 bg-[var(--fg)] text-[var(--bg)] rounded-[var(--radius-xs)]">
-              {data?.subscription.plan === 'pro' ? 'Active' : 'Upgrade'}
+              {data?.subscription.plan === 'pro' ? t('Active') : t('Upgrade')}
             </span>
           </button>
+
+          {/* Language */}
+          <div className="flex items-center justify-between p-2 rounded-[var(--radius-xs)] bg-[var(--bg-muted)] border border-[var(--border)] text-xs">
+            <LanguagePicker />
+          </div>
 
           {/* Quick Theme Toggle & Utility */}
           <div className="flex items-center justify-between p-2 rounded-[var(--radius-xs)] bg-[var(--bg-muted)] border border-[var(--border)] text-xs">
             <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-              {currentTheme === 'dark' ? 'Midnight Theme' : 'Editorial Theme'}
+              {currentTheme === 'dark' ? t('Midnight Theme') : t('Editorial Theme')}
             </span>
             <button
               onClick={toggleTheme}
               className="flex items-center gap-1.5 px-2 py-0.5 rounded-[var(--radius-xs)] bg-[var(--bg-elevated)] text-[var(--fg)] border border-[var(--border)] hover:border-[var(--fg)] text-[10px] font-semibold uppercase tracking-wider transition-colors cursor-pointer"
-              title={`Switch to ${currentTheme === 'dark' ? 'Editorial Light' : 'Midnight Dark'} Theme`}
+              title={currentTheme === 'dark' ? t('Switch to Editorial Light Theme') : t('Switch to Midnight Dark Theme')}
             >
               {currentTheme === 'dark' ? (
                 <>
                   <Sun className="w-3 h-3 text-amber-400" />
-                  <span>Light</span>
+                  <span>{t('Light')}</span>
                 </>
               ) : (
                 <>
                   <Moon className="w-3 h-3 text-[var(--fg-muted)]" />
-                  <span>Dark</span>
+                  <span>{t('Dark')}</span>
                 </>
               )}
             </button>
@@ -246,20 +254,20 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
               onClick={() => handleNav('/two-futures')}
               className="hover:text-[var(--fg)] flex items-center gap-1 cursor-pointer"
             >
-              Public Funnel <ExternalLink className="w-3 h-3" />
+              {t('Public Funnel')} <ExternalLink className="w-3 h-3" />
             </button>
             <button
               onClick={resetToDemo}
-              title="Reset state to initial sample data"
+              title={t('Reset state to initial sample data')}
               className="hover:text-[var(--fg)] flex items-center gap-1 cursor-pointer"
             >
-              <RotateCcw className="w-3 h-3" /> Reset Demo
+              <RotateCcw className="w-3 h-3" /> {t('Reset Demo')}
             </button>
           </div>
 
           <div className="text-[11px] text-[var(--ink-faint)] leading-relaxed pt-3 border-t border-[var(--border)] font-sans">
-            Vol. 01 — Edition<br />
-            AurelyStudio System OS
+            {t('Vol. 01 — Edition')}<br />
+            {t('AurelyStudio System OS')}
           </div>
         </div>
       </aside>
@@ -271,17 +279,17 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           className="cursor-pointer"
         >
           <span className="font-display font-bold text-lg text-[var(--fg)]">
-            One Decision Away
+            {t('One Decision Away')}
           </span>
-          <span className="text-[10px] block text-[var(--fg-subtle)]">by AurelyStudio</span>
+          <span className="text-[10px] block text-[var(--fg-subtle)]">{t('by AurelyStudio')}</span>
         </div>
 
         <div className="flex items-center gap-2">
           <button
             onClick={openQuickJournal}
             className="p-1.5 rounded-[var(--radius-sm)] text-[var(--color-sage)] hover:text-[var(--fg)] hover:bg-[var(--bg-muted)] cursor-pointer flex items-center gap-1 bg-[var(--bg-muted)] border border-[var(--border)]"
-            title={`Quick Dream Journal Entry (${isMac ? '⌘K' : 'Ctrl+K'})`}
-            aria-label="Quick Journal Entry"
+            title={t('Quick Dream Journal Entry ({key})', { key: isMac ? '⌘K' : 'Ctrl+K' })}
+            aria-label={t('Quick Journal Entry')}
           >
             <BookOpen className="w-4 h-4" />
             <span className="text-[10px] font-bold font-mono">⌘K</span>
@@ -290,8 +298,8 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           <button
             onClick={toggleTheme}
             className="p-1.5 rounded-[var(--radius-sm)] text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-muted)] cursor-pointer"
-            title={`Switch to ${currentTheme === 'dark' ? 'Editorial Light' : 'Midnight Dark'} Theme`}
-            aria-label="Toggle Theme"
+            title={currentTheme === 'dark' ? t('Switch to Editorial Light Theme') : t('Switch to Midnight Dark Theme')}
+            aria-label={t('Toggle Theme')}
           >
             {currentTheme === 'dark' ? (
               <Sun className="w-4 h-4 text-amber-400" />
@@ -311,7 +319,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           <button
             onClick={() => setMobileMenuOpen(true)}
             className="p-1.5 rounded-[var(--radius-sm)] text-[var(--fg)] hover:bg-[var(--bg-muted)] cursor-pointer"
-            aria-label="Open Navigation Menu"
+            aria-label={t('Open Navigation Menu')}
           >
             <Menu className="w-5 h-5" />
           </button>
@@ -324,7 +332,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           <div className="w-4/5 max-w-xs bg-[var(--bg-elevated)] h-full p-5 flex flex-col justify-between overflow-y-auto">
             <div className="space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
-                <span className="font-display font-bold text-base">Menu</span>
+                <span className="font-display font-bold text-base">{t('Menu')}</span>
                 <button
                   onClick={() => setMobileMenuOpen(false)}
                   className="p-1 text-[var(--fg-subtle)] hover:text-[var(--fg)]"
@@ -360,13 +368,13 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
                 onClick={() => handleNav('/app/upgrade')}
                 className="w-full py-2 bg-[var(--accent-soft)] text-[var(--color-coral)] font-semibold rounded-[var(--radius-md)] text-xs text-center"
               >
-                Pro Plan ($6.99/mo)
+                {t('Pro Plan ($6.99/mo)')}
               </button>
               <button
                 onClick={() => handleNav('/two-futures')}
                 className="w-full text-xs text-[var(--fg-muted)] text-center py-1 hover:underline"
               >
-                Public Two Futures Funnel
+                {t('Public Two Futures Funnel')}
               </button>
             </div>
           </div>

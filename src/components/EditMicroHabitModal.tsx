@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Field, Input, Select, Button, Textarea } from './ui';
 import { MicroHabit, MicroHabitCategory, CustomHabitCategory, Goal } from '../types/models';
 import { Target, CheckCircle2, Trash2, Plus, Sparkles } from 'lucide-react';
+import { useT } from '../i18n';
 
 interface EditMicroHabitModalProps {
   isOpen: boolean;
@@ -37,6 +38,7 @@ export const EditMicroHabitModal: React.FC<EditMicroHabitModalProps> = ({
   onDelete,
   onOpenCreateGoalModal,
 }) => {
+  const t = useT();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [categoryType, setCategoryType] = useState<string>('Health');
@@ -96,7 +98,7 @@ export const EditMicroHabitModal: React.FC<EditMicroHabitModalProps> = ({
   };
 
   const handleDelete = async () => {
-    if (window.confirm(`Are you sure you want to delete the micro-habit "${habit.title}"?`)) {
+    if (window.confirm(t('Are you sure you want to delete the micro-habit "{title}"?', { title: habit.title }))) {
       try {
         setIsDeleting(true);
         await onDelete(habit.id);
@@ -109,14 +111,14 @@ export const EditMicroHabitModal: React.FC<EditMicroHabitModalProps> = ({
 
   // Build category options
   const categoryOptions = [
-    { value: '---built-in---', label: '── Core Categories ──', disabled: true },
+    { value: '---built-in---', label: t('── Core Categories ──'), disabled: true },
     ...PREDEFINED_CATEGORIES.map((cat) => ({
       value: cat,
-      label: cat,
+      label: t(cat),
     })),
     ...(customCategories.length > 0
       ? [
-          { value: '---custom---', label: '── Custom Categories ──', disabled: true },
+          { value: '---custom---', label: t('── Custom Categories ──'), disabled: true },
           ...customCategories.map((c) => ({
             value: `custom:${c.id}`,
             label: `✨ ${c.name}`,
@@ -129,16 +131,16 @@ export const EditMicroHabitModal: React.FC<EditMicroHabitModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Edit Micro-Habit"
-      subtitle="Update routine details or tag to an overarching life goal."
+      title={t('Edit Micro-Habit')}
+      subtitle={t('Update routine details or tag to an overarching life goal.')}
     >
       <form onSubmit={handleSubmit} className="space-y-4">
-        <Field id="edit-habit-title" label="Habit Title" required>
+        <Field id="edit-habit-title" label={t('Habit Title')} required>
           <Input
             id="edit-habit-title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="e.g. 5-Min Hydration & Mineral Protocol"
+            placeholder={t('e.g. 5-Min Hydration & Mineral Protocol')}
           />
         </Field>
 
@@ -147,25 +149,25 @@ export const EditMicroHabitModal: React.FC<EditMicroHabitModalProps> = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-xs font-semibold text-[var(--primary)] uppercase tracking-wider">
               <Target className="w-3.5 h-3.5 text-[var(--primary)]" />
-              <span>Overarching Life Goal Tag</span>
+              <span>{t('Overarching Life Goal Tag')}</span>
             </div>
             <button
               type="button"
               onClick={onOpenCreateGoalModal}
               className="text-xs text-[var(--primary)] hover:underline flex items-center gap-1 font-medium"
             >
-              <Plus className="w-3 h-3" /> New Goal
+              <Plus className="w-3 h-3" /> {t('New Goal')}
             </button>
           </div>
           <p className="text-xs text-[var(--muted)] leading-relaxed">
-            Linking this habit to a Goal visualizes daily consistency as direct momentum toward that life objective in your Missions and Progress views.
+            {t('Linking this habit to a Goal visualizes daily consistency as direct momentum toward that life objective in your Missions and Progress views.')}
           </p>
           <Select
             id="edit-habit-goal-select"
             value={goalId}
             onChange={(e) => setGoalId(e.target.value)}
             options={[
-              { value: '', label: '── None (Standalone Routine) ──' },
+              { value: '', label: t('── None (Standalone Routine) ──') },
               ...goals.map((g) => ({
                 value: g.id,
                 label: `🎯 ${g.title} (${g.area})`,
@@ -175,7 +177,7 @@ export const EditMicroHabitModal: React.FC<EditMicroHabitModalProps> = ({
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Field id="edit-habit-category" label="Category">
+          <Field id="edit-habit-category" label={t('Category')}>
             <Select
               id="edit-habit-category"
               value={categoryType}
@@ -184,7 +186,7 @@ export const EditMicroHabitModal: React.FC<EditMicroHabitModalProps> = ({
             />
           </Field>
 
-          <Field id="edit-habit-duration" label="Duration (Minutes)">
+          <Field id="edit-habit-duration" label={t('Duration (Minutes)')}>
             <Input
               id="edit-habit-duration"
               type="number"
@@ -198,15 +200,15 @@ export const EditMicroHabitModal: React.FC<EditMicroHabitModalProps> = ({
 
         <Field
           id="edit-habit-description"
-          label="Execution Protocol / Context"
-          helper="Specific friction-reducing cue or formula (e.g. '500ml water with sea salt upon waking')."
+          label={t('Execution Protocol / Context')}
+          helper={t("Specific friction-reducing cue or formula (e.g. '500ml water with sea salt upon waking').")}
         >
           <Textarea
             id="edit-habit-description"
             rows={2}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Specific trigger, routine, or ritual..."
+            placeholder={t('Specific trigger, routine, or ritual...')}
           />
         </Field>
 
@@ -219,15 +221,15 @@ export const EditMicroHabitModal: React.FC<EditMicroHabitModalProps> = ({
             className="text-[var(--danger)] hover:bg-[var(--danger)]/10"
             icon={Trash2}
           >
-            {isDeleting ? 'Deleting...' : 'Delete Habit'}
+            {isDeleting ? t('Deleting...') : t('Delete Habit')}
           </Button>
 
           <div className="flex items-center gap-2">
             <Button variant="ghost" type="button" onClick={onClose} disabled={isSubmitting}>
-              Cancel
+              {t('Cancel')}
             </Button>
             <Button variant="primary" type="submit" loading={isSubmitting} icon={CheckCircle2}>
-              Save Changes
+              {t('Save Changes')}
             </Button>
           </div>
         </div>

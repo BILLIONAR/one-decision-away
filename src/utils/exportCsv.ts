@@ -4,6 +4,7 @@
  */
 
 import { UserData, MicroHabit } from '../types/models';
+import { t, getSpeechLang } from '../i18n';
 
 interface CsvExportOptions {
   rangeDays?: number; // e.g. 7, 30, 90, or undefined for all time
@@ -32,18 +33,18 @@ export function generateMicroHabitsDetailedCsv(
   const minDate = rangeDays ? new Date(now.getTime() - rangeDays * 86400000) : null;
 
   const headers = [
-    'Date',
-    'Day of Week',
-    'Habit ID',
-    'Habit Title',
-    'Category',
-    'Duration (Minutes)',
-    'Linked Life Goal',
-    'Goal Domain Area',
-    'Current Streak (Days)',
-    'Best Streak (Days)',
-    'Lifetime Habit Completions',
-    'Status',
+    t('Date'),
+    t('Day of Week'),
+    t('Habit ID'),
+    t('Habit Title'),
+    t('Category'),
+    t('Duration (Minutes)'),
+    t('Linked Life Goal'),
+    t('Goal Domain Area'),
+    t('Current Streak (Days)'),
+    t('Best Streak (Days)'),
+    t('Lifetime Habit Completions'),
+    t('Status'),
   ];
 
   const rows: string[][] = [];
@@ -61,7 +62,7 @@ export function generateMicroHabitsDetailedCsv(
       const dateObj = new Date(dateStr + 'T00:00:00');
       const dayOfWeek = isNaN(dateObj.getTime())
         ? ''
-        : dateObj.toLocaleDateString('en-US', { weekday: 'long' });
+        : dateObj.toLocaleDateString(getSpeechLang(), { weekday: 'long' });
 
       rows.push([
         dateStr,
@@ -70,12 +71,12 @@ export function generateMicroHabitsDetailedCsv(
         habit.title,
         habit.category,
         habit.durationMinutes ? String(habit.durationMinutes) : '5',
-        linkedGoal ? linkedGoal.title : 'None',
-        linkedGoal ? linkedGoal.area : 'General',
+        linkedGoal ? linkedGoal.title : t('None'),
+        linkedGoal ? linkedGoal.area : t('General'),
         String(habit.streakCount || 0),
         String(habit.bestStreak || 0),
         String(completedDates.length),
-        'Completed',
+        t('Completed'),
       ]);
     });
   });
@@ -99,18 +100,18 @@ export function generateMicroHabitsSummaryCsv(data: UserData): string {
   const goals = data.goals || [];
 
   const headers = [
-    'Habit ID',
-    'Habit Title',
-    'Category',
-    'Target Duration (Minutes)',
-    'Description',
-    'Linked Life Goal',
-    'Goal Area',
-    'Current Streak (Days)',
-    'Best Streak (Days)',
-    'Total Completed Days',
-    'Created At',
-    'Completed Dates List',
+    t('Habit ID'),
+    t('Habit Title'),
+    t('Category'),
+    t('Target Duration (Minutes)'),
+    t('Description'),
+    t('Linked Life Goal'),
+    t('Goal Area'),
+    t('Current Streak (Days)'),
+    t('Best Streak (Days)'),
+    t('Total Completed Days'),
+    t('Created At'),
+    t('Completed Dates List'),
   ];
 
   const rows: string[][] = habits.map((h) => {
@@ -123,8 +124,8 @@ export function generateMicroHabitsSummaryCsv(data: UserData): string {
       h.category,
       h.durationMinutes ? String(h.durationMinutes) : '5',
       h.description || '',
-      linkedGoal ? linkedGoal.title : 'None',
-      linkedGoal ? linkedGoal.area : 'General',
+      linkedGoal ? linkedGoal.title : t('None'),
+      linkedGoal ? linkedGoal.area : t('General'),
       String(h.streakCount || 0),
       String(h.bestStreak || 0),
       String(completedDates.length),

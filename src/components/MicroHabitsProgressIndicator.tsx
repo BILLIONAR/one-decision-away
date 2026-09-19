@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { MicroHabit } from '../types/models';
 import { MicroHabitCheckbox } from './MicroHabitCheckbox';
+import { useT } from '../i18n';
 
 interface MicroHabitsProgressIndicatorProps {
   className?: string;
@@ -24,6 +25,7 @@ export const MicroHabitsProgressIndicator: React.FC<MicroHabitsProgressIndicator
   onScrollToHabits,
 }) => {
   const { data, toggleMicroHabit } = useApp();
+  const t = useT();
 
   if (!data) return null;
 
@@ -62,14 +64,14 @@ export const MicroHabitsProgressIndicator: React.FC<MicroHabitsProgressIndicator
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-sm sm:text-base font-bold font-display text-[var(--fg)]">
-                Daily Micro-Habits Progress
+                {t('Daily Micro-Habits Progress')}
               </h3>
               <span className="hidden sm:inline-block text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-[var(--bg-muted)] text-[var(--fg-muted)] border border-[var(--border)]">
-                Today
+                {t('Today')}
               </span>
             </div>
             <p className="text-xs text-[var(--fg-muted)]">
-              Showing completion progress across all {totalCount} micro-habits saved in your daily protocol.
+              {t('Showing completion progress across all {n} micro-habits saved in your daily protocol.', { n: totalCount })}
             </p>
           </div>
         </div>
@@ -83,11 +85,11 @@ export const MicroHabitsProgressIndicator: React.FC<MicroHabitsProgressIndicator
             {progressPct === 100 ? (
               <span className="inline-flex items-center gap-1">
                 <CheckCircle2 className="w-3.5 h-3.5 text-[var(--color-sage)]" />
-                {completedCount} of {totalCount} Completed (100%)
+                {t('{completed} of {total} Completed (100%)', { completed: completedCount, total: totalCount })}
               </span>
             ) : (
               <span>
-                {completedCount} of {totalCount} Completed ({progressPct}%)
+                {t('{completed} of {total} Completed ({pct}%)', { completed: completedCount, total: totalCount, pct: progressPct })}
               </span>
             )}
           </Badge>
@@ -96,9 +98,9 @@ export const MicroHabitsProgressIndicator: React.FC<MicroHabitsProgressIndicator
             type="button"
             onClick={handleScrollToDetail}
             className="text-xs font-semibold text-[var(--fg-muted)] hover:text-[var(--fg)] flex items-center gap-1 cursor-pointer transition-colors px-2 py-1 rounded hover:bg-[var(--bg-muted)]"
-            title="Jump to full micro-habits manager"
+            title={t('Jump to full micro-habits manager')}
           >
-            <span>Manage</span>
+            <span>{t('Manage')}</span>
             <ArrowDown className="w-3 h-3" />
           </button>
         </div>
@@ -114,7 +116,7 @@ export const MicroHabitsProgressIndicator: React.FC<MicroHabitsProgressIndicator
               }`}
             />
             <span>
-              {completedCount} of {totalCount} micro-habits completed today
+              {t('{completed} of {total} micro-habits completed today', { completed: completedCount, total: totalCount })}
             </span>
           </div>
 
@@ -138,7 +140,7 @@ export const MicroHabitsProgressIndicator: React.FC<MicroHabitsProgressIndicator
           aria-valuenow={progressPct}
           aria-valuemin={0}
           aria-valuemax={100}
-          aria-label={`Micro-habits completion: ${completedCount} of ${totalCount} completed`}
+          aria-label={t('Micro-habits completion: {completed} of {total} completed', { completed: completedCount, total: totalCount })}
           className="relative h-3 w-full bg-[var(--bg-muted)] rounded-full overflow-hidden border border-[var(--border)]"
         >
           <div
@@ -168,24 +170,24 @@ export const MicroHabitsProgressIndicator: React.FC<MicroHabitsProgressIndicator
         <div className="flex items-center justify-between text-[11px] text-[var(--fg-subtle)] pt-0.5">
           <span>
             {totalCount === 0 ? (
-              'No micro-habits currently configured in your protocol.'
+              t('No micro-habits currently configured in your protocol.')
             ) : progressPct === 100 ? (
               <span className="text-[var(--color-sage)] font-semibold inline-flex items-center gap-1">
                 <Sparkles className="w-3 h-3 text-[var(--color-sage)]" />
-                All {totalCount} micro-habits completed! Today's foundational momentum is secured.
+                {t("All {n} micro-habits completed! Today's foundational momentum is secured.", { n: totalCount })}
               </span>
             ) : remainingCount > 0 ? (
               <span>
-                <strong className="text-[var(--fg)] font-semibold">{remainingCount}</strong> habit
-                {remainingCount === 1 ? '' : 's'} remaining today (+D$25 momentum per habit)
+                <strong className="text-[var(--fg)] font-semibold">{remainingCount}</strong>{' '}
+                {remainingCount === 1 ? t('habit remaining today (+D$25 momentum per habit)') : t('habits remaining today (+D$25 momentum per habit)')}
               </span>
             ) : (
-              'Tap any habit below to mark it done for today.'
+              t('Tap any habit below to mark it done for today.')
             )}
           </span>
 
           <span className="text-[10px] font-mono text-[var(--fg-muted)]">
-            {completedCount} / {totalCount} Done
+            {t('{completed} / {total} Done', { completed: completedCount, total: totalCount })}
           </span>
         </div>
       </div>
@@ -195,9 +197,9 @@ export const MicroHabitsProgressIndicator: React.FC<MicroHabitsProgressIndicator
         <div className="pt-2 border-t border-[var(--border)]">
           <div className="flex items-center justify-between mb-2">
             <span className="text-[10px] uppercase font-bold tracking-wider text-[var(--fg-muted)]">
-              Quick Toggle Today's Habits:
+              {t("Quick Toggle Today's Habits:")}
             </span>
-            <span className="text-[10px] text-[var(--fg-subtle)]">Click to complete</span>
+            <span className="text-[10px] text-[var(--fg-subtle)]">{t('Click to complete')}</span>
           </div>
 
           <div className="flex flex-wrap gap-2">
@@ -208,7 +210,7 @@ export const MicroHabitsProgressIndicator: React.FC<MicroHabitsProgressIndicator
                   key={habit.id}
                   type="button"
                   onClick={() => toggleMicroHabit(habit.id)}
-                  title={`${habit.title} (${isDone ? 'Completed today · Click to undo' : 'Pending · Click to complete'})`}
+                  title={`${habit.title} (${isDone ? t('Completed today · Click to undo') : t('Pending · Click to complete')})`}
                   className={`group inline-flex items-center gap-2 px-3 py-1.5 rounded-[var(--radius-sm)] text-xs transition-all cursor-pointer border text-left ${
                     isDone
                       ? 'bg-[var(--color-sage)]/10 border-[var(--color-sage)]/40 text-[var(--color-sage)] font-medium'
@@ -230,7 +232,7 @@ export const MicroHabitsProgressIndicator: React.FC<MicroHabitsProgressIndicator
                         ? 'text-[var(--color-coral)] bg-[var(--color-coral)]/10'
                         : 'text-[var(--fg-muted)] bg-[var(--bg-muted)]'
                     }`}
-                    title={`Current streak: ${habit.streakCount || 0} days`}
+                    title={t('Current streak: {n} days', { n: habit.streakCount || 0 })}
                   >
                     <Flame className={`w-2.5 h-2.5 ${habit.streakCount > 0 ? 'fill-[var(--color-coral)]' : ''}`} />
                     <span>{habit.streakCount || 0}d</span>

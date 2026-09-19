@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MicroHabitCategory } from '../types/models';
+import { useT } from '../i18n';
 
 export interface MicroHabitCheckboxProps {
   id?: string;
@@ -49,6 +50,7 @@ export const MicroHabitCheckbox: React.FC<MicroHabitCheckboxProps> = ({
   disabled = false,
   as = 'button',
 }) => {
+  const t = useT();
   const [burstKey, setBurstKey] = useState<number | null>(null);
   const [particles, setParticles] = useState<ParticleConfig[]>([]);
   const prevCheckedRef = useRef(checked);
@@ -294,7 +296,7 @@ export const MicroHabitCheckbox: React.FC<MicroHabitCheckboxProps> = ({
           type="button"
           role="checkbox"
           aria-checked={checked}
-          aria-label={ariaLabel || (checked ? 'Completed micro-habit' : 'Incomplete micro-habit')}
+          aria-label={ariaLabel || (checked ? t('Completed micro-habit') : t('Incomplete micro-habit'))}
           disabled={disabled}
           onClick={handleClick}
           onKeyDown={handleKeyDown}
@@ -309,7 +311,7 @@ export const MicroHabitCheckbox: React.FC<MicroHabitCheckboxProps> = ({
           id={id}
           role="checkbox"
           aria-checked={checked}
-          aria-label={ariaLabel || (checked ? 'Completed micro-habit' : 'Incomplete micro-habit')}
+          aria-label={ariaLabel || (checked ? t('Completed micro-habit') : t('Incomplete micro-habit'))}
           onClick={handleClick}
           {...commonMotionProps}
         >

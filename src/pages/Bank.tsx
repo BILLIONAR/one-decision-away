@@ -26,11 +26,13 @@ import {
   calculateCurrentStreak,
   ECONOMY_CONSTANTS,
 } from '../services/economy';
+import { useT } from '../i18n';
 import { DreamDollarChart } from '../components/DreamDollarChart';
 import { SavingsMomentumChart } from '../components/SavingsMomentumChart';
 
 export const Bank: React.FC = () => {
   const { data } = useApp();
+  const t = useT();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
@@ -59,35 +61,35 @@ export const Bank: React.FC = () => {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Dream Bank"
-        subtitle="Your immutable ledger of symbolic earnings, marketplace expenditures, and savings momentum."
-        issueNumber="Issue No. 03 — Ledger & Velocity"
+        title={t('Dream Bank')}
+        subtitle={t('Your immutable ledger of symbolic earnings, marketplace expenditures, and savings momentum.')}
+        issueNumber={t('Issue No. 03 — Ledger & Velocity')}
       />
 
       {/* Hero Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <Stat
-          label="Current Balance"
+          label={t('Current Balance')}
           value={`D$ ${balance.toLocaleString()}`}
-          subtext="Available to allocate"
-          badge="Verified"
+          subtext={t('Available to allocate')}
+          badge={t('Verified')}
         />
         <Stat
-          label="Lifetime Earned"
+          label={t('Lifetime Earned')}
           value={`D$ ${earned.toLocaleString()}`}
-          subtext="Through direct execution"
+          subtext={t('Through direct execution')}
           icon={ArrowUpRight}
         />
         <Stat
-          label="Lifetime Spent"
+          label={t('Lifetime Spent')}
           value={`D$ ${spent.toLocaleString()}`}
-          subtext="Furnished in My Life"
+          subtext={t('Furnished in My Life')}
           icon={ArrowDownLeft}
         />
         <Stat
-          label="Today's Cap Usage"
+          label={t("Today's Cap Usage")}
           value={`D$ ${todayEarned.toLocaleString()} / ${ECONOMY_CONSTANTS.DAILY_REWARD_CAP.toLocaleString()}`}
-          subtext="Daily anti-binge guardrail"
+          subtext={t('Daily anti-binge guardrail')}
           icon={Calendar}
         />
       </div>
@@ -109,7 +111,7 @@ export const Bank: React.FC = () => {
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-[var(--color-sage)]" />
             <h3 className="font-display font-bold text-base text-[var(--fg)]">
-              Simulation Ledger ({data.transactions.length} entries)
+              {t('Simulation Ledger ({n} entries)', { n: data.transactions.length })}
             </h3>
           </div>
 
@@ -117,7 +119,7 @@ export const Bank: React.FC = () => {
             <div className="w-full sm:w-48">
               <Input
                 id="search-tx"
-                placeholder="Search ledger..."
+                placeholder={t('Search ledger...')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -128,9 +130,9 @@ export const Bank: React.FC = () => {
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value)}
                 options={[
-                  { value: 'all', label: 'All' },
-                  { value: 'earn', label: 'Deposits' },
-                  { value: 'spend', label: 'Spends' },
+                  { value: 'all', label: t('All') },
+                  { value: 'earn', label: t('Deposits') },
+                  { value: 'spend', label: t('Spends') },
                 ]}
               />
             </div>
@@ -191,7 +193,7 @@ export const Bank: React.FC = () => {
         </div>
       </Card>
 
-      <Disclaimer text="Dream Dollars is a virtual simulation currency designed to anchor focus. It cannot be purchased, transferred, or exchanged for fiat currency." />
+      <Disclaimer text={t('Dream Dollars is a virtual simulation currency designed to anchor focus. It cannot be purchased, transferred, or exchanged for fiat currency.')} />
     </div>
   );
 };

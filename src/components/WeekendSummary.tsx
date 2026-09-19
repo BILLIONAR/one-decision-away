@@ -5,9 +5,11 @@ import { CalendarCheck, Flame, Target } from 'lucide-react';
 import { SEED_MARKET_ITEMS } from '../data/seed';
 import { EXPLORE_DREAM_ITEMS } from '../data/exploreDreams';
 import { computeLedgerBalance, estimateDailyEarningPace, daysToAfford, calculateOneDecisionStreakData } from '../services/economy';
+import { useT } from '../i18n';
 
 /** Saturday/Sunday: a 30-second look back at the week and forward at the closest dream. */
 export const WeekendSummary: React.FC = () => {
+  const t = useT();
   const { data, setActiveRoute } = useApp();
   if (!data) return null;
   const day = new Date().getDay();
@@ -38,8 +40,8 @@ export const WeekendSummary: React.FC = () => {
             <CalendarCheck className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--fg)]">This Week, In 30 Seconds</h3>
-            <p className="text-[11px] text-[var(--fg-muted)]">Weekend review — no judgment, just the numbers.</p>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--fg)]">{t('This Week, In 30 Seconds')}</h3>
+            <p className="text-[11px] text-[var(--fg-muted)]">{t('Weekend review — no judgment, just the numbers.')}</p>
           </div>
         </div>
         <Badge variant={earned > 0 ? 'sage' : 'subtle'}>+ D$ {earned.toLocaleString()}</Badge>
@@ -47,24 +49,24 @@ export const WeekendSummary: React.FC = () => {
       <div className="grid grid-cols-3 gap-2 text-center">
         <div className="p-3 bg-[var(--bg-muted)]/60 rounded-[var(--radius-sm)]">
           <div className="text-xl font-bold font-display text-[var(--fg)]">{decisions}</div>
-          <div className="text-[10px] uppercase tracking-wider text-[var(--fg-muted)]">One Decisions</div>
+          <div className="text-[10px] uppercase tracking-wider text-[var(--fg-muted)]">{t('One Decisions')}</div>
         </div>
         <div className="p-3 bg-[var(--bg-muted)]/60 rounded-[var(--radius-sm)]">
           <div className="text-xl font-bold font-display text-[var(--fg)]">{focusMin}</div>
-          <div className="text-[10px] uppercase tracking-wider text-[var(--fg-muted)]">Focus minutes</div>
+          <div className="text-[10px] uppercase tracking-wider text-[var(--fg-muted)]">{t('Focus minutes')}</div>
         </div>
         <div className="p-3 bg-[var(--bg-muted)]/60 rounded-[var(--radius-sm)]">
           <div className="text-xl font-bold font-display text-[var(--fg)] flex items-center justify-center gap-1"><Flame className="w-4 h-4 text-[var(--color-coral)]" />{streak.currentStreak}</div>
-          <div className="text-[10px] uppercase tracking-wider text-[var(--fg-muted)]">Day streak</div>
+          <div className="text-[10px] uppercase tracking-wider text-[var(--fg-muted)]">{t('Day streak')}</div>
         </div>
       </div>
       {closest && (
         <button type="button" onClick={() => setActiveRoute('/app/life')} className="w-full text-left flex items-center gap-3 p-3 rounded-[var(--radius-sm)] border border-[var(--border)] hover:border-[var(--color-sage)] cursor-pointer">
           <Target className="w-4 h-4 text-[var(--color-sage)] shrink-0" />
           <div className="text-xs">
-            <span className="text-[var(--fg-muted)]">Closest dream: </span>
+            <span className="text-[var(--fg-muted)]">{t('Closest dream:')} </span>
             <strong className="text-[var(--fg)]">{closest.name}</strong>
-            <span className="text-[var(--fg-muted)]"> — {daysLeft === 0 ? 'affordable now' : `~${daysLeft} days at this pace`}</span>
+            <span className="text-[var(--fg-muted)]"> — {daysLeft === 0 ? t('affordable now') : t('~{n} days at this pace', { n: daysLeft ?? 0 })}</span>
           </div>
         </button>
       )}

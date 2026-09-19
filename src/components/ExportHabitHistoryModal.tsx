@@ -16,6 +16,7 @@ import {
   generateMicroHabitsSummaryCsv,
   downloadCsvFile,
 } from '../utils/exportCsv';
+import { useT } from '../i18n';
 
 interface ExportHabitHistoryModalProps {
   isOpen: boolean;
@@ -26,6 +27,7 @@ export const ExportHabitHistoryModal: React.FC<ExportHabitHistoryModalProps> = (
   isOpen,
   onClose,
 }) => {
+  const t = useT();
   const { data, showToast } = useApp();
   const [rangeDays, setRangeDays] = useState<number | undefined>(30);
   const [exportType, setExportType] = useState<'detailed' | 'summary'>('detailed');
@@ -57,12 +59,12 @@ export const ExportHabitHistoryModal: React.FC<ExportHabitHistoryModalProps> = (
         rangeDays ? `${rangeDays}d` : 'all_time'
       }_${timestamp}.csv`;
       downloadCsvFile(csv, filename);
-      showToast(`✓ Exported ${totalFilteredCompletions} completion records to CSV!`, 'success');
+      showToast(t('✓ Exported {n} completion records to CSV!', { n: totalFilteredCompletions }), 'success');
     } else {
       const csv = generateMicroHabitsSummaryCsv(data);
       const filename = `micro_habits_summary_${timestamp}.csv`;
       downloadCsvFile(csv, filename);
-      showToast(`✓ Exported summary for ${habits.length} micro-habits to CSV!`, 'success');
+      showToast(t('✓ Exported summary for {n} micro-habits to CSV!', { n: habits.length }), 'success');
     }
     onClose();
   };
@@ -82,14 +84,14 @@ export const ExportHabitHistoryModal: React.FC<ExportHabitHistoryModalProps> = (
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-base font-bold font-display text-[var(--fg)]">
-                  Export Micro-Habit History
+                  {t('Export Micro-Habit History')}
                 </h3>
                 <Badge variant="sage" className="text-[10px] uppercase">
                   CSV • RFC 4180
                 </Badge>
               </div>
               <p className="text-xs text-[var(--fg-muted)]">
-                Download your micro-habit tracking logs for spreadsheet analysis
+                {t('Download your micro-habit tracking logs for spreadsheet analysis')}
               </p>
             </div>
           </div>
@@ -107,7 +109,7 @@ export const ExportHabitHistoryModal: React.FC<ExportHabitHistoryModalProps> = (
           {/* Format Selection */}
           <div className="space-y-1.5">
             <label className="block text-xs font-semibold text-[var(--fg)]">
-              Export Format Structure
+              {t('Export Format Structure')}
             </label>
             <div className="grid grid-cols-2 gap-2">
               <button
@@ -120,10 +122,10 @@ export const ExportHabitHistoryModal: React.FC<ExportHabitHistoryModalProps> = (
                 }`}
               >
                 <span className="font-bold block text-[var(--fg)] mb-0.5">
-                  Detailed Daily Log
+                  {t('Detailed Daily Log')}
                 </span>
                 <span className="text-[11px] text-[var(--fg-subtle)] leading-tight block">
-                  One row per completion date with habit title, category, linked life goal, and streak at completion.
+                  {t('One row per completion date with habit title, category, linked life goal, and streak at completion.')}
                 </span>
               </button>
 
@@ -137,10 +139,10 @@ export const ExportHabitHistoryModal: React.FC<ExportHabitHistoryModalProps> = (
                 }`}
               >
                 <span className="font-bold block text-[var(--fg)] mb-0.5">
-                  Habit Summary Metrics
+                  {t('Habit Summary Metrics')}
                 </span>
                 <span className="text-[11px] text-[var(--fg-subtle)] leading-tight block">
-                  One row per micro-habit with lifetime completions, active streak, best streak, and linked goals.
+                  {t('One row per micro-habit with lifetime completions, active streak, best streak, and linked goals.')}
                 </span>
               </button>
             </div>
@@ -150,14 +152,14 @@ export const ExportHabitHistoryModal: React.FC<ExportHabitHistoryModalProps> = (
           {exportType === 'detailed' && (
             <div className="space-y-1.5">
               <label className="block text-xs font-semibold text-[var(--fg)]">
-                History Time Window
+                {t('History Time Window')}
               </label>
               <div className="flex flex-wrap gap-2">
                 {[
-                  { label: 'Last 7 Days', days: 7 },
-                  { label: 'Last 30 Days', days: 30 },
-                  { label: 'Last 90 Days', days: 90 },
-                  { label: 'All-Time History', days: undefined },
+                  { label: t('Last 7 Days'), days: 7 },
+                  { label: t('Last 30 Days'), days: 30 },
+                  { label: t('Last 90 Days'), days: 90 },
+                  { label: t('All-Time History'), days: undefined },
                 ].map((item) => (
                   <button
                     key={item.label}
@@ -183,38 +185,38 @@ export const ExportHabitHistoryModal: React.FC<ExportHabitHistoryModalProps> = (
               <span className="text-[var(--fg-muted)]">
                 {exportType === 'detailed' ? (
                   <>
-                    <strong className="text-[var(--fg)]">{totalFilteredCompletions}</strong> completion records found across{' '}
-                    <strong className="text-[var(--fg)]">{habits.length}</strong> micro-habits
+                    <strong className="text-[var(--fg)]">{totalFilteredCompletions}</strong> {t('completion records found across')}{' '}
+                    <strong className="text-[var(--fg)]">{habits.length}</strong> {t('micro-habits')}
                   </>
                 ) : (
                   <>
-                    <strong className="text-[var(--fg)]">{habits.length}</strong> active micro-habit definitions
+                    <strong className="text-[var(--fg)]">{habits.length}</strong> {t('active micro-habit definitions')}
                   </>
                 )}
               </span>
             </div>
-            <Badge variant="neutral">Excel / Sheets ready</Badge>
+            <Badge variant="neutral">{t('Excel / Sheets ready')}</Badge>
           </div>
 
           {/* Column Schema Preview */}
           <div className="space-y-1 text-xs">
             <span className="font-semibold text-[var(--fg-muted)] uppercase tracking-wider text-[10px]">
-              Included CSV Columns:
+              {t('Included CSV Columns:')}
             </span>
             <div className="p-2.5 rounded-[var(--radius-sm)] bg-[var(--bg)] border border-[var(--border)] text-[11px] font-mono text-[var(--fg-muted)] flex flex-wrap gap-1.5">
               {exportType === 'detailed'
                 ? [
-                    'Date',
-                    'Day of Week',
-                    'Habit Title',
-                    'Category',
-                    'Duration (Mins)',
-                    'Linked Life Goal',
-                    'Goal Domain Area',
-                    'Current Streak',
-                    'Best Streak',
-                    'Lifetime Completions',
-                    'Status',
+                    t('Date'),
+                    t('Day of Week'),
+                    t('Habit Title'),
+                    t('Category'),
+                    t('Duration (Mins)'),
+                    t('Linked Life Goal'),
+                    t('Goal Domain Area'),
+                    t('Current Streak'),
+                    t('Best Streak'),
+                    t('Lifetime Completions'),
+                    t('Status'),
                   ].map((col) => (
                     <span
                       key={col}
@@ -224,16 +226,16 @@ export const ExportHabitHistoryModal: React.FC<ExportHabitHistoryModalProps> = (
                     </span>
                   ))
                 : [
-                    'Habit Title',
-                    'Category',
-                    'Duration (Mins)',
-                    'Description',
-                    'Linked Life Goal',
-                    'Goal Area',
-                    'Current Streak',
-                    'Best Streak',
-                    'Total Completed Days',
-                    'Created At',
+                    t('Habit Title'),
+                    t('Category'),
+                    t('Duration (Mins)'),
+                    t('Description'),
+                    t('Linked Life Goal'),
+                    t('Goal Area'),
+                    t('Current Streak'),
+                    t('Best Streak'),
+                    t('Total Completed Days'),
+                    t('Created At'),
                   ].map((col) => (
                     <span
                       key={col}
@@ -249,7 +251,7 @@ export const ExportHabitHistoryModal: React.FC<ExportHabitHistoryModalProps> = (
         {/* Modal Footer */}
         <div className="p-4 sm:p-5 border-t border-[var(--border)] flex items-center justify-between bg-[var(--bg-muted)]/30">
           <Button variant="ghost" size="sm" onClick={onClose}>
-            Cancel
+            {t('Cancel')}
           </Button>
 
           <Button
@@ -258,7 +260,7 @@ export const ExportHabitHistoryModal: React.FC<ExportHabitHistoryModalProps> = (
             onClick={handleExport}
             disabled={exportType === 'detailed' && totalFilteredCompletions === 0}
           >
-            Download CSV Export
+            {t('Download CSV Export')}
           </Button>
         </div>
       </Card>

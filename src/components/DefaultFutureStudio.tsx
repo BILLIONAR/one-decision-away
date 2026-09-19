@@ -16,6 +16,7 @@ import {
   X,
 } from 'lucide-react';
 import { DriftCostItem } from '../types/models';
+import { useT, N_ } from '../i18n';
 
 /**
  * Default Future Studio — the enriched "life you're allowing".
@@ -25,23 +26,23 @@ import { DriftCostItem } from '../types/models';
 
 const TIMELINE_PROMPTS = {
   oneYear: {
-    label: 'One year from now — if nothing changes',
+    label: N_('One year from now — if nothing changes'),
     placeholder:
-      'Same job, same excuses, one more year older. What does an ordinary Tuesday look like? What have you quietly stopped mentioning to friends?',
+      N_('Same job, same excuses, one more year older. What does an ordinary Tuesday look like? What have you quietly stopped mentioning to friends?'),
   },
   threeYears: {
-    label: 'Three years from now — if nothing changes',
+    label: N_('Three years from now — if nothing changes'),
     placeholder:
-      'Which opportunities did you watch other people take? What does your body feel like? What do you tell yourself at 11pm?',
+      N_('Which opportunities did you watch other people take? What does your body feel like? What do you tell yourself at 11pm?'),
   },
   tenYears: {
-    label: 'Ten years from now — if nothing changes',
+    label: N_('Ten years from now — if nothing changes'),
     placeholder:
-      'Which doors are closed for good? Who did you become to the people who depend on you? What is the one sentence you would say about the last decade?',
+      N_('Which doors are closed for good? Who did you become to the people who depend on you? What is the one sentence you would say about the last decade?'),
   },
 } as const;
 
-const LETTER_TEMPLATE = `Dear me,
+const LETTER_TEMPLATE = N_(`Dear me,
 
 It's ten years later and nothing changed. I want to tell you what it's like here.
 
@@ -53,14 +54,14 @@ I kept telling myself ...
 
 If you can hear me: the decision that would have changed everything was ...
 
-— The version of you that waited`;
+— The version of you that waited`);
 
 const DEFAULT_SIGNALS = [
-  'Scrolled instead of starting',
-  'Said "tomorrow" to the hard thing',
-  'Chose comfort over the plan',
-  'Complained without acting',
-  'Skipped the One Decision',
+  N_('Scrolled instead of starting'),
+  N_('Said "tomorrow" to the hard thing'),
+  N_('Chose comfort over the plan'),
+  N_('Complained without acting'),
+  N_('Skipped the One Decision'),
 ];
 
 function formatDays(minutesPerDay: number): { hoursPerYear: number; daysPerYear: number; daysPerDecade: number } {
@@ -70,6 +71,7 @@ function formatDays(minutesPerDay: number): { hoursPerYear: number; daysPerYear:
 }
 
 export const DefaultFutureStudio: React.FC = () => {
+  const t = useT();
   const { data, saveDefaultFuture, logDriftSignal, removeDriftEntry, startFocusSession, setActiveRoute } = useApp();
 
   const df = data?.twoFutures.defaultFuture || {};
@@ -193,12 +195,11 @@ export const DefaultFutureStudio: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
         <div>
           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#9A8F86]">
-            The Future You're Running From
+            {t("The Future You're Running From")}
           </span>
-          <h2 className="font-display font-bold text-2xl text-[var(--fg)] mt-1">Default Future Studio</h2>
+          <h2 className="font-display font-bold text-2xl text-[var(--fg)] mt-1">{t('Default Future Studio')}</h2>
           <p className="text-sm text-[var(--fg-muted)] max-w-2xl mt-1">
-            Fear is a poor long-term fuel, but a clear picture of the default path is a superb compass. Make it concrete,
-            count what it costs, and notice the small moments you drift toward it.
+            {t('Fear is a poor long-term fuel, but a clear picture of the default path is a superb compass. Make it concrete, count what it costs, and notice the small moments you drift toward it.')}
           </p>
         </div>
         <Button
@@ -207,14 +208,14 @@ export const DefaultFutureStudio: React.FC = () => {
           icon={Play}
           onClick={() =>
             startFocusSession({
-              missionTitle: '🌗 The Two Futures Walk',
+              missionTitle: t('🌗 The Two Futures Walk'),
               durationMinutes: 9,
               soundTrack: 'solfeggio_396hz',
               guidedMeditationId: 'gm-two-futures',
             })
           }
         >
-          Guided: The Two Futures Walk (9m)
+          {t('Guided: The Two Futures Walk (9m)')}
         </Button>
       </div>
 
@@ -226,19 +227,18 @@ export const DefaultFutureStudio: React.FC = () => {
               <Footprints className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-[var(--fg)]">Drift Signals</h3>
+              <h3 className="text-sm font-bold text-[var(--fg)]">{t('Drift Signals')}</h3>
               <p className="text-[11px] text-[var(--fg-muted)]">
-                Tap the moment you catch yourself sliding. Each tap is one honest vote for the default future — and
-                noticing it is the first vote back.
+                {t('Tap the moment you catch yourself sliding. Each tap is one honest vote for the default future — and noticing it is the first vote back.')}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2 text-[11px]">
             <Badge variant={cleanDaysInRow >= 3 ? 'sage' : 'subtle'}>
-              {cleanDaysInRow} clean day{cleanDaysInRow === 1 ? '' : 's'} in a row
+              {cleanDaysInRow === 1 ? t('1 clean day in a row') : t('{n} clean days in a row', { n: cleanDaysInRow })}
             </Badge>
             <Badge variant={driftLast7 <= driftPrev7 ? 'sage' : 'coral'}>
-              7d: {driftLast7} {driftLast7 <= driftPrev7 ? '↓' : '↑'} (prev {driftPrev7})
+              {t('7d: {n} {arrow} (prev {prev})', { n: driftLast7, arrow: driftLast7 <= driftPrev7 ? '↓' : '↑', prev: driftPrev7 })}
             </Badge>
           </div>
         </div>
@@ -246,7 +246,7 @@ export const DefaultFutureStudio: React.FC = () => {
         {/* 14-day strip */}
         <div className="flex items-end gap-1.5">
           {last14.map((d) => (
-            <div key={d.key} className="flex-1 flex flex-col items-center gap-1" title={`${d.key}: ${d.count} drift`}>
+            <div key={d.key} className="flex-1 flex flex-col items-center gap-1" title={t('{date}: {n} drift', { date: d.key, n: d.count })}>
               <div
                 className={`w-full h-7 rounded-md border transition-all ${
                   d.count === 0
@@ -277,7 +277,7 @@ export const DefaultFutureStudio: React.FC = () => {
                 }`}
               >
                 {done ? '✓ ' : ''}
-                {sig}
+                {t(sig)}
               </button>
             );
           })}
@@ -294,25 +294,25 @@ export const DefaultFutureStudio: React.FC = () => {
             id="custom-drift"
             value={customSignal}
             onChange={(e) => setCustomSignal(e.target.value)}
-            placeholder="Something else you noticed today…"
+            placeholder={t('Something else you noticed today…')}
             className="flex-1"
           />
           <Button type="submit" variant="secondary" size="sm" icon={Plus} disabled={!customSignal.trim()}>
-            Log
+            {t('Log')}
           </Button>
         </form>
 
         {driftLog.length > 0 && (
           <div className="pt-3 border-t border-[var(--border)] space-y-1.5">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-subtle)]">Recent drift log</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-subtle)]">{t('Recent drift log')}</span>
               {driftLog.length > 6 && (
                 <button
                   type="button"
                   onClick={() => setShowAllDrift(!showAllDrift)}
                   className="text-[11px] underline text-[var(--fg-muted)] cursor-pointer"
                 >
-                  {showAllDrift ? 'Show less' : `Show all (${driftLog.length})`}
+                  {showAllDrift ? t('Show less') : t('Show all ({n})', { n: driftLog.length })}
                 </button>
               )}
             </div>
@@ -323,12 +323,12 @@ export const DefaultFutureStudio: React.FC = () => {
               >
                 <span className="text-[var(--fg)]">
                   <span className="font-mono text-[var(--fg-subtle)] mr-2">{e.dateKey.slice(5)}</span>
-                  {e.signal}
+                  {t(e.signal)}
                 </span>
                 <button
                   type="button"
                   onClick={() => removeDriftEntry(e.id)}
-                  title="Remove (logged by mistake)"
+                  title={t('Remove (logged by mistake)')}
                   className="p-1 text-[var(--fg-subtle)] hover:text-red-500 cursor-pointer"
                 >
                   <X className="w-3 h-3" />
@@ -345,19 +345,18 @@ export const DefaultFutureStudio: React.FC = () => {
           <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
             <div className="flex items-center gap-2">
               <Hourglass className="w-4 h-4 text-[#9A8F86]" />
-              <h3 className="text-sm font-bold text-[var(--fg)]">The Cost of Drift</h3>
+              <h3 className="text-sm font-bold text-[var(--fg)]">{t('The Cost of Drift')}</h3>
             </div>
-            <Badge variant="subtle">Quiet math</Badge>
+            <Badge variant="subtle">{t('Quiet math')}</Badge>
           </div>
           <p className="text-[11px] text-[var(--fg-muted)]">
-            List the default habits that eat your days. The numbers are not a judgment — they are the invoice the
-            default future sends every decade.
+            {t('List the default habits that eat your days. The numbers are not a judgment — they are the invoice the default future sends every decade.')}
           </p>
 
           {costs.length > 0 && (
             <div className="space-y-1.5">
               {costs.map((c) => {
-                const t = formatDays(c.minutesPerDay);
+                const fd = formatDays(c.minutesPerDay);
                 return (
                   <div
                     key={c.id}
@@ -366,12 +365,12 @@ export const DefaultFutureStudio: React.FC = () => {
                     <div className="min-w-0">
                       <div className="font-semibold text-[var(--fg)] truncate">{c.label}</div>
                       <div className="text-[var(--fg-muted)]">
-                        {c.minutesPerDay} min/day → <strong>{t.daysPerYear.toFixed(1)} full days</strong> a year,{' '}
-                        <strong>{(t.daysPerDecade / 30.4).toFixed(1)} months</strong> a decade
+                        {t('{n} min/day →', { n: c.minutesPerDay })} <strong>{t('{n} full days', { n: fd.daysPerYear.toFixed(1) })}</strong> {t('a year,')}{' '}
+                        <strong>{t('{n} months', { n: (fd.daysPerDecade / 30.4).toFixed(1) })}</strong> {t('a decade')}
                         {c.dollarsPerMonth ? (
                           <>
                             {' '}
-                            · ${c.dollarsPerMonth}/mo → <strong>${(c.dollarsPerMonth * 120).toLocaleString()}</strong> in 10 years
+                            · ${c.dollarsPerMonth}/mo → <strong>${(c.dollarsPerMonth * 120).toLocaleString()}</strong> {t('in 10 years')}
                           </>
                         ) : null}
                       </div>
@@ -380,7 +379,7 @@ export const DefaultFutureStudio: React.FC = () => {
                       type="button"
                       onClick={() => handleRemoveCost(c.id)}
                       className="p-1.5 text-[var(--fg-subtle)] hover:text-red-500 cursor-pointer shrink-0"
-                      title="Remove"
+                      title={t('Remove')}
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -394,19 +393,19 @@ export const DefaultFutureStudio: React.FC = () => {
             <div className="grid grid-cols-3 gap-2 text-center">
               <div className="p-3 bg-[#9A8F86]/10 border border-[#9A8F86]/30 rounded-[var(--radius-sm)]">
                 <div className="text-lg font-bold font-display text-[var(--fg)]">{totals.hoursPerYear.toFixed(0)}h</div>
-                <div className="text-[10px] uppercase tracking-wider text-[var(--fg-muted)]">per year</div>
+                <div className="text-[10px] uppercase tracking-wider text-[var(--fg-muted)]">{t('per year')}</div>
               </div>
               <div className="p-3 bg-[#9A8F86]/10 border border-[#9A8F86]/30 rounded-[var(--radius-sm)]">
                 <div className="text-lg font-bold font-display text-[var(--fg)]">
-                  {(totals.daysPerDecade / 30.4).toFixed(1)} mo
+                  {t('{n} mo', { n: (totals.daysPerDecade / 30.4).toFixed(1) })}
                 </div>
-                <div className="text-[10px] uppercase tracking-wider text-[var(--fg-muted)]">per decade</div>
+                <div className="text-[10px] uppercase tracking-wider text-[var(--fg-muted)]">{t('per decade')}</div>
               </div>
               <div className="p-3 bg-[#9A8F86]/10 border border-[#9A8F86]/30 rounded-[var(--radius-sm)]">
                 <div className="text-lg font-bold font-display text-[var(--fg)]">
                   {decadeDollars > 0 ? `$${Math.round(decadeDollars / 1000)}k` : '—'}
                 </div>
-                <div className="text-[10px] uppercase tracking-wider text-[var(--fg-muted)]">10-yr spend</div>
+                <div className="text-[10px] uppercase tracking-wider text-[var(--fg-muted)]">{t('10-yr spend')}</div>
               </div>
             </div>
           )}
@@ -417,7 +416,7 @@ export const DefaultFutureStudio: React.FC = () => {
                 id="cost-label"
                 value={newCostLabel}
                 onChange={(e) => setNewCostLabel(e.target.value)}
-                placeholder="e.g. Doomscrolling, late-night TV, food delivery"
+                placeholder={t('e.g. Doomscrolling, late-night TV, food delivery')}
               />
               <Input
                 id="cost-minutes"
@@ -426,8 +425,8 @@ export const DefaultFutureStudio: React.FC = () => {
                 max={1440}
                 value={newCostMinutes}
                 onChange={(e) => setNewCostMinutes(parseInt(e.target.value) || 0)}
-                placeholder="min/day"
-                title="Minutes per day"
+                placeholder={t('min/day')}
+                title={t('Minutes per day')}
               />
               <Input
                 id="cost-dollars"
@@ -435,14 +434,14 @@ export const DefaultFutureStudio: React.FC = () => {
                 min={0}
                 value={newCostDollars}
                 onChange={(e) => setNewCostDollars(e.target.value === '' ? '' : parseInt(e.target.value) || 0)}
-                placeholder="$/mo"
-                title="Dollars per month (optional)"
+                placeholder={t('$/mo')}
+                title={t('Dollars per month (optional)')}
               />
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-[10px] text-[var(--fg-subtle)]">minutes per day · optional $ per month</span>
+              <span className="text-[10px] text-[var(--fg-subtle)]">{t('minutes per day · optional $ per month')}</span>
               <Button variant="secondary" size="sm" icon={Plus} onClick={handleAddCost} disabled={!newCostLabel.trim()}>
-                Add cost
+                {t('Add cost')}
               </Button>
             </div>
           </div>
@@ -453,15 +452,15 @@ export const DefaultFutureStudio: React.FC = () => {
           <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-[#9A8F86]" />
-              <h3 className="text-sm font-bold text-[var(--fg)]">If Nothing Changes — Timeline</h3>
+              <h3 className="text-sm font-bold text-[var(--fg)]">{t('If Nothing Changes — Timeline')}</h3>
             </div>
             {!editingTimeline ? (
               <Button variant="outline" size="sm" icon={Edit2} onClick={() => setEditingTimeline(true)}>
-                {df.oneYear || df.threeYears || df.tenYears ? 'Edit' : 'Write it'}
+                {df.oneYear || df.threeYears || df.tenYears ? t('Edit') : t('Write it')}
               </Button>
             ) : (
               <Button variant="accent" size="sm" icon={Check} onClick={handleSaveTimeline}>
-                Save
+                {t('Save')}
               </Button>
             )}
           </div>
@@ -475,7 +474,7 @@ export const DefaultFutureStudio: React.FC = () => {
           ).map(([key, value, setter, saved]) => (
             <div key={key} className="space-y-1.5">
               <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#9A8F86]">
-                {TIMELINE_PROMPTS[key].label}
+                {t(TIMELINE_PROMPTS[key].label)}
               </span>
               {editingTimeline ? (
                 <Textarea
@@ -483,14 +482,14 @@ export const DefaultFutureStudio: React.FC = () => {
                   value={value}
                   onChange={(e) => setter(e.target.value)}
                   rows={3}
-                  placeholder={TIMELINE_PROMPTS[key].placeholder}
+                  placeholder={t(TIMELINE_PROMPTS[key].placeholder)}
                 />
               ) : saved ? (
                 <p className="text-sm italic font-serif text-[var(--fg)] bg-[var(--bg-muted)] p-3 rounded-[var(--radius-sm)] border border-[var(--border)] leading-relaxed">
                   {saved}
                 </p>
               ) : (
-                <p className="text-xs text-[var(--fg-subtle)] italic">{TIMELINE_PROMPTS[key].placeholder}</p>
+                <p className="text-xs text-[var(--fg-subtle)] italic">{t(TIMELINE_PROMPTS[key].placeholder)}</p>
               )}
             </div>
           ))}
@@ -503,7 +502,7 @@ export const DefaultFutureStudio: React.FC = () => {
           <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
             <div className="flex items-center gap-2">
               <Mail className="w-4 h-4 text-[#9A8F86]" />
-              <h3 className="text-sm font-bold text-[var(--fg)]">A Letter From Your Default Self</h3>
+              <h3 className="text-sm font-bold text-[var(--fg)]">{t('A Letter From Your Default Self')}</h3>
             </div>
             {!editingLetter ? (
               <Button
@@ -511,20 +510,20 @@ export const DefaultFutureStudio: React.FC = () => {
                 size="sm"
                 icon={Edit2}
                 onClick={() => {
-                  if (!letter.trim()) setLetter(LETTER_TEMPLATE);
+                  if (!letter.trim()) setLetter(t(LETTER_TEMPLATE));
                   setEditingLetter(true);
                 }}
               >
-                {df.letterFromDefaultSelf ? 'Edit' : 'Write it'}
+                {df.letterFromDefaultSelf ? t('Edit') : t('Write it')}
               </Button>
             ) : (
               <Button variant="accent" size="sm" icon={Check} onClick={handleSaveLetter}>
-                Save
+                {t('Save')}
               </Button>
             )}
           </div>
           <p className="text-[11px] text-[var(--fg-muted)]">
-            Written from ten years down the default path. Read it when you feel the pull to postpone.
+            {t('Written from ten years down the default path. Read it when you feel the pull to postpone.')}
           </p>
           {editingLetter ? (
             <Textarea id="df-letter" value={letter} onChange={(e) => setLetter(e.target.value)} rows={12} />
@@ -534,7 +533,7 @@ export const DefaultFutureStudio: React.FC = () => {
             </pre>
           ) : (
             <pre className="whitespace-pre-wrap text-xs font-serif italic text-[var(--fg-subtle)] leading-relaxed">
-              {LETTER_TEMPLATE}
+              {t(LETTER_TEMPLATE)}
             </pre>
           )}
         </Card>
@@ -544,22 +543,22 @@ export const DefaultFutureStudio: React.FC = () => {
           <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
             <div className="flex items-center gap-2">
               <Eye className="w-4 h-4 text-[#9A8F86]" />
-              <h3 className="text-sm font-bold text-[var(--fg)]">Recorded Observations</h3>
+              <h3 className="text-sm font-bold text-[var(--fg)]">{t('Recorded Observations')}</h3>
             </div>
-            <Badge variant="subtle">{answeredAllowing.length} / 8 answered</Badge>
+            <Badge variant="subtle">{t('{n} / 8 answered', { n: answeredAllowing.length })}</Badge>
           </div>
           {answeredAllowing.length === 0 ? (
             <div className="text-xs text-[var(--fg-muted)] space-y-2">
-              <p>You haven't answered the eight "life you're allowing" questions yet.</p>
+              <p>{t('You haven\'t answered the eight "life you\'re allowing" questions yet.')}</p>
               <Button variant="secondary" size="sm" onClick={() => setActiveRoute('/two-futures')}>
-                <AlertTriangle className="w-3.5 h-3.5 mr-1" /> Open the Public Compass to answer them
+                <AlertTriangle className="w-3.5 h-3.5 mr-1" /> {t('Open the Public Compass to answer them')}
               </Button>
             </div>
           ) : (
             <div className="space-y-2 text-xs text-[var(--fg-muted)] max-h-[420px] overflow-y-auto pr-1">
               {answeredAllowing.map(([id, answer]) => (
                 <div key={id} className="p-2.5 bg-[var(--bg-muted)]/60 rounded-[var(--radius-sm)]">
-                  <span className="font-semibold text-[var(--fg)] block">{ALLOWING_TITLES[id] || id}</span>
+                  <span className="font-semibold text-[var(--fg)] block">{ALLOWING_TITLES[id] ? t(ALLOWING_TITLES[id]) : id}</span>
                   {answer}
                 </div>
               ))}
@@ -572,12 +571,12 @@ export const DefaultFutureStudio: React.FC = () => {
 };
 
 const ALLOWING_TITLES: Record<string, string> = {
-  q1: 'Quiet dissatisfaction',
-  q2: 'Unchanged complaints',
-  q3: 'A Tuesday in 5 years',
-  q4: 'Closed doors in 10 years',
-  q5: 'Late-life regret',
-  q6: 'Identity to release',
-  q7: 'The shield',
-  q8: 'The real price',
+  q1: N_('Quiet dissatisfaction'),
+  q2: N_('Unchanged complaints'),
+  q3: N_('A Tuesday in 5 years'),
+  q4: N_('Closed doors in 10 years'),
+  q5: N_('Late-life regret'),
+  q6: N_('Identity to release'),
+  q7: N_('The shield'),
+  q8: N_('The real price'),
 };

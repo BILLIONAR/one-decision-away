@@ -4,6 +4,7 @@ import { WalletTransaction, MarketItem, Goal } from '../types/models';
 import { SEED_MARKET_ITEMS } from '../data/seed';
 import { Badge, Card, Select } from './ui';
 import { TrendingUp, Target, Zap, CheckCircle2, Compass, Sparkles } from 'lucide-react';
+import { useT } from '../i18n';
 
 interface SavingsMomentumChartProps {
   transactions: WalletTransaction[];
@@ -39,6 +40,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
   userGoals = [],
   className = '',
 }) => {
+  const t = useT();
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const [containerWidth, setContainerWidth] = useState<number>(600);
@@ -109,11 +111,11 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
   const activeGoal = useMemo(() => {
     return goalOptions.find((g) => g.id === selectedGoalId) || goalOptions[0] || {
       id: 'default-goal',
-      name: 'Life Design Milestone',
+      name: t('Life Design Milestone'),
       targetD$: 1000,
       source: 'market',
     };
-  }, [goalOptions, selectedGoalId]);
+  }, [goalOptions, selectedGoalId, t]);
 
   // Calculate 30-day timeline series
   const dataPoints = useMemo<DayPoint[]>(() => {
@@ -375,7 +377,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
     g.attr('transform', `translate(${margin.left},${margin.top})`);
 
     // Define standard transition
-    const t = svg.transition().duration(isInitial ? 850 : 650).ease(d3.easeCubicInOut);
+    const trans = svg.transition().duration(isInitial ? 850 : 650).ease(d3.easeCubicInOut);
 
     // --- A. Grid Lines ---
     const gridGroup = g.select<SVGGElement>('.grid-lines');
@@ -394,18 +396,18 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
             .attr('stroke-width', 0.8)
             .attr('stroke-dasharray', '3,3')
             .attr('opacity', 0)
-            .call((enterLine) => enterLine.transition(t).attr('opacity', 1)),
+            .call((enterLine) => enterLine.transition(trans).attr('opacity', 1)),
         (update) =>
           update.call((updateLine) =>
             updateLine
-              .transition(t)
+              .transition(trans)
               .attr('x1', 0)
               .attr('x2', innerWidth)
               .attr('y1', (d) => yScale(d))
               .attr('y2', (d) => yScale(d))
               .attr('opacity', 1)
           ),
-        (exit) => exit.call((exitLine) => exitLine.transition(t).attr('opacity', 0).remove())
+        (exit) => exit.call((exitLine) => exitLine.transition(trans).attr('opacity', 0).remove())
       );
 
     // --- B. X & Y Axes ---
@@ -420,7 +422,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
     if (isInitial) {
       xAxisGroup.call(xAxis);
     } else {
-      xAxisGroup.transition(t).call(xAxis);
+      xAxisGroup.transition(trans).call(xAxis);
     }
     xAxisGroup.select('.domain').attr('stroke', 'var(--border-strong)');
     xAxisGroup.selectAll('.tick line').attr('stroke', 'var(--border-strong)');
@@ -442,7 +444,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
     if (isInitial) {
       yAxisGroup.call(yAxis);
     } else {
-      yAxisGroup.transition(t).call(yAxis);
+      yAxisGroup.transition(trans).call(yAxis);
     }
     yAxisGroup.select('.domain').remove();
     yAxisGroup
@@ -480,7 +482,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
                     .attr('height', (d: DayPoint) => (d.dayEarned > 0 ? innerHeight - yScale(d.dayEarned) : 0))
                     .attr('opacity', 0.18)
                 : enterRect
-                    .transition(t)
+                    .transition(trans)
                     .attr('y', (d: DayPoint) => (d.dayEarned > 0 ? yScale(d.dayEarned) : innerHeight))
                     .attr('height', (d: DayPoint) => (d.dayEarned > 0 ? innerHeight - yScale(d.dayEarned) : 0))
                     .attr('opacity', 0.18)
@@ -488,7 +490,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
         (update) =>
           update.call((updateRect) =>
             updateRect
-              .transition(t)
+              .transition(trans)
               .attr('x', (d: DayPoint) => (xScale(d.date) || 0) - barWidth / 2)
               .attr('y', (d: DayPoint) => (d.dayEarned > 0 ? yScale(d.dayEarned) : innerHeight))
               .attr('width', barWidth)
@@ -497,7 +499,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
           ),
         (exit) =>
           exit.call((exitRect) =>
-            exitRect.transition(t).attr('y', innerHeight).attr('height', 0).attr('opacity', 0).remove()
+            exitRect.transition(trans).attr('y', innerHeight).attr('height', 0).attr('opacity', 0).remove()
           )
       );
 
@@ -513,7 +515,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
         .ease(d3.easeCubicOut)
         .attr('opacity', 1);
     } else {
-      areaPath.datum(dataPoints).transition(t).attr('d', areaGenerator).attr('opacity', 1);
+      areaPath.datum(dataPoints).transition(trans).attr('d', areaGenerator).attr('opacity', 1);
     }
 
     // --- E. Momentum Line Path ---
@@ -536,7 +538,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
         .datum(dataPoints)
         .attr('stroke-dasharray', null)
         .attr('stroke-dashoffset', null)
-        .transition(t)
+        .transition(trans)
         .attr('d', lineGenerator);
     }
 
@@ -567,14 +569,14 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
                     .attr('r', 3)
                     .attr('opacity', 1)
                 : enterCircle
-                    .transition(t)
+                    .transition(trans)
                     .attr('r', 3)
                     .attr('opacity', 1)
             ),
         (update) =>
           update.call((updateCircle) =>
             updateCircle
-              .transition(t)
+              .transition(trans)
               .attr('cx', (d: DayPoint) => xScale(d.date) || 0)
               .attr('cy', (d: DayPoint) => yScale(d.cumulativeBalance))
               .attr('fill', (d: DayPoint) => (d.dayEarned > 0 ? '#FAF8F5' : '#B8533C'))
@@ -584,7 +586,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
           ),
         (exit) =>
           exit.call((exitCircle) =>
-            exitCircle.transition(t).attr('r', 0).attr('opacity', 0).remove()
+            exitCircle.transition(trans).attr('r', 0).attr('opacity', 0).remove()
           )
       );
 
@@ -614,14 +616,14 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
           .attr('x', innerWidth - 6)
           .attr('y', goalY - 6)
           .attr('opacity', 0)
-          .text(`GOAL TARGET: ${activeGoal.name.toUpperCase()} (D$ ${activeGoal.targetD$.toLocaleString()})`)
+          .text(t('GOAL TARGET: {name} (D$ {amount})', { name: activeGoal.name.toUpperCase(), amount: activeGoal.targetD$.toLocaleString() }))
           .transition()
           .delay(350)
           .duration(500)
           .attr('opacity', 1);
       } else {
         goalLine
-          .transition(t)
+          .transition(trans)
           .attr('x1', 0)
           .attr('x2', innerWidth)
           .attr('y1', goalY)
@@ -629,14 +631,14 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
           .attr('opacity', 0.85);
 
         goalLabel
-          .text(`GOAL TARGET: ${activeGoal.name.toUpperCase()} (D$ ${activeGoal.targetD$.toLocaleString()})`)
-          .transition(t)
+          .text(t('GOAL TARGET: {name} (D$ {amount})', { name: activeGoal.name.toUpperCase(), amount: activeGoal.targetD$.toLocaleString() }))
+          .transition(trans)
           .attr('x', innerWidth - 6)
           .attr('y', goalY - 6)
           .attr('opacity', 1);
       }
     } else {
-      goalGroup.transition(t).style('opacity', 0).on('end', () => goalGroup.style('display', 'none'));
+      goalGroup.transition(trans).style('opacity', 0).on('end', () => goalGroup.style('display', 'none'));
     }
 
     // --- H. Interactive Overlay & Focus Group Bindings ---
@@ -685,7 +687,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
 
     // Mark initial entrance complete
     isInitialMountRef.current = false;
-  }, [dataPoints, containerWidth, activeGoal]);
+  }, [dataPoints, containerWidth, activeGoal, t]);
 
   return (
     <Card padding="md" className={`space-y-4 ${className}`}>
@@ -694,15 +696,15 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="font-sans text-[9px] font-bold uppercase tracking-[0.25em] text-[var(--color-sage)]">
-              Fig. 02 — Velocity Metric
+              {t('Fig. 02 — Velocity Metric')}
             </span>
-            <Badge variant="sage">30-Day Trajectory</Badge>
+            <Badge variant="sage">{t('30-Day Trajectory')}</Badge>
           </div>
           <h3 className="text-xl font-bold font-display text-[var(--fg)]">
-            Savings Momentum
+            {t('Savings Momentum')}
           </h3>
           <p className="text-xs text-[var(--fg-muted)] font-sans">
-            Visualizing cumulative Dream Dollar momentum and progress toward target acquisitions.
+            {t('Visualizing cumulative Dream Dollar momentum and progress toward target acquisitions.')}
           </p>
         </div>
 
@@ -710,7 +712,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <div className="flex items-center gap-1.5 text-xs text-[var(--fg-subtle)] shrink-0 font-sans">
             <Target className="w-3.5 h-3.5 text-[var(--color-coral)]" />
-            <span className="font-semibold uppercase tracking-wider text-[10px]">Track Goal:</span>
+            <span className="font-semibold uppercase tracking-wider text-[10px]">{t('Track Goal:')}</span>
           </div>
           <div className="w-full sm:w-56">
             <Select
@@ -730,19 +732,19 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 p-3.5 bg-[var(--bg-muted)] border border-[var(--border)] rounded-[var(--radius-sm)]">
         <div className="space-y-0.5">
           <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--fg-subtle)] flex items-center gap-1">
-            <TrendingUp className="w-3 h-3 text-[var(--color-sage)]" /> 30D Velocity
+            <TrendingUp className="w-3 h-3 text-[var(--color-sage)]" /> {t('30D Velocity')}
           </span>
           <div className="text-lg font-bold font-display text-[var(--fg)]">
-            + D$ {velocityMetrics.dailyAvg} <span className="text-xs font-sans font-normal text-[var(--fg-muted)]">/ day</span>
+            + D$ {velocityMetrics.dailyAvg} <span className="text-xs font-sans font-normal text-[var(--fg-muted)]">{t('/ day')}</span>
           </div>
           <span className="text-[10px] text-[var(--fg-subtle)] font-sans">
-            Total Net: +D$ {velocityMetrics.total30dNet.toLocaleString()}
+            {t('Total Net: +D$ {amount}', { amount: velocityMetrics.total30dNet.toLocaleString() })}
           </span>
         </div>
 
         <div className="space-y-0.5">
           <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--fg-subtle)] flex items-center gap-1">
-            <Target className="w-3 h-3 text-[var(--color-coral)]" /> Goal Target
+            <Target className="w-3 h-3 text-[var(--color-coral)]" /> {t('Goal Target')}
           </span>
           <div className="text-lg font-bold font-display text-[var(--fg)]">
             D$ {activeGoal.targetD$.toLocaleString()}
@@ -754,33 +756,40 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
 
         <div className="space-y-0.5">
           <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--fg-subtle)] flex items-center gap-1">
-            <Zap className="w-3 h-3 text-[var(--color-sage)]" /> Goal Progress
+            <Zap className="w-3 h-3 text-[var(--color-sage)]" /> {t('Goal Progress')}
           </span>
           <div className="text-lg font-bold font-display text-[var(--color-sage)]">
             {velocityMetrics.progressPct}%
           </div>
           <span className="text-[10px] text-[var(--fg-subtle)] font-sans">
-            D$ {velocityMetrics.latestBalance?.toLocaleString()} reached
+            {t('D$ {amount} reached', { amount: velocityMetrics.latestBalance?.toLocaleString() ?? '0' })}
           </span>
         </div>
 
         <div className="space-y-0.5">
           <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--fg-subtle)] flex items-center gap-1">
-            <Compass className="w-3 h-3 text-[var(--fg-muted)]" /> Est. Completion
+            <Compass className="w-3 h-3 text-[var(--fg-muted)]" /> {t('Est. Completion')}
           </span>
           <div className="text-lg font-bold font-display text-[var(--fg)]">
             {velocityMetrics.isReached ? (
               <span className="text-[var(--color-sage)] flex items-center gap-1 text-sm pt-0.5">
-                <CheckCircle2 className="w-4 h-4" /> Achieved!
+                <CheckCircle2 className="w-4 h-4" /> {t('Achieved!')}
               </span>
             ) : velocityMetrics.daysLeft !== null ? (
-              `~${velocityMetrics.daysLeft} days`
+              t('~{n} days', { n: velocityMetrics.daysLeft })
             ) : (
-              'Action required'
+              t('Action required')
             )}
           </div>
           <span className="text-[10px] text-[var(--fg-subtle)] font-sans capitalize">
-            Trajectory: {velocityMetrics.momentumStatus}
+            {t('Trajectory: {status}', {
+              status:
+                velocityMetrics.momentumStatus === 'accelerating'
+                  ? t('accelerating')
+                  : velocityMetrics.momentumStatus === 'cooldown'
+                  ? t('cooldown')
+                  : t('steady'),
+            })}
           </span>
         </div>
       </div>
@@ -810,7 +819,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
 
             <div className="space-y-1 font-sans">
               <div className="flex justify-between items-center">
-                <span className="text-[var(--fg-muted)]">Ledger Balance:</span>
+                <span className="text-[var(--fg-muted)]">{t('Ledger Balance:')}</span>
                 <span className="font-bold font-mono text-[var(--fg)]">
                   D$ {hoveredPoint.cumulativeBalance.toLocaleString()}
                 </span>
@@ -818,20 +827,20 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
 
               {hoveredPoint.dayEarned > 0 && (
                 <div className="flex justify-between items-center text-[var(--color-sage)]">
-                  <span>Earned Today:</span>
+                  <span>{t('Earned Today:')}</span>
                   <span className="font-bold font-mono">+ D$ {hoveredPoint.dayEarned}</span>
                 </div>
               )}
 
               {hoveredPoint.daySpent > 0 && (
                 <div className="flex justify-between items-center text-[var(--color-coral)]">
-                  <span>Spent Today:</span>
+                  <span>{t('Spent Today:')}</span>
                   <span className="font-bold font-mono">- D$ {hoveredPoint.daySpent}</span>
                 </div>
               )}
 
               <div className="flex justify-between items-center pt-1 border-t border-[var(--border)] text-[10px] text-[var(--fg-muted)]">
-                <span>Goal Target ({activeGoal.name}):</span>
+                <span>{t('Goal Target ({name}):', { name: activeGoal.name })}</span>
                 <span className="font-bold text-[var(--color-sage)]">
                   {Math.min(100, Math.round((hoveredPoint.cumulativeBalance / activeGoal.targetD$) * 100))}%
                 </span>
@@ -846,21 +855,21 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1.5">
             <div className="w-3 h-1 bg-[var(--color-sage)] rounded-full" />
-            <span>Cumulative D$ Trajectory</span>
+            <span>{t('Cumulative D$ Trajectory')}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="w-2.5 h-2.5 bg-[var(--color-sage)]/20 border border-[var(--color-sage)]/40 rounded-xs" />
-            <span>Daily Mission Output</span>
+            <span>{t('Daily Mission Output')}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="w-3 h-[1px] border-b border-dashed border-[var(--color-coral)]" />
-            <span>Goal Threshold</span>
+            <span>{t('Goal Threshold')}</span>
           </div>
         </div>
 
         <div className="flex items-center gap-1 text-[10px] text-[var(--fg-muted)]">
           <Sparkles className="w-3 h-3 text-[var(--color-sage)]" />
-          <span>Calculated from immutable mission completions</span>
+          <span>{t('Calculated from immutable mission completions')}</span>
         </div>
       </div>
     </Card>

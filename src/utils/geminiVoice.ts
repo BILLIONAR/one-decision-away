@@ -4,20 +4,27 @@
  * otherwise VoiceGuide falls back to the browser's built-in voice.
  */
 
+import { t, N_, getLocaleMeta } from '../i18n';
+
 export const GEMINI_TTS_VOICES = [
-  { id: 'Kore', label: 'Kore — warm, steady (recommended)' },
-  { id: 'Aoede', label: 'Aoede — soft, breathy' },
-  { id: 'Zephyr', label: 'Zephyr — bright, gentle' },
-  { id: 'Leda', label: 'Leda — youthful, clear' },
-  { id: 'Puck', label: 'Puck — upbeat' },
-  { id: 'Charon', label: 'Charon — deep, calm' },
-  { id: 'Fenrir', label: 'Fenrir — grounded, firm' },
-  { id: 'Orus', label: 'Orus — smooth, low' },
+  { id: 'Kore', label: N_('Kore — warm, steady (recommended)') },
+  { id: 'Aoede', label: N_('Aoede — soft, breathy') },
+  { id: 'Zephyr', label: N_('Zephyr — bright, gentle') },
+  { id: 'Leda', label: N_('Leda — youthful, clear') },
+  { id: 'Puck', label: N_('Puck — upbeat') },
+  { id: 'Charon', label: N_('Charon — deep, calm') },
+  { id: 'Fenrir', label: N_('Fenrir — grounded, firm') },
+  { id: 'Orus', label: N_('Orus — smooth, low') },
 ];
 
 const TTS_MODEL = 'gemini-2.5-flash-preview-tts';
 const STYLE_PREFIX =
   'Speak very slowly and softly, with calm, warm pauses, like a gentle meditation guide leading a quiet session: ';
+/** Language hint for the TTS model so narration follows the active locale (prompt text, not user-visible). */
+function stylePrefix(): string {
+  const meta = getLocaleMeta();
+  return meta.code === 'en' ? STYLE_PREFIX : `Speak in ${meta.name} (${meta.speech}). ${STYLE_PREFIX}`;
+}
 
 type PcmClip = { sampleRate: number; samples: Float32Array };
 
@@ -38,7 +45,7 @@ class GeminiVoice {
   }
 
   private cacheKey(text: string, voice: string) {
-    return `${voice}::${text}`;
+    return `${getLocaleMeta().code}::${voice}::${text}`;
   }
 
   /** Warm the cache for upcoming cues (fire and forget). */
@@ -55,7 +62,7 @@ class GeminiVoice {
       const ai = new GoogleGenAI({ apiKey });
       const res = await ai.models.generateContent({
         model: TTS_MODEL,
-        contents: [{ role: 'user', parts: [{ text: STYLE_PREFIX + text }] }],
+        contents: [{ role: 'user', parts: [{ text: stylePrefix() + text }] }],
         config: {
           responseModalities: ['AUDIO'],
           speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: voice } } },
@@ -152,10 +159,11 @@ class GeminiVoice {
 
   /** Quick connectivity/key check used by Settings. */
   public async test(apiKey: string, voice: string): Promise<boolean> {
-    const clip = await this.synthesize('Welcome. Take a slow breath, and let the day soften.', apiKey, voice);
+    const phrase = t('Welcome. Take a slow breath, and let the day soften.');
+    const clip = await this.synthesize(phrase, apiKey, voice);
     if (!clip) return false;
-    this.cache.set(this.cacheKey('Welcome. Take a slow breath, and let the day soften.', voice), Promise.resolve(clip));
-    return this.speak('Welcome. Take a slow breath, and let the day soften.', apiKey, voice, 1);
+    this.cache.set(this.cacheKey(phrase, voice), Promise.resolve(clip));
+    return this.speak(phrase, apiKey, voice, 1);
   }
 }
 

@@ -4,6 +4,7 @@ import { SEED_MARKET_ITEMS } from '../data/seed';
 import { MarketItem, ArchivedMarketRecord, ArchiveReason } from '../types/models';
 import { Card, Button, Badge } from './ui';
 import { DreamArt } from './DreamArt';
+import { useT } from '../i18n';
 import {
   Archive,
   RotateCcw,
@@ -25,6 +26,7 @@ interface ArchivedMarketHistoryProps {
 }
 
 export const ArchivedMarketHistory: React.FC<ArchivedMarketHistoryProps> = ({ onExploreMore }) => {
+  const t = useT();
   const { data, restoreMarketItem, deleteArchivedRecord, setActiveRoute } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedReason, setSelectedReason] = useState<'All' | ArchiveReason>('All');
@@ -121,28 +123,28 @@ export const ArchivedMarketHistory: React.FC<ArchivedMarketHistoryProps> = ({ on
         return (
           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
             <CheckCircle2 className="w-3 h-3" />
-            <span>Completed / Acquired</span>
+            <span>{t('Completed / Acquired')}</span>
           </span>
         );
       case 'replaced':
         return (
           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/30">
             <Sparkles className="w-3 h-3" />
-            <span>Replaced with Bigger Goal</span>
+            <span>{t('Replaced with Bigger Goal')}</span>
           </span>
         );
       case 'outgrown':
         return (
           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30">
             <RefreshCw className="w-3 h-3" />
-            <span>Taste Evolved</span>
+            <span>{t('Taste Evolved')}</span>
           </span>
         );
       default:
         return (
           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-slate-500/15 text-slate-600 dark:text-slate-400 border border-slate-500/30">
             <Archive className="w-3 h-3" />
-            <span>Retired from Vision</span>
+            <span>{t('Retired from Vision')}</span>
           </span>
         );
     }
@@ -154,40 +156,40 @@ export const ArchivedMarketHistory: React.FC<ArchivedMarketHistoryProps> = ({ on
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="p-4 bg-[var(--bg-elevated)] border border-[var(--border)] rounded-[var(--radius-lg)] space-y-1">
           <div className="flex items-center justify-between text-xs text-[var(--fg-muted)]">
-            <span>Total Archived History</span>
+            <span>{t('Total Archived History')}</span>
             <Archive className="w-4 h-4 text-[var(--color-slate)]" />
           </div>
           <div className="text-2xl font-bold font-display text-[var(--fg)]">
-            {totalArchivedCount} items
+            {t('{n} items', { n: totalArchivedCount })}
           </div>
           <p className="text-[11px] text-[var(--fg-subtle)]">
-            Archived out of active vision
+            {t('Archived out of active vision')}
           </p>
         </div>
 
         <div className="p-4 bg-[var(--bg-elevated)] border border-[var(--border)] rounded-[var(--radius-lg)] space-y-1">
           <div className="flex items-center justify-between text-xs text-[var(--fg-muted)]">
-            <span>Historical Valuation</span>
+            <span>{t('Historical Valuation')}</span>
             <span className="text-xs font-mono font-bold text-[var(--color-sage)]">$ USD</span>
           </div>
           <div className="text-2xl font-bold font-display text-[var(--fg)]">
             ${totalArchivedUsd.toLocaleString()}
           </div>
           <p className="text-[11px] text-[var(--fg-subtle)]">
-            Cumulative value of achieved or retired items
+            {t('Cumulative value of achieved or retired items')}
           </p>
         </div>
 
         <div className="p-4 bg-[var(--bg-elevated)] border border-[var(--border)] rounded-[var(--radius-lg)] space-y-1">
           <div className="flex items-center justify-between text-xs text-[var(--fg-muted)]">
-            <span>Completed vs. Evolved</span>
+            <span>{t('Completed vs. Evolved')}</span>
             <CheckCircle2 className="w-4 h-4 text-emerald-500" />
           </div>
           <div className="text-2xl font-bold font-display text-[var(--fg)]">
-            {completedCount} <span className="text-xs font-normal text-[var(--fg-muted)]">achieved /</span> {outgrownOrReplacedCount} <span className="text-xs font-normal text-[var(--fg-muted)]">evolved</span>
+            {completedCount} <span className="text-xs font-normal text-[var(--fg-muted)]">{t('achieved /')}</span> {outgrownOrReplacedCount} <span className="text-xs font-normal text-[var(--fg-muted)]">{t('evolved')}</span>
           </div>
           <p className="text-[11px] text-[var(--fg-subtle)]">
-            Full life milestone progression record
+            {t('Full life milestone progression record')}
           </p>
         </div>
       </div>
@@ -198,7 +200,7 @@ export const ArchivedMarketHistory: React.FC<ArchivedMarketHistoryProps> = ({ on
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--fg-muted)]" />
           <input
             type="text"
-            placeholder="Search archived dreams..."
+            placeholder={t('Search archived dreams...')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-9 pr-3 py-2 text-xs bg-[var(--bg-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] text-[var(--fg)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-[var(--color-slate)]"
@@ -208,11 +210,11 @@ export const ArchivedMarketHistory: React.FC<ArchivedMarketHistoryProps> = ({ on
         {/* Reason Filters */}
         <div className="flex items-center gap-1.5 flex-wrap w-full sm:w-auto">
           {[
-            { key: 'All', label: `All (${totalArchivedCount})` },
-            { key: 'completed', label: `Completed (${completedCount})` },
-            { key: 'outgrown', label: 'Taste Evolved' },
-            { key: 'replaced', label: 'Replaced' },
-            { key: 'no_longer_relevant', label: 'Retired' },
+            { key: 'All', label: t('All ({n})', { n: totalArchivedCount }) },
+            { key: 'completed', label: t('Completed ({n})', { n: completedCount }) },
+            { key: 'outgrown', label: t('Taste Evolved') },
+            { key: 'replaced', label: t('Replaced') },
+            { key: 'no_longer_relevant', label: t('Retired') },
           ].map((tab) => (
             <button
               key={tab.key}
@@ -239,18 +241,18 @@ export const ArchivedMarketHistory: React.FC<ArchivedMarketHistoryProps> = ({ on
           <div className="max-w-md mx-auto space-y-1.5">
             <h3 className="font-display font-bold text-base text-[var(--fg)]">
               {archivedEntries.length === 0
-                ? 'No Archived Dreams Yet'
-                : 'No Archive Records Match This Filter'}
+                ? t('No Archived Dreams Yet')
+                : t('No Archive Records Match This Filter')}
             </h3>
             <p className="text-xs text-[var(--fg-muted)] leading-relaxed">
               {archivedEntries.length === 0
-                ? 'Archive dreams you have completed or no longer prioritize to remove them from your Vision Board while keeping their history here.'
-                : 'Try changing your search or the archive filter.'}
+                ? t('Archive dreams you have completed or no longer prioritize to remove them from your Vision Board while keeping their history here.')
+                : t('Try changing your search or the archive filter.')}
             </p>
           </div>
           {onExploreMore && (
             <Button variant="outline" size="sm" onClick={onExploreMore} className="mt-2">
-              Browse the Collection
+              {t('Browse the Collection')}
             </Button>
           )}
         </div>
@@ -319,11 +321,11 @@ export const ArchivedMarketHistory: React.FC<ArchivedMarketHistoryProps> = ({ on
                       <div className="flex items-center justify-between text-[11px] text-[var(--fg-subtle)] pt-2 border-t border-[var(--border)]">
                         <span className="flex items-center gap-1">
                           <Calendar className="w-3 h-3" />
-                          <span>Archived on {dateStr}</span>
+                          <span>{t('Archived on {date}', { date: dateStr })}</span>
                         </span>
                         {wasOwned && (
                           <span className="text-emerald-600 dark:text-emerald-400 font-bold">
-                            ✓ Acquired Asset
+                            {t('✓ Acquired Asset')}
                           </span>
                         )}
                       </div>
@@ -340,9 +342,9 @@ export const ArchivedMarketHistory: React.FC<ArchivedMarketHistoryProps> = ({ on
                       icon={RotateCcw}
                       onClick={() => restoreMarketItem(item.id, false)}
                       className="text-xs py-1"
-                      title="Restore item back to active Market collection"
+                      title={t('Restore item back to active Market collection')}
                     >
-                      Restore to Market
+                      {t('Restore to Market')}
                     </Button>
                     <Button
                       variant="secondary"
@@ -350,9 +352,9 @@ export const ArchivedMarketHistory: React.FC<ArchivedMarketHistoryProps> = ({ on
                       icon={Star}
                       onClick={() => restoreMarketItem(item.id, true)}
                       className="text-xs py-1"
-                      title="Restore back to active Market and pin to Vision Board"
+                      title={t('Restore back to active Market and pin to Vision Board')}
                     >
-                      Restore to Vision & Market ⭐
+                      {t('Restore to Vision & Market ⭐')}
                     </Button>
                   </div>
 
@@ -361,7 +363,7 @@ export const ArchivedMarketHistory: React.FC<ArchivedMarketHistoryProps> = ({ on
                       type="button"
                       onClick={() => deleteArchivedRecord(recordId)}
                       className="p-1.5 text-[var(--fg-muted)] hover:text-red-500 rounded transition-colors cursor-pointer"
-                      title="Delete archive record permanently"
+                      title={t('Delete archive record permanently')}
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>

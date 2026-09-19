@@ -43,6 +43,9 @@ import { soundSynthesizer } from '../utils/soundSynthesizer';
 import { NaturalVoiceSettings } from '../components/NaturalVoiceSettings';
 import { BackupAndCloudSettings } from '../components/BackupAndCloudSettings';
 import { DailyNudgesSettings } from '../components/DailyNudgesSettings';
+import { LanguagePicker } from '../components/LanguagePicker';
+import { Languages } from 'lucide-react';
+import { useT } from '../i18n';
 
 export const Settings: React.FC = () => {
   const {
@@ -58,6 +61,7 @@ export const Settings: React.FC = () => {
     simulateFocusTimerAlert,
     isSimulatingFocusAlert,
   } = useApp();
+  const t = useT();
 
   const [displayName, setDisplayName] = useState(data?.profile.displayName || '');
   const [email, setEmail] = useState(data?.profile.email || '');
@@ -138,29 +142,29 @@ export const Settings: React.FC = () => {
 
   const handleTestTapChime = () => {
     if (soundMuted) {
-      showToast('🔇 Sounds are currently muted. Unmute to test audio.', 'info');
+      showToast(t('🔇 Sounds are currently muted. Unmute to test audio.'), 'info');
       return;
     }
     soundSynthesizer.playTapChime();
-    showToast('✨ Played tactile tap chime.', 'info');
+    showToast(t('✨ Played tactile tap chime.'), 'info');
   };
 
   const handleTestCompletionSound = () => {
     if (soundMuted) {
-      showToast('🔇 Sounds are currently muted. Unmute to test audio.', 'info');
+      showToast(t('🔇 Sounds are currently muted. Unmute to test audio.'), 'info');
       return;
     }
     soundSynthesizer.playFocusCompleteChime();
-    showToast('🎉 Played victory completion chord.', 'info');
+    showToast(t('🎉 Played victory completion chord.'), 'info');
   };
 
   const handleTestCategoryCue = (category: string, name: string) => {
     if (soundMuted) {
-      showToast('🔇 Sounds are currently muted. Unmute to test audio.', 'info');
+      showToast(t('🔇 Sounds are currently muted. Unmute to test audio.'), 'info');
       return;
     }
     soundSynthesizer.playMicroHabitCue(category, 'complete');
-    showToast(`🎵 Tested ${name} cue (${category} habit).`, 'info');
+    showToast(t('🎵 Tested {name} cue ({category} habit).', { name, category }), 'info');
   };
 
   const handleSaveProfile = async (e: React.FormEvent) => {
@@ -192,8 +196,8 @@ export const Settings: React.FC = () => {
     if (typeof window !== 'undefined' && 'Notification' in window) {
       if (Notification.permission === 'granted') {
         try {
-          new Notification(`Daily Wisdom: ${currentWisdom.theme}`, {
-            body: `"${currentWisdom.quote}" — ${currentWisdom.author}`,
+          new Notification(t('Daily Wisdom: {theme}', { theme: currentWisdom.theme }), {
+            body: t('"{quote}" — {author}', { quote: currentWisdom.quote, author: currentWisdom.author }),
             icon: '/favicon.ico',
           });
         } catch (err) {
@@ -204,8 +208,8 @@ export const Settings: React.FC = () => {
           const perm = await Notification.requestPermission();
           setNotificationStatus(perm);
           if (perm === 'granted') {
-            new Notification(`Daily Wisdom: ${currentWisdom.theme}`, {
-              body: `"${currentWisdom.quote}" — ${currentWisdom.author}`,
+            new Notification(t('Daily Wisdom: {theme}', { theme: currentWisdom.theme }), {
+              body: t('"{quote}" — {author}', { quote: currentWisdom.quote, author: currentWisdom.author }),
               icon: '/favicon.ico',
             });
           }
@@ -216,7 +220,7 @@ export const Settings: React.FC = () => {
     }
 
     setIsPreviewModalOpen(true);
-    showToast(`🔔 Daily Wisdom simulated for ${dailyWisdomTime}!`, 'info');
+    showToast(t('🔔 Daily Wisdom simulated for {time}!', { time: dailyWisdomTime }), 'info');
   };
 
   const handleConfirmExport = () => {
@@ -233,8 +237,8 @@ export const Settings: React.FC = () => {
   return (
     <div className="space-y-6 max-w-3xl">
       <PageHeader
-        title="Settings & Privacy"
-        subtitle="Manage your profile, daily cadence, data sovereignty, and security."
+        title={t('Settings & Privacy')}
+        subtitle={t('Manage your profile, daily cadence, data sovereignty, and security.')}
       />
 
       {/* Profile & Cadence */}
@@ -242,13 +246,13 @@ export const Settings: React.FC = () => {
         <div className="flex items-center gap-2 pb-3 border-b border-[var(--border)]">
           <User className="w-4 h-4 text-[var(--color-sage)]" />
           <h3 className="font-display font-bold text-base text-[var(--fg)]">
-            User Profile & Routine
+            {t('User Profile & Routine')}
           </h3>
         </div>
 
         <form onSubmit={handleSaveProfile} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Field id="profile-name" label="Display Name" required>
+            <Field id="profile-name" label={t('Display Name')} required>
               <Input
                 id="profile-name"
                 value={displayName}
@@ -256,7 +260,7 @@ export const Settings: React.FC = () => {
               />
             </Field>
 
-            <Field id="profile-email" label="Email Address">
+            <Field id="profile-email" label={t('Email Address')}>
               <Input
                 id="profile-email"
                 type="email"
@@ -266,6 +270,18 @@ export const Settings: React.FC = () => {
             </Field>
           </div>
 
+          {/* Language Section */}
+          <div className="pt-4 border-t border-[var(--border)] space-y-3">
+            <div className="flex items-center gap-2">
+              <Languages className="w-4 h-4 text-[var(--color-sage)]" />
+              <span className="font-display font-bold text-sm text-[var(--fg)]">{t('Language')}</span>
+            </div>
+            <p className="text-xs text-[var(--fg-muted)] leading-relaxed max-w-lg">
+              {t('Choose the language for the whole app — menus, missions, meditations and daily nudges.')}
+            </p>
+            <LanguagePicker variant="grid" />
+          </div>
+
           {/* Appearance & Aesthetic Theme Section */}
           <div className="pt-4 border-t border-[var(--border)] space-y-4">
             <div className="flex items-start justify-between gap-4">
@@ -273,14 +289,14 @@ export const Settings: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <Palette className="w-4 h-4 text-[var(--color-sage)]" />
                   <span className="font-display font-bold text-sm text-[var(--fg)]">
-                    Appearance & Aesthetic Theme
+                    {t('Appearance & Aesthetic Theme')}
                   </span>
                   <Badge variant={currentTheme === 'dark' ? 'slate' : 'sage'} className="text-[10px] py-0 px-2">
-                    {currentTheme === 'dark' ? 'Midnight Dark' : 'Editorial Light'}
+                    {currentTheme === 'dark' ? t('Midnight Dark') : t('Editorial Light')}
                   </Badge>
                 </div>
                 <p className="text-xs text-[var(--fg-muted)] leading-relaxed max-w-lg">
-                  Switch between the warm ivory Editorial paper format and the high-contrast Midnight dark atmosphere.
+                  {t('Switch between the warm ivory Editorial paper format and the high-contrast Midnight dark atmosphere.')}
                 </p>
               </div>
 
@@ -289,17 +305,17 @@ export const Settings: React.FC = () => {
                 type="button"
                 onClick={toggleTheme}
                 className="flex items-center gap-2 px-3 py-1.5 rounded-[var(--radius-sm)] bg-[var(--bg)] hover:bg-[var(--bg-muted)] border border-[var(--border)] text-xs font-semibold text-[var(--fg)] transition-all cursor-pointer shadow-xs"
-                title={`Switch to ${currentTheme === 'dark' ? 'Editorial Light' : 'Midnight Dark'}`}
+                title={currentTheme === 'dark' ? t('Switch to Editorial Light') : t('Switch to Midnight Dark')}
               >
                 {currentTheme === 'dark' ? (
                   <>
                     <Sun className="w-3.5 h-3.5 text-amber-400" />
-                    <span>Editorial</span>
+                    <span>{t('Editorial')}</span>
                   </>
                 ) : (
                   <>
                     <Moon className="w-3.5 h-3.5 text-[var(--fg-muted)]" />
-                    <span>Midnight</span>
+                    <span>{t('Midnight')}</span>
                   </>
                 )}
               </button>
@@ -328,39 +344,39 @@ export const Settings: React.FC = () => {
                         <Sun className="w-3.5 h-3.5 text-amber-600" />
                       </div>
                       <span className="font-display font-bold text-sm text-[#1A1A1A]">
-                        Editorial Light
+                        {t('Editorial Light')}
                       </span>
                     </div>
                     {currentTheme === 'light' ? (
                       <span className="inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#4E6B56] text-white">
-                        <Check className="w-3 h-3" /> Active
+                        <Check className="w-3 h-3" /> {t('Active')}
                       </span>
                     ) : (
                       <span className="text-[9px] uppercase tracking-wider text-[#767676] font-semibold">
-                        Select
+                        {t('Select')}
                       </span>
                     )}
                   </div>
 
                   <p className="text-xs text-[#4A4A4A] leading-relaxed">
-                    Warm ivory paper canvas with high-contrast serif typography and refined hairline borders.
+                    {t('Warm ivory paper canvas with high-contrast serif typography and refined hairline borders.')}
                   </p>
 
                   {/* Visual Theme Palette Swatch Preview */}
                   <div className="p-2.5 rounded-[var(--radius-sm)] bg-[#F5F2ED] border border-[#1A1A1A]/10 space-y-1.5">
                     <div className="flex items-center justify-between text-[9px] text-[#767676] uppercase tracking-widest font-bold">
-                      <span>Paper Swatch</span>
+                      <span>{t('Paper Swatch')}</span>
                       <span className="text-[#4E6B56]">#F5F2ED</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="h-4 flex-1 rounded-xs bg-[#1A1A1A] flex items-center px-1.5">
-                        <span className="text-[8px] text-[#F5F2ED] font-mono">Ink #1A1A1A</span>
+                        <span className="text-[8px] text-[#F5F2ED] font-mono">{t('Ink #1A1A1A')}</span>
                       </div>
                       <div className="h-4 w-12 rounded-xs bg-[#4E6B56] flex items-center justify-center">
-                        <span className="text-[8px] text-white font-mono">Sage</span>
+                        <span className="text-[8px] text-white font-mono">{t('Sage')}</span>
                       </div>
                       <div className="h-4 w-12 rounded-xs bg-[#B8533C] flex items-center justify-center">
-                        <span className="text-[8px] text-white font-mono">Coral</span>
+                        <span className="text-[8px] text-white font-mono">{t('Coral')}</span>
                       </div>
                     </div>
                   </div>
@@ -388,39 +404,39 @@ export const Settings: React.FC = () => {
                         <Moon className="w-3.5 h-3.5 text-sky-400" />
                       </div>
                       <span className="font-display font-bold text-sm text-[#F6F7F9]">
-                        Midnight Dark
+                        {t('Midnight Dark')}
                       </span>
                     </div>
                     {currentTheme === 'dark' ? (
                       <span className="inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#5EA878] text-black">
-                        <Check className="w-3 h-3" /> Active
+                        <Check className="w-3 h-3" /> {t('Active')}
                       </span>
                     ) : (
                       <span className="text-[9px] uppercase tracking-wider text-[var(--fg-subtle)] font-semibold">
-                        Select
+                        {t('Select')}
                       </span>
                     )}
                   </div>
 
                   <p className="text-xs text-[#B8BCC6] leading-relaxed">
-                    Deep obsidian black background with luminous typography and high-contrast emerald accents.
+                    {t('Deep obsidian black background with luminous typography and high-contrast emerald accents.')}
                   </p>
 
                   {/* Visual Theme Palette Swatch Preview */}
                   <div className="p-2.5 rounded-[var(--radius-sm)] bg-[#0C0D0E] border border-white/10 space-y-1.5">
                     <div className="flex items-center justify-between text-[9px] text-[#7A808C] uppercase tracking-widest font-bold">
-                      <span>Obsidian Swatch</span>
+                      <span>{t('Obsidian Swatch')}</span>
                       <span className="text-[#5EA878]">#0C0D0E</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="h-4 flex-1 rounded-xs bg-[#F6F7F9] flex items-center px-1.5">
-                        <span className="text-[8px] text-[#0C0D0E] font-mono font-bold">Luminous</span>
+                        <span className="text-[8px] text-[#0C0D0E] font-mono font-bold">{t('Luminous')}</span>
                       </div>
                       <div className="h-4 w-12 rounded-xs bg-[#5EA878] flex items-center justify-center">
-                        <span className="text-[8px] text-black font-mono font-bold">Sage</span>
+                        <span className="text-[8px] text-black font-mono font-bold">{t('Sage')}</span>
                       </div>
                       <div className="h-4 w-12 rounded-xs bg-[#E05D4A] flex items-center justify-center">
-                        <span className="text-[8px] text-white font-mono">Coral</span>
+                        <span className="text-[8px] text-white font-mono">{t('Coral')}</span>
                       </div>
                     </div>
                   </div>
@@ -431,8 +447,8 @@ export const Settings: React.FC = () => {
 
           <Field
             id="profile-reminder"
-            label="Daily One Decision Reflection Time"
-            helper="The hour when your daily focus checkpoint prompt appears."
+            label={t('Daily One Decision Reflection Time')}
+            helper={t('The hour when your daily focus checkpoint prompt appears.')}
           >
             <Input
               id="profile-reminder"
@@ -450,14 +466,14 @@ export const Settings: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-[var(--color-coral)]" />
                   <span className="font-display font-bold text-sm text-[var(--fg)]">
-                    Daily Wisdom Notifications
+                    {t('Daily Wisdom Notifications')}
                   </span>
                   <Badge variant="coral" className="text-[10px] py-0 px-2">
-                    Seasonal Focus
+                    {t('Seasonal Focus')}
                   </Badge>
                 </div>
                 <p className="text-xs text-[var(--fg-muted)] leading-relaxed max-w-lg">
-                  Receive a curated motivational insight, mental model, and action prompt aligned with your active 30-day season.
+                  {t('Receive a curated motivational insight, mental model, and action prompt aligned with your active 30-day season.')}
                 </p>
               </div>
 
@@ -487,10 +503,10 @@ export const Settings: React.FC = () => {
                     <Clock className="w-4 h-4 text-[var(--fg-muted)]" />
                     <div>
                       <label htmlFor="wisdom-time" className="text-xs font-bold text-[var(--fg)] block">
-                        Wisdom Delivery Time
+                        {t('Wisdom Delivery Time')}
                       </label>
                       <span className="text-[10px] text-[var(--fg-subtle)]">
-                        Scheduled local morning delivery
+                        {t('Scheduled local morning delivery')}
                       </span>
                     </div>
                   </div>
@@ -509,7 +525,7 @@ export const Settings: React.FC = () => {
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <span className="text-xs font-bold text-[var(--fg)] flex items-center gap-1">
                         <Compass className="w-3.5 h-3.5 text-[var(--color-sage)]" />
-                        {activeSeason ? activeSeason.title : 'Sovereign Vision (General)'}
+                        {activeSeason ? activeSeason.title : t('Sovereign Vision (General)')}
                       </span>
                       <span className="text-[10px] text-[var(--color-sage)] bg-[var(--color-sage)]/10 px-2 py-0.5 rounded-[var(--radius-xs)] font-semibold">
                         {currentWisdom.theme}
@@ -521,19 +537,19 @@ export const Settings: React.FC = () => {
                         type="button"
                         onClick={handleShuffleWisdom}
                         className="text-[11px] text-[var(--fg-muted)] hover:text-[var(--fg)] flex items-center gap-1 px-2 py-1 rounded-[var(--radius-xs)] bg-[var(--bg-elevated)] border border-[var(--border)] transition-colors cursor-pointer"
-                        title="Shuffle to next curated seasonal insight"
+                        title={t('Shuffle to next curated seasonal insight')}
                       >
                         <Shuffle className="w-3 h-3" />
-                        <span>Shuffle</span>
+                        <span>{t('Shuffle')}</span>
                       </button>
                       <button
                         type="button"
                         onClick={handleTestNotification}
                         className="text-[11px] text-[var(--color-coral)] hover:underline flex items-center gap-1 px-2 py-1 rounded-[var(--radius-xs)] bg-[var(--color-coral)]/10 border border-[var(--color-coral)]/20 transition-colors font-medium cursor-pointer"
-                        title="Preview sample notification"
+                        title={t('Preview sample notification')}
                       >
                         <Bell className="w-3 h-3" />
-                        <span>Test Alert</span>
+                        <span>{t('Test Alert')}</span>
                       </button>
                     </div>
                   </div>
@@ -553,7 +569,7 @@ export const Settings: React.FC = () => {
                   <div className="pt-2 border-t border-[var(--border)] grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-[11px]">
                     <div className="space-y-1">
                       <span className="font-bold text-[var(--fg-muted)] flex items-center gap-1">
-                        <Lightbulb className="w-3 h-3 text-amber-500" /> Core Principle
+                        <Lightbulb className="w-3 h-3 text-amber-500" /> {t('Core Principle')}
                       </span>
                       <p className="text-[var(--fg-subtle)] leading-snug">
                         {currentWisdom.principle}
@@ -561,7 +577,7 @@ export const Settings: React.FC = () => {
                     </div>
                     <div className="space-y-1">
                       <span className="font-bold text-[var(--fg-muted)] flex items-center gap-1">
-                        <CheckCircle2 className="w-3 h-3 text-[var(--color-sage)]" /> Actionable Anchor
+                        <CheckCircle2 className="w-3 h-3 text-[var(--color-sage)]" /> {t('Actionable Anchor')}
                       </span>
                       <p className="text-[var(--fg-subtle)] leading-snug">
                         {currentWisdom.actionPrompt}
@@ -579,14 +595,14 @@ export const Settings: React.FC = () => {
               <div className="flex items-center gap-2">
                 <Activity className="w-4 h-4 text-[var(--color-sage)]" />
                 <span className="font-display font-bold text-sm text-[var(--fg)]">
-                  Focus Timer Completion Visual Alerts
+                  {t('Focus Timer Completion Visual Alerts')}
                 </span>
                 <Badge variant="sage" className="text-[10px] py-0 px-2">
-                  Timer = 0 Alerts
+                  {t('Timer = 0 Alerts')}
                 </Badge>
               </div>
               <p className="text-xs text-[var(--fg-muted)] leading-relaxed max-w-lg">
-                Choose ambient visual alerts to notify you the instant a focus session timer finishes, keeping you aware without sudden jarring interruptions.
+                {t('Choose ambient visual alerts to notify you the instant a focus session timer finishes, keeping you aware without sudden jarring interruptions.')}
               </p>
             </div>
 
@@ -600,14 +616,14 @@ export const Settings: React.FC = () => {
                         <Bell className="w-3.5 h-3.5" />
                       </div>
                       <span className="text-xs font-bold text-[var(--fg)]">
-                        Browser Tab Title Blink
+                        {t('Browser Tab Title Blink')}
                       </span>
                     </div>
 
                     <button
                       type="button"
                       role="switch"
-                      aria-label="Toggle Browser Tab Title Blink Animation"
+                      aria-label={t('Toggle Browser Tab Title Blink Animation')}
                       aria-checked={focusTabBlinkEnabled}
                       onClick={() => setFocusTabBlinkEnabled(!focusTabBlinkEnabled)}
                       className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
@@ -622,13 +638,13 @@ export const Settings: React.FC = () => {
                     </button>
                   </div>
                   <p className="text-[11px] text-[var(--fg-subtle)] leading-relaxed">
-                    Alternates the browser tab title (e.g. <span className="font-mono text-[10px] text-[var(--color-sage)]">✨ [Finished!]</span> ⇄ <span className="font-mono text-[10px] text-[var(--color-coral)]">🔔 TIME'S UP!</span>) when the timer reaches 0 so you see it from any tab.
+                    {t('Alternates the browser tab title (e.g.')} <span className="font-mono text-[10px] text-[var(--color-sage)]">{t('✨ [Finished!]')}</span> ⇄ <span className="font-mono text-[10px] text-[var(--color-coral)]">{t("🔔 TIME'S UP!")}</span>) {t('when the timer reaches 0 so you see it from any tab.')}
                   </p>
                 </div>
 
                 <div className="flex items-center gap-1.5 text-[10px] text-[var(--fg-muted)]">
                   <span className={`w-1.5 h-1.5 rounded-full ${focusTabBlinkEnabled ? 'bg-emerald-500 animate-ping' : 'bg-gray-400'}`} />
-                  <span>Status: {focusTabBlinkEnabled ? 'Blink Animation Enabled' : 'Static Title'}</span>
+                  <span>{t('Status: {status}', { status: focusTabBlinkEnabled ? t('Blink Animation Enabled') : t('Static Title') })}</span>
                 </div>
               </div>
 
@@ -641,14 +657,14 @@ export const Settings: React.FC = () => {
                         <Monitor className="w-3.5 h-3.5" />
                       </div>
                       <span className="text-xs font-bold text-[var(--fg)]">
-                        Screen Edge Pulsing Border
+                        {t('Screen Edge Pulsing Border')}
                       </span>
                     </div>
 
                     <button
                       type="button"
                       role="switch"
-                      aria-label="Toggle Screen Edge Pulsing Border"
+                      aria-label={t('Toggle Screen Edge Pulsing Border')}
                       aria-checked={focusScreenPulseEnabled}
                       onClick={() => setFocusScreenPulseEnabled(!focusScreenPulseEnabled)}
                       className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
@@ -663,13 +679,13 @@ export const Settings: React.FC = () => {
                     </button>
                   </div>
                   <p className="text-[11px] text-[var(--fg-subtle)] leading-relaxed">
-                    Emits a subtle, glowing breathing pulse around the edges of your screen when the timer hits 0, providing a gentle optical alert.
+                    {t('Emits a subtle, glowing breathing pulse around the edges of your screen when the timer hits 0, providing a gentle optical alert.')}
                   </p>
                 </div>
 
                 <div className="flex items-center gap-1.5 text-[10px] text-[var(--fg-muted)]">
                   <span className={`w-1.5 h-1.5 rounded-full ${focusScreenPulseEnabled ? 'bg-[var(--color-coral)] animate-pulse' : 'bg-gray-400'}`} />
-                  <span>Status: {focusScreenPulseEnabled ? 'Edge Pulse Alert Enabled' : 'No Screen Glow'}</span>
+                  <span>{t('Status: {status}', { status: focusScreenPulseEnabled ? t('Edge Pulse Alert Enabled') : t('No Screen Glow') })}</span>
                 </div>
               </div>
             </div>
@@ -679,7 +695,7 @@ export const Settings: React.FC = () => {
               <div className="flex items-center gap-2 text-xs text-[var(--fg)]">
                 <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
                 <span>
-                  Test how the tab title blink and screen border pulse look when a session finishes.
+                  {t('Test how the tab title blink and screen border pulse look when a session finishes.')}
                 </span>
               </div>
 
@@ -694,7 +710,7 @@ export const Settings: React.FC = () => {
                 }`}
               >
                 <Activity className="w-3.5 h-3.5" />
-                <span>{isSimulatingFocusAlert ? 'Alert Playing (5s)...' : 'Simulate Timer 0 Alert'}</span>
+                <span>{isSimulatingFocusAlert ? t('Alert Playing (5s)...') : t('Simulate Timer 0 Alert')}</span>
               </button>
             </div>
           </div>
@@ -710,20 +726,20 @@ export const Settings: React.FC = () => {
                     <Volume2 className="w-4 h-4 text-[var(--color-sage)]" />
                   )}
                   <span className="font-display font-bold text-sm text-[var(--fg)]">
-                    Sound & Audio Effects
+                    {t('Sound & Audio Effects')}
                   </span>
                   {soundMuted ? (
                     <Badge variant="coral" className="text-[10px] py-0 px-2">
-                      Muted
+                      {t('Muted')}
                     </Badge>
                   ) : (
                     <Badge variant="sage" className="text-[10px] py-0 px-2">
-                      Audio Enabled
+                      {t('Audio Enabled')}
                     </Badge>
                   )}
                 </div>
                 <p className="text-xs text-[var(--fg-muted)] leading-relaxed max-w-lg">
-                  Globally control tactile tap chimes, celebratory completion fanfares, and session gongs. When muted, all interactive UI audio remains silent. Persists across sessions.
+                  {t('Globally control tactile tap chimes, celebratory completion fanfares, and session gongs. When muted, all interactive UI audio remains silent. Persists across sessions.')}
                 </p>
               </div>
 
@@ -731,7 +747,7 @@ export const Settings: React.FC = () => {
               <button
                 type="button"
                 role="switch"
-                aria-label="Toggle Mute Sound"
+                aria-label={t('Toggle Mute Sound')}
                 aria-checked={!soundMuted}
                 onClick={handleToggleSound}
                 className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
@@ -765,12 +781,12 @@ export const Settings: React.FC = () => {
                   </div>
                   <div>
                     <div className="text-xs font-bold text-[var(--fg)]">
-                      {soundMuted ? 'UI Sound Effects Muted' : 'UI Sound Effects Active'}
+                      {soundMuted ? t('UI Sound Effects Muted') : t('UI Sound Effects Active')}
                     </div>
                     <div className="text-[10px] text-[var(--fg-subtle)]">
                       {soundMuted
-                        ? 'Web Audio synthesizer output is disabled'
-                        : 'Interactive synthesizer tones are operational'}
+                        ? t('Web Audio synthesizer output is disabled')
+                        : t('Interactive synthesizer tones are operational')}
                     </div>
                   </div>
                 </div>
@@ -786,10 +802,10 @@ export const Settings: React.FC = () => {
                           ? 'bg-[var(--bg-muted)] border-[var(--border)] text-[var(--fg-subtle)] opacity-60'
                           : 'bg-[var(--bg-elevated)] border-[var(--border)] text-[var(--fg)] hover:border-[var(--color-sage)]'
                       }`}
-                      title={soundMuted ? 'Unmute sound to test audio' : 'Test tactile tap chime'}
+                      title={soundMuted ? t('Unmute sound to test audio') : t('Test tactile tap chime')}
                     >
                       <Music className="w-3.5 h-3.5 text-[var(--color-sage)]" />
-                      <span>Tap Chime</span>
+                      <span>{t('Tap Chime')}</span>
                     </button>
 
                     <button
@@ -800,53 +816,53 @@ export const Settings: React.FC = () => {
                           ? 'bg-[var(--bg-muted)] border-[var(--border)] text-[var(--fg-subtle)] opacity-60'
                           : 'bg-[var(--bg-elevated)] border-[var(--border)] text-[var(--fg)] hover:border-[var(--color-sage)]'
                       }`}
-                      title={soundMuted ? 'Unmute sound to test audio' : 'Test victory fanfare'}
+                      title={soundMuted ? t('Unmute sound to test audio') : t('Test victory fanfare')}
                     >
                       <Sparkles className="w-3.5 h-3.5 text-[var(--color-coral)]" />
-                      <span>Victory Chord</span>
+                      <span>{t('Victory Chord')}</span>
                     </button>
                   </div>
 
                   {/* Micro-Habit Category Acoustic Cues */}
                   <div className="flex items-center gap-1.5 flex-wrap pt-1">
-                    <span className="text-[11px] text-[var(--fg-subtle)] font-semibold">Habit Cues:</span>
+                    <span className="text-[11px] text-[var(--fg-subtle)] font-semibold">{t('Habit Cues:')}</span>
                     <button
                       type="button"
-                      onClick={() => handleTestCategoryCue('Health', '528Hz Vitality Bloom')}
+                      onClick={() => handleTestCategoryCue('Health', t('528Hz Vitality Bloom'))}
                       className={`text-[11px] px-2 py-1 rounded-[var(--radius-sm)] border font-medium flex items-center gap-1 transition-colors cursor-pointer ${
                         soundMuted
                           ? 'bg-[var(--bg-muted)] border-[var(--border)] text-[var(--fg-subtle)] opacity-60'
                           : 'bg-[var(--color-sage)]/10 border-[var(--color-sage)]/30 text-[var(--color-sage)] hover:bg-[var(--color-sage)]/20'
                       }`}
-                      title="Health: 528Hz Solfeggio vitality bloom + heartbeat haptic"
+                      title={t('Health: 528Hz Solfeggio vitality bloom + heartbeat haptic')}
                     >
-                      <span>🌿 Health (528Hz)</span>
+                      <span>{t('🌿 Health (528Hz)')}</span>
                     </button>
 
                     <button
                       type="button"
-                      onClick={() => handleTestCategoryCue('Learning', 'Crystal Glissando')}
+                      onClick={() => handleTestCategoryCue('Learning', t('Crystal Glissando'))}
                       className={`text-[11px] px-2 py-1 rounded-[var(--radius-sm)] border font-medium flex items-center gap-1 transition-colors cursor-pointer ${
                         soundMuted
                           ? 'bg-[var(--bg-muted)] border-[var(--border)] text-[var(--fg-subtle)] opacity-60'
                           : 'bg-[var(--color-navy)]/10 border-[var(--color-navy)]/30 text-[var(--color-navy)] hover:bg-[var(--color-navy)]/20'
                       }`}
-                      title="Learning: Ascending crystalline 4-note glissando + double-tap haptic"
+                      title={t('Learning: Ascending crystalline 4-note glissando + double-tap haptic')}
                     >
-                      <span>📚 Learning (Glissando)</span>
+                      <span>{t('📚 Learning (Glissando)')}</span>
                     </button>
 
                     <button
                       type="button"
-                      onClick={() => handleTestCategoryCue('Discipline', 'Bedrock Anchor')}
+                      onClick={() => handleTestCategoryCue('Discipline', t('Bedrock Anchor'))}
                       className={`text-[11px] px-2 py-1 rounded-[var(--radius-sm)] border font-medium flex items-center gap-1 transition-colors cursor-pointer ${
                         soundMuted
                           ? 'bg-[var(--bg-muted)] border-[var(--border)] text-[var(--fg-subtle)] opacity-60'
                           : 'bg-[var(--color-coral)]/10 border-[var(--color-coral)]/30 text-[var(--color-coral)] hover:bg-[var(--color-coral)]/20'
                       }`}
-                      title="Discipline: Resolute 330Hz strike with sub-weight & fifth + anchor haptic"
+                      title={t('Discipline: Resolute 330Hz strike with sub-weight & fifth + anchor haptic')}
                     >
-                      <span>🎯 Discipline (Anchor)</span>
+                      <span>{t('🎯 Discipline (Anchor)')}</span>
                     </button>
                   </div>
                 </div>
@@ -856,10 +872,10 @@ export const Settings: React.FC = () => {
 
           <div className="flex items-center justify-between pt-4 border-t border-[var(--border)]">
             <span className="text-xs text-[var(--color-sage)] font-semibold">
-              {isSaved ? 'Settings saved successfully.' : ''}
+              {isSaved ? t('Settings saved successfully.') : ''}
             </span>
             <Button variant="primary" type="submit" icon={Save}>
-              Save Preferences
+              {t('Save Preferences')}
             </Button>
           </div>
         </form>
@@ -879,12 +895,12 @@ export const Settings: React.FC = () => {
         <div className="flex items-center gap-2 pb-3 border-b border-[var(--border)]">
           <Download className="w-4 h-4 text-[var(--color-slate)]" />
           <h3 className="font-display font-bold text-base text-[var(--fg)]">
-            Data Sovereignty & Backup
+            {t('Data Sovereignty & Backup')}
           </h3>
         </div>
 
         <p className="text-xs text-[var(--fg-muted)] leading-relaxed">
-          Your life data, journal reflections, Dream Bank ledger, and Two Futures statements are stored locally on your device. Export a complete JSON backup at any time.
+          {t('Your life data, journal reflections, Dream Bank ledger, and Two Futures statements are stored locally on your device. Export a complete JSON backup at any time.')}
         </p>
 
         <div className="pt-2">
@@ -893,7 +909,7 @@ export const Settings: React.FC = () => {
             icon={Download}
             onClick={() => setIsExportConfirmOpen(true)}
           >
-            Export My Complete Data (JSON)
+            {t('Export My Complete Data (JSON)')}
           </Button>
         </div>
       </Card>
@@ -903,12 +919,12 @@ export const Settings: React.FC = () => {
         <div className="flex items-center gap-2 pb-3 border-b border-[var(--border)]">
           <Trash2 className="w-4 h-4 text-[var(--color-coral)]" />
           <h3 className="font-display font-bold text-base text-[var(--fg)]">
-            Reset Application Data
+            {t('Reset Application Data')}
           </h3>
         </div>
 
         <p className="text-xs text-[var(--fg-muted)] leading-relaxed">
-          Clears all transactions, completions, custom dream items, and resets the app state to default sample data. This action is irreversible.
+          {t('Clears all transactions, completions, custom dream items, and resets the app state to default sample data. This action is irreversible.')}
         </p>
 
         <div>
@@ -918,7 +934,7 @@ export const Settings: React.FC = () => {
             icon={AlertTriangle}
             onClick={() => setIsResetConfirmOpen(true)}
           >
-            Reset All Application Data
+            {t('Reset All Application Data')}
           </Button>
         </div>
       </Card>
@@ -926,16 +942,16 @@ export const Settings: React.FC = () => {
       {/* Complete Legal & Simulation Disclaimer */}
       <div className="p-4 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)] space-y-2 text-[11px] text-[var(--fg-subtle)] leading-relaxed">
         <div className="font-bold text-[var(--fg)] text-xs">
-          Simulation & Privacy Disclosures
+          {t('Simulation & Privacy Disclosures')}
         </div>
         <p>
-          1. <strong>Virtual Currency:</strong> "Dream Dollars" (D$) is a simulation currency. It possesses no monetary value, cannot be converted to fiat currency, cannot be traded, and cannot be withdrawn.
+          1. <strong>{t('Virtual Currency:')}</strong> {t('"Dream Dollars" (D$) is a simulation currency. It possesses no monetary value, cannot be converted to fiat currency, cannot be traded, and cannot be withdrawn.')}
         </p>
         <p>
-          2. <strong>Physical Reality:</strong> Purchases within the "Dream Market" and assets in "My Future Life" are visual and psychological anchors. Physical acquisition requires real-world execution as modeled in the Reality Bridge.
+          2. <strong>{t('Physical Reality:')}</strong> {t('Purchases within the "Dream Market" and assets in "My Future Life" are visual and psychological anchors. Physical acquisition requires real-world execution as modeled in the Reality Bridge.')}
         </p>
         <p>
-          3. <strong>Data Privacy:</strong> Built by AurelyStudio. Your responses to the Two Futures questions and daily mission reflections are never sold or shared.
+          3. <strong>{t('Data Privacy:')}</strong> {t('Built by AurelyStudio. Your responses to the Two Futures questions and daily mission reflections are never sold or shared.')}
         </p>
       </div>
 
@@ -943,15 +959,15 @@ export const Settings: React.FC = () => {
       <Modal
         isOpen={isPreviewModalOpen}
         onClose={() => setIsPreviewModalOpen(false)}
-        title="Daily Wisdom Notification Preview"
-        subtitle={`Scheduled for ${dailyWisdomTime} · Aligned with ${activeSeason ? activeSeason.title : 'Active Season'}`}
+        title={t('Daily Wisdom Notification Preview')}
+        subtitle={t('Scheduled for {time} · Aligned with {season}', { time: dailyWisdomTime, season: activeSeason ? activeSeason.title : t('Active Season') })}
       >
         <div className="space-y-4 pt-1">
           <div className="p-4 rounded-[var(--radius-md)] bg-[var(--bg)] border border-[var(--border)] space-y-3 shadow-inner">
             <div className="flex items-center justify-between gap-2 border-b border-[var(--border)] pb-2">
               <span className="text-[11px] font-bold text-[var(--color-sage)] flex items-center gap-1">
                 <Bell className="w-3.5 h-3.5" />
-                Scheduled at {dailyWisdomTime}
+                {t('Scheduled at {time}', { time: dailyWisdomTime })}
               </span>
               <Badge variant="coral" className="text-[10px]">
                 {currentWisdom.theme}
@@ -966,7 +982,7 @@ export const Settings: React.FC = () => {
             </span>
 
             <div className="p-2.5 rounded bg-[var(--bg-elevated)] border border-[var(--border)] text-xs text-[var(--fg-muted)] space-y-1">
-              <strong className="text-[var(--fg)] block font-semibold">Today's Focus Anchor:</strong>
+              <strong className="text-[var(--fg)] block font-semibold">{t("Today's Focus Anchor:")}</strong>
               <p>{currentWisdom.actionPrompt}</p>
             </div>
           </div>
@@ -978,14 +994,14 @@ export const Settings: React.FC = () => {
               icon={Shuffle}
               onClick={handleShuffleWisdom}
             >
-              Shuffle Next
+              {t('Shuffle Next')}
             </Button>
             <Button
               variant="primary"
               size="sm"
               onClick={() => setIsPreviewModalOpen(false)}
             >
-              Got It
+              {t('Got It')}
             </Button>
           </div>
         </div>
@@ -995,12 +1011,12 @@ export const Settings: React.FC = () => {
       <Modal
         isOpen={isExportConfirmOpen}
         onClose={() => setIsExportConfirmOpen(false)}
-        title="Confirm Data Export"
-        subtitle="Export and download your complete local workspace snapshot"
+        title={t('Confirm Data Export')}
+        subtitle={t('Export and download your complete local workspace snapshot')}
       >
         <div className="space-y-4 pt-1">
           <p className="text-xs text-[var(--fg-muted)] leading-relaxed">
-            Are you sure you want to download a full JSON backup of your One Decision Life OS workspace?
+            {t('Are you sure you want to download a full JSON backup of your One Decision Life OS workspace?')}
           </p>
 
           {/* Backup Contents Summary */}
@@ -1008,44 +1024,44 @@ export const Settings: React.FC = () => {
             <div className="flex items-center justify-between text-[11px] font-bold text-[var(--fg)] border-b border-[var(--border)] pb-2">
               <span className="flex items-center gap-1.5">
                 <FileJson className="w-3.5 h-3.5 text-[var(--color-sage)]" />
-                Backup Contents Overview
+                {t('Backup Contents Overview')}
               </span>
               <span className="text-[10px] font-mono text-[var(--fg-subtle)]">
-                .json format
+                {t('.json format')}
               </span>
             </div>
 
             <div className="grid grid-cols-2 gap-2 text-[11px] text-[var(--fg-muted)]">
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-3 h-3 text-[var(--color-sage)] shrink-0" />
-                <span>Two Futures Statements</span>
+                <span>{t('Two Futures Statements')}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-3 h-3 text-[var(--color-sage)] shrink-0" />
-                <span>Dream Bank Ledger ({data.transactions.length} items)</span>
+                <span>{t('Dream Bank Ledger ({n} items)', { n: data.transactions.length })}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-3 h-3 text-[var(--color-sage)] shrink-0" />
-                <span>Daily Missions & Habits</span>
+                <span>{t('Daily Missions & Habits')}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-3 h-3 text-[var(--color-sage)] shrink-0" />
-                <span>Check-ins & Mood Logs</span>
+                <span>{t('Check-ins & Mood Logs')}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-3 h-3 text-[var(--color-sage)] shrink-0" />
-                <span>Dream Market & Visions</span>
+                <span>{t('Dream Market & Visions')}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-3 h-3 text-[var(--color-sage)] shrink-0" />
-                <span>Profile & Preferences</span>
+                <span>{t('Profile & Preferences')}</span>
               </div>
             </div>
           </div>
 
           <div className="p-2.5 rounded-[var(--radius-sm)] bg-[var(--bg-muted)] border border-[var(--border)] text-[11px] text-[var(--fg-subtle)] leading-snug">
-            <span className="font-semibold text-[var(--fg)]">Privacy Note: </span>
-            This file is packaged locally inside your browser and downloaded straight to your machine. No external servers or analytics track your backup.
+            <span className="font-semibold text-[var(--fg)]">{t('Privacy Note:')} </span>
+            {t('This file is packaged locally inside your browser and downloaded straight to your machine. No external servers or analytics track your backup.')}
           </div>
 
           <div className="flex justify-end gap-2.5 pt-2">
@@ -1054,7 +1070,7 @@ export const Settings: React.FC = () => {
               size="sm"
               onClick={() => setIsExportConfirmOpen(false)}
             >
-              Cancel
+              {t('Cancel')}
             </Button>
             <Button
               variant="primary"
@@ -1062,7 +1078,7 @@ export const Settings: React.FC = () => {
               icon={Download}
               onClick={handleConfirmExport}
             >
-              Confirm & Download JSON
+              {t('Confirm & Download JSON')}
             </Button>
           </div>
         </div>
@@ -1072,20 +1088,20 @@ export const Settings: React.FC = () => {
       <Modal
         isOpen={isResetConfirmOpen}
         onClose={() => setIsResetConfirmOpen(false)}
-        title="Confirm Account Reset"
-        subtitle="Are you sure you want to reset all data?"
+        title={t('Confirm Account Reset')}
+        subtitle={t('Are you sure you want to reset all data?')}
       >
         <div className="space-y-4">
           <p className="text-xs text-[var(--fg-muted)] leading-relaxed">
-            This will permanently wipe your Dream Bank ledger, completed missions history, custom items, and Two Futures statements from your local device.
+            {t('This will permanently wipe your Dream Bank ledger, completed missions history, custom items, and Two Futures statements from your local device.')}
           </p>
 
           <div className="flex justify-end gap-3 pt-2">
             <Button variant="ghost" onClick={() => setIsResetConfirmOpen(false)}>
-              Cancel
+              {t('Cancel')}
             </Button>
             <Button variant="destructive" onClick={handleHardReset}>
-              Yes, Reset Everything
+              {t('Yes, Reset Everything')}
             </Button>
           </div>
         </div>

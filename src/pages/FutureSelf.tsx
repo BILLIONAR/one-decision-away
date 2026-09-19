@@ -2,16 +2,18 @@ import React, { useState } from 'react';
 import { useApp } from '../store/useApp';
 import { PageHeader, Button, Card, Field, Input, Textarea, Badge } from '../components/ui';
 import { UserCheck, Edit2, Check, ShieldAlert, Sparkles, Plus, X } from 'lucide-react';
+import { useT } from '../i18n';
 
 export const FutureSelf: React.FC = () => {
   const { data, saveFutureSelf } = useApp();
+  const t = useT();
 
   const [isEditing, setIsEditing] = useState(false);
 
-  const [title, setTitle] = useState(data?.futureSelf?.title || 'The Finisher');
+  const [title, setTitle] = useState(data?.futureSelf?.title || t('The Finisher'));
   const [identityStatement, setIdentityStatement] = useState(
     data?.futureSelf?.identityStatement ||
-      'I am someone who finishes important work, protects my attention, and acts before I feel ready.'
+      t('I am someone who finishes important work, protects my attention, and acts before I feel ready.')
   );
 
   // Multi-line list string states for editing
@@ -58,7 +60,7 @@ export const FutureSelf: React.FC = () => {
 
   const handleSave = async () => {
     await saveFutureSelf({
-      title: title.trim() || 'The Finisher',
+      title: title.trim() || t('The Finisher'),
       identityStatement: identityStatement.trim(),
       coreValues: parseLines(coreValuesText),
       dailyStandards: parseLines(standardsText),
@@ -77,16 +79,16 @@ export const FutureSelf: React.FC = () => {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Future Self & Old Self"
-        subtitle="Identity shift precedes behavioural change. Define who you are becoming and what you leave behind."
+        title={t('Future Self & Old Self')}
+        subtitle={t('Identity shift precedes behavioural change. Define who you are becoming and what you leave behind.')}
         action={
           !isEditing ? (
             <Button variant="outline" size="sm" icon={Edit2} onClick={() => setIsEditing(true)}>
-              Edit Identity
+              {t('Edit Identity')}
             </Button>
           ) : (
             <Button variant="accent" size="sm" icon={Check} onClick={handleSave}>
-              Save Identity Profile
+              {t('Save Identity Profile')}
             </Button>
           )
         }
@@ -98,19 +100,19 @@ export const FutureSelf: React.FC = () => {
           <div className="flex items-center gap-2">
             <UserCheck className="w-5 h-5 text-[var(--color-sage)]" />
             <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-sage)]">
-              Future Self Identity
+              {t('Future Self Identity')}
             </span>
           </div>
-          <Badge variant="sage">{data.futureSelf.title || 'The Finisher'}</Badge>
+          <Badge variant="sage">{data.futureSelf.title || t('The Finisher')}</Badge>
         </div>
 
         {isEditing ? (
           <div className="space-y-4">
-            <Field id="role-title" label="Future Self Role (Not a job title)" helper="e.g. The Finisher, The Architect, The Grounded Creator">
+            <Field id="role-title" label={t('Future Self Role (Not a job title)')} helper={t('e.g. The Finisher, The Architect, The Grounded Creator')}>
               <Input id="role-title" value={title} onChange={(e) => setTitle(e.target.value)} />
             </Field>
 
-            <Field id="identity-stmt" label="Core Identity Statement">
+            <Field id="identity-stmt" label={t('Core Identity Statement')}>
               <Textarea
                 id="identity-stmt"
                 value={identityStatement}
@@ -136,12 +138,12 @@ export const FutureSelf: React.FC = () => {
         {/* Core Values & Standards */}
         <Card padding="md" className="space-y-4">
           <h3 className="font-display font-bold text-base text-[var(--fg)]">
-            Core Values & Daily Standards
+            {t('Core Values & Daily Standards')}
           </h3>
 
           {isEditing ? (
             <div className="space-y-4">
-              <Field id="core-values" label="Core Values (1 per line)">
+              <Field id="core-values" label={t('Core Values (1 per line)')}>
                 <Textarea
                   id="core-values"
                   value={coreValuesText}
@@ -149,7 +151,7 @@ export const FutureSelf: React.FC = () => {
                   rows={3}
                 />
               </Field>
-              <Field id="daily-standards" label="Daily Standards (1 per line)">
+              <Field id="daily-standards" label={t('Daily Standards (1 per line)')}>
                 <Textarea
                   id="daily-standards"
                   value={standardsText}
@@ -162,7 +164,7 @@ export const FutureSelf: React.FC = () => {
             <div className="space-y-4 text-xs">
               <div>
                 <span className="font-bold text-[var(--fg-muted)] block mb-1.5 uppercase tracking-wider text-[10px]">
-                  Core Values
+                  {t('Core Values')}
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {data.futureSelf.coreValues.map((v, i) => (
@@ -175,7 +177,7 @@ export const FutureSelf: React.FC = () => {
 
               <div>
                 <span className="font-bold text-[var(--fg-muted)] block mb-1.5 uppercase tracking-wider text-[10px]">
-                  Daily Standards
+                  {t('Daily Standards')}
                 </span>
                 <ul className="space-y-1.5 text-[var(--fg)]">
                   {data.futureSelf.dailyStandards.map((s, i) => (
@@ -193,12 +195,12 @@ export const FutureSelf: React.FC = () => {
         {/* Habits & Boundaries */}
         <Card padding="md" className="space-y-4">
           <h3 className="font-display font-bold text-base text-[var(--fg)]">
-            Habits, Skills & Boundaries
+            {t('Habits, Skills & Boundaries')}
           </h3>
 
           {isEditing ? (
             <div className="space-y-4">
-              <Field id="habits" label="Non-Negotiable Habits (1 per line)">
+              <Field id="habits" label={t('Non-Negotiable Habits (1 per line)')}>
                 <Textarea
                   id="habits"
                   value={habitsText}
@@ -206,7 +208,7 @@ export const FutureSelf: React.FC = () => {
                   rows={3}
                 />
               </Field>
-              <Field id="boundaries" label="Clear Boundaries (1 per line)">
+              <Field id="boundaries" label={t('Clear Boundaries (1 per line)')}>
                 <Textarea
                   id="boundaries"
                   value={boundariesText}
@@ -219,7 +221,7 @@ export const FutureSelf: React.FC = () => {
             <div className="space-y-4 text-xs">
               <div>
                 <span className="font-bold text-[var(--fg-muted)] block mb-1.5 uppercase tracking-wider text-[10px]">
-                  Non-Negotiable Habits
+                  {t('Non-Negotiable Habits')}
                 </span>
                 <ul className="space-y-1.5 text-[var(--fg)]">
                   {data.futureSelf.habits.map((h, i) => (
@@ -233,7 +235,7 @@ export const FutureSelf: React.FC = () => {
 
               <div>
                 <span className="font-bold text-[var(--fg-muted)] block mb-1.5 uppercase tracking-wider text-[10px]">
-                  Clear Boundaries
+                  {t('Clear Boundaries')}
                 </span>
                 <ul className="space-y-1.5 text-[var(--fg)]">
                   {data.futureSelf.boundaries.map((b, i) => (
@@ -254,13 +256,13 @@ export const FutureSelf: React.FC = () => {
         <div className="flex items-center gap-2 pb-3 border-b border-[var(--border)]">
           <ShieldAlert className="w-5 h-5 text-[#9A8F86]" />
           <h3 className="font-display font-bold text-lg text-[var(--fg)]">
-            Old Self — Patterns to Leave Behind
+            {t('Old Self — Patterns to Leave Behind')}
           </h3>
         </div>
 
         {isEditing ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Field id="old-behaviors" label="Behaviors to Leave Behind (1 per line)">
+            <Field id="old-behaviors" label={t('Behaviors to Leave Behind (1 per line)')}>
               <Textarea
                 id="old-behaviors"
                 value={oldBehaviorsText}
@@ -269,7 +271,7 @@ export const FutureSelf: React.FC = () => {
               />
             </Field>
 
-            <Field id="old-excuses" label="Outdated Excuses (1 per line)">
+            <Field id="old-excuses" label={t('Outdated Excuses (1 per line)')}>
               <Textarea
                 id="old-excuses"
                 value={oldExcusesText}
@@ -278,7 +280,7 @@ export const FutureSelf: React.FC = () => {
               />
             </Field>
 
-            <Field id="old-patterns" label="Self-Sabotage Triggers (1 per line)">
+            <Field id="old-patterns" label={t('Self-Sabotage Triggers (1 per line)')}>
               <Textarea
                 id="old-patterns"
                 value={oldPatternsText}
@@ -287,7 +289,7 @@ export const FutureSelf: React.FC = () => {
               />
             </Field>
 
-            <Field id="old-labels" label="Identity Labels to Release (1 per line)">
+            <Field id="old-labels" label={t('Identity Labels to Release (1 per line)')}>
               <Textarea
                 id="old-labels"
                 value={oldLabelsText}
@@ -300,7 +302,7 @@ export const FutureSelf: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div className="p-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)]">
               <span className="font-bold text-[var(--fg-muted)] block mb-1 text-[11px]">
-                Behaviors Left Behind
+                {t('Behaviors Left Behind')}
               </span>
               <ul className="space-y-1 text-[var(--fg)]">
                 {data.futureSelf.oldSelfBehaviors.map((b, i) => (
@@ -311,7 +313,7 @@ export const FutureSelf: React.FC = () => {
 
             <div className="p-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)]">
               <span className="font-bold text-[var(--fg-muted)] block mb-1 text-[11px]">
-                Old Excuses & Patterns
+                {t('Old Excuses & Patterns')}
               </span>
               <ul className="space-y-1 text-[var(--fg)]">
                 {data.futureSelf.oldSelfExcuses.map((e, i) => (

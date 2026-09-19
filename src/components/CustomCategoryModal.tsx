@@ -17,6 +17,7 @@ import {
 } from '../utils/categoryHelpers';
 import { soundSynthesizer } from '../utils/soundSynthesizer';
 import { MicroHabitCheckbox } from './MicroHabitCheckbox';
+import { useT } from '../i18n';
 
 export interface CustomCategoryModalProps {
   isOpen: boolean;
@@ -39,6 +40,7 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
   onSave,
   onDelete,
 }) => {
+  const t = useT();
   const [name, setName] = useState('');
   const [selectedIcon, setSelectedIcon] = useState('Zap');
   const [selectedColor, setSelectedColor] = useState('#6366f1');
@@ -93,7 +95,7 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
     if (e) e.preventDefault();
     const cleanName = name.trim();
     if (!cleanName) {
-      setError('Please enter a category name.');
+      setError(t('Please enter a category name.'));
       return;
     }
 
@@ -109,7 +111,7 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
       });
       onClose();
     } catch (err: any) {
-      setError(err?.message || 'Failed to save custom category.');
+      setError(err?.message || t('Failed to save custom category.'));
     } finally {
       setIsSubmitting(false);
     }
@@ -122,7 +124,7 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
       await onDelete(categoryToEdit.id);
       onClose();
     } catch (err: any) {
-      setError(err?.message || 'Failed to delete category.');
+      setError(err?.message || t('Failed to delete category.'));
     } finally {
       setIsSubmitting(false);
     }
@@ -136,8 +138,8 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={categoryToEdit ? 'Edit Custom Category' : 'Create Custom Habit Category'}
-      subtitle="Define a personalized identity domain with custom icons, color accents, and sound cues."
+      title={categoryToEdit ? t('Edit Custom Category') : t('Create Custom Habit Category')}
+      subtitle={t('Define a personalized identity domain with custom icons, color accents, and sound cues.')}
       maxWidth="lg"
     >
       <form onSubmit={handleSubmit} className="space-y-5">
@@ -151,13 +153,13 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
         <div className="space-y-3">
           <Field
             id="cat-name"
-            label="Category Name"
-            helper="Short and evocative (e.g. Deep Focus, Morning Power, Writing, Vitality)."
+            label={t('Category Name')}
+            helper={t('Short and evocative (e.g. Deep Focus, Morning Power, Writing, Vitality).')}
           >
             <div className="relative">
               <Input
                 id="cat-name"
-                placeholder="e.g. Deep Focus"
+                placeholder={t('e.g. Deep Focus')}
                 value={name}
                 onChange={(e) => {
                   setName(e.target.value);
@@ -175,12 +177,12 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
 
           <Field
             id="cat-desc"
-            label="Optional Focus Intent / Trigger Description"
-            helper="Brief context on what belongs here."
+            label={t('Optional Focus Intent / Trigger Description')}
+            helper={t('Brief context on what belongs here.')}
           >
             <Input
               id="cat-desc"
-              placeholder="e.g. 5-minute deep focus sprints, cognitive rituals & zero distraction"
+              placeholder={t('e.g. 5-minute deep focus sprints, cognitive rituals & zero distraction')}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               maxLength={90}
@@ -192,17 +194,17 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <label className="text-xs font-bold uppercase tracking-wider text-[var(--fg)]">
-              Choose Unique Icon Identifier
+              {t('Choose Unique Icon Identifier')}
             </label>
             <span className="text-[11px] text-[var(--fg-muted)]">
-              Selected: <strong className="text-[var(--fg)]">{selectedIcon}</strong>
+              {t('Selected:')} <strong className="text-[var(--fg)]">{selectedIcon}</strong>
             </span>
           </div>
 
           <div
             className="grid grid-cols-4 sm:grid-cols-6 gap-2 max-h-48 overflow-y-auto p-2 bg-[var(--bg-muted)]/40 rounded-[var(--radius-sm)] border border-[var(--border)]"
             role="radiogroup"
-            aria-label="Select category icon"
+            aria-label={t('Select category icon')}
           >
             {CURATED_CATEGORY_ICONS.map((item) => {
               const IconComp = item.icon;
@@ -214,7 +216,7 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
                   type="button"
                   role="radio"
                   aria-checked={isSelected}
-                  title={item.label}
+                  title={t(item.label)}
                   onClick={() => setSelectedIcon(item.id)}
                   className={`flex flex-col items-center justify-center p-2 rounded-[var(--radius-xs)] border transition-all cursor-pointer ${
                     isSelected
@@ -236,7 +238,7 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <label className="text-xs font-bold uppercase tracking-wider text-[var(--fg)]">
-              Choose Unique Color Palette
+              {t('Choose Unique Color Palette')}
             </label>
             <div className="flex items-center gap-1.5">
               <span
@@ -259,7 +261,7 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
                   key={palette.id}
                   type="button"
                   onClick={() => handleColorSelect(palette.hex)}
-                  title={palette.label}
+                  title={t(palette.label)}
                   className={`flex items-center gap-2 p-1.5 rounded-[var(--radius-xs)] border text-left transition-all cursor-pointer ${
                     isSelected
                       ? 'bg-[var(--bg-elevated)] border-[var(--fg)] ring-1 ring-[var(--fg)] font-semibold shadow-xs'
@@ -271,7 +273,7 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
                     style={{ backgroundColor: palette.hex }}
                   />
                   <span className="text-[10px] font-medium text-[var(--fg)] truncate">
-                    {palette.label}
+                    {t(palette.label)}
                   </span>
                 </button>
               );
@@ -283,14 +285,14 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
             <div className="flex-1">
               <Input
                 id="cat-hex"
-                placeholder="#6366f1 or custom hex"
+                placeholder={t('#6366f1 or custom hex')}
                 value={customHex}
                 onChange={(e) => handleCustomHexChange(e.target.value)}
                 className="font-mono text-xs"
               />
             </div>
             <span className="text-[11px] text-[var(--fg-muted)]">
-              Paste any valid brand or custom hex code
+              {t('Paste any valid brand or custom hex code')}
             </span>
           </div>
         </div>
@@ -300,7 +302,7 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[var(--fg)]">
               <Sparkles className="w-3.5 h-3.5 text-[var(--color-coral)]" />
-              <span>Live Interactive Preview</span>
+              <span>{t('Live Interactive Preview')}</span>
             </div>
             <Button
               type="button"
@@ -310,7 +312,7 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
               onClick={testAudioChime}
               className="text-xs h-7 px-2.5"
             >
-              Test Sound & Haptics
+              {t('Test Sound & Haptics')}
             </Button>
           </div>
 
@@ -336,7 +338,7 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
                   );
                 }}
                 color={activeColorHex}
-                ariaLabel="Toggle preview habit"
+                ariaLabel={t('Toggle preview habit')}
               />
 
               <div className="min-w-0 flex-1">
@@ -350,21 +352,21 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
                     }}
                   >
                     <ActiveIconComponent className="w-3 h-3" />
-                    <span>{name || 'Category Name'}</span>
+                    <span>{name || t('Category Name')}</span>
                   </span>
-                  <span className="text-[11px] text-[var(--fg-muted)]">5 mins</span>
+                  <span className="text-[11px] text-[var(--fg-muted)]">{t('5 mins')}</span>
                 </div>
                 <div className="text-xs font-medium text-[var(--fg)] truncate">
-                  Sample habit in this custom category
+                  {t('Sample habit in this custom category')}
                 </div>
                 <div className="text-[11px] text-[var(--fg-muted)] truncate">
-                  {description || 'Interactive particle burst & acoustic chime in your custom color.'}
+                  {description || t('Interactive particle burst & acoustic chime in your custom color.')}
                 </div>
               </div>
             </div>
 
             <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-muted)] px-2 py-0.5 bg-[var(--bg-muted)] rounded border border-[var(--border)] shrink-0">
-              {previewChecked ? 'Completed' : 'Click to Test'}
+              {previewChecked ? t('Completed') : t('Click to Test')}
             </span>
           </div>
         </div>
@@ -376,7 +378,7 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
               <>
                 {showDeleteConfirm ? (
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-[var(--danger)] font-medium">Confirm delete?</span>
+                    <span className="text-xs text-[var(--danger)] font-medium">{t('Confirm delete?')}</span>
                     <Button
                       type="button"
                       variant="danger"
@@ -384,7 +386,7 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
                       onClick={handleDelete}
                       isLoading={isSubmitting}
                     >
-                      Yes, Delete
+                      {t('Yes, Delete')}
                     </Button>
                     <Button
                       type="button"
@@ -392,7 +394,7 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
                       size="sm"
                       onClick={() => setShowDeleteConfirm(false)}
                     >
-                      Cancel
+                      {t('Cancel')}
                     </Button>
                   </div>
                 ) : (
@@ -404,7 +406,7 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
                     onClick={() => setShowDeleteConfirm(true)}
                     className="text-[var(--danger)] hover:bg-[var(--danger)]/10 hover:text-[var(--danger)]"
                   >
-                    Delete Category
+                    {t('Delete Category')}
                   </Button>
                 )}
               </>
@@ -419,7 +421,7 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
               onClick={onClose}
               disabled={isSubmitting}
             >
-              Cancel
+              {t('Cancel')}
             </Button>
             <Button
               type="submit"
@@ -428,7 +430,7 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
               icon={Check}
               isLoading={isSubmitting}
             >
-              {categoryToEdit ? 'Save Changes' : 'Create Category'}
+              {categoryToEdit ? t('Save Changes') : t('Create Category')}
             </Button>
           </div>
         </div>

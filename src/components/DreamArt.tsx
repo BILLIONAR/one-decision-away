@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useT } from '../i18n';
 
 interface DreamArtProps {
   type: string;
@@ -7,15 +8,17 @@ interface DreamArtProps {
   className?: string;
 }
 
-export const DreamArt: React.FC<DreamArtProps> = ({ type, imageUrl, alt = 'Luxury Dream Asset', className = 'w-full h-full' }) => {
+export const DreamArt: React.FC<DreamArtProps> = ({ type, imageUrl, alt, className = 'w-full h-full' }) => {
+  const t = useT();
   const [imageFailed, setImageFailed] = useState(false);
+  const altText = alt ?? t('Luxury Dream Asset');
 
   if (imageUrl && !imageFailed) {
     return (
       <div className={`relative overflow-hidden bg-[#1A1A1A] ${className}`}>
         <img
           src={imageUrl}
-          alt={alt}
+          alt={altText}
           referrerPolicy="no-referrer"
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           onError={() => setImageFailed(true)}

@@ -38,6 +38,7 @@ import {
 import { DailyPrimaryGoal } from '../types/models';
 import { SEED_DAILY_PRIMARY_GOALS } from '../data/seed';
 import { ExportProgressModal } from './ExportProgressModal';
+import { useT, t } from '../i18n';
 
 export interface GoalMilestone {
   streakDays: number;
@@ -59,9 +60,9 @@ export const getStreakMilestone = (streak: number): GoalMilestone | null => {
     return {
       streakDays: 5,
       level: 'bronze',
-      label: '5-Day Streak',
-      title: '5-Day Momentum Milestone',
-      description: '5 consecutive days of locked-in daily primary goal focus.',
+      label: t('5-Day Streak'),
+      title: t('5-Day Momentum Milestone'),
+      description: t('5 consecutive days of locked-in daily primary goal focus.'),
       badgeBg: '#FEF3C7',
       badgeBorder: '#D97706',
       badgeColor: '#92400E',
@@ -75,9 +76,9 @@ export const getStreakMilestone = (streak: number): GoalMilestone | null => {
     return {
       streakDays: 10,
       level: 'silver',
-      label: '10-Day Streak',
-      title: '10-Day Consistency Milestone',
-      description: 'Double-digit streak! 10 unbroken days of high-leverage execution.',
+      label: t('10-Day Streak'),
+      title: t('10-Day Consistency Milestone'),
+      description: t('Double-digit streak! 10 unbroken days of high-leverage execution.'),
       badgeBg: '#D1FAE5',
       badgeBorder: '#059669',
       badgeColor: '#065F46',
@@ -91,9 +92,9 @@ export const getStreakMilestone = (streak: number): GoalMilestone | null => {
     return {
       streakDays: 15,
       level: 'gold',
-      label: '15-Day Streak',
-      title: '15-Day Discipline Milestone',
-      description: '15 consecutive days of sustained excellence and focus momentum.',
+      label: t('15-Day Streak'),
+      title: t('15-Day Discipline Milestone'),
+      description: t('15 consecutive days of sustained excellence and focus momentum.'),
       badgeBg: '#DBEAFE',
       badgeBorder: '#2563EB',
       badgeColor: '#1E40AF',
@@ -107,9 +108,9 @@ export const getStreakMilestone = (streak: number): GoalMilestone | null => {
     return {
       streakDays: 20,
       level: 'diamond',
-      label: '20-Day Streak',
-      title: '20-Day Mastery Milestone',
-      description: '20 consecutive days of goal completion! Elite top-tier consistency.',
+      label: t('20-Day Streak'),
+      title: t('20-Day Mastery Milestone'),
+      description: t('20 consecutive days of goal completion! Elite top-tier consistency.'),
       badgeBg: '#EDE9FE',
       badgeBorder: '#7C3AED',
       badgeColor: '#5B21B6',
@@ -123,9 +124,9 @@ export const getStreakMilestone = (streak: number): GoalMilestone | null => {
     return {
       streakDays: streak,
       level: 'master',
-      label: `${streak}-Day Streak`,
-      title: `${streak}-Day Legendary Milestone`,
-      description: `${streak} consecutive days of world-class discipline and execution velocity.`,
+      label: t('{n}-Day Streak', { n: streak }),
+      title: t('{n}-Day Legendary Milestone', { n: streak }),
+      description: t('{n} consecutive days of world-class discipline and execution velocity.', { n: streak }),
       badgeBg: '#FEF3C7',
       badgeBorder: '#B45309',
       badgeColor: '#78350F',
@@ -298,6 +299,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
   onExportPng?: () => void;
 }> = ({ className = '', onExportPng }) => {
   const { data } = useApp();
+  const t = useT();
   const [viewMode, setViewMode] = useState<'daily' | 'weekly'>('daily');
   const [showMilestones, setShowMilestones] = useState<boolean>(true);
   const [selectedMilestoneDateKey, setSelectedMilestoneDateKey] = useState<string | null>(null);
@@ -375,7 +377,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
         isCompleted,
         isIncomplete,
         status,
-        title: goal?.title || 'No Primary Goal Set',
+        title: goal?.title || t('No Primary Goal Set'),
         rollingRate: 0,
         consecutiveStreak: 0,
         milestone: null,
@@ -435,7 +437,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
       const lastDate = chunk[chunk.length - 1]?.displayDate || '';
 
       weekly.push({
-        weekLabel: `Wk ${w + 1} (${firstDate} - ${lastDate})`,
+        weekLabel: t('Wk {n} ({from} - {to})', { n: w + 1, from: firstDate, to: lastDate }),
         daysWithGoal,
         completedGoals,
         incompleteGoals,
@@ -541,7 +543,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
         },
       },
     };
-  }, [goalsMap]);
+  }, [goalsMap, t]);
 
   const achievedMilestones = useMemo(() => {
     return timelineData.filter((p) => p.milestone !== null);
@@ -574,10 +576,10 @@ export const DailyPrimaryGoalsChart: React.FC<{
               className="text-[9px] py-0"
             >
               {dataPoint.status === 'completed'
-                ? 'Accomplished'
+                ? t('Accomplished')
                 : dataPoint.status === 'incomplete'
-                ? 'Set & Incomplete'
-                : 'No Goal Defined'}
+                ? t('Set & Incomplete')
+                : t('No Goal Defined')}
             </Badge>
           </div>
 
@@ -598,7 +600,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
                 <span>{milestone.title}</span>
               </div>
               <p className="text-[10px] text-white/95 leading-tight">
-                {milestone.description} ({milestone.streakDays} consecutive days unlocked!)
+                {milestone.description} {t('({n} consecutive days unlocked!)', { n: milestone.streakDays })}
               </p>
             </div>
           )}
@@ -615,23 +617,23 @@ export const DailyPrimaryGoalsChart: React.FC<{
               )}
               {goal.completedAt && (
                 <p className="text-[10px] text-[var(--color-sage)] font-medium">
-                  Completed at {new Date(goal.completedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  {t('Completed at {time}', { time: new Date(goal.completedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) })}
                 </p>
               )}
             </div>
           ) : (
             <p className="text-[11px] text-[var(--fg-subtle)]">
-              No primary focus was set on this day.
+              {t('No primary focus was set on this day.')}
             </p>
           )}
 
           <div className="pt-1.5 border-t border-[var(--border)] space-y-1 text-[10px]">
             <div className="flex justify-between text-[var(--fg-subtle)]">
-              <span>Consecutive Streak:</span>
-              <span className="font-bold text-[var(--fg)]">{dataPoint.consecutiveStreak} days</span>
+              <span>{t('Consecutive Streak:')}</span>
+              <span className="font-bold text-[var(--fg)]">{t('{n} days', { n: dataPoint.consecutiveStreak })}</span>
             </div>
             <div className="flex justify-between text-[var(--fg-subtle)]">
-              <span>7-Day Rolling Rate:</span>
+              <span>{t('7-Day Rolling Rate:')}</span>
               <span className="font-bold text-[var(--fg)]">{dataPoint.rollingRate}%</span>
             </div>
           </div>
@@ -655,14 +657,14 @@ export const DailyPrimaryGoalsChart: React.FC<{
               <Target className="w-4 h-4" />
             </div>
             <h3 className="text-base font-bold font-display text-[var(--fg)]">
-              Primary Daily Goals (Last 30 Days)
+              {t('Primary Daily Goals (Last 30 Days)')}
             </h3>
             <Badge variant="primary" className="text-[10px] uppercase">
-              Recharts Analytics
+              {t('Recharts Analytics')}
             </Badge>
           </div>
           <p className="text-xs text-[var(--fg-muted)] mt-1">
-            Tracking commitment frequency and accomplishment status of your single daily focus over the past 30 days.
+            {t('Tracking commitment frequency and accomplishment status of your single daily focus over the past 30 days.')}
           </p>
         </div>
 
@@ -679,7 +681,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
                   : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
               }`}
             >
-              30-Day Daily Timeline
+              {t('30-Day Daily Timeline')}
             </button>
             <button
               id="chart-toggle-weekly-btn"
@@ -691,7 +693,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
                   : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
               }`}
             >
-              Weekly Rollup
+              {t('Weekly Rollup')}
             </button>
           </div>
 
@@ -703,9 +705,9 @@ export const DailyPrimaryGoalsChart: React.FC<{
             data-no-export="true"
             onClick={handleExportClick}
             className="text-xs border-[var(--border)] hover:border-[var(--fg-muted)]"
-            title="Export this progress visualization as a PNG image for sharing"
+            title={t('Export this progress visualization as a PNG image for sharing')}
           >
-            Export PNG
+            {t('Export PNG')}
           </Button>
         </div>
       </div>
@@ -714,20 +716,20 @@ export const DailyPrimaryGoalsChart: React.FC<{
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <div className="p-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)]">
           <div className="flex items-center justify-between text-xs text-[var(--fg-muted)] mb-1">
-            <span>Setting Frequency</span>
+            <span>{t('Setting Frequency')}</span>
             <Calendar className="w-3.5 h-3.5 text-[var(--primary)]" />
           </div>
           <div className="text-xl font-bold font-display text-[var(--fg)]">
             {stats.setFrequencyPct}%
           </div>
           <p className="text-[10px] text-[var(--fg-subtle)] mt-0.5">
-            {stats.totalSet} of {stats.totalDays} days defined
+            {t('{set} of {total} days defined', { set: stats.totalSet, total: stats.totalDays })}
           </p>
         </div>
 
         <div className="p-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)]">
           <div className="flex items-center justify-between text-xs text-[var(--fg-muted)] mb-1">
-            <span>Completion Rate</span>
+            <span>{t('Completion Rate')}</span>
             <CheckCircle2 className="w-3.5 h-3.5 text-[var(--color-sage)]" />
           </div>
           <div className="flex items-baseline gap-2">
@@ -752,26 +754,26 @@ export const DailyPrimaryGoalsChart: React.FC<{
             </span>
           </div>
           <p className="text-[10px] text-[var(--fg-subtle)] mt-0.5">
-            {stats.totalCompleted} achieved of {stats.totalSet} set
+            {t('{completed} achieved of {set} set', { completed: stats.totalCompleted, set: stats.totalSet })}
           </p>
         </div>
 
         <div className="p-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)]">
           <div className="flex items-center justify-between text-xs text-[var(--fg-muted)] mb-1">
-            <span>Current Streak</span>
+            <span>{t('Current Streak')}</span>
             <Flame className="w-3.5 h-3.5 text-[var(--color-coral)]" />
           </div>
           <div className="text-xl font-bold font-display text-[var(--fg)]">
-            {stats.currentStreak} Days
+            {t('{n} Days', { n: stats.currentStreak })}
           </div>
           <p className="text-[10px] text-[var(--fg-subtle)] mt-0.5">
-            Active daily focus momentum
+            {t('Active daily focus momentum')}
           </p>
         </div>
 
         <div className="p-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)]">
           <div className="flex items-center justify-between text-xs text-[var(--fg-muted)] mb-1">
-            <span>Milestones Reached</span>
+            <span>{t('Milestones Reached')}</span>
             <Award className="w-3.5 h-3.5 text-amber-500" />
           </div>
           <div className="flex items-baseline gap-2">
@@ -780,12 +782,12 @@ export const DailyPrimaryGoalsChart: React.FC<{
             </span>
             {stats.highestMilestone && (
               <Badge variant="warning" className="text-[9px] py-0 px-1 font-bold">
-                Top: {stats.highestMilestone.streakDays}d
+                {t('Top: {n}d', { n: stats.highestMilestone.streakDays })}
               </Badge>
             )}
           </div>
           <p className="text-[10px] text-[var(--fg-subtle)] mt-0.5">
-            Best run: {stats.longestStreak} consecutive days
+            {t('Best run: {n} consecutive days', { n: stats.longestStreak })}
           </p>
         </div>
       </div>
@@ -808,7 +810,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
               {stats.comparison15d.growthDirection === 'neutral' && <Minus className="w-4 h-4" />}
             </div>
             <span className="text-xs font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-              Completion Growth Rate (15d vs 15d Trend)
+              {t('Completion Growth Rate (15d vs 15d Trend)')}
             </span>
             <Badge
               variant={
@@ -821,10 +823,10 @@ export const DailyPrimaryGoalsChart: React.FC<{
               className="text-[10px] font-bold"
             >
               {stats.comparison15d.pointDelta > 0
-                ? `+${stats.comparison15d.pointDelta}% pts`
+                ? t('+{n}% pts', { n: stats.comparison15d.pointDelta })
                 : stats.comparison15d.pointDelta < 0
-                ? `${stats.comparison15d.pointDelta}% pts`
-                : '0% pts'}
+                ? t('{n}% pts', { n: stats.comparison15d.pointDelta })
+                : t('0% pts')}
             </Badge>
           </div>
 
@@ -844,15 +846,15 @@ export const DailyPrimaryGoalsChart: React.FC<{
             </span>
             <span className="text-xs text-[var(--fg-muted)] font-medium">
               {stats.comparison15d.growthDirection === 'up'
-                ? 'growth in accomplishment rate over the last 15 days'
+                ? t('growth in accomplishment rate over the last 15 days')
                 : stats.comparison15d.growthDirection === 'down'
-                ? 'reduction in accomplishment rate over the last 15 days'
-                : 'steady execution velocity over the last 15 days'}
+                ? t('reduction in accomplishment rate over the last 15 days')
+                : t('steady execution velocity over the last 15 days')}
             </span>
           </div>
 
           <p className="text-[11px] text-[var(--fg-subtle)] leading-relaxed">
-            Comparing the last 15 days ({stats.comparison15d.recent15RangeLabel}) against the baseline of the previous 15 days ({stats.comparison15d.prev15RangeLabel}).
+            {t('Comparing the last 15 days ({recent}) against the baseline of the previous 15 days ({prev}).', { recent: stats.comparison15d.recent15RangeLabel, prev: stats.comparison15d.prev15RangeLabel })}
           </p>
         </div>
 
@@ -860,24 +862,24 @@ export const DailyPrimaryGoalsChart: React.FC<{
         <div className="flex items-center gap-2 sm:gap-3 bg-[var(--bg-elevated)] p-2.5 sm:p-3 rounded-[var(--radius-sm)] border border-[var(--border)] shrink-0 self-stretch sm:self-auto justify-between sm:justify-start">
           <div className="text-left space-y-0.5">
             <span className="text-[10px] uppercase font-bold text-[var(--fg-subtle)] tracking-wider block">
-              Previous 15 Days
+              {t('Previous 15 Days')}
             </span>
             <div className="text-base font-bold font-display text-[var(--fg)]">
               {stats.comparison15d.prev15Rate}%
             </div>
             <span className="text-[10px] text-[var(--fg-muted)] block">
-              {stats.comparison15d.prev15Completed} / {stats.comparison15d.prev15Set} completed
+              {t('{completed} / {set} completed', { completed: stats.comparison15d.prev15Completed, set: stats.comparison15d.prev15Set })}
             </span>
           </div>
 
           <div className="px-1 text-[var(--fg-subtle)] flex flex-col items-center">
             <ArrowRight className="w-4 h-4" />
-            <span className="text-[9px] font-mono text-[var(--fg-subtle)] mt-0.5">vs</span>
+            <span className="text-[9px] font-mono text-[var(--fg-subtle)] mt-0.5">{t('vs')}</span>
           </div>
 
           <div className="text-left space-y-0.5">
             <span className="text-[10px] uppercase font-bold text-[var(--fg-subtle)] tracking-wider block">
-              Last 15 Days
+              {t('Last 15 Days')}
             </span>
             <div
               className={`text-base font-bold font-display ${
@@ -891,7 +893,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
               {stats.comparison15d.recent15Rate}%
             </div>
             <span className="text-[10px] text-[var(--fg-muted)] block">
-              {stats.comparison15d.recent15Completed} / {stats.comparison15d.recent15Set} completed
+              {t('{completed} / {set} completed', { completed: stats.comparison15d.recent15Completed, set: stats.comparison15d.recent15Set })}
             </span>
           </div>
         </div>
@@ -906,10 +908,10 @@ export const DailyPrimaryGoalsChart: React.FC<{
             </div>
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-[var(--fg)]">
-                Goal Completion Streak Milestones
+                {t('Goal Completion Streak Milestones')}
               </span>
               <span className="text-[11px] text-[var(--fg-muted)] block">
-                Key consistency thresholds (5, 10, 20 consecutive days) highlighted directly on the line graph
+                {t('Key consistency thresholds (5, 10, 20 consecutive days) highlighted directly on the line graph')}
               </span>
             </div>
           </div>
@@ -925,7 +927,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
               }`}
             >
               <Sparkles className="w-3 h-3" />
-              <span>{showMilestones ? 'Milestones Visible' : 'Milestones Hidden'}</span>
+              <span>{showMilestones ? t('Milestones Visible') : t('Milestones Hidden')}</span>
             </button>
           </div>
         </div>
@@ -934,7 +936,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
         {achievedMilestones.length > 0 ? (
           <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-[var(--border)]/60">
             <span className="text-[11px] font-semibold text-[var(--fg-subtle)] mr-1">
-              Milestones Reached:
+              {t('Milestones Reached:')}
             </span>
             {achievedMilestones.map((point) => {
               const m = point.milestone!;
@@ -958,13 +960,13 @@ export const DailyPrimaryGoalsChart: React.FC<{
                     borderColor: m.badgeBorder,
                     color: m.badgeColor,
                   }}
-                  title={`${m.title} achieved on ${point.fullDate}`}
+                  title={t('{title} achieved on {date}', { title: m.title, date: point.fullDate })}
                 >
                   {m.iconName === 'flame' && <Flame className="w-3.5 h-3.5" />}
                   {m.iconName === 'shield' && <Shield className="w-3.5 h-3.5" />}
                   {m.iconName === 'trophy' && <Trophy className="w-3.5 h-3.5" />}
                   {m.iconName === 'crown' && <Crown className="w-3.5 h-3.5" />}
-                  <span>{m.streakDays}-Day Milestone</span>
+                  <span>{t('{n}-Day Milestone', { n: m.streakDays })}</span>
                   <span className="text-[10px] font-normal opacity-80">({point.displayDate})</span>
                 </button>
               );
@@ -972,7 +974,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
           </div>
         ) : (
           <p className="text-[11px] text-[var(--fg-subtle)] italic pt-1 border-t border-[var(--border)]/60">
-            No 5, 10, or 20-day milestones reached yet in this 30-day window. Complete daily primary goals consecutively to unlock milestone markers!
+            {t('No 5, 10, or 20-day milestones reached yet in this 30-day window. Complete daily primary goals consecutively to unlock milestone markers!')}
           </p>
         )}
 
@@ -995,7 +997,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
                   className="text-[9px] font-bold"
                   style={{ color: selectedMilestonePoint.milestone.badgeColor }}
                 >
-                  {selectedMilestonePoint.milestone.streakDays} Consecutive Days
+                  {t('{n} Consecutive Days', { n: selectedMilestonePoint.milestone.streakDays })}
                 </Badge>
               </div>
               <p className="text-xs font-medium text-[var(--fg-muted)]">
@@ -1003,7 +1005,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
               </p>
               {selectedMilestonePoint.goal && (
                 <p className="text-[11px] text-[var(--fg)] italic pt-0.5">
-                  Goal completed on this milestone day: &ldquo;{selectedMilestonePoint.goal.title}&rdquo;
+                  {t('Goal completed on this milestone day: “{title}”', { title: selectedMilestonePoint.goal.title })}
                 </p>
               )}
             </div>
@@ -1014,7 +1016,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
               onClick={() => setSelectedMilestoneDateKey(null)}
               className="text-[11px] self-start sm:self-auto h-7 px-2"
             >
-              Clear Focus
+              {t('Clear Focus')}
             </Button>
           </div>
         )}
@@ -1053,7 +1055,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
                     yAxisId="status"
                     domain={[0, 1.2]}
                     ticks={[0, 1]}
-                    tickFormatter={(val) => (val === 1 ? 'Focus' : 'None')}
+                    tickFormatter={(val) => (val === 1 ? t('Focus') : t('None'))}
                     tickLine={false}
                     axisLine={false}
                     tick={{ fill: 'var(--fg-subtle)', fontSize: 10 }}
@@ -1080,7 +1082,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
                   <Bar
                     yAxisId="status"
                     dataKey="isCompleted"
-                    name="Completed Goal"
+                    name={t('Completed Goal')}
                     stackId="goal"
                     fill="var(--color-sage)"
                     radius={[2, 2, 0, 0]}
@@ -1105,7 +1107,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
                     yAxisId="rate"
                     type="monotone"
                     dataKey="rollingRate"
-                    name="7-Day Rolling Completion Rate (%)"
+                    name={t('7-Day Rolling Completion Rate (%)')}
                     stroke="var(--primary)"
                     strokeWidth={2.5}
                     dot={(dotProps: any) => (
@@ -1129,15 +1131,15 @@ export const DailyPrimaryGoalsChart: React.FC<{
               <div className="flex flex-wrap items-center gap-4">
                 <span className="flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-xs bg-[#2A6F4E]" />
-                  <span>Accomplished (100% completed)</span>
+                  <span>{t('Accomplished (100% completed)')}</span>
                 </span>
                 <span className="flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-xs bg-[#C2593F]" />
-                  <span>Set, but Incomplete</span>
+                  <span>{t('Set, but Incomplete')}</span>
                 </span>
                 <span className="flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-xs bg-[#D4CDC3]" />
-                  <span>No Goal Set</span>
+                  <span>{t('No Goal Set')}</span>
                 </span>
                 <span className="flex items-center gap-1.5">
                   <span className="flex items-center -space-x-1">
@@ -1145,11 +1147,11 @@ export const DailyPrimaryGoalsChart: React.FC<{
                     <span className="w-3 h-3 rounded-full bg-[#10B981] border border-[#059669] inline-block" />
                     <span className="w-3 h-3 rounded-full bg-[#8B5CF6] border border-[#7C3AED] inline-block" />
                   </span>
-                  <span className="font-semibold text-[var(--fg)]">Key Milestones (5, 10, 20 Days)</span>
+                  <span className="font-semibold text-[var(--fg)]">{t('Key Milestones (5, 10, 20 Days)')}</span>
                 </span>
               </div>
               <span className="italic text-[10px] text-[var(--fg-subtle)]">
-                *Click milestone nodes or badges to highlight achievement details; hover bars for goals
+                {t('*Click milestone nodes or badges to highlight achievement details; hover bars for goals')}
               </span>
             </div>
           </div>
@@ -1183,8 +1185,8 @@ export const DailyPrimaryGoalsChart: React.FC<{
                   />
                   <Tooltip
                     formatter={(value: any, name: any) => [
-                      `${value} days`,
-                      name === 'completedGoals' ? 'Goals Accomplished' : 'Goals Incomplete',
+                      t('{n} days', { n: value }),
+                      name === 'completedGoals' ? t('Goals Accomplished') : t('Goals Incomplete'),
                     ]}
                     contentStyle={{
                       backgroundColor: 'var(--bg-elevated)',
@@ -1201,14 +1203,14 @@ export const DailyPrimaryGoalsChart: React.FC<{
                   />
                   <Bar
                     dataKey="completedGoals"
-                    name="Accomplished Focus"
+                    name={t('Accomplished Focus')}
                     fill="var(--color-sage)"
                     radius={[3, 3, 0, 0]}
                     maxBarSize={32}
                   />
                   <Bar
                     dataKey="incompleteGoals"
-                    name="Incomplete Focus"
+                    name={t('Incomplete Focus')}
                     fill="var(--color-coral)"
                     radius={[3, 3, 0, 0]}
                     maxBarSize={32}
@@ -1220,10 +1222,10 @@ export const DailyPrimaryGoalsChart: React.FC<{
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-[var(--border)] text-xs">
               {weeklyData.map((wk, i) => (
                 <div key={i} className="p-2 rounded bg-[var(--bg-muted)] border border-[var(--border)]">
-                  <span className="font-semibold block text-[11px] text-[var(--fg)]">Week {i + 1}</span>
+                  <span className="font-semibold block text-[11px] text-[var(--fg)]">{t('Week {n}', { n: i + 1 })}</span>
                   <div className="flex justify-between items-center text-[10px] text-[var(--fg-muted)] mt-1">
-                    <span>Rate: <strong className="text-[var(--color-sage)]">{wk.completionRate}%</strong></span>
-                    <span>{wk.completedGoals}/{wk.daysWithGoal} goals</span>
+                    <span>{t('Rate:')} <strong className="text-[var(--color-sage)]">{wk.completionRate}%</strong></span>
+                    <span>{t('{completed}/{total} goals', { completed: wk.completedGoals, total: wk.daysWithGoal })}</span>
                   </div>
                 </div>
               ))}
@@ -1235,11 +1237,11 @@ export const DailyPrimaryGoalsChart: React.FC<{
       {/* Export / Brand Watermark Footer */}
       <div className="pt-2 border-t border-[var(--border)]/50 flex flex-wrap items-center justify-between gap-2 text-[10px] text-[var(--fg-subtle)] font-sans">
         <div className="flex items-center gap-1.5">
-          <span className="font-semibold text-[var(--fg-muted)]">One Decision Away</span>
+          <span className="font-semibold text-[var(--fg-muted)]">{t('One Decision Away')}</span>
           <span>•</span>
-          <span>30-Day Goal Trajectory & Streak Milestones</span>
+          <span>{t('30-Day Goal Trajectory & Streak Milestones')}</span>
         </div>
-        <span>Record generated {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+        <span>{t('Record generated {date}', { date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) })}</span>
       </div>
 
       {/* Internal Export Progress Modal if triggered from chart */}

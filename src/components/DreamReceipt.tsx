@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Purchase } from '../types/models';
 import { Modal, Button } from './ui';
 import { Download, Share2, Check } from 'lucide-react';
+import { useT } from '../i18n';
 
 interface DreamReceiptModalProps {
   purchase: Purchase | null;
@@ -16,6 +17,7 @@ export const DreamReceiptModal: React.FC<DreamReceiptModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  const t = useT();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [dataUrl, setDataUrl] = useState<string>('');
   const [isCopied, setIsCopied] = useState(false);
@@ -61,7 +63,7 @@ export const DreamReceiptModal: React.FC<DreamReceiptModalProps> = ({
 
     ctx.fillStyle = '#8A969C';
     ctx.font = '400 24px Inter, sans-serif';
-    ctx.fillText('by AurelyStudio · Life Simulation Receipt', width / 2, 255);
+    ctx.fillText(t('by AurelyStudio · Life Simulation Receipt'), width / 2, 255);
 
     // Horizontal Divider
     ctx.strokeStyle = '#E2DFD6';
@@ -83,7 +85,7 @@ export const DreamReceiptModal: React.FC<DreamReceiptModalProps> = ({
     ctx.fill();
     ctx.fillStyle = '#708879';
     ctx.font = '600 22px Inter, sans-serif';
-    ctx.fillText(purchase.itemSnapshot.category.toUpperCase(), width / 2, 494);
+    ctx.fillText(t(purchase.itemSnapshot.category).toUpperCase(), width / 2, 494);
 
     // Center Geometric Art Box
     ctx.fillStyle = '#F7F6F2';
@@ -106,7 +108,7 @@ export const DreamReceiptModal: React.FC<DreamReceiptModalProps> = ({
 
     ctx.fillStyle = '#708879';
     ctx.font = '500 24px Inter, sans-serif';
-    ctx.fillText('SYMBOLIC ASSET OWNERSHIP: 100%', width / 2, 820);
+    ctx.fillText(t('SYMBOLIC ASSET OWNERSHIP: 100%'), width / 2, 820);
 
     // Stats Grid
     const drawStatBox = (x: number, y: number, w: number, h: number, label: string, val: string, sub?: string) => {
@@ -134,8 +136,8 @@ export const DreamReceiptModal: React.FC<DreamReceiptModalProps> = ({
       }
     };
 
-    drawStatBox(160, 930, 420, 140, 'Dream Price Paid', `D$ ${purchase.dreamDollarPaid.toLocaleString()}`, 'Verified Ledger Debit');
-    drawStatBox(620, 930, 420, 140, 'Missions Completed', `${completedMissionsCount} Missions`, 'Fueling Real Momentum');
+    drawStatBox(160, 930, 420, 140, t('Dream Price Paid'), `D$ ${purchase.dreamDollarPaid.toLocaleString()}`, t('Verified Ledger Debit'));
+    drawStatBox(620, 930, 420, 140, t('Missions Completed'), t('{n} Missions', { n: completedMissionsCount }), t('Fueling Real Momentum'));
 
     // Date & Timestamp
     const dateStr = new Date(purchase.purchasedAt).toLocaleDateString('en-US', {
@@ -147,7 +149,7 @@ export const DreamReceiptModal: React.FC<DreamReceiptModalProps> = ({
     ctx.fillStyle = '#5C6A72';
     ctx.font = '500 22px Inter, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(`Issued: ${dateStr} · Simulation Transaction ID: #${purchase.id.slice(-8)}`, width / 2, 1140);
+    ctx.fillText(t('Issued: {date} · Simulation Transaction ID: #{id}', { date: dateStr, id: purchase.id.slice(-8) }), width / 2, 1140);
 
     // Mandatory Disclaimer Notice
     ctx.fillStyle = '#EFEDE7';
@@ -157,15 +159,15 @@ export const DreamReceiptModal: React.FC<DreamReceiptModalProps> = ({
 
     ctx.fillStyle = '#5C6A72';
     ctx.font = '600 20px Inter, sans-serif';
-    ctx.fillText('SIMULATION PURCHASE – NO CASH VALUE', width / 2, 1232);
+    ctx.fillText(t('SIMULATION PURCHASE – NO CASH VALUE'), width / 2, 1232);
 
     ctx.fillStyle = '#8A969C';
     ctx.font = '400 17px Inter, sans-serif';
-    ctx.fillText('All assets in My Future Life represent symbolic milestones earned through real daily action.', width / 2, 1260);
+    ctx.fillText(t('All assets in My Future Life represent symbolic milestones earned through real daily action.'), width / 2, 1260);
 
     const generated = canvas.toDataURL('image/png');
     setDataUrl(generated);
-  }, [purchase, isOpen, completedMissionsCount]);
+  }, [purchase, isOpen, completedMissionsCount, t]);
 
   if (!purchase) return null;
 
@@ -186,8 +188,8 @@ export const DreamReceiptModal: React.FC<DreamReceiptModalProps> = ({
         const blob = await (await fetch(dataUrl)).blob();
         const file = new File([blob], 'dream-receipt.png', { type: 'image/png' });
         await navigator.share({
-          title: `One Decision Away — Dream Receipt: ${purchase.itemSnapshot.name}`,
-          text: `I just unlocked "${purchase.itemSnapshot.name}" in my simulation through daily completed missions on One Decision Away.`,
+          title: t('One Decision Away — Dream Receipt: {name}', { name: purchase.itemSnapshot.name }),
+          text: t('I just unlocked "{name}" in my simulation through daily completed missions on One Decision Away.', { name: purchase.itemSnapshot.name }),
           files: [file],
         });
       } else {
@@ -199,7 +201,7 @@ export const DreamReceiptModal: React.FC<DreamReceiptModalProps> = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Dream Receipt" subtitle="Verified purchase milestone in My Future Life." maxWidth="lg">
+    <Modal isOpen={isOpen} onClose={onClose} title={t('Dream Receipt')} subtitle={t('Verified purchase milestone in My Future Life.')} maxWidth="lg">
       <div className="space-y-5">
         {/* Hidden Canvas for generation */}
         <canvas ref={canvasRef} className="hidden" />
@@ -207,20 +209,20 @@ export const DreamReceiptModal: React.FC<DreamReceiptModalProps> = ({
         {/* Visual Preview */}
         {dataUrl && (
           <div className="rounded-[var(--radius-lg)] border border-[var(--border)] overflow-hidden shadow-[var(--shadow-sm)] bg-[var(--bg-muted)] flex justify-center p-2">
-            <img src={dataUrl} alt="Dream Receipt" className="max-h-[460px] object-contain rounded-[var(--radius-md)]" />
+            <img src={dataUrl} alt={t('Dream Receipt')} className="max-h-[460px] object-contain rounded-[var(--radius-md)]" />
           </div>
         )}
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
           <div className="text-xs text-[var(--fg-subtle)] text-center sm:text-left">
-            Simulation milestone · No cash value · by AurelyStudio
+            {t('Simulation milestone · No cash value · by AurelyStudio')}
           </div>
           <div className="flex items-center gap-2.5 w-full sm:w-auto">
             <Button variant="outline" size="sm" icon={Download} onClick={handleDownload} className="flex-1 sm:flex-initial">
-              Save PNG
+              {t('Save PNG')}
             </Button>
             <Button variant="accent" size="sm" icon={Share2} onClick={handleShare} className="flex-1 sm:flex-initial">
-              Share Receipt
+              {t('Share Receipt')}
             </Button>
           </div>
         </div>

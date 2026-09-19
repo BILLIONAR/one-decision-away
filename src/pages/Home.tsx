@@ -48,6 +48,7 @@ import {
   ECONOMY_CONSTANTS,
 } from '../services/economy';
 import { Mission } from '../types/models';
+import { useT } from '../i18n';
 
 export const Home: React.FC = () => {
   const {
@@ -57,6 +58,7 @@ export const Home: React.FC = () => {
     setOneDecision,
     startFocusSession,
   } = useApp();
+  const t = useT();
 
   const [completingMission, setCompletingMission] = useState<Mission | null>(null);
   const [newDecisionTitle, setNewDecisionTitle] = useState('');
@@ -119,18 +121,18 @@ export const Home: React.FC = () => {
               <BellRing className="w-4 h-4" />
             </div>
             <div>
-              <p className="text-sm font-bold text-[var(--fg)]">You haven't set today's One Decision yet.</p>
+              <p className="text-sm font-bold text-[var(--fg)]">{t("You haven't set today's One Decision yet.")}</p>
               <p className="text-xs text-[var(--fg-muted)]">
-                One meaningful action a day is how the future gets built. Pick it now, before the day picks for you.
+                {t('One meaningful action a day is how the future gets built. Pick it now, before the day picks for you.')}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2 self-start sm:self-auto">
             <Button size="sm" variant="primary" onClick={() => setIsSettingDecision(true)}>
-              Set it here
+              {t('Set it here')}
             </Button>
             <Button size="sm" variant="ghost" onClick={() => setActiveRoute('/app/missions')}>
-              Go to Missions <ArrowRight className="w-3.5 h-3.5 ml-1" />
+              {t('Go to Missions')} <ArrowRight className="w-3.5 h-3.5 ml-1" />
             </Button>
           </div>
         </div>
@@ -157,17 +159,17 @@ export const Home: React.FC = () => {
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-coral)] animate-pulse" />
             <h2 className="text-xs font-bold uppercase tracking-wider text-[var(--fg)]">
-              Today's Signature Decision
+              {t("Today's Signature Decision")}
             </h2>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
-            <Badge variant="coral">+ D$ 500 Reward</Badge>
+            <Badge variant="coral">{t('+ D$ 500 Reward')}</Badge>
             {decisionStreak.currentStreak > 0 ? (
               <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-[var(--color-coral)]/15 text-[var(--color-coral)] border border-[var(--color-coral)]/30">
-                <Flame className="w-3 h-3 fill-current" /> {decisionStreak.currentStreak}-Day Streak
+                <Flame className="w-3 h-3 fill-current" /> {t('{n}-Day Streak', { n: decisionStreak.currentStreak })}
               </span>
             ) : (
-              <Badge variant="slate">Priority #1</Badge>
+              <Badge variant="slate">{t('Priority #1')}</Badge>
             )}
           </div>
         </div>
@@ -177,8 +179,8 @@ export const Home: React.FC = () => {
             <div className="space-y-1">
               <span className="text-xs text-[var(--fg-muted)]">
                 {todayOneDecision.status === 'completed'
-                  ? 'Completed for today · Vote recorded'
-                  : 'What makes today meaningful:'}
+                  ? t('Completed for today · Vote recorded')
+                  : t('What makes today meaningful:')}
               </span>
               <h3 className="text-xl sm:text-2xl font-bold font-display text-[var(--fg)]">
                 {todayOneDecision.title}
@@ -189,10 +191,10 @@ export const Home: React.FC = () => {
               <div className="flex items-center gap-3 text-xs text-[var(--fg-muted)]">
                 <span className="flex items-center gap-1">
                   <Clock className="w-3.5 h-3.5" />
-                  {todayOneDecision.estimatedMinutes || 45} mins
+                  {t('{n} mins', { n: todayOneDecision.estimatedMinutes || 45 })}
                 </span>
                 <span className="capitalize px-2 py-0.5 rounded bg-[var(--bg-muted)] border border-[var(--border)]">
-                  {todayOneDecision.difficulty} difficulty
+                  {t('{difficulty} difficulty', { difficulty: todayOneDecision.difficulty })}
                 </span>
               </div>
 
@@ -211,9 +213,9 @@ export const Home: React.FC = () => {
                         durationMinutes: todayOneDecision.estimatedMinutes || 45,
                       })
                     }
-                    title="Lock app into dedicated Deep Work for today's signature decision"
+                    title={t("Lock app into dedicated Deep Work for today's signature decision")}
                   >
-                    Lock Into Focus ({todayOneDecision.estimatedMinutes || 45}m)
+                    {t('Lock Into Focus ({n}m)', { n: todayOneDecision.estimatedMinutes || 45 })}
                   </Button>
                   <Button
                     variant="accent"
@@ -221,12 +223,12 @@ export const Home: React.FC = () => {
                     icon={CheckCircle}
                     onClick={() => setCompletingMission(todayOneDecision)}
                   >
-                    Complete One Decision
+                    {t('Complete One Decision')}
                   </Button>
                 </div>
               ) : (
                 <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--color-sage)]">
-                  <CheckCircle className="w-4 h-4" /> Finished Today
+                  <CheckCircle className="w-4 h-4" /> {t('Finished Today')}
                 </div>
               )}
             </div>
@@ -235,21 +237,21 @@ export const Home: React.FC = () => {
           <form onSubmit={handleCreateDecision} className="pt-4 space-y-4">
             <Field
               id="decision-input"
-              label="What is the one decision that would make today meaningful?"
+              label={t('What is the one decision that would make today meaningful?')}
               required
-              helper="Under 45 min = Easy, 45-119 min = Medium, 120+ min = Hard."
+              helper={t('Under 45 min = Easy, 45-119 min = Medium, 120+ min = Hard.')}
             >
               <Input
                 id="decision-input"
                 value={newDecisionTitle}
                 onChange={(e) => setNewDecisionTitle(e.target.value)}
-                placeholder="e.g. Ship the client proposal draft before 2:00 PM"
+                placeholder={t('e.g. Ship the client proposal draft before 2:00 PM')}
                 autoFocus
               />
             </Field>
 
             <div className="flex items-center gap-4">
-              <Field id="est-mins" label="Estimated Minutes" className="w-40">
+              <Field id="est-mins" label={t('Estimated Minutes')} className="w-40">
                 <Input
                   id="est-mins"
                   type="number"
@@ -266,14 +268,14 @@ export const Home: React.FC = () => {
                   type="submit"
                   disabled={!newDecisionTitle.trim()}
                 >
-                  Lock In Decision
+                  {t('Lock In Decision')}
                 </Button>
                 <Button
                   variant="ghost"
                   type="button"
                   onClick={() => setIsSettingDecision(false)}
                 >
-                  Cancel
+                  {t('Cancel')}
                 </Button>
               </div>
             </div>
@@ -282,10 +284,10 @@ export const Home: React.FC = () => {
           <div className="pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="space-y-1">
               <div className="text-base font-semibold text-[var(--fg)]">
-                No One Decision committed for today yet.
+                {t('No One Decision committed for today yet.')}
               </div>
               <p className="text-xs text-[var(--fg-muted)]">
-                Choose the single task that would render the day successful.
+                {t('Choose the single task that would render the day successful.')}
               </p>
             </div>
             <Button
@@ -293,7 +295,7 @@ export const Home: React.FC = () => {
               icon={Plus}
               onClick={() => setIsSettingDecision(true)}
             >
-              Set Today's One Decision
+              {t("Set Today's One Decision")}
             </Button>
           </div>
         )}
@@ -335,33 +337,33 @@ export const Home: React.FC = () => {
       {/* 8. Key Metrics Row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
         <Stat
-          label="Dream Bank"
+          label={t('Dream Bank')}
           value={`D$ ${balance.toLocaleString()}`}
-          subtext="Verified simulation ledger"
-          badge="Verified"
+          subtext={t('Verified simulation ledger')}
+          badge={t('Verified')}
           className="cursor-pointer hover:border-[var(--border-strong)]"
           onClick={() => setActiveRoute('/app/bank')}
         />
         <Stat
-          label="Decision Streak"
-          value={`${decisionStreak.currentStreak} Days`}
+          label={t('Decision Streak')}
+          value={t('{n} Days', { n: decisionStreak.currentStreak })}
           subtext={
             decisionStreak.currentStreak > 0
-              ? `${decisionStreak.tier.name} Tier (${decisionStreak.longestStreak}d record)`
-              : 'Execute today to ignite'
+              ? t('{tier} Tier ({n}d record)', { tier: decisionStreak.tier.name, n: decisionStreak.longestStreak })
+              : t('Execute today to ignite')
           }
           icon={Flame}
         />
         <Stat
-          label="Completed Missions"
+          label={t('Completed Missions')}
           value={data.completions.length}
-          subtext="Total lifetime executions"
+          subtext={t('Total lifetime executions')}
           icon={CheckCircle}
         />
         <Stat
-          label="Two Futures Votes"
-          value={`${data.twoFutures.buildingVotes || 0} Votes`}
-          subtext="Toward built future"
+          label={t('Two Futures Votes')}
+          value={t('{n} Votes', { n: data.twoFutures.buildingVotes || 0 })}
+          subtext={t('Toward built future')}
           icon={Compass}
         />
       </div>
@@ -373,13 +375,13 @@ export const Home: React.FC = () => {
           <div>
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-                Active Mission Queue
+                {t('Active Mission Queue')}
               </span>
               <button
                 onClick={() => setActiveRoute('/app/missions')}
                 className="text-xs font-semibold text-[var(--color-sage)] hover:underline"
               >
-                View All ({data.missions.filter((m) => m.status === 'active').length})
+                {t('View All ({n})', { n: data.missions.filter((m) => m.status === 'active').length })}
               </button>
             </div>
 
@@ -390,7 +392,7 @@ export const Home: React.FC = () => {
                     {currentActiveMission.area} · {currentActiveMission.type.replace('_', ' ')}
                   </span>
                   <span className="text-xs font-bold text-[var(--color-sage)]">
-                    + D$ {currentActiveMission.type === 'constraint' ? '0 (Rule)' : '150-1,000'}
+                    {currentActiveMission.type === 'constraint' ? t('+ D$ 0 (Rule)') : t('+ D$ 150-1,000')}
                   </span>
                 </div>
                 <h4 className="text-base font-bold font-display text-[var(--fg)]">
@@ -398,12 +400,12 @@ export const Home: React.FC = () => {
                 </h4>
                 <div className="flex items-center gap-2 text-xs text-[var(--fg-muted)]">
                   <Clock className="w-3.5 h-3.5" />
-                  <span>{currentActiveMission.estimatedMinutes || 30} mins</span>
+                  <span>{t('{n} mins', { n: currentActiveMission.estimatedMinutes || 30 })}</span>
                 </div>
               </div>
             ) : (
               <div className="p-6 bg-[var(--bg-muted)] rounded-[var(--radius-md)] text-center text-xs text-[var(--fg-muted)]">
-                No secondary missions queued.
+                {t('No secondary missions queued.')}
               </div>
             )}
           </div>
@@ -414,7 +416,7 @@ export const Home: React.FC = () => {
               size="sm"
               onClick={() => setActiveRoute('/app/missions')}
             >
-              Missions List
+              {t('Missions List')}
             </Button>
             {currentActiveMission && (
               <Button
@@ -423,7 +425,7 @@ export const Home: React.FC = () => {
                 icon={CheckCircle}
                 onClick={() => setCompletingMission(currentActiveMission)}
               >
-                Complete Mission
+                {t('Complete Mission')}
               </Button>
             )}
           </div>
@@ -434,13 +436,13 @@ export const Home: React.FC = () => {
           <div>
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-sage)]">
-                Active Dream Target
+                {t('Active Dream Target')}
               </span>
               <button
                 onClick={() => setActiveRoute('/app/market')}
                 className="text-xs font-semibold text-[var(--fg-muted)] hover:text-[var(--fg)] flex items-center gap-1"
               >
-                <ShoppingBag className="w-3.5 h-3.5" /> Market
+                <ShoppingBag className="w-3.5 h-3.5" /> {t('Market')}
               </button>
             </div>
 
@@ -454,7 +456,7 @@ export const Home: React.FC = () => {
                     {targetItem.name}
                   </div>
                   <div className="flex items-center justify-between text-xs text-[var(--fg-muted)]">
-                    <span>Price: D$ {targetItem.dreamDollarPrice.toLocaleString()}</span>
+                    <span>{t('Price: D$ {price}', { price: targetItem.dreamDollarPrice.toLocaleString() })}</span>
                     <span>{targetProgress}%</span>
                   </div>
                   <Progress value={targetProgress} variant="sage" />
@@ -466,15 +468,15 @@ export const Home: React.FC = () => {
           <div className="flex items-center justify-between pt-2 border-t border-[var(--border)]">
             <span className="text-xs text-[var(--fg-subtle)]">
               {Math.max(0, (targetItem?.dreamDollarPrice || 0) - balance) === 0
-                ? 'Ready to buy!'
-                : `Need D$ ${Math.max(0, (targetItem?.dreamDollarPrice || 0) - balance).toLocaleString()} more`}
+                ? t('Ready to buy!')
+                : t('Need D$ {amount} more', { amount: Math.max(0, (targetItem?.dreamDollarPrice || 0) - balance).toLocaleString() })}
             </span>
             <Button
               variant="secondary"
               size="sm"
               onClick={() => setActiveRoute('/app/market')}
             >
-              Open Dream Market
+              {t('Open Dream Market')}
             </Button>
           </div>
         </Card>
@@ -485,18 +487,18 @@ export const Home: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <h3 className="text-sm font-bold font-display text-[var(--fg)]">
-              Two Futures Trajectory
+              {t('Two Futures Trajectory')}
             </h3>
             <p className="text-xs text-[var(--fg-muted)]">
-              Every completed mission is a symbolic vote for the life you are building.
+              {t('Every completed mission is a symbolic vote for the life you are building.')}
             </p>
           </div>
           <div className="flex items-center gap-3 text-xs">
             <span className="text-[var(--color-sage)] font-bold">
-              Building: {data.twoFutures.buildingVotes || 0} votes
+              {t('Building: {n} votes', { n: data.twoFutures.buildingVotes || 0 })}
             </span>
             <span className="text-[#9A8F86] font-medium">
-              Default: {data.twoFutures.allowingVotes || 0} votes
+              {t('Default: {n} votes', { n: data.twoFutures.allowingVotes || 0 })}
             </span>
           </div>
         </div>
@@ -505,17 +507,17 @@ export const Home: React.FC = () => {
           <div
             className="h-full bg-[var(--color-sage)] transition-all duration-500 ease-out"
             style={{ width: `${buildingPct}%` }}
-            title={`Building votes: ${buildingPct}%`}
+            title={t('Building votes: {pct}%', { pct: buildingPct })}
           />
         </div>
 
         <div className="flex items-center justify-between text-[11px] text-[var(--fg-subtle)] pt-1">
-          <span>Anti-Vision: "{data.twoFutures.antiVision.slice(0, 45)}..."</span>
+          <span>{t('Anti-Vision: "{text}..."', { text: data.twoFutures.antiVision.slice(0, 45) })}</span>
           <button
             onClick={() => setActiveRoute('/app/two-futures')}
             className="text-[var(--color-coral)] hover:underline shrink-0"
           >
-            Review Two Futures →
+            {t('Review Two Futures →')}
           </button>
         </div>
       </Card>
@@ -527,10 +529,10 @@ export const Home: React.FC = () => {
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 bg-[var(--bg-elevated)] border border-[var(--border)] rounded-[var(--radius-lg)]">
         <div className="space-y-0.5 text-center sm:text-left">
           <div className="text-sm font-bold font-display text-[var(--fg)]">
-            Ready for your next milestone?
+            {t('Ready for your next milestone?')}
           </div>
           <div className="text-xs text-[var(--fg-muted)]">
-            Small, daily, deliberate actions compound into an entirely new life.
+            {t('Small, daily, deliberate actions compound into an entirely new life.')}
           </div>
         </div>
 
@@ -541,7 +543,7 @@ export const Home: React.FC = () => {
             onClick={() => setActiveRoute('/app/progress')}
             className="flex-1 sm:flex-initial"
           >
-            View Progress
+            {t('View Progress')}
           </Button>
           <Button
             variant="primary"
@@ -551,12 +553,12 @@ export const Home: React.FC = () => {
             onClick={() => setActiveRoute('/app/missions')}
             className="flex-1 sm:flex-initial"
           >
-            Continue Mission
+            {t('Continue Mission')}
           </Button>
         </div>
       </div>
 
-      <Disclaimer text="Dream Dollars (D$) is a simulation currency. Purchases and assets in My Future Life represent symbolic milestones." />
+      <Disclaimer text={t('Dream Dollars (D$) is a simulation currency. Purchases and assets in My Future Life represent symbolic milestones.')} />
 
       {/* Complete Mission Reflection Modal */}
       <CompleteMissionModal

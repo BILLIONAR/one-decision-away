@@ -31,6 +31,7 @@ import {
   ComposedChart,
 } from 'recharts';
 import { Mission, MissionCompletion, WalletTransaction } from '../types/models';
+import { useT } from '../i18n';
 
 interface DaySummaryData {
   dayKey: string; // YYYY-MM-DD
@@ -56,6 +57,7 @@ interface DaySummaryData {
 
 export const Last7DaysSummary: React.FC = () => {
   const { data } = useApp();
+  const t = useT();
   const [activeTab, setActiveTab] = useState<'overview' | 'missions' | 'earnings'>('overview');
   const [selectedDayKey, setSelectedDayKey] = useState<string | null>(null);
 
@@ -259,10 +261,10 @@ export const Last7DaysSummary: React.FC = () => {
             </div>
             <div>
               <h2 className="text-lg sm:text-xl font-bold font-display text-[var(--fg)] tracking-tight">
-                7-Day Performance & Earnings Summary
+                {t('7-Day Performance & Earnings Summary')}
               </h2>
               <p className="text-xs text-[var(--fg-muted)]">
-                Rolling weekly velocity of completed missions and earned Dream Dollars (D$).
+                {t('Rolling weekly velocity of completed missions and earned Dream Dollars (D$).')}
               </p>
             </div>
           </div>
@@ -279,7 +281,7 @@ export const Last7DaysSummary: React.FC = () => {
                 : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
             }`}
           >
-            Overview & Velocity
+            {t('Overview & Velocity')}
           </button>
           <button
             type="button"
@@ -290,7 +292,7 @@ export const Last7DaysSummary: React.FC = () => {
                 : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
             }`}
           >
-            <span>Missions</span>
+            <span>{t('Missions')}</span>
             <span className="px-1.5 py-0.2 rounded-full bg-[var(--color-sage)]/20 text-[var(--color-sage)] text-[10px]">
               {total7DayMissions}
             </span>
@@ -304,7 +306,7 @@ export const Last7DaysSummary: React.FC = () => {
                 : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
             }`}
           >
-            Revenue Sources
+            {t('Revenue Sources')}
           </button>
         </div>
       </div>
@@ -315,7 +317,7 @@ export const Last7DaysSummary: React.FC = () => {
         <div className="p-4 rounded-[var(--radius-md)] bg-gradient-to-br from-[var(--bg-muted)] to-[var(--color-sage)]/10 border border-[var(--color-sage)]/30 space-y-1">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--color-sage)]">
-              7-Day Total D$
+              {t('7-Day Total D$')}
             </span>
             <Coins className="w-4 h-4 text-[var(--color-sage)]" />
           </div>
@@ -323,7 +325,7 @@ export const Last7DaysSummary: React.FC = () => {
             +D$ {total7DayEarnings.toLocaleString()}
           </div>
           <p className="text-[11px] text-[var(--fg-muted)]">
-            Avg. +D$ {avgDailyEarnings.toLocaleString()} / day
+            {t('Avg. +D$ {amount} / day', { amount: avgDailyEarnings.toLocaleString() })}
           </p>
         </div>
 
@@ -331,15 +333,15 @@ export const Last7DaysSummary: React.FC = () => {
         <div className="p-4 rounded-[var(--radius-md)] bg-gradient-to-br from-[var(--bg-muted)] to-[var(--color-coral)]/10 border border-[var(--color-coral)]/30 space-y-1">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--color-coral)]">
-              Missions Completed
+              {t('Missions Completed')}
             </span>
             <Target className="w-4 h-4 text-[var(--color-coral)]" />
           </div>
           <div className="text-2xl font-black font-display text-[var(--fg)]">
-            {total7DayMissions} <span className="text-sm font-normal text-[var(--fg-muted)]">Missions</span>
+            {total7DayMissions} <span className="text-sm font-normal text-[var(--fg-muted)]">{t('Missions')}</span>
           </div>
           <p className="text-[11px] text-[var(--fg-muted)]">
-            Avg. {avgDailyMissions} missions / day
+            {t('Avg. {n} missions / day', { n: avgDailyMissions })}
           </p>
         </div>
 
@@ -347,16 +349,16 @@ export const Last7DaysSummary: React.FC = () => {
         <div className="p-4 rounded-[var(--radius-md)] bg-[var(--bg-muted)] border border-[var(--border)] space-y-1">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-amber-500">
-              One Decisions
+              {t('One Decisions')}
             </span>
             <Flame className="w-4 h-4 text-amber-500" />
           </div>
           <div className="text-2xl font-black font-display text-[var(--fg)]">
             {total7DayOneDecisions}{' '}
-            <span className="text-sm font-normal text-[var(--fg-muted)]">/ 7 Days</span>
+            <span className="text-sm font-normal text-[var(--fg-muted)]">{t('/ 7 Days')}</span>
           </div>
           <p className="text-[11px] text-[var(--fg-muted)]">
-            {total7DayOneDecisions >= 5 ? '🔥 High consistency' : 'Daily signature focus'}
+            {total7DayOneDecisions >= 5 ? t('🔥 High consistency') : t('Daily signature focus')}
           </p>
         </div>
 
@@ -364,7 +366,7 @@ export const Last7DaysSummary: React.FC = () => {
         <div className="p-4 rounded-[var(--radius-md)] bg-[var(--bg-muted)] border border-[var(--border)] space-y-1">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-              Execution Velocity
+              {t('Execution Velocity')}
             </span>
             <Sparkles className="w-4 h-4 text-[var(--color-sage)]" />
           </div>
@@ -372,7 +374,7 @@ export const Last7DaysSummary: React.FC = () => {
             {Math.round((activeDaysCount / 7) * 100)}%
           </div>
           <p className="text-[11px] text-[var(--fg-muted)]">
-            {activeDaysCount} of 7 active days
+            {t('{n} of 7 active days', { n: activeDaysCount })}
           </p>
         </div>
       </div>
@@ -386,21 +388,21 @@ export const Last7DaysSummary: React.FC = () => {
               <div>
                 <h3 className="text-sm font-bold text-[var(--fg)] font-display flex items-center gap-2">
                   <TrendingUp className="w-4 h-4 text-[var(--color-sage)]" />
-                  <span>Daily D$ Earnings & Mission Count Over Time</span>
+                  <span>{t('Daily D$ Earnings & Mission Count Over Time')}</span>
                 </h3>
                 <p className="text-xs text-[var(--fg-muted)]">
-                  Bars represent daily D$ currency earned; dots indicate missions executed.
+                  {t('Bars represent daily D$ currency earned; dots indicate missions executed.')}
                 </p>
               </div>
 
               <div className="flex items-center gap-4 text-xs">
                 <div className="flex items-center gap-1.5">
                   <span className="w-3 h-3 rounded-xs bg-[var(--color-sage)] inline-block" />
-                  <span className="text-[var(--fg-muted)]">D$ Earned</span>
+                  <span className="text-[var(--fg-muted)]">{t('D$ Earned')}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-coral)] inline-block" />
-                  <span className="text-[var(--fg-muted)]">Missions</span>
+                  <span className="text-[var(--fg-muted)]">{t('Missions')}</span>
                 </div>
               </div>
             </div>
@@ -449,26 +451,26 @@ export const Last7DaysSummary: React.FC = () => {
                             <span>{d.fullDayLabel}</span>
                             {d.isToday && (
                               <span className="text-[9px] px-1.5 py-0.2 bg-[var(--color-sage)] text-white rounded-full">
-                                Today
+                                {t('Today')}
                               </span>
                             )}
                           </div>
                           <div className="flex justify-between items-center text-[var(--color-sage)] font-semibold">
-                            <span>Total D$ Earned:</span>
+                            <span>{t('Total D$ Earned:')}</span>
                             <span className="font-mono">+D$ {d.totalEarned.toLocaleString()}</span>
                           </div>
                           <div className="flex justify-between items-center text-[var(--color-coral)]">
-                            <span>Missions Done:</span>
+                            <span>{t('Missions Done:')}</span>
                             <span className="font-mono font-bold">{d.missionsCompletedCount}</span>
                           </div>
                           {d.oneDecisionsCompletedCount > 0 && (
                             <div className="flex justify-between items-center text-amber-400 text-[11px]">
-                              <span>Signature Decision:</span>
-                              <span>✓ Done</span>
+                              <span>{t('Signature Decision:')}</span>
+                              <span>{t('✓ Done')}</span>
                             </div>
                           )}
                           <div className="text-[10px] text-white/50 pt-0.5 border-t border-white/10">
-                            Click day below for detailed inspection
+                            {t('Click day below for detailed inspection')}
                           </div>
                         </div>
                       );
@@ -477,7 +479,7 @@ export const Last7DaysSummary: React.FC = () => {
                   <Bar
                     yAxisId="left"
                     dataKey="totalEarned"
-                    name="D$ Earned"
+                    name={t('D$ Earned')}
                     radius={[4, 4, 0, 0]}
                     maxBarSize={40}
                   >
@@ -501,7 +503,7 @@ export const Last7DaysSummary: React.FC = () => {
                     yAxisId="right"
                     type="monotone"
                     dataKey="missionsCompletedCount"
-                    name="Missions"
+                    name={t('Missions')}
                     stroke="var(--color-coral)"
                     strokeWidth={2.5}
                     dot={{ r: 4, fill: 'var(--color-coral)', strokeWidth: 1.5, stroke: 'var(--bg)' }}
@@ -516,9 +518,9 @@ export const Last7DaysSummary: React.FC = () => {
           <div className="space-y-3">
             <div className="flex items-center justify-between text-xs text-[var(--fg-muted)]">
               <span className="font-bold uppercase tracking-wider text-[11px] text-[var(--fg)]">
-                Daily Breakdown (Past 7 Days)
+                {t('Daily Breakdown (Past 7 Days)')}
               </span>
-              <span className="text-[11px]">Click a day to view completions</span>
+              <span className="text-[11px]">{t('Click a day to view completions')}</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-2.5">
@@ -542,7 +544,7 @@ export const Last7DaysSummary: React.FC = () => {
                     {/* Day & Date Header */}
                     <div className="flex items-center justify-between w-full">
                       <span className="text-[11px] font-bold text-[var(--fg)]">
-                        {day.isToday ? 'Today' : day.isYesterday ? 'Yest.' : day.dayLabel}
+                        {day.isToday ? t('Today') : day.isYesterday ? t('Yest.') : day.dayLabel}
                       </span>
                       <span className="text-[10px] text-[var(--fg-muted)] font-mono">
                         {day.fullDayLabel.split(', ')[1]}
@@ -556,7 +558,7 @@ export const Last7DaysSummary: React.FC = () => {
                       </div>
                       <div className="text-[11px] text-[var(--fg-muted)] flex items-center gap-1 mt-0.5">
                         <Target className="w-3 h-3 text-[var(--color-coral)]" />
-                        <span>{day.missionsCompletedCount} {day.missionsCompletedCount === 1 ? 'mission' : 'missions'}</span>
+                        <span>{day.missionsCompletedCount === 1 ? t('1 mission') : t('{n} missions', { n: day.missionsCompletedCount })}</span>
                       </div>
                     </div>
 
@@ -564,17 +566,17 @@ export const Last7DaysSummary: React.FC = () => {
                     <div className="pt-1.5 border-t border-[var(--border)] flex items-center justify-between w-full text-[10px]">
                       {day.oneDecisionsCompletedCount > 0 ? (
                         <span className="text-amber-500 font-bold flex items-center gap-0.5">
-                          <Flame className="w-3 h-3" /> Decision
+                          <Flame className="w-3 h-3" /> {t('Decision')}
                         </span>
                       ) : day.totalEarned > 0 ? (
-                        <span className="text-[var(--color-sage)] font-semibold">Active</span>
+                        <span className="text-[var(--color-sage)] font-semibold">{t('Active')}</span>
                       ) : (
-                        <span className="text-[var(--fg-subtle)]">Rest</span>
+                        <span className="text-[var(--fg-subtle)]">{t('Rest')}</span>
                       )}
 
                       {day.completedMissions.length > 0 && (
                         <span className="text-[var(--fg-subtle)] font-mono">
-                          {day.completedMissions.length} items
+                          {t('{n} items', { n: day.completedMissions.length })}
                         </span>
                       )}
                     </div>
@@ -591,7 +593,7 @@ export const Last7DaysSummary: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <Badge variant="sage">{selectedDayData.fullDayLabel}</Badge>
                   <span className="text-xs font-bold text-[var(--fg)]">
-                    Detailed Record (+D$ {selectedDayData.totalEarned.toLocaleString()} earned)
+                    {t('Detailed Record (+D$ {amount} earned)', { amount: selectedDayData.totalEarned.toLocaleString() })}
                   </span>
                 </div>
                 <button
@@ -599,14 +601,14 @@ export const Last7DaysSummary: React.FC = () => {
                   onClick={() => setSelectedDayKey(null)}
                   className="text-xs text-[var(--fg-muted)] hover:text-[var(--fg)] cursor-pointer"
                 >
-                  ✕ Close Day View
+                  {t('✕ Close Day View')}
                 </button>
               </div>
 
               {selectedDayData.completedMissions.length > 0 ? (
                 <div className="space-y-2">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--fg-muted)] block">
-                    Completed Missions on {selectedDayData.dayLabel}:
+                    {t('Completed Missions on {day}:', { day: selectedDayData.dayLabel })}
                   </span>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {selectedDayData.completedMissions.map(({ completion, mission }, idx) => (
@@ -618,12 +620,12 @@ export const Last7DaysSummary: React.FC = () => {
                           <div className="flex items-center gap-1.5">
                             <CheckCircle2 className="w-3.5 h-3.5 text-[var(--color-sage)] shrink-0" />
                             <span className="font-semibold text-[var(--fg)] truncate">
-                              {mission?.title || 'One Decision / Quest'}
+                              {mission?.title || t('One Decision / Quest')}
                             </span>
                           </div>
                           {mission?.area && (
                             <span className="text-[10px] text-[var(--fg-muted)]">
-                              Area: {mission.area} • {mission.type}
+                              {t('Area: {area} • {type}', { area: mission.area, type: mission.type })}
                             </span>
                           )}
                         </div>
@@ -636,7 +638,7 @@ export const Last7DaysSummary: React.FC = () => {
                 </div>
               ) : (
                 <p className="text-xs text-[var(--fg-muted)]">
-                  No mission completion records logged on this day. D$ rewards came from micro-habits, check-ins, or focus time.
+                  {t('No mission completion records logged on this day. D$ rewards came from micro-habits, check-ins, or focus time.')}
                 </p>
               )}
             </div>
@@ -649,9 +651,9 @@ export const Last7DaysSummary: React.FC = () => {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-              All Missions Completed in the Last 7 Days ({all7DayCompletions.length})
+              {t('All Missions Completed in the Last 7 Days ({n})', { n: all7DayCompletions.length })}
             </span>
-            <Badge variant="coral">{total7DayOneDecisions} One Decisions</Badge>
+            <Badge variant="coral">{t('{n} One Decisions', { n: total7DayOneDecisions })}</Badge>
           </div>
 
           {all7DayCompletions.length > 0 ? (
@@ -687,9 +689,9 @@ export const Last7DaysSummary: React.FC = () => {
                       <div className="space-y-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="font-bold text-sm text-[var(--fg)]">
-                            {mission?.title || 'Completed Objective'}
+                            {mission?.title || t('Completed Objective')}
                           </span>
-                          {isDecision && <Badge variant="coral">One Decision</Badge>}
+                          {isDecision && <Badge variant="coral">{t('One Decision')}</Badge>}
                           {mission?.area && <Badge variant="subtle">{mission.area}</Badge>}
                           {mission?.difficulty && (
                             <span className="text-[10px] text-[var(--fg-muted)] font-mono">
@@ -706,10 +708,10 @@ export const Last7DaysSummary: React.FC = () => {
 
                         <div className="text-[10px] text-[var(--fg-subtle)] flex items-center gap-2">
                           <span>
-                            {dayObj?.fullDayLabel || dayKey} at {formattedTime}
+                            {t('{day} at {time}', { day: dayObj?.fullDayLabel || dayKey, time: formattedTime })}
                           </span>
                           {completion.focusMinutes && (
-                            <span>• {completion.focusMinutes}m Deep Focus</span>
+                            <span>{t('• {n}m Deep Focus', { n: completion.focusMinutes })}</span>
                           )}
                         </div>
                       </div>
@@ -720,7 +722,7 @@ export const Last7DaysSummary: React.FC = () => {
                         +D$ {(completion.rewardAmount || 500).toLocaleString()}
                       </span>
                       <span className="text-[10px] text-[var(--fg-muted)] font-sans">
-                        Method: {completion.method || 'verified'}
+                        {t('Method: {method}', { method: completion.method || t('verified') })}
                       </span>
                     </div>
                   </div>
@@ -730,8 +732,8 @@ export const Last7DaysSummary: React.FC = () => {
           ) : (
             <div className="p-8 text-center bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)] text-xs text-[var(--fg-muted)] space-y-2">
               <Target className="w-8 h-8 text-[var(--fg-subtle)] mx-auto" />
-              <p className="font-semibold text-[var(--fg)]">No missions completed in the last 7 days yet.</p>
-              <p>Execute your daily signature One Decision or mission quests to populate your weekly record.</p>
+              <p className="font-semibold text-[var(--fg)]">{t('No missions completed in the last 7 days yet.')}</p>
+              <p>{t('Execute your daily signature One Decision or mission quests to populate your weekly record.')}</p>
             </div>
           )}
         </div>
@@ -741,7 +743,7 @@ export const Last7DaysSummary: React.FC = () => {
       {activeTab === 'earnings' && (
         <div className="space-y-4">
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-            7-Day Dream Dollar (D$) Inflow Breakdown
+            {t('7-Day Dream Dollar (D$) Inflow Breakdown')}
           </span>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
@@ -749,7 +751,7 @@ export const Last7DaysSummary: React.FC = () => {
             <div className="p-3.5 rounded-[var(--radius-sm)] bg-[var(--bg-muted)] border border-[var(--border)] space-y-1.5">
               <div className="flex items-center justify-between text-[var(--fg-muted)]">
                 <span className="flex items-center gap-1.5 font-bold text-[var(--fg)]">
-                  <Flame className="w-4 h-4 text-[var(--color-coral)]" /> One Decisions
+                  <Flame className="w-4 h-4 text-[var(--color-coral)]" /> {t('One Decisions')}
                 </span>
                 <span className="font-mono font-bold text-[var(--color-sage)]">
                   +D$ {earningsBySource.oneDecision.toLocaleString()}
@@ -764,10 +766,11 @@ export const Last7DaysSummary: React.FC = () => {
                 variant="coral"
               />
               <span className="text-[10px] text-[var(--fg-subtle)]">
-                {total7DayEarnings > 0
-                  ? Math.round((earningsBySource.oneDecision / total7DayEarnings) * 100)
-                  : 0}
-                % of weekly earnings
+                {t('{pct}% of weekly earnings', {
+                  pct: total7DayEarnings > 0
+                    ? Math.round((earningsBySource.oneDecision / total7DayEarnings) * 100)
+                    : 0,
+                })}
               </span>
             </div>
 
@@ -775,7 +778,7 @@ export const Last7DaysSummary: React.FC = () => {
             <div className="p-3.5 rounded-[var(--radius-sm)] bg-[var(--bg-muted)] border border-[var(--border)] space-y-1.5">
               <div className="flex items-center justify-between text-[var(--fg-muted)]">
                 <span className="flex items-center gap-1.5 font-bold text-[var(--fg)]">
-                  <Target className="w-4 h-4 text-[var(--color-sage)]" /> Mission Quests
+                  <Target className="w-4 h-4 text-[var(--color-sage)]" /> {t('Mission Quests')}
                 </span>
                 <span className="font-mono font-bold text-[var(--color-sage)]">
                   +D$ {earningsBySource.missions.toLocaleString()}
@@ -790,10 +793,11 @@ export const Last7DaysSummary: React.FC = () => {
                 variant="sage"
               />
               <span className="text-[10px] text-[var(--fg-subtle)]">
-                {total7DayEarnings > 0
-                  ? Math.round((earningsBySource.missions / total7DayEarnings) * 100)
-                  : 0}
-                % of weekly earnings
+                {t('{pct}% of weekly earnings', {
+                  pct: total7DayEarnings > 0
+                    ? Math.round((earningsBySource.missions / total7DayEarnings) * 100)
+                    : 0,
+                })}
               </span>
             </div>
 
@@ -801,7 +805,7 @@ export const Last7DaysSummary: React.FC = () => {
             <div className="p-3.5 rounded-[var(--radius-sm)] bg-[var(--bg-muted)] border border-[var(--border)] space-y-1.5">
               <div className="flex items-center justify-between text-[var(--fg-muted)]">
                 <span className="flex items-center gap-1.5 font-bold text-[var(--fg)]">
-                  <Zap className="w-4 h-4 text-amber-500" /> Micro-Habits
+                  <Zap className="w-4 h-4 text-amber-500" /> {t('Micro-Habits')}
                 </span>
                 <span className="font-mono font-bold text-[var(--color-sage)]">
                   +D$ {earningsBySource.habits.toLocaleString()}
@@ -816,10 +820,11 @@ export const Last7DaysSummary: React.FC = () => {
                 variant="slate"
               />
               <span className="text-[10px] text-[var(--fg-subtle)]">
-                {total7DayEarnings > 0
-                  ? Math.round((earningsBySource.habits / total7DayEarnings) * 100)
-                  : 0}
-                % of weekly earnings
+                {t('{pct}% of weekly earnings', {
+                  pct: total7DayEarnings > 0
+                    ? Math.round((earningsBySource.habits / total7DayEarnings) * 100)
+                    : 0,
+                })}
               </span>
             </div>
 
@@ -827,7 +832,7 @@ export const Last7DaysSummary: React.FC = () => {
             <div className="p-3.5 rounded-[var(--radius-sm)] bg-[var(--bg-muted)] border border-[var(--border)] space-y-1.5">
               <div className="flex items-center justify-between text-[var(--fg-muted)]">
                 <span className="flex items-center gap-1.5 font-bold text-[var(--fg)]">
-                  <Clock className="w-4 h-4 text-sky-500" /> Focus Sessions
+                  <Clock className="w-4 h-4 text-sky-500" /> {t('Focus Sessions')}
                 </span>
                 <span className="font-mono font-bold text-[var(--color-sage)]">
                   +D$ {earningsBySource.focus.toLocaleString()}
@@ -842,10 +847,11 @@ export const Last7DaysSummary: React.FC = () => {
                 variant="slate"
               />
               <span className="text-[10px] text-[var(--fg-subtle)]">
-                {total7DayEarnings > 0
-                  ? Math.round((earningsBySource.focus / total7DayEarnings) * 100)
-                  : 0}
-                % of weekly earnings
+                {t('{pct}% of weekly earnings', {
+                  pct: total7DayEarnings > 0
+                    ? Math.round((earningsBySource.focus / total7DayEarnings) * 100)
+                    : 0,
+                })}
               </span>
             </div>
 
@@ -853,7 +859,7 @@ export const Last7DaysSummary: React.FC = () => {
             <div className="p-3.5 rounded-[var(--radius-sm)] bg-[var(--bg-muted)] border border-[var(--border)] space-y-1.5">
               <div className="flex items-center justify-between text-[var(--fg-muted)]">
                 <span className="flex items-center gap-1.5 font-bold text-[var(--fg)]">
-                  <CheckCircle2 className="w-4 h-4 text-teal-500" /> Daily Check-Ins
+                  <CheckCircle2 className="w-4 h-4 text-teal-500" /> {t('Daily Check-Ins')}
                 </span>
                 <span className="font-mono font-bold text-[var(--color-sage)]">
                   +D$ {earningsBySource.checkIn.toLocaleString()}
@@ -868,10 +874,11 @@ export const Last7DaysSummary: React.FC = () => {
                 variant="sage"
               />
               <span className="text-[10px] text-[var(--fg-subtle)]">
-                {total7DayEarnings > 0
-                  ? Math.round((earningsBySource.checkIn / total7DayEarnings) * 100)
-                  : 0}
-                % of weekly earnings
+                {t('{pct}% of weekly earnings', {
+                  pct: total7DayEarnings > 0
+                    ? Math.round((earningsBySource.checkIn / total7DayEarnings) * 100)
+                    : 0,
+                })}
               </span>
             </div>
 
@@ -879,7 +886,7 @@ export const Last7DaysSummary: React.FC = () => {
             <div className="p-3.5 rounded-[var(--radius-sm)] bg-[var(--bg-muted)] border border-[var(--border)] space-y-1.5">
               <div className="flex items-center justify-between text-[var(--fg-muted)]">
                 <span className="flex items-center gap-1.5 font-bold text-[var(--fg)]">
-                  <Sparkles className="w-4 h-4 text-purple-400" /> Bonuses & Grants
+                  <Sparkles className="w-4 h-4 text-purple-400" /> {t('Bonuses & Grants')}
                 </span>
                 <span className="font-mono font-bold text-[var(--color-sage)]">
                   +D$ {earningsBySource.other.toLocaleString()}
@@ -894,10 +901,11 @@ export const Last7DaysSummary: React.FC = () => {
                 variant="slate"
               />
               <span className="text-[10px] text-[var(--fg-subtle)]">
-                {total7DayEarnings > 0
-                  ? Math.round((earningsBySource.other / total7DayEarnings) * 100)
-                  : 0}
-                % of weekly earnings
+                {t('{pct}% of weekly earnings', {
+                  pct: total7DayEarnings > 0
+                    ? Math.round((earningsBySource.other / total7DayEarnings) * 100)
+                    : 0,
+                })}
               </span>
             </div>
           </div>

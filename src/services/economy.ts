@@ -4,6 +4,7 @@
  */
 
 import { Mission, MissionDifficulty, MissionType, WalletTransaction } from '../types/models';
+import { t, getSpeechLang } from '../i18n';
 
 export const ECONOMY_CONSTANTS = {
   DAILY_REWARD_CAP: 2500,
@@ -71,7 +72,7 @@ export function evaluateMissionReward(params: {
     return {
       rewardAmount: 0,
       isCapped: false,
-      reason: 'Constraints are personal rules that protect your focus — they record consistency without currency rewards.',
+      reason: t('Constraints are personal rules that protect your focus — they record consistency without currency rewards.'),
     };
   }
 
@@ -85,7 +86,7 @@ export function evaluateMissionReward(params: {
         rewardAmount: 0,
         isCapped: true,
         isDuplicateCooldown: true,
-        reason: 'This mission was completed less than 2 hours ago. Your consistency is noted, but repeat rewards require spaced action.',
+        reason: t('This mission was completed less than 2 hours ago. Your consistency is noted, but repeat rewards require spaced action.'),
       };
     }
   }
@@ -98,7 +99,7 @@ export function evaluateMissionReward(params: {
       return {
         rewardAmount: 0,
         isCapped: true,
-        reason: `You've reached today's 5 paid daily quests. Mission completed and recorded toward your Future Life!`,
+        reason: t("You've reached today's 5 paid daily quests. Mission completed and recorded toward your Future Life!"),
       };
     }
   }
@@ -122,7 +123,7 @@ export function evaluateMissionReward(params: {
     return {
       rewardAmount: 0,
       isCapped: true,
-      reason: `Daily reward cap of D$${ECONOMY_CONSTANTS.DAILY_REWARD_CAP.toLocaleString()} reached. Your vote for the Future You're Building is saved!`,
+      reason: t("Daily reward cap of D${cap} reached. Your vote for the Future You're Building is saved!", { cap: ECONOMY_CONSTANTS.DAILY_REWARD_CAP.toLocaleString() }),
     };
   }
 
@@ -130,7 +131,7 @@ export function evaluateMissionReward(params: {
     return {
       rewardAmount: remainingCap,
       isCapped: true,
-      reason: `Adjusted to D$${remainingCap} to stay within today's D$${ECONOMY_CONSTANTS.DAILY_REWARD_CAP.toLocaleString()} ceiling.`,
+      reason: t("Adjusted to D${amount} to stay within today's D${cap} ceiling.", { amount: remainingCap, cap: ECONOMY_CONSTANTS.DAILY_REWARD_CAP.toLocaleString() }),
     };
   }
 
@@ -321,7 +322,7 @@ export function calculateOneDecisionStreakData(userData: {
   for (let i = 6; i >= 0; i--) {
     const d = new Date(Date.now() - i * 86400000);
     const dateStr = d.toISOString().slice(0, 10);
-    const dayLabel = d.toLocaleDateString('en-US', { weekday: 'short' });
+    const dayLabel = d.toLocaleDateString(getSpeechLang(), { weekday: 'short' });
     const dayNumber = d.getDate();
     const isCompleted = Boolean(dayMap[dateStr]);
     const isCurrentDay = dateStr === today;
@@ -339,64 +340,64 @@ export function calculateOneDecisionStreakData(userData: {
 
   // Tiers and Milestones
   let tier = {
-    name: 'Baseline',
+    name: t('Baseline'),
     level: 0,
     icon: '🎯',
     nextMilestone: 1,
     prevMilestone: 0,
-    description: 'Set and execute today’s One Decision to ignite your streak.',
+    description: t('Set and execute today’s One Decision to ignite your streak.'),
   };
 
   let multiplier = 1.0;
 
   if (currentStreak >= 30) {
     tier = {
-      name: 'Sovereignty',
+      name: t('Sovereignty'),
       level: 5,
       icon: '👑',
       nextMilestone: 60,
       prevMilestone: 30,
-      description: 'Legendary discipline. Your daily execution is now second nature.',
+      description: t('Legendary discipline. Your daily execution is now second nature.'),
     };
     multiplier = 2.0;
   } else if (currentStreak >= 14) {
     tier = {
-      name: 'Mastery',
+      name: t('Mastery'),
       level: 4,
       icon: '⚡',
       nextMilestone: 30,
       prevMilestone: 14,
-      description: 'Exceptional consistency. Two solid weeks of daily high-leverage decisions.',
+      description: t('Exceptional consistency. Two solid weeks of daily high-leverage decisions.'),
     };
     multiplier = 1.5;
   } else if (currentStreak >= 7) {
     tier = {
-      name: 'Flow State',
+      name: t('Flow State'),
       level: 3,
       icon: '🌊',
       nextMilestone: 14,
       prevMilestone: 7,
-      description: 'One full week completed. Your momentum is carrying you forward effortlessly.',
+      description: t('One full week completed. Your momentum is carrying you forward effortlessly.'),
     };
     multiplier = 1.25;
   } else if (currentStreak >= 3) {
     tier = {
-      name: 'Momentum',
+      name: t('Momentum'),
       level: 2,
       icon: '🔥',
       nextMilestone: 7,
       prevMilestone: 3,
-      description: '3+ days in a row! You have broken through initial inertia.',
+      description: t('3+ days in a row! You have broken through initial inertia.'),
     };
     multiplier = 1.1;
   } else if (currentStreak >= 1) {
     tier = {
-      name: 'Ignition',
+      name: t('Ignition'),
       level: 1,
       icon: '✨',
       nextMilestone: 3,
       prevMilestone: 1,
-      description: 'Streak ignited. Protect this momentum tomorrow.',
+      description: t('Streak ignited. Protect this momentum tomorrow.'),
     };
     multiplier = 1.0;
   }

@@ -44,6 +44,7 @@ import { SEED_MARKET_ITEMS } from '../data/seed';
 import { soundSynthesizer } from '../utils/soundSynthesizer';
 import { voiceGuide } from '../utils/voiceGuide';
 import { getGuidedMeditation } from '../data/guidedMeditations';
+import { t, getLocale, setLocale, isLocale, hasStoredLocale, ensureLocaleLoaded } from '../i18n';
 
 interface AppContextType {
   data: UserData | null;
@@ -296,9 +297,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
     if (dueIndex !== activeGuidedCueIndex) {
       setActiveGuidedCueIndex(dueIndex);
-      if (dueIndex >= 0) voiceGuide.speak(meditation.cues[dueIndex].text);
+      if (dueIndex >= 0) voiceGuide.speak(t(meditation.cues[dueIndex].text));
       // Keep the next two cues warm so natural-voice playback starts on time
-      voiceGuide.prefetch(meditation.cues.slice(dueIndex + 1, dueIndex + 3).map((c) => c.text));
+      voiceGuide.prefetch(meditation.cues.slice(dueIndex + 1, dueIndex + 3).map((c) => t(c.text)));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeFocusSession?.remainingSeconds, activeFocusSession?.isPaused, activeFocusSession?.guidedMeditationId]);
@@ -321,8 +322,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     // If user is previewing / testing timer 0 alert in settings
     if (isSimulatingFocusAlert) {
       let toggle = false;
-      const titleA = `✨ [Finished!] Focus Session Simulation — Claim Reward`;
-      const titleB = `🔔 TIME'S UP! [00:00] — Return to Claim D$`;
+      const titleA = t('✨ [Finished!] Focus Session Simulation — Claim Reward');
+      const titleB = t("🔔 TIME'S UP! [00:00] — Return to Claim D$");
       document.title = titleA;
       const simTimer = setInterval(() => {
         toggle = !toggle;
@@ -330,12 +331,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }, 850);
       return () => {
         clearInterval(simTimer);
-        document.title = 'One Decision Away — Life OS & Future Self';
+        document.title = t('One Decision Away — Life OS & Future Self');
       };
     }
 
     if (!activeFocusSession) {
-      document.title = 'One Decision Away — Life OS & Future Self';
+      document.title = t('One Decision Away — Life OS & Future Self');
       return;
     }
 
@@ -346,14 +347,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     if (activeFocusSession.remainingSeconds === 0) {
       if (!tabBlinkEnabled) {
-        document.title = `✨ [Finished!] ${activeFocusSession.missionTitle} — One Decision Away`;
+        document.title = t('✨ [Finished!] {title} — One Decision Away', { title: activeFocusSession.missionTitle });
         return;
       }
 
       // Visual Blinking Animation across browser tab title bar
       let toggle = false;
-      const titleA = `✨ [Finished!] ${activeFocusSession.missionTitle} — Claim Reward`;
-      const titleB = `🔔 TIME'S UP! [00:00] — Return to Claim D$`;
+      const titleA = t('✨ [Finished!] {title} — Claim Reward', { title: activeFocusSession.missionTitle });
+      const titleB = t("🔔 TIME'S UP! [00:00] — Return to Claim D$");
       document.title = titleA;
       const blinkTimer = setInterval(() => {
         toggle = !toggle;
@@ -364,9 +365,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         clearInterval(blinkTimer);
       };
     } else if (activeFocusSession.isPaused) {
-      document.title = `⏸️ [Paused ${timeStr}] ${activeFocusSession.missionTitle} — One Decision Away`;
+      document.title = t('⏸️ [Paused {time}] {title} — One Decision Away', { time: timeStr, title: activeFocusSession.missionTitle });
     } else {
-      document.title = `⏱️ [${timeStr}] ${activeFocusSession.missionTitle} — One Decision Away`;
+      document.title = t('⏱️ [{time}] {title} — One Decision Away', { time: timeStr, title: activeFocusSession.missionTitle });
     }
   }, [
     isSimulatingFocusAlert,
@@ -396,7 +397,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const newSession: ActiveFocusSession = {
         id: `focus-${Date.now()}`,
         missionId: params.missionId,
-        missionTitle: params.missionTitle || 'Deep Work Sprint',
+        missionTitle: params.missionTitle || t('Deep Work Sprint'),
         missionType: params.missionType,
         missionArea: params.missionArea,
         durationMinutes: duration,
@@ -414,7 +415,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setActiveGuidedCueIndex(-1);
       if (params.guidedMeditationId) {
         const med = getGuidedMeditation(params.guidedMeditationId);
-        if (med) voiceGuide.prefetch(med.cues.slice(0, 3).map((c) => c.text));
+        if (med) voiceGuide.prefetch(med.cues.slice(0, 3).map((c) => t(c.text)));
       }
       setActiveFocusSession(newSession);
       soundSynthesizer.setVolume(volume);
@@ -424,8 +425,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
       showToast(
         params.guidedMeditationId
-          ? `Guided meditation started: ${newSession.missionTitle} (${duration}m)`
-          : `Locked into Deep Work: ${newSession.missionTitle} (${duration}m)`,
+          ? t('Guided meditation started: {title} ({minutes}m)', { title: newSession.missionTitle, minutes: duration })
+          : t('Locked into Deep Work: {title} ({minutes}m)', { title: newSession.missionTitle, minutes: duration }),
         'info'
       );
     },
@@ -479,7 +480,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     soundSynthesizer.stopAmbient();
     voiceGuide.stop();
     setActiveFocusSession(null);
-    showToast('Deep work focus session ended.', 'info');
+    showToast(t('Deep work focus session ended.'), 'info');
   }, [showToast]);
 
   const finishFocusSessionEarly = useCallback(() => {
@@ -531,6 +532,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       } catch {
         /* cloud is optional */
       }
+      // Language: the explicit device choice (localStorage) wins; otherwise follow the profile.
+      // Wait for the dictionary so the first paint is already translated.
+      try {
+        if (!hasStoredLocale() && isLocale(loaded.profile.locale) && loaded.profile.locale !== getLocale()) {
+          setLocale(loaded.profile.locale);
+        }
+        await ensureLocaleLoaded();
+      } catch {
+        /* i18n is best-effort */
+      }
       setData(loaded);
 
       if (loaded.lastActiveDateKey) {
@@ -547,7 +558,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       setError(null);
     } catch (e: any) {
-      setError(e?.message || 'Failed to load app data');
+      setError(e?.message || t('Failed to load app data'));
     } finally {
       setIsLoading(false);
     }
@@ -577,7 +588,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           triggerMissionConfetti();
         }
       } catch (err: any) {
-        showToast(err?.message || 'Failed to complete mission', 'error');
+        showToast(err?.message || t('Failed to complete mission'), 'error');
         throw err;
       }
     },
@@ -599,14 +610,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           missionId: session.missionId,
           method: 'timer',
           focusMinutes: actualMinutesSpent,
-          note: session.distractionNotes.length > 0 ? `Parking lot notes: ${session.distractionNotes.join('; ')}` : undefined,
+          note: session.distractionNotes.length > 0 ? t('Parking lot notes: {notes}', { notes: session.distractionNotes.join('; ') }) : undefined,
           reflection: reflection || {
-            completedSummary: `Deep Work Completed: ${session.missionTitle}`,
+            completedSummary: t('Deep Work Completed: {title}', { title: session.missionTitle }),
             resistanceNoticed:
               session.distractionNotes.length > 0
-                ? `Parked ${session.distractionNotes.length} thoughts in distraction lot.`
-                : 'Protected flow without checking distractions.',
-            nextStep: 'Continue next high-leverage block.',
+                ? t('Parked {n} thoughts in distraction lot.', { n: session.distractionNotes.length })
+                : t('Protected flow without checking distractions.'),
+            nextStep: t('Continue next high-leverage block.'),
           },
         });
       } else {
@@ -622,7 +633,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           kind: 'focus_reward',
           amount: rewardRate,
           dayKey: todayStr,
-          memo: `Deep Work Session: ${session.missionTitle} (${actualMinutesSpent}m)`,
+          memo: t('Deep Work Session: {title} ({minutes}m)', { title: session.missionTitle, minutes: actualMinutesSpent }),
           createdAt: now,
         };
 
@@ -639,12 +650,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               focusMinutes: actualMinutesSpent,
               note: session.distractionNotes.join('; '),
               reflection: reflection || {
-                completedSummary: `Deep Work Sprint: ${session.missionTitle}`,
+                completedSummary: t('Deep Work Sprint: {title}', { title: session.missionTitle }),
                 resistanceNoticed:
                   session.distractionNotes.length > 0
-                    ? `Noticed ${session.distractionNotes.length} resistance thoughts.`
-                    : 'Maintained uninterrupted deep focus.',
-                nextStep: 'Hydrate, reflect, and reset.',
+                    ? t('Noticed {n} resistance thoughts.', { n: session.distractionNotes.length })
+                    : t('Maintained uninterrupted deep focus.'),
+                nextStep: t('Hydrate, reflect, and reset.'),
               },
               rewardAmount: rewardRate,
               streakBonus: 0,
@@ -655,7 +666,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
         await repository.save(updated);
         setData(updated);
-        showToast(`Deep Work verified! + D$${rewardRate.toLocaleString()} added to Dream Bank.`, 'success');
+        showToast(t('Deep Work verified! + D${amount} added to Dream Bank.', { amount: rewardRate.toLocaleString() }), 'success');
         triggerBigRewardConfetti();
       }
 
@@ -672,7 +683,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         showToast(result.message, 'success');
         triggerGoldConfetti();
       } catch (err: any) {
-        showToast(err?.message || 'Purchase failed', 'error');
+        showToast(err?.message || t('Purchase failed'), 'error');
         throw err;
       }
     },
@@ -684,9 +695,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       try {
         const result = await repository.createRealityBridge(bridgeData);
         setData(result.data);
-        showToast('Reality Bridge established with real action plan!', 'success');
+        showToast(t('Reality Bridge established with real action plan!'), 'success');
       } catch (err: any) {
-        showToast(err?.message || 'Failed to create bridge', 'error');
+        showToast(err?.message || t('Failed to create bridge'), 'error');
         throw err;
       }
     },
@@ -698,9 +709,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       try {
         const result = await repository.updateRealityBridgeSavings(bridgeId, amount, note);
         setData(result.data);
-        showToast(`Logged $${amount.toLocaleString()} in real savings progress.`, 'success');
+        showToast(t('Logged ${amount} in real savings progress.', { amount: amount.toLocaleString() }), 'success');
       } catch (err: any) {
-        showToast(err?.message || 'Failed to update savings', 'error');
+        showToast(err?.message || t('Failed to update savings'), 'error');
         throw err;
       }
     },
@@ -714,14 +725,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const totalScore = Math.round((values.reduce((a, b) => a + b, 0) / (values.length * 10)) * 100);
 
       const areaLabels: Record<keyof LifeScoreCategories, string> = {
-        money: 'Money',
-        workAndPurpose: 'Work & Purpose',
-        health: 'Health',
-        relationships: 'Relationships',
-        discipline: 'Discipline',
-        environment: 'Environment',
-        learning: 'Learning',
-        personalMeaning: 'Personal Meaning',
+        money: t('Money'),
+        workAndPurpose: t('Work & Purpose'),
+        health: t('Health'),
+        relationships: t('Relationships'),
+        discipline: t('Discipline'),
+        environment: t('Environment'),
+        learning: t('Learning'),
+        personalMeaning: t('Personal Meaning'),
       };
 
       const sorted = (Object.keys(scores) as (keyof LifeScoreCategories)[]).sort(
@@ -732,12 +743,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       let interpretation = '';
       if (totalScore >= 75) {
         interpretation =
-          'Your current actions are largely supporting the future you want. The work now is protecting what works.';
+          t('Your current actions are largely supporting the future you want. The work now is protecting what works.');
       } else if (totalScore >= 50) {
         interpretation =
-          'Some areas are carrying you; others are quietly asking for attention. A single daily decision can shift the balance.';
+          t('Some areas are carrying you; others are quietly asking for attention. A single daily decision can shift the balance.');
       } else {
-        interpretation = `Your Future Life Score is ${totalScore}/100. Your current actions are not yet supporting the future you described. That is information, not a verdict — and it is exactly what this app is for.`;
+        interpretation = t('Your Future Life Score is {score}/100. Your current actions are not yet supporting the future you described. That is information, not a verdict — and it is exactly what this app is for.', { score: totalScore });
       }
 
       const now = new Date().toISOString();
@@ -758,7 +769,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       await repository.save(updated);
       setData(updated);
-      showToast('Future Life Score recorded.', 'success');
+      showToast(t('Future Life Score recorded.'), 'success');
     },
     [data, showToast]
   );
@@ -776,7 +787,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       };
       await repository.save(updated);
       setData(updated);
-      showToast('Two Futures vision updated.', 'success');
+      showToast(t('Two Futures vision updated.'), 'success');
     },
     [data, showToast]
   );
@@ -798,7 +809,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       };
       await repository.save(updated);
       setData(updated);
-      showToast('Default Future updated.', 'success');
+      showToast(t('Default Future updated.'), 'success');
     },
     [data, showToast]
   );
@@ -810,7 +821,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const dateKey = now.toISOString().slice(0, 10);
       const existing = data.twoFutures.defaultFuture?.driftLog || [];
       if (existing.some((e) => e.dateKey === dateKey && e.signal === signal)) {
-        showToast('Already logged for today. Awareness noted.', 'info');
+        showToast(t('Already logged for today. Awareness noted.'), 'info');
         return;
       }
       const entry: DriftLogEntry = {
@@ -833,7 +844,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       };
       await repository.save(updated);
       setData(updated);
-      showToast('Drift noticed. Noticing is the first vote back.', 'info');
+      showToast(t('Drift noticed. Noticing is the first vote back.'), 'info');
     },
     [data, showToast]
   );
@@ -874,7 +885,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       };
       await repository.save(updated);
       setData(updated);
-      showToast('Future Self profile saved.', 'success');
+      showToast(t('Future Self profile saved.'), 'success');
     },
     [data, showToast]
   );
@@ -897,7 +908,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       };
       await repository.save(updated);
       setData(updated);
-      showToast('Mission created.', 'success');
+      showToast(t('Mission created.'), 'success');
     },
     [data, showToast]
   );
@@ -937,7 +948,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       };
       await repository.save(updated);
       setData(updated);
-      showToast('Today’s One Decision is locked in. Complete it to earn D$500!', 'success');
+      showToast(t('Today’s One Decision is locked in. Complete it to earn D$500!'), 'success');
     },
     [data, showToast]
   );
@@ -969,8 +980,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setData(updated);
       showToast(
         pinToVision
-          ? `"${newItem.name}" added to your Vision Board and Market.`
-          : `Custom dream "${newItem.name}" added to your Dream Market.`,
+          ? t('"{name}" added to your Vision Board and Market.', { name: newItem.name })
+          : t('Custom dream "{name}" added to your Dream Market.', { name: newItem.name }),
         'success'
       );
       return newItem;
@@ -1019,8 +1030,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           description: exploreItem.description,
           illustrationKey: 'custom_dream',
           customImageUrl: exploreItem.imageUrl,
-          whyWanted: exploreItem.whyWanted || 'High standard of sovereign living and deep focus.',
-          firstRealStep: exploreItem.firstRealStep || 'Define concrete execution milestone.',
+          whyWanted: exploreItem.whyWanted || t('High standard of sovereign living and deep focus.'),
+          firstRealStep: exploreItem.firstRealStep || t('Define concrete execution milestone.'),
           isCustom: true,
           createdAt: new Date().toISOString(),
         };
@@ -1044,10 +1055,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setData(updated);
 
       if (pin) {
-        showToast(`"${exploreItem.name}" added to your Vision Board and Dream Market! ⭐`, 'success');
+        showToast(t('"{name}" added to your Vision Board and Dream Market! ⭐', { name: exploreItem.name }), 'success');
         triggerGoldConfetti();
       } else {
-        showToast(`"${exploreItem.name}" removed from your Vision Board.`, 'info');
+        showToast(t('"{name}" removed from your Vision Board.', { name: exploreItem.name }), 'info');
       }
 
       return targetItem;
@@ -1056,7 +1067,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   );
 
   const grantSimulationBonus = useCallback(
-    async (amount: number = 25000, memo: string = 'Executive Life Simulation Grant') => {
+    async (amount: number = 25000, memo: string = t('Executive Life Simulation Grant')) => {
       if (!data) return;
       const now = new Date().toISOString();
       const newTx: WalletTransaction = {
@@ -1075,7 +1086,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       };
       await repository.save(updated);
       setData(updated);
-      showToast(`+D$ ${amount.toLocaleString()} added to your ledger for luxury acquisitions!`, 'success');
+      showToast(t('+D$ {amount} added to your ledger for luxury acquisitions!', { amount: amount.toLocaleString() }), 'success');
       triggerGoldConfetti();
     },
     [data, showToast]
@@ -1128,7 +1139,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const allItems: MarketItem[] = [...SEED_MARKET_ITEMS, ...data.customMarketItems];
       const targetItem = allItems.find((i) => i.id === itemId);
       if (!targetItem) {
-        showToast('Nothing found to archive.', 'error');
+        showToast(t('Nothing found to archive.'), 'error');
         return;
       }
 
@@ -1177,15 +1188,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       const reasonLabel =
         reason === 'completed' || reason === 'acquired'
-          ? 'archived as completed / acquired'
+          ? t('archived as completed / acquired')
           : reason === 'outgrown'
-          ? 'archived as outgrown'
+          ? t('archived as outgrown')
           : reason === 'replaced'
-          ? 'archived as replaced by a new goal'
-          : 'archived';
+          ? t('archived as replaced by a new goal')
+          : t('archived');
 
       showToast(
-        `"${targetItem.name}" ${reasonLabel} and removed from the active Vision Board.`,
+        t('"{name}" {reason} and removed from the active Vision Board.', { name: targetItem.name, reason: reasonLabel }),
         'info'
       );
     },
@@ -1225,11 +1236,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       await repository.save(updated);
       setData(updated);
 
-      const itemName = targetItem?.name || 'Item';
+      const itemName = targetItem?.name || t('Item');
       showToast(
         andPinToVision
-          ? `"${itemName}" restored from the archive to your Vision Board.`
-          : `"${itemName}" restored from the archive to the Market.`,
+          ? t('"{name}" restored from the archive to your Vision Board.', { name: itemName })
+          : t('"{name}" restored from the archive to the Market.', { name: itemName }),
         'success'
       );
     },
@@ -1252,7 +1263,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       };
       await repository.save(updated);
       setData(updated);
-      showToast('Archive record deleted.', 'info');
+      showToast(t('Archive record deleted.'), 'info');
     },
     [data, showToast]
   );
@@ -1266,7 +1277,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       };
       await repository.save(updated);
       setData(updated);
-      showToast('Life simulation budget updated.', 'success');
+      showToast(t('Life simulation budget updated.'), 'success');
     },
     [data, showToast]
   );
@@ -1280,7 +1291,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       };
       await repository.save(updated);
       setData(updated);
-      showToast('Life simulation allocation saved.', 'success');
+      showToast(t('Life simulation allocation saved.'), 'success');
     },
     [data, showToast]
   );
@@ -1302,7 +1313,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       };
       await repository.save(updated);
       setData(updated);
-      showToast('Dream Journal entry documented in your timeline!', 'success');
+      showToast(t('Dream Journal entry documented in your timeline!'), 'success');
     },
     [data, showToast]
   );
@@ -1317,7 +1328,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       };
       await repository.save(updated);
       setData(updated);
-      showToast('Journal entry removed.', 'info');
+      showToast(t('Journal entry removed.'), 'info');
     },
     [data, showToast]
   );
@@ -1340,7 +1351,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         updatedDates = habit.completedDates.filter((d) => d !== todayStr);
         updatedStreak = Math.max(0, updatedStreak - 1);
         soundSynthesizer.playMicroHabitCue(habit.category, 'undo');
-        showToast(`Untoggled: ${habit.title}`, 'info');
+        showToast(t('Untoggled: {title}', { title: habit.title }), 'info');
       } else {
         // Toggle on
         updatedDates = [...habit.completedDates, todayStr];
@@ -1371,15 +1382,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           kind: 'micro_habit_reward',
           amount: 25,
           dayKey: todayStr,
-          memo: `5-Min Micro-Habit Momentum: ${habit.title}`,
+          memo: t('5-Min Micro-Habit Momentum: {title}', { title: habit.title }),
           createdAt: now,
         };
         newTransactions = [habitTx, ...newTransactions];
 
         if (isLastRemaining) {
-          showToast(`✨ All micro-habits completed today! Full momentum secured! (+ D$25)`, 'success');
+          showToast(t('✨ All micro-habits completed today! Full momentum secured! (+ D$25)'), 'success');
         } else {
-          showToast(`✓ Micro-Habit completed: "${habit.title}"! (+ D$25 momentum)`, 'success');
+          showToast(t('✓ Micro-Habit completed: "{title}"! (+ D$25 momentum)', { title: habit.title }), 'success');
         }
       }
 
@@ -1432,7 +1443,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       };
       await repository.save(updated);
       setData(updated);
-      showToast(`Created goal: "${newGoal.title}"`, 'success');
+      showToast(t('Created goal: "{title}"', { title: newGoal.title }), 'success');
       return newGoal;
     },
     [data, showToast]
@@ -1451,7 +1462,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       };
       await repository.save(updated);
       setData(updated);
-      showToast('Goal updated.', 'info');
+      showToast(t('Goal updated.'), 'info');
     },
     [data, showToast]
   );
@@ -1476,7 +1487,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       };
       await repository.save(updated);
       setData(updated);
-      showToast(`Goal "${goalToDelete?.title || ''}" removed.`, 'info');
+      showToast(t('Goal "{title}" removed.', { title: goalToDelete?.title || '' }), 'info');
     },
     [data, showToast]
   );
@@ -1514,7 +1525,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       await repository.save(updated);
       setData(updated);
-      showToast(`Added 5-minute micro-habit: "${newHabit.title}"`, 'success');
+      showToast(t('Added 5-minute micro-habit: "{title}"', { title: newHabit.title }), 'success');
     },
     [data, showToast]
   );
@@ -1545,7 +1556,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       await repository.save(updated);
       setData(updated);
-      showToast(`Updated micro-habit: "${updatedHabit.title}"`, 'success');
+      showToast(t('Updated micro-habit: "{title}"', { title: updatedHabit.title }), 'success');
     },
     [data, showToast]
   );
@@ -1560,7 +1571,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       };
       await repository.save(updated);
       setData(updated);
-      showToast('Micro-habit removed.', 'info');
+      showToast(t('Micro-habit removed.'), 'info');
     },
     [data, showToast]
   );
@@ -1581,7 +1592,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         (c) => c.name.toLowerCase() === cleanName.toLowerCase()
       );
       if (duplicate) {
-        showToast(`Category "${cleanName}" already exists.`, 'info');
+        showToast(t('Category "{name}" already exists.', { name: cleanName }), 'info');
         return duplicate;
       }
 
@@ -1602,7 +1613,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       await repository.save(updated);
       setData(updated);
-      showToast(`Created custom category: "${newCategory.name}"`, 'success');
+      showToast(t('Created custom category: "{name}"', { name: newCategory.name }), 'success');
       return newCategory;
     },
     [data, showToast]
@@ -1641,7 +1652,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       await repository.save(updated);
       setData(updated);
-      showToast(`Custom category "${catToDelete.name}" removed.`, 'info');
+      showToast(t('Custom category "{name}" removed.', { name: catToDelete.name }), 'info');
     },
     [data, showToast]
   );
@@ -1690,7 +1701,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       await repository.save(updated);
       setData(updated);
-      showToast(`Updated category "${updatedCat.name}"`, 'success');
+      showToast(t('Updated category "{name}"', { name: updatedCat.name }), 'success');
     },
     [data, showToast]
   );
@@ -1709,7 +1720,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
     await repository.save(updated);
     setData(updated);
-    showToast('Reset today’s micro-habits.', 'info');
+    showToast(t('Reset today’s micro-habits.'), 'info');
   }, [data, showToast]);
 
   const checkDailyMicroHabitsRollover = useCallback(
@@ -1742,12 +1753,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
         if (result.brokenStreaksCount > 0) {
           showToast(
-            `🌅 New day (${result.currentDateKey}): ${result.resetHabitsCount} micro-habits reset. ${result.brokenStreaksCount} missed streak(s) reset to 0.`,
+            t('🌅 New day ({date}): {reset} micro-habits reset. {broken} missed streak(s) reset to 0.', { date: result.currentDateKey, reset: result.resetHabitsCount, broken: result.brokenStreaksCount }),
             'info'
           );
         } else {
           showToast(
-            `🌅 New day started (${result.currentDateKey}): Daily micro-habits reset for today!`,
+            t('🌅 New day started ({date}): Daily micro-habits reset for today!', { date: result.currentDateKey }),
             'info'
           );
         }
@@ -1785,7 +1796,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setLastRolloverSummary(summary);
 
       showToast(
-        `🗓️ DateKey rollover simulated to ${nextDateKey}: Daily micro-habits reset for today!`,
+        t('🗓️ DateKey rollover simulated to {date}: Daily micro-habits reset for today!', { date: nextDateKey }),
         'success'
       );
     },
@@ -1884,14 +1895,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           kind: 'check_in_reward',
           amount: 50,
           dayKey: todayStr,
-          memo: `Daily Check-in (Focus: ${checkIn.focus}/10, Energy: ${checkIn.energy}/10, Mood: ${checkIn.mood}/10)`,
+          memo: t('Daily Check-in (Focus: {focus}/10, Energy: {energy}/10, Mood: {mood}/10)', { focus: checkIn.focus, energy: checkIn.energy, mood: checkIn.mood }),
           createdAt: now,
         };
         newTransactions = [checkInTx, ...newTransactions];
         showToast('✓ Daily Check-in recorded! (+ D$50 Focus Fuel)', 'success');
       } else {
         soundSynthesizer.playTapChime();
-        showToast('Daily Check-in updated.', 'info');
+        showToast(t('Daily Check-in updated.'), 'info');
       }
 
       const updated: UserData = {
@@ -1916,7 +1927,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       };
       await repository.save(updated);
       setData(updated);
-      showToast('Daily check-in removed.', 'info');
+      showToast(t('Daily check-in removed.'), 'info');
     },
     [data, showToast]
   );
@@ -1930,7 +1941,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       };
       await repository.save(updated);
       setData(updated);
-      showToast(`Enrolled in 30-Day Season: ${season.title}!`, 'success');
+      showToast(t('Enrolled in 30-Day Season: {title}!', { title: season.title }), 'success');
     },
     [data, showToast]
   );
@@ -1975,7 +1986,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       };
       await repository.save(updated);
       setData(updated);
-      showToast('Profile updated.', 'success');
+      showToast(t('Profile updated.'), 'success');
     },
     [data, showToast]
   );
@@ -2167,7 +2178,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
     await repository.save(updated);
     setData(updated);
-    showToast('Upgraded to One Decision Pro!', 'success');
+    showToast(t('Upgraded to One Decision Pro!'), 'success');
   }, [data, showToast]);
 
   const toggleProPlan = useCallback(async () => {
@@ -2189,7 +2200,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     await repository.save(updated);
     setData(updated);
     showToast(
-      nextIsPro ? 'Pro membership activated (Demo).' : 'Switched to Free plan.',
+      nextIsPro ? t('Pro membership activated (Demo).') : t('Switched to Free plan.'),
       'info'
     );
   }, [data, showToast]);
@@ -2211,19 +2222,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
     await repository.save(updated);
     setData(updated);
-    showToast('Pro subscription cancelled.', 'info');
+    showToast(t('Pro subscription cancelled.'), 'info');
   }, [data, showToast]);
 
   const resetToDemo = useCallback(async () => {
     await repository.clear();
     await refreshData();
-    showToast('Reset to clean initial state.', 'info');
+    showToast(t('Reset to clean initial state.'), 'info');
   }, [refreshData, showToast]);
 
   const resetAllData = useCallback(async () => {
     await repository.clear();
     await refreshData();
-    showToast('All local data cleared and reset.', 'info');
+    showToast(t('All local data cleared and reset.'), 'info');
   }, [refreshData, showToast]);
 
   const importDataJson = useCallback(
@@ -2232,14 +2243,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const text = await file.text();
         const parsed = JSON.parse(text) as UserData;
         if (!parsed || !parsed.profile || !Array.isArray(parsed.transactions)) {
-          showToast('That file is not a One Decision Away backup.', 'error');
+          showToast(t('That file is not a One Decision Away backup.'), 'error');
           return;
         }
         await repository.replaceAll(parsed);
         await refreshData();
-        showToast('Backup restored. Welcome back.', 'success');
+        showToast(t('Backup restored. Welcome back.'), 'success');
       } catch {
-        showToast('Could not read the backup file.', 'error');
+        showToast(t('Could not read the backup file.'), 'error');
       }
     },
     [refreshData, showToast]
@@ -2250,7 +2261,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (remote) {
       await repository.replaceAll(remote);
       await refreshData();
-      showToast('Synced from cloud.', 'success');
+      showToast(t('Synced from cloud.'), 'success');
       return true;
     }
     return false;
@@ -2273,7 +2284,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    showToast('Data exported to JSON file.', 'success');
+    showToast(t('Data exported to JSON file.'), 'success');
   }, [data, showToast]);
 
   const value: AppContextType = {

@@ -2,22 +2,24 @@ import React, { useState } from 'react';
 import { useApp } from '../store/useApp';
 import { computeLedgerBalance } from '../services/economy';
 import { LifeBudgetCategory } from '../types/models';
+import { useT } from '../i18n';
 
 export const Budget: React.FC = () => {
   const { data, saveLifeBudget, openQuickJournal } = useApp();
+  const t = useT();
 
   const isMac = typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform || '');
   const balance = data ? computeLedgerBalance(data.transactions) : 100;
 
   const defaultCategories: LifeBudgetCategory[] = [
-    { id: 'b1', name: 'Sanctuary & Home', percentage: 20, description: 'Living spaces and comfort' },
-    { id: 'b2', name: 'Enterprise & Tools', percentage: 15, description: 'Workstation and hardware' },
-    { id: 'b3', name: 'Health & Vitality', percentage: 15, description: 'Nutrition and recovery' },
-    { id: 'b4', name: 'Mastery & Learning', percentage: 10, description: 'Mentors and masterclasses' },
-    { id: 'b5', name: 'Expeditions & Travel', percentage: 15, description: 'Horizons and retreats' },
-    { id: 'b6', name: 'Sovereign Capital', percentage: 10, description: 'Security and reserves' },
-    { id: 'b7', name: 'Contributions & Giving', percentage: 10, description: 'Generosity and community' },
-    { id: 'b8', name: 'Rituals & Experiences', percentage: 5, description: 'Shared memories and craft' },
+    { id: 'b1', name: t('Sanctuary & Home'), percentage: 20, description: t('Living spaces and comfort') },
+    { id: 'b2', name: t('Enterprise & Tools'), percentage: 15, description: t('Workstation and hardware') },
+    { id: 'b3', name: t('Health & Vitality'), percentage: 15, description: t('Nutrition and recovery') },
+    { id: 'b4', name: t('Mastery & Learning'), percentage: 10, description: t('Mentors and masterclasses') },
+    { id: 'b5', name: t('Expeditions & Travel'), percentage: 15, description: t('Horizons and retreats') },
+    { id: 'b6', name: t('Sovereign Capital'), percentage: 10, description: t('Security and reserves') },
+    { id: 'b7', name: t('Contributions & Giving'), percentage: 10, description: t('Generosity and community') },
+    { id: 'b8', name: t('Rituals & Experiences'), percentage: 5, description: t('Shared memories and craft') },
   ];
 
   const [categories, setCategories] = useState<LifeBudgetCategory[]>(
@@ -65,13 +67,13 @@ export const Budget: React.FC = () => {
       <div className="space-y-8 pr-0 lg:pr-6 lg:border-r border-[var(--border)]">
         <div>
           <span className="text-[10px] uppercase tracking-[0.15em] text-[var(--ink-faint)] font-sans font-medium block mb-2">
-            Life OS / Simulation
+            {t('Life OS / Simulation')}
           </span>
           <h1 className="font-display italic font-semibold text-4xl sm:text-5xl lg:text-[3.25rem] text-[var(--ink)] leading-none mb-3">
-            Simulation Budget
+            {t('Simulation Budget')}
           </h1>
           <p className="text-base sm:text-lg text-[var(--ink-faint)] leading-relaxed max-w-xl font-sans font-normal">
-            Design how your ideal monthly effort and resources are distributed across life.
+            {t('Design how your ideal monthly effort and resources are distributed across life.')}
           </p>
         </div>
 
@@ -94,7 +96,7 @@ export const Budget: React.FC = () => {
                   value={cat.percentage}
                   onChange={(e) => handlePercentageChange(cat.id, parseInt(e.target.value) || 0)}
                   className="variation3-slider"
-                  aria-label={`${cat.name} percentage`}
+                  aria-label={t('{name} percentage', { name: cat.name })}
                 />
               </div>
 
@@ -111,7 +113,7 @@ export const Budget: React.FC = () => {
         {/* Bank Badge */}
         <div className="bg-[var(--bg)] border border-[var(--border)] p-4 text-center">
           <span className="text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] block mb-1 font-sans">
-            Bank Balance
+            {t('Bank Balance')}
           </span>
           <div className="font-display text-[1.8rem] leading-none text-[var(--ink)]">
             D$ {balance.toLocaleString()}
@@ -122,22 +124,22 @@ export const Budget: React.FC = () => {
         <div
           onClick={openQuickJournal}
           className="border border-dashed border-[var(--border)] p-4 flex justify-between items-center text-xs text-[var(--ink)] hover:border-[var(--accent)] cursor-pointer transition-colors"
-          title={`Open Quick Dream Journal (${isMac ? '⌘K' : 'Ctrl+K'})`}
+          title={t('Open Quick Dream Journal ({shortcut})', { shortcut: isMac ? '⌘K' : 'Ctrl+K' })}
         >
-          <span className="font-medium">Quick Journal</span>
+          <span className="font-medium">{t('Quick Journal')}</span>
           <span className="opacity-40 font-mono text-xs">{isMac ? '⌘K' : 'Ctrl+K'}</span>
         </div>
 
         {/* Total Allocation Stat */}
         <div>
           <span className="text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] block mb-1.5 font-sans">
-            Total Allocation
+            {t('Total Allocation')}
           </span>
           <div className="font-display text-4xl leading-none text-[var(--ink)]">
             {totalPercentage}%
           </div>
           <div className={`text-xs mt-1.5 font-sans ${isValid ? 'text-[var(--ink-faint)]' : 'text-[var(--accent)] font-medium'}`}>
-            {isValid ? 'Allocation is Balanced' : totalPercentage < 100 ? `Needs +${100 - totalPercentage}% to balance` : `Exceeds 100% by +${totalPercentage - 100}%`}
+            {isValid ? t('Allocation is Balanced') : totalPercentage < 100 ? t('Needs +{n}% to balance', { n: 100 - totalPercentage }) : t('Exceeds 100% by +{n}%', { n: totalPercentage - 100 })}
           </div>
         </div>
 
@@ -161,7 +163,7 @@ export const Budget: React.FC = () => {
             <div
               style={{ width: `${100 - totalPercentage}%` }}
               className="h-full bg-[var(--bg-muted)] opacity-60"
-              title={`Unallocated: ${100 - totalPercentage}%`}
+              title={t('Unallocated: {n}%', { n: 100 - totalPercentage })}
             />
           )}
         </div>
@@ -169,11 +171,11 @@ export const Budget: React.FC = () => {
         {/* Projected Burn Stat */}
         <div>
           <span className="text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] block mb-1.5 font-sans">
-            Projected Burn
+            {t('Projected Burn')}
           </span>
           <div className="font-display text-3xl leading-none text-[var(--ink)]">
             D$ {monthlyBurnD.toLocaleString()}{' '}
-            <span className="text-xs font-sans text-[var(--ink-faint)]">/mo</span>
+            <span className="text-xs font-sans text-[var(--ink-faint)]">{t('/mo')}</span>
           </div>
         </div>
 
@@ -187,12 +189,12 @@ export const Budget: React.FC = () => {
               : 'bg-[var(--bg-muted)] text-[var(--ink-faint)] border border-[var(--border)] cursor-not-allowed'
           }`}
         >
-          Save Allocation
+          {t('Save Allocation')}
         </button>
 
         {/* Note Footer */}
         <p className="text-[11px] text-[var(--ink-faint)] leading-relaxed pt-5 border-t border-[var(--border)] font-sans">
-          <strong className="text-[var(--ink)]">Note:</strong> The Life Simulation Budget is a design blueprint to align your intentions with how you spend your energy, focus, and time.
+          <strong className="text-[var(--ink)]">{t('Note:')}</strong> {t('The Life Simulation Budget is a design blueprint to align your intentions with how you spend your energy, focus, and time.')}
         </p>
       </aside>
     </div>

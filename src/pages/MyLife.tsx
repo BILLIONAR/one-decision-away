@@ -44,6 +44,7 @@ import { ArchivedMarketHistory } from '../components/ArchivedMarketHistory';
 import { SEED_MARKET_ITEMS } from '../data/seed';
 import { EXPLORE_DREAM_ITEMS } from '../data/exploreDreams';
 import { MarketItem, Purchase, RealityBridge } from '../types/models';
+import { useT } from '../i18n';
 
 export const MyLife: React.FC = () => {
   const {
@@ -56,6 +57,7 @@ export const MyLife: React.FC = () => {
     setActiveRoute,
     showToast,
   } = useApp();
+  const t = useT();
 
   const [activeTab, setActiveTab] = useState<'vision' | 'assets' | 'archive' | 'journal'>('vision');
   const [visionSubTab, setVisionSubTab] = useState<'board' | 'explore'>('board');
@@ -155,7 +157,7 @@ export const MyLife: React.FC = () => {
 
     await reorderVisionItems(newIds);
     soundSynthesizer.playTapChime();
-    showToast('✨ Vision board priority order updated.', 'success');
+    showToast(t('✨ Vision board priority order updated.'), 'success');
   };
 
   const handleMovePriority = async (itemId: string, direction: 'prev' | 'next') => {
@@ -172,7 +174,7 @@ export const MyLife: React.FC = () => {
 
     await reorderVisionItems(newIds);
     soundSynthesizer.playTapChime();
-    showToast(`✨ "${visionItems[index].name}" moved to priority #${targetIndex + 1}.`, 'info');
+    showToast(t('✨ "{name}" moved to priority #{n}.', { name: visionItems[index].name, n: targetIndex + 1 }), 'info');
   };
 
   const handleSortPreset = async (type: 'highest_val' | 'lowest_val' | 'highest_dprice' | 'alphabetical') => {
@@ -190,7 +192,7 @@ export const MyLife: React.FC = () => {
     const newIds = sorted.map((i) => i.id);
     await reorderVisionItems(newIds);
     soundSynthesizer.playTapChime();
-    showToast('✨ Vision board sorted.', 'success');
+    showToast(t('✨ Vision board sorted.'), 'success');
   };
 
   // Total valuation of active vision board
@@ -206,26 +208,26 @@ export const MyLife: React.FC = () => {
 
   // Group purchases by category
   const categories = [
-    { key: 'Homes', label: 'My Luxury Villas & Residences' },
-    { key: 'Cars & Mobility', label: 'My Supercars & Fleet' },
-    { key: 'Luxury Watches', label: 'My Haute Horlogerie & Timepieces' },
-    { key: 'Yachts & Aviation', label: 'My Marine & Aviation Fleet' },
-    { key: 'Experiences', label: 'My Elite Experiences & Gastronomy' },
-    { key: 'Dream Workspace', label: 'My Workspace & Sanctuary' },
-    { key: 'Travel', label: 'My Travels & Expeditions' },
-    { key: 'Education', label: 'My Education & Mastery' },
-    { key: 'Business', label: 'My Enterprise & Capital' },
-    { key: 'Health & Wellness', label: 'My Health & Vitality' },
-    { key: 'Giving', label: 'My Legacy & Contributions' },
+    { key: 'Homes', label: t('My Luxury Villas & Residences') },
+    { key: 'Cars & Mobility', label: t('My Supercars & Fleet') },
+    { key: 'Luxury Watches', label: t('My Haute Horlogerie & Timepieces') },
+    { key: 'Yachts & Aviation', label: t('My Marine & Aviation Fleet') },
+    { key: 'Experiences', label: t('My Elite Experiences & Gastronomy') },
+    { key: 'Dream Workspace', label: t('My Workspace & Sanctuary') },
+    { key: 'Travel', label: t('My Travels & Expeditions') },
+    { key: 'Education', label: t('My Education & Mastery') },
+    { key: 'Business', label: t('My Enterprise & Capital') },
+    { key: 'Health & Wellness', label: t('My Health & Vitality') },
+    { key: 'Giving', label: t('My Legacy & Contributions') },
   ];
 
   const handleOpenCreateBridge = (purchase: Purchase) => {
     setBridgeTargetPurchase(purchase);
     setRealCostUsd(purchase.itemSnapshot.realPriceUsd || 1000);
     setCurrentSavingsUsd(0);
-    setIncomeProject('Primary Income Allocation');
-    setFirstRealAction(`Open a dedicated sub-account for ${purchase.itemSnapshot.name}`);
-    setNextMilestone(`Save first 20% of ${purchase.itemSnapshot.name} cost`);
+    setIncomeProject(t('Primary Income Allocation'));
+    setFirstRealAction(t('Open a dedicated sub-account for {name}', { name: purchase.itemSnapshot.name }));
+    setNextMilestone(t('Save first 20% of {name} cost', { name: purchase.itemSnapshot.name }));
   };
 
   const handleSaveBridge = async (e: React.FormEvent) => {
@@ -246,9 +248,9 @@ export const MyLife: React.FC = () => {
       currentSavingsUsd,
       targetDate,
       requiredMonthlySavingsUsd: requiredMonthly,
-      incomeProject: incomeProject.trim() || 'Core Savings Allocation',
-      firstRealAction: firstRealAction.trim() || `Draft timeline for ${bridgeTargetPurchase.itemSnapshot.name}`,
-      nextMilestone: nextMilestone.trim() || 'Reach first milestone',
+      incomeProject: incomeProject.trim() || t('Core Savings Allocation'),
+      firstRealAction: firstRealAction.trim() || t('Draft timeline for {name}', { name: bridgeTargetPurchase.itemSnapshot.name }),
+      nextMilestone: nextMilestone.trim() || t('Reach first milestone'),
     });
 
     setBridgeTargetPurchase(null);
@@ -267,8 +269,8 @@ export const MyLife: React.FC = () => {
   return (
     <div className="space-y-8">
       <PageHeader
-        title="My Future Life · Vision Board & Palace"
-        subtitle="Photograph the things you see in real life, add goals from the web, and build your symbolic future."
+        title={t('My Future Life · Vision Board & Palace')}
+        subtitle={t('Photograph the things you see in real life, add goals from the web, and build your symbolic future.')}
         action={
           <div className="flex items-center gap-2">
             <Button
@@ -277,7 +279,7 @@ export const MyLife: React.FC = () => {
               icon={Camera}
               onClick={() => setIsAddVisionModalOpen(true)}
             >
-              Take / Add Photo
+              {t('Take / Add Photo')}
             </Button>
             <Button
               variant="outline"
@@ -285,7 +287,7 @@ export const MyLife: React.FC = () => {
               icon={ShoppingBag}
               onClick={() => setActiveRoute('/app/market')}
             >
-              Dream Market
+              {t('Dream Market')}
             </Button>
           </div>
         }
@@ -297,30 +299,30 @@ export const MyLife: React.FC = () => {
           <div className="flex flex-wrap items-center gap-4">
             <div>
               <span className="text-xs font-semibold uppercase tracking-wider text-[var(--fg-muted)] block">
-                {activeTab === 'vision' ? 'Vision Board Value' : 'Total Dream Balance Invested'}
+                {activeTab === 'vision' ? t('Vision Board Value') : t('Total Dream Balance Invested')}
               </span>
               <div className="text-3xl font-bold font-display text-[var(--color-sage)]">
                 {activeTab === 'vision'
-                  ? `$${totalVisionRealUsd.toLocaleString()} USD`
+                  ? t('${n} USD', { n: totalVisionRealUsd.toLocaleString() })
                   : `D$ ${dreamNetWorth.toLocaleString()}`}
               </div>
             </div>
             <div className="h-10 w-px bg-[var(--border)] hidden sm:block" />
             <div>
               <span className="text-xs font-semibold uppercase tracking-wider text-[var(--fg-muted)] block">
-                {activeTab === 'vision' ? 'Target Dream Dollars (D$)' : 'Equivalent Real Valuation'}
+                {activeTab === 'vision' ? t('Target Dream Dollars (D$)') : t('Equivalent Real Valuation')}
               </span>
               <div className="text-2xl font-bold font-display text-[var(--fg)]">
                 {activeTab === 'vision'
                   ? `D$ ${totalVisionDPrice.toLocaleString()}`
-                  : `$${totalRealWorthUsd.toLocaleString()} USD`}
+                  : t('${n} USD', { n: totalRealWorthUsd.toLocaleString() })}
               </div>
             </div>
           </div>
           <p className="text-xs text-[var(--fg-subtle)] pt-1">
             {activeTab === 'vision'
-              ? `${visionItems.length} vision goals anchored on your board.`
-              : `${data.purchases.length} luxury assets anchored in your physical reality transition plan.`}
+              ? t('{n} vision goals anchored on your board.', { n: visionItems.length })
+              : t('{n} luxury assets anchored in your physical reality transition plan.', { n: data.purchases.length })}
           </p>
         </div>
 
@@ -332,7 +334,7 @@ export const MyLife: React.FC = () => {
             icon={Camera}
             onClick={() => setIsAddVisionModalOpen(true)}
           >
-            + Add to Vision
+            {t('+ Add to Vision')}
           </Button>
           <Button
             variant="secondary"
@@ -340,7 +342,7 @@ export const MyLife: React.FC = () => {
             icon={Layers}
             onClick={() => setActiveRoute('/app/bridge')}
           >
-            Reality Bridges ({data.realityBridges.length})
+            {t('Reality Bridges ({n})', { n: data.realityBridges.length })}
           </Button>
         </div>
       </div>
@@ -356,7 +358,7 @@ export const MyLife: React.FC = () => {
           }`}
         >
           <Star className="w-3.5 h-3.5 text-amber-500 fill-current" />
-          <span>Vision Board ({visionItems.length})</span>
+          <span>{t('Vision Board ({n})', { n: visionItems.length })}</span>
         </button>
 
         <button
@@ -368,7 +370,7 @@ export const MyLife: React.FC = () => {
           }`}
         >
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Visual Palace & Assets ({data.purchases.length})</span>
+          <span>{t('Visual Palace & Assets ({n})', { n: data.purchases.length })}</span>
         </button>
 
         <button
@@ -380,7 +382,7 @@ export const MyLife: React.FC = () => {
           }`}
         >
           <Archive className="w-3.5 h-3.5" />
-          <span>Archive History ({data.archivedMarketRecords?.length || archivedItemIds.size})</span>
+          <span>{t('Archive History ({n})', { n: data.archivedMarketRecords?.length || archivedItemIds.size })}</span>
         </button>
 
         <button
@@ -392,7 +394,7 @@ export const MyLife: React.FC = () => {
           }`}
         >
           <BookOpen className="w-3.5 h-3.5" />
-          <span>Dream Journal & Photo Log ({data.dreamJournal?.length || 0})</span>
+          <span>{t('Dream Journal & Photo Log ({n})', { n: data.dreamJournal?.length || 0 })}</span>
         </button>
       </div>
 
@@ -411,7 +413,7 @@ export const MyLife: React.FC = () => {
                 }`}
               >
                 <Star className="w-3.5 h-3.5 text-amber-500 fill-current" />
-                <span>Dreams on My Board ({visionItems.length})</span>
+                <span>{t('Dreams on My Board ({n})', { n: visionItems.length })}</span>
               </button>
 
               <button
@@ -424,7 +426,7 @@ export const MyLife: React.FC = () => {
                 }`}
               >
                 <Compass className="w-3.5 h-3.5 text-[var(--color-sage)]" />
-                <span>Explore & Add Luxury Dreams ({EXPLORE_DREAM_ITEMS.length})</span>
+                <span>{t('Explore & Add Luxury Dreams ({n})', { n: EXPLORE_DREAM_ITEMS.length })}</span>
               </button>
             </div>
 
@@ -436,7 +438,7 @@ export const MyLife: React.FC = () => {
                 onClick={() => setIsAddVisionModalOpen(true)}
                 className="text-xs py-1"
               >
-                Add Custom Photo
+                {t('Add Custom Photo')}
               </Button>
             </div>
           </div>
@@ -452,10 +454,10 @@ export const MyLife: React.FC = () => {
                   </div>
                   <div className="max-w-md mx-auto space-y-2">
                     <h3 className="font-display font-bold text-lg text-[var(--fg)]">
-                      Your Vision Board Is Empty
+                      {t('Your Vision Board Is Empty')}
                     </h3>
                     <p className="text-xs text-[var(--fg-muted)] leading-relaxed">
-                      Photograph the cars, homes and places that inspire you in real life, or pin inspiring dreams from our <strong>curated explore gallery</strong> to your board.
+                      {t('Photograph the cars, homes and places that inspire you in real life, or pin inspiring dreams from our')}{' '}<strong>{t('curated explore gallery')}</strong>{' '}{t('to your board.')}
                     </p>
                   </div>
                   <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
@@ -464,21 +466,21 @@ export const MyLife: React.FC = () => {
                       icon={Compass}
                       onClick={() => setVisionSubTab('explore')}
                     >
-                      Explore the Curated Gallery
+                      {t('Explore the Curated Gallery')}
                     </Button>
                     <Button
                       variant="outline"
                       icon={Camera}
                       onClick={() => setIsAddVisionModalOpen(true)}
                     >
-                      Open Camera & Take a Photo
+                      {t('Open Camera & Take a Photo')}
                     </Button>
                     <Button
                       variant="ghost"
                       icon={Globe}
                       onClick={() => setIsAddVisionModalOpen(true)}
                     >
-                      Add a Link from the Web
+                      {t('Add a Link from the Web')}
                     </Button>
                   </div>
                 </div>
@@ -492,44 +494,44 @@ export const MyLife: React.FC = () => {
                           <GripVertical className="w-4 h-4" />
                         </div>
                         <div>
-                          <span className="font-bold text-[var(--fg)]">Priority Order: </span>
-                          <span>Drag and drop your dreams, or use the arrows on each card, to rank them by importance.</span>
+                          <span className="font-bold text-[var(--fg)]">{t('Priority Order:')} </span>
+                          <span>{t('Drag and drop your dreams, or use the arrows on each card, to rank them by importance.')}</span>
                         </div>
                       </div>
 
                       <div className="flex flex-wrap items-center gap-1.5 self-start md:self-auto shrink-0">
-                        <span className="text-[11px] font-medium text-[var(--fg-subtle)] mr-1">Quick sort:</span>
+                        <span className="text-[11px] font-medium text-[var(--fg-subtle)] mr-1">{t('Quick sort:')}</span>
                         <button
                           type="button"
                           onClick={() => handleSortPreset('highest_val')}
                           className="text-[11px] px-2.5 py-1 rounded-[var(--radius-sm)] bg-[var(--bg)] border border-[var(--border)] text-[var(--fg)] hover:border-amber-400 hover:text-amber-500 transition-colors cursor-pointer font-medium"
-                          title="Sort by real value, highest first"
+                          title={t('Sort by real value, highest first')}
                         >
-                          Highest $ USD
+                          {t('Highest $ USD')}
                         </button>
                         <button
                           type="button"
                           onClick={() => handleSortPreset('lowest_val')}
                           className="text-[11px] px-2.5 py-1 rounded-[var(--radius-sm)] bg-[var(--bg)] border border-[var(--border)] text-[var(--fg)] hover:border-amber-400 hover:text-amber-500 transition-colors cursor-pointer font-medium"
-                          title="Sort by real value, lowest first"
+                          title={t('Sort by real value, lowest first')}
                         >
-                          Lowest $ USD
+                          {t('Lowest $ USD')}
                         </button>
                         <button
                           type="button"
                           onClick={() => handleSortPreset('highest_dprice')}
                           className="text-[11px] px-2.5 py-1 rounded-[var(--radius-sm)] bg-[var(--bg)] border border-[var(--border)] text-[var(--fg)] hover:border-amber-400 hover:text-amber-500 transition-colors cursor-pointer font-medium"
-                          title="Sort by Dream Dollar price, highest first"
+                          title={t('Sort by Dream Dollar price, highest first')}
                         >
-                          Highest D$
+                          {t('Highest D$')}
                         </button>
                         <button
                           type="button"
                           onClick={() => handleSortPreset('alphabetical')}
                           className="text-[11px] px-2.5 py-1 rounded-[var(--radius-sm)] bg-[var(--bg)] border border-[var(--border)] text-[var(--fg)] hover:border-amber-400 hover:text-amber-500 transition-colors cursor-pointer font-medium"
-                          title="Sort alphabetically"
+                          title={t('Sort alphabetically')}
                         >
-                          A-Z
+                          {t('A-Z')}
                         </button>
                       </div>
                     </div>
@@ -595,7 +597,7 @@ export const MyLife: React.FC = () => {
                             <div className="absolute inset-0 z-30 bg-emerald-500/10 backdrop-blur-[2px] border-2 border-dashed border-emerald-500 rounded-[var(--radius-lg)] flex items-center justify-center pointer-events-none animate-pulse">
                               <div className="bg-[var(--bg-elevated)]/95 px-3 py-1.5 rounded-[var(--radius-md)] border border-emerald-500/40 text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 shadow-lg">
                                 <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
-                                <span>Drop at #{index + 1}</span>
+                                <span>{t('Drop at #{n}', { n: index + 1 })}</span>
                               </div>
                             </div>
                           )}
@@ -613,20 +615,20 @@ export const MyLife: React.FC = () => {
                             <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5 flex-wrap">
                               <div
                                 className="flex items-center gap-1 bg-black/80 backdrop-blur-md px-2 py-1 rounded text-[11px] font-bold text-amber-400 border border-amber-400/30 shadow-xs cursor-grab active:cursor-grabbing select-none"
-                                title="Drag to reorder priority"
+                                title={t('Drag to reorder priority')}
                               >
                                 <GripVertical className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                                 <span>#{index + 1}</span>
                               </div>
-                              <Badge variant="subtle">{item.category}</Badge>
+                              <Badge variant="subtle">{t(item.category)}</Badge>
                               {isRecentlyAdded && (
                                 <span className="bg-amber-500 text-slate-950 font-extrabold text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1 shadow-md animate-pulse">
-                                  <Sparkles className="w-3 h-3 fill-current" /> Just Added
+                                  <Sparkles className="w-3 h-3 fill-current" /> {t('Just Added')}
                                 </span>
                               )}
                               {item.customImageUrl && (
                                 <span className="bg-black/75 backdrop-blur-xs text-[10px] text-white px-2 py-0.5 rounded font-medium">
-                                  {item.customImageUrl.startsWith('data:image') ? '📸 Live Photo' : '🌐 Image'}
+                                  {item.customImageUrl.startsWith('data:image') ? t('📸 Live Photo') : t('🌐 Image')}
                                 </span>
                               )}
                             </div>
@@ -643,7 +645,7 @@ export const MyLife: React.FC = () => {
                                       handleMovePriority(item.id, 'prev');
                                     }}
                                     className="p-1 text-white/80 hover:text-white disabled:opacity-25 disabled:hover:text-white/80 cursor-pointer disabled:cursor-not-allowed transition-colors"
-                                    title="Raise priority (move left)"
+                                    title={t('Raise priority (move left)')}
                                   >
                                     <ArrowLeft className="w-3.5 h-3.5" />
                                   </button>
@@ -655,7 +657,7 @@ export const MyLife: React.FC = () => {
                                       handleMovePriority(item.id, 'next');
                                     }}
                                     className="p-1 text-white/80 hover:text-white disabled:opacity-25 disabled:hover:text-white/80 cursor-pointer disabled:cursor-not-allowed transition-colors"
-                                    title="Lower priority (move right)"
+                                    title={t('Lower priority (move right)')}
                                   >
                                     <ArrowRight className="w-3.5 h-3.5" />
                                   </button>
@@ -672,7 +674,7 @@ export const MyLife: React.FC = () => {
                                     ? 'bg-amber-500/90 text-white'
                                     : 'bg-black/60 text-white/70 hover:text-white'
                                 }`}
-                                title={isPinned ? 'Remove from Vision Board' : 'Pin to Vision Board'}
+                                title={isPinned ? t('Remove from Vision Board') : t('Pin to Vision Board')}
                               >
                                 <Star className="w-4 h-4 fill-current" />
                               </button>
@@ -680,7 +682,7 @@ export const MyLife: React.FC = () => {
 
                             <div className="absolute bottom-2.5 inset-x-2.5 flex items-center justify-between">
                               <span className="bg-black/80 backdrop-blur-xs px-2.5 py-1 rounded text-xs font-mono font-bold text-white">
-                                ${(item.realPriceUsd || 0).toLocaleString()} USD
+                                {t('${n} USD', { n: (item.realPriceUsd || 0).toLocaleString() })}
                               </span>
                               <span className="bg-[var(--color-slate)]/90 backdrop-blur-xs px-2.5 py-1 rounded text-xs font-mono font-bold text-white">
                                 D$ {(item.dreamDollarPrice || 0).toLocaleString()}
@@ -708,7 +710,7 @@ export const MyLife: React.FC = () => {
                               {isOwned ? (
                                 <div className="flex items-center gap-2 w-full">
                                   <Badge variant="success" className="flex-1 justify-center py-1.5">
-                                    <CheckCircle className="w-3.5 h-3.5 mr-1" /> Owned (in Palace)
+                                    <CheckCircle className="w-3.5 h-3.5 mr-1" /> {t('Owned (in Palace)')}
                                   </Badge>
                                   <Button
                                     variant="ghost"
@@ -718,7 +720,7 @@ export const MyLife: React.FC = () => {
                                       const p = data.purchases.find((purch) => purch.itemId === item.id);
                                       setArchivingItem({ item, purchase: p });
                                     }}
-                                    title="Archive (move to history)"
+                                    title={t('Archive (move to history)')}
                                   >
                                     <Archive className="w-3.5 h-3.5" />
                                   </Button>
@@ -731,7 +733,7 @@ export const MyLife: React.FC = () => {
                                     className="text-xs flex-1"
                                     onClick={() => setActiveRoute('/app/market')}
                                   >
-                                    View in Market
+                                    {t('View in Market')}
                                   </Button>
                                   <Button
                                     variant="secondary"
@@ -750,14 +752,14 @@ export const MyLife: React.FC = () => {
                                       handleOpenCreateBridge(dummyPurchase);
                                     }}
                                   >
-                                    Build Bridge
+                                    {t('Build Bridge')}
                                   </Button>
                                   <Button
                                     variant="ghost"
                                     size="sm"
                                     className="px-2 text-[var(--fg-muted)] hover:text-amber-500"
                                     onClick={() => setArchivingItem({ item, purchase: null })}
-                                    title="Archive (remove from Vision Board & keep history)"
+                                    title={t('Archive (remove from Vision Board & keep history)')}
                                   >
                                     <Archive className="w-3.5 h-3.5" />
                                   </Button>
@@ -775,10 +777,10 @@ export const MyLife: React.FC = () => {
                     <div className="space-y-1 text-center sm:text-left">
                       <h4 className="font-display font-bold text-sm text-[var(--fg)] flex items-center justify-center sm:justify-start gap-1.5">
                         <Compass className="w-4 h-4 text-[var(--color-sage)]" />
-                        <span>Discover More Luxury Homes, Supercars & Experiences</span>
+                        <span>{t('Discover More Luxury Homes, Supercars & Experiences')}</span>
                       </h4>
                       <p className="text-xs text-[var(--fg-muted)]">
-                        Lakeside villas, racing machines and polar expeditions await in our curated gallery.
+                        {t('Lakeside villas, racing machines and polar expeditions await in our curated gallery.')}
                       </p>
                     </div>
                     <Button
@@ -788,7 +790,7 @@ export const MyLife: React.FC = () => {
                       onClick={() => setVisionSubTab('explore')}
                       className="whitespace-nowrap"
                     >
-                      Go to Explore
+                      {t('Go to Explore')}
                     </Button>
                   </div>
                 </div>
@@ -847,18 +849,18 @@ export const MyLife: React.FC = () => {
                             />
                             <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5">
                               <Badge variant="sage" className="backdrop-blur-md bg-[#2d4033]/85 text-emerald-200 border-0">
-                                100% Owned
+                                {t('100% Owned')}
                               </Badge>
                               <button
                                 onClick={() => setArchivingItem({ item: purchase.itemSnapshot, purchase })}
                                 className="p-1.5 rounded-full bg-black/60 backdrop-blur-md text-white/80 hover:text-amber-400 hover:bg-black/90 transition-colors cursor-pointer"
-                                title="Archive (move to history)"
+                                title={t('Archive (move to history)')}
                               >
                                 <Archive className="w-3.5 h-3.5" />
                               </button>
                             </div>
                             <div className="absolute bottom-2 left-2.5 bg-black/70 backdrop-blur-sm px-2 py-0.5 rounded text-[11px] font-mono text-white/90">
-                              ${purchase.itemSnapshot.realPriceUsd.toLocaleString()} USD
+                              {t('${n} USD', { n: purchase.itemSnapshot.realPriceUsd.toLocaleString() })}
                             </div>
                           </div>
 
@@ -877,7 +879,7 @@ export const MyLife: React.FC = () => {
                               {/* 1. Virtual Progress */}
                               <div className="space-y-1">
                                 <div className="flex justify-between text-[11px] font-medium text-[var(--fg-muted)]">
-                                  <span>Virtual Ownership</span>
+                                  <span>{t('Virtual Ownership')}</span>
                                   <span className="text-[var(--color-sage)] font-bold">100%</span>
                                 </div>
                                 <Progress value={100} variant="sage" />
@@ -886,16 +888,16 @@ export const MyLife: React.FC = () => {
                               {/* 2. Real-World Progress */}
                               <div className="space-y-1 pt-1 border-t border-[var(--border)]">
                                 <div className="flex justify-between text-[11px] font-medium text-[var(--fg-muted)]">
-                                  <span>Real-World Progress</span>
+                                  <span>{t('Real-World Progress')}</span>
                                   <span className="font-bold text-[var(--fg)]">
-                                    {bridge ? `${bridge.realProgressPct}%` : 'Not Connected'}
+                                    {bridge ? `${bridge.realProgressPct}%` : t('Not Connected')}
                                   </span>
                                 </div>
                                 {bridge ? (
                                   <Progress value={bridge.realProgressPct} variant="coral" />
                                 ) : (
                                   <div className="text-[10px] text-[var(--fg-subtle)]">
-                                    Connect to Reality Bridge to track real savings.
+                                    {t('Connect to Reality Bridge to track real savings.')}
                                   </div>
                                 )}
                               </div>
@@ -913,7 +915,7 @@ export const MyLife: React.FC = () => {
                                 className="flex-1 text-xs"
                                 onClick={() => setLoggingSavingsBridge(bridge)}
                               >
-                                Log Savings (${bridge.currentSavingsUsd.toLocaleString()})
+                                {t('Log Savings (${n})', { n: bridge.currentSavingsUsd.toLocaleString() })}
                               </Button>
                             ) : (
                               <Button
@@ -923,7 +925,7 @@ export const MyLife: React.FC = () => {
                                 icon={Layers}
                                 onClick={() => handleOpenCreateBridge(purchase)}
                               >
-                                Reality Bridge
+                                {t('Reality Bridge')}
                               </Button>
                             )}
 
@@ -932,7 +934,7 @@ export const MyLife: React.FC = () => {
                               size="sm"
                               icon={FileText}
                               onClick={() => setReceiptPurchase(purchase)}
-                              title="View Dream Receipt"
+                              title={t('View Dream Receipt')}
                             />
 
                             <Button
@@ -940,7 +942,7 @@ export const MyLife: React.FC = () => {
                               size="sm"
                               icon={Archive}
                               onClick={() => setArchivingItem({ item: purchase.itemSnapshot, purchase })}
-                              title="Archive (move to history)"
+                              title={t('Archive (move to history)')}
                               className="px-2 text-[var(--fg-muted)] hover:text-amber-500"
                             />
                           </div>
@@ -956,14 +958,14 @@ export const MyLife: React.FC = () => {
       ) : (
         <Empty
           icon={Sparkles}
-          title="Your Future Life Gallery is Empty"
-          description="Complete daily quests, earn Dream Dollars into your ledger, and buy your first symbolic asset in the Dream Market."
-          actionLabel="Explore Dream Market"
+          title={t('Your Future Life Gallery is Empty')}
+          description={t('Complete daily quests, earn Dream Dollars into your ledger, and buy your first symbolic asset in the Dream Market.')}
+          actionLabel={t('Explore Dream Market')}
           onAction={() => setActiveRoute('/app/market')}
         />
       )}
 
-      <Disclaimer text="Assets in My Future Life are symbolic visual anchors. The Reality Bridge connects these dreams to tangible savings schedules and real habits." />
+      <Disclaimer text={t('Assets in My Future Life are symbolic visual anchors. The Reality Bridge connects these dreams to tangible savings schedules and real habits.')} />
 
         </>
       )}
@@ -980,14 +982,14 @@ export const MyLife: React.FC = () => {
       <Modal
         isOpen={Boolean(bridgeTargetPurchase)}
         onClose={() => setBridgeTargetPurchase(null)}
-        title="Connect to Reality Bridge"
-        subtitle={`Bridge "${bridgeTargetPurchase?.itemSnapshot.name}" to a real savings and execution plan.`}
+        title={t('Connect to Reality Bridge')}
+        subtitle={t('Bridge "{name}" to a real savings and execution plan.', { name: bridgeTargetPurchase?.itemSnapshot.name ?? '' })}
         maxWidth="lg"
       >
         {bridgeTargetPurchase && (
           <form onSubmit={handleSaveBridge} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field id="bridge-real-cost" label="Real-World Target Cost ($ USD)" required>
+              <Field id="bridge-real-cost" label={t('Real-World Target Cost ($ USD)')} required>
                 <Input
                   id="bridge-real-cost"
                   type="number"
@@ -997,7 +999,7 @@ export const MyLife: React.FC = () => {
                 />
               </Field>
 
-              <Field id="bridge-current-savings" label="Current Real Savings ($ USD)" required>
+              <Field id="bridge-current-savings" label={t('Current Real Savings ($ USD)')} required>
                 <Input
                   id="bridge-current-savings"
                   type="number"
@@ -1009,7 +1011,7 @@ export const MyLife: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field id="bridge-target-date" label="Target Date in Physical Reality" required>
+              <Field id="bridge-target-date" label={t('Target Date in Physical Reality')} required>
                 <Input
                   id="bridge-target-date"
                   type="date"
@@ -1018,45 +1020,45 @@ export const MyLife: React.FC = () => {
                 />
               </Field>
 
-              <Field id="bridge-income-project" label="Income / Action Project" helper="How will you generate this capital?">
+              <Field id="bridge-income-project" label={t('Income / Action Project')} helper={t('How will you generate this capital?')}>
                 <Input
                   id="bridge-income-project"
                   value={incomeProject}
                   onChange={(e) => setIncomeProject(e.target.value)}
-                  placeholder="e.g. Freelance Consulting Retainer"
+                  placeholder={t('e.g. Freelance Consulting Retainer')}
                 />
               </Field>
             </div>
 
             <Field
               id="bridge-first-action"
-              label="First Real Action (Will create a Mission)"
+              label={t('First Real Action (Will create a Mission)')}
               required
-              helper="A concrete physical action you can take this week."
+              helper={t('A concrete physical action you can take this week.')}
             >
               <Input
                 id="bridge-first-action"
                 value={firstRealAction}
                 onChange={(e) => setFirstRealAction(e.target.value)}
-                placeholder="e.g. Open high-yield savings sub-account and automate $250 transfer"
+                placeholder={t('e.g. Open high-yield savings sub-account and automate $250 transfer')}
               />
             </Field>
 
-            <Field id="bridge-milestone" label="Next Milestone">
+            <Field id="bridge-milestone" label={t('Next Milestone')}>
               <Input
                 id="bridge-milestone"
                 value={nextMilestone}
                 onChange={(e) => setNextMilestone(e.target.value)}
-                placeholder="e.g. First $2,500 deposited"
+                placeholder={t('e.g. First $2,500 deposited')}
               />
             </Field>
 
             <div className="flex justify-end gap-3 pt-4 border-t border-[var(--border)]">
               <Button variant="ghost" type="button" onClick={() => setBridgeTargetPurchase(null)}>
-                Cancel
+                {t('Cancel')}
               </Button>
               <Button variant="accent" type="submit">
-                Establish Reality Bridge
+                {t('Establish Reality Bridge')}
               </Button>
             </div>
           </form>
@@ -1067,12 +1069,12 @@ export const MyLife: React.FC = () => {
       <Modal
         isOpen={Boolean(loggingSavingsBridge)}
         onClose={() => setLoggingSavingsBridge(null)}
-        title="Log Real Savings Progress"
-        subtitle="Record money you have actively saved or invested in physical reality."
+        title={t('Log Real Savings Progress')}
+        subtitle={t('Record money you have actively saved or invested in physical reality.')}
       >
         {loggingSavingsBridge && (
           <form onSubmit={handleLogSavings} className="space-y-4">
-            <Field id="savings-amount" label="Amount Added ($ USD)" required>
+            <Field id="savings-amount" label={t('Amount Added ($ USD)')} required>
               <Input
                 id="savings-amount"
                 type="number"
@@ -1082,21 +1084,21 @@ export const MyLife: React.FC = () => {
               />
             </Field>
 
-            <Field id="savings-note" label="Optional Note">
+            <Field id="savings-note" label={t('Optional Note')}>
               <Input
                 id="savings-note"
                 value={savingsNote}
                 onChange={(e) => setSavingsNote(e.target.value)}
-                placeholder="e.g. Client deposit, monthly automatic savings"
+                placeholder={t('e.g. Client deposit, monthly automatic savings')}
               />
             </Field>
 
             <div className="flex justify-end gap-3 pt-2">
               <Button variant="ghost" type="button" onClick={() => setLoggingSavingsBridge(null)}>
-                Cancel
+                {t('Cancel')}
               </Button>
               <Button variant="primary" type="submit" disabled={addedSavingsAmount <= 0}>
-                Record Savings
+                {t('Record Savings')}
               </Button>
             </div>
           </form>

@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { MarketCategory, MarketItem } from '../types/models';
 import { triggerBigRewardConfetti } from '../utils/confetti';
+import { useT } from '../i18n';
 
 interface AddVisionDreamModalProps {
   isOpen: boolean;
@@ -44,6 +45,7 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
   defaultPinToVision = true,
   onSuccess,
 }) => {
+  const t = useT();
   const { data, addCustomDream, showToast } = useApp();
 
   const [activeTab, setActiveTab] = useState<MediaSourceMode>('camera');
@@ -73,64 +75,64 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
   // Curated inspiration presets with real web imagery
   const INSPIRATION_PRESETS = [
     {
-      name: 'Porsche 911 GT3 RS in Guards Red',
+      name: t('Porsche 911 GT3 RS in Guards Red'),
       category: 'Cars & Mobility' as MarketCategory,
       realUsd: 285000,
       dPrice: 18500,
       img: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85',
-      desc: 'Naturally aspirated 4.0L flat-six, lightweight motorsport aerodynamic package, track telemetry.',
-      why: 'Symbol of uncompromising mechanical excellence and track-honed precision.',
-      step: 'Book a Porsche Track Experience session and calculate amortization schedule.',
+      desc: t('Naturally aspirated 4.0L flat-six, lightweight motorsport aerodynamic package, track telemetry.'),
+      why: t('Symbol of uncompromising mechanical excellence and track-honed precision.'),
+      step: t('Book a Porsche Track Experience session and calculate amortization schedule.'),
     },
     {
-      name: 'Lake Como Waterfront Modernist Villa',
+      name: t('Lake Como Waterfront Modernist Villa'),
       category: 'Homes' as MarketCategory,
       realUsd: 6500000,
       dPrice: 45000,
       img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=85',
-      desc: 'Direct private dock, floor-to-ceiling glass pavilions, infinity pool overlooking Bellagio.',
-      why: 'Daily sanctuary of absolute peace, natural serenity, and deep creative focus.',
-      step: 'Visit Italian lakeside properties and consult with European cross-border wealth advisory.',
+      desc: t('Direct private dock, floor-to-ceiling glass pavilions, infinity pool overlooking Bellagio.'),
+      why: t('Daily sanctuary of absolute peace, natural serenity, and deep creative focus.'),
+      step: t('Visit Italian lakeside properties and consult with European cross-border wealth advisory.'),
     },
     {
-      name: 'Patek Philippe Nautilus 5711/1R Rose Gold',
+      name: t('Patek Philippe Nautilus 5711/1R Rose Gold'),
       category: 'Luxury Watches' as MarketCategory,
       realUsd: 145000,
       dPrice: 12000,
       img: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1600&q=85',
-      desc: 'Warm 18k rose gold case, chocolate embossed horizontal dial, mechanical self-winding caliber 26-330 S C.',
-      why: 'Generational heirloom anchoring the standard of my time and legacy.',
-      step: 'Register profile with authorized Geneva salon and track certified pre-owned auctions.',
+      desc: t('Warm 18k rose gold case, chocolate embossed horizontal dial, mechanical self-winding caliber 26-330 S C.'),
+      why: t('Generational heirloom anchoring the standard of my time and legacy.'),
+      step: t('Register profile with authorized Geneva salon and track certified pre-owned auctions.'),
     },
     {
-      name: 'Riva 68 Diable Mediterranean Yacht',
+      name: t('Riva 68 Diable Mediterranean Yacht'),
       category: 'Yachts & Aviation' as MarketCategory,
       realUsd: 3800000,
       dPrice: 32000,
       img: 'https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?auto=format&fit=crop&w=1600&q=85',
-      desc: 'Handcrafted mahogany varnished deck, twin MAN 1,550 hp engines, bespoke owner stateroom.',
-      why: 'Total maritime freedom across the Mediterranean and coastal waters.',
-      step: 'Obtain international RYA skipper license and charter a weekend sea trial in Cannes.',
+      desc: t('Handcrafted mahogany varnished deck, twin MAN 1,550 hp engines, bespoke owner stateroom.'),
+      why: t('Total maritime freedom across the Mediterranean and coastal waters.'),
+      step: t('Obtain international RYA skipper license and charter a weekend sea trial in Cannes.'),
     },
     {
-      name: 'Minimalist Tokyo High-Rise Creative Penthouse',
+      name: t('Minimalist Tokyo High-Rise Creative Penthouse'),
       category: 'Homes' as MarketCategory,
       realUsd: 4200000,
       dPrice: 35000,
       img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1600&q=85',
-      desc: 'Panoramic skyline views of Mount Fuji and Tokyo Tower, tatami tea sanctuary, private cedar sauna.',
-      why: 'Harmonious sanctuary blending high-tech metropolis with ancient Zen serenity.',
-      step: 'Consult Tokyo luxury real estate broker and structure offshore holding.',
+      desc: t('Panoramic skyline views of Mount Fuji and Tokyo Tower, tatami tea sanctuary, private cedar sauna.'),
+      why: t('Harmonious sanctuary blending high-tech metropolis with ancient Zen serenity.'),
+      step: t('Consult Tokyo luxury real estate broker and structure offshore holding.'),
     },
     {
-      name: 'Bespoke Executive Creative Studio & Library',
+      name: t('Bespoke Executive Creative Studio & Library'),
       category: 'Dream Workspace' as MarketCategory,
       realUsd: 85000,
       dPrice: 8500,
       img: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=85',
-      desc: 'Solid walnut acoustic paneling, dual Pro Display XDRs, Genelec studio monitors, Herman Miller seating.',
-      why: 'Peak cognitive environment designed for deep, uninterrupted creative architecture.',
-      step: 'Draft 3D studio floor plan and order custom walnut acoustic isolation panels.',
+      desc: t('Solid walnut acoustic paneling, dual Pro Display XDRs, Genelec studio monitors, Herman Miller seating.'),
+      why: t('Peak cognitive environment designed for deep, uninterrupted creative architecture.'),
+      step: t('Draft 3D studio floor plan and order custom walnut acoustic isolation panels.'),
     },
   ];
 
@@ -150,7 +152,7 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
     setCameraError(null);
     try {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        throw new Error('Camera API is not supported in this browser environment.');
+        throw new Error(t('Camera API is not supported in this browser environment.'));
       }
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
@@ -170,8 +172,8 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
       console.warn('Camera failed to start:', err);
       setCameraError(
         err.name === 'NotAllowedError'
-          ? 'Camera permission denied. Allow camera access in your browser, or use a web link / image file instead.'
-          : 'Could not access the camera. Upload an image from your device or paste a web link instead.'
+          ? t('Camera permission denied. Allow camera access in your browser, or use a web link / image file instead.')
+          : t('Could not access the camera. Upload an image from your device or paste a web link instead.')
       );
       setIsCameraActive(false);
     }
@@ -203,14 +205,14 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
       const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
       setImageUrl(dataUrl);
       stopCamera();
-      showToast('Live photo captured and attached to your vision goal! 📸', 'success');
+      showToast(t('Live photo captured and attached to your vision goal! 📸'), 'success');
     }
   };
 
   // Image file drop/upload handler
   const processImageFile = (file: File) => {
     if (!file.type.startsWith('image/')) {
-      showToast('Please choose a valid image file (PNG, JPG, WEBP).', 'error');
+      showToast(t('Please choose a valid image file (PNG, JPG, WEBP).'), 'error');
       return;
     }
     const reader = new FileReader();
@@ -219,7 +221,7 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
       if (result) {
         setImageUrl(result);
         stopCamera();
-        showToast('Image uploaded.', 'success');
+        showToast(t('Image uploaded.'), 'success');
       }
     };
     reader.readAsDataURL(file);
@@ -242,7 +244,7 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
     setDescription(preset.desc);
     setWhyWanted(preset.why);
     setFirstRealStep(preset.step);
-    showToast(`"${preset.name}" template applied.`, 'info');
+    showToast(t('"{name}" template applied.', { name: preset.name }), 'info');
   };
 
   const handleRealPriceChange = (val: number) => {
@@ -253,7 +255,7 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
-      showToast('Please enter a name for your dream or vision goal.', 'error');
+      showToast(t('Please enter a name for your dream or vision goal.'), 'error');
       return;
     }
 
@@ -264,11 +266,11 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
           category,
           realPriceUsd,
           dreamDollarPrice,
-          description: description.trim() || 'A custom vision goal seen in real life or discovered online.',
+          description: description.trim() || t('A custom vision goal seen in real life or discovered online.'),
           illustrationKey: 'custom_dream',
           customImageUrl: imageUrl.trim() || undefined,
-          whyWanted: whyWanted.trim() || 'Personal sovereignty, a high standard of living, and focus.',
-          firstRealStep: firstRealStep.trim() || 'Plan the first step toward making this dream real.',
+          whyWanted: whyWanted.trim() || t('Personal sovereignty, a high standard of living, and focus.'),
+          firstRealStep: firstRealStep.trim() || t('Plan the first step toward making this dream real.'),
         },
         pinToVision
       );
@@ -276,8 +278,8 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
       triggerBigRewardConfetti();
       showToast(
         pinToVision
-          ? `"${name.trim()}" added to your Vision Board and Dream Market! ⭐`
-          : `"${name.trim()}" added to your Dream Market!`,
+          ? t('"{name}" added to your Vision Board and Dream Market! ⭐', { name: name.trim() })
+          : t('"{name}" added to your Dream Market!', { name: name.trim() }),
         'success'
       );
 
@@ -287,7 +289,7 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
 
       handleClose();
     } catch (err: any) {
-      showToast(err?.message || 'Could not save the vision goal.', 'error');
+      showToast(err?.message || t('Could not save the vision goal.'), 'error');
     }
   };
 
@@ -324,15 +326,15 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      title="Add to Vision Board / Dream Market"
-      subtitle="Photograph something you saw in real life, or add an image you love from the web, and make it part of your vision."
+      title={t('Add to Vision Board / Dream Market')}
+      subtitle={t('Photograph something you saw in real life, or add an image you love from the web, and make it part of your vision.')}
       maxWidth="lg"
     >
       <form onSubmit={handleSave} className="space-y-5">
         {/* Source Media Mode Switcher */}
         <div className="space-y-2">
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--fg-muted)] block">
-            Choose an image source:
+            {t('Choose an image source:')}
           </span>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             <button
@@ -349,9 +351,9 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
             >
               <div className="flex items-center gap-1.5 text-xs">
                 <Camera className="w-3.5 h-3.5 text-[var(--color-sage)]" />
-                <span>Live Camera</span>
+                <span>{t('Live Camera')}</span>
               </div>
-              <span className="text-[10px] text-[var(--fg-subtle)]">Photograph it in real life</span>
+              <span className="text-[10px] text-[var(--fg-subtle)]">{t('Photograph it in real life')}</span>
             </button>
 
             <button
@@ -368,9 +370,9 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
             >
               <div className="flex items-center gap-1.5 text-xs">
                 <Globe className="w-3.5 h-3.5 text-sky-500" />
-                <span>Web Link</span>
+                <span>{t('Web Link')}</span>
               </div>
-              <span className="text-[10px] text-[var(--fg-subtle)]">Paste a web URL</span>
+              <span className="text-[10px] text-[var(--fg-subtle)]">{t('Paste a web URL')}</span>
             </button>
 
             <button
@@ -387,9 +389,9 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
             >
               <div className="flex items-center gap-1.5 text-xs">
                 <Upload className="w-3.5 h-3.5 text-amber-500" />
-                <span>Upload File</span>
+                <span>{t('Upload File')}</span>
               </div>
-              <span className="text-[10px] text-[var(--fg-subtle)]">Pick an image from your device</span>
+              <span className="text-[10px] text-[var(--fg-subtle)]">{t('Pick an image from your device')}</span>
             </button>
 
             <button
@@ -406,9 +408,9 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
             >
               <div className="flex items-center gap-1.5 text-xs">
                 <Sparkles className="w-3.5 h-3.5 text-[var(--color-coral)]" />
-                <span>Quick Inspiration</span>
+                <span>{t('Quick Inspiration')}</span>
               </div>
-              <span className="text-[10px] text-[var(--fg-subtle)]">Curated templates</span>
+              <span className="text-[10px] text-[var(--fg-subtle)]">{t('Curated templates')}</span>
             </button>
           </div>
         </div>
@@ -428,14 +430,14 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
                   />
                   <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] text-white flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                    Camera Active ({cameraFacing === 'user' ? 'Front' : 'Back'})
+                    {t('Camera Active ({side})', { side: cameraFacing === 'user' ? t('Front') : t('Back') })}
                   </div>
 
                   <button
                     type="button"
                     onClick={toggleCameraFacing}
                     className="absolute top-3 right-3 p-2 rounded-full bg-black/60 backdrop-blur-xs text-white hover:bg-black/90 transition-colors"
-                    title="Switch camera"
+                    title={t('Switch camera')}
                   >
                     <FlipHorizontal className="w-4 h-4" />
                   </button>
@@ -448,13 +450,13 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
                       className="bg-black/60 text-white hover:bg-black/90"
                       onClick={stopCamera}
                     >
-                      Close Camera
+                      {t('Close Camera')}
                     </Button>
                     <button
                       type="button"
                       onClick={capturePhoto}
                       className="w-12 h-12 rounded-full border-4 border-white bg-red-600 hover:bg-red-500 active:scale-95 transition-all shadow-lg flex items-center justify-center cursor-pointer"
-                      title="Take photo"
+                      title={t('Take photo')}
                     >
                       <Camera className="w-5 h-5 text-white" />
                     </button>
@@ -464,12 +466,12 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
                 <div className="w-full h-52 rounded-[var(--radius-md)] overflow-hidden relative bg-black border border-[var(--border)] group">
                   <img
                     src={imageUrl}
-                    alt="Captured photo"
+                    alt={t('Captured photo')}
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute top-2.5 left-2.5 bg-black/75 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] text-white flex items-center gap-1">
-                    <Check className="w-3 h-3 text-[var(--color-sage)]" /> Live Photo Attached
+                    <Check className="w-3 h-3 text-[var(--color-sage)]" /> {t('Live Photo Attached')}
                   </div>
                   <div className="absolute bottom-2.5 right-2.5 flex items-center gap-2">
                     <Button
@@ -480,7 +482,7 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
                       onClick={() => startCamera()}
                       className="bg-black/75 text-white border-0 hover:bg-black"
                     >
-                      Retake
+                      {t('Retake')}
                     </Button>
                     <Button
                       type="button"
@@ -490,7 +492,7 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
                       onClick={() => setImageUrl('')}
                       className="bg-black/75 text-red-400 border-0 hover:bg-black"
                     >
-                      Remove
+                      {t('Remove')}
                     </Button>
                   </div>
                 </div>
@@ -498,10 +500,10 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
                 <div className="p-6 border-2 border-dashed border-[var(--border)] rounded-[var(--radius-md)] bg-[var(--bg-muted)] text-center space-y-2">
                   <Camera className="w-8 h-8 text-[var(--color-sage)] mx-auto" />
                   <div className="text-xs font-semibold text-[var(--fg)]">
-                    Photograph Something You See in Real Life
+                    {t('Photograph Something You See in Real Life')}
                   </div>
                   <p className="text-[11px] text-[var(--fg-muted)] max-w-sm mx-auto">
-                    Spotted a car, a building, a desk or a watch you love? Capture it on the spot.
+                    {t('Spotted a car, a building, a desk or a watch you love? Capture it on the spot.')}
                   </p>
                   <Button
                     type="button"
@@ -510,7 +512,7 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
                     icon={Camera}
                     onClick={() => startCamera()}
                   >
-                    Start Camera & Capture
+                    {t('Start Camera & Capture')}
                   </Button>
                   {cameraError && (
                     <div className="p-2 text-xs bg-amber-500/10 text-amber-700 dark:text-amber-300 rounded border border-amber-500/20">
@@ -526,14 +528,14 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
             <div className="space-y-3">
               <Field
                 id="dream-web-url"
-                label="Web Image Link (URL)"
-                helper="Paste a direct image link from Pinterest, Unsplash, Instagram, architecture magazines or Google Images."
+                label={t('Web Image Link (URL)')}
+                helper={t('Paste a direct image link from Pinterest, Unsplash, Instagram, architecture magazines or Google Images.')}
               >
                 <Input
                   id="dream-web-url"
                   value={imageUrl}
                   onChange={(e) => setImageUrl(e.target.value)}
-                  placeholder="https://images.unsplash.com/... veya https://..."
+                  placeholder={t('https://images.unsplash.com/... or https://...')}
                 />
               </Field>
 
@@ -541,15 +543,15 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
                 <div className="w-full h-44 rounded-[var(--radius-md)] overflow-hidden border border-[var(--border)] relative bg-black">
                   <img
                     src={imageUrl}
-                    alt="Web preview"
+                    alt={t('Web preview')}
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover"
                     onError={() => {
-                      showToast('Could not load the image link. Please enter a valid direct image URL.', 'error');
+                      showToast(t('Could not load the image link. Please enter a valid direct image URL.'), 'error');
                     }}
                   />
                   <div className="absolute top-2 left-2 bg-black/75 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] text-white">
-                    Web Image Preview
+                    {t('Web Image Preview')}
                   </div>
                 </div>
               )}
@@ -574,12 +576,12 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
                 <div className="w-full h-44 rounded-[var(--radius-md)] overflow-hidden border border-[var(--border)] relative bg-black">
                   <img
                     src={imageUrl}
-                    alt="Uploaded image"
+                    alt={t('Uploaded image')}
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute top-2 left-2 bg-black/75 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] text-white">
-                    File Uploaded
+                    {t('File Uploaded')}
                   </div>
                   <Button
                     type="button"
@@ -588,7 +590,7 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
                     onClick={() => fileInputRef.current?.click()}
                     className="absolute bottom-2 right-2 bg-black/75 text-white"
                   >
-                    Choose Another Image
+                    {t('Choose Another Image')}
                   </Button>
                 </div>
               ) : (
@@ -607,10 +609,10 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
                 >
                   <Upload className="w-8 h-8 text-[var(--fg-muted)] mx-auto mb-2" />
                   <div className="text-xs font-semibold text-[var(--fg)]">
-                    Drag a Photo Here or Choose a File
+                    {t('Drag a Photo Here or Choose a File')}
                   </div>
                   <p className="text-[11px] text-[var(--fg-subtle)] my-2">
-                    PNG, JPG and WEBP are supported.
+                    {t('PNG, JPG and WEBP are supported.')}
                   </p>
                   <Button
                     type="button"
@@ -619,7 +621,7 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
                     icon={Upload}
                     onClick={() => fileInputRef.current?.click()}
                   >
-                    Upload from Device
+                    {t('Upload from Device')}
                   </Button>
                 </div>
               )}
@@ -629,7 +631,7 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
           {activeTab === 'preset' && (
             <div className="space-y-2">
               <span className="text-xs font-semibold text-[var(--fg-muted)] block">
-                Curated Luxury & Vision Templates:
+                {t('Curated Luxury & Vision Templates:')}
               </span>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-56 overflow-y-auto pr-1">
                 {INSPIRATION_PRESETS.map((preset, idx) => (
@@ -646,7 +648,7 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
                     />
                     <div className="min-w-0 flex-1">
                       <h5 className="text-xs font-bold text-[var(--fg)] truncate">{preset.name}</h5>
-                      <span className="text-[10px] text-[var(--fg-muted)] block">{preset.category}</span>
+                      <span className="text-[10px] text-[var(--fg-muted)] block">{t(preset.category)}</span>
                       <span className="text-[10px] font-mono text-[var(--color-sage)] font-semibold">
                         ${preset.realUsd.toLocaleString()} USD · D$ {preset.dPrice.toLocaleString()}
                       </span>
@@ -662,32 +664,32 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
         <div className="space-y-3.5 pt-2 border-t border-[var(--border)]">
           <Field
             id="dream-name"
-            label="Dream / Vision Title"
+            label={t('Dream / Vision Title')}
             required
-            helper="e.g. Porsche 911 GT3 RS, Modern Villa on Lake Como, Patek Philippe Nautilus, Minimalist Studio"
+            helper={t('e.g. Porsche 911 GT3 RS, Modern Villa on Lake Como, Patek Philippe Nautilus, Minimalist Studio')}
           >
             <Input
               id="dream-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Ferrari 296 GTB or a custom mountain retreat"
+              placeholder={t('e.g. Ferrari 296 GTB or a custom mountain retreat')}
             />
           </Field>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Field id="dream-category" label="Kategori">
+            <Field id="dream-category" label={t('Category')}>
               <Select
                 id="dream-category"
                 value={category}
                 onChange={(e) => setCategory(e.target.value as MarketCategory)}
-                options={categories.map((c) => ({ value: c, label: c }))}
+                options={categories.map((c) => ({ value: c, label: t(c) }))}
               />
             </Field>
 
             <Field
               id="dream-real-price"
-              label="Estimated Real-World Value ($ USD)"
-              helper="Estimated market or acquisition price."
+              label={t('Estimated Real-World Value ($ USD)')}
+              helper={t('Estimated market or acquisition price.')}
             >
               <Input
                 id="dream-real-price"
@@ -702,8 +704,8 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field
               id="dream-d-price"
-              label="Dream Dollar Price (D$)"
-              helper="Suggested: real USD × 0.008"
+              label={t('Dream Dollar Price (D$)')}
+              helper={t('Suggested: real USD × 0.008')}
             >
               <Input
                 id="dream-d-price"
@@ -716,28 +718,28 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
 
             <Field
               id="dream-why"
-              label="Why Do You Want This Dream?"
-              helper="Your emotional anchor and future-self standard."
+              label={t('Why Do You Want This Dream?')}
+              helper={t('Your emotional anchor and future-self standard.')}
             >
               <Input
                 id="dream-why"
                 value={whyWanted}
                 onChange={(e) => setWhyWanted(e.target.value)}
-                placeholder="e.g. Focused work discipline and uncompromising personal freedom."
+                placeholder={t('e.g. Focused work discipline and uncompromising personal freedom.')}
               />
             </Field>
           </div>
 
           <Field
             id="dream-first-step"
-            label="First Concrete Real-World Step"
-            helper="What is the first physical move that connects this dream to reality?"
+            label={t('First Concrete Real-World Step')}
+            helper={t('What is the first physical move that connects this dream to reality?')}
           >
             <Input
               id="dream-first-step"
               value={firstRealStep}
               onChange={(e) => setFirstRealStep(e.target.value)}
-              placeholder="e.g. Open a dedicated savings sub-account, book a test drive / visit, or study the floor plans."
+              placeholder={t('e.g. Open a dedicated savings sub-account, book a test drive / visit, or study the floor plans.')}
             />
           </Field>
 
@@ -747,10 +749,10 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
               <Star className="w-4 h-4 text-amber-500 fill-current" />
               <div>
                 <div className="text-xs font-bold text-[var(--fg)]">
-                  Pin to Vision Board as a Priority ⭐
+                  {t('Pin to Vision Board as a Priority ⭐')}
                 </div>
                 <div className="text-[11px] text-[var(--fg-muted)]">
-                  Feature it in your Daily Vision Affirmations on the Home page and on your Vision Board.
+                  {t('Feature it in your Daily Vision Affirmations on the Home page and on your Vision Board.')}
                 </div>
               </div>
             </div>
@@ -767,10 +769,10 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
         {/* Modal Actions */}
         <div className="flex justify-end gap-3 pt-3 border-t border-[var(--border)]">
           <Button variant="ghost" type="button" onClick={handleClose}>
-            Cancel
+            {t('Cancel')}
           </Button>
           <Button variant="primary" type="submit" disabled={!name.trim()}>
-            Save to Vision & Market
+            {t('Save to Vision & Market')}
           </Button>
         </div>
       </form>

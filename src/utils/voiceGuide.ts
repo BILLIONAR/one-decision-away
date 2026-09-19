@@ -4,6 +4,7 @@
  */
 
 import { geminiVoice } from './geminiVoice';
+import { getSpeechLang } from '../i18n';
 
 export type VoiceEngine = 'browser' | 'gemini';
 
@@ -92,9 +93,12 @@ class VoiceGuide {
     }
   }
 
+  /** Voices matching the active locale (2-letter code), falling back to any available voice. */
   public getEnglishVoices(): SpeechSynthesisVoice[] {
     if (this.voices.length === 0) this.loadVoices();
-    return this.voices.filter((v) => v.lang.toLowerCase().startsWith('en'));
+    const code = getSpeechLang().slice(0, 2).toLowerCase();
+    const matching = this.voices.filter((v) => (v.lang || '').toLowerCase().startsWith(code));
+    return matching.length > 0 ? matching : this.voices;
   }
 
   public getSelectedVoice(): SpeechSynthesisVoice | null {
@@ -236,7 +240,7 @@ class VoiceGuide {
         utterance.voice = voice;
         utterance.lang = voice.lang;
       } else {
-        utterance.lang = 'en-US';
+        utterance.lang = getSpeechLang();
       }
       utterance.rate = this.rate;
       utterance.pitch = this.pitch;

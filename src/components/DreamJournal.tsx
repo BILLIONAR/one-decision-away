@@ -26,25 +26,26 @@ import {
 } from 'lucide-react';
 import { DreamJournalEntry, MarketItem } from '../types/models';
 import { SEED_MARKET_ITEMS } from '../data/seed';
+import { useT, N_ } from '../i18n';
 
 type JournalMood = 'triumphant' | 'focused' | 'grateful' | 'visionary' | 'breakthrough';
 type DateRangePreset = 'all' | 'today' | '7days' | '30days' | 'thisMonth' | 'custom';
 
 const MOOD_CONFIG: Record<JournalMood, { label: string; color: string; badgeVariant: 'sage' | 'slate' | 'coral' | 'outline' }> = {
-  focused: { label: 'Deep Focus', color: 'text-[var(--color-sage)]', badgeVariant: 'sage' },
-  triumphant: { label: 'Triumphant', color: 'text-amber-500', badgeVariant: 'slate' },
-  grateful: { label: 'Grateful & Grounded', color: 'text-emerald-500', badgeVariant: 'sage' },
-  visionary: { label: 'Visionary', color: 'text-[var(--color-coral)]', badgeVariant: 'coral' },
-  breakthrough: { label: 'Breakthrough', color: 'text-sky-500', badgeVariant: 'outline' },
+  focused: { label: N_('Deep Focus'), color: 'text-[var(--color-sage)]', badgeVariant: 'sage' },
+  triumphant: { label: N_('Triumphant'), color: 'text-amber-500', badgeVariant: 'slate' },
+  grateful: { label: N_('Grateful & Grounded'), color: 'text-emerald-500', badgeVariant: 'sage' },
+  visionary: { label: N_('Visionary'), color: 'text-[var(--color-coral)]', badgeVariant: 'coral' },
+  breakthrough: { label: N_('Breakthrough'), color: 'text-sky-500', badgeVariant: 'outline' },
 };
 
 const DATE_PRESETS: { id: DateRangePreset; label: string }[] = [
-  { id: 'all', label: 'All Dates' },
-  { id: 'today', label: 'Today' },
-  { id: '7days', label: 'Past 7 Days' },
-  { id: '30days', label: 'Past 30 Days' },
-  { id: 'thisMonth', label: 'This Month' },
-  { id: 'custom', label: 'Custom Range' },
+  { id: 'all', label: N_('All Dates') },
+  { id: 'today', label: N_('Today') },
+  { id: '7days', label: N_('Past 7 Days') },
+  { id: '30days', label: N_('Past 30 Days') },
+  { id: 'thisMonth', label: N_('This Month') },
+  { id: 'custom', label: N_('Custom Range') },
 ];
 
 export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean }> = ({
@@ -52,6 +53,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
   showHeaderAction = true,
 }) => {
   const { data, addDreamJournalEntry, deleteDreamJournalEntry, showToast } = useApp();
+  const t = useT();
 
   const [isComposeOpen, setIsComposeOpen] = useState<boolean>(false);
   const [selectedPhotoModal, setSelectedPhotoModal] = useState<DreamJournalEntry | null>(null);
@@ -105,7 +107,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
     setCameraError(null);
     try {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        throw new Error('Camera API is not supported in this browser environment.');
+        throw new Error(t('Camera API is not supported in this browser environment.'));
       }
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
@@ -125,8 +127,8 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
       console.warn('Camera stream failed:', err);
       setCameraError(
         err.name === 'NotAllowedError'
-          ? 'Camera access was denied. Please allow camera permissions in your browser or upload an image file.'
-          : 'Could not access camera device. You can upload an image from your device.'
+          ? t('Camera access was denied. Please allow camera permissions in your browser or upload an image file.')
+          : t('Could not access camera device. You can upload an image from your device.')
       );
       setIsCameraActive(false);
     }
@@ -159,14 +161,14 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
       const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
       setPhotoDataUrl(dataUrl);
       stopCamera();
-      showToast('Photo captured from camera!', 'success');
+      showToast(t('Photo captured from camera!'), 'success');
     }
   };
 
   // File Upload Handlers (Drag & Drop + Click)
   const processImageFile = (file: File) => {
     if (!file.type.startsWith('image/')) {
-      showToast('Please select a valid image file (PNG, JPG, WEBP).', 'error');
+      showToast(t('Please select a valid image file (PNG, JPG, WEBP).'), 'error');
       return;
     }
     const reader = new FileReader();
@@ -198,7 +200,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
   const handleSaveEntry = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !content.trim()) {
-      showToast('Please provide both a title and reflection notes.', 'error');
+      showToast(t('Please provide both a title and reflection notes.'), 'error');
       return;
     }
 
@@ -321,10 +323,10 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
           </div>
           <div>
             <h3 className="font-display font-bold text-base text-[var(--fg)]">
-              Dream Journal & Visual Log
+              {t('Dream Journal & Visual Log')}
             </h3>
             <p className="text-xs text-[var(--fg-muted)]">
-              Document your daily physical progress, mental breakthroughs, and snapshot photo memories.
+              {t('Document your daily physical progress, mental breakthroughs, and snapshot photo memories.')}
             </p>
           </div>
         </div>
@@ -339,7 +341,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
                 setIsComposeOpen(true);
               }}
             >
-              <span>New Entry</span>
+              <span>{t('New Entry')}</span>
               <kbd className="hidden sm:inline-block ml-1.5 px-1.5 py-0.2 rounded bg-black/20 text-white font-mono text-[9px] font-bold">
                 {typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform || '') ? '⌘K' : 'Ctrl+K'}
               </kbd>
@@ -356,7 +358,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
             <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--fg-muted)]" />
             <input
               type="text"
-              placeholder="Search by keywords, reflections, dreams, or insights..."
+              placeholder={t('Search by keywords, reflections, dreams, or insights...')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-8 pr-8 py-1.5 text-xs bg-[var(--bg)] border border-[var(--border)] rounded-[var(--radius-md)] text-[var(--fg)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-[var(--color-sage)] transition-colors"
@@ -366,7 +368,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
                 type="button"
                 onClick={() => setSearchQuery('')}
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--fg-muted)] hover:text-[var(--fg)] p-0.5 rounded-full"
-                title="Clear search"
+                title={t('Clear search')}
               >
                 <X className="w-3 h-3" />
               </button>
@@ -388,7 +390,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
               >
                 {DATE_PRESETS.map((p) => (
                   <option key={p.id} value={p.id}>
-                    {p.label}
+                    {t(p.label)}
                   </option>
                 ))}
               </select>
@@ -401,7 +403,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
               onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
               className="text-xs shrink-0"
             >
-              Filters
+              {t('Filters')}
             </Button>
           </div>
         </div>
@@ -412,12 +414,12 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
             {/* Custom Date Range Pickers if active */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 bg-[var(--bg-muted)] p-2.5 rounded-[var(--radius-sm)] border border-[var(--border)]">
               <span className="text-[11px] font-semibold text-[var(--fg)] flex items-center gap-1 shrink-0">
-                <Calendar className="w-3.5 h-3.5 text-[var(--color-sage)]" /> Date Range:
+                <Calendar className="w-3.5 h-3.5 text-[var(--color-sage)]" /> {t('Date Range:')}
               </span>
 
               <div className="flex items-center gap-2 flex-1 flex-wrap sm:flex-nowrap">
                 <div className="flex items-center gap-1 flex-1 min-w-[120px]">
-                  <span className="text-[10px] uppercase font-bold text-[var(--fg-muted)]">From:</span>
+                  <span className="text-[10px] uppercase font-bold text-[var(--fg-muted)]">{t('From:')}</span>
                   <input
                     type="date"
                     value={startDate}
@@ -430,7 +432,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
                 </div>
 
                 <div className="flex items-center gap-1 flex-1 min-w-[120px]">
-                  <span className="text-[10px] uppercase font-bold text-[var(--fg-muted)]">To:</span>
+                  <span className="text-[10px] uppercase font-bold text-[var(--fg-muted)]">{t('To:')}</span>
                   <input
                     type="date"
                     value={endDate}
@@ -452,7 +454,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
                     }}
                     className="text-[11px] text-[var(--color-coral)] hover:underline shrink-0 px-1"
                   >
-                    Clear Dates
+                    {t('Clear Dates')}
                   </button>
                 )}
               </div>
@@ -461,7 +463,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
             {/* Mood Category Pills */}
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
               <span className="text-[11px] text-[var(--fg-muted)] font-medium mr-1 shrink-0">
-                Mood:
+                {t('Mood:')}
               </span>
               <button
                 onClick={() => setSelectedMoodFilter('all')}
@@ -471,7 +473,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
                     : 'bg-[var(--bg)] text-[var(--fg-muted)] border-[var(--border)] hover:text-[var(--fg)]'
                 }`}
               >
-                All ({entries.length})
+                {t('All ({n})', { n: entries.length })}
               </button>
               {(Object.keys(MOOD_CONFIG) as JournalMood[]).map((m) => (
                 <button
@@ -483,7 +485,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
                       : 'bg-[var(--bg)] text-[var(--fg-muted)] border-[var(--border)] hover:text-[var(--fg)]'
                   }`}
                 >
-                  {MOOD_CONFIG[m].label}
+                  {t(MOOD_CONFIG[m].label)}
                 </button>
               ))}
             </div>
@@ -494,21 +496,28 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
         <div className="flex items-center justify-between text-[11px] text-[var(--fg-muted)] pt-1 border-t border-[var(--border)]/60">
           <div className="flex items-center gap-1.5 flex-wrap">
             <span>
-              Showing <strong className="text-[var(--fg)]">{filteredEntries.length}</strong> of {entries.length} {entries.length === 1 ? 'entry' : 'entries'}
+              {entries.length === 1
+                ? t('Showing {shown} of {total} entry', { shown: filteredEntries.length, total: entries.length })
+                : t('Showing {shown} of {total} entries', { shown: filteredEntries.length, total: entries.length })}
             </span>
             {searchQuery && (
               <span className="bg-[var(--color-sage)]/10 text-[var(--color-sage)] px-1.5 py-0.2 rounded border border-[var(--color-sage)]/20">
-                keyword: "{searchQuery}"
+                {t('keyword: "{query}"', { query: searchQuery })}
               </span>
             )}
             {datePreset !== 'all' && (
               <span className="bg-[var(--bg-muted)] text-[var(--fg)] px-1.5 py-0.2 rounded border border-[var(--border)]">
-                date: {datePreset === 'custom' ? `${startDate || 'Start'} to ${endDate || 'Now'}` : DATE_PRESETS.find(p => p.id === datePreset)?.label}
+                {t('date: {range}', {
+                  range:
+                    datePreset === 'custom'
+                      ? t('{start} to {end}', { start: startDate || t('Start'), end: endDate || t('Now') })
+                      : t(DATE_PRESETS.find((p) => p.id === datePreset)?.label || ''),
+                })}
               </span>
             )}
             {selectedMoodFilter !== 'all' && (
               <span className="bg-[var(--bg-muted)] text-[var(--fg)] px-1.5 py-0.2 rounded border border-[var(--border)]">
-                mood: {MOOD_CONFIG[selectedMoodFilter as JournalMood]?.label || selectedMoodFilter}
+                {t('mood: {mood}', { mood: t(MOOD_CONFIG[selectedMoodFilter as JournalMood]?.label || selectedMoodFilter) })}
               </span>
             )}
           </div>
@@ -519,7 +528,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
               onClick={resetAllFilters}
               className="flex items-center gap-1 text-[var(--color-coral)] hover:underline font-semibold shrink-0"
             >
-              <RotateCcw className="w-3 h-3" /> Clear All Filters
+              <RotateCcw className="w-3 h-3" /> {t('Clear All Filters')}
             </button>
           )}
         </div>
@@ -555,7 +564,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
                       <button
                         onClick={() => setSelectedPhotoModal(entry)}
                         className="absolute bottom-2 right-2 p-1.5 rounded-full bg-black/70 backdrop-blur-xs text-white/90 hover:text-white hover:bg-black transition-colors"
-                        title="View Full Photo"
+                        title={t('View Full Photo')}
                       >
                         <Maximize2 className="w-3.5 h-3.5" />
                       </button>
@@ -566,7 +575,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
                   <div className="flex items-center justify-between gap-2 text-xs">
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <Badge variant={moodInfo.badgeVariant}>
-                        {moodInfo.label}
+                        {t(moodInfo.label)}
                       </Badge>
                       {entry.dreamName && (
                         <span className="text-[10px] font-semibold text-[var(--color-sage)] bg-[var(--color-sage)]/10 px-2 py-0.5 rounded-[var(--radius-xs)] border border-[var(--color-sage)]/20 truncate max-w-[180px]">
@@ -595,12 +604,12 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
                 {/* Footer Action */}
                 <div className="pt-3 mt-3 border-t border-[var(--border)] flex items-center justify-between">
                   <span className="text-[10px] text-[var(--fg-subtle)] uppercase tracking-wider font-mono">
-                    Entry #{entry.id.slice(-4)}
+                    {t('Entry #{id}', { id: entry.id.slice(-4) })}
                   </span>
                   <button
                     onClick={() => deleteDreamJournalEntry(entry.id)}
                     className="text-[var(--fg-subtle)] hover:text-red-500 transition-colors p-1"
-                    title="Delete Entry"
+                    title={t('Delete Entry')}
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -614,11 +623,11 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
         <div className="p-8 text-center bg-[var(--bg-elevated)] border border-[var(--border)] rounded-[var(--radius-lg)] space-y-3">
           <Search className="w-8 h-8 text-[var(--fg-subtle)] mx-auto" />
           <h4 className="font-display font-bold text-sm text-[var(--fg)]">
-            No journal entries match your search filters
+            {t('No journal entries match your search filters')}
           </h4>
           <p className="text-xs text-[var(--fg-muted)] max-w-sm mx-auto">
-            {searchQuery ? `No results found for "${searchQuery}". ` : ''}
-            Try adjusting your keyword query, mood filter, or date range settings.
+            {searchQuery ? t('No results found for "{query}". ', { query: searchQuery }) : ''}
+            {t('Try adjusting your keyword query, mood filter, or date range settings.')}
           </p>
           <div className="pt-1">
             <Button
@@ -627,7 +636,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
               icon={RotateCcw}
               onClick={resetAllFilters}
             >
-              Reset Search & Filters
+              {t('Reset Search & Filters')}
             </Button>
           </div>
         </div>
@@ -636,10 +645,10 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
         <div className="p-8 text-center bg-[var(--bg-elevated)] border border-[var(--border)] rounded-[var(--radius-lg)] space-y-3">
           <BookOpen className="w-8 h-8 text-[var(--fg-subtle)] mx-auto" />
           <h4 className="font-display font-bold text-sm text-[var(--fg)]">
-            No Dream Journal entries yet
+            {t('No Dream Journal entries yet')}
           </h4>
           <p className="text-xs text-[var(--fg-muted)] max-w-sm mx-auto">
-            Take a photo from your camera and jot down your mental state, execution win, or vision reflection.
+            {t('Take a photo from your camera and jot down your mental state, execution win, or vision reflection.')}
           </p>
           <Button
             variant="outline"
@@ -647,7 +656,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
             icon={Camera}
             onClick={() => setIsComposeOpen(true)}
           >
-            Create First Journal Entry
+            {t('Create First Journal Entry')}
           </Button>
         </div>
       )}
@@ -656,8 +665,8 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
       <Modal
         isOpen={Boolean(selectedPhotoModal)}
         onClose={() => setSelectedPhotoModal(null)}
-        title={selectedPhotoModal?.title || 'Journal Photo'}
-        subtitle={selectedPhotoModal ? `Logged on ${new Date(selectedPhotoModal.createdAt).toLocaleDateString()}` : ''}
+        title={selectedPhotoModal?.title || t('Journal Photo')}
+        subtitle={selectedPhotoModal ? t('Logged on {date}', { date: new Date(selectedPhotoModal.createdAt).toLocaleDateString() }) : ''}
         maxWidth="lg"
       >
         {selectedPhotoModal && selectedPhotoModal.photoDataUrl && (
@@ -684,43 +693,43 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
           stopCamera();
           setIsComposeOpen(false);
         }}
-        title="New Dream Journal Entry"
-        subtitle="Capture a live camera snapshot and write a short reflection on your future life progress."
+        title={t('New Dream Journal Entry')}
+        subtitle={t('Capture a live camera snapshot and write a short reflection on your future life progress.')}
         maxWidth="lg"
       >
         <form onSubmit={handleSaveEntry} className="space-y-4">
-          <Field id="journal-title" label="Entry Title" required helper="e.g. 6 AM Sanctuary Routine, Breakthrough Architecture Milestone">
+          <Field id="journal-title" label={t('Entry Title')} required helper={t('e.g. 6 AM Sanctuary Routine, Breakthrough Architecture Milestone')}>
             <Input
               id="journal-title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. Breakthrough execution on high-leverage decision"
+              placeholder={t('e.g. Breakthrough execution on high-leverage decision')}
             />
           </Field>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Field id="journal-mood" label="State of Mind">
+            <Field id="journal-mood" label={t('State of Mind')}>
               <Select
                 id="journal-mood"
                 value={mood}
                 onChange={(e) => setMood(e.target.value as JournalMood)}
                 options={[
-                  { value: 'focused', label: '🎯 Deep Focus' },
-                  { value: 'triumphant', label: '🏆 Triumphant Win' },
-                  { value: 'grateful', label: '🌿 Grateful & Grounded' },
-                  { value: 'visionary', label: '✨ Visionary Expansion' },
-                  { value: 'breakthrough', label: '⚡ Breakthrough Realization' },
+                  { value: 'focused', label: t('🎯 Deep Focus') },
+                  { value: 'triumphant', label: t('🏆 Triumphant Win') },
+                  { value: 'grateful', label: t('🌿 Grateful & Grounded') },
+                  { value: 'visionary', label: t('✨ Visionary Expansion') },
+                  { value: 'breakthrough', label: t('⚡ Breakthrough Realization') },
                 ]}
               />
             </Field>
 
-            <Field id="journal-dream" label="Linked Vision Target (Optional)" helper="Anchor this reflection to a specific luxury milestone.">
+            <Field id="journal-dream" label={t('Linked Vision Target (Optional)')} helper={t('Anchor this reflection to a specific luxury milestone.')}>
               <Select
                 id="journal-dream"
                 value={linkedDreamId}
                 onChange={(e) => setLinkedDreamId(e.target.value)}
                 options={[
-                  { value: '', label: '— General Future Life Progress —' },
+                  { value: '', label: t('— General Future Life Progress —') },
                   ...allAvailableDreams.map((d) => ({
                     value: d.id,
                     label: `${d.name} (${d.category})`,
@@ -733,7 +742,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
           {/* Photo & Camera Section */}
           <div className="space-y-2">
             <span className="text-xs font-semibold text-[var(--fg)] block">
-              Attach Live Camera Photo or Image
+              {t('Attach Live Camera Photo or Image')}
             </span>
 
             {/* Live Camera Viewfinder if Active */}
@@ -750,14 +759,14 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
                 {/* Camera Overlay Controls */}
                 <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] text-white flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                  Live Camera Active ({cameraFacing === 'user' ? 'Front' : 'Back'})
+                  {t('Live Camera Active ({facing})', { facing: cameraFacing === 'user' ? t('Front') : t('Back') })}
                 </div>
 
                 <button
                   type="button"
                   onClick={toggleCameraFacing}
                   className="absolute top-3 right-3 p-2 rounded-full bg-black/60 backdrop-blur-xs text-white hover:bg-black/90 transition-colors"
-                  title="Switch Camera Facing"
+                  title={t('Switch Camera Facing')}
                 >
                   <FlipHorizontal className="w-4 h-4" />
                 </button>
@@ -770,13 +779,13 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
                     className="bg-black/60 text-white hover:bg-black/90"
                     onClick={stopCamera}
                   >
-                    Cancel Camera
+                    {t('Cancel Camera')}
                   </Button>
                   <button
                     type="button"
                     onClick={capturePhoto}
                     className="w-12 h-12 rounded-full border-4 border-white bg-red-600 hover:bg-red-500 active:scale-95 transition-all shadow-lg flex items-center justify-center cursor-pointer"
-                    title="Capture Photo"
+                    title={t('Capture Photo')}
                   >
                     <Camera className="w-5 h-5 text-white" />
                   </button>
@@ -787,12 +796,12 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
               <div className="w-full h-56 rounded-[var(--radius-md)] overflow-hidden relative bg-black border border-[var(--border)] group">
                 <img
                   src={photoDataUrl}
-                  alt="Captured Preview"
+                  alt={t('Captured Preview')}
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute top-2.5 left-2.5 bg-black/70 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] text-white">
-                  Photo Attached
+                  {t('Photo Attached')}
                 </div>
                 <div className="absolute bottom-2.5 right-2.5 flex items-center gap-2">
                   <Button
@@ -803,7 +812,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
                     onClick={() => startCamera()}
                     className="bg-black/75 text-white border-0 hover:bg-black"
                   >
-                    Retake with Camera
+                    {t('Retake with Camera')}
                   </Button>
                   <Button
                     type="button"
@@ -813,7 +822,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
                     onClick={() => setPhotoDataUrl('')}
                     className="bg-black/75 text-red-400 border-0 hover:bg-black"
                   >
-                    Remove
+                    {t('Remove')}
                   </Button>
                 </div>
               </div>
@@ -848,10 +857,10 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
                     icon={Camera}
                     onClick={() => startCamera()}
                   >
-                    Take Photo with Camera
+                    {t('Take Photo with Camera')}
                   </Button>
 
-                  <span className="text-xs text-[var(--fg-muted)]">or</span>
+                  <span className="text-xs text-[var(--fg-muted)]">{t('or')}</span>
 
                   <Button
                     type="button"
@@ -860,12 +869,12 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
                     icon={Upload}
                     onClick={() => fileInputRef.current?.click()}
                   >
-                    Upload / Drop Image
+                    {t('Upload / Drop Image')}
                   </Button>
                 </div>
 
                 <p className="text-[11px] text-[var(--fg-subtle)] mt-2">
-                  Use your device camera to capture your workspace, physical notes, or milestone moment.
+                  {t('Use your device camera to capture your workspace, physical notes, or milestone moment.')}
                 </p>
 
                 {cameraError && (
@@ -879,15 +888,15 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
 
           <Field
             id="journal-content"
-            label="Progress Notes & Reflections"
+            label={t('Progress Notes & Reflections')}
             required
-            helper="What action did you take today? How did you overcome friction? What does this mean for your future life?"
+            helper={t('What action did you take today? How did you overcome friction? What does this mean for your future life?')}
           >
             <Textarea
               id="journal-content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              placeholder="Reflect on the standard of work executed today, resistance conquered, or physical milestone unlocked..."
+              placeholder={t('Reflect on the standard of work executed today, resistance conquered, or physical milestone unlocked...')}
               rows={4}
             />
           </Field>
@@ -901,14 +910,14 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
                 setIsComposeOpen(false);
               }}
             >
-              Cancel
+              {t('Cancel')}
             </Button>
             <Button
               variant="primary"
               type="submit"
               disabled={!title.trim() || !content.trim()}
             >
-              Save Journal Entry
+              {t('Save Journal Entry')}
             </Button>
           </div>
         </form>

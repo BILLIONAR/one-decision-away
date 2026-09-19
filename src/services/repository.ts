@@ -8,6 +8,7 @@ import { SEED_INITIAL_GOALS, SEED_INITIAL_MISSIONS, DEFAULT_BUDGET, SEED_MARKET_
 import { computeLedgerBalance, evaluateMissionReward, ECONOMY_CONSTANTS } from './economy';
 import { checkAndApplyDailyMicroHabitRollover } from './microHabitsService';
 import { cloudSync } from './cloudSync';
+import { detectLocale, t } from '../i18n';
 
 export interface DataRepository {
   readonly mode: 'demo' | 'server';
@@ -38,16 +39,16 @@ export function getInitialDemoState(): UserData {
     kind: 'welcome_grant',
     amount: ECONOMY_CONSTANTS.WELCOME_GRANT,
     dayKey: now.slice(0, 10),
-    memo: 'Welcome grant for beginning your journey',
+    memo: t('Welcome grant for beginning your journey'),
     createdAt: now,
   };
 
   return {
     profile: {
       id: 'demo-user',
-      displayName: 'Dream Builder',
+      displayName: t('Dream Builder'),
       onboardingStep: 'completed',
-      locale: 'en',
+      locale: detectLocale(),
       theme: 'light',
       soundMuted: false,
       focusTabBlinkEnabled: true,
@@ -74,47 +75,47 @@ export function getInitialDemoState(): UserData {
           personalMeaning: 7,
         },
         totalScore: 69,
-        lowestAreas: ['Money', 'Discipline'],
-        interpretation: 'Some areas are carrying you; others are quietly asking for attention. A single daily decision can shift the balance.',
+        lowestAreas: [t('Money'), t('Discipline')],
+        interpretation: t('Some areas are carrying you; others are quietly asking for attention. A single daily decision can shift the balance.'),
         createdAt: now,
       },
     ],
     twoFutures: {
       allowingAnswers: {
-        q1: 'Quietly accepting that evening tiredness dictates what gets worked on.',
-        q2: 'Complaining about lack of time while spending an hour scrolling.',
-        q3: 'Wake up rushed, commute with friction, do reactive tasks, return drained.',
-        q4: 'The ability to build my own business or travel for a month freely.',
-        q5: 'Not having given my true ideas a dedicated year of consistent focus.',
-        q6: 'The version that waits for perfect certainty before publishing.',
-        q7: 'Fear of putting out work and having it meet total silence.',
-        q8: 'Years of postponement and staying in a comfortable plateau.',
+        q1: t('Quietly accepting that evening tiredness dictates what gets worked on.'),
+        q2: t('Complaining about lack of time while spending an hour scrolling.'),
+        q3: t('Wake up rushed, commute with friction, do reactive tasks, return drained.'),
+        q4: t('The ability to build my own business or travel for a month freely.'),
+        q5: t('Not having given my true ideas a dedicated year of consistent focus.'),
+        q6: t('The version that waits for perfect certainty before publishing.'),
+        q7: t('Fear of putting out work and having it meet total silence.'),
+        q8: t('Years of postponement and staying in a comfortable plateau.'),
       },
       buildingAnswers: {
-        q1: 'Wake up with a clear calendar, two hours of deep creation, afternoon training, evening reading.',
-        q2: 'Known for craftsmanship, consistency, and clear systems by peers and clients.',
-        q3: 'Saying no to frantic projects, rush hours, and misaligned requests.',
-        q4: 'Present, calm, and generous with family and close collaborators.',
+        q1: t('Wake up with a clear calendar, two hours of deep creation, afternoon training, evening reading.'),
+        q2: t('Known for craftsmanship, consistency, and clear systems by peers and clients.'),
+        q3: t('Saying no to frantic projects, rush hours, and misaligned requests.'),
+        q4: t('Present, calm, and generous with family and close collaborators.'),
       },
-      antiVision: 'I refuse to become someone who leaves their best ideas in notes and lets distraction decide their life.',
-      vision: 'I am building a life of creative sovereignty, calm energy, and meaningful craftsmanship.',
+      antiVision: t('I refuse to become someone who leaves their best ideas in notes and lets distraction decide their life.'),
+      vision: t('I am building a life of creative sovereignty, calm energy, and meaningful craftsmanship.'),
       buildingVotes: 14,
       allowingVotes: 4,
       updatedAt: now,
     },
     futureSelf: {
-      title: 'The Finisher',
-      coreValues: ['Craftsmanship', 'Calm Autonomy', 'Relentless Focus', 'Honesty'],
-      dailyStandards: ['First 90 minutes dedicated to high leverage work', 'No digital noise at meals', 'Daily physical movement'],
-      habits: ['Daily One Decision', 'Evening workspace reset', 'Weekly retrospective'],
-      skills: ['System Design', 'Writing & Clarity', 'Deep Work Endurance'],
-      boundaries: ['No morning meetings before 11:00 AM', 'Strict bedtime at 10:30 PM'],
-      noLongerDoes: ['Endless bookmarking without execution', 'Checking email first thing in bed'],
-      identityStatement: 'I am someone who finishes important work, protects my attention, and acts before I feel ready.',
-      oldSelfBehaviors: ['Starting 5 projects and finishing zero', 'Postponing tough outreach'],
-      oldSelfExcuses: ['"I need more research first"', '"I will start next Monday"'],
-      oldSelfPatterns: ['Cleaning the desk when hard thinking is required'],
-      oldSelfLabels: ['The perfectionist procrastinator'],
+      title: t('The Finisher'),
+      coreValues: [t('Craftsmanship'), t('Calm Autonomy'), t('Relentless Focus'), t('Honesty')],
+      dailyStandards: [t('First 90 minutes dedicated to high leverage work'), t('No digital noise at meals'), t('Daily physical movement')],
+      habits: [t('Daily One Decision'), t('Evening workspace reset'), t('Weekly retrospective')],
+      skills: [t('System Design'), t('Writing & Clarity'), t('Deep Work Endurance')],
+      boundaries: [t('No morning meetings before 11:00 AM'), t('Strict bedtime at 10:30 PM')],
+      noLongerDoes: [t('Endless bookmarking without execution'), t('Checking email first thing in bed')],
+      identityStatement: t('I am someone who finishes important work, protects my attention, and acts before I feel ready.'),
+      oldSelfBehaviors: [t('Starting 5 projects and finishing zero'), t('Postponing tough outreach')],
+      oldSelfExcuses: [t('"I need more research first"'), t('"I will start next Monday"')],
+      oldSelfPatterns: [t('Cleaning the desk when hard thinking is required')],
+      oldSelfLabels: [t('The perfectionist procrastinator')],
       updatedAt: now,
     },
     goals: SEED_INITIAL_GOALS,
@@ -146,10 +147,10 @@ export function getInitialDemoState(): UserData {
       {
         id: 'journal-seed-1',
         userId: 'demo-user',
-        title: 'Morning Focus & Sanctuary Awakening',
-        content: 'Woke up at 6:00 AM without hitting snooze. Sat in quiet stillness with black coffee before looking at any screens. Visualized walking into the morning light of the waterfront villa—felt the standard of the day elevate immediately.',
+        title: t('Morning Focus & Sanctuary Awakening'),
+        content: t('Woke up at 6:00 AM without hitting snooze. Sat in quiet stillness with black coffee before looking at any screens. Visualized walking into the morning light of the waterfront villa—felt the standard of the day elevate immediately.'),
         dreamId: 'seed-lake-como-villa',
-        dreamName: 'Lake Como Waterfront Modernist Villa',
+        dreamName: t('Lake Como Waterfront Modernist Villa'),
         mood: 'focused',
         photoDataUrl: 'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=1200&q=80',
         createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
@@ -157,10 +158,10 @@ export function getInitialDemoState(): UserData {
       {
         id: 'journal-seed-2',
         userId: 'demo-user',
-        title: 'Locked In: 90-Minute Pure Deep Work Sprint',
-        content: 'Finished the core architecture milestone ahead of schedule. When the urge to open social media hit at minute 40, I remembered my Future Self identity. Refused to yield.',
+        title: t('Locked In: 90-Minute Pure Deep Work Sprint'),
+        content: t('Finished the core architecture milestone ahead of schedule. When the urge to open social media hit at minute 40, I remembered my Future Self identity. Refused to yield.'),
         dreamId: 'seed-work-machine',
-        dreamName: 'Bespoke Executive Studio & Work Machine',
+        dreamName: t('Bespoke Executive Studio & Work Machine'),
         mood: 'triumphant',
         photoDataUrl: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80',
         createdAt: new Date(Date.now() - 86400000 * 1).toISOString(),
@@ -264,7 +265,7 @@ export class LocalDemoRepository implements DataRepository {
     const data = await this.load();
     const mission = data.missions.find((m) => m.id === params.missionId);
     if (!mission) {
-      throw new Error('Mission not found');
+      throw new Error(t('Mission not found'));
     }
 
     const todayStr = new Date().toISOString().slice(0, 10);
@@ -319,8 +320,8 @@ export class LocalDemoRepository implements DataRepository {
         refType: 'mission',
         refId: mission.id,
         memo: mission.isOneDecision
-          ? `One Decision completed: ${mission.title}`
-          : `Mission completed: ${mission.title}`,
+          ? t('One Decision completed: {title}', { title: mission.title })
+          : t('Mission completed: {title}', { title: mission.title }),
         createdAt: now,
       });
     }
@@ -330,9 +331,9 @@ export class LocalDemoRepository implements DataRepository {
 
     await this.save(data);
 
-    let message = `Mission completed!`;
+    let message = t('Mission completed!');
     if (evalResult.rewardAmount > 0) {
-      message += ` Earned D$${evalResult.rewardAmount.toLocaleString()}.`;
+      message += ' ' + t('Earned D${amount}.', { amount: evalResult.rewardAmount.toLocaleString() });
     }
     if (evalResult.reason) {
       message += ` (${evalResult.reason})`;
@@ -347,19 +348,19 @@ export class LocalDemoRepository implements DataRepository {
     const item = allItems.find((i) => i.id === itemId);
 
     if (!item) {
-      throw new Error('Item not found in Dream Market');
+      throw new Error(t('Item not found in Dream Market'));
     }
 
     // Check if already purchased
     const alreadyOwned = data.purchases.some((p) => p.itemId === itemId);
     if (alreadyOwned) {
-      throw new Error('You already own this dream in My Future Life');
+      throw new Error(t('You already own this dream in My Future Life'));
     }
 
     const currentBalance = computeLedgerBalance(data.transactions);
     if (currentBalance < item.dreamDollarPrice) {
       throw new Error(
-        `Insufficient Dream Dollars. You have D$${currentBalance.toLocaleString()}, but this requires D$${item.dreamDollarPrice.toLocaleString()}`
+        t('Insufficient Dream Dollars. You have D${balance}, but this requires D${price}', { balance: currentBalance.toLocaleString(), price: item.dreamDollarPrice.toLocaleString() })
       );
     }
 
@@ -376,7 +377,7 @@ export class LocalDemoRepository implements DataRepository {
       dayKey: todayStr,
       refType: 'purchase',
       refId: item.id,
-      memo: `Purchased dream: ${item.name}`,
+      memo: t('Purchased dream: {name}', { name: item.name }),
       createdAt: now,
     });
 
@@ -396,7 +397,7 @@ export class LocalDemoRepository implements DataRepository {
     return {
       data,
       purchase: newPurchase,
-      message: `Successfully purchased ${item.name}! Added to My Future Life.`,
+      message: t('Successfully purchased {name}! Added to My Future Life.', { name: item.name }),
     };
   }
 
@@ -441,7 +442,7 @@ export class LocalDemoRepository implements DataRepository {
           id: `log-${Date.now()}`,
           date: now.slice(0, 10),
           amountUsd: bridgeData.currentSavingsUsd,
-          note: 'Initial Reality Bridge baseline',
+          note: t('Initial Reality Bridge baseline'),
         },
       ],
       createdAt: now,
@@ -462,7 +463,7 @@ export class LocalDemoRepository implements DataRepository {
     const data = await this.load();
     const bridge = data.realityBridges.find((b) => b.id === bridgeId);
     if (!bridge) {
-      throw new Error('Reality Bridge not found');
+      throw new Error(t('Reality Bridge not found'));
     }
 
     const now = new Date().toISOString();
@@ -475,7 +476,7 @@ export class LocalDemoRepository implements DataRepository {
       id: `log-${Date.now()}`,
       date: now.slice(0, 10),
       amountUsd: addedAmount,
-      note: note || 'Savings progress update',
+      note: note || t('Savings progress update'),
     });
     bridge.updatedAt = now;
 

@@ -2,9 +2,12 @@ import React from 'react';
 import { useApp } from '../store/useApp';
 import { Button, Card, Disclaimer } from '../components/ui';
 import { ArrowRight, Sparkles, CheckCircle, ShieldCheck } from 'lucide-react';
+import { LanguagePicker } from '../components/LanguagePicker';
+import { useT } from '../i18n';
 
 export const Landing: React.FC = () => {
   const { setActiveRoute } = useApp();
+  const t = useT();
 
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] flex flex-col justify-between selection:bg-[var(--fg)] selection:text-[var(--bg)]">
@@ -13,29 +16,30 @@ export const Landing: React.FC = () => {
         <div className="max-w-6xl mx-auto px-6 py-6 flex items-baseline justify-between">
           <div className="flex items-baseline gap-4">
             <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.3em] text-[var(--fg-subtle)]">
-              Issue No. 01 — Blueprint
+              {t('Issue No. 01 — Blueprint')}
             </span>
           </div>
 
           <div className="flex items-center space-x-6 sm:space-x-10 font-sans text-[10px] font-semibold uppercase tracking-[0.25em]">
+            <LanguagePicker className="normal-case tracking-normal" />
             <button
               onClick={() => setActiveRoute('/two-futures')}
               className="hover:opacity-50 transition-opacity cursor-pointer text-[var(--fg)]"
             >
-              Two Futures
+              {t('Two Futures')}
             </button>
             <button
               onClick={() => setActiveRoute('/app')}
               className="hover:opacity-50 transition-opacity cursor-pointer text-[var(--fg)]"
             >
-              Open Life OS
+              {t('Open Life OS')}
             </button>
             <Button
               variant="outline"
               size="sm"
               onClick={() => setActiveRoute('/app')}
             >
-              Enter System
+              {t('Enter System')}
             </Button>
           </div>
         </div>
@@ -46,7 +50,7 @@ export const Landing: React.FC = () => {
         {/* Left Vertical volume tag */}
         <div className="hidden lg:flex lg:col-span-1 flex-col justify-end pb-8">
           <span className="vertical-text font-sans text-[9px] uppercase tracking-[0.5em] opacity-40">
-            VOLUME TWENTY SIX — SPECIFICATION
+            {t('VOLUME TWENTY SIX — SPECIFICATION')}
           </span>
         </div>
 
@@ -54,17 +58,17 @@ export const Landing: React.FC = () => {
         <div className="lg:col-span-6 flex flex-col justify-center space-y-6 text-left">
           <div className="inline-flex items-center gap-2 font-sans text-[10px] uppercase tracking-[0.25em] text-[var(--fg-muted)]">
             <span className="w-2 h-2 rounded-full bg-[var(--color-sage)]" />
-            <span>A Personal Transformation & Future Life OS</span>
+            <span>{t('A Personal Transformation & Future Life OS')}</span>
           </div>
 
           <h1 className="font-display text-5xl sm:text-7xl lg:text-8xl leading-[0.92] font-black italic tracking-tight text-[var(--fg)]">
-            The <br />
-            Silence <br />
-            Of Intent
+            {t('The')} <br />
+            {t('Silence')} <br />
+            {t('Of Intent')}
           </h1>
 
           <p className="font-sans text-sm sm:text-base leading-relaxed max-w-lg text-[var(--fg-muted)]">
-            Turn decisive daily action into Dream Dollars, furnish your future life in a symbolic economy, and connect every dream to an actionable real-world bridge.
+            {t('Turn decisive daily action into Dream Dollars, furnish your future life in a symbolic economy, and connect every dream to an actionable real-world bridge.')}
           </p>
 
           <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
@@ -75,7 +79,7 @@ export const Landing: React.FC = () => {
               iconPosition="right"
               onClick={() => setActiveRoute('/app')}
             >
-              Design My Future
+              {t('Design My Future')}
             </Button>
 
             <Button
@@ -83,14 +87,14 @@ export const Landing: React.FC = () => {
               size="lg"
               onClick={() => setActiveRoute('/two-futures')}
             >
-              Examine Two Futures
+              {t('Examine Two Futures')}
             </Button>
           </div>
 
           <div className="flex items-center space-x-4 pt-4">
             <div className="w-12 h-[1px] bg-[var(--fg)] opacity-60" />
             <span className="font-sans text-[9px] uppercase font-semibold tracking-widest text-[var(--fg-subtle)]">
-              Symbolic Economy & Reality Bridges
+              {t('Symbolic Economy & Reality Bridges')}
             </span>
           </div>
         </div>
@@ -105,13 +109,13 @@ export const Landing: React.FC = () => {
 
             <div className="bg-[var(--bg-elevated)]/90 backdrop-blur-xs p-6 border border-black/10 text-center max-w-xs space-y-3 z-10">
               <span className="font-sans text-[9px] uppercase tracking-[0.25em] text-[var(--fg-subtle)] block">
-                Fig. 01 — The Fork
+                {t('Fig. 01 — The Fork')}
               </span>
               <div className="font-display italic text-2xl font-bold text-[var(--fg)]">
-                One Decision Away
+                {t('One Decision Away')}
               </div>
               <p className="text-xs text-[var(--fg-muted)] leading-relaxed font-sans">
-                "Between stimulus and response, there is a space. In that space is our power to choose our future."
+                {t('"Between stimulus and response, there is a space. In that space is our power to choose our future."')}
               </p>
             </div>
           </div>
@@ -119,7 +123,7 @@ export const Landing: React.FC = () => {
           {/* Date stamp box */}
           <div className="absolute -top-3 -right-3 w-20 h-20 border border-[var(--fg)] flex flex-col items-center justify-center bg-[var(--bg)] shadow-xs">
             <span className="font-display text-2xl font-black text-[var(--fg)]">01</span>
-            <span className="font-sans text-[8px] uppercase tracking-wider text-[var(--fg-muted)]">Decision</span>
+            <span className="font-sans text-[8px] uppercase tracking-wider text-[var(--fg-muted)]">{t('Decision')}</span>
           </div>
         </div>
       </main>
@@ -128,47 +132,47 @@ export const Landing: React.FC = () => {
       <section className="max-w-6xl mx-auto px-6 py-12 border-t border-[var(--border)] w-full">
         <div className="flex items-baseline justify-between mb-8">
           <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.3em] text-[var(--fg-subtle)]">
-            Section 02 — Systematic Architecture
+            {t('Section 02 — Systematic Architecture')}
           </span>
           <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.3em] text-[var(--fg-subtle)]">
-            Philosophy
+            {t('Philosophy')}
           </span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="p-6 bg-[var(--bg-elevated)] border border-[var(--border)] space-y-3 relative">
             <span className="font-sans text-[9px] font-bold tracking-[0.25em] text-[var(--color-sage)] uppercase">
-              Module 01
+              {t('Module 01')}
             </span>
             <h3 className="font-bold font-display text-xl text-[var(--fg)]">
-              Complete High-Leverage Missions
+              {t('Complete High-Leverage Missions')}
             </h3>
             <p className="text-xs text-[var(--fg-muted)] leading-relaxed font-sans">
-              Choose one high-leverage decision each day that truly moves your needle. Finish it, honor your boundaries, and lock in the identity shift.
+              {t('Choose one high-leverage decision each day that truly moves your needle. Finish it, honor your boundaries, and lock in the identity shift.')}
             </p>
           </div>
 
           <div className="p-6 bg-[var(--bg-elevated)] border border-[var(--border)] space-y-3 relative">
             <span className="font-sans text-[9px] font-bold tracking-[0.25em] text-[var(--color-coral)] uppercase">
-              Module 02
+              {t('Module 02')}
             </span>
             <h3 className="font-bold font-display text-xl text-[var(--fg)]">
-              Earn Transparent Dream Dollars
+              {t('Earn Transparent Dream Dollars')}
             </h3>
             <p className="text-xs text-[var(--fg-muted)] leading-relaxed font-sans">
-              Every completed mission deposits D$ into your ledger in the Dream Bank. No fake math, no pay-to-win mechanics, and anti-binge caps.
+              {t('Every completed mission deposits D$ into your ledger in the Dream Bank. No fake math, no pay-to-win mechanics, and anti-binge caps.')}
             </p>
           </div>
 
           <div className="p-6 bg-[var(--bg-elevated)] border border-[var(--border)] space-y-3 relative">
             <span className="font-sans text-[9px] font-bold tracking-[0.25em] text-[var(--fg-subtle)] uppercase">
-              Module 03
+              {t('Module 03')}
             </span>
             <h3 className="font-bold font-display text-xl text-[var(--fg)]">
-              Furnish & Bridge Future Life
+              {t('Furnish & Bridge Future Life')}
             </h3>
             <p className="text-xs text-[var(--fg-muted)] leading-relaxed font-sans">
-              Spend D$ in the Dream Market, curate your 2D life gallery in My Future Life, and connect every aspiration to a concrete financial reality bridge.
+              {t('Spend D$ in the Dream Market, curate your 2D life gallery in My Future Life, and connect every aspiration to a concrete financial reality bridge.')}
             </p>
           </div>
         </div>
@@ -178,26 +182,26 @@ export const Landing: React.FC = () => {
           <div className="p-6 bg-[var(--bg-muted)] border border-[var(--border)] space-y-2">
             <div className="flex items-center gap-2 text-sm font-bold font-display text-[var(--fg)]">
               <CheckCircle className="w-4 h-4 text-[var(--color-sage)] shrink-0" />
-              <span>Not a generic to-do checklist</span>
+              <span>{t('Not a generic to-do checklist')}</span>
             </div>
             <p className="text-xs text-[var(--fg-muted)] leading-relaxed font-sans">
-              To-do lists accumulate friction and endless trivial checkboxes. One Decision Away centers entirely on identity conviction, strategic milestones, and calm directional focus.
+              {t('To-do lists accumulate friction and endless trivial checkboxes. One Decision Away centers entirely on identity conviction, strategic milestones, and calm directional focus.')}
             </p>
           </div>
 
           <div className="p-6 bg-[var(--bg-muted)] border border-[var(--border)] space-y-2">
             <div className="flex items-center gap-2 text-sm font-bold font-display text-[var(--fg)]">
               <ShieldCheck className="w-4 h-4 text-[var(--color-coral)] shrink-0" />
-              <span>Not a real currency or casino</span>
+              <span>{t('Not a real currency or casino')}</span>
             </div>
             <p className="text-xs text-[var(--fg-muted)] leading-relaxed font-sans">
-              Dream Dollars (D$) are symbolic simulation tokens that cannot be purchased, gambled, or withdrawn. They act as a behavioral mirror for where your daily energy is invested.
+              {t('Dream Dollars (D$) are symbolic simulation tokens that cannot be purchased, gambled, or withdrawn. They act as a behavioral mirror for where your daily energy is invested.')}
             </p>
           </div>
         </div>
 
         <div className="pt-8 max-w-xl mx-auto text-center">
-          <Disclaimer text="Dream Dollars (D$) is a virtual simulation economy with no cash value. Purchases and allocations are symbolic representations of your life design." />
+          <Disclaimer text={t('Dream Dollars (D$) is a virtual simulation economy with no cash value. Purchases and allocations are symbolic representations of your life design.')} />
         </div>
       </section>
 
@@ -206,25 +210,25 @@ export const Landing: React.FC = () => {
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-baseline gap-6">
           <div className="flex space-x-12 sm:space-x-16">
             <div className="flex flex-col">
-              <span className="font-sans text-[9px] uppercase tracking-widest opacity-50 mb-1">Edition</span>
-              <span className="font-sans text-[11px] font-semibold">Volume 01 — 2026</span>
+              <span className="font-sans text-[9px] uppercase tracking-widest opacity-50 mb-1">{t('Edition')}</span>
+              <span className="font-sans text-[11px] font-semibold">{t('Volume 01 — 2026')}</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-sans text-[9px] uppercase tracking-widest opacity-50 mb-1">Curator</span>
+              <span className="font-sans text-[9px] uppercase tracking-widest opacity-50 mb-1">{t('Curator')}</span>
               <span className="font-sans text-[11px] font-semibold">AurelyStudio</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-sans text-[9px] uppercase tracking-widest opacity-50 mb-1">System</span>
-              <span className="font-sans text-[11px] font-semibold">One Decision Away</span>
+              <span className="font-sans text-[9px] uppercase tracking-widest opacity-50 mb-1">{t('System')}</span>
+              <span className="font-sans text-[11px] font-semibold">{t('One Decision Away')}</span>
             </div>
           </div>
 
           <div className="flex items-center space-x-6 text-[10px] uppercase tracking-widest font-semibold text-[var(--fg-muted)]">
             <button onClick={() => setActiveRoute('/two-futures')} className="hover:text-[var(--fg)] cursor-pointer">
-              Two Futures
+              {t('Two Futures')}
             </button>
             <button onClick={() => setActiveRoute('/app/settings')} className="hover:text-[var(--fg)] cursor-pointer">
-              Disclaimers
+              {t('Disclaimers')}
             </button>
           </div>
         </div>

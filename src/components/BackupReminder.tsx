@@ -3,11 +3,13 @@ import { useApp } from '../store/useApp';
 import { Download, X, ShieldAlert } from 'lucide-react';
 import { Button } from './ui';
 import { cloudSync } from '../services/cloudSync';
+import { useT } from '../i18n';
 
 const DAYS = 14;
 
 /** Gentle Home nudge: no backup in 14+ days and not signed in to cloud. */
 export const BackupReminder: React.FC = () => {
+  const t = useT();
   const { exportDataJson, setActiveRoute, data } = useApp();
   const [hidden, setHidden] = useState(() => {
     try {
@@ -42,19 +44,19 @@ export const BackupReminder: React.FC = () => {
       <div className="flex items-start gap-3">
         <ShieldAlert className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
         <p className="text-xs text-[var(--fg-muted)]">
-          <strong className="text-[var(--fg)]">Your data lives only in this browser.</strong>{' '}
-          {last ? `Last backup was ${daysSince} days ago.` : 'You have never made a backup.'} Download one, or sign in to
-          sync to the cloud.
+          <strong className="text-[var(--fg)]">{t('Your data lives only in this browser.')}</strong>{' '}
+          {last ? t('Last backup was {n} days ago.', { n: daysSince }) : t('You have never made a backup.')}{' '}
+          {t('Download one, or sign in to sync to the cloud.')}
         </p>
       </div>
       <div className="flex items-center gap-1.5 self-start sm:self-auto">
         <Button size="sm" variant="secondary" icon={Download} onClick={exportDataJson}>
-          Backup now
+          {t('Backup now')}
         </Button>
         <Button size="sm" variant="ghost" onClick={() => setActiveRoute('/app/settings')}>
-          Cloud sync
+          {t('Cloud sync')}
         </Button>
-        <button type="button" onClick={dismiss} className="p-1.5 text-[var(--fg-subtle)] hover:text-[var(--fg)] cursor-pointer" title="Not now">
+        <button type="button" onClick={dismiss} className="p-1.5 text-[var(--fg-subtle)] hover:text-[var(--fg)] cursor-pointer" title={t('Not now')}>
           <X className="w-4 h-4" />
         </button>
       </div>

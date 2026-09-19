@@ -22,6 +22,7 @@ import {
   ShoppingBag,
 } from 'lucide-react';
 import { RealityBridge } from '../types/models';
+import { useT } from '../i18n';
 
 export const Bridge: React.FC = () => {
   const {
@@ -30,6 +31,7 @@ export const Bridge: React.FC = () => {
     addMission,
     setActiveRoute,
   } = useApp();
+  const t = useT();
 
   const [loggingBridge, setLoggingBridge] = useState<RealityBridge | null>(null);
   const [savingsInput, setSavingsInput] = useState<number>(150);
@@ -48,11 +50,11 @@ export const Bridge: React.FC = () => {
 
   const handleCreateMissionFromBridge = async (bridge: RealityBridge) => {
     const purchase = data.purchases.find((p) => p.id === bridge.purchaseId);
-    const itemName = purchase?.itemSnapshot.name || 'Dream Item';
+    const itemName = purchase?.itemSnapshot.name || t('Dream Item');
 
     await addMission({
-      title: `${bridge.nextMilestone || `Execute next milestone for ${itemName}`}`,
-      description: `Linked Reality Bridge: ${itemName}. Target: $${bridge.realCostUsd.toLocaleString()}.`,
+      title: bridge.nextMilestone || t('Execute next milestone for {itemName}', { itemName }),
+      description: t('Linked Reality Bridge: {itemName}. Target: ${cost}.', { itemName, cost: bridge.realCostUsd.toLocaleString() }),
       area: 'Money',
       type: 'weekly_mission',
       difficulty: 'medium',
@@ -66,15 +68,15 @@ export const Bridge: React.FC = () => {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Reality Bridge"
-        subtitle="Translate symbolic Future Life dreams into concrete savings timelines and real-world actions."
+        title={t('Reality Bridge')}
+        subtitle={t('Translate symbolic Future Life dreams into concrete savings timelines and real-world actions.')}
         action={
           <Button
             variant="outline"
             icon={ShoppingBag}
             onClick={() => setActiveRoute('/app/life')}
           >
-            My Future Life
+            {t('My Future Life')}
           </Button>
         }
       />
@@ -94,42 +96,42 @@ export const Bridge: React.FC = () => {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-coral)]">
-                      Reality Execution Bridge
+                      {t('Reality Execution Bridge')}
                     </span>
-                    <Badge variant="coral">{bridge.realProgressPct}% Saved</Badge>
+                    <Badge variant="coral">{t('{n}% Saved', { n: bridge.realProgressPct })}</Badge>
                   </div>
 
                   <h3 className="text-lg font-bold font-display text-[var(--fg)]">
-                    {purchase?.itemSnapshot.name || 'Connected Dream'}
+                    {purchase?.itemSnapshot.name || t('Connected Dream')}
                   </h3>
 
                   {/* Dual Savings Progress */}
                   <div className="space-y-1.5 p-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)]">
                     <div className="flex justify-between text-xs">
-                      <span className="text-[var(--fg-muted)]">Real Saved vs Target:</span>
+                      <span className="text-[var(--fg-muted)]">{t('Real Saved vs Target:')}</span>
                       <span className="font-bold text-[var(--fg)]">
                         ${bridge.currentSavingsUsd.toLocaleString()} / ${bridge.realCostUsd.toLocaleString()}
                       </span>
                     </div>
                     <Progress value={bridge.realProgressPct} variant="coral" />
                     <div className="flex justify-between text-[11px] text-[var(--fg-subtle)] pt-1">
-                      <span>Remaining: ${remaining.toLocaleString()}</span>
-                      <span>Target: {bridge.targetDate}</span>
+                      <span>{t('Remaining: ${n}', { n: remaining.toLocaleString() })}</span>
+                      <span>{t('Target: {date}', { date: bridge.targetDate })}</span>
                     </div>
                   </div>
 
                   {/* Blueprint details */}
                   <div className="space-y-2 text-xs text-[var(--fg-muted)]">
                     <div>
-                      <span className="font-semibold text-[var(--fg)] block">Required Monthly Rate:</span>
-                      ${bridge.requiredMonthlySavingsUsd.toLocaleString()} / month
+                      <span className="font-semibold text-[var(--fg)] block">{t('Required Monthly Rate:')}</span>
+                      {t('${n} / month', { n: bridge.requiredMonthlySavingsUsd.toLocaleString() })}
                     </div>
                     <div>
-                      <span className="font-semibold text-[var(--fg)] block">Income / Funding Channel:</span>
+                      <span className="font-semibold text-[var(--fg)] block">{t('Income / Funding Channel:')}</span>
                       {bridge.incomeProject}
                     </div>
                     <div>
-                      <span className="font-semibold text-[var(--fg)] block">Next Physical Milestone:</span>
+                      <span className="font-semibold text-[var(--fg)] block">{t('Next Physical Milestone:')}</span>
                       {bridge.nextMilestone}
                     </div>
                   </div>
@@ -141,7 +143,7 @@ export const Bridge: React.FC = () => {
                     size="sm"
                     onClick={() => handleCreateMissionFromBridge(bridge)}
                   >
-                    Generate Mission
+                    {t('Generate Mission')}
                   </Button>
 
                   <Button
@@ -150,7 +152,7 @@ export const Bridge: React.FC = () => {
                     icon={DollarSign}
                     onClick={() => setLoggingBridge(bridge)}
                   >
-                    Log Savings
+                    {t('Log Savings')}
                   </Button>
                 </div>
               </Card>
@@ -160,25 +162,25 @@ export const Bridge: React.FC = () => {
       ) : (
         <Empty
           icon={Layers}
-          title="No Reality Bridges Established"
-          description="Purchase a dream in the Market and click 'Reality Bridge' in My Future Life to calculate real costs and savings schedules."
-          actionLabel="Go to My Future Life"
+          title={t('No Reality Bridges Established')}
+          description={t("Purchase a dream in the Market and click 'Reality Bridge' in My Future Life to calculate real costs and savings schedules.")}
+          actionLabel={t('Go to My Future Life')}
           onAction={() => setActiveRoute('/app/life')}
         />
       )}
 
-      <Disclaimer text="The Reality Bridge provides mathematical clarity for your physical life. It does not initiate real bank transactions." />
+      <Disclaimer text={t('The Reality Bridge provides mathematical clarity for your physical life. It does not initiate real bank transactions.')} />
 
       {/* Log Savings Modal */}
       <Modal
         isOpen={Boolean(loggingBridge)}
         onClose={() => setLoggingBridge(null)}
-        title="Record Real Savings"
-        subtitle="Log capital set aside in your physical bank account or brokerage."
+        title={t('Record Real Savings')}
+        subtitle={t('Log capital set aside in your physical bank account or brokerage.')}
       >
         {loggingBridge && (
           <form onSubmit={handleRecordSavings} className="space-y-4">
-            <Field id="savings-val" label="Amount Saved ($ USD)" required>
+            <Field id="savings-val" label={t('Amount Saved ($ USD)')} required>
               <Input
                 id="savings-val"
                 type="number"
@@ -188,21 +190,21 @@ export const Bridge: React.FC = () => {
               />
             </Field>
 
-            <Field id="savings-note-input" label="Note (Optional)">
+            <Field id="savings-note-input" label={t('Note (Optional)')}>
               <Input
                 id="savings-note-input"
                 value={savingsNote}
                 onChange={(e) => setSavingsNote(e.target.value)}
-                placeholder="e.g. Monthly transfer, side revenue"
+                placeholder={t('e.g. Monthly transfer, side revenue')}
               />
             </Field>
 
             <div className="flex justify-end gap-3 pt-2">
               <Button variant="ghost" type="button" onClick={() => setLoggingBridge(null)}>
-                Cancel
+                {t('Cancel')}
               </Button>
               <Button variant="primary" type="submit">
-                Update Savings
+                {t('Update Savings')}
               </Button>
             </div>
           </form>

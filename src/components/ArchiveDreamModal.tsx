@@ -3,6 +3,7 @@ import { MarketItem, ArchiveReason, Purchase } from '../types/models';
 import { useApp } from '../store/useApp';
 import { Modal, Button, Badge } from './ui';
 import { DreamArt } from './DreamArt';
+import { useT } from '../i18n';
 import { Archive, CheckCircle2, RefreshCw, Sparkles, Compass, XCircle, FileText } from 'lucide-react';
 
 interface ArchiveDreamModalProps {
@@ -18,6 +19,7 @@ export const ArchiveDreamModal: React.FC<ArchiveDreamModalProps> = ({
   item,
   purchase,
 }) => {
+  const t = useT();
   const { archiveMarketItem } = useApp();
   const [reason, setReason] = useState<ArchiveReason>(purchase ? 'completed' : 'no_longer_relevant');
   const [note, setNote] = useState<string>('');
@@ -36,34 +38,34 @@ export const ArchiveDreamModal: React.FC<ArchiveDreamModalProps> = ({
   }[] = [
     {
       value: 'completed',
-      label: 'Completed / Acquired',
-      description: 'You have attained this milestone in real life or completed its full simulation cycle.',
+      label: t('Completed / Acquired'),
+      description: t('You have attained this milestone in real life or completed its full simulation cycle.'),
       icon: CheckCircle2,
       recommended: isOwned,
     },
     {
       value: 'outgrown',
-      label: 'Outgrown / Taste Evolved',
-      description: 'Your priorities and personal vision have matured beyond this specific item.',
+      label: t('Outgrown / Taste Evolved'),
+      description: t('Your priorities and personal vision have matured beyond this specific item.'),
       icon: RefreshCw,
     },
     {
       value: 'replaced',
-      label: 'Replaced with Higher Ambition',
-      description: 'Upgraded to a higher tier supercar, residence, or more meaningful aspiration.',
+      label: t('Replaced with Higher Ambition'),
+      description: t('Upgraded to a higher tier supercar, residence, or more meaningful aspiration.'),
       icon: Sparkles,
     },
     {
       value: 'no_longer_relevant',
-      label: 'No Longer Relevant',
-      description: 'Does not align with your current focus, but you want to retain historical record.',
+      label: t('No Longer Relevant'),
+      description: t('Does not align with your current focus, but you want to retain historical record.'),
       icon: XCircle,
       recommended: !isOwned,
     },
     {
       value: 'other',
-      label: 'Other Reason',
-      description: 'Custom personal reasoning recorded in your milestone archives.',
+      label: t('Other Reason'),
+      description: t('Custom personal reasoning recorded in your milestone archives.'),
       icon: FileText,
     },
   ];
@@ -84,7 +86,7 @@ export const ArchiveDreamModal: React.FC<ArchiveDreamModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Archive Dream & Preserve History"
+      title={t('Archive Dream & Preserve History')}
       size="lg"
     >
       <form onSubmit={handleConfirm} className="space-y-6">
@@ -102,7 +104,7 @@ export const ArchiveDreamModal: React.FC<ArchiveDreamModalProps> = ({
           <div className="flex-1 min-w-0 space-y-1">
             <div className="flex items-center gap-2">
               <Badge variant="subtle">{item.category}</Badge>
-              {isOwned && <Badge variant="success">Acquired 100%</Badge>}
+              {isOwned && <Badge variant="success">{t('Acquired 100%')}</Badge>}
             </div>
             <h4 className="font-display font-bold text-sm text-[var(--fg)] truncate">
               {item.name}
@@ -119,14 +121,14 @@ export const ArchiveDreamModal: React.FC<ArchiveDreamModalProps> = ({
         <div className="p-3.5 rounded-[var(--radius-md)] bg-amber-500/10 border border-amber-500/20 text-xs text-amber-900 dark:text-amber-200 leading-relaxed flex items-start gap-2.5">
           <Archive className="w-4 h-4 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
           <div>
-            <strong>Active Vision Board cleanup:</strong> Archiving will immediately move this item out of your active Vision Board while preserving its date, valuation, and milestone note in your <strong>Archived History</strong>.
+            <strong>{t('Active Vision Board cleanup:')}</strong> {t('Archiving will immediately move this item out of your active Vision Board while preserving its date, valuation, and milestone note in your')} <strong>{t('Archived History')}</strong>.
           </div>
         </div>
 
         {/* Reason Selector */}
         <div className="space-y-2.5">
           <label className="block text-xs font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-            Select Archive Reason
+            {t('Select Archive Reason')}
           </label>
 
           <div className="grid grid-cols-1 gap-2">
@@ -162,7 +164,7 @@ export const ArchiveDreamModal: React.FC<ArchiveDreamModalProps> = ({
                       </span>
                       {opt.recommended && (
                         <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-[var(--color-sage)]/20 text-[var(--color-sage)] font-bold">
-                          Recommended
+                          {t('Recommended')}
                         </span>
                       )}
                     </div>
@@ -179,14 +181,14 @@ export const ArchiveDreamModal: React.FC<ArchiveDreamModalProps> = ({
         {/* Note & Reflection field */}
         <div className="space-y-1.5">
           <label htmlFor="archive-note" className="block text-xs font-bold text-[var(--fg-muted)]">
-            Personal Reflection Note (Optional)
+            {t('Personal Reflection Note (Optional)')}
           </label>
           <textarea
             id="archive-note"
             value={note}
             onChange={(e) => setNote(e.target.value)}
             rows={2}
-            placeholder="e.g., Achieved key promotion; or upgrading vision to a GT3 RS instead..."
+            placeholder={t('e.g., Achieved key promotion; or upgrading vision to a GT3 RS instead...')}
             className="w-full px-3 py-2 text-xs bg-[var(--bg-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] text-[var(--fg)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-[var(--color-slate)]"
           />
         </div>
@@ -199,7 +201,7 @@ export const ArchiveDreamModal: React.FC<ArchiveDreamModalProps> = ({
             onClick={onClose}
             disabled={isSubmitting}
           >
-            Cancel
+            {t('Cancel')}
           </Button>
           <Button
             type="submit"
@@ -207,7 +209,7 @@ export const ArchiveDreamModal: React.FC<ArchiveDreamModalProps> = ({
             icon={Archive}
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Archiving...' : 'Confirm & Archive'}
+            {isSubmitting ? t('Archiving...') : t('Confirm & Archive')}
           </Button>
         </div>
       </form>

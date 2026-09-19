@@ -4,14 +4,16 @@ import { Card, Button, Field, Badge } from './ui';
 import { BellRing, Send, Check } from 'lucide-react';
 import { notificationScheduler } from '../services/notificationScheduler';
 import { DEFAULT_NUDGE_TIMES, NUDGE_TITLES, NudgeSlot, getNudgeLine } from '../data/dailyNudges';
+import { useT, N_ } from '../i18n';
 
 const SLOTS: { key: NudgeSlot; label: string; hint: string }[] = [
-  { key: 'morning', label: 'Morning ignite', hint: 'Sets the One Decision before the day starts' },
-  { key: 'midday', label: 'Midday re-aim', hint: 'Catches the drift, brings you back' },
-  { key: 'evening', label: 'Evening close', hint: 'Kind review, tomorrow\'s first step' },
+  { key: 'morning', label: N_('Morning ignite'), hint: N_('Sets the One Decision before the day starts') },
+  { key: 'midday', label: N_('Midday re-aim'), hint: N_('Catches the drift, brings you back') },
+  { key: 'evening', label: N_('Evening close'), hint: N_('Kind review, tomorrow\'s first step') },
 ];
 
 export const DailyNudgesSettings: React.FC = () => {
+  const t = useT();
   const { data, updateProfile, showToast } = useApp();
   const [perm, setPerm] = useState(notificationScheduler.permission());
   const [enabled, setEnabled] = useState<boolean>(data?.profile.nudgesEnabled === true);
@@ -33,7 +35,7 @@ export const DailyNudgesSettings: React.FC = () => {
       const p = await notificationScheduler.requestPermission();
       setPerm(p);
       if (p !== 'granted') {
-        showToast('Notifications are blocked in the browser. Allow them to receive nudges.', 'error');
+        showToast(t('Notifications are blocked in the browser. Allow them to receive nudges.'), 'error');
         return;
       }
     }
@@ -63,23 +65,22 @@ export const DailyNudgesSettings: React.FC = () => {
       <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
         <div className="flex items-center gap-2">
           <BellRing className="w-4 h-4 text-[var(--color-coral)]" />
-          <h3 className="font-display font-bold text-base text-[var(--fg)]">Daily Nudges</h3>
+          <h3 className="font-display font-bold text-base text-[var(--fg)]">{t('Daily Nudges')}</h3>
         </div>
         <Badge variant={enabled && perm === 'granted' ? 'sage' : 'subtle'}>
-          {!supported ? 'Not supported here' : perm === 'denied' ? 'Blocked by browser' : enabled ? 'On · 3 a day' : 'Off'}
+          {!supported ? t('Not supported here') : perm === 'denied' ? t('Blocked by browser') : enabled ? t('On · 3 a day') : t('Off')}
         </Badge>
       </div>
 
       <p className="text-xs text-[var(--fg-muted)] leading-relaxed">
-        Three short, honest lines a day — one to start, one to re-aim, one to close. They arrive as notifications while
-        the app is open or installed on your home screen. Never the same line twice in a day.
+        {t('Three short, honest lines a day — one to start, one to re-aim, one to close. They arrive as notifications while the app is open or installed on your home screen. Never the same line twice in a day.')}
       </p>
 
       <div className="flex items-center justify-between p-3 rounded-[var(--radius-sm)] bg-[var(--bg-muted)]/60 border border-[var(--border)]">
         <div className="text-xs">
-          <div className="font-bold text-[var(--fg)]">Send me daily nudges</div>
+          <div className="font-bold text-[var(--fg)]">{t('Send me daily nudges')}</div>
           <div className="text-[var(--fg-muted)]">
-            {perm === 'granted' ? 'Notification permission granted.' : perm === 'denied' ? 'Permission denied — enable it in browser site settings.' : 'We\'ll ask for permission once.'}
+            {perm === 'granted' ? t('Notification permission granted.') : perm === 'denied' ? t('Permission denied — enable it in browser site settings.') : t("We'll ask for permission once.")}
           </div>
         </div>
         <button
@@ -95,7 +96,7 @@ export const DailyNudgesSettings: React.FC = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {SLOTS.map((s) => (
-          <Field key={s.key} id={`nudge-${s.key}`} label={s.label} helper={s.hint}>
+          <Field key={s.key} id={`nudge-${s.key}`} label={t(s.label)} helper={t(s.hint)}>
             <input
               id={`nudge-${s.key}`}
               type="time"
@@ -108,26 +109,24 @@ export const DailyNudgesSettings: React.FC = () => {
       </div>
 
       <div className="p-3 rounded-[var(--radius-sm)] bg-[var(--bg-muted)]/40 border border-[var(--border)] space-y-1.5">
-        <div className="text-[10px] uppercase tracking-wider font-bold text-[var(--fg-subtle)]">Today's lines</div>
+        <div className="text-[10px] uppercase tracking-wider font-bold text-[var(--fg-subtle)]">{t("Today's lines")}</div>
         {SLOTS.map((s) => (
           <div key={s.key} className="text-xs text-[var(--fg-muted)]">
-            <span className="font-semibold text-[var(--fg)]">{NUDGE_TITLES[s.key]} · {times[s.key]}</span> — {getNudgeLine(s.key)}
+            <span className="font-semibold text-[var(--fg)]">{t(NUDGE_TITLES[s.key])} · {times[s.key]}</span> — {t(getNudgeLine(s.key))}
           </div>
         ))}
       </div>
 
       <div className="flex items-center justify-between pt-3 border-t border-[var(--border)]">
         <Button variant="outline" size="sm" icon={Send} onClick={handleTest} disabled={!supported}>
-          Send a test now
+          {t('Send a test now')}
         </Button>
         <Button variant="primary" size="sm" icon={saved ? Check : undefined} onClick={handleSave}>
-          {saved ? 'Saved' : 'Save times'}
+          {saved ? t('Saved') : t('Save times')}
         </Button>
       </div>
       <p className="text-[11px] text-[var(--fg-subtle)]">
-        Browser limitation: when the app is fully closed, nudges can't fire without a push server. Keep it installed on
-        your home screen or open in a tab, and they arrive on time; if you open the app within 90 minutes of a slot, the
-        missed nudge is delivered then.
+        {t("Browser limitation: when the app is fully closed, nudges can't fire without a push server. Keep it installed on your home screen or open in a tab, and they arrive on time; if you open the app within 90 minutes of a slot, the missed nudge is delivered then.")}
       </p>
     </Card>
   );

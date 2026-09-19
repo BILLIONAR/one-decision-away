@@ -24,6 +24,7 @@ import {
   Flame,
 } from 'lucide-react';
 import { ECONOMY_CONSTANTS } from '../services/economy';
+import { useT } from '../i18n';
 
 export interface DreamDollarChartProps {
   transactions: WalletTransaction[];
@@ -58,6 +59,7 @@ interface CustomTooltipProps {
 }
 
 const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload }) => {
+  const t = useT();
   if (!active || !payload || !payload.length || !payload[0]?.payload) {
     return null;
   }
@@ -78,7 +80,7 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload }) => {
         </div>
         {d.isToday && (
           <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-[var(--color-sage)] text-white">
-            Today
+            {t('Today')}
           </span>
         )}
       </div>
@@ -86,7 +88,7 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload }) => {
       {/* Total Earnings */}
       <div className="space-y-1.5 font-sans">
         <div className="flex items-center justify-between text-xs pb-1 border-b border-[var(--border)]">
-          <span className="text-[var(--fg-muted)] font-medium">Total Earned:</span>
+          <span className="text-[var(--fg-muted)] font-medium">{t('Total Earned:')}</span>
           <span className="font-mono font-bold text-[var(--color-sage)] text-sm">
             + D$ {d.earnings.toLocaleString()}
           </span>
@@ -99,7 +101,7 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload }) => {
               <div className="flex items-center justify-between text-[var(--fg-muted)]">
                 <span className="flex items-center gap-1">
                   <Target className="w-3 h-3 text-[var(--color-sage)] shrink-0" />
-                  <span>Missions & Decisions:</span>
+                  <span>{t('Missions & Decisions:')}</span>
                 </span>
                 <span className="font-mono font-semibold text-[var(--fg)]">
                   +D$ {d.missionsEarned.toLocaleString()}
@@ -111,7 +113,7 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload }) => {
               <div className="flex items-center justify-between text-[var(--fg-muted)]">
                 <span className="flex items-center gap-1">
                   <Zap className="w-3 h-3 text-amber-500 shrink-0" />
-                  <span>Micro-Habits:</span>
+                  <span>{t('Micro-Habits:')}</span>
                 </span>
                 <span className="font-mono font-semibold text-[var(--fg)]">
                   +D$ {d.habitsEarned.toLocaleString()}
@@ -123,7 +125,7 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload }) => {
               <div className="flex items-center justify-between text-[var(--fg-muted)]">
                 <span className="flex items-center gap-1">
                   <Clock className="w-3 h-3 text-sky-500 shrink-0" />
-                  <span>Focus Deep Work:</span>
+                  <span>{t('Focus Deep Work:')}</span>
                 </span>
                 <span className="font-mono font-semibold text-[var(--fg)]">
                   +D$ {d.focusEarned.toLocaleString()}
@@ -135,7 +137,7 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload }) => {
               <div className="flex items-center justify-between text-[var(--fg-muted)]">
                 <span className="flex items-center gap-1">
                   <CheckCircle2 className="w-3 h-3 text-teal-500 shrink-0" />
-                  <span>Check-In Reflection:</span>
+                  <span>{t('Check-In Reflection:')}</span>
                 </span>
                 <span className="font-mono font-semibold text-[var(--fg)]">
                   +D$ {d.checkInsEarned.toLocaleString()}
@@ -147,7 +149,7 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload }) => {
               <div className="flex items-center justify-between text-[var(--fg-muted)]">
                 <span className="flex items-center gap-1">
                   <Flame className="w-3 h-3 text-[var(--color-coral)] shrink-0" />
-                  <span>Streaks & Grants:</span>
+                  <span>{t('Streaks & Grants:')}</span>
                 </span>
                 <span className="font-mono font-semibold text-[var(--fg)]">
                   +D$ {d.bonusesEarned.toLocaleString()}
@@ -156,19 +158,19 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload }) => {
             )}
 
             <div className="text-[10px] text-[var(--fg-subtle)] pt-1 text-right">
-              {d.txCount} deposit transaction{d.txCount !== 1 ? 's' : ''}
+              {d.txCount === 1 ? t('1 deposit transaction') : t('{n} deposit transactions', { n: d.txCount })}
             </div>
           </div>
         ) : (
           <div className="text-[11px] text-[var(--fg-subtle)] py-1 italic">
-            Zero currency generated on this date.
+            {t('Zero currency generated on this date.')}
           </div>
         )}
 
         {/* Spent info if any */}
         {d.spent > 0 && (
           <div className="flex items-center justify-between pt-1.5 border-t border-[var(--border)] text-[11px] text-[var(--color-coral)]">
-            <span>Marketplace Outflow:</span>
+            <span>{t('Marketplace Outflow:')}</span>
             <span className="font-mono font-semibold">- D$ {d.spent.toLocaleString()}</span>
           </div>
         )}
@@ -182,6 +184,7 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
   className = '',
   dailyCap = ECONOMY_CONSTANTS.DAILY_REWARD_CAP,
 }) => {
+  const t = useT();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   // Compute 7-day chronological data array (6 days ago to today)
@@ -304,16 +307,16 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="font-sans text-[9px] font-bold uppercase tracking-[0.25em] text-[var(--color-sage)]">
-              Fig. 01 — 7-Day Output
+              {t('Fig. 01 — 7-Day Output')}
             </span>
-            <Badge variant="sage">Recharts Engine</Badge>
+            <Badge variant="sage">{t('Recharts Engine')}</Badge>
           </div>
           <h3 className="text-xl font-bold font-display text-[var(--fg)] flex items-center gap-2">
             <Coins className="w-5 h-5 text-[var(--color-sage)]" />
-            7-Day Dream Dollar Earnings
+            {t('7-Day Dream Dollar Earnings')}
           </h3>
           <p className="text-xs text-[var(--fg-muted)] font-sans">
-            Daily distribution of symbolic currency earned through focus sessions, missions, and identity votes.
+            {t('Daily distribution of symbolic currency earned through focus sessions, missions, and identity votes.')}
           </p>
         </div>
 
@@ -322,7 +325,7 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
           <TrendingUp className="w-4 h-4 text-[var(--color-sage)]" />
           <div className="text-right">
             <span className="text-[9px] uppercase tracking-wider text-[var(--fg-subtle)] font-bold block">
-              7-Day Total
+              {t('7-Day Total')}
             </span>
             <span className="font-mono font-bold text-sm text-[var(--fg)]">
               + D$ {metrics.totalEarned.toLocaleString()}
@@ -335,31 +338,33 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 p-3 bg-[var(--bg-muted)] border border-[var(--border)] rounded-[var(--radius-sm)]">
         <div className="space-y-0.5">
           <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--fg-subtle)] flex items-center gap-1">
-            <Calendar className="w-3 h-3 text-[var(--color-sage)]" /> Today's Output
+            <Calendar className="w-3 h-3 text-[var(--color-sage)]" /> {t("Today's Output")}
           </span>
           <div className="text-lg font-bold font-display text-[var(--color-sage)]">
             + D$ {metrics.todayData.earnings.toLocaleString()}
           </div>
           <span className="text-[10px] text-[var(--fg-subtle)] font-sans">
-            {metrics.todayData.txCount} action{metrics.todayData.txCount !== 1 ? 's' : ''} logged today
+            {metrics.todayData.txCount === 1
+              ? t('1 action logged today')
+              : t('{n} actions logged today', { n: metrics.todayData.txCount })}
           </span>
         </div>
 
         <div className="space-y-0.5">
           <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--fg-subtle)] flex items-center gap-1">
-            <TrendingUp className="w-3 h-3 text-[var(--fg-muted)]" /> Daily Average
+            <TrendingUp className="w-3 h-3 text-[var(--fg-muted)]" /> {t('Daily Average')}
           </span>
           <div className="text-lg font-bold font-display text-[var(--fg)]">
             + D$ {metrics.dailyAvg.toLocaleString()}
           </div>
           <span className="text-[10px] text-[var(--fg-subtle)] font-sans">
-            Paced across 7 days
+            {t('Paced across 7 days')}
           </span>
         </div>
 
         <div className="space-y-0.5">
           <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--fg-subtle)] flex items-center gap-1">
-            <Zap className="w-3 h-3 text-amber-500" /> Best Day
+            <Zap className="w-3 h-3 text-amber-500" /> {t('Best Day')}
           </span>
           <div className="text-lg font-bold font-display text-[var(--fg)]">
             + D$ {metrics.peakDay.earnings.toLocaleString()}
@@ -367,19 +372,19 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
           <span className="text-[10px] text-[var(--fg-subtle)] font-sans">
             {metrics.peakDay.earnings > 0
               ? `${metrics.peakDay.weekday} (${metrics.peakDay.dateLabel})`
-              : 'No activity yet'}
+              : t('No activity yet')}
           </span>
         </div>
 
         <div className="space-y-0.5">
           <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--fg-subtle)] flex items-center gap-1">
-            <CheckCircle2 className="w-3 h-3 text-[var(--color-sage)]" /> Consistency
+            <CheckCircle2 className="w-3 h-3 text-[var(--color-sage)]" /> {t('Consistency')}
           </span>
           <div className="text-lg font-bold font-display text-[var(--fg)]">
-            {metrics.activeDays} / 7 Days
+            {t('{n} / 7 Days', { n: metrics.activeDays })}
           </div>
           <span className="text-[10px] text-[var(--fg-subtle)] font-sans">
-            {Math.round((metrics.activeDays / 7) * 100)}% weekly execution rate
+            {t('{pct}% weekly execution rate', { pct: Math.round((metrics.activeDays / 7) * 100) })}
           </span>
         </div>
       </div>
@@ -513,10 +518,10 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
       {/* 7-Day Source Breakdown Chips */}
       <div className="pt-2 border-t border-[var(--border)] space-y-2">
         <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-[var(--fg-subtle)] font-sans">
-          <span>7-Day Earnings by Contribution Source</span>
+          <span>{t('7-Day Earnings by Contribution Source')}</span>
           <span className="flex items-center gap-1 text-[var(--color-sage)]">
             <Sparkles className="w-3 h-3" />
-            Immutable Ledger Data
+            {t('Immutable Ledger Data')}
           </span>
         </div>
 
@@ -525,7 +530,7 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
           <div className="p-2 rounded-[var(--radius-xs)] bg-[var(--bg)] border border-[var(--border)] flex items-center justify-between">
             <div className="flex items-center gap-1.5 truncate">
               <div className="w-2 h-2 rounded-full bg-[var(--color-sage)] shrink-0" />
-              <span className="text-[11px] text-[var(--fg-muted)] truncate">Missions & OD</span>
+              <span className="text-[11px] text-[var(--fg-muted)] truncate">{t('Missions & OD')}</span>
             </div>
             <span className="font-mono font-bold text-[11px] text-[var(--fg)] shrink-0 pl-1">
               +D$ {metrics.breakdown.missions.toLocaleString()}
@@ -536,7 +541,7 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
           <div className="p-2 rounded-[var(--radius-xs)] bg-[var(--bg)] border border-[var(--border)] flex items-center justify-between">
             <div className="flex items-center gap-1.5 truncate">
               <div className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
-              <span className="text-[11px] text-[var(--fg-muted)] truncate">Micro-Habits</span>
+              <span className="text-[11px] text-[var(--fg-muted)] truncate">{t('Micro-Habits')}</span>
             </div>
             <span className="font-mono font-bold text-[11px] text-[var(--fg)] shrink-0 pl-1">
               +D$ {metrics.breakdown.habits.toLocaleString()}
@@ -547,7 +552,7 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
           <div className="p-2 rounded-[var(--radius-xs)] bg-[var(--bg)] border border-[var(--border)] flex items-center justify-between">
             <div className="flex items-center gap-1.5 truncate">
               <div className="w-2 h-2 rounded-full bg-sky-500 shrink-0" />
-              <span className="text-[11px] text-[var(--fg-muted)] truncate">Focus Work</span>
+              <span className="text-[11px] text-[var(--fg-muted)] truncate">{t('Focus Work')}</span>
             </div>
             <span className="font-mono font-bold text-[11px] text-[var(--fg)] shrink-0 pl-1">
               +D$ {metrics.breakdown.focus.toLocaleString()}
@@ -558,7 +563,7 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
           <div className="p-2 rounded-[var(--radius-xs)] bg-[var(--bg)] border border-[var(--border)] flex items-center justify-between">
             <div className="flex items-center gap-1.5 truncate">
               <div className="w-2 h-2 rounded-full bg-[var(--color-coral)] shrink-0" />
-              <span className="text-[11px] text-[var(--fg-muted)] truncate">Check-ins & Bonus</span>
+              <span className="text-[11px] text-[var(--fg-muted)] truncate">{t('Check-ins & Bonus')}</span>
             </div>
             <span className="font-mono font-bold text-[11px] text-[var(--fg)] shrink-0 pl-1">
               +D$ {(metrics.breakdown.checkIns + metrics.breakdown.bonuses).toLocaleString()}

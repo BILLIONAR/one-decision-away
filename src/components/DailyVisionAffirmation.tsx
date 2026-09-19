@@ -18,6 +18,7 @@ import {
 import { DreamArt } from './DreamArt';
 import { SEED_MARKET_ITEMS } from '../data/seed';
 import { MarketItem } from '../types/models';
+import { useT } from '../i18n';
 
 type AffirmationTone = 'execution' | 'sovereignty' | 'calm';
 
@@ -29,6 +30,7 @@ interface GeneratedQuote {
 }
 
 export const DailyVisionAffirmation: React.FC = () => {
+  const t = useT();
   const { data, setActiveRoute, showToast } = useApp();
 
   const [tone, setTone] = useState<AffirmationTone>('sovereignty');
@@ -63,14 +65,14 @@ export const DailyVisionAffirmation: React.FC = () => {
     return allItems.find((item) => !archivedItemIds.has(item.id)) || allItems[0];
   }, [data.inVisionItemIds, data.customMarketItems, allItems, archivedItemIds]);
 
-  const futureRole = data.futureSelf?.title || 'The Finisher';
-  const identityStmt = data.futureSelf?.identityStatement || 'I act before I feel ready.';
+  const futureRole = data.futureSelf?.title || t('The Finisher');
+  const identityStmt = data.futureSelf?.identityStatement || t('I act before I feel ready.');
 
   // 2. Generate customized inspiring affirmation
   const currentAffirmation: GeneratedQuote = useMemo(() => {
     const dName = priorityDream.name;
     const dCat = priorityDream.category;
-    const whyWanted = priorityDream.whyWanted || 'Uncompromising personal sovereignty and focus.';
+    const whyWanted = priorityDream.whyWanted || t('Uncompromising personal sovereignty and focus.');
 
     // Deterministic date + tone + seed index
     const today = new Date();
@@ -82,102 +84,102 @@ export const DailyVisionAffirmation: React.FC = () => {
     const toneMatrices: Record<AffirmationTone, GeneratedQuote[]> = {
       sovereignty: [
         {
-          quote: `You are not merely wishing for ${dName}; you are cultivating the caliber of mind and standard of execution that makes it inevitable.`,
-          subtext: `Every disciplined decision today anchors ${dName} from an abstract dream into an impending reality.`,
-          themePillar: 'Standard of Sovereignty',
-          actionPrompt: `Embody ${futureRole} today. Walk, decide, and create as the person who already commands this level of excellence.`,
+          quote: t('You are not merely wishing for {dName}; you are cultivating the caliber of mind and standard of execution that makes it inevitable.', { dName }),
+          subtext: t('Every disciplined decision today anchors {dName} from an abstract dream into an impending reality.', { dName }),
+          themePillar: t('Standard of Sovereignty'),
+          actionPrompt: t('Embody {futureRole} today. Walk, decide, and create as the person who already commands this level of excellence.', { futureRole }),
         },
         {
-          quote: `True luxury is alignment with your highest vision. The existence of ${dName} on your horizon is a compass, not a fantasy.`,
-          subtext: `Hold your boundaries firm against distraction. Your future life is listening to today's habits.`,
-          themePillar: 'Unyielding Alignment',
-          actionPrompt: `Execute your signature decision today with absolute precision.`,
+          quote: t('True luxury is alignment with your highest vision. The existence of {dName} on your horizon is a compass, not a fantasy.', { dName }),
+          subtext: t('Hold your boundaries firm against distraction. Your future life is listening to today\'s habits.'),
+          themePillar: t('Unyielding Alignment'),
+          actionPrompt: t('Execute your signature decision today with absolute precision.'),
         },
         {
-          quote: `Do not shrink your standards to fit current circumstances. Grow your daily capacity until ${dName} is simply your natural baseline.`,
+          quote: t('Do not shrink your standards to fit current circumstances. Grow your daily capacity until {dName} is simply your natural baseline.', { dName }),
           subtext: `"${whyWanted}"`,
-          themePillar: 'Identity Expansion',
-          actionPrompt: `Reject old-self excuses. Protect your peak focus blocks without compromise.`,
+          themePillar: t('Identity Expansion'),
+          actionPrompt: t('Reject old-self excuses. Protect your peak focus blocks without compromise.'),
         },
         {
-          quote: `The highest form of respect you can pay to ${dName} is honoring the hours between now and its arrival with deep, undistracted craft.`,
-          subtext: `Your Future Self (${futureRole}) has already overcome today's micro-resistances.`,
-          themePillar: 'Honor The Vision',
-          actionPrompt: `Take one concrete physical step toward this milestone before the day concludes.`,
+          quote: t('The highest form of respect you can pay to {dName} is honoring the hours between now and its arrival with deep, undistracted craft.', { dName }),
+          subtext: t('Your Future Self ({futureRole}) has already overcome today\'s micro-resistances.', { futureRole }),
+          themePillar: t('Honor The Vision'),
+          actionPrompt: t('Take one concrete physical step toward this milestone before the day concludes.'),
         },
       ],
       execution: [
         {
-          quote: `The speed of your transition to ${dName} is strictly determined by the velocity of your daily decisions.`,
-          subtext: `Hesitation is the only distance between who you are and the reality that holds ${dName}.`,
-          themePillar: 'Velocity & Momentum',
-          actionPrompt: `Eliminate friction. Complete today's signature One Decision without delay.`,
+          quote: t('The speed of your transition to {dName} is strictly determined by the velocity of your daily decisions.', { dName }),
+          subtext: t('Hesitation is the only distance between who you are and the reality that holds {dName}.', { dName }),
+          themePillar: t('Velocity & Momentum'),
+          actionPrompt: t('Eliminate friction. Complete today\'s signature One Decision without delay.'),
         },
         {
-          quote: `Mastery is compounded repetition. When you push through resistance today, you are literally funding the reality of ${dName}.`,
-          subtext: `Compounding works in silence before it roars in physical manifest.`,
-          themePillar: 'Compounded Force',
-          actionPrompt: `Lock into a 45-minute sprint right now. Leave nothing on the table.`,
+          quote: t('Mastery is compounded repetition. When you push through resistance today, you are literally funding the reality of {dName}.', { dName }),
+          subtext: t('Compounding works in silence before it roars in physical manifest.'),
+          themePillar: t('Compounded Force'),
+          actionPrompt: t('Lock into a 45-minute sprint right now. Leave nothing on the table.'),
         },
         {
-          quote: `Amateurs wait for motivation; architects of ${dName} build systems that perform regardless of emotion.`,
-          subtext: `Discipline is choosing between what you want now and what you want most.`,
-          themePillar: 'Architectural Drive',
-          actionPrompt: `Treat today's work as the cornerstone of your entire physical empire.`,
+          quote: t('Amateurs wait for motivation; architects of {dName} build systems that perform regardless of emotion.', { dName }),
+          subtext: t('Discipline is choosing between what you want now and what you want most.'),
+          themePillar: t('Architectural Drive'),
+          actionPrompt: t('Treat today\'s work as the cornerstone of your entire physical empire.'),
         },
         {
-          quote: `Every completed mission is a non-negotiable vote cast directly for the reality of ${dName}.`,
-          subtext: `Refuse to let the default future win a single hour today.`,
-          themePillar: 'Unstoppable Execution',
-          actionPrompt: `Execute your active queue with unwavering sharpness.`,
+          quote: t('Every completed mission is a non-negotiable vote cast directly for the reality of {dName}.', { dName }),
+          subtext: t('Refuse to let the default future win a single hour today.'),
+          themePillar: t('Unstoppable Execution'),
+          actionPrompt: t('Execute your active queue with unwavering sharpness.'),
         },
       ],
       calm: [
         {
-          quote: `Move with quiet certainty. The path to ${dName} requires neither frantic anxiety nor frantic rushing—only serene, daily consistency.`,
-          subtext: `Rest in the clarity of knowing your trajectory is set and unbroken.`,
-          themePillar: 'Quiet Certainty',
-          actionPrompt: `Breathe deeply. Approach your next task with calm, centered poise.`,
+          quote: t('Move with quiet certainty. The path to {dName} requires neither frantic anxiety nor frantic rushing—only serene, daily consistency.', { dName }),
+          subtext: t('Rest in the clarity of knowing your trajectory is set and unbroken.'),
+          themePillar: t('Quiet Certainty'),
+          actionPrompt: t('Breathe deeply. Approach your next task with calm, centered poise.'),
         },
         {
-          quote: `When your inner identity is anchored in ${futureRole}, the physical manifestation of ${dName} is merely a matter of time and calm persistence.`,
+          quote: t('When your inner identity is anchored in {futureRole}, the physical manifestation of {dName} is merely a matter of time and calm persistence.', { futureRole, dName }),
           subtext: `"${identityStmt}"`,
-          themePillar: 'Grounded Presence',
-          actionPrompt: `Honor your daily standards with peaceful focus and quiet grace.`,
+          themePillar: t('Grounded Presence'),
+          actionPrompt: t('Honor your daily standards with peaceful focus and quiet grace.'),
         },
         {
-          quote: `You do not have to conquer the entire mountain today—only take the next deliberate step with the presence of one who knows they will arrive at ${dName}.`,
-          subtext: `Peace of mind is the greatest multiplier of high-leverage execution.`,
-          themePillar: 'Deliberate Flow',
-          actionPrompt: `Clear your immediate workspace and focus on the singular task in front of you.`,
+          quote: t('You do not have to conquer the entire mountain today—only take the next deliberate step with the presence of one who knows they will arrive at {dName}.', { dName }),
+          subtext: t('Peace of mind is the greatest multiplier of high-leverage execution.'),
+          themePillar: t('Deliberate Flow'),
+          actionPrompt: t('Clear your immediate workspace and focus on the singular task in front of you.'),
         },
         {
-          quote: `Allow ${dName} to inspire your joy today rather than create longing. You are already on the bridge.`,
-          subtext: `Gratitude for the journey fuels the stamina for the summit.`,
-          themePillar: 'Serene Sovereignty',
-          actionPrompt: `Acknowledge your progress so far and proceed with steady clarity.`,
+          quote: t('Allow {dName} to inspire your joy today rather than create longing. You are already on the bridge.', { dName }),
+          subtext: t('Gratitude for the journey fuels the stamina for the summit.'),
+          themePillar: t('Serene Sovereignty'),
+          actionPrompt: t('Acknowledge your progress so far and proceed with steady clarity.'),
         },
       ],
     };
 
     const pool = toneMatrices[tone];
     return pool[variantIndex % pool.length];
-  }, [priorityDream, futureRole, identityStmt, tone, seedOffset]);
+  }, [priorityDream, futureRole, identityStmt, tone, seedOffset, t]);
 
   const handleRegenerate = () => {
     setIsGenerating(true);
     setTimeout(() => {
       setSeedOffset((prev) => prev + 1);
       setIsGenerating(false);
-      showToast('Generated fresh daily perspective for your priority dream', 'info');
+      showToast(t('Generated fresh daily perspective for your priority dream'), 'info');
     }, 350);
   };
 
   const handleCopy = () => {
-    const fullText = `"${currentAffirmation.quote}"\n— Daily Vision Affirmation for ${priorityDream.name} (${currentAffirmation.themePillar})`;
+    const fullText = `"${currentAffirmation.quote}"\n— ${t('Daily Vision Affirmation for {name} ({pillar})', { name: priorityDream.name, pillar: currentAffirmation.themePillar })}`;
     navigator.clipboard.writeText(fullText);
     setCopied(true);
-    showToast('Affirmation copied to clipboard', 'success');
+    showToast(t('Affirmation copied to clipboard'), 'success');
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -198,14 +200,14 @@ export const DailyVisionAffirmation: React.FC = () => {
           <div>
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-sage)]">
-                Daily Vision Affirmation
+                {t('Daily Vision Affirmation')}
               </span>
               <span className="text-[9px] px-1.5 py-0.5 rounded bg-[var(--bg-muted)] text-[var(--fg-subtle)] font-mono border border-[var(--border)]">
-                AI Synthesis
+                {t('AI Synthesis')}
               </span>
             </div>
             <h3 className="text-xs text-[var(--fg-muted)]">
-              Anchored to Priority Dream: <span className="font-semibold text-[var(--fg)]">{priorityDream.name}</span>
+              {t('Anchored to Priority Dream:')} <span className="font-semibold text-[var(--fg)]">{priorityDream.name}</span>
             </h3>
           </div>
         </div>
@@ -221,10 +223,10 @@ export const DailyVisionAffirmation: React.FC = () => {
                   ? 'bg-[var(--fg)] text-[var(--bg)] shadow-xs'
                   : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
               }`}
-              title="Sovereignty & Identity Tone"
+              title={t('Sovereignty & Identity Tone')}
             >
               <Shield className="w-2.5 h-2.5" />
-              <span>Sovereign</span>
+              <span>{t('Sovereign')}</span>
             </button>
             <button
               type="button"
@@ -234,10 +236,10 @@ export const DailyVisionAffirmation: React.FC = () => {
                   ? 'bg-[var(--fg)] text-[var(--bg)] shadow-xs'
                   : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
               }`}
-              title="Relentless Drive & Execution Tone"
+              title={t('Relentless Drive & Execution Tone')}
             >
               <Zap className="w-2.5 h-2.5" />
-              <span>Drive</span>
+              <span>{t('Drive')}</span>
             </button>
             <button
               type="button"
@@ -247,10 +249,10 @@ export const DailyVisionAffirmation: React.FC = () => {
                   ? 'bg-[var(--fg)] text-[var(--bg)] shadow-xs'
                   : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
               }`}
-              title="Quiet Certainty & Calm Tone"
+              title={t('Quiet Certainty & Calm Tone')}
             >
               <Feather className="w-2.5 h-2.5" />
-              <span>Calm</span>
+              <span>{t('Calm')}</span>
             </button>
           </div>
 
@@ -260,7 +262,7 @@ export const DailyVisionAffirmation: React.FC = () => {
             onClick={handleRegenerate}
             disabled={isGenerating}
             className="px-2 h-7"
-            title="Generate Fresh Affirmation Perspective"
+            title={t('Generate Fresh Affirmation Perspective')}
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isGenerating ? 'animate-spin text-[var(--color-sage)]' : ''}`} />
           </Button>
@@ -270,7 +272,7 @@ export const DailyVisionAffirmation: React.FC = () => {
             size="sm"
             onClick={handleCopy}
             className="px-2 h-7"
-            title="Copy Mantra to Clipboard"
+            title={t('Copy Mantra to Clipboard')}
           >
             {copied ? <Check className="w-3.5 h-3.5 text-[var(--color-sage)]" /> : <Copy className="w-3.5 h-3.5" />}
           </Button>
@@ -284,7 +286,7 @@ export const DailyVisionAffirmation: React.FC = () => {
           <div className="flex items-center gap-2">
             <Badge variant="sage">{currentAffirmation.themePillar}</Badge>
             <span className="text-[11px] text-[var(--fg-subtle)]">
-              Target Valuation: ${priorityDream.realPriceUsd.toLocaleString()} USD
+              {t('Target Valuation: ${price} USD', { price: priorityDream.realPriceUsd.toLocaleString() })}
             </span>
           </div>
 
@@ -302,7 +304,7 @@ export const DailyVisionAffirmation: React.FC = () => {
             <div className="p-2.5 bg-[var(--bg-muted)] border border-[var(--border)] rounded-[var(--radius-sm)] flex items-center justify-between gap-3 text-xs">
               <span className="text-[var(--fg)] font-medium text-[11px] leading-snug">
                 <span className="font-bold text-[var(--color-sage)] uppercase tracking-wider text-[10px] mr-1.5">
-                  Today's Call to Action:
+                  {t("Today's Call to Action:")}
                 </span>
                 {currentAffirmation.actionPrompt}
               </span>
@@ -316,13 +318,13 @@ export const DailyVisionAffirmation: React.FC = () => {
             <div className="flex items-center justify-between">
               <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--fg-muted)] flex items-center gap-1">
                 <Star className="w-2.5 h-2.5 text-[var(--color-coral)] fill-current" />
-                Vision Anchor
+                {t('Vision Anchor')}
               </span>
               <button
                 onClick={() => setActiveRoute('/app/market')}
                 className="text-[10px] text-[var(--color-sage)] hover:underline flex items-center gap-0.5"
               >
-                Change <ExternalLink className="w-2.5 h-2.5" />
+                {t('Change')} <ExternalLink className="w-2.5 h-2.5" />
               </button>
             </div>
 
@@ -343,7 +345,7 @@ export const DailyVisionAffirmation: React.FC = () => {
                 {priorityDream.name}
               </h4>
               <span className="text-[10px] text-[var(--fg-muted)] block truncate">
-                {priorityDream.category}
+                {t(priorityDream.category)}
               </span>
             </div>
 
@@ -355,7 +357,7 @@ export const DailyVisionAffirmation: React.FC = () => {
               iconPosition="right"
               onClick={() => setActiveRoute('/app/life')}
             >
-              View in Future Life
+              {t('View in Future Life')}
             </Button>
           </div>
         </div>

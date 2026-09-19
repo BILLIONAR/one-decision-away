@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useApp } from '../store/useApp';
 import { Card, Button, Textarea, Badge } from './ui';
 import { MessageCircleQuestion, Check, ArrowRight } from 'lucide-react';
+import { useT, N_ } from '../i18n';
 
 /**
  * Onboarding, spread over days: one deep question a day on the Home page instead of a 12-step form.
@@ -16,24 +17,25 @@ interface Q {
 }
 
 const QUESTIONS: Q[] = [
-  { id: 'q1', group: 'allowing', title: 'Quiet dissatisfaction', prompt: 'What dissatisfaction have you quietly agreed to live with?' },
-  { id: 'b1', group: 'building', title: 'A day in the built life', prompt: 'Describe an ordinary day in the life you want, three years from now.' },
-  { id: 'q2', group: 'allowing', title: 'Unchanged complaints', prompt: 'What do you complain about but never actually take action to change?' },
-  { id: 'b2', group: 'building', title: 'Reputation & mastery', prompt: 'What are you known for, and by whom?' },
-  { id: 'q3', group: 'allowing', title: 'A Tuesday in 5 years', prompt: 'If nothing changes, describe an ordinary Tuesday five years from now.' },
-  { id: 'identity', group: 'identity', title: 'Identity statement', prompt: 'Finish the sentence: "I am becoming the kind of person who…"' },
-  { id: 'q4', group: 'allowing', title: 'Closed doors in 10 years', prompt: 'Ten years on this default path — which doors have quietly closed for good?' },
-  { id: 'b3', group: 'building', title: 'Sovereignty & money', prompt: 'What does financial autonomy let you say "no" to?' },
-  { id: 'q5', group: 'allowing', title: 'Late-life regret', prompt: 'At the end of your life, what would you deeply regret not trying?' },
-  { id: 'b4', group: 'building', title: 'Inner circle', prompt: 'Who is around you, and how do you show up for them?' },
-  { id: 'q6', group: 'allowing', title: 'Identity to release', prompt: 'Which outdated version of yourself would you need to let go of to change?' },
-  { id: 'q7', group: 'allowing', title: 'The shield', prompt: 'What fear, discomfort, or judgment are your current avoidance habits protecting you from?' },
-  { id: 'q8', group: 'allowing', title: 'The real price', prompt: 'What is that protection actually costing you in time, dignity, and potential?' },
+  { id: 'q1', group: 'allowing', title: N_('Quiet dissatisfaction'), prompt: N_('What dissatisfaction have you quietly agreed to live with?') },
+  { id: 'b1', group: 'building', title: N_('A day in the built life'), prompt: N_('Describe an ordinary day in the life you want, three years from now.') },
+  { id: 'q2', group: 'allowing', title: N_('Unchanged complaints'), prompt: N_('What do you complain about but never actually take action to change?') },
+  { id: 'b2', group: 'building', title: N_('Reputation & mastery'), prompt: N_('What are you known for, and by whom?') },
+  { id: 'q3', group: 'allowing', title: N_('A Tuesday in 5 years'), prompt: N_('If nothing changes, describe an ordinary Tuesday five years from now.') },
+  { id: 'identity', group: 'identity', title: N_('Identity statement'), prompt: N_('Finish the sentence: "I am becoming the kind of person who…"') },
+  { id: 'q4', group: 'allowing', title: N_('Closed doors in 10 years'), prompt: N_('Ten years on this default path — which doors have quietly closed for good?') },
+  { id: 'b3', group: 'building', title: N_('Sovereignty & money'), prompt: N_('What does financial autonomy let you say "no" to?') },
+  { id: 'q5', group: 'allowing', title: N_('Late-life regret'), prompt: N_('At the end of your life, what would you deeply regret not trying?') },
+  { id: 'b4', group: 'building', title: N_('Inner circle'), prompt: N_('Who is around you, and how do you show up for them?') },
+  { id: 'q6', group: 'allowing', title: N_('Identity to release'), prompt: N_('Which outdated version of yourself would you need to let go of to change?') },
+  { id: 'q7', group: 'allowing', title: N_('The shield'), prompt: N_('What fear, discomfort, or judgment are your current avoidance habits protecting you from?') },
+  { id: 'q8', group: 'allowing', title: N_('The real price'), prompt: N_('What is that protection actually costing you in time, dignity, and potential?') },
 ];
 
 const SKIP_KEY = 'oda_deep_q_skipped';
 
 export const DailyDeepQuestion: React.FC = () => {
+  const t = useT();
   const { data, saveTwoFutures, saveFutureSelf, setActiveRoute } = useApp();
   const [answer, setAnswer] = useState('');
   const [saving, setSaving] = useState(false);
@@ -100,23 +102,23 @@ export const DailyDeepQuestion: React.FC = () => {
             <MessageCircleQuestion className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--fg)]">One Question Today</h3>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--fg)]">{t('One Question Today')}</h3>
             <p className="text-[11px] text-[var(--fg-muted)]">
-              {q.group === 'allowing' ? 'The life you\'re allowing' : q.group === 'building' ? 'The life you\'re building' : 'Future self'} · {q.title}
+              {q.group === 'allowing' ? t("The life you're allowing") : q.group === 'building' ? t("The life you're building") : t('Future self')} · {t(q.title)}
             </p>
           </div>
         </div>
-        <Badge variant="subtle">{answered} / {total} answered</Badge>
+        <Badge variant="subtle">{t('{answered} / {total} answered', { answered, total })}</Badge>
       </div>
-      <p className="text-base font-display italic text-[var(--fg)] leading-relaxed">{q.prompt}</p>
-      <Textarea id={`deep-${q.id}`} rows={3} value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="One honest paragraph is enough." />
+      <p className="text-base font-display italic text-[var(--fg)] leading-relaxed">{t(q.prompt)}</p>
+      <Textarea id={`deep-${q.id}`} rows={3} value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder={t('One honest paragraph is enough.')} />
       <div className="flex items-center justify-between">
         <button type="button" onClick={() => setActiveRoute('/app/two-futures')} className="text-[11px] text-[var(--fg-subtle)] underline cursor-pointer flex items-center gap-1">
-          See all answers <ArrowRight className="w-3 h-3" />
+          {t('See all answers')} <ArrowRight className="w-3 h-3" />
         </button>
         <div className="flex gap-2">
-          <Button variant="ghost" size="sm" onClick={skipToday}>Not today</Button>
-          <Button variant="primary" size="sm" icon={Check} onClick={save} disabled={saving || !answer.trim()}>Save answer</Button>
+          <Button variant="ghost" size="sm" onClick={skipToday}>{t('Not today')}</Button>
+          <Button variant="primary" size="sm" icon={Check} onClick={save} disabled={saving || !answer.trim()}>{t('Save answer')}</Button>
         </div>
       </div>
     </Card>

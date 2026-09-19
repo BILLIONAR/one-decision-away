@@ -1,3 +1,4 @@
+import type { Locale } from '../i18n';
 /**
  * One Decision Away — Domain Models & Type Definitions
  * by AurelyStudio
@@ -11,7 +12,7 @@ export interface Profile {
   email?: string;
   isPro?: boolean;
   onboardingStep: OnboardingStep;
-  locale: 'en' | 'tr';
+  locale: Locale;
   theme: 'light' | 'dark';
   soundMuted?: boolean;
   focusTabBlinkEnabled?: boolean;

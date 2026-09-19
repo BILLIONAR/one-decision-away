@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Field, Input, Select, Button, Textarea } from './ui';
 import { Goal, MissionArea } from '../types/models';
 import { Target, Calendar, CheckCircle2 } from 'lucide-react';
+import { useT } from '../i18n';
 
 interface GoalModalProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ export const GoalModal: React.FC<GoalModalProps> = ({
   onSave,
   initialGoal,
 }) => {
+  const t = useT();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [area, setArea] = useState<MissionArea>('Work');
@@ -68,47 +70,47 @@ export const GoalModal: React.FC<GoalModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={initialGoal ? 'Edit Life Goal' : 'Create Life Goal'}
-      subtitle="Anchor your daily micro-habits and focused missions to an overarching vision."
+      title={initialGoal ? t('Edit Life Goal') : t('Create Life Goal')}
+      subtitle={t('Anchor your daily micro-habits and focused missions to an overarching vision.')}
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <Field
           id="goal-title"
-          label="Goal Title"
+          label={t('Goal Title')}
           required
-          helper="Define the overarching outcome or standard (e.g. 'Build a sustainable online income', 'Peak Physical Vitality')."
+          helper={t("Define the overarching outcome or standard (e.g. 'Build a sustainable online income', 'Peak Physical Vitality').")}
         >
           <Input
             id="goal-title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="e.g. Build a sustainable online income"
+            placeholder={t('e.g. Build a sustainable online income')}
             autoFocus
           />
         </Field>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Field id="goal-area" label="Life Domain">
+          <Field id="goal-area" label={t('Life Domain')}>
             <Select
               id="goal-area"
               value={area}
               onChange={(e) => setArea(e.target.value as MissionArea)}
               options={[
-                { value: 'Work', label: 'Work & Enterprise' },
-                { value: 'Money', label: 'Money & Wealth' },
-                { value: 'Health', label: 'Health & Vitality' },
-                { value: 'Learning', label: 'Learning & Craft' },
-                { value: 'Relationships', label: 'Relationships' },
-                { value: 'Environment', label: 'Environment & Space' },
-                { value: 'Personal Meaning', label: 'Personal Meaning' },
+                { value: 'Work', label: t('Work & Enterprise') },
+                { value: 'Money', label: t('Money & Wealth') },
+                { value: 'Health', label: t('Health & Vitality') },
+                { value: 'Learning', label: t('Learning & Craft') },
+                { value: 'Relationships', label: t('Relationships') },
+                { value: 'Environment', label: t('Environment & Space') },
+                { value: 'Personal Meaning', label: t('Personal Meaning') },
               ]}
             />
           </Field>
 
           <Field
             id="goal-target-date"
-            label="Target Date (Optional)"
-            helper="Estimated completion or horizon."
+            label={t('Target Date (Optional)')}
+            helper={t('Estimated completion or horizon.')}
           >
             <Input
               id="goal-target-date"
@@ -121,28 +123,28 @@ export const GoalModal: React.FC<GoalModalProps> = ({
 
         <Field
           id="goal-description"
-          label="Why This Matters / Core Vision (Optional)"
-          helper="A short rationale to reinforce motivation during resistance."
+          label={t('Why This Matters / Core Vision (Optional)')}
+          helper={t('A short rationale to reinforce motivation during resistance.')}
         >
           <Textarea
             id="goal-description"
             rows={3}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Describe the real-life transformation this goal creates..."
+            placeholder={t('Describe the real-life transformation this goal creates...')}
           />
         </Field>
 
         {initialGoal && (
-          <Field id="goal-status" label="Status">
+          <Field id="goal-status" label={t('Status')}>
             <Select
               id="goal-status"
               value={status}
               onChange={(e) => setStatus(e.target.value as 'active' | 'achieved' | 'archived')}
               options={[
-                { value: 'active', label: 'Active (Currently Pursuing)' },
-                { value: 'achieved', label: 'Achieved (Celebrated Outcome)' },
-                { value: 'archived', label: 'Archived (Deferred)' },
+                { value: 'active', label: t('Active (Currently Pursuing)') },
+                { value: 'achieved', label: t('Achieved (Celebrated Outcome)') },
+                { value: 'archived', label: t('Archived (Deferred)') },
               ]}
             />
           </Field>
@@ -150,10 +152,10 @@ export const GoalModal: React.FC<GoalModalProps> = ({
 
         <div className="flex justify-end gap-2 pt-2 border-t border-[var(--border)]">
           <Button variant="ghost" type="button" onClick={onClose} disabled={isSubmitting}>
-            Cancel
+            {t('Cancel')}
           </Button>
           <Button variant="primary" type="submit" loading={isSubmitting} icon={CheckCircle2}>
-            {initialGoal ? 'Save Changes' : 'Create Goal'}
+            {initialGoal ? t('Save Changes') : t('Create Goal')}
           </Button>
         </div>
       </form>

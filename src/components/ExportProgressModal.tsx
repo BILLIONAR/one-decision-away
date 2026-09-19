@@ -18,6 +18,7 @@ import {
   copyPngToClipboard,
 } from '../utils/exportVisualizationImage';
 import { useApp } from '../store/useApp';
+import { useT } from '../i18n';
 
 interface ExportProgressModalProps {
   isOpen: boolean;
@@ -30,6 +31,7 @@ export const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
   onClose,
   targetElementId = 'daily-primary-goals-visualization-card',
 }) => {
+  const t = useT();
   const { showToast } = useApp();
   const [dataUrl, setDataUrl] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -46,7 +48,7 @@ export const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
   const generateImage = async () => {
     const el = document.getElementById(targetElementId);
     if (!el) {
-      showToast('Could not find visualization to export', 'error');
+      showToast(t('Could not find visualization to export'), 'error');
       return;
     }
 
@@ -61,7 +63,7 @@ export const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
       setDataUrl(url);
     } catch (err) {
       console.error('Failed to generate PNG image:', err);
-      showToast('Failed to generate PNG image. Please try again.', 'error');
+      showToast(t('Failed to generate PNG image. Please try again.'), 'error');
     } finally {
       setIsGenerating(false);
     }
@@ -83,7 +85,7 @@ export const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
     const dateStr = new Date().toISOString().slice(0, 10);
     const filename = `one-decision-away-progress-milestones-${dateStr}.png`;
     downloadPngDataUrl(dataUrl, filename);
-    showToast('✓ Progress visualization downloaded as PNG!', 'success');
+    showToast(t('✓ Progress visualization downloaded as PNG!'), 'success');
   };
 
   const handleCopy = async () => {
@@ -91,10 +93,10 @@ export const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
     const success = await copyPngToClipboard(dataUrl);
     if (success) {
       setCopied(true);
-      showToast('✓ Image copied to clipboard! Ready to paste into Slack, Twitter, or Discord.', 'success');
+      showToast(t('✓ Image copied to clipboard! Ready to paste into Slack, Twitter, or Discord.'), 'success');
       setTimeout(() => setCopied(false), 2500);
     } else {
-      showToast('Clipboard image copying is not supported in this browser. Please use Download.', 'warning');
+      showToast(t('Clipboard image copying is not supported in this browser. Please use Download.'), 'warning');
     }
   };
 
@@ -119,14 +121,14 @@ export const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-base sm:text-lg font-bold font-display text-[var(--fg)]">
-                  Export Progress Visualization (PNG)
+                  {t('Export Progress Visualization (PNG)')}
                 </h3>
                 <Badge variant="sage" className="text-[10px] uppercase">
-                  PNG • High Resolution
+                  {t('PNG • High Resolution')}
                 </Badge>
               </div>
               <p className="text-xs text-[var(--fg-muted)]">
-                Share your 30-day consistency trajectory, accomplishment trend, and goal streaks
+                {t('Share your 30-day consistency trajectory, accomplishment trend, and goal streaks')}
               </p>
             </div>
           </div>
@@ -135,7 +137,7 @@ export const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
             type="button"
             onClick={onClose}
             className="p-2 text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-muted)] rounded-md transition-colors cursor-pointer"
-            aria-label="Close dialog"
+            aria-label={t('Close dialog')}
           >
             <X className="w-4 h-4" />
           </button>
@@ -146,7 +148,7 @@ export const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
           {/* Export Customization Controls */}
           <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-[var(--bg-muted)] rounded-[var(--radius-sm)] border border-[var(--border)] text-xs">
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-[var(--fg-muted)]">Image Background:</span>
+              <span className="font-semibold text-[var(--fg-muted)]">{t('Image Background:')}</span>
               <div className="flex items-center gap-1">
                 <button
                   type="button"
@@ -157,7 +159,7 @@ export const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
                       : 'bg-[var(--bg-elevated)] text-[var(--fg-muted)] border-[var(--border)]'
                   }`}
                 >
-                  Warm Alabaster
+                  {t('Warm Alabaster')}
                 </button>
                 <button
                   type="button"
@@ -168,7 +170,7 @@ export const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
                       : 'bg-[var(--bg-elevated)] text-[var(--fg-muted)] border-[var(--border)]'
                   }`}
                 >
-                  Clean White
+                  {t('Clean White')}
                 </button>
                 <button
                   type="button"
@@ -179,13 +181,13 @@ export const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
                       : 'bg-[var(--bg-elevated)] text-[var(--fg-muted)] border-[var(--border)]'
                   }`}
                 >
-                  Dark Obsidian
+                  {t('Dark Obsidian')}
                 </button>
               </div>
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-[var(--fg-muted)]">Sharpness:</span>
+              <span className="font-semibold text-[var(--fg-muted)]">{t('Sharpness:')}</span>
               <div className="flex items-center gap-1">
                 <button
                   type="button"
@@ -196,7 +198,7 @@ export const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
                       : 'text-[var(--fg-muted)] border-transparent'
                   }`}
                 >
-                  2x Retina (Sharper)
+                  {t('2x Retina (Sharper)')}
                 </button>
                 <button
                   type="button"
@@ -207,7 +209,7 @@ export const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
                       : 'text-[var(--fg-muted)] border-transparent'
                   }`}
                 >
-                  1x Standard
+                  {t('1x Standard')}
                 </button>
               </div>
               <button
@@ -215,7 +217,7 @@ export const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
                 onClick={generateImage}
                 disabled={isGenerating}
                 className="p-1.5 text-[var(--fg-muted)] hover:text-[var(--fg)] rounded transition-colors ml-1 cursor-pointer disabled:opacity-40"
-                title="Regenerate preview"
+                title={t('Regenerate preview')}
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${isGenerating ? 'animate-spin' : ''}`} />
               </button>
@@ -226,9 +228,9 @@ export const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
           <div className="space-y-2">
             <div className="flex items-center justify-between text-xs text-[var(--fg-muted)] px-1">
               <span className="font-semibold uppercase tracking-wider text-[10px]">
-                Image Preview (Ready for export)
+                {t('Image Preview (Ready for export)')}
               </span>
-              <span>{resolution === 2 ? 'High-DPI 2x scale' : '1x scale'}</span>
+              <span>{resolution === 2 ? t('High-DPI 2x scale') : t('1x scale')}</span>
             </div>
 
             <div className="relative rounded-[var(--radius-md)] border border-[var(--border)] overflow-hidden bg-neutral-900/10 min-h-[220px] max-h-[50vh] flex items-center justify-center p-2">
@@ -236,23 +238,23 @@ export const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
                 <div className="flex flex-col items-center gap-2 text-center p-6">
                   <div className="w-7 h-7 border-2 border-[var(--primary)] border-t-transparent rounded-full animate-spin" />
                   <p className="text-xs font-medium text-[var(--fg)]">
-                    Capturing chart layers and milestone icons...
+                    {t('Capturing chart layers and milestone icons...')}
                   </p>
                   <p className="text-[10px] text-[var(--fg-muted)]">
-                    Embedding SVG paths, 15-day comparison, and typography
+                    {t('Embedding SVG paths, 15-day comparison, and typography')}
                   </p>
                 </div>
               ) : dataUrl ? (
                 <div className="w-full h-full overflow-auto flex justify-center">
                   <img
                     src={dataUrl}
-                    alt="One Decision Away Progress Visualization"
+                    alt={t('One Decision Away Progress Visualization')}
                     className="max-h-[46vh] w-auto object-contain rounded border border-black/10 shadow-md"
                   />
                 </div>
               ) : (
                 <div className="text-center p-6 text-xs text-[var(--fg-muted)]">
-                  No preview generated yet.
+                  {t('No preview generated yet.')}
                 </div>
               )}
             </div>
@@ -263,10 +265,10 @@ export const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
             <Award className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
             <div className="space-y-0.5">
               <span className="font-semibold text-[var(--fg)]">
-                Perfect for celebrating your milestones & streaks
+                {t('Perfect for celebrating your milestones & streaks')}
               </span>
               <p className="text-[11px] text-[var(--fg-subtle)] leading-relaxed">
-                Click <strong>Download PNG</strong> to save the image to your device, or use <strong>Copy Image</strong> to paste directly into your favorite messaging apps, Twitter/X, or journaling tools.
+                {t('Click')} <strong>{t('Download PNG')}</strong> {t('to save the image to your device, or use')} <strong>{t('Copy Image')}</strong> {t('to paste directly into your favorite messaging apps, Twitter/X, or journaling tools.')}
               </p>
             </div>
           </div>
@@ -275,7 +277,7 @@ export const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
         {/* Modal Footer */}
         <div className="p-4 sm:p-5 border-t border-[var(--border)] bg-[var(--bg-muted)]/30 flex flex-wrap items-center justify-between gap-3">
           <Button variant="ghost" size="sm" onClick={onClose} className="text-xs">
-            Cancel
+            {t('Cancel')}
           </Button>
 
           <div className="flex items-center gap-2.5">
@@ -288,7 +290,7 @@ export const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
               disabled={isGenerating || !dataUrl}
               className="text-xs"
             >
-              {copied ? 'Copied to Clipboard!' : 'Copy Image'}
+              {copied ? t('Copied to Clipboard!') : t('Copy Image')}
             </Button>
 
             <Button
@@ -300,7 +302,7 @@ export const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
               disabled={isGenerating || !dataUrl}
               className="text-xs"
             >
-              Download PNG Image
+              {t('Download PNG Image')}
             </Button>
           </div>
         </div>

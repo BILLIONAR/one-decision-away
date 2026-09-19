@@ -2,27 +2,29 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useApp } from '../store/useApp';
 import { Button, Card, Field, Input, Textarea, Progress, Disclaimer } from '../components/ui';
 import { ArrowLeft, ArrowRight, Download, Share2, Sparkles, CheckCircle } from 'lucide-react';
+import { useT, N_ } from '../i18n';
 
 const ALLOWING_QUESTIONS = [
-  { id: 'q1', title: '1. Quiet Dissatisfaction', prompt: 'What dissatisfaction have you quietly agreed to live with?' },
-  { id: 'q2', title: '2. Unchanged Complaints', prompt: 'What do you complain about but never actually take action to change?' },
-  { id: 'q3', title: '3. A Tuesday in 5 Years', prompt: 'If nothing changes, describe an ordinary Tuesday five years from now — wake-up to lights-out.' },
-  { id: 'q4', title: '4. Closed Doors in 10 Years', prompt: 'Ten years on this default path — which doors have quietly closed for good?' },
-  { id: 'q5', title: '5. Late Life Regret', prompt: 'At the end of your life, what would you deeply regret not trying?' },
-  { id: 'q6', title: '6. Identity to Release', prompt: 'Which outdated version of yourself would you need to let go of to change?' },
-  { id: 'q7', title: '7. The Shield', prompt: 'What fear, discomfort, or judgment are your current avoidance habits protecting you from?' },
-  { id: 'q8', title: '8. The Real Price', prompt: 'What is that protection actually costing you in time, dignity, and potential?' },
+  { id: 'q1', title: N_('1. Quiet Dissatisfaction'), prompt: N_('What dissatisfaction have you quietly agreed to live with?') },
+  { id: 'q2', title: N_('2. Unchanged Complaints'), prompt: N_('What do you complain about but never actually take action to change?') },
+  { id: 'q3', title: N_('3. A Tuesday in 5 Years'), prompt: N_('If nothing changes, describe an ordinary Tuesday five years from now — wake-up to lights-out.') },
+  { id: 'q4', title: N_('4. Closed Doors in 10 Years'), prompt: N_('Ten years on this default path — which doors have quietly closed for good?') },
+  { id: 'q5', title: N_('5. Late Life Regret'), prompt: N_('At the end of your life, what would you deeply regret not trying?') },
+  { id: 'q6', title: N_('6. Identity to Release'), prompt: N_('Which outdated version of yourself would you need to let go of to change?') },
+  { id: 'q7', title: N_('7. The Shield'), prompt: N_('What fear, discomfort, or judgment are your current avoidance habits protecting you from?') },
+  { id: 'q8', title: N_('8. The Real Price'), prompt: N_('What is that protection actually costing you in time, dignity, and potential?') },
 ];
 
 const BUILDING_QUESTIONS = [
-  { id: 'b1', title: '1. A Day in the Built Life', prompt: 'Describe an ordinary day in the life you want, three years from now.' },
-  { id: 'b2', title: '2. Reputation & Mastery', prompt: 'What are you known for, and by whom?' },
-  { id: 'b3', title: '3. Sovereignty & Money', prompt: 'What does financial autonomy let you say "no" to?' },
-  { id: 'b4', title: '4. Inner Circle', prompt: 'Who is around you, and how do you show up for them?' },
+  { id: 'b1', title: N_('1. A Day in the Built Life'), prompt: N_('Describe an ordinary day in the life you want, three years from now.') },
+  { id: 'b2', title: N_('2. Reputation & Mastery'), prompt: N_('What are you known for, and by whom?') },
+  { id: 'b3', title: N_('3. Sovereignty & Money'), prompt: N_('What does financial autonomy let you say "no" to?') },
+  { id: 'b4', title: N_('4. Inner Circle'), prompt: N_('Who is around you, and how do you show up for them?') },
 ];
 
 export const PublicTwoFutures: React.FC = () => {
   const { data, saveTwoFutures, setActiveRoute } = useApp();
+  const t = useT();
 
   const [step, setStep] = useState<number>(0); // 0: intro, 1..8: allowing, 9..12: building, 13: synthesis, 14: result card
   const [allowingAnswers, setAllowingAnswers] = useState<Record<string, string>>(() => {
@@ -33,10 +35,10 @@ export const PublicTwoFutures: React.FC = () => {
   });
 
   const [antiVision, setAntiVision] = useState(
-    data?.twoFutures?.antiVision || 'I refuse to become someone who leaves their best potential in draft notes and lets distraction decide their fate.'
+    data?.twoFutures?.antiVision || t('I refuse to become someone who leaves their best potential in draft notes and lets distraction decide their fate.')
   );
   const [vision, setVision] = useState(
-    data?.twoFutures?.vision || 'I am building a life where I do deep work with calm focus, achieve complete financial autonomy, and show up fully for the people I care about.'
+    data?.twoFutures?.vision || t('I am building a life where I do deep work with calm focus, achieve complete financial autonomy, and show up fully for the people I care about.')
   );
 
   const [cardImage, setCardImage] = useState<string>('');
@@ -96,7 +98,7 @@ export const PublicTwoFutures: React.FC = () => {
 
     ctx.fillStyle = '#8A969C';
     ctx.font = '400 22px Inter, sans-serif';
-    ctx.fillText('by AurelyStudio · Two Futures Compass', w / 2, 210);
+    ctx.fillText(t('by AurelyStudio · Two Futures Compass'), w / 2, 210);
 
     // Divider
     ctx.strokeStyle = '#E2DFD6';
@@ -113,7 +115,7 @@ export const PublicTwoFutures: React.FC = () => {
       ctx.fillStyle = '#9A8F86';
       ctx.font = '600 22px Inter, sans-serif';
       ctx.textAlign = 'left';
-      ctx.fillText("THE LIFE YOU'RE ALLOWING (ANTI-VISION)", 140, currentY);
+      ctx.fillText(t("THE LIFE YOU'RE ALLOWING (ANTI-VISION)"), 140, currentY);
 
       currentY += 40;
       ctx.fillStyle = '#263238';
@@ -147,7 +149,7 @@ export const PublicTwoFutures: React.FC = () => {
     ctx.fillStyle = '#708879';
     ctx.font = '600 22px Inter, sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText("THE LIFE YOU'RE BUILDING (VISION)", 140, currentY);
+    ctx.fillText(t("THE LIFE YOU'RE BUILDING (VISION)"), 140, currentY);
 
     currentY += 40;
     ctx.fillStyle = '#263238';
@@ -176,10 +178,10 @@ export const PublicTwoFutures: React.FC = () => {
     ctx.fillStyle = '#5C6A72';
     ctx.font = '600 20px Inter, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('DESIGNED ON ONEDECISIONAWAY.APP', w / 2, h - 180);
+    ctx.fillText(t('DESIGNED ON ONEDECISIONAWAY.APP'), w / 2, h - 180);
 
     setCardImage(canvas.toDataURL('image/png'));
-  }, [step, antiVision, vision, includeAntiVisionOnCard]);
+  }, [step, antiVision, vision, includeAntiVisionOnCard, t]);
 
   const handleMigrateAndOpenApp = async () => {
     await saveTwoFutures({
@@ -208,8 +210,8 @@ export const PublicTwoFutures: React.FC = () => {
         const blob = await (await fetch(cardImage)).blob();
         const file = new File([blob], 'two-futures.png', { type: 'image/png' });
         await navigator.share({
-          title: 'My Two Futures — One Decision Away',
-          text: `My Vision: ${vision}`,
+          title: t('My Two Futures — One Decision Away'),
+          text: t('My Vision: {vision}', { vision }),
           files: [file],
         });
       } else {
@@ -229,16 +231,16 @@ export const PublicTwoFutures: React.FC = () => {
             onClick={() => setActiveRoute('/')}
             className="text-xs font-semibold text-[var(--fg-muted)] hover:text-[var(--fg)] flex items-center gap-1 cursor-pointer"
           >
-            <ArrowLeft className="w-3.5 h-3.5" /> Back to Home
+            <ArrowLeft className="w-3.5 h-3.5" /> {t('Back to Home')}
           </button>
           <span className="font-display font-bold text-lg text-[var(--fg)] block mt-1">
-            Two Futures Compass
+            {t('Two Futures Compass')}
           </span>
         </div>
 
         {step > 0 && step <= 13 && (
           <div className="text-right">
-            <span className="text-xs text-[var(--fg-subtle)]">Step {step} of 13</span>
+            <span className="text-xs text-[var(--fg-subtle)]">{t('Step {n} of 13', { n: step })}</span>
             <div className="w-24 sm:w-32 mt-1">
               <Progress value={(step / 13) * 100} variant="sage" />
             </div>
@@ -257,29 +259,29 @@ export const PublicTwoFutures: React.FC = () => {
 
             <div className="space-y-2">
               <h1 className="text-3xl sm:text-4xl font-bold font-display text-[var(--fg)]">
-                The Two Futures Exercise
+                {t('The Two Futures Exercise')}
               </h1>
               <p className="text-sm text-[var(--fg-muted)] leading-relaxed max-w-lg mx-auto">
-                Lasting discipline doesn't come from willpower. It comes from looking directly at the price of inaction, and defining the exact life you are building instead.
+                {t("Lasting discipline doesn't come from willpower. It comes from looking directly at the price of inaction, and defining the exact life you are building instead.")}
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left pt-2">
               <div className="p-4 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)]">
-                <span className="text-xs font-bold uppercase text-[#9A8F86]">Part 1</span>
-                <div className="font-bold text-sm text-[var(--fg)] mt-1">The Default Future</div>
-                <p className="text-xs text-[var(--fg-muted)] mt-1">What happens if you change nothing for 5 to 10 years.</p>
+                <span className="text-xs font-bold uppercase text-[#9A8F86]">{t('Part 1')}</span>
+                <div className="font-bold text-sm text-[var(--fg)] mt-1">{t('The Default Future')}</div>
+                <p className="text-xs text-[var(--fg-muted)] mt-1">{t('What happens if you change nothing for 5 to 10 years.')}</p>
               </div>
 
               <div className="p-4 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)]">
-                <span className="text-xs font-bold uppercase text-[var(--color-sage)]">Part 2</span>
-                <div className="font-bold text-sm text-[var(--fg)] mt-1">The Built Future</div>
-                <p className="text-xs text-[var(--fg-muted)] mt-1">The daily reality you are actively working toward.</p>
+                <span className="text-xs font-bold uppercase text-[var(--color-sage)]">{t('Part 2')}</span>
+                <div className="font-bold text-sm text-[var(--fg)] mt-1">{t('The Built Future')}</div>
+                <p className="text-xs text-[var(--fg-muted)] mt-1">{t('The daily reality you are actively working toward.')}</p>
               </div>
             </div>
 
             <Button variant="accent" size="lg" onClick={() => setStep(1)} className="w-full sm:w-auto">
-              Begin Exercise (5 mins)
+              {t('Begin Exercise (5 mins)')}
             </Button>
           </Card>
         )}
@@ -289,17 +291,17 @@ export const PublicTwoFutures: React.FC = () => {
           <Card padding="lg" className="space-y-6">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-[#9A8F86]">
-                The Life You're Allowing
+                {t("The Life You're Allowing")}
               </span>
-              <span className="text-xs text-[var(--fg-subtle)]">Question {step} of 8</span>
+              <span className="text-xs text-[var(--fg-subtle)]">{t('Question {n} of 8', { n: step })}</span>
             </div>
 
             <div className="space-y-2">
               <h2 className="text-2xl font-bold font-display text-[var(--fg)]">
-                {ALLOWING_QUESTIONS[step - 1].prompt}
+                {t(ALLOWING_QUESTIONS[step - 1].prompt)}
               </h2>
               <p className="text-xs text-[var(--fg-muted)]">
-                Be radically honest. Nobody else sees these answers unless you choose to share your summary card.
+                {t('Be radically honest. Nobody else sees these answers unless you choose to share your summary card.')}
               </p>
             </div>
 
@@ -312,16 +314,16 @@ export const PublicTwoFutures: React.FC = () => {
                   [ALLOWING_QUESTIONS[step - 1].id]: e.target.value,
                 })
               }
-              placeholder="Write your honest observation here..."
+              placeholder={t('Write your honest observation here...')}
               rows={4}
             />
 
             <div className="flex justify-between items-center pt-4 border-t border-[var(--border)]">
               <Button variant="ghost" size="sm" onClick={handlePrev}>
-                Back
+                {t('Back')}
               </Button>
               <Button variant="primary" size="md" onClick={handleNext} icon={ArrowRight} iconPosition="right">
-                Next
+                {t('Next')}
               </Button>
             </div>
           </Card>
@@ -332,17 +334,17 @@ export const PublicTwoFutures: React.FC = () => {
           <Card padding="lg" className="space-y-6">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-sage)]">
-                The Life You're Building
+                {t("The Life You're Building")}
               </span>
-              <span className="text-xs text-[var(--fg-subtle)]">Question {step - 8} of 4</span>
+              <span className="text-xs text-[var(--fg-subtle)]">{t('Question {n} of 4', { n: step - 8 })}</span>
             </div>
 
             <div className="space-y-2">
               <h2 className="text-2xl font-bold font-display text-[var(--fg)]">
-                {BUILDING_QUESTIONS[step - 9].prompt}
+                {t(BUILDING_QUESTIONS[step - 9].prompt)}
               </h2>
               <p className="text-xs text-[var(--fg-muted)]">
-                Describe specifics: sensory details, rhythms, boundaries, and concrete freedom.
+                {t('Describe specifics: sensory details, rhythms, boundaries, and concrete freedom.')}
               </p>
             </div>
 
@@ -355,16 +357,16 @@ export const PublicTwoFutures: React.FC = () => {
                   [BUILDING_QUESTIONS[step - 9].id]: e.target.value,
                 })
               }
-              placeholder="Describe your vision concretely..."
+              placeholder={t('Describe your vision concretely...')}
               rows={4}
             />
 
             <div className="flex justify-between items-center pt-4 border-t border-[var(--border)]">
               <Button variant="ghost" size="sm" onClick={handlePrev}>
-                Back
+                {t('Back')}
               </Button>
               <Button variant="primary" size="md" onClick={handleNext} icon={ArrowRight} iconPosition="right">
-                Next
+                {t('Next')}
               </Button>
             </div>
           </Card>
@@ -375,21 +377,21 @@ export const PublicTwoFutures: React.FC = () => {
           <Card padding="lg" className="space-y-6">
             <div className="space-y-2 text-center">
               <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-coral)]">
-                Final Synthesis
+                {t('Final Synthesis')}
               </span>
               <h2 className="text-2xl sm:text-3xl font-bold font-display text-[var(--fg)]">
-                Distill Your Two Futures
+                {t('Distill Your Two Futures')}
               </h2>
               <p className="text-xs text-[var(--fg-muted)] max-w-md mx-auto">
-                Condense your answers into two clear, non-negotiable declarations.
+                {t('Condense your answers into two clear, non-negotiable declarations.')}
               </p>
             </div>
 
             <div className="space-y-4">
               <Field
                 id="anti-vision-synthesis"
-                label="Anti-Vision: What you refuse to become"
-                helper="Begin with 'I refuse to become someone who...'"
+                label={t('Anti-Vision: What you refuse to become')}
+                helper={t("Begin with 'I refuse to become someone who...'")}
               >
                 <Textarea
                   id="anti-vision-synthesis"
@@ -401,8 +403,8 @@ export const PublicTwoFutures: React.FC = () => {
 
               <Field
                 id="vision-synthesis"
-                label="Vision: The life you are building"
-                helper="Begin with 'I am building a life where...'"
+                label={t('Vision: The life you are building')}
+                helper={t("Begin with 'I am building a life where...'")}
               >
                 <Textarea
                   id="vision-synthesis"
@@ -415,10 +417,10 @@ export const PublicTwoFutures: React.FC = () => {
 
             <div className="flex justify-between items-center pt-4 border-t border-[var(--border)]">
               <Button variant="ghost" size="sm" onClick={handlePrev}>
-                Back
+                {t('Back')}
               </Button>
               <Button variant="accent" size="lg" onClick={() => setStep(14)}>
-                Generate Shareable Card
+                {t('Generate Shareable Card')}
               </Button>
             </div>
           </Card>
@@ -431,10 +433,10 @@ export const PublicTwoFutures: React.FC = () => {
 
             <div className="text-center space-y-2">
               <h2 className="text-2xl sm:text-3xl font-bold font-display text-[var(--fg)]">
-                Your Two Futures Compass
+                {t('Your Two Futures Compass')}
               </h2>
               <p className="text-xs text-[var(--fg-muted)]">
-                Save or share this compass as an honest anchor. Private question answers remain on your device.
+                {t('Save or share this compass as an honest anchor. Private question answers remain on your device.')}
               </p>
             </div>
 
@@ -443,7 +445,7 @@ export const PublicTwoFutures: React.FC = () => {
               <div className="p-2 bg-[var(--bg-muted)] border border-[var(--border)] rounded-[var(--radius-xl)] flex justify-center shadow-[var(--shadow-md)]">
                 <img
                   src={cardImage}
-                  alt="Two Futures Compass"
+                  alt={t('Two Futures Compass')}
                   className="max-h-[480px] object-contain rounded-[var(--radius-lg)]"
                 />
               </div>
@@ -458,15 +460,15 @@ export const PublicTwoFutures: React.FC = () => {
                   onChange={(e) => setIncludeAntiVisionOnCard(e.target.checked)}
                   className="rounded text-[var(--color-slate)]"
                 />
-                <span>Include Anti-Vision on Card</span>
+                <span>{t('Include Anti-Vision on Card')}</span>
               </label>
 
               <div className="flex items-center gap-2.5 w-full sm:w-auto">
                 <Button variant="outline" size="sm" icon={Download} onClick={handleDownload} className="flex-1 sm:flex-initial">
-                  Download PNG
+                  {t('Download PNG')}
                 </Button>
                 <Button variant="secondary" size="sm" icon={Share2} onClick={handleShare} className="flex-1 sm:flex-initial">
-                  Share Card
+                  {t('Share Card')}
                 </Button>
               </div>
             </div>
@@ -477,13 +479,13 @@ export const PublicTwoFutures: React.FC = () => {
                 <CheckCircle className="w-5 h-5" />
               </div>
               <h3 className="text-xl font-bold font-display text-[var(--fg)]">
-                Track This Direction Every Day in Life OS
+                {t('Track This Direction Every Day in Life OS')}
               </h3>
               <p className="text-xs text-[var(--fg-muted)] max-w-md mx-auto leading-relaxed">
-                Your vision is now drafted. Continue into Life OS to set your daily One Decision, earn Dream Dollars, and build your future world step by step.
+                {t('Your vision is now drafted. Continue into Life OS to set your daily One Decision, earn Dream Dollars, and build your future world step by step.')}
               </p>
               <Button variant="accent" size="lg" onClick={handleMigrateAndOpenApp} className="w-full sm:w-auto">
-                Enter Life OS (Save & Continue)
+                {t('Enter Life OS (Save & Continue)')}
               </Button>
             </Card>
           </div>

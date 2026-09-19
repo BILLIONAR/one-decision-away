@@ -25,9 +25,11 @@ import { CompleteMissionModal, CreateMissionModal } from '../components/MissionF
 import { FocusTimerHub } from '../components/FocusTimerHub';
 import { Mission, MissionType, MissionArea } from '../types/models';
 import { getBaseReward } from '../services/economy';
+import { useT } from '../i18n';
 
 export const Missions: React.FC = () => {
   const { data, addMission, completeMission, startFocusSession } = useApp();
+  const t = useT();
 
   const [activeTab, setActiveTab] = useState<string>('All');
   const [selectedArea, setSelectedArea] = useState<string>('All');
@@ -37,6 +39,7 @@ export const Missions: React.FC = () => {
   if (!data) return null;
 
   const tabs = ['All', 'Daily Quests', 'Weekly Missions', 'Boss Fights', 'Constraints', 'Completed'];
+  const tabLabels = tabs.map((tab) => t(tab));
 
   const typeMap: Record<string, MissionType | 'completed' | 'all'> = {
     All: 'all',
@@ -66,11 +69,11 @@ export const Missions: React.FC = () => {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Missions & Quests"
-        subtitle="Turn meaningful life projects into structured daily quests, deep-work focus sprints, and boss fights."
+        title={t('Missions & Quests')}
+        subtitle={t('Turn meaningful life projects into structured daily quests, deep-work focus sprints, and boss fights.')}
         action={
           <Button variant="primary" icon={Plus} onClick={() => setIsCreateOpen(true)}>
-            Create Mission
+            {t('Create Mission')}
           </Button>
         }
       />
@@ -80,7 +83,11 @@ export const Missions: React.FC = () => {
 
       {/* Tabs & Filters */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[var(--border)]">
-        <ChipGroup items={tabs} selected={activeTab} onSelect={setActiveTab} />
+        <ChipGroup
+          items={tabLabels}
+          selected={t(activeTab)}
+          onSelect={(label) => setActiveTab(tabs[tabLabels.indexOf(label)] ?? label)}
+        />
 
         <div className="w-full sm:w-48">
           <Select
@@ -88,14 +95,14 @@ export const Missions: React.FC = () => {
             value={selectedArea}
             onChange={(e) => setSelectedArea(e.target.value)}
             options={[
-              { value: 'All', label: 'All Life Domains' },
-              { value: 'Work', label: 'Work & Enterprise' },
-              { value: 'Money', label: 'Money' },
-              { value: 'Health', label: 'Health' },
-              { value: 'Learning', label: 'Learning' },
-              { value: 'Relationships', label: 'Relationships' },
-              { value: 'Environment', label: 'Environment' },
-              { value: 'Personal Meaning', label: 'Personal Meaning' },
+              { value: 'All', label: t('All Life Domains') },
+              { value: 'Work', label: t('Work & Enterprise') },
+              { value: 'Money', label: t('Money') },
+              { value: 'Health', label: t('Health') },
+              { value: 'Learning', label: t('Learning') },
+              { value: 'Relationships', label: t('Relationships') },
+              { value: 'Environment', label: t('Environment') },
+              { value: 'Personal Meaning', label: t('Personal Meaning') },
             ]}
           />
         </div>
@@ -122,13 +129,13 @@ export const Missions: React.FC = () => {
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-1.5">
                       <span className="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-[var(--bg-muted)] text-[var(--fg-muted)]">
-                        {mission.area}
+                        {t(mission.area)}
                       </span>
-                      {mission.isOneDecision && <Badge variant="coral">One Decision</Badge>}
+                      {mission.isOneDecision && <Badge variant="coral">{t('One Decision')}</Badge>}
                     </div>
 
                     <span className="text-xs font-bold text-[var(--color-sage)]">
-                      {mission.type === 'constraint' ? 'Rule' : `+ D$ ${reward.toLocaleString()}`}
+                      {mission.type === 'constraint' ? t('Rule') : `+ D$ ${reward.toLocaleString()}`}
                     </span>
                   </div>
 
@@ -139,28 +146,28 @@ export const Missions: React.FC = () => {
                   <div className="flex items-center gap-3 text-xs text-[var(--fg-muted)]">
                     <span className="flex items-center gap-1">
                       <Clock className="w-3.5 h-3.5" />
-                      {mission.estimatedMinutes || 30} mins
+                      {t('{n} mins', { n: mission.estimatedMinutes || 30 })}
                     </span>
-                    <span className="capitalize">{mission.difficulty}</span>
+                    <span className="capitalize">{t(mission.difficulty)}</span>
                     {mission.recurring && (
                       <span className="flex items-center gap-1 text-[var(--color-sage)]">
-                        <Calendar className="w-3.5 h-3.5" /> {mission.recurring}
+                        <Calendar className="w-3.5 h-3.5" /> {t(mission.recurring)}
                       </span>
                     )}
                   </div>
 
                   {mission.reflection && (
                     <div className="p-2.5 bg-[var(--bg-muted)] rounded-[var(--radius-sm)] text-[11px] text-[var(--fg-muted)] space-y-1">
-                      <div className="font-semibold text-[var(--fg)]">Reflection:</div>
-                      <div>Completed: {mission.reflection.completedSummary}</div>
-                      <div>Next Step: {mission.reflection.nextStep}</div>
+                      <div className="font-semibold text-[var(--fg)]">{t('Reflection:')}</div>
+                      <div>{t('Completed: {text}', { text: mission.reflection.completedSummary })}</div>
+                      <div>{t('Next Step: {text}', { text: mission.reflection.nextStep })}</div>
                     </div>
                   )}
                 </div>
 
                 <div className="pt-2 border-t border-[var(--border)] flex items-center justify-between gap-2">
                   <span className="text-[11px] text-[var(--fg-subtle)] capitalize">
-                    Type: {mission.type.replace('_', ' ')}
+                    {t('Type: {type}', { type: t(mission.type.replace('_', ' ')) })}
                   </span>
 
                   {!isCompleted ? (
@@ -178,9 +185,9 @@ export const Missions: React.FC = () => {
                             durationMinutes: mission.estimatedMinutes || 30,
                           })
                         }
-                        title="Lock app into dedicated Deep Work for this quest"
+                        title={t('Lock app into dedicated Deep Work for this quest')}
                       >
-                        Focus ({mission.estimatedMinutes || 30}m)
+                        {t('Focus ({n}m)', { n: mission.estimatedMinutes || 30 })}
                       </Button>
                       <Button
                         variant={mission.isOneDecision ? 'accent' : 'primary'}
@@ -188,12 +195,12 @@ export const Missions: React.FC = () => {
                         icon={CheckCircle}
                         onClick={() => setCompletingMission(mission)}
                       >
-                        Complete
+                        {t('Complete')}
                       </Button>
                     </div>
                   ) : (
                     <span className="text-xs font-bold text-[var(--color-sage)] flex items-center gap-1">
-                      <CheckCircle className="w-3.5 h-3.5" /> Completed
+                      <CheckCircle className="w-3.5 h-3.5" /> {t('Completed')}
                     </span>
                   )}
                 </div>
@@ -203,13 +210,13 @@ export const Missions: React.FC = () => {
         </div>
       ) : (
         <Empty
-          title="No missions found"
+          title={t('No missions found')}
           description={
             activeTab === 'Completed'
-              ? 'You have not completed any missions under this filter yet.'
-              : 'Add a new mission to begin earning D$ and building momentum.'
+              ? t('You have not completed any missions under this filter yet.')
+              : t('Add a new mission to begin earning D$ and building momentum.')
           }
-          actionLabel="Create a Mission"
+          actionLabel={t('Create a Mission')}
           onAction={() => setIsCreateOpen(true)}
         />
       )}

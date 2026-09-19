@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../store/useApp';
 import { BookOpen, Sparkles, Plus, Feather } from 'lucide-react';
 import { soundSynthesizer } from '../utils/soundSynthesizer';
+import { useT } from '../i18n';
 
 interface FloatingJournalButtonProps {
   className?: string;
@@ -9,6 +10,7 @@ interface FloatingJournalButtonProps {
 
 export const FloatingJournalButton: React.FC<FloatingJournalButtonProps> = ({ className = '' }) => {
   const { openQuickJournal } = useApp();
+  const t = useT();
   const [isHovered, setIsHovered] = useState(false);
 
   const isMac = typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform || '');
@@ -32,7 +34,7 @@ export const FloatingJournalButton: React.FC<FloatingJournalButtonProps> = ({ cl
             : 'opacity-0 translate-y-1'
         }`}
       >
-        <span className="font-semibold text-white">Log Dream Journal Entry</span>
+        <span className="font-semibold text-white">{t('Log Dream Journal Entry')}</span>
         <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-white/15 rounded text-white/90 border border-white/20">
           {isMac ? '⌘K' : 'Ctrl+K'}
         </kbd>
@@ -43,7 +45,7 @@ export const FloatingJournalButton: React.FC<FloatingJournalButtonProps> = ({ cl
         type="button"
         id="home-floating-journal-btn"
         onClick={handleClick}
-        aria-label="Instantly log Dream Journal entry"
+        aria-label={t('Instantly log Dream Journal entry')}
         className="relative flex items-center gap-2 px-3.5 py-3 sm:px-4 sm:py-3.5 rounded-full bg-gradient-to-r from-[var(--color-slate)] via-[var(--color-slate)] to-[var(--color-coral)] text-white shadow-lg hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer border border-white/20 group-hover:border-white/40"
       >
         {/* Subtle Ambient Pulse Ring */}
@@ -59,7 +61,7 @@ export const FloatingJournalButton: React.FC<FloatingJournalButtonProps> = ({ cl
 
         {/* Label: shows on larger screens or expands smoothly */}
         <span className="text-xs sm:text-sm font-bold tracking-tight font-display whitespace-nowrap hidden sm:inline-block">
-          Quick Journal
+          {t('Quick Journal')}
         </span>
       </button>
     </div>

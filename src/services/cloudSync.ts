@@ -5,6 +5,7 @@
  */
 import type { SupabaseClient, Session } from '@supabase/supabase-js';
 import { UserData } from '../types/models';
+import { t } from '../i18n';
 
 const CFG_KEY = 'oda_cloud_cfg';
 const LAST_SYNC_KEY = 'oda_cloud_last_sync';
@@ -132,13 +133,13 @@ class CloudSync {
 
   public async signInWithEmail(email: string): Promise<{ ok: boolean; message: string }> {
     const client = await this.getClient();
-    if (!client) return { ok: false, message: 'Cloud sync is not configured.' };
+    if (!client) return { ok: false, message: t('Cloud sync is not configured.') };
     const { error } = await client.auth.signInWithOtp({
       email: email.trim(),
       options: { emailRedirectTo: window.location.origin },
     });
     if (error) return { ok: false, message: error.message };
-    return { ok: true, message: 'Magic link sent — check your inbox and open it on this device.' };
+    return { ok: true, message: t('Magic link sent — check your inbox and open it on this device.') };
   }
 
   public async signOut() {

@@ -4,6 +4,7 @@
  * True server push (app fully closed) needs a Web Push backend; see README notes.
  */
 import { NudgeSlot, DEFAULT_NUDGE_TIMES, NUDGE_TITLES, getNudgeLine } from '../data/dailyNudges';
+import { t } from '../i18n';
 
 const FIRED_KEY = 'oda_nudges_fired';
 const CATCH_UP_MINUTES = 90;
@@ -90,8 +91,8 @@ class NotificationScheduler {
 
   public async show(slot: NudgeSlot, customBody?: string) {
     if (!this.isSupported() || Notification.permission !== 'granted') return;
-    const body = customBody || getNudgeLine(slot);
-    const title = NUDGE_TITLES[slot];
+    const body = customBody || t(getNudgeLine(slot));
+    const title = t(NUDGE_TITLES[slot]);
     const opts: NotificationOptions = {
       body,
       icon: '/icon-192.png',

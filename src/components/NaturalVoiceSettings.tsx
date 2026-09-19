@@ -3,12 +3,14 @@ import { Card, Button, Field, Input, Badge } from './ui';
 import { Mic, Sparkles, CheckCircle2, AlertTriangle, Volume2 } from 'lucide-react';
 import { voiceGuide, VoiceEngine } from '../utils/voiceGuide';
 import { GEMINI_TTS_VOICES } from '../utils/geminiVoice';
+import { useT } from '../i18n';
 
 /**
  * Settings card: choose between the free built-in browser voice and
  * a more natural Gemini voice (needs the user's own Gemini API key, stored only on this device).
  */
 export const NaturalVoiceSettings: React.FC = () => {
+  const t = useT();
   const [engine, setEngine] = useState<VoiceEngine>(voiceGuide.getEngine());
   const [apiKey, setApiKey] = useState(voiceGuide.getGeminiApiKey());
   const [voiceName, setVoiceName] = useState(voiceGuide.getGeminiVoiceName());
@@ -41,7 +43,7 @@ export const NaturalVoiceSettings: React.FC = () => {
         const ok = await voiceGuide.testNaturalVoice();
         setTestResult(ok ? 'ok' : 'fail');
       } else {
-        voiceGuide.speak('Welcome. Take a slow breath, and let the day soften.');
+        voiceGuide.speak(t('Welcome. Take a slow breath, and let the day soften.'));
         setTestResult('ok');
       }
     } finally {
@@ -56,23 +58,22 @@ export const NaturalVoiceSettings: React.FC = () => {
       <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
         <div className="flex items-center gap-2">
           <Mic className="w-4 h-4 text-[var(--color-sage)]" />
-          <h3 className="font-display font-bold text-base text-[var(--fg)]">Meditation Voice</h3>
+          <h3 className="font-display font-bold text-base text-[var(--fg)]">{t('Meditation Voice')}</h3>
         </div>
         <Badge variant={naturalReady ? 'sage' : 'subtle'}>
-          {naturalReady ? 'Natural voice active' : 'Built-in voice'}
+          {naturalReady ? t('Natural voice active') : t('Built-in voice')}
         </Badge>
       </div>
 
       <p className="text-xs text-[var(--fg-muted)] leading-relaxed">
-        Guided meditations are narrated by a voice. The built-in voice is free and works offline. For a warmer,
-        more human narration you can use a Gemini voice with your own API key — the key stays on this device only.
+        {t('Guided meditations are narrated by a voice. The built-in voice is free and works offline. For a warmer, more human narration you can use a Gemini voice with your own API key — the key stays on this device only.')}
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         {(
           [
-            { id: 'browser', title: 'Built-in voice', sub: 'Free · offline · instant', icon: Volume2 },
-            { id: 'gemini', title: 'Natural voice (Gemini)', sub: 'Warm, human-like · needs API key', icon: Sparkles },
+            { id: 'browser', title: t('Built-in voice'), sub: t('Free · offline · instant'), icon: Volume2 },
+            { id: 'gemini', title: t('Natural voice (Gemini)'), sub: t('Warm, human-like · needs API key'), icon: Sparkles },
           ] as const
         ).map((opt) => {
           const Icon = opt.icon;
@@ -98,7 +99,7 @@ export const NaturalVoiceSettings: React.FC = () => {
       </div>
 
       {engine === 'browser' && browserVoices.length > 0 && (
-        <Field id="browser-voice" label="Built-in voice" helper="Voices come from your operating system; quality varies by device.">
+        <Field id="browser-voice" label={t('Built-in voice')} helper={t('Voices come from your operating system; quality varies by device.')}>
           <select
             id="browser-voice"
             value={browserVoiceURI}
@@ -122,8 +123,8 @@ export const NaturalVoiceSettings: React.FC = () => {
         <div className="space-y-3 animate-in fade-in duration-200">
           <Field
             id="gemini-key"
-            label="Gemini API key"
-            helper="Create a free key at aistudio.google.com → Get API key. Stored in this browser only, never sent anywhere except Google."
+            label={t('Gemini API key')}
+            helper={t('Create a free key at aistudio.google.com → Get API key. Stored in this browser only, never sent anywhere except Google.')}
           >
             <div className="flex gap-2">
               <Input
@@ -136,12 +137,12 @@ export const NaturalVoiceSettings: React.FC = () => {
                 className="flex-1"
               />
               <Button variant="outline" size="sm" onClick={() => setShowKey(!showKey)}>
-                {showKey ? 'Hide' : 'Show'}
+                {showKey ? t('Hide') : t('Show')}
               </Button>
             </div>
           </Field>
 
-          <Field id="gemini-voice" label="Voice">
+          <Field id="gemini-voice" label={t('Voice')}>
             <select
               id="gemini-voice"
               value={voiceName}
@@ -154,7 +155,7 @@ export const NaturalVoiceSettings: React.FC = () => {
             >
               {GEMINI_TTS_VOICES.map((v) => (
                 <option key={v.id} value={v.id}>
-                  {v.label}
+                  {t(v.label)}
                 </option>
               ))}
             </select>
@@ -163,7 +164,7 @@ export const NaturalVoiceSettings: React.FC = () => {
       )}
 
       {engine === 'browser' && (
-        <Field id="voice-rate" label={`Speaking pace · ${rate.toFixed(2)}×`} helper="Slower is calmer. 0.85–0.9 suits most meditations.">
+        <Field id="voice-rate" label={t('Speaking pace · {rate}×', { rate: rate.toFixed(2) })} helper={t('Slower is calmer. 0.85–0.9 suits most meditations.')}>
           <input
             id="voice-rate"
             type="range"
@@ -185,12 +186,12 @@ export const NaturalVoiceSettings: React.FC = () => {
         <div className="text-[11px]">
           {testResult === 'ok' && (
             <span className="flex items-center gap-1 text-[var(--color-sage)] font-semibold">
-              <CheckCircle2 className="w-3.5 h-3.5" /> Voice is working.
+              <CheckCircle2 className="w-3.5 h-3.5" /> {t('Voice is working.')}
             </span>
           )}
           {testResult === 'fail' && (
             <span className="flex items-center gap-1 text-amber-600 font-semibold">
-              <AlertTriangle className="w-3.5 h-3.5" /> Could not reach Gemini — check the key. Meditations will use the built-in voice meanwhile.
+              <AlertTriangle className="w-3.5 h-3.5" /> {t('Could not reach Gemini — check the key. Meditations will use the built-in voice meanwhile.')}
             </span>
           )}
         </div>
@@ -201,7 +202,7 @@ export const NaturalVoiceSettings: React.FC = () => {
           onClick={handleTest}
           disabled={testing || (engine === 'gemini' && !naturalReady)}
         >
-          {testing ? 'Testing…' : 'Test voice'}
+          {testing ? t('Testing…') : t('Test voice')}
         </Button>
       </div>
     </Card>

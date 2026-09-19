@@ -4,9 +4,11 @@ import { PageHeader, Button, Card, Badge, Progress, Disclaimer } from '../compon
 import { Compass, CheckCircle, Flame, Award, Calendar, Sparkles } from 'lucide-react';
 import { SEED_SEASONS } from '../data/seed';
 import { Season } from '../types/models';
+import { useT } from '../i18n';
 
 export const Seasons: React.FC = () => {
   const { data, joinSeason, completeMission } = useApp();
+  const t = useT();
 
   const [activeSeasonTab, setActiveSeasonTab] = useState<string>(
     data?.activeSeason?.id || SEED_SEASONS[0].id
@@ -27,8 +29,8 @@ export const Seasons: React.FC = () => {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="30-Day Themed Seasons"
-        subtitle="Intensive 30-day focus cycles to create decisive breakthroughs."
+        title={t('30-Day Themed Seasons')}
+        subtitle={t('Intensive 30-day focus cycles to create decisive breakthroughs.')}
       />
 
       {/* Seasons Selector Tabs */}
@@ -51,9 +53,9 @@ export const Seasons: React.FC = () => {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-bold uppercase text-[var(--color-sage)]">
-                    {season.durationDays || 30} Days Focus
+                    {t('{n} Days Focus', { n: season.durationDays || 30 })}
                   </span>
-                  {isCurrentlyActive && <Badge variant="coral">Active Focus</Badge>}
+                  {isCurrentlyActive && <Badge variant="coral">{t('Active Focus')}</Badge>}
                 </div>
 
                 <h3 className="font-display font-bold text-base text-[var(--fg)]">
@@ -74,7 +76,7 @@ export const Seasons: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--border)]">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <Badge variant="sage">{currentSeason.durationDays || 30} Days Sprint</Badge>
+              <Badge variant="sage">{t('{n} Days Sprint', { n: currentSeason.durationDays || 30 })}</Badge>
               <Badge variant="slate">{currentSeason.rewardBadgeTitle || currentSeason.badgeName}</Badge>
             </div>
             <h2 className="text-2xl font-bold font-display text-[var(--fg)]">
@@ -89,15 +91,15 @@ export const Seasons: React.FC = () => {
               icon={Sparkles}
               onClick={() => joinSeason(currentSeason)}
             >
-              Enroll in This Season
+              {t('Enroll in This Season')}
             </Button>
           ) : (
             <div className="text-right">
               <span className="text-xs font-bold text-[var(--color-sage)] block">
-                Enrolled · 30 Days Active
+                {t('Enrolled · 30 Days Active')}
               </span>
               <span className="text-[11px] text-[var(--fg-subtle)]">
-                {seasonProgress}% Completed
+                {t('{pct}% Completed', { pct: seasonProgress })}
               </span>
             </div>
           )}
@@ -107,7 +109,7 @@ export const Seasons: React.FC = () => {
         {isJoined && (
           <div className="space-y-2 p-4 bg-[var(--bg-muted)] rounded-[var(--radius-md)]">
             <div className="flex justify-between text-xs">
-              <span className="font-bold text-[var(--fg)]">Seasonal Mission Progress</span>
+              <span className="font-bold text-[var(--fg)]">{t('Seasonal Mission Progress')}</span>
               <span className="font-mono text-[var(--color-sage)] font-bold">
                 {seasonProgress}%
               </span>
@@ -119,7 +121,7 @@ export const Seasons: React.FC = () => {
         {/* Missions Checklist for this Season */}
         <div className="space-y-3">
           <h3 className="font-display font-bold text-base text-[var(--fg)]">
-            Core Seasonal Quests ({currentSeason.missions.length})
+            {t('Core Seasonal Quests ({n})', { n: currentSeason.missions.length })}
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -150,19 +152,19 @@ export const Seasons: React.FC = () => {
           </div>
           <div className="space-y-0.5">
             <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-coral)]">
-              Cosmetic Milestone Reward
+              {t('Cosmetic Milestone Reward')}
             </span>
             <div className="font-bold text-sm text-[var(--fg)]">
-              "{currentSeason.rewardBadgeTitle || currentSeason.badgeName}" Profile Emblem
+              {t('"{name}" Profile Emblem', { name: currentSeason.rewardBadgeTitle || currentSeason.badgeName || '' })}
             </div>
             <p className="text-[11px] text-[var(--fg-muted)]">
-              Earned upon completing the 30-day cycle. Purely symbolic recognition with no pay-to-win advantages.
+              {t('Earned upon completing the 30-day cycle. Purely symbolic recognition with no pay-to-win advantages.')}
             </p>
           </div>
         </div>
       </Card>
 
-      <Disclaimer text="Seasons are designed to provide sprint focus without artificial urgency or streak penalties." />
+      <Disclaimer text={t('Seasons are designed to provide sprint focus without artificial urgency or streak penalties.')} />
     </div>
   );
 };

@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { calculateOneDecisionStreakData } from '../services/economy';
 import { Mission } from '../types/models';
+import { useT } from '../i18n';
 
 interface OneDecisionStreakCounterProps {
   onSetDecision?: () => void;
@@ -32,6 +33,7 @@ export const OneDecisionStreakCounter: React.FC<OneDecisionStreakCounterProps> =
   onCompleteDecision,
   className = '',
 }) => {
+  const t = useT();
   const { data, startFocusSession } = useApp();
   const [showInfo, setShowInfo] = useState(false);
   const [hoveredDayDate, setHoveredDayDate] = useState<string | null>(null);
@@ -120,18 +122,18 @@ export const OneDecisionStreakCounter: React.FC<OneDecisionStreakCounterProps> =
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-base sm:text-lg font-bold font-display text-[var(--fg)] tracking-tight">
-                  One Decision Streak Counter
+                  {t('One Decision Streak Counter')}
                 </h3>
                 <span
                   className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${getTierColor(
                     tier.level
                   )}`}
                 >
-                  {tier.icon} {tier.name}
+                  {tier.icon} {t(tier.name)}
                 </span>
               </div>
               <p className="text-xs text-[var(--fg-muted)]">
-                Consecutive daily execution of your highest-leverage signature decision.
+                {t('Consecutive daily execution of your highest-leverage signature decision.')}
               </p>
             </div>
           </div>
@@ -139,15 +141,15 @@ export const OneDecisionStreakCounter: React.FC<OneDecisionStreakCounterProps> =
           <div className="flex items-center gap-2 self-start sm:self-auto">
             {multiplier > 1.0 && (
               <Badge variant="coral" className="font-bold text-[11px] shadow-2xs">
-                ⚡ {multiplier}x Reward Boost
+                {t('⚡ {multiplier}x Reward Boost', { multiplier })}
               </Badge>
             )}
             <button
               type="button"
               onClick={() => setShowInfo(!showInfo)}
               className="p-1.5 rounded-[var(--radius-xs)] text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-muted)] transition-colors cursor-pointer"
-              title="Learn about One Decision Streak methodology"
-              aria-label="Streak information"
+              title={t('Learn about One Decision Streak methodology')}
+              aria-label={t('Streak information')}
             >
               <Info className="w-4 h-4" />
             </button>
@@ -159,21 +161,21 @@ export const OneDecisionStreakCounter: React.FC<OneDecisionStreakCounterProps> =
           <div className="p-3.5 bg-[var(--bg-muted)] border border-[var(--border)] rounded-[var(--radius-sm)] text-xs space-y-2 text-[var(--fg-muted)]">
             <div className="flex items-center gap-2 font-bold text-[var(--fg)]">
               <Sparkles className="w-4 h-4 text-[var(--color-coral)]" />
-              <span>The Power of Daily Compounding Execution</span>
+              <span>{t('The Power of Daily Compounding Execution')}</span>
             </div>
             <p>
-              Your future is not forged in occasional marathons—it is constructed by making and executing
-              exactly <strong>One Signature Decision every single day</strong>.
+              {t('Your future is not forged in occasional marathons—it is constructed by making and executing exactly')}{' '}
+              <strong>{t('One Signature Decision every single day')}</strong>.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-[11px]">
               <div className="p-2 rounded bg-[var(--bg-elevated)] border border-[var(--border)]">
-                <span className="font-bold text-[var(--fg)]">🔥 Ignition (1-2d):</span> Breaks initial inertia.
+                <span className="font-bold text-[var(--fg)]">{t('🔥 Ignition (1-2d):')}</span> {t('Breaks initial inertia.')}
               </div>
               <div className="p-2 rounded bg-[var(--bg-elevated)] border border-[var(--border)]">
-                <span className="font-bold text-[var(--fg)]">🌊 Flow State (7d+):</span> Effortless daily momentum.
+                <span className="font-bold text-[var(--fg)]">{t('🌊 Flow State (7d+):')}</span> {t('Effortless daily momentum.')}
               </div>
               <div className="p-2 rounded bg-[var(--bg-elevated)] border border-[var(--border)]">
-                <span className="font-bold text-[var(--fg)]">👑 Sovereign (30d+):</span> Complete identity shift.
+                <span className="font-bold text-[var(--fg)]">{t('👑 Sovereign (30d+):')}</span> {t('Complete identity shift.')}
               </div>
             </div>
           </div>
@@ -195,7 +197,7 @@ export const OneDecisionStreakCounter: React.FC<OneDecisionStreakCounterProps> =
               >
                 <span className="text-2xl font-black font-display leading-none">{currentStreak}</span>
                 <span className="text-[10px] font-bold uppercase tracking-wider mt-0.5">
-                  {currentStreak === 1 ? 'Day' : 'Days'}
+                  {currentStreak === 1 ? t('Day') : t('Days')}
                 </span>
               </div>
               {currentStreak > 0 && (
@@ -208,26 +210,26 @@ export const OneDecisionStreakCounter: React.FC<OneDecisionStreakCounterProps> =
             <div className="space-y-1 min-w-0">
               <div className="flex items-center gap-1.5">
                 <span className="text-xs font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-                  Active Momentum
+                  {t('Active Momentum')}
                 </span>
                 {completedToday ? (
                   <span className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded bg-[var(--color-sage)]/15 text-[var(--color-sage)] border border-[var(--color-sage)]/30">
-                    <Check className="w-3 h-3" /> Locked
+                    <Check className="w-3 h-3" /> {t('Locked')}
                   </span>
                 ) : (
                   <span className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-500 border border-amber-500/30 animate-pulse">
-                    Today Pending
+                    {t('Today Pending')}
                   </span>
                 )}
               </div>
               <div className="text-sm font-semibold text-[var(--fg)] truncate">
                 {completedToday
-                  ? 'Today’s One Decision Completed'
+                  ? t('Today’s One Decision Completed')
                   : currentStreak > 0
-                  ? 'Complete today to extend streak'
-                  : 'Execute today to begin your streak'}
+                  ? t('Complete today to extend streak')
+                  : t('Execute today to begin your streak')}
               </div>
-              <p className="text-[11px] text-[var(--fg-muted)] line-clamp-1">{tier.description}</p>
+              <p className="text-[11px] text-[var(--fg-muted)] line-clamp-1">{t(tier.description)}</p>
             </div>
           </div>
 
@@ -236,15 +238,17 @@ export const OneDecisionStreakCounter: React.FC<OneDecisionStreakCounterProps> =
             <div className="flex items-center justify-between text-xs">
               <span className="font-medium text-[var(--fg-muted)] flex items-center gap-1.5">
                 <Award className="w-3.5 h-3.5 text-[var(--color-coral)]" />
-                <span>Next Milestone Target:</span>
+                <span>{t('Next Milestone Target:')}</span>
                 <strong className="text-[var(--fg)] font-semibold">
-                  {tier.nextMilestone} Days ({tier.name === 'Sovereignty' ? 'Mastery+' : 'Tier Upgrade'})
+                  {t('{n} Days', { n: tier.nextMilestone })} ({tier.name === 'Sovereignty' ? t('Mastery+') : t('Tier Upgrade')})
                 </strong>
               </span>
               <span className="font-bold text-[var(--color-coral)]">
                 {daysToNextMilestone === 0
-                  ? 'Milestone Reached! 🎉'
-                  : `${daysToNextMilestone} ${daysToNextMilestone === 1 ? 'day' : 'days'} away`}
+                  ? t('Milestone Reached! 🎉')
+                  : daysToNextMilestone === 1
+                  ? t('1 day away')
+                  : t('{n} days away', { n: daysToNextMilestone })}
               </span>
             </div>
 
@@ -258,7 +262,7 @@ export const OneDecisionStreakCounter: React.FC<OneDecisionStreakCounterProps> =
             <div className="flex items-center justify-between text-[11px] text-[var(--fg-muted)]">
               <span>{tier.prevMilestone}d</span>
               <span className="font-medium text-[var(--fg)]">
-                {currentStreak} / {tier.nextMilestone} Days ({milestoneProgress}%)
+                {t('{current} / {target} Days ({pct}%)', { current: currentStreak, target: tier.nextMilestone, pct: milestoneProgress })}
               </span>
               <span>{tier.nextMilestone}d</span>
             </div>
@@ -270,10 +274,10 @@ export const OneDecisionStreakCounter: React.FC<OneDecisionStreakCounterProps> =
           <div className="flex items-center justify-between text-xs text-[var(--fg-muted)]">
             <span className="font-bold uppercase tracking-wider text-[10px] flex items-center gap-1.5">
               <Calendar className="w-3 h-3 text-[var(--fg-muted)]" />
-              <span>7-Day Decision Trajectory</span>
+              <span>{t('7-Day Decision Trajectory')}</span>
             </span>
             <span className="text-[11px]">
-              {last7Days.filter((d) => d.isCompleted).length} of 7 days executed
+              {t('{n} of 7 days executed', { n: last7Days.filter((d) => d.isCompleted).length })}
             </span>
           </div>
 
@@ -296,7 +300,7 @@ export const OneDecisionStreakCounter: React.FC<OneDecisionStreakCounterProps> =
                   }`}
                 >
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-                    {day.dayLabel}
+                    {t(day.dayLabel)}
                   </span>
                   <span className="text-xs font-semibold text-[var(--fg)] my-0.5">{day.dayNumber}</span>
 
@@ -315,7 +319,7 @@ export const OneDecisionStreakCounter: React.FC<OneDecisionStreakCounterProps> =
                   </div>
 
                   <span className="text-[9px] font-medium text-[var(--fg-muted)]">
-                    {day.isToday ? 'Today' : day.isCompleted ? '✓ Done' : 'Missed'}
+                    {day.isToday ? t('Today') : day.isCompleted ? t('✓ Done') : t('Missed')}
                   </span>
 
                   {/* Day Hover Tooltip */}
@@ -334,27 +338,27 @@ export const OneDecisionStreakCounter: React.FC<OneDecisionStreakCounterProps> =
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
           <div className="p-3 rounded-[var(--radius-sm)] bg-[var(--bg-muted)] border border-[var(--border)] space-y-0.5">
             <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-              Current Streak
+              {t('Current Streak')}
             </span>
             <div className="text-lg font-bold font-display text-[var(--fg)] flex items-center gap-1">
               <Flame className="w-4 h-4 text-[var(--color-coral)]" />
-              <span>{currentStreak} Days</span>
+              <span>{t('{n} Days', { n: currentStreak })}</span>
             </div>
           </div>
 
           <div className="p-3 rounded-[var(--radius-sm)] bg-[var(--bg-muted)] border border-[var(--border)] space-y-0.5">
             <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-              Longest Record
+              {t('Longest Record')}
             </span>
             <div className="text-lg font-bold font-display text-[var(--fg)] flex items-center gap-1">
               <Crown className="w-4 h-4 text-amber-500" />
-              <span>{longestStreak} Days</span>
+              <span>{t('{n} Days', { n: longestStreak })}</span>
             </div>
           </div>
 
           <div className="p-3 rounded-[var(--radius-sm)] bg-[var(--bg-muted)] border border-[var(--border)] space-y-0.5">
             <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-              Total Decisions
+              {t('Total Decisions')}
             </span>
             <div className="text-lg font-bold font-display text-[var(--fg)] flex items-center gap-1">
               <ShieldCheck className="w-4 h-4 text-[var(--color-sage)]" />
@@ -364,7 +368,7 @@ export const OneDecisionStreakCounter: React.FC<OneDecisionStreakCounterProps> =
 
           <div className="p-3 rounded-[var(--radius-sm)] bg-[var(--bg-muted)] border border-[var(--border)] space-y-0.5">
             <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-              D$ Earned
+              {t('D$ Earned')}
             </span>
             <div className="text-lg font-bold font-display text-[var(--color-sage)] flex items-center gap-1">
               <TrendingUp className="w-4 h-4" />
@@ -380,11 +384,11 @@ export const OneDecisionStreakCounter: React.FC<OneDecisionStreakCounterProps> =
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-[var(--color-sage)] flex-shrink-0" />
                 <span className="font-semibold text-[var(--fg)]">
-                  Today's signature decision was successfully executed and recorded in your ledger (+D$ 500).
+                  {t("Today's signature decision was successfully executed and recorded in your ledger (+D$ 500).")}
                 </span>
               </div>
               <span className="text-[11px] font-bold text-[var(--color-sage)] whitespace-nowrap">
-                Streak Safe Until Tomorrow
+                {t('Streak Safe Until Tomorrow')}
               </span>
             </div>
           ) : todayDecision ? (
@@ -392,7 +396,7 @@ export const OneDecisionStreakCounter: React.FC<OneDecisionStreakCounterProps> =
               <div className="space-y-0.5 min-w-0">
                 <div className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-[var(--color-coral)] animate-ping" />
-                  <span className="font-bold text-[var(--fg)]">Today's Active Decision:</span>
+                  <span className="font-bold text-[var(--fg)]">{t("Today's Active Decision:")}</span>
                 </div>
                 <p className="font-medium text-[var(--fg)] truncate">{todayDecision.title}</p>
               </div>
@@ -411,9 +415,9 @@ export const OneDecisionStreakCounter: React.FC<OneDecisionStreakCounterProps> =
                       durationMinutes: todayDecision.estimatedMinutes || 45,
                     })
                   }
-                  title="Lock Into Focus"
+                  title={t('Lock Into Focus')}
                 >
-                  Focus ({todayDecision.estimatedMinutes || 45}m)
+                  {t('Focus ({n}m)', { n: todayDecision.estimatedMinutes || 45 })}
                 </Button>
                 {onCompleteDecision && (
                   <Button
@@ -422,7 +426,7 @@ export const OneDecisionStreakCounter: React.FC<OneDecisionStreakCounterProps> =
                     icon={Check}
                     onClick={() => onCompleteDecision(todayDecision)}
                   >
-                    Complete Decision
+                    {t('Complete Decision')}
                   </Button>
                 )}
               </div>
@@ -430,9 +434,9 @@ export const OneDecisionStreakCounter: React.FC<OneDecisionStreakCounterProps> =
           ) : (
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-[var(--radius-sm)] bg-[var(--bg-muted)] border border-[var(--border)] text-xs">
               <div className="space-y-0.5">
-                <span className="font-bold text-[var(--fg)]">No One Decision locked for today yet.</span>
+                <span className="font-bold text-[var(--fg)]">{t('No One Decision locked for today yet.')}</span>
                 <p className="text-[var(--fg-muted)] text-[11px]">
-                  Lock in today's signature decision to maintain and grow your consecutive streak.
+                  {t("Lock in today's signature decision to maintain and grow your consecutive streak.")}
                 </p>
               </div>
               {onSetDecision && (
@@ -443,7 +447,7 @@ export const OneDecisionStreakCounter: React.FC<OneDecisionStreakCounterProps> =
                   onClick={onSetDecision}
                   className="flex-shrink-0"
                 >
-                  Set Today's One Decision
+                  {t("Set Today's One Decision")}
                 </Button>
               )}
             </div>

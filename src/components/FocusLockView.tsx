@@ -36,8 +36,10 @@ import { getBaseReward } from '../services/economy';
 import { soundSynthesizer } from '../utils/soundSynthesizer';
 import { voiceGuide } from '../utils/voiceGuide';
 import { getGuidedMeditation, INTENT_LABELS } from '../data/guidedMeditations';
+import { useT } from '../i18n';
 
 export const FocusLockView: React.FC = () => {
+  const t = useT();
   const {
     data,
     activeFocusSession,
@@ -126,7 +128,7 @@ export const FocusLockView: React.FC = () => {
   };
 
   const handleReplayCue = () => {
-    if (currentCue) voiceGuide.speak(currentCue.text);
+    if (currentCue) voiceGuide.speak(t(currentCue.text));
   };
 
   const isMeditation =
@@ -169,18 +171,18 @@ export const FocusLockView: React.FC = () => {
   };
 
   const soundTracks: { id: FocusSoundTrack; label: string; icon: React.FC<{ className?: string }> }[] = [
-    { id: 'meditation_432hz', label: '432 Hz Healing', icon: Sparkles },
-    { id: 'solfeggio_528hz', label: '528 Hz Miracle', icon: Heart },
-    { id: 'theta_meditation', label: 'Theta 6 Hz', icon: Brain },
-    { id: 'tibetan_bowls', label: 'Tibetan Bowls', icon: Bell },
-    { id: 'solfeggio_396hz', label: '396 Hz Release', icon: Flame },
-    { id: 'solfeggio_639hz', label: '639 Hz Harmony', icon: Sun },
-    { id: 'binaural', label: 'Binaural Alpha', icon: Headphones },
-    { id: 'rain', label: 'Gentle Rain', icon: CloudRain },
-    { id: 'waves', label: 'Ocean', icon: Waves },
-    { id: 'brown_noise', label: 'Deep Noise', icon: Wind },
-    { id: 'fireplace', label: 'Fireplace', icon: FireIcon },
-    { id: 'silence', label: 'Silence', icon: VolumeX },
+    { id: 'meditation_432hz', label: t('432 Hz Healing'), icon: Sparkles },
+    { id: 'solfeggio_528hz', label: t('528 Hz Miracle'), icon: Heart },
+    { id: 'theta_meditation', label: t('Theta 6 Hz'), icon: Brain },
+    { id: 'tibetan_bowls', label: t('Tibetan Bowls'), icon: Bell },
+    { id: 'solfeggio_396hz', label: t('396 Hz Release'), icon: Flame },
+    { id: 'solfeggio_639hz', label: t('639 Hz Harmony'), icon: Sun },
+    { id: 'binaural', label: t('Binaural Alpha'), icon: Headphones },
+    { id: 'rain', label: t('Gentle Rain'), icon: CloudRain },
+    { id: 'waves', label: t('Ocean'), icon: Waves },
+    { id: 'brown_noise', label: t('Deep Noise'), icon: Wind },
+    { id: 'fireplace', label: t('Fireplace'), icon: FireIcon },
+    { id: 'silence', label: t('Silence'), icon: VolumeX },
   ];
 
   // Linked mission lookup
@@ -193,13 +195,13 @@ export const FocusLockView: React.FC = () => {
     setIsSubmitting(true);
     try {
       await completeFocusSession({
-        completedSummary: completedSummary.trim() || `Deep Work completed: ${missionTitle}`,
+        completedSummary: completedSummary.trim() || t('Deep Work completed: {title}', { title: missionTitle }),
         resistanceNoticed:
           resistanceNoticed.trim() ||
           (distractionNotes.length > 0
-            ? `Captured ${distractionNotes.length} thoughts in distraction parking lot.`
-            : 'Sustained unbroken attention throughout session.'),
-        nextStep: nextStep.trim() || 'Review outcomes and maintain daily standard.',
+            ? t('Captured {n} thoughts in distraction parking lot.', { n: distractionNotes.length })
+            : t('Sustained unbroken attention throughout session.')),
+        nextStep: nextStep.trim() || t('Review outcomes and maintain daily standard.'),
       });
     } finally {
       setIsSubmitting(false);
@@ -208,7 +210,7 @@ export const FocusLockView: React.FC = () => {
 
   // Pre-fill reflection if not set
   if (isCompleted && !completedSummary && missionTitle) {
-    setCompletedSummary(`Finished: ${missionTitle}`);
+    setCompletedSummary(t('Finished: {title}', { title: missionTitle }));
   }
 
   const tabBlinkEnabled = data?.profile?.focusTabBlinkEnabled !== false;
@@ -239,11 +241,11 @@ export const FocusLockView: React.FC = () => {
         <div className="flex items-center gap-3">
           <span className="flex items-center gap-2 px-3 py-1 bg-[var(--color-slate)] text-white text-[11px] font-bold uppercase tracking-widest rounded-full shadow-xs">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            Focus Lock Active
+            {t('Focus Lock Active')}
           </span>
           {isPaused && (
             <span className="px-2.5 py-0.5 bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30 text-[10px] font-bold uppercase tracking-wider rounded-md">
-              Timer Paused
+              {t('Timer Paused')}
             </span>
           )}
         </div>
@@ -253,7 +255,7 @@ export const FocusLockView: React.FC = () => {
           <button
             type="button"
             onClick={toggleFullscreen}
-            title={isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
+            title={isFullscreen ? t('Exit Fullscreen') : t('Enter Fullscreen')}
             className="p-2 rounded-[var(--radius-sm)] text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-muted)] transition-colors cursor-pointer"
           >
             {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
@@ -265,7 +267,7 @@ export const FocusLockView: React.FC = () => {
             className="px-3 py-1.5 text-xs font-semibold text-[var(--fg-muted)] hover:text-red-500 hover:bg-red-500/10 rounded-[var(--radius-sm)] border border-[var(--border)] transition-colors cursor-pointer flex items-center gap-1.5"
           >
             <AlertOctagon className="w-3.5 h-3.5" />
-            <span>End Early</span>
+            <span>{t('End Early')}</span>
           </button>
         </div>
       </header>
@@ -278,14 +280,14 @@ export const FocusLockView: React.FC = () => {
             <div className="space-y-2">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--bg-muted)] border border-[var(--border)] text-xs font-semibold text-[var(--color-sage)]">
                 <Brain className="w-3.5 h-3.5" />
-                <span>{isGuided ? `Guided Meditation • ${INTENT_LABELS[guidedMeditation!.intent]}` : 'Current Deep Work Intention'}</span>
+                <span>{isGuided ? t('Guided Meditation • {intent}', { intent: t(INTENT_LABELS[guidedMeditation!.intent]) }) : t('Current Deep Work Intention')}</span>
               </div>
               <h1 className="text-2xl sm:text-4xl font-bold font-display tracking-tight text-[var(--fg)] leading-tight">
                 {missionTitle}
               </h1>
               {linkedMission?.isOneDecision && (
                 <div className="inline-block mt-1 px-3 py-0.5 bg-[var(--color-coral)]/15 text-[var(--color-coral)] text-xs font-bold uppercase tracking-wider rounded-md">
-                  ★ Today's One Decision Milestone
+                  {t("★ Today's One Decision Milestone")}
                 </div>
               )}
             </div>
@@ -302,13 +304,13 @@ export const FocusLockView: React.FC = () => {
                 }`}
               >
                 <Activity className="w-3.5 h-3.5" />
-                <span>Box Breathing (4-4-4-4): {showBreathingGuide ? 'On' : 'Off'}</span>
+                <span>{t('Box Breathing (4-4-4-4): {state}', { state: showBreathingGuide ? t('On') : t('Off') })}</span>
               </button>
 
               <button
                 type="button"
                 onClick={handleRingBowl}
-                title="Ring a Tibetan singing bowl to return to the present moment"
+                title={t('Ring a Tibetan singing bowl to return to the present moment')}
                 className={`px-3 py-1.5 rounded-full text-xs font-semibold border flex items-center gap-1.5 transition-all cursor-pointer ${
                   bowlRang
                     ? 'bg-[var(--color-coral)] text-white border-[var(--color-coral)] scale-105'
@@ -316,12 +318,12 @@ export const FocusLockView: React.FC = () => {
                 }`}
               >
                 <Bell className="w-3.5 h-3.5" />
-                <span>{bowlRang ? '🔔 Ringing…' : 'Ring Tibetan Bowl'}</span>
+                <span>{bowlRang ? t('🔔 Ringing…') : t('Ring Tibetan Bowl')}</span>
               </button>
 
               {isMeditation && (
                 <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[var(--color-sage)]/15 text-[var(--color-sage)] border border-[var(--color-sage)]/30">
-                  🧘 Meditation tuning active
+                  {t('🧘 Meditation tuning active')}
                 </span>
               )}
             </div>
@@ -342,14 +344,14 @@ export const FocusLockView: React.FC = () => {
                     }`}
                   />
                   <span className="relative text-xs font-bold font-display text-[var(--fg)]">
-                    {breathingPhase === 'inhale' && 'Breathe In'}
-                    {breathingPhase === 'hold1' && 'Hold'}
-                    {breathingPhase === 'exhale' && 'Breathe Out'}
-                    {breathingPhase === 'hold2' && 'Rest Empty'}
+                    {breathingPhase === 'inhale' && t('Breathe In')}
+                    {breathingPhase === 'hold1' && t('Hold')}
+                    {breathingPhase === 'exhale' && t('Breathe Out')}
+                    {breathingPhase === 'hold2' && t('Rest Empty')}
                   </span>
                 </div>
                 <p className="text-[11px] text-[var(--fg-muted)] max-w-sm">
-                  Box breathing: inhale for 4 seconds, hold for 4, exhale for 4, and rest for 4.
+                  {t('Box breathing: inhale for 4 seconds, hold for 4, exhale for 4, and rest for 4.')}
                 </p>
               </div>
             )}
@@ -363,28 +365,28 @@ export const FocusLockView: React.FC = () => {
                       key={activeGuidedCueIndex}
                       className="text-base sm:text-xl font-display italic text-[var(--fg)] leading-relaxed max-w-xl animate-in fade-in slide-in-from-bottom-2 duration-500"
                     >
-                      “{currentCue.text}”
+                      “{t(currentCue.text)}”
                     </p>
                   ) : (
                     <p className="text-sm text-[var(--fg-muted)] italic">
-                      {isPaused ? 'Paused. Resume when you are ready.' : 'Settling in… the guide will begin in a moment.'}
+                      {isPaused ? t('Paused. Resume when you are ready.') : t('Settling in… the guide will begin in a moment.')}
                     </p>
                   )}
                 </div>
 
                 <div className="flex flex-wrap items-center justify-center gap-2 text-[11px]">
                   <span className="px-2 py-0.5 rounded-full bg-[var(--bg-muted)] border border-[var(--border)] text-[var(--fg-muted)] font-semibold">
-                    Step {Math.max(0, activeGuidedCueIndex + 1)} / {guidedMeditation!.cues.length}
+                    {t('Step {n} / {total}', { n: Math.max(0, activeGuidedCueIndex + 1), total: guidedMeditation!.cues.length })}
                   </span>
                   {isSpeaking && (
                     <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-[var(--color-sage)]/15 text-[var(--color-sage)] font-bold">
                       <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-sage)] animate-ping" />
-                      Speaking
+                      {t('Speaking')}
                     </span>
                   )}
                   {nextCue && !isPaused && (
                     <span className="text-[var(--fg-subtle)]">
-                      Next cue in {Math.max(0, nextCue.atSeconds - elapsedSeconds)}s
+                      {t('Next cue in {n}s', { n: Math.max(0, nextCue.atSeconds - elapsedSeconds) })}
                     </span>
                   )}
                 </div>
@@ -402,10 +404,10 @@ export const FocusLockView: React.FC = () => {
                         }`}
                       >
                         {voiceEnabled ? <Mic className="w-3.5 h-3.5" /> : <MicOff className="w-3.5 h-3.5" />}
-                        <span>Voice {voiceEnabled ? 'On' : 'Off'}</span>
+                        <span>{voiceEnabled ? t('Voice On') : t('Voice Off')}</span>
                       </button>
                       <div className="flex items-center gap-2 px-2">
-                        <span className="text-[10px] uppercase font-bold text-[var(--fg-subtle)]">Voice</span>
+                        <span className="text-[10px] uppercase font-bold text-[var(--fg-subtle)]">{t('Voice')}</span>
                         <input
                           type="range"
                           min={0.1}
@@ -422,12 +424,12 @@ export const FocusLockView: React.FC = () => {
                         disabled={!currentCue || !voiceEnabled}
                         className="px-3 py-1.5 rounded-full text-xs font-semibold border bg-[var(--bg-muted)] text-[var(--fg-muted)] border-[var(--border)] hover:text-[var(--fg)] disabled:opacity-40 cursor-pointer"
                       >
-                        Repeat
+                        {t('Repeat')}
                       </button>
                     </>
                   ) : (
                     <span className="text-[11px] text-amber-700 dark:text-amber-300">
-                      Spoken voice isn’t available in this browser — follow the on-screen guidance.
+                      {t('Spoken voice isn’t available in this browser — follow the on-screen guidance.')}
                     </span>
                   )}
                 </div>
@@ -466,7 +468,7 @@ export const FocusLockView: React.FC = () => {
                     {formatTime(remainingSeconds)}
                   </span>
                   <span className="text-xs font-medium text-[var(--fg-muted)] uppercase tracking-widest mt-2">
-                    {Math.round(progressPct)}% Complete
+                    {t('{pct}% Complete', { pct: Math.round(progressPct) })}
                   </span>
                 </div>
               </div>
@@ -481,7 +483,7 @@ export const FocusLockView: React.FC = () => {
                   className="px-6 py-3 bg-[var(--fg)] text-[var(--bg)] font-bold text-sm rounded-[var(--radius-sm)] flex items-center gap-2 shadow-sm hover:opacity-90 transition-all cursor-pointer"
                 >
                   <Play className="w-4 h-4 fill-current" />
-                  <span>{isGuided ? 'Resume Meditation' : 'Resume Deep Work'}</span>
+                  <span>{isGuided ? t('Resume Meditation') : t('Resume Deep Work')}</span>
                 </button>
               ) : (
                 <button
@@ -490,7 +492,7 @@ export const FocusLockView: React.FC = () => {
                   className="px-6 py-3 bg-[var(--bg-muted)] border border-[var(--border-strong)] text-[var(--fg)] font-bold text-sm rounded-[var(--radius-sm)] flex items-center gap-2 hover:bg-[var(--bg-elevated)] transition-all cursor-pointer"
                 >
                   <Pause className="w-4 h-4" />
-                  <span>Pause Timer</span>
+                  <span>{t('Pause Timer')}</span>
                 </button>
               )}
 
@@ -500,7 +502,7 @@ export const FocusLockView: React.FC = () => {
                 className="px-5 py-3 bg-[var(--color-sage)] text-white font-bold text-sm rounded-[var(--radius-sm)] flex items-center gap-2 hover:opacity-90 shadow-xs transition-all cursor-pointer"
               >
                 <CheckCircle2 className="w-4 h-4" />
-                <span>{isGuided ? 'Finish Meditation' : 'Task Finished Early'}</span>
+                <span>{isGuided ? t('Finish Meditation') : t('Task Finished Early')}</span>
               </button>
             </div>
 
@@ -509,7 +511,7 @@ export const FocusLockView: React.FC = () => {
               <div className="flex items-center justify-between text-xs text-[var(--fg-muted)] font-semibold">
                 <span className="flex items-center gap-1.5">
                   <Headphones className="w-3.5 h-3.5 text-[var(--color-sage)]" />
-                  <span>Focus Soundscapes</span>
+                  <span>{t('Focus Soundscapes')}</span>
                 </span>
                 {soundTrack !== 'silence' && (
                   <div className="flex items-center gap-2">
@@ -555,10 +557,10 @@ export const FocusLockView: React.FC = () => {
               <div className="flex items-center justify-between text-xs font-semibold text-[var(--fg)]">
                 <span className="flex items-center gap-1.5">
                   <ShieldCheck className="w-3.5 h-3.5 text-[var(--color-sage)]" />
-                  <span>Distraction Parking Lot</span>
+                  <span>{t('Distraction Parking Lot')}</span>
                 </span>
                 <span className="text-[11px] text-[var(--fg-subtle)]">
-                  Park thoughts here; don't leave focus.
+                  {t("Park thoughts here; don't leave focus.")}
                 </span>
               </div>
 
@@ -567,7 +569,7 @@ export const FocusLockView: React.FC = () => {
                   type="text"
                   value={distractionInput}
                   onChange={(e) => setDistractionInput(e.target.value)}
-                  placeholder="Capture random thought or urge (e.g. check email, grocery item)..."
+                  placeholder={t('Capture random thought or urge (e.g. check email, grocery item)...')}
                   className="flex-1 px-3 py-1.5 text-xs bg-[var(--bg)] border border-[var(--border)] rounded-[var(--radius-xs)] text-[var(--fg)] focus:outline-none focus:border-[var(--color-sage)]"
                 />
                 <button
@@ -576,7 +578,7 @@ export const FocusLockView: React.FC = () => {
                   className="px-3 py-1.5 bg-[var(--bg-elevated)] border border-[var(--border)] text-xs font-semibold rounded-[var(--radius-xs)] hover:bg-[var(--bg)] transition-colors disabled:opacity-50 flex items-center gap-1 cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  <span>Park</span>
+                  <span>{t('Park')}</span>
                 </button>
               </form>
 
@@ -610,10 +612,10 @@ export const FocusLockView: React.FC = () => {
                 <Sparkles className="w-6 h-6" />
               </div>
               <h2 className="text-2xl font-bold font-display text-[var(--fg)]">
-                Focus Session Complete!
+                {t('Focus Session Complete!')}
               </h2>
               <p className="text-xs text-[var(--fg-muted)]">
-                You held the standard for {durationMinutes} minutes of deep craftsmanship.
+                {t('You held the standard for {n} minutes of deep craftsmanship.', { n: durationMinutes })}
               </p>
 
               {/* Visual Alerts Status Badge */}
@@ -621,7 +623,7 @@ export const FocusLockView: React.FC = () => {
                 <button
                   type="button"
                   onClick={toggleFocusTabBlink}
-                  title="Click to toggle browser tab title blinking alert"
+                  title={t('Click to toggle browser tab title blinking alert')}
                   className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold border transition-all cursor-pointer ${
                     tabBlinkEnabled
                       ? 'bg-[var(--color-sage)]/10 text-[var(--color-sage)] border-[var(--color-sage)]/30 hover:bg-[var(--color-sage)]/20'
@@ -630,13 +632,13 @@ export const FocusLockView: React.FC = () => {
                 >
                   <span className={`w-1.5 h-1.5 rounded-full ${tabBlinkEnabled ? 'bg-[var(--color-sage)] animate-ping' : 'bg-gray-400'}`} />
                   <Bell className="w-3 h-3" />
-                  <span>Tab Blink: {tabBlinkEnabled ? 'Active' : 'Off'}</span>
+                  <span>{t('Tab Blink: {state}', { state: tabBlinkEnabled ? t('Active') : t('Off') })}</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={toggleFocusScreenPulse}
-                  title="Click to toggle subtle screen edge pulsing border alert"
+                  title={t('Click to toggle subtle screen edge pulsing border alert')}
                   className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold border transition-all cursor-pointer ${
                     screenPulseEnabled
                       ? 'bg-[var(--color-coral)]/10 text-[var(--color-coral)] border-[var(--color-coral)]/30 hover:bg-[var(--color-coral)]/20'
@@ -645,7 +647,7 @@ export const FocusLockView: React.FC = () => {
                 >
                   <span className={`w-1.5 h-1.5 rounded-full ${screenPulseEnabled ? 'bg-[var(--color-coral)] animate-pulse' : 'bg-gray-400'}`} />
                   <Activity className="w-3 h-3" />
-                  <span>Screen Pulse: {screenPulseEnabled ? 'Active' : 'Off'}</span>
+                  <span>{t('Screen Pulse: {state}', { state: screenPulseEnabled ? t('Active') : t('Off') })}</span>
                 </button>
               </div>
             </div>
@@ -654,14 +656,14 @@ export const FocusLockView: React.FC = () => {
             <div className="p-4 bg-[var(--bg-muted)] border border-[var(--border)] rounded-[var(--radius-md)] flex items-center justify-between">
               <div>
                 <span className="text-[11px] uppercase tracking-wider text-[var(--fg-subtle)] font-semibold">
-                  Verified Yield
+                  {t('Verified Yield')}
                 </span>
                 <div className="text-lg font-bold text-[var(--color-sage)]">
                   + D$ {rewardD$.toLocaleString()}
                 </div>
               </div>
               <span className="text-xs font-semibold px-2.5 py-1 bg-[var(--bg-elevated)] text-[var(--fg)] border border-[var(--border)] rounded-full">
-                {durationMinutes} mins deep work
+                {t('{n} mins deep work', { n: durationMinutes })}
               </span>
             </div>
 
@@ -669,40 +671,40 @@ export const FocusLockView: React.FC = () => {
             <div className="space-y-4">
               <div className="space-y-1">
                 <label className="text-xs font-bold text-[var(--fg)]">
-                  1. What did you finish during this block?
+                  {t('1. What did you finish during this block?')}
                 </label>
                 <input
                   type="text"
                   value={completedSummary}
                   onChange={(e) => setCompletedSummary(e.target.value)}
                   className="w-full px-3 py-2 text-xs bg-[var(--bg)] border border-[var(--border)] rounded-[var(--radius-xs)] text-[var(--fg)] focus:outline-none focus:border-[var(--color-sage)]"
-                  placeholder="e.g. Drafted pitch email and sent 3 samples"
+                  placeholder={t('e.g. Drafted pitch email and sent 3 samples')}
                 />
               </div>
 
               <div className="space-y-1">
                 <label className="text-xs font-bold text-[var(--fg)]">
-                  2. What resistance or distraction did you notice?
+                  {t('2. What resistance or distraction did you notice?')}
                 </label>
                 <input
                   type="text"
                   value={resistanceNoticed}
                   onChange={(e) => setResistanceNoticed(e.target.value)}
                   className="w-full px-3 py-2 text-xs bg-[var(--bg)] border border-[var(--border)] rounded-[var(--radius-xs)] text-[var(--fg)] focus:outline-none focus:border-[var(--color-sage)]"
-                  placeholder="e.g. Urge to browse social feeds at minute 18"
+                  placeholder={t('e.g. Urge to browse social feeds at minute 18')}
                 />
               </div>
 
               <div className="space-y-1">
                 <label className="text-xs font-bold text-[var(--fg)]">
-                  3. What is the next single domino?
+                  {t('3. What is the next single domino?')}
                 </label>
                 <input
                   type="text"
                   value={nextStep}
                   onChange={(e) => setNextStep(e.target.value)}
                   className="w-full px-3 py-2 text-xs bg-[var(--bg)] border border-[var(--border)] rounded-[var(--radius-xs)] text-[var(--fg)] focus:outline-none focus:border-[var(--color-sage)]"
-                  placeholder="e.g. Review responses tomorrow morning"
+                  placeholder={t('e.g. Review responses tomorrow morning')}
                 />
               </div>
             </div>
@@ -714,7 +716,7 @@ export const FocusLockView: React.FC = () => {
               className="w-full py-3 bg-[var(--color-sage)] text-white font-bold text-sm rounded-[var(--radius-sm)] flex items-center justify-center gap-2 hover:opacity-90 shadow-xs transition-all cursor-pointer disabled:opacity-50"
             >
               <CheckCircle2 className="w-4 h-4" />
-              <span>{isSubmitting ? 'Recording...' : 'Claim D$ & Return to Life OS'}</span>
+              <span>{isSubmitting ? t('Recording...') : t('Claim D$ & Return to Life OS')}</span>
             </button>
           </div>
         )}
@@ -722,8 +724,8 @@ export const FocusLockView: React.FC = () => {
 
       {/* Bottom Footer Quote */}
       <footer className="relative z-10 w-full max-w-6xl mx-auto px-6 py-4 flex items-center justify-between text-[11px] text-[var(--fg-subtle)] border-t border-[var(--border)]">
-        <span>One Decision Away — Deep Work Engine</span>
-        <span>Standard: Craftsmanship over Distraction</span>
+        <span>{t('One Decision Away — Deep Work Engine')}</span>
+        <span>{t('Standard: Craftsmanship over Distraction')}</span>
       </footer>
 
       {/* Abort Session Confirmation Modal */}
@@ -732,10 +734,10 @@ export const FocusLockView: React.FC = () => {
           <div className="w-full max-w-md bg-[var(--bg-elevated)] border border-[var(--border)] rounded-[var(--radius-lg)] p-6 space-y-4 shadow-xl">
             <div className="flex items-center gap-3 text-red-500">
               <AlertOctagon className="w-6 h-6" />
-              <h3 className="text-base font-bold text-[var(--fg)]">End Deep Work Early?</h3>
+              <h3 className="text-base font-bold text-[var(--fg)]">{t('End Deep Work Early?')}</h3>
             </div>
             <p className="text-xs text-[var(--fg-muted)] leading-relaxed">
-              You have completed {Math.round(elapsedSeconds / 60)} minutes of focus. Ending now will release the app lock without logging a verified completion.
+              {t('You have completed {n} minutes of focus. Ending now will release the app lock without logging a verified completion.', { n: Math.round(elapsedSeconds / 60) })}
             </p>
             <div className="flex justify-end gap-3 pt-2">
               <button
@@ -743,7 +745,7 @@ export const FocusLockView: React.FC = () => {
                 onClick={() => setShowAbortModal(false)}
                 className="px-4 py-2 text-xs font-semibold text-[var(--fg)] bg-[var(--bg-muted)] rounded-[var(--radius-xs)] hover:bg-[var(--bg)] cursor-pointer"
               >
-                Keep Focusing
+                {t('Keep Focusing')}
               </button>
               <button
                 type="button"
@@ -753,7 +755,7 @@ export const FocusLockView: React.FC = () => {
                 }}
                 className="px-4 py-2 text-xs font-bold text-white bg-red-600 rounded-[var(--radius-xs)] hover:bg-red-700 cursor-pointer"
               >
-                Abort Session
+                {t('Abort Session')}
               </button>
             </div>
           </div>

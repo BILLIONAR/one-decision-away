@@ -46,6 +46,7 @@ import {
 import { CustomCategoryModal } from './CustomCategoryModal';
 import { GoalModal } from './GoalModal';
 import { EditMicroHabitModal } from './EditMicroHabitModal';
+import { useT, N_ } from '../i18n';
 
 export interface CategoryConfig {
   id: MicroHabitCategory;
@@ -69,107 +70,107 @@ export interface CategoryConfig {
 export const PREDEFINED_CATEGORIES: CategoryConfig[] = [
   {
     id: 'Health',
-    label: 'Health',
+    label: N_('Health'),
     icon: Heart,
     badgeVariant: 'sage',
-    description: 'Physical vitality, hydration, nutrition & daily movement',
+    description: N_('Physical vitality, hydration, nutrition & daily movement'),
     colorClass: 'text-[var(--color-sage)]',
     bgClass: 'bg-[var(--color-sage)]/10',
     borderClass: 'border-[var(--color-sage)]/30',
-    soundCueName: '528Hz Vitality Bloom',
-    soundCueDetail: 'Warm Solfeggio vitality bloom (528Hz + 660Hz)',
-    hapticDetail: 'Heartbeat pulse [35ms, 40ms]',
+    soundCueName: N_('528Hz Vitality Bloom'),
+    soundCueDetail: N_('Warm Solfeggio vitality bloom (528Hz + 660Hz)'),
+    hapticDetail: N_('Heartbeat pulse [35ms, 40ms]'),
   },
   {
     id: 'Learning',
-    label: 'Learning',
+    label: N_('Learning'),
     icon: BookOpen,
     badgeVariant: 'default',
-    description: 'Knowledge acquisition, reading, study & intellectual craft',
+    description: N_('Knowledge acquisition, reading, study & intellectual craft'),
     colorClass: 'text-[var(--color-navy)]',
     bgClass: 'bg-[var(--color-navy)]/10',
     borderClass: 'border-[var(--color-navy)]/30',
-    soundCueName: 'Crystal Glissando',
-    soundCueDetail: 'Ascending 4-note insight chime (E5 → G#5 → B5 → E6)',
-    hapticDetail: 'Crisp double-tap [15ms, 25ms]',
+    soundCueName: N_('Crystal Glissando'),
+    soundCueDetail: N_('Ascending 4-note insight chime (E5 → G#5 → B5 → E6)'),
+    hapticDetail: N_('Crisp double-tap [15ms, 25ms]'),
   },
   {
     id: 'Discipline',
-    label: 'Discipline',
+    label: N_('Discipline'),
     icon: Target,
     badgeVariant: 'coral',
-    description: 'Friction reduction, impulse control, standards & consistency',
+    description: N_('Friction reduction, impulse control, standards & consistency'),
     colorClass: 'text-[var(--color-coral)]',
     bgClass: 'bg-[var(--color-coral)]/10',
     borderClass: 'border-[var(--color-coral)]/30',
-    soundCueName: 'Bedrock Anchor',
-    soundCueDetail: 'Resolute 330Hz strike with 165Hz sub-weight & 495Hz fifth',
-    hapticDetail: 'Firm anchor pulse [65ms]',
+    soundCueName: N_('Bedrock Anchor'),
+    soundCueDetail: N_('Resolute 330Hz strike with 165Hz sub-weight & 495Hz fifth'),
+    hapticDetail: N_('Firm anchor pulse [65ms]'),
   },
   {
     id: 'Mindset',
-    label: 'Mindset',
+    label: N_('Mindset'),
     icon: Brain,
     badgeVariant: 'coral',
-    description: 'Cognitive reframing, future self identity & gratitude',
+    description: N_('Cognitive reframing, future self identity & gratitude'),
     colorClass: 'text-[var(--color-coral)]',
     bgClass: 'bg-[var(--color-coral)]/10',
     borderClass: 'border-[var(--color-coral)]/30',
-    soundCueName: '432Hz Zen Bowl',
-    soundCueDetail: 'Harmonic singing bowl resonance (432Hz + 864Hz)',
-    hapticDetail: 'Smooth meditative wave [25ms, 20ms]',
+    soundCueName: N_('432Hz Zen Bowl'),
+    soundCueDetail: N_('Harmonic singing bowl resonance (432Hz + 864Hz)'),
+    hapticDetail: N_('Smooth meditative wave [25ms, 20ms]'),
   },
   {
     id: 'Clarity',
-    label: 'Clarity',
+    label: N_('Clarity'),
     icon: Sparkles,
     badgeVariant: 'sage',
-    description: 'Breathing, meditation & mental space decluttering',
+    description: N_('Breathing, meditation & mental space decluttering'),
     colorClass: 'text-[var(--color-sage)]',
     bgClass: 'bg-[var(--color-sage)]/10',
     borderClass: 'border-[var(--color-sage)]/30',
-    soundCueName: 'Harmonic Dual Bell',
-    soundCueDetail: 'Uplifting clarity chime [1046Hz → 1568Hz]',
-    hapticDetail: 'Confirmation tap [30ms]',
+    soundCueName: N_('Harmonic Dual Bell'),
+    soundCueDetail: N_('Uplifting clarity chime [1046Hz → 1568Hz]'),
+    hapticDetail: N_('Confirmation tap [30ms]'),
   },
   {
     id: 'Craft',
-    label: 'Craft',
+    label: N_('Craft'),
     icon: Wrench,
     badgeVariant: 'default',
-    description: 'Technical execution, deliberate practice & creative output',
+    description: N_('Technical execution, deliberate practice & creative output'),
     colorClass: 'text-[var(--fg)]',
     bgClass: 'bg-[var(--bg-muted)]',
     borderClass: 'border-[var(--border-strong)]',
-    soundCueName: 'Precision Bell',
-    soundCueDetail: 'Resonant execution chime',
-    hapticDetail: 'Tactile tap [30ms]',
+    soundCueName: N_('Precision Bell'),
+    soundCueDetail: N_('Resonant execution chime'),
+    hapticDetail: N_('Tactile tap [30ms]'),
   },
   {
     id: 'Environment',
-    label: 'Environment',
+    label: N_('Environment'),
     icon: Home,
     badgeVariant: 'slate',
-    description: 'Physical desk workspace, browser tabs & staged surroundings',
+    description: N_('Physical desk workspace, browser tabs & staged surroundings'),
     colorClass: 'text-[var(--fg-muted)]',
     bgClass: 'bg-[var(--bg-muted)]',
     borderClass: 'border-[var(--border)]',
-    soundCueName: 'Spacious Tone',
-    soundCueDetail: 'Open ambient tone',
-    hapticDetail: 'Tactile tap [30ms]',
+    soundCueName: N_('Spacious Tone'),
+    soundCueDetail: N_('Open ambient tone'),
+    hapticDetail: N_('Tactile tap [30ms]'),
   },
   {
     id: 'Wealth',
-    label: 'Wealth',
+    label: N_('Wealth'),
     icon: TrendingUp,
     badgeVariant: 'coral',
-    description: 'Resource management, value creation & leverage tracking',
+    description: N_('Resource management, value creation & leverage tracking'),
     colorClass: 'text-[var(--color-sand)]',
     bgClass: 'bg-[var(--color-sand)]/20',
     borderClass: 'border-[var(--color-sand)]/40',
-    soundCueName: 'Prosperity Chime',
-    soundCueDetail: 'Harmonic abundance tone',
-    hapticDetail: 'Tactile tap [30ms]',
+    soundCueName: N_('Prosperity Chime'),
+    soundCueDetail: N_('Harmonic abundance tone'),
+    hapticDetail: N_('Tactile tap [30ms]'),
   },
 ];
 
@@ -184,6 +185,7 @@ export const HabitBestStreakIndicator: React.FC<HabitBestStreakIndicatorProps> =
   todayStr = new Date().toISOString().slice(0, 10),
   showTooltip = true,
 }) => {
+  const t = useT();
   const currentStreak = habit.streakCount || 0;
   const bestStreak = calculateBestMicroHabitStreak(
     habit.completedDates || [],
@@ -204,13 +206,13 @@ export const HabitBestStreakIndicator: React.FC<HabitBestStreakIndicatorProps> =
       <div
         tabIndex={0}
         role="button"
-        aria-label={`All-time best streak: ${bestStreak} days. Current streak: ${currentStreak} days.`}
+        aria-label={t('All-time best streak: {bestStreak} days. Current streak: {currentStreak} days.', { bestStreak, currentStreak })}
         className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold tracking-tight border cursor-help transition-all select-none ${
           isAtRecord
             ? 'bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/30 ring-1 ring-amber-500/20'
             : 'bg-[var(--bg-muted)] text-[var(--fg-muted)] hover:text-[var(--fg)] border-[var(--border)] hover:border-amber-400/40'
         }`}
-        title={`🏆 Best Streak: ${bestStreak} consecutive days (retrieved from history) · Current: ${currentStreak}d · Total completions: ${totalCompletions}d`}
+        title={t('🏆 Best Streak: {bestStreak} consecutive days (retrieved from history) · Current: {currentStreak}d · Total completions: {totalCompletions}d', { bestStreak, currentStreak, totalCompletions })}
       >
         <Trophy
           className={`w-3 h-3 shrink-0 ${
@@ -219,11 +221,11 @@ export const HabitBestStreakIndicator: React.FC<HabitBestStreakIndicatorProps> =
               : 'text-amber-500/70'
           }`}
         />
-        <span className="font-mono">{bestStreak}d best</span>
+        <span className="font-mono">{t('{n}d best', { n: bestStreak })}</span>
         {isAtRecord && (
           <span
             className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 animate-ping"
-            title="Active all-time personal best!"
+            title={t('Active all-time personal best!')}
           />
         )}
       </div>
@@ -238,33 +240,33 @@ export const HabitBestStreakIndicator: React.FC<HabitBestStreakIndicatorProps> =
           <div className="flex items-center justify-between pb-2 border-b border-[var(--border)]">
             <div className="flex items-center gap-1.5 font-bold text-[var(--fg)]">
               <Trophy className="w-3.5 h-3.5 text-amber-500 fill-amber-500/30" />
-              <span>Personal Record</span>
+              <span>{t('Personal Record')}</span>
             </div>
             <span className="font-mono font-bold text-amber-700 dark:text-amber-400 text-xs">
-              {bestStreak} {bestStreak === 1 ? 'day' : 'days'}
+              {bestStreak === 1 ? t('1 day') : t('{n} days', { n: bestStreak })}
             </span>
           </div>
 
           {/* Metric Rows */}
           <div className="py-2 space-y-2">
             <div className="flex items-center justify-between text-[11px]">
-              <span className="text-[var(--fg-muted)]">Current Active Streak</span>
+              <span className="text-[var(--fg-muted)]">{t('Current Active Streak')}</span>
               <span className="font-mono font-semibold text-[var(--fg)]">
-                {currentStreak} {currentStreak === 1 ? 'day' : 'days'}
+                {currentStreak === 1 ? t('1 day') : t('{n} days', { n: currentStreak })}
               </span>
             </div>
 
             <div className="flex items-center justify-between text-[11px]">
-              <span className="text-[var(--fg-muted)]">Historical Completions</span>
+              <span className="text-[var(--fg-muted)]">{t('Historical Completions')}</span>
               <span className="font-mono font-semibold text-[var(--fg)]">
-                {totalCompletions} {totalCompletions === 1 ? 'day' : 'days'} logged
+                {totalCompletions === 1 ? t('1 day logged') : t('{n} days logged', { n: totalCompletions })}
               </span>
             </div>
 
             {/* Record Momentum Bar */}
             <div className="space-y-1 pt-0.5">
               <div className="flex items-center justify-between text-[10px] text-[var(--fg-subtle)]">
-                <span>Momentum vs Best</span>
+                <span>{t('Momentum vs Best')}</span>
                 <span className="font-mono font-medium">{progressRatio}%</span>
               </div>
               <div className="w-full h-1.5 rounded-full bg-[var(--bg-muted)] overflow-hidden border border-[var(--border)]">
@@ -285,16 +287,16 @@ export const HabitBestStreakIndicator: React.FC<HabitBestStreakIndicatorProps> =
             {isAtRecord ? (
               <span className="text-amber-700 dark:text-amber-400 font-semibold flex items-center gap-1">
                 <Sparkles className="w-3 h-3 text-amber-500" />
-                Active All-Time High!
+                {t('Active All-Time High!')}
               </span>
             ) : daysToMatch > 0 ? (
               <span>
-                {daysToMatch} more {daysToMatch === 1 ? 'day' : 'days'} to match record
+                {daysToMatch === 1 ? t('1 more day to match record') : t('{n} more days to match record', { n: daysToMatch })}
               </span>
             ) : (
-              <span>Complete today to begin streak</span>
+              <span>{t('Complete today to begin streak')}</span>
             )}
-            <span className="text-[9px] text-[var(--fg-subtle)] font-mono">from history</span>
+            <span className="text-[9px] text-[var(--fg-subtle)] font-mono">{t('from history')}</span>
           </div>
 
           {/* Caret Pointer Arrow */}
@@ -321,6 +323,7 @@ export const DailyMicroHabits: React.FC = () => {
     simulateDateKeyChange,
     lastRolloverSummary,
   } = useApp();
+  const t = useT();
 
   const [isAdding, setIsAdding] = useState(false);
   const [newTitle, setNewTitle] = useState('');
@@ -444,16 +447,16 @@ export const DailyMicroHabits: React.FC = () => {
   if (otherHabits.length > 0) {
     const otherConfig: CategoryConfig = {
       id: 'Mindset' as MicroHabitCategory,
-      label: 'Other Routines',
+      label: N_('Other Routines'),
       icon: Folder,
       badgeVariant: 'slate',
-      description: 'Additional custom categories',
+      description: N_('Additional custom categories'),
       colorClass: 'text-[var(--fg-muted)]',
       bgClass: 'bg-[var(--bg-muted)]',
       borderClass: 'border-[var(--border)]',
-      soundCueName: 'Standard Chime',
-      soundCueDetail: 'Clean completion tone',
-      hapticDetail: 'Confirmation tap [30ms]',
+      soundCueName: N_('Standard Chime'),
+      soundCueDetail: N_('Clean completion tone'),
+      hapticDetail: N_('Confirmation tap [30ms]'),
     };
     groupedHabits.push({
       config: otherConfig,
@@ -524,27 +527,27 @@ export const DailyMicroHabits: React.FC = () => {
               <Zap className="w-4 h-4" />
             </span>
             <h3 className="text-base sm:text-lg font-bold font-display text-[var(--fg)]">
-              Daily Micro-Habits (5-Min Momentum)
+              {t('Daily Micro-Habits (5-Min Momentum)')}
             </h3>
           </div>
           <div className="flex flex-wrap items-center gap-2 pt-0.5">
             <p className="text-xs text-[var(--fg-muted)]">
-              Low-friction 5-minute foundational actions organized by category to eliminate inertia and build compounding momentum.
+              {t('Low-friction 5-minute foundational actions organized by category to eliminate inertia and build compounding momentum.')}
             </p>
             <span
               id="micro-habits-autoreset-badge"
-              title="Daily auto-reset is active: uncompleted habits reset automatically whenever dateKey changes across midnight or on app load"
+              title={t('Daily auto-reset is active: uncompleted habits reset automatically whenever dateKey changes across midnight or on app load')}
               className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono bg-[var(--color-sage)]/10 text-[var(--color-sage)] border border-[var(--color-sage)]/25"
             >
               <CalendarCheck className="w-3 h-3" />
-              Auto-reset on dateKey change ({data.lastActiveDateKey || todayStr})
+              {t('Auto-reset on dateKey change ({date})', { date: data.lastActiveDateKey || todayStr })}
             </span>
           </div>
         </div>
 
         <div className="flex items-center gap-2 self-start sm:self-auto">
           <Badge variant={progressPct === 100 ? 'sage' : 'slate'} className="font-semibold">
-            {completedCount} / {totalCount} Done ({progressPct}%)
+            {t('{completed} / {total} Done ({pct}%)', { completed: completedCount, total: totalCount, pct: progressPct })}
           </Badge>
           {!isAdding && (
             <Button
@@ -554,7 +557,7 @@ export const DailyMicroHabits: React.FC = () => {
               icon={Plus}
               onClick={() => setIsAdding(true)}
             >
-              Add Habit
+              {t('Add Habit')}
             </Button>
           )}
         </div>
@@ -566,11 +569,11 @@ export const DailyMicroHabits: React.FC = () => {
           <span className="text-[var(--fg-muted)] flex items-center gap-1.5">
             <Flame className="w-3.5 h-3.5 text-[var(--color-coral)]" />
             <span>
-              Micro-Habits Progress: {completedCount} of {totalCount} completed today
+              {t('Micro-Habits Progress: {completed} of {total} completed today', { completed: completedCount, total: totalCount })}
             </span>
           </span>
           <span className={progressPct === 100 ? 'text-[var(--color-sage)] font-bold' : 'text-[var(--fg)]'}>
-            {progressPct === 100 ? '🔥 Momentum Peak Unlocked! (100%)' : `${progressPct}% Activated`}
+            {progressPct === 100 ? t('🔥 Momentum Peak Unlocked! (100%)') : t('{pct}% Activated', { pct: progressPct })}
           </span>
         </div>
         <Progress value={progressPct} variant={progressPct === 100 ? 'sage' : 'coral'} />
@@ -580,7 +583,7 @@ export const DailyMicroHabits: React.FC = () => {
       <div className="flex items-center justify-between gap-2 overflow-x-auto pb-1 text-xs no-scrollbar">
         <div className="flex items-center gap-1.5 shrink-0">
           <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--fg-muted)] shrink-0 mr-1">
-            Group:
+            {t('Group:')}
           </span>
           <button
             type="button"
@@ -591,7 +594,7 @@ export const DailyMicroHabits: React.FC = () => {
                 : 'bg-[var(--bg)] text-[var(--fg-muted)] hover:text-[var(--fg)] border-[var(--border)] hover:bg-[var(--bg-muted)]'
             }`}
           >
-            All Categories ({habits.length})
+            {t('All Categories ({n})', { n: habits.length })}
           </button>
 
           {groupedHabits.map((group) => {
@@ -618,7 +621,7 @@ export const DailyMicroHabits: React.FC = () => {
                 ) : (
                   <Icon className="w-3 h-3" />
                 )}
-                <span>{group.config.label}</span>
+                <span>{t(group.config.label)}</span>
                 <span className="text-[10px] opacity-75 font-mono">({group.habits.length})</span>
               </button>
             );
@@ -634,7 +637,7 @@ export const DailyMicroHabits: React.FC = () => {
           className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium text-[var(--color-sage)] hover:bg-[var(--color-sage)]/10 border border-[var(--color-sage)]/30 transition-colors shrink-0 cursor-pointer ml-auto"
         >
           <Palette className="w-3 h-3" />
-          <span>New Category</span>
+          <span>{t('New Category')}</span>
         </button>
       </div>
 
@@ -644,7 +647,7 @@ export const DailyMicroHabits: React.FC = () => {
           <div className="flex items-center gap-1.5 shrink-0 flex-wrap">
             <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--fg-muted)] shrink-0 flex items-center gap-1">
               <Target className="w-3 h-3 text-[var(--primary)]" />
-              <span>Goal:</span>
+              <span>{t('Goal:')}</span>
             </span>
             <button
               type="button"
@@ -655,7 +658,7 @@ export const DailyMicroHabits: React.FC = () => {
                   : 'bg-[var(--bg)] text-[var(--fg-muted)] hover:text-[var(--fg)] border-[var(--border)]'
               }`}
             >
-              All Goals ({habits.length})
+              {t('All Goals ({n})', { n: habits.length })}
             </button>
             {goals.map((g) => {
               const goalHabitsCount = habits.filter((h) => h.goalId === g.id).length;
@@ -685,7 +688,7 @@ export const DailyMicroHabits: React.FC = () => {
                   : 'bg-[var(--bg)] text-[var(--fg-muted)] hover:text-[var(--fg)] border-[var(--border)]'
               }`}
             >
-              Standalone ({habits.filter((h) => !h.goalId).length})
+              {t('Standalone ({n})', { n: habits.filter((h) => !h.goalId).length })}
             </button>
           </div>
 
@@ -695,7 +698,7 @@ export const DailyMicroHabits: React.FC = () => {
             className="inline-flex items-center gap-1 text-xs font-medium text-[var(--primary)] hover:underline shrink-0 ml-auto"
           >
             <Plus className="w-3 h-3" />
-            <span>New Goal</span>
+            <span>{t('New Goal')}</span>
           </button>
         </div>
       )}
@@ -709,18 +712,18 @@ export const DailyMicroHabits: React.FC = () => {
           <div className="flex items-center justify-between">
             <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--fg)] flex items-center gap-1.5">
               <Plus className="w-3.5 h-3.5 text-[var(--color-sage)]" />
-              Create New Micro-Habit
+              {t('Create New Micro-Habit')}
             </h4>
-            <span className="text-[11px] text-[var(--fg-muted)]">Target: 2 to 5 mins max</span>
+            <span className="text-[11px] text-[var(--fg-muted)]">{t('Target: 2 to 5 mins max')}</span>
           </div>
 
           <div className="space-y-3">
-            <Field id="micro-title" label="Habit Action / Routine" required>
+            <Field id="micro-title" label={t('Habit Action / Routine')} required>
               <Input
                 id="micro-title"
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
-                placeholder="e.g. 5-minute deep hydration & mineral protocol, box breathing, or flash study"
+                placeholder={t('e.g. 5-minute deep hydration & mineral protocol, box breathing, or flash study')}
                 autoFocus
               />
             </Field>
@@ -730,18 +733,18 @@ export const DailyMicroHabits: React.FC = () => {
               <div className="flex items-center justify-between">
                 <label htmlFor="micro-goal-select" className="text-xs font-semibold text-[var(--primary)] flex items-center gap-1.5">
                   <Target className="w-3.5 h-3.5" />
-                  <span>Tag to Overarching Life Goal (Optional)</span>
+                  <span>{t('Tag to Overarching Life Goal (Optional)')}</span>
                 </label>
                 <button
                   type="button"
                   onClick={() => setIsGoalModalOpen(true)}
                   className="text-xs text-[var(--primary)] hover:underline flex items-center gap-1 font-medium cursor-pointer"
                 >
-                  <Plus className="w-3 h-3" /> + New Life Goal
+                  <Plus className="w-3 h-3" /> {t('+ New Life Goal')}
                 </button>
               </div>
               <p className="text-[11px] text-[var(--fg-muted)]">
-                Connect this daily routine to a broader objective to visualize habit completion momentum on your Missions & Progress pages.
+                {t('Connect this daily routine to a broader objective to visualize habit completion momentum on your Missions & Progress pages.')}
               </p>
               <select
                 id="micro-goal-select"
@@ -749,7 +752,7 @@ export const DailyMicroHabits: React.FC = () => {
                 onChange={(e) => setNewGoalId(e.target.value)}
                 className="w-full px-3 py-1.5 text-xs rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--fg)] focus:outline-none focus:ring-1 focus:ring-[var(--primary)]"
               >
-                <option value="">── None (Standalone Routine) ──</option>
+                <option value="">{t('── None (Standalone Routine) ──')}</option>
                 {goals.map((g) => (
                   <option key={g.id} value={g.id}>
                     🎯 {g.title} ({g.area})
@@ -763,10 +766,10 @@ export const DailyMicroHabits: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <label className="block text-xs font-semibold text-[var(--fg)]">
-                    Category & Life Domain
+                    {t('Category & Life Domain')}
                   </label>
                   <p className="text-[11px] text-[var(--fg-muted)]">
-                    Assign a core domain to color-code and organize this routine.
+                    {t('Assign a core domain to color-code and organize this routine.')}
                   </p>
                 </div>
                 <button
@@ -778,18 +781,18 @@ export const DailyMicroHabits: React.FC = () => {
                   className="inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--color-sage)] hover:underline cursor-pointer"
                 >
                   <Plus className="w-3 h-3" />
-                  + Create Custom Category
+                  {t('+ Create Custom Category')}
                 </button>
               </div>
 
               {/* Predefined Categories */}
               <div className="space-y-1">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-subtle)]">
-                  Standard Categories
+                  {t('Standard Categories')}
                 </span>
                 <div
                   role="radiogroup"
-                  aria-label="Micro-habit category selection"
+                  aria-label={t('Micro-habit category selection')}
                   className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-0.5"
                 >
                   {PREDEFINED_CATEGORIES.map((cat) => {
@@ -820,7 +823,7 @@ export const DailyMicroHabits: React.FC = () => {
                           <Icon className="w-3.5 h-3.5" />
                         </span>
                         <div className="min-w-0 flex-1">
-                          <div className="text-xs truncate">{cat.label}</div>
+                          <div className="text-xs truncate">{t(cat.label)}</div>
                         </div>
                         {isSelected && (
                           <Check className="w-3.5 h-3.5 text-[var(--color-sage)] stroke-[3] shrink-0" />
@@ -835,7 +838,7 @@ export const DailyMicroHabits: React.FC = () => {
               {customCategories.length > 0 && (
                 <div className="space-y-1 pt-1">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-subtle)]">
-                    Your Custom Categories
+                    {t('Your Custom Categories')}
                   </span>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                     {customCategories.map((cc) => {
@@ -883,7 +886,7 @@ export const DailyMicroHabits: React.FC = () => {
                               setCategoryToEdit(cc);
                               setIsCategoryModalOpen(true);
                             }}
-                            title="Edit this category"
+                            title={t('Edit this category')}
                             className="p-1 rounded text-[var(--fg-subtle)] hover:text-[var(--fg)] hover:bg-[var(--bg-muted)] transition-colors"
                           >
                             <Edit3 className="w-3 h-3" />
@@ -919,8 +922,8 @@ export const DailyMicroHabits: React.FC = () => {
                     />
                   </span>
                   <span className="truncate">
-                    <strong className="text-[var(--fg)]">{selectedCategoryMeta.label}:</strong>{' '}
-                    {selectedCategoryMeta.description}
+                    <strong className="text-[var(--fg)]">{t(selectedCategoryMeta.label)}:</strong>{' '}
+                    {t(selectedCategoryMeta.description)}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
@@ -933,7 +936,7 @@ export const DailyMicroHabits: React.FC = () => {
                         color: selectedCategoryMeta.color,
                       }}
                     >
-                      Custom
+                      {t('Custom')}
                     </span>
                   )}
                   <button
@@ -945,18 +948,18 @@ export const DailyMicroHabits: React.FC = () => {
                         selectedCategoryMeta.color
                       )
                     }
-                    title="Audition acoustic chime"
+                    title={t('Audition acoustic chime')}
                     className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-[var(--bg-muted)] hover:bg-[var(--bg)] border border-[var(--border)] text-[var(--fg-muted)] hover:text-[var(--fg)] cursor-pointer"
                   >
                     <Volume2 className="w-3 h-3" />
-                    <span>Chime</span>
+                    <span>{t('Chime')}</span>
                   </button>
                 </div>
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <Field id="micro-mins" label="Duration (Minutes)">
+              <Field id="micro-mins" label={t('Duration (Minutes)')}>
                 <Input
                   id="micro-mins"
                   type="number"
@@ -967,12 +970,12 @@ export const DailyMicroHabits: React.FC = () => {
                 />
               </Field>
 
-              <Field id="micro-desc" label="Optional Cue / Execution Note" helper="Trigger cue or location.">
+              <Field id="micro-desc" label={t('Optional Cue / Execution Note')} helper={t('Trigger cue or location.')}>
                 <Input
                   id="micro-desc"
                   value={newDescription}
                   onChange={(e) => setNewDescription(e.target.value)}
-                  placeholder="e.g. Perform immediately after morning coffee."
+                  placeholder={t('e.g. Perform immediately after morning coffee.')}
                 />
               </Field>
             </div>
@@ -988,7 +991,7 @@ export const DailyMicroHabits: React.FC = () => {
                 setNewTitle('');
               }}
             >
-              Cancel
+              {t('Cancel')}
             </Button>
             <Button
               variant="primary"
@@ -996,7 +999,7 @@ export const DailyMicroHabits: React.FC = () => {
               type="submit"
               disabled={!newTitle.trim()}
             >
-              Save Micro-Habit
+              {t('Save Micro-Habit')}
             </Button>
           </div>
         </form>
@@ -1006,11 +1009,11 @@ export const DailyMicroHabits: React.FC = () => {
       <div className="space-y-5">
         {habits.length === 0 ? (
           <div className="p-6 text-center text-xs text-[var(--fg-muted)] bg-[var(--bg-muted)] rounded-[var(--radius-md)]">
-            No micro-habits defined yet. Click "Add Habit" to create your first 5-minute win.
+            {t('No micro-habits defined yet. Click "Add Habit" to create your first 5-minute win.')}
           </div>
         ) : displayedGroups.length === 0 ? (
           <div className="p-6 text-center text-xs text-[var(--fg-muted)] bg-[var(--bg-muted)] rounded-[var(--radius-md)]">
-            No habits found in the selected category.
+            {t('No habits found in the selected category.')}
           </div>
         ) : (
           displayedGroups.map((group) => {
@@ -1047,7 +1050,7 @@ export const DailyMicroHabits: React.FC = () => {
                       <GroupIcon className="w-3.5 h-3.5" />
                     </span>
                     <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--fg)]">
-                      {group.config.label}
+                      {t(group.config.label)}
                     </h4>
                     {group.config.isCustom && (
                       <span
@@ -1058,11 +1061,11 @@ export const DailyMicroHabits: React.FC = () => {
                           color: group.config.color,
                         }}
                       >
-                        Custom Domain
+                        {t('Custom Domain')}
                       </span>
                     )}
                     <Badge variant={group.config.badgeVariant} className="text-[10px] px-1.5 py-0.2">
-                      {categoryTotal} {categoryTotal === 1 ? 'habit' : 'habits'}
+                      {categoryTotal === 1 ? t('1 habit') : t('{n} habits', { n: categoryTotal })}
                     </Badge>
                     <button
                       type="button"
@@ -1073,13 +1076,13 @@ export const DailyMicroHabits: React.FC = () => {
                           group.config.color
                         )
                       }
-                      title={`Preview acoustic cue: ${group.config.soundCueName || 'Harmonic Chime'} · ${group.config.soundCueDetail || ''}`}
-                      aria-label={`Preview ${group.config.label} cue`}
+                      title={t('Preview acoustic cue: {name} · {detail}', { name: group.config.soundCueName ? t(group.config.soundCueName) : t('Harmonic Chime'), detail: group.config.soundCueDetail ? t(group.config.soundCueDetail) : '' })}
+                      aria-label={t('Preview {label} cue', { label: t(group.config.label) })}
                       className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-[var(--bg-muted)] hover:bg-[var(--bg-elevated)] text-[var(--fg-muted)] hover:text-[var(--fg)] border border-[var(--border)] transition-colors cursor-pointer"
                     >
                       <Volume2 className="w-3 h-3 text-[var(--fg-muted)]" />
                       <span className="hidden sm:inline font-mono text-[10px]">
-                        {group.config.soundCueName || 'Chime'}
+                        {group.config.soundCueName ? t(group.config.soundCueName) : t('Chime')}
                       </span>
                     </button>
                     {group.config.isCustom && group.config.customCategory && (
@@ -1089,12 +1092,12 @@ export const DailyMicroHabits: React.FC = () => {
                           setCategoryToEdit(group.config.customCategory!);
                           setIsCategoryModalOpen(true);
                         }}
-                        title="Edit this custom domain"
-                        aria-label={`Edit ${group.config.label} domain`}
+                        title={t('Edit this custom domain')}
+                        aria-label={t('Edit {label} domain', { label: t(group.config.label) })}
                         className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-[var(--bg-muted)] hover:bg-[var(--bg-elevated)] text-[var(--fg-muted)] hover:text-[var(--fg)] border border-[var(--border)] transition-colors cursor-pointer"
                       >
                         <Edit3 className="w-3 h-3 text-[var(--fg-muted)]" />
-                        <span className="hidden sm:inline">Edit Domain</span>
+                        <span className="hidden sm:inline">{t('Edit Domain')}</span>
                       </button>
                     )}
                   </div>
@@ -1107,7 +1110,7 @@ export const DailyMicroHabits: React.FC = () => {
                           : 'text-[var(--fg-muted)]'
                       }`}
                     >
-                      {isCategoryAllDone ? '✓ All done today' : `${categoryCompleted} / ${categoryTotal} done`}
+                      {isCategoryAllDone ? t('✓ All done today') : t('{completed} / {total} done', { completed: categoryCompleted, total: categoryTotal })}
                     </span>
                   </div>
                 </div>
@@ -1145,7 +1148,7 @@ export const DailyMicroHabits: React.FC = () => {
                               category={habit.category}
                               color={group.config.color}
                               size="md"
-                              ariaLabel={`Mark ${habit.title} as ${isCompletedToday ? 'incomplete' : 'completed'}`}
+                              ariaLabel={isCompletedToday ? t('Mark {title} as incomplete', { title: habit.title }) : t('Mark {title} as completed', { title: habit.title })}
                             />
 
                             <div className="min-w-0 flex-1">
@@ -1169,8 +1172,8 @@ export const DailyMicroHabits: React.FC = () => {
                                   }`}
                                   title={
                                     habit.streakCount > 0
-                                      ? `🔥 ${habit.streakCount}-day active streak! Completed across ${habit.streakCount} consecutive calendar days.`
-                                      : '0-day streak. Complete this micro-habit today to begin your streak!'
+                                      ? t('🔥 {n}-day active streak! Completed across {n} consecutive calendar days.', { n: habit.streakCount })
+                                      : t('0-day streak. Complete this micro-habit today to begin your streak!')
                                   }
                                 >
                                   <Flame
@@ -1180,7 +1183,7 @@ export const DailyMicroHabits: React.FC = () => {
                                         : 'text-[var(--fg-muted)] opacity-60'
                                     }`}
                                   />
-                                  <span>{habit.streakCount || 0}d streak</span>
+                                  <span>{t('{n}d streak', { n: habit.streakCount || 0 })}</span>
                                 </span>
 
                                 {/* Best Streak Achieved from History Indicator & Tooltip */}
@@ -1205,7 +1208,7 @@ export const DailyMicroHabits: React.FC = () => {
                                         setEditingHabit(habit);
                                       }}
                                       className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[var(--primary)]/10 text-[var(--primary)] border border-[var(--primary)]/25 hover:bg-[var(--primary)]/20 transition-all cursor-pointer"
-                                      title={`Linked to Goal: "${linkedGoal.title}" (${linkedGoal.area}). Click to edit.`}
+                                      title={t('Linked to Goal: "{title}" ({area}). Click to edit.', { title: linkedGoal.title, area: linkedGoal.area })}
                                     >
                                       <Target className="w-2.5 h-2.5 shrink-0" />
                                       <span className="truncate max-w-[120px] sm:max-w-[170px]">{linkedGoal.title}</span>
@@ -1223,11 +1226,11 @@ export const DailyMicroHabits: React.FC = () => {
                               type="button"
                               onClick={() =>
                                 startFocusSession({
-                                  missionTitle: `Micro-Habit: ${habit.title}`,
+                                  missionTitle: t('Micro-Habit: {title}', { title: habit.title }),
                                   durationMinutes: habit.durationMinutes || 5,
                                 })
                               }
-                              title={`Launch ${habit.durationMinutes}m Focus Timer`}
+                              title={t('Launch {n}m Focus Timer', { n: habit.durationMinutes })}
                               className="p-1.5 rounded-[var(--radius-sm)] text-[var(--fg-muted)] hover:text-[var(--color-sage)] hover:bg-[var(--bg-elevated)] transition-colors cursor-pointer"
                             >
                               <Play className="w-3.5 h-3.5" />
@@ -1238,7 +1241,7 @@ export const DailyMicroHabits: React.FC = () => {
                               type="button"
                               onClick={() => setEditingHabit(habit)}
                               className="p-1.5 rounded-[var(--radius-sm)] text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-elevated)] transition-colors cursor-pointer"
-                              title="Edit habit details & goal tag"
+                              title={t('Edit habit details & goal tag')}
                             >
                               <Edit3 className="w-3.5 h-3.5" />
                             </button>
@@ -1248,7 +1251,7 @@ export const DailyMicroHabits: React.FC = () => {
                               type="button"
                               onClick={() => setExpandedHabitId(isExpanded ? null : habit.id)}
                               className="p-1.5 rounded-[var(--radius-sm)] text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-elevated)] transition-colors cursor-pointer"
-                              title={isExpanded ? 'Collapse cue details' : 'View habit cue & details'}
+                              title={isExpanded ? t('Collapse cue details') : t('View habit cue & details')}
                             >
                               {isExpanded ? (
                                 <ChevronUp className="w-3.5 h-3.5" />
@@ -1262,7 +1265,7 @@ export const DailyMicroHabits: React.FC = () => {
                               type="button"
                               onClick={() => deleteMicroHabit(habit.id)}
                               className="p-1.5 rounded-[var(--radius-sm)] text-[var(--fg-subtle)] hover:text-[var(--color-coral)] hover:bg-[var(--bg-elevated)] transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer"
-                              title="Delete habit"
+                              title={t('Delete habit')}
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
@@ -1276,10 +1279,10 @@ export const DailyMicroHabits: React.FC = () => {
 
                             {/* Sound & Haptic Cue Row */}
                             <div className="flex flex-wrap items-center gap-2 text-[11px] text-[var(--fg-subtle)] bg-[var(--bg-muted)]/50 p-2 rounded-[var(--radius-sm)] border border-[var(--border)]">
-                              <span className="font-semibold text-[var(--fg)]">Sound & Haptic Cue:</span>
-                              <span className="font-mono text-[var(--fg)] font-medium">{group.config.soundCueName}</span>
-                              <span>— {group.config.soundCueDetail}</span>
-                              <span className="text-[10px] text-[var(--fg-muted)]">({group.config.hapticDetail})</span>
+                              <span className="font-semibold text-[var(--fg)]">{t('Sound & Haptic Cue:')}</span>
+                              <span className="font-mono text-[var(--fg)] font-medium">{group.config.soundCueName ? t(group.config.soundCueName) : ''}</span>
+                              <span>— {group.config.soundCueDetail ? t(group.config.soundCueDetail) : ''}</span>
+                              <span className="text-[10px] text-[var(--fg-muted)]">({group.config.hapticDetail ? t(group.config.hapticDetail) : ''})</span>
                               <button
                                 type="button"
                                 onClick={(e) => {
@@ -1288,7 +1291,7 @@ export const DailyMicroHabits: React.FC = () => {
                                 }}
                                 className="inline-flex items-center gap-1 text-[var(--color-sage)] hover:underline ml-auto font-medium cursor-pointer"
                               >
-                                <Volume2 className="w-3 h-3" /> Test Cue
+                                <Volume2 className="w-3 h-3" /> {t('Test Cue')}
                               </button>
                             </div>
 
@@ -1314,16 +1317,16 @@ export const DailyMicroHabits: React.FC = () => {
                                   <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-1.5 font-bold uppercase tracking-wider text-[11px] text-[var(--fg)]">
                                       <Trophy className="w-3.5 h-3.5 text-amber-500" />
-                                      <span>Historical Streak Intelligence</span>
+                                      <span>{t('Historical Streak Intelligence')}</span>
                                     </div>
                                     <span className="text-[10px] font-mono text-[var(--fg-muted)]">
-                                      {isAtRecord ? '⭐ Personal Best Active' : `Personal Record: ${habitBest}d`}
+                                      {isAtRecord ? t('⭐ Personal Best Active') : t('Personal Record: {n}d', { n: habitBest })}
                                     </span>
                                   </div>
 
                                   <div className="grid grid-cols-3 gap-2 text-center">
                                     <div className="p-2 rounded bg-[var(--bg-muted)] border border-[var(--border)]">
-                                      <div className="text-[10px] text-[var(--fg-muted)] font-medium">Active Streak</div>
+                                      <div className="text-[10px] text-[var(--fg-muted)] font-medium">{t('Active Streak')}</div>
                                       <div className="text-sm font-mono font-bold text-[var(--fg)] flex items-center justify-center gap-1 mt-0.5">
                                         <Flame className="w-3.5 h-3.5 text-[var(--color-coral)]" />
                                         {habit.streakCount || 0}d
@@ -1331,7 +1334,7 @@ export const DailyMicroHabits: React.FC = () => {
                                     </div>
 
                                     <div className="p-2 rounded bg-amber-500/10 border border-amber-500/25">
-                                      <div className="text-[10px] text-amber-700 dark:text-amber-300 font-medium">Best Streak</div>
+                                      <div className="text-[10px] text-amber-700 dark:text-amber-300 font-medium">{t('Best Streak')}</div>
                                       <div className="text-sm font-mono font-bold text-amber-700 dark:text-amber-300 flex items-center justify-center gap-1 mt-0.5">
                                         <Trophy className="w-3.5 h-3.5 text-amber-500 fill-amber-500/20" />
                                         {habitBest}d
@@ -1339,7 +1342,7 @@ export const DailyMicroHabits: React.FC = () => {
                                     </div>
 
                                     <div className="p-2 rounded bg-[var(--bg-muted)] border border-[var(--border)]">
-                                      <div className="text-[10px] text-[var(--fg-muted)] font-medium">Total Logged</div>
+                                      <div className="text-[10px] text-[var(--fg-muted)] font-medium">{t('Total Logged')}</div>
                                       <div className="text-sm font-mono font-bold text-[var(--fg)] flex items-center justify-center gap-1 mt-0.5">
                                         <CalendarCheck className="w-3.5 h-3.5 text-[var(--color-sage)]" />
                                         {habit.completedDates?.length || 0}d
@@ -1351,7 +1354,7 @@ export const DailyMicroHabits: React.FC = () => {
                                   <div className="pt-1 flex items-center justify-between text-[11px] text-[var(--fg-muted)]">
                                     <span className="text-[10px] text-[var(--fg-subtle)] flex items-center gap-1">
                                       <History className="w-3 h-3 text-[var(--fg-muted)]" />
-                                      Past 7-day completion rhythm:
+                                      {t('Past 7-day completion rhythm:')}
                                     </span>
                                     <div className="flex items-center gap-1">
                                       {past7Days.map((day) => {
@@ -1359,7 +1362,7 @@ export const DailyMicroHabits: React.FC = () => {
                                         return (
                                           <span
                                             key={day.dateKey}
-                                            title={`${day.fullLabel}: ${isDone ? 'Completed' : 'Not completed'}`}
+                                            title={`${day.fullLabel}: ${isDone ? t('Completed') : t('Not completed')}`}
                                             className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-mono font-bold border transition-all ${
                                               isDone
                                                 ? 'bg-[var(--color-sage)] text-white border-[var(--color-sage)] shadow-2xs'
@@ -1391,7 +1394,7 @@ export const DailyMicroHabits: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-2.5 border-t border-[var(--border)] text-xs text-[var(--fg-muted)]">
         <span className="flex items-center gap-1.5">
           <Sparkles className="w-3.5 h-3.5 text-[var(--color-sage)]" />
-          Uncompleted habits reset automatically each calendar day (+D$ 25 per toggle).
+          {t('Uncompleted habits reset automatically each calendar day (+D$ 25 per toggle).')}
         </span>
 
         <div className="flex items-center gap-3">
@@ -1399,10 +1402,10 @@ export const DailyMicroHabits: React.FC = () => {
             type="button"
             id="btn-simulate-tomorrow-rollover"
             onClick={() => simulateDateKeyChange()}
-            title="Simulate advancing dateKey to tomorrow to test automated daily reset & streak evaluation"
+            title={t('Simulate advancing dateKey to tomorrow to test automated daily reset & streak evaluation')}
             className="flex items-center gap-1 text-[11px] font-medium text-[var(--color-coral)] hover:underline transition-colors cursor-pointer"
           >
-            <RotateCcw className="w-3 h-3" /> Simulate Next Day's Rollover
+            <RotateCcw className="w-3 h-3" /> {t("Simulate Next Day's Rollover")}
           </button>
 
           {completedCount > 0 && (
@@ -1412,7 +1415,7 @@ export const DailyMicroHabits: React.FC = () => {
               onClick={resetMicroHabitsToday}
               className="flex items-center gap-1 text-[11px] text-[var(--fg-subtle)] hover:text-[var(--fg)] transition-colors cursor-pointer"
             >
-              <RotateCcw className="w-3 h-3" /> Clear today's marks
+              <RotateCcw className="w-3 h-3" /> {t("Clear today's marks")}
             </button>
           )}
         </div>

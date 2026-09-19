@@ -3,24 +3,26 @@ import { useApp } from '../store/useApp';
 import { PageHeader, Button, Card, Badge, Disclaimer } from '../components/ui';
 import { Award, RotateCcw, Check, ArrowRight } from 'lucide-react';
 import { LifeScoreCategories } from '../types/models';
+import { useT, N_ } from '../i18n';
 
 const DOMAINS: {
   key: keyof LifeScoreCategories;
   label: string;
   helper: string;
 }[] = [
-  { key: 'money', label: 'Money & Wealth', helper: 'How secure, intentional, and autonomous does your capital feel?' },
-  { key: 'workAndPurpose', label: 'Work & Purpose', helper: 'How aligned and high-leverage is your daily enterprise?' },
-  { key: 'health', label: 'Health & Vitality', helper: 'How resilient, well-rested, and energised is your physical body?' },
-  { key: 'relationships', label: 'Relationships', helper: 'How present, honest, and generous are you with your closest people?' },
-  { key: 'discipline', label: 'Discipline & Follow-Through', helper: 'How often do you do what you said you would, without delay?' },
-  { key: 'environment', label: 'Environment & Space', helper: 'How calm, orderly, and inspiring is your physical sanctuary?' },
-  { key: 'learning', label: 'Learning & Mastery', helper: 'How consistently are you mastering high-value skills?' },
-  { key: 'personalMeaning', label: 'Personal Meaning', helper: 'How clear and grounding is your reason for daily action?' },
+  { key: 'money', label: N_('Money & Wealth'), helper: N_('How secure, intentional, and autonomous does your capital feel?') },
+  { key: 'workAndPurpose', label: N_('Work & Purpose'), helper: N_('How aligned and high-leverage is your daily enterprise?') },
+  { key: 'health', label: N_('Health & Vitality'), helper: N_('How resilient, well-rested, and energised is your physical body?') },
+  { key: 'relationships', label: N_('Relationships'), helper: N_('How present, honest, and generous are you with your closest people?') },
+  { key: 'discipline', label: N_('Discipline & Follow-Through'), helper: N_('How often do you do what you said you would, without delay?') },
+  { key: 'environment', label: N_('Environment & Space'), helper: N_('How calm, orderly, and inspiring is your physical sanctuary?') },
+  { key: 'learning', label: N_('Learning & Mastery'), helper: N_('How consistently are you mastering high-value skills?') },
+  { key: 'personalMeaning', label: N_('Personal Meaning'), helper: N_('How clear and grounding is your reason for daily action?') },
 ];
 
 export const LifeScore: React.FC = () => {
   const { data, saveLifeScores } = useApp();
+  const t = useT();
 
   const latestScore = data?.lifeScores?.[0];
 
@@ -53,8 +55,8 @@ export const LifeScore: React.FC = () => {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Future Life Score"
-        subtitle="A periodic diagnostic of the 8 essential foundations of your life."
+        title={t('Future Life Score')}
+        subtitle={t('A periodic diagnostic of the 8 essential foundations of your life.')}
         action={
           !isAssessing ? (
             <Button
@@ -63,11 +65,11 @@ export const LifeScore: React.FC = () => {
               icon={RotateCcw}
               onClick={() => setIsAssessing(true)}
             >
-              Retake Assessment
+              {t('Retake Assessment')}
             </Button>
           ) : (
             <Button variant="accent" size="sm" icon={Check} onClick={handleSaveScore}>
-              Save Diagnostic Score
+              {t('Save Diagnostic Score')}
             </Button>
           )
         }
@@ -112,13 +114,13 @@ export const LifeScore: React.FC = () => {
 
             {/* Interpretation Text */}
             <div className="space-y-2 text-center sm:text-left flex-1">
-              <Badge variant="sage">Diagnostic Overview</Badge>
+              <Badge variant="sage">{t('Diagnostic Overview')}</Badge>
               <h2 className="text-xl font-bold font-display text-[var(--fg)]">
                 {latestScore.totalScore >= 75
-                  ? 'Strong Life Foundation'
+                  ? t('Strong Life Foundation')
                   : latestScore.totalScore >= 50
-                  ? 'Emerging Alignment'
-                  : 'Starting Benchmark'}
+                  ? t('Emerging Alignment')
+                  : t('Starting Benchmark')}
               </h2>
               <p className="text-sm text-[var(--fg-muted)] leading-relaxed">
                 {latestScore.interpretation}
@@ -131,10 +133,10 @@ export const LifeScore: React.FC = () => {
             <div className="p-4 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
               <div>
                 <span className="font-bold text-[var(--color-coral)] block">
-                  Priority Focus Domains:
+                  {t('Priority Focus Domains:')}
                 </span>
                 <span className="text-[var(--fg-muted)]">
-                  {latestScore.lowestAreas.join(' and ')} are currently asking for deliberate attention.
+                  {t('{areas} are currently asking for deliberate attention.', { areas: latestScore.lowestAreas.join(t(' and ')) })}
                 </span>
               </div>
               <Button
@@ -142,7 +144,7 @@ export const LifeScore: React.FC = () => {
                 size="sm"
                 onClick={() => setIsAssessing(true)}
               >
-                Rebalance Sliders
+                {t('Rebalance Sliders')}
               </Button>
             </div>
           )}
@@ -154,10 +156,10 @@ export const LifeScore: React.FC = () => {
         <Card padding="lg" className="space-y-6">
           <div className="flex items-center justify-between pb-4 border-b border-[var(--border)]">
             <h2 className="text-lg font-bold font-display text-[var(--fg)]">
-              Rate Each Foundation (1 to 10)
+              {t('Rate Each Foundation (1 to 10)')}
             </h2>
             <span className="text-sm font-bold text-[var(--color-sage)]">
-              Live Score: {calculatedTotal} / 100
+              {t('Live Score: {n} / 100', { n: calculatedTotal })}
             </span>
           </div>
 
@@ -170,13 +172,13 @@ export const LifeScore: React.FC = () => {
                   className="p-4 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)] space-y-2"
                 >
                   <div className="flex justify-between items-center text-xs">
-                    <span className="font-bold text-[var(--fg)]">{domain.label}</span>
+                    <span className="font-bold text-[var(--fg)]">{t(domain.label)}</span>
                     <span className="font-mono font-bold text-sm text-[var(--color-slate)] bg-[var(--bg-elevated)] px-2 py-0.5 rounded">
                       {val} / 10
                     </span>
                   </div>
 
-                  <p className="text-[11px] text-[var(--fg-subtle)]">{domain.helper}</p>
+                  <p className="text-[11px] text-[var(--fg-subtle)]">{t(domain.helper)}</p>
 
                   <input
                     type="range"
@@ -198,10 +200,10 @@ export const LifeScore: React.FC = () => {
 
           <div className="flex justify-end gap-3 pt-4 border-t border-[var(--border)]">
             <Button variant="ghost" onClick={() => setIsAssessing(false)}>
-              Cancel
+              {t('Cancel')}
             </Button>
             <Button variant="accent" onClick={handleSaveScore}>
-              Save Diagnostic ({calculatedTotal}/100)
+              {t('Save Diagnostic ({n}/100)', { n: calculatedTotal })}
             </Button>
           </div>
         </Card>
@@ -211,7 +213,7 @@ export const LifeScore: React.FC = () => {
       {data.lifeScores.length > 1 && (
         <Card padding="md" className="space-y-3">
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-            Score History
+            {t('Score History')}
           </span>
           <div className="space-y-2 text-xs">
             {data.lifeScores.slice(1, 5).map((entry) => (
@@ -227,7 +229,7 @@ export const LifeScore: React.FC = () => {
         </Card>
       )}
 
-      <Disclaimer text="The Future Life Score is an honest reflection tool. It does not measure your worth — it measures alignment with your stated ambitions." />
+      <Disclaimer text={t('The Future Life Score is an honest reflection tool. It does not measure your worth — it measures alignment with your stated ambitions.')} />
     </div>
   );
 };

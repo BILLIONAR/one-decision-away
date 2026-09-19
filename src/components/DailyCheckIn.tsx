@@ -25,48 +25,50 @@ import {
   Edit3,
 } from 'lucide-react';
 import { DailyCheckIn as DailyCheckInModel } from '../types/models';
+import { useT, N_ } from '../i18n';
 
 const FOCUS_LABELS: Record<number, string> = {
-  1: 'Scattered / Foggy',
-  2: 'Distracted',
-  3: 'Low Clarity',
-  4: 'Warming Up',
-  5: 'Steady Baseline',
-  6: 'Task-Oriented',
-  7: 'Deep Focus',
-  8: 'Locked In',
-  9: 'Flow State',
-  10: 'Unstoppable Mastery',
+  1: N_('Scattered / Foggy'),
+  2: N_('Distracted'),
+  3: N_('Low Clarity'),
+  4: N_('Warming Up'),
+  5: N_('Steady Baseline'),
+  6: N_('Task-Oriented'),
+  7: N_('Deep Focus'),
+  8: N_('Locked In'),
+  9: N_('Flow State'),
+  10: N_('Unstoppable Mastery'),
 };
 
 const ENERGY_LABELS: Record<number, string> = {
-  1: 'Exhausted',
-  2: 'Depleted',
-  3: 'Low Reserve',
-  4: 'Moderate',
-  5: 'Stable & Sustainable',
-  6: 'Alert',
-  7: 'High Drive',
-  8: 'Vibrant Vitality',
-  9: 'Peak Power',
-  10: 'Electric Boundless',
+  1: N_('Exhausted'),
+  2: N_('Depleted'),
+  3: N_('Low Reserve'),
+  4: N_('Moderate'),
+  5: N_('Stable & Sustainable'),
+  6: N_('Alert'),
+  7: N_('High Drive'),
+  8: N_('Vibrant Vitality'),
+  9: N_('Peak Power'),
+  10: N_('Electric Boundless'),
 };
 
 const MOOD_LABELS: Record<number, string> = {
-  1: 'Reactive / Overwhelmed',
-  2: 'Anxious',
-  3: 'Resistant',
-  4: 'Neutral',
-  5: 'Grounded & Calm',
-  6: 'Clear-Minded',
-  7: 'Optimistic',
-  8: 'Victorious / Confident',
-  9: 'Joyful Momentum',
-  10: 'Sovereign & Inspired',
+  1: N_('Reactive / Overwhelmed'),
+  2: N_('Anxious'),
+  3: N_('Resistant'),
+  4: N_('Neutral'),
+  5: N_('Grounded & Calm'),
+  6: N_('Clear-Minded'),
+  7: N_('Optimistic'),
+  8: N_('Victorious / Confident'),
+  9: N_('Joyful Momentum'),
+  10: N_('Sovereign & Inspired'),
 };
 
 export const DailyCheckIn: React.FC = () => {
   const { data, saveDailyCheckIn } = useApp();
+  const t = useT();
   const checkIns = data?.checkIns || [];
 
   const todayStr = useMemo(() => new Date().toISOString().slice(0, 10), []);
@@ -117,7 +119,7 @@ export const DailyCheckIn: React.FC = () => {
       const key = d.toISOString().slice(0, 10);
       const isToday = i === 0;
       const dayName = isToday
-        ? 'Today'
+        ? t('Today')
         : d.toLocaleDateString(undefined, { weekday: 'short' });
       const fullDate = d.toLocaleDateString(undefined, {
         month: 'short',
@@ -139,7 +141,7 @@ export const DailyCheckIn: React.FC = () => {
     }
 
     return result;
-  }, [checkIns]);
+  }, [checkIns, t]);
 
   // Calculate 7-day averages
   const stats = useMemo(() => {
@@ -155,7 +157,7 @@ export const DailyCheckIn: React.FC = () => {
         avgEnergy: 0,
         avgMood: 0,
         count: 0,
-        peakState: 'N/A',
+        peakState: t('N/A'),
       };
     }
 
@@ -168,10 +170,10 @@ export const DailyCheckIn: React.FC = () => {
     const avgMood = Number((totalMood / records.length).toFixed(1));
 
     // Determine highest driver
-    let peakState = 'Balanced';
-    if (avgFocus >= avgEnergy && avgFocus >= avgMood) peakState = 'Deep Focus';
-    else if (avgEnergy >= avgFocus && avgEnergy >= avgMood) peakState = 'High Vitality';
-    else peakState = 'Victorious Mood';
+    let peakState = t('Balanced');
+    if (avgFocus >= avgEnergy && avgFocus >= avgMood) peakState = t('Deep Focus');
+    else if (avgEnergy >= avgFocus && avgEnergy >= avgMood) peakState = t('High Vitality');
+    else peakState = t('Victorious Mood');
 
     return {
       avgFocus,
@@ -180,7 +182,7 @@ export const DailyCheckIn: React.FC = () => {
       count: records.length,
       peakState,
     };
-  }, [checkIns]);
+  }, [checkIns, t]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -208,9 +210,9 @@ export const DailyCheckIn: React.FC = () => {
           <div className="flex items-center justify-between border-b border-[var(--border)] pb-1">
             <span className="font-bold text-[var(--fg)] font-display">{label} ({dataPoint?.fullDate})</span>
             {dataPoint?.hasRecord ? (
-              <span className="text-[10px] text-[var(--color-sage)] font-semibold">Logged</span>
+              <span className="text-[10px] text-[var(--color-sage)] font-semibold">{t('Logged')}</span>
             ) : (
-              <span className="text-[10px] text-[var(--fg-subtle)]">No Check-in</span>
+              <span className="text-[10px] text-[var(--fg-subtle)]">{t('No Check-in')}</span>
             )}
           </div>
           {dataPoint?.hasRecord ? (
@@ -218,19 +220,19 @@ export const DailyCheckIn: React.FC = () => {
               <div className="space-y-1 pt-1">
                 <div className="flex items-center justify-between text-[11px]">
                   <span className="flex items-center gap-1 text-[var(--color-sage)] font-medium">
-                    <span className="w-2 h-2 rounded-full bg-[var(--color-sage)]" /> Focus:
+                    <span className="w-2 h-2 rounded-full bg-[var(--color-sage)]" /> {t('Focus:')}
                   </span>
                   <span className="font-bold text-[var(--fg)]">{dataPoint.focus}/10</span>
                 </div>
                 <div className="flex items-center justify-between text-[11px]">
                   <span className="flex items-center gap-1 text-[var(--color-coral)] font-medium">
-                    <span className="w-2 h-2 rounded-full bg-[var(--color-coral)]" /> Energy:
+                    <span className="w-2 h-2 rounded-full bg-[var(--color-coral)]" /> {t('Energy:')}
                   </span>
                   <span className="font-bold text-[var(--fg)]">{dataPoint.energy}/10</span>
                 </div>
                 <div className="flex items-center justify-between text-[11px]">
                   <span className="flex items-center gap-1 text-sky-600 dark:text-sky-400 font-medium">
-                    <span className="w-2 h-2 rounded-full bg-sky-500" /> Mood:
+                    <span className="w-2 h-2 rounded-full bg-sky-500" /> {t('Mood:')}
                   </span>
                   <span className="font-bold text-[var(--fg)]">{dataPoint.mood}/10</span>
                 </div>
@@ -243,7 +245,7 @@ export const DailyCheckIn: React.FC = () => {
             </>
           ) : (
             <p className="text-[11px] text-[var(--fg-muted)] pt-1">
-              No rating recorded on this date.
+              {t('No rating recorded on this date.')}
             </p>
           )}
         </div>
@@ -262,20 +264,20 @@ export const DailyCheckIn: React.FC = () => {
               <Activity className="w-4 h-4" />
             </span>
             <h3 className="font-display font-bold text-base text-[var(--fg)] tracking-tight">
-              Daily Check-in & Internal Vitality
+              {t('Daily Check-in & Internal Vitality')}
             </h3>
             {todayCheckIn ? (
               <Badge variant="sage" className="text-[10px] py-0 px-2 flex items-center gap-1">
-                <CheckCircle2 className="w-3 h-3" /> Logged Today
+                <CheckCircle2 className="w-3 h-3" /> {t('Logged Today')}
               </Badge>
             ) : (
               <Badge variant="coral" className="text-[10px] py-0 px-2 flex items-center gap-1">
-                <Sparkles className="w-3 h-3" /> + D$50 Daily Fuel
+                <Sparkles className="w-3 h-3" /> {t('+ D$50 Daily Fuel')}
               </Badge>
             )}
           </div>
           <p className="text-xs text-[var(--fg-muted)]">
-            Rate focus, energy, and state of mind to track long-term compounding clarity.
+            {t('Rate focus, energy, and state of mind to track long-term compounding clarity.')}
           </p>
         </div>
 
@@ -290,7 +292,7 @@ export const DailyCheckIn: React.FC = () => {
                 : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
             }`}
           >
-            {todayCheckIn ? 'Update Today' : 'Rate Today'}
+            {todayCheckIn ? t('Update Today') : t('Rate Today')}
           </button>
           <button
             type="button"
@@ -301,7 +303,7 @@ export const DailyCheckIn: React.FC = () => {
                 : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
             }`}
           >
-            <TrendingUp className="w-3.5 h-3.5" /> 7-Day Trend
+            <TrendingUp className="w-3.5 h-3.5" /> {t('7-Day Trend')}
           </button>
           <button
             type="button"
@@ -312,7 +314,7 @@ export const DailyCheckIn: React.FC = () => {
                 : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
             }`}
           >
-            Logs ({checkIns.length})
+            {t('Logs ({n})', { n: checkIns.length })}
           </button>
         </div>
       </div>
@@ -326,7 +328,7 @@ export const DailyCheckIn: React.FC = () => {
             <div className="p-3.5 rounded-[var(--radius-md)] bg-[var(--bg)] border border-[var(--border)] space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-[var(--fg)] flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-[var(--color-sage)]" /> Focus Rating
+                  <span className="w-2 h-2 rounded-full bg-[var(--color-sage)]" /> {t('Focus Rating')}
                 </span>
                 <span className="text-sm font-extrabold text-[var(--color-sage)] font-display">
                   {focus}/10
@@ -342,11 +344,11 @@ export const DailyCheckIn: React.FC = () => {
                 className="w-full accent-[var(--color-sage)] cursor-pointer"
               />
               <div className="flex items-center justify-between text-[10px] text-[var(--fg-subtle)]">
-                <span>1 (Scattered)</span>
+                <span>{t('1 (Scattered)')}</span>
                 <span className="font-semibold text-[var(--color-sage)] text-center px-1 truncate max-w-[130px]">
-                  {FOCUS_LABELS[focus]}
+                  {t(FOCUS_LABELS[focus])}
                 </span>
-                <span>10 (Flow)</span>
+                <span>{t('10 (Flow)')}</span>
               </div>
             </div>
 
@@ -354,7 +356,7 @@ export const DailyCheckIn: React.FC = () => {
             <div className="p-3.5 rounded-[var(--radius-md)] bg-[var(--bg)] border border-[var(--border)] space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-[var(--fg)] flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-[var(--color-coral)]" /> Energy Reserve
+                  <span className="w-2 h-2 rounded-full bg-[var(--color-coral)]" /> {t('Energy Reserve')}
                 </span>
                 <span className="text-sm font-extrabold text-[var(--color-coral)] font-display">
                   {energy}/10
@@ -370,11 +372,11 @@ export const DailyCheckIn: React.FC = () => {
                 className="w-full accent-[var(--color-coral)] cursor-pointer"
               />
               <div className="flex items-center justify-between text-[10px] text-[var(--fg-subtle)]">
-                <span>1 (Drained)</span>
+                <span>{t('1 (Drained)')}</span>
                 <span className="font-semibold text-[var(--color-coral)] text-center px-1 truncate max-w-[130px]">
-                  {ENERGY_LABELS[energy]}
+                  {t(ENERGY_LABELS[energy])}
                 </span>
-                <span>10 (Peak)</span>
+                <span>{t('10 (Peak)')}</span>
               </div>
             </div>
 
@@ -382,7 +384,7 @@ export const DailyCheckIn: React.FC = () => {
             <div className="p-3.5 rounded-[var(--radius-md)] bg-[var(--bg)] border border-[var(--border)] space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-[var(--fg)] flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-sky-500" /> State of Mind
+                  <span className="w-2 h-2 rounded-full bg-sky-500" /> {t('State of Mind')}
                 </span>
                 <span className="text-sm font-extrabold text-sky-600 dark:text-sky-400 font-display">
                   {mood}/10
@@ -398,11 +400,11 @@ export const DailyCheckIn: React.FC = () => {
                 className="w-full accent-sky-500 cursor-pointer"
               />
               <div className="flex items-center justify-between text-[10px] text-[var(--fg-subtle)]">
-                <span>1 (Reactive)</span>
+                <span>{t('1 (Reactive)')}</span>
                 <span className="font-semibold text-sky-600 dark:text-sky-400 text-center px-1 truncate max-w-[130px]">
-                  {MOOD_LABELS[mood]}
+                  {t(MOOD_LABELS[mood])}
                 </span>
-                <span>10 (Inspired)</span>
+                <span>{t('10 (Inspired)')}</span>
               </div>
             </div>
           </div>
@@ -410,13 +412,13 @@ export const DailyCheckIn: React.FC = () => {
           {/* Quick reflection notes input */}
           <div className="space-y-1.5">
             <label className="text-xs font-semibold text-[var(--fg)] flex items-center gap-1.5">
-              <Edit3 className="w-3.5 h-3.5 text-[var(--fg-muted)]" /> Daily Internal Note (Optional)
+              <Edit3 className="w-3.5 h-3.5 text-[var(--fg-muted)]" /> {t('Daily Internal Note (Optional)')}
             </label>
             <Textarea
               id="checkin-notes"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="What fueled your focus or caused friction today? (e.g. 7 hours uninterrupted sleep, box breathing session, deep work win)..."
+              placeholder={t('What fueled your focus or caused friction today? (e.g. 7 hours uninterrupted sleep, box breathing session, deep work win)...')}
               rows={2}
               className="text-xs"
             />
@@ -426,7 +428,7 @@ export const DailyCheckIn: React.FC = () => {
           <div className="flex items-center justify-between pt-1">
             <div className="flex items-center gap-2 text-xs text-[var(--fg-muted)]">
               <Flame className="w-4 h-4 text-[var(--color-coral)]" />
-              <span>{stats.count} total check-ins recorded</span>
+              <span>{t('{n} total check-ins recorded', { n: stats.count })}</span>
             </div>
 
             <div className="flex items-center gap-2">
@@ -437,7 +439,7 @@ export const DailyCheckIn: React.FC = () => {
                 isLoading={isSubmitting}
                 icon={CheckCircle2}
               >
-                {todayCheckIn ? 'Update Check-in' : 'Record Today (+ D$50)'}
+                {todayCheckIn ? t('Update Check-in') : t('Record Today (+ D$50)')}
               </Button>
             </div>
           </div>
@@ -451,7 +453,7 @@ export const DailyCheckIn: React.FC = () => {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="p-3 rounded-[var(--radius-md)] bg-[var(--bg)] border border-[var(--border)] space-y-1">
               <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-                7-Day Avg Focus
+                {t('7-Day Avg Focus')}
               </span>
               <div className="flex items-baseline gap-1.5">
                 <span className="text-xl font-extrabold font-display text-[var(--color-sage)]">
@@ -469,7 +471,7 @@ export const DailyCheckIn: React.FC = () => {
 
             <div className="p-3 rounded-[var(--radius-md)] bg-[var(--bg)] border border-[var(--border)] space-y-1">
               <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-                7-Day Avg Energy
+                {t('7-Day Avg Energy')}
               </span>
               <div className="flex items-baseline gap-1.5">
                 <span className="text-xl font-extrabold font-display text-[var(--color-coral)]">
@@ -487,7 +489,7 @@ export const DailyCheckIn: React.FC = () => {
 
             <div className="p-3 rounded-[var(--radius-md)] bg-[var(--bg)] border border-[var(--border)] space-y-1">
               <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-                7-Day Avg Mood
+                {t('7-Day Avg Mood')}
               </span>
               <div className="flex items-baseline gap-1.5">
                 <span className="text-xl font-extrabold font-display text-sky-600 dark:text-sky-400">
@@ -505,13 +507,13 @@ export const DailyCheckIn: React.FC = () => {
 
             <div className="p-3 rounded-[var(--radius-md)] bg-[var(--bg)] border border-[var(--border)] space-y-1">
               <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-                Leading Driver
+                {t('Leading Driver')}
               </span>
               <div className="text-sm font-bold text-[var(--fg)] truncate pt-0.5">
                 {stats.peakState}
               </div>
               <p className="text-[10px] text-[var(--fg-muted)] truncate">
-                {stats.count} days logged in 7d
+                {t('{n} days logged in 7d', { n: stats.count })}
               </p>
             </div>
           </div>
@@ -519,7 +521,7 @@ export const DailyCheckIn: React.FC = () => {
           {/* Metric Filter Toggles */}
           <div className="flex items-center justify-between flex-wrap gap-2 pt-1">
             <div className="flex items-center gap-1 text-[11px]">
-              <span className="text-[var(--fg-muted)] font-medium mr-1">Metrics:</span>
+              <span className="text-[var(--fg-muted)] font-medium mr-1">{t('Metrics:')}</span>
               <button
                 type="button"
                 onClick={() => setSelectedMetric('all')}
@@ -529,7 +531,7 @@ export const DailyCheckIn: React.FC = () => {
                     : 'bg-[var(--bg)] text-[var(--fg-muted)] border-[var(--border)]'
                 }`}
               >
-                All 3 Metrics
+                {t('All 3 Metrics')}
               </button>
               <button
                 type="button"
@@ -540,7 +542,7 @@ export const DailyCheckIn: React.FC = () => {
                     : 'bg-[var(--bg)] text-[var(--fg-muted)] border-[var(--border)]'
                 }`}
               >
-                Focus Only
+                {t('Focus Only')}
               </button>
               <button
                 type="button"
@@ -551,7 +553,7 @@ export const DailyCheckIn: React.FC = () => {
                     : 'bg-[var(--bg)] text-[var(--fg-muted)] border-[var(--border)]'
                 }`}
               >
-                Energy Only
+                {t('Energy Only')}
               </button>
               <button
                 type="button"
@@ -562,12 +564,12 @@ export const DailyCheckIn: React.FC = () => {
                     : 'bg-[var(--bg)] text-[var(--fg-muted)] border-[var(--border)]'
                 }`}
               >
-                Mood Only
+                {t('Mood Only')}
               </button>
             </div>
 
             <span className="text-[11px] text-[var(--fg-subtle)] flex items-center gap-1">
-              <Info className="w-3 h-3" /> Scale: 1 (Lowest) to 10 (Peak)
+              <Info className="w-3 h-3" /> {t('Scale: 1 (Lowest) to 10 (Peak)')}
             </span>
           </div>
 
@@ -600,7 +602,7 @@ export const DailyCheckIn: React.FC = () => {
                   <Line
                     type="monotone"
                     dataKey="focus"
-                    name="Focus"
+                    name={t('Focus')}
                     stroke="var(--color-sage, #4E6B56)"
                     strokeWidth={2.5}
                     dot={{ r: 4, fill: 'var(--color-sage, #4E6B56)', strokeWidth: 1.5, stroke: 'var(--bg)' }}
@@ -613,7 +615,7 @@ export const DailyCheckIn: React.FC = () => {
                   <Line
                     type="monotone"
                     dataKey="energy"
-                    name="Energy"
+                    name={t('Energy')}
                     stroke="var(--color-coral, #B8533C)"
                     strokeWidth={2.5}
                     dot={{ r: 4, fill: 'var(--color-coral, #B8533C)', strokeWidth: 1.5, stroke: 'var(--bg)' }}
@@ -626,7 +628,7 @@ export const DailyCheckIn: React.FC = () => {
                   <Line
                     type="monotone"
                     dataKey="mood"
-                    name="Mood"
+                    name={t('Mood')}
                     stroke="#0284c7"
                     strokeWidth={2.5}
                     dot={{ r: 4, fill: '#0284c7', strokeWidth: 1.5, stroke: 'var(--bg)' }}
@@ -663,13 +665,13 @@ export const DailyCheckIn: React.FC = () => {
                         </span>
                         <div className="flex items-center gap-1.5 text-[10px]">
                           <span className="px-1.5 py-0.2 rounded bg-[var(--color-sage)]/10 text-[var(--color-sage)] font-semibold">
-                            Focus {entry.focus}/10
+                            {t('Focus {n}/10', { n: entry.focus })}
                           </span>
                           <span className="px-1.5 py-0.2 rounded bg-[var(--color-coral)]/10 text-[var(--color-coral)] font-semibold">
-                            Energy {entry.energy}/10
+                            {t('Energy {n}/10', { n: entry.energy })}
                           </span>
                           <span className="px-1.5 py-0.2 rounded bg-sky-500/10 text-sky-600 dark:text-sky-400 font-semibold">
-                            Mood {entry.mood}/10
+                            {t('Mood {n}/10', { n: entry.mood })}
                           </span>
                         </div>
                       </div>
@@ -686,7 +688,7 @@ export const DailyCheckIn: React.FC = () => {
                         onClick={() => setActiveTab('checkin')}
                         className="text-[11px] text-[var(--color-sage)] hover:underline font-semibold flex items-center gap-1 shrink-0 self-end sm:self-auto cursor-pointer"
                       >
-                        <Edit3 className="w-3 h-3" /> Edit Today
+                        <Edit3 className="w-3 h-3" /> {t('Edit Today')}
                       </button>
                     )}
                   </div>
@@ -695,7 +697,7 @@ export const DailyCheckIn: React.FC = () => {
             </div>
           ) : (
             <div className="p-6 text-center text-xs text-[var(--fg-muted)]">
-              No previous check-ins logged yet.
+              {t('No previous check-ins logged yet.')}
             </div>
           )}
         </div>

@@ -3,17 +3,19 @@ import { useApp } from '../store/useApp';
 import { Card, Button } from './ui';
 import { Headphones, Play, ArrowRight } from 'lucide-react';
 import { GUIDED_MEDITATIONS, GuidedMeditation } from '../data/guidedMeditations';
+import { useT, N_ } from '../i18n';
 
 /** Picks three guided sessions that fit the time of day. */
 function pickForNow(): { greeting: string; ids: string[] } {
   const h = new Date().getHours();
-  if (h < 11) return { greeting: 'Morning — set the tone', ids: ['gm-motivation', 'gm-manifest', 'gm-confidence'] };
-  if (h < 17) return { greeting: 'Midday — sharpen up', ids: ['gm-focus', 'gm-dopamine', 'gm-belief'] };
-  if (h < 21) return { greeting: 'Evening — come back to yourself', ids: ['gm-relax', 'gm-gratitude', 'gm-two-futures'] };
-  return { greeting: 'Night — close the day well', ids: ['gm-sleep', 'gm-relax', 'gm-gratitude'] };
+  if (h < 11) return { greeting: N_('Morning — set the tone'), ids: ['gm-motivation', 'gm-manifest', 'gm-confidence'] };
+  if (h < 17) return { greeting: N_('Midday — sharpen up'), ids: ['gm-focus', 'gm-dopamine', 'gm-belief'] };
+  if (h < 21) return { greeting: N_('Evening — come back to yourself'), ids: ['gm-relax', 'gm-gratitude', 'gm-two-futures'] };
+  return { greeting: N_('Night — close the day well'), ids: ['gm-sleep', 'gm-relax', 'gm-gratitude'] };
 }
 
 export const MeditateNowWidget: React.FC = () => {
+  const t = useT();
   const { startFocusSession, setActiveRoute } = useApp();
   const { greeting, ids } = pickForNow();
   const sessions = ids
@@ -22,7 +24,7 @@ export const MeditateNowWidget: React.FC = () => {
 
   const start = (m: GuidedMeditation) =>
     startFocusSession({
-      missionTitle: `${m.emoji} ${m.title}`,
+      missionTitle: `${m.emoji} ${t(m.title)}`,
       durationMinutes: m.durationMinutes,
       soundTrack: m.track,
       guidedMeditationId: m.id,
@@ -36,8 +38,8 @@ export const MeditateNowWidget: React.FC = () => {
             <Headphones className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--fg)]">Meditate Now</h3>
-            <p className="text-[11px] text-[var(--fg-muted)]">{greeting} · voice-guided</p>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--fg)]">{t('Meditate Now')}</h3>
+            <p className="text-[11px] text-[var(--fg-muted)]">{t('{greeting} · voice-guided', { greeting: t(greeting) })}</p>
           </div>
         </div>
         <button
@@ -45,7 +47,7 @@ export const MeditateNowWidget: React.FC = () => {
           onClick={() => setActiveRoute('/app/missions')}
           className="text-[11px] font-semibold text-[var(--fg-muted)] hover:text-[var(--fg)] flex items-center gap-1 cursor-pointer"
         >
-          All sessions <ArrowRight className="w-3 h-3" />
+          {t('All sessions')} <ArrowRight className="w-3 h-3" />
         </button>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -58,12 +60,12 @@ export const MeditateNowWidget: React.FC = () => {
           >
             <div className="flex items-center justify-between">
               <span className="text-lg leading-none">{m.emoji}</span>
-              <span className="text-[10px] font-mono text-[var(--fg-subtle)]">{m.durationMinutes} min</span>
+              <span className="text-[10px] font-mono text-[var(--fg-subtle)]">{t('{n} min', { n: m.durationMinutes })}</span>
             </div>
-            <div className="text-xs font-bold text-[var(--fg)] mt-1.5">{m.title}</div>
-            <div className="text-[11px] italic text-[var(--fg-subtle)]">{m.tagline}</div>
+            <div className="text-xs font-bold text-[var(--fg)] mt-1.5">{t(m.title)}</div>
+            <div className="text-[11px] italic text-[var(--fg-subtle)]">{t(m.tagline)}</div>
             <div className="mt-2 text-[10px] font-bold uppercase tracking-wider text-[var(--color-sage)] flex items-center gap-1 opacity-70 group-hover:opacity-100">
-              <Play className="w-3 h-3 fill-current" /> Start
+              <Play className="w-3 h-3 fill-current" /> {t('Start')}
             </div>
           </button>
         ))}
