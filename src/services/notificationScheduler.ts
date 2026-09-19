@@ -1,3 +1,4 @@
+import { appRouteHref, publicAssetPath } from '../utils/routing';
 /**
  * Local notification scheduler for daily nudges.
  * Runs while the app (or its installed PWA) is open — including background tabs.
@@ -95,10 +96,10 @@ class NotificationScheduler {
     const title = t(NUDGE_TITLES[slot]);
     const opts: NotificationOptions = {
       body,
-      icon: '/icon-192.png',
-      badge: '/icon-192.png',
+      icon: publicAssetPath('icon-192.png'),
+      badge: publicAssetPath('icon-192.png'),
       tag: `oda-nudge-${slot}`,
-      data: { url: '/app' },
+      data: { url: appRouteHref('/app') },
     };
     try {
       const reg = 'serviceWorker' in navigator ? await navigator.serviceWorker.getRegistration() : undefined;

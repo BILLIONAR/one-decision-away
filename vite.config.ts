@@ -1,10 +1,17 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import {defineConfig} from 'vite';
+import {defineConfig, loadEnv} from 'vite';
 
-export default defineConfig(() => {
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), 'VITE_');
+  const requestedBase = env.VITE_BASE_PATH?.trim() || '/';
+  if (!requestedBase.startsWith('/') || requestedBase.startsWith('//') || /[?#\\]/.test(requestedBase)) {
+    throw new Error('VITE_BASE_PATH must be an absolute site path, such as /one-decision-away/.');
+  }
+  const base = requestedBase === '/' ? '/' : `${requestedBase.replace(/\/+$/, '')}/`;
   return {
+    base,
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {

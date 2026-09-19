@@ -1,3 +1,4 @@
+import { getAppBase } from '../utils/routing';
 /**
  * CloudSync — optional Supabase-backed backup & sync of the whole UserData document.
  * Works only when a Supabase URL + anon key are configured (env or Settings);
@@ -159,7 +160,7 @@ class CloudSync {
     if (!client) return { ok: false, message: t('Cloud sync is not configured.') };
     const { error } = await client.auth.signInWithOtp({
       email: email.trim(),
-      options: { emailRedirectTo: window.location.origin },
+      options: { emailRedirectTo: new URL(getAppBase(), window.location.origin).href },
     });
     if (error) return { ok: false, message: error.message };
     return { ok: true, message: t('Magic link sent — check your inbox and open it on this device.') };

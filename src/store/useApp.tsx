@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState, useCallback } from 'react';
+import { appRouteHref, normalizeAppRoute, readAppRoute } from '../utils/routing';
 import { AppContext } from './AppContext';
 import {
   UserData,
@@ -214,7 +215,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [activeRoute, setActiveRouteState] = useState<string>(() => {
-    return window.location.pathname || '/';
+    return readAppRoute(window.location);
   });
   const [toast, setToast] = useState<{ message: string; type?: 'success' | 'info' | 'error' } | null>(null);
   const [activeFocusSession, setActiveFocusSession] = useState<ActiveFocusSession | null>(null);
@@ -518,18 +519,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [toast]);
 
   const setActiveRoute = useCallback((route: string) => {
-    setActiveRouteState(route);
-    window.history.pushState({}, '', route);
+    setActiveRouteState(normalizeAppRoute(route));
+    window.history.pushState({}, '', appRouteHref(route));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   // Listen to browser back/forward
   useEffect(() => {
     const handlePop = () => {
-      setActiveRouteState(window.location.pathname || '/');
+      setActiveRouteState(readAppRoute(window.location));
     };
     window.addEventListener('popstate', handlePop);
-    return () => window.removeEventListener('popstate', handlePop);
+    window.addEventListener('hashchange', handlePop);
+    return () => {
+      window.removeEventListener('popstate', handlePop);
+      window.removeEventListener('hashchange', handlePop);
+    };
   }, []);
 
   const refreshData = useCallback(async (options?: { skipCloudPull?: boolean }) => {

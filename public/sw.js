@@ -1,62 +1,97 @@
-/* One Decision Away — service worker: offline app shell + cached dream images */
-const VERSION = 'oda-v1';
-const SHELL = ['/', '/index.html', '/manifest.webmanifest', '/icon-192.png', '/icon-512.png'];
+/* One Decision Away — each deployment owns its own offline shell and caches. */
+const BASE = new URL(self.registration.scope);
+const CACHE_PREFIX = `oda:${encodeURIComponent(BASE.pathname)}:`;
+const SHELL_CACHE = `${CACHE_PREFIX}v2`;
+const MEDIA_CACHE = `${SHELL_CACHE}:media`;
+const INDEX_URL = new URL('index.html', BASE).href;
+const SHELL = ['', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-192-maskable.png', 'icon-512-maskable.png', 'apple-touch-icon.png'].map(path => new URL(path, BASE).href);
+const inScope = url => url.origin === BASE.origin && url.pathname.startsWith(BASE.pathname);
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(VERSION).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
+self.addEventListener('install', event => {
+  event.waitUntil(caches.open(SHELL_CACHE).then(cache => cache.addAll(SHELL)).then(() => self.skipWaiting()));
 });
 
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== VERSION).map((k) => caches.delete(k)))).then(() => self.clients.claim())
+    caches.keys().then(keys => Promise.all(keys.filter(key => {
+      const obsoleteScopedCache = key.startsWith(CACHE_PREFIX) && key !== SHELL_CACHE && key !== MEDIA_CACHE;
+      const legacyRootCache = BASE.pathname === '/' && (key === 'oda-v1' || key === 'oda-v1-media');
+      return obsoleteScopedCache || legacyRootCache;
+    }).map(key => caches.delete(key)))).then(() => self.clients.claim())
   );
 });
 
-self.addEventListener('fetch', (event) => {
-  const req = event.request;
-  if (req.method !== 'GET') return;
-  const url = new URL(req.url);
+self.addEventListener('fetch', event => {
+  const request = event.request;
+  if (request.method !== 'GET') return;
+  const url = new URL(request.url);
 
-  // SPA navigations: network first, fall back to cached shell
-  if (req.mode === 'navigate') {
-    event.respondWith(
-      fetch(req)
-        .then((res) => {
-          caches.open(VERSION).then((c) => c.put('/index.html', res.clone()));
-          return res;
-        })
-        .catch(() => caches.match('/index.html'))
-    );
-    return;
-  }
-
-  // Built assets & fonts: cache first
-  if (url.origin === location.origin && url.pathname.startsWith('/assets/')) {
-    event.respondWith(caches.match(req).then((hit) => hit || fetch(req).then((res) => { caches.open(VERSION).then((c) => c.put(req, res.clone())); return res; })));
-    return;
-  }
-
-  // Dream images (Unsplash) & Google fonts: stale-while-revalidate
-  if (url.hostname.includes('unsplash.com') || url.hostname.includes('gstatic.com') || url.hostname.includes('googleapis.com')) {
-    event.respondWith(
-      caches.open(VERSION + '-media').then(async (c) => {
-        const hit = await c.match(req);
-        const net = fetch(req).then((res) => { if (res.ok) c.put(req, res.clone()); return res; }).catch(() => hit);
-        return hit || net;
-      })
-    );
-  }
-});
-
-self.addEventListener('notificationclick', (event) => {
-  event.notification.close();
-  const url = (event.notification.data && event.notification.data.url) || '/app';
-  event.waitUntil(
-    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
-      for (const c of list) {
-        if ('focus' in c) return c.focus();
+  // A hash route never goes to the host. Root history deployments still use
+  // the same network-first shell fallback, without caching a host's 404 page.
+  if (request.mode === 'navigate' && inScope(url)) {
+    event.respondWith((async () => {
+      const cache = await caches.open(SHELL_CACHE);
+      try {
+        const response = await fetch(request);
+        if (response.ok && response.headers.get('content-type')?.includes('text/html')) {
+          await cache.put(INDEX_URL, response.clone());
+          return response;
+        }
+        return (await cache.match(INDEX_URL)) || response;
+      } catch {
+        return (await cache.match(INDEX_URL)) || Response.error();
       }
-      return self.clients.openWindow(url);
-    })
-  );
+    })());
+    return;
+  }
+
+  if ((inScope(url) && url.pathname.startsWith(`${BASE.pathname}assets/`)) || SHELL.includes(url.href)) {
+    event.respondWith((async () => {
+      const cache = await caches.open(SHELL_CACHE);
+      const hit = await cache.match(request);
+      if (hit) return hit;
+      const response = await fetch(request);
+      if (response.ok) await cache.put(request, response.clone());
+      return response;
+    })());
+    return;
+  }
+
+  const mediaHost = url.hostname === 'unsplash.com' || url.hostname.endsWith('.unsplash.com') || url.hostname === 'fonts.gstatic.com' || url.hostname === 'fonts.googleapis.com';
+  if (mediaHost) {
+    const refresh = caches.open(MEDIA_CACHE).then(async cache => {
+      try {
+        const response = await fetch(request);
+        if (response.ok || response.type === 'opaque') await cache.put(request, response.clone());
+        return response;
+      } catch { return undefined; }
+    });
+    event.waitUntil(refresh.then(() => undefined));
+    event.respondWith(caches.open(MEDIA_CACHE).then(async cache => (await cache.match(request)) || (await refresh) || Response.error()));
+  }
+});
+
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  const defaultTarget = new URL(BASE.pathname === '/' ? 'app' : '#/app', BASE);
+  const requested = event.notification.data?.url;
+  let target = defaultTarget;
+  if (typeof requested === 'string') {
+    try {
+      // Also handle notifications created by older versions before the base
+      // path fix, which stored the canonical /app route directly.
+      const candidate = BASE.pathname !== '/' && requested.startsWith('/app')
+        ? new URL(`#${requested}`, BASE)
+        : new URL(requested, BASE);
+      if (inScope(candidate)) target = candidate;
+    } catch { /* Keep the deployment-local home route. */ }
+  }
+  event.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(async clients => {
+    const client = clients.find(item => inScope(new URL(item.url)));
+    if (client) {
+      if ('navigate' in client) await client.navigate(target.href);
+      return client.focus();
+    }
+    return self.clients.openWindow(target.href);
+  }));
 });

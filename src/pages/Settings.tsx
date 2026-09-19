@@ -1,3 +1,4 @@
+import { publicAssetPath } from '../utils/routing';
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../store/useApp';
 import {
@@ -198,7 +199,7 @@ export const Settings: React.FC = () => {
         try {
           new Notification(t('Daily Wisdom: {theme}', { theme: t(currentWisdom.theme) }), {
             body: t('"{quote}" — {author}', { quote: t(currentWisdom.quote), author: t(currentWisdom.author) }),
-            icon: '/favicon.ico',
+            icon: publicAssetPath('icon-192.png'),
           });
         } catch (err) {
           // ignore fallback
@@ -210,7 +211,7 @@ export const Settings: React.FC = () => {
           if (perm === 'granted') {
             new Notification(t('Daily Wisdom: {theme}', { theme: t(currentWisdom.theme) }), {
               body: t('"{quote}" — {author}', { quote: t(currentWisdom.quote), author: t(currentWisdom.author) }),
-              icon: '/favicon.ico',
+              icon: publicAssetPath('icon-192.png'),
             });
           }
         } catch (err) {
