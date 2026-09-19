@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
+import { AppContext } from './AppContext';
 import {
   UserData,
   LifeScoreCategories,
@@ -46,7 +47,7 @@ import { voiceGuide } from '../utils/voiceGuide';
 import { getGuidedMeditation } from '../data/guidedMeditations';
 import { t, getLocale, setLocale, isLocale, hasStoredLocale, ensureLocaleLoaded } from '../i18n';
 
-interface AppContextType {
+export interface AppContextType {
   data: UserData | null;
   isLoading: boolean;
   error: string | null;
@@ -190,7 +191,6 @@ interface AppContextType {
   syncFromCloud: () => Promise<boolean>;
 }
 
-const AppContext = createContext<AppContextType | null>(null);
 
 const repository: DataRepository = createRepository();
 
