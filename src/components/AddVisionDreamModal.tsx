@@ -8,24 +8,7 @@ import {
   Textarea,
   Select,
 } from './ui';
-import {
-  Camera,
-  Globe,
-  Upload,
-  Sparkles,
-  FlipHorizontal,
-  Trash2,
-  Check,
-  Star,
-  Car,
-  Home,
-  Clock,
-  Plane,
-  Compass,
-  Briefcase,
-  Layers,
-  Image as ImageIcon,
-} from 'lucide-react';
+import { Camera, Globe, Upload, Sparkles, FlipHorizontal, Trash2 } from 'lucide-react';
 import { MarketCategory, MarketItem } from '../types/models';
 import { triggerBigRewardConfetti } from '../utils/confetti';
 import { useT } from '../i18n';
@@ -205,7 +188,7 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
       const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
       setImageUrl(dataUrl);
       stopCamera();
-      showToast(t('Live photo captured and attached to your vision goal! 📸'), 'success');
+      showToast(t('Photo attached.'), 'success');
     }
   };
 
@@ -244,7 +227,7 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
     setDescription(preset.desc);
     setWhyWanted(preset.why);
     setFirstRealStep(preset.step);
-    showToast(t('"{name}" template applied.', { name: preset.name }), 'info');
+    showToast(t('"{name}" applied.', { name: preset.name }), 'info');
   };
 
   const handleRealPriceChange = (val: number) => {
@@ -278,8 +261,8 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
       triggerBigRewardConfetti();
       showToast(
         pinToVision
-          ? t('"{name}" added to your Vision Board and Dream Market! ⭐', { name: name.trim() })
-          : t('"{name}" added to your Dream Market!', { name: name.trim() }),
+          ? t('"{name}" added to your Vision Board.', { name: name.trim() })
+          : t('"{name}" added to your dreams.', { name: name.trim() }),
         'success'
       );
 
@@ -322,105 +305,83 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
     'Giving',
   ];
 
+  const sourceTabs: { id: MediaSourceMode; label: string; icon: React.ComponentType<{ className?: string; strokeWidth?: number }>; onSelect: () => void }[] = [
+    {
+      id: 'camera',
+      label: t('Camera'),
+      icon: Camera,
+      onSelect: () => {
+        setActiveTab('camera');
+        startCamera();
+      },
+    },
+    {
+      id: 'web_url',
+      label: t('Link'),
+      icon: Globe,
+      onSelect: () => {
+        stopCamera();
+        setActiveTab('web_url');
+      },
+    },
+    {
+      id: 'upload',
+      label: t('Upload'),
+      icon: Upload,
+      onSelect: () => {
+        stopCamera();
+        setActiveTab('upload');
+      },
+    },
+    {
+      id: 'preset',
+      label: t('Ideas'),
+      icon: Sparkles,
+      onSelect: () => {
+        stopCamera();
+        setActiveTab('preset');
+      },
+    },
+  ];
+
   return (
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      title={t('Add to Vision Board / Dream Market')}
-      subtitle={t('Photograph something you saw in real life, or add an image you love from the web, and make it part of your vision.')}
+      title={t('Add a dream')}
+      subtitle={t('Photograph something you saw, or add an image you love.')}
       maxWidth="lg"
     >
-      <form onSubmit={handleSave} className="space-y-5">
-        {/* Source Media Mode Switcher */}
-        <div className="space-y-2">
-          <span className="text-xs font-bold uppercase tracking-wider text-[var(--fg-muted)] block">
-            {t('Choose an image source:')}
-          </span>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            <button
-              type="button"
-              onClick={() => {
-                setActiveTab('camera');
-                startCamera();
-              }}
-              className={`p-2.5 rounded-[var(--radius-md)] border text-left flex flex-col gap-1 transition-all cursor-pointer ${
-                activeTab === 'camera'
-                  ? 'border-[var(--color-sage)] bg-[var(--color-sage)]/10 text-[var(--fg)] font-semibold shadow-xs'
-                  : 'border-[var(--border)] bg-[var(--bg-muted)] text-[var(--fg-muted)] hover:text-[var(--fg)]'
-              }`}
-            >
-              <div className="flex items-center gap-1.5 text-xs">
-                <Camera className="w-3.5 h-3.5 text-[var(--color-sage)]" />
-                <span>{t('Live Camera')}</span>
-              </div>
-              <span className="text-[10px] text-[var(--fg-subtle)]">{t('Photograph it in real life')}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                stopCamera();
-                setActiveTab('web_url');
-              }}
-              className={`p-2.5 rounded-[var(--radius-md)] border text-left flex flex-col gap-1 transition-all cursor-pointer ${
-                activeTab === 'web_url'
-                  ? 'border-[var(--color-sage)] bg-[var(--color-sage)]/10 text-[var(--fg)] font-semibold shadow-xs'
-                  : 'border-[var(--border)] bg-[var(--bg-muted)] text-[var(--fg-muted)] hover:text-[var(--fg)]'
-              }`}
-            >
-              <div className="flex items-center gap-1.5 text-xs">
-                <Globe className="w-3.5 h-3.5 text-sky-500" />
-                <span>{t('Web Link')}</span>
-              </div>
-              <span className="text-[10px] text-[var(--fg-subtle)]">{t('Paste a web URL')}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                stopCamera();
-                setActiveTab('upload');
-              }}
-              className={`p-2.5 rounded-[var(--radius-md)] border text-left flex flex-col gap-1 transition-all cursor-pointer ${
-                activeTab === 'upload'
-                  ? 'border-[var(--color-sage)] bg-[var(--color-sage)]/10 text-[var(--fg)] font-semibold shadow-xs'
-                  : 'border-[var(--border)] bg-[var(--bg-muted)] text-[var(--fg-muted)] hover:text-[var(--fg)]'
-              }`}
-            >
-              <div className="flex items-center gap-1.5 text-xs">
-                <Upload className="w-3.5 h-3.5 text-amber-500" />
-                <span>{t('Upload File')}</span>
-              </div>
-              <span className="text-[10px] text-[var(--fg-subtle)]">{t('Pick an image from your device')}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                stopCamera();
-                setActiveTab('preset');
-              }}
-              className={`p-2.5 rounded-[var(--radius-md)] border text-left flex flex-col gap-1 transition-all cursor-pointer ${
-                activeTab === 'preset'
-                  ? 'border-[var(--color-sage)] bg-[var(--color-sage)]/10 text-[var(--fg)] font-semibold shadow-xs'
-                  : 'border-[var(--border)] bg-[var(--bg-muted)] text-[var(--fg-muted)] hover:text-[var(--fg)]'
-              }`}
-            >
-              <div className="flex items-center gap-1.5 text-xs">
-                <Sparkles className="w-3.5 h-3.5 text-[var(--color-coral)]" />
-                <span>{t('Quick Inspiration')}</span>
-              </div>
-              <span className="text-[10px] text-[var(--fg-subtle)]">{t('Curated templates')}</span>
-            </button>
+      <form onSubmit={handleSave} className="space-y-6">
+        {/* Image source */}
+        <div className="space-y-3">
+          <span className="block text-[13px] font-medium text-[var(--fg-muted)]">{t('Image')}</span>
+          <div className="grid grid-cols-4 gap-1 p-1 bg-[var(--bg-muted)] rounded-[var(--radius-sm)]">
+            {sourceTabs.map((tab) => {
+              const Icon = tab.icon;
+              const active = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={tab.onSelect}
+                  className={`h-10 rounded-[var(--radius-xs)] flex items-center justify-center gap-1.5 text-[13px] font-medium transition-colors cursor-pointer ${
+                    active
+                      ? 'bg-[var(--bg)] text-[var(--fg)] shadow-[var(--shadow-md)]'
+                      : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
+                  }`}
+                >
+                  <Icon className="w-[18px] h-[18px]" strokeWidth={1.8} />
+                  <span className="hidden sm:inline">{tab.label}</span>
+                </button>
+              );
+            })}
           </div>
-        </div>
 
-        {/* Media Preview & Input Box based on Active Tab */}
-        <div className="space-y-2">
           {activeTab === 'camera' && (
             <div>
               {isCameraActive ? (
-                <div className="w-full h-64 rounded-[var(--radius-md)] overflow-hidden relative bg-black border-2 border-[var(--color-sage)] shadow-inner">
+                <div className="w-full h-64 rounded-[var(--radius-md)] overflow-hidden relative bg-[#111111]">
                   <video
                     ref={videoRef}
                     autoPlay
@@ -428,97 +389,68 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
                     muted
                     className={`w-full h-full object-cover ${cameraFacing === 'user' ? 'scale-x-[-1]' : ''}`}
                   />
-                  <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] text-white flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                    {t('Camera Active ({side})', { side: cameraFacing === 'user' ? t('Front') : t('Back') })}
-                  </div>
-
                   <button
                     type="button"
                     onClick={toggleCameraFacing}
-                    className="absolute top-3 right-3 p-2 rounded-full bg-black/60 backdrop-blur-xs text-white hover:bg-black/90 transition-colors"
+                    className="absolute top-3 right-3 w-10 h-10 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/80 transition-colors cursor-pointer"
                     title={t('Switch camera')}
                   >
-                    <FlipHorizontal className="w-4 h-4" />
+                    <FlipHorizontal className="w-[18px] h-[18px]" strokeWidth={1.8} />
                   </button>
-
-                  <div className="absolute bottom-3 inset-x-0 flex items-center justify-center gap-4">
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      className="bg-black/60 text-white hover:bg-black/90"
-                      onClick={stopCamera}
-                    >
-                      {t('Close Camera')}
-                    </Button>
+                  <button
+                    type="button"
+                    onClick={stopCamera}
+                    className="absolute top-3 left-3 h-10 px-3.5 rounded-full bg-black/60 text-white text-[13px] font-medium hover:bg-black/80 transition-colors cursor-pointer"
+                  >
+                    {t('Close')}
+                  </button>
+                  <div className="absolute bottom-4 inset-x-0 flex items-center justify-center">
                     <button
                       type="button"
                       onClick={capturePhoto}
-                      className="w-12 h-12 rounded-full border-4 border-white bg-red-600 hover:bg-red-500 active:scale-95 transition-all shadow-lg flex items-center justify-center cursor-pointer"
+                      className="w-14 h-14 rounded-full border-4 border-white bg-white/20 hover:bg-white/40 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
                       title={t('Take photo')}
                     >
-                      <Camera className="w-5 h-5 text-white" />
+                      <Camera className="w-5 h-5 text-white" strokeWidth={1.8} />
                     </button>
                   </div>
                 </div>
               ) : imageUrl ? (
-                <div className="w-full h-52 rounded-[var(--radius-md)] overflow-hidden relative bg-black border border-[var(--border)] group">
+                <div className="w-full h-52 rounded-[var(--radius-md)] overflow-hidden relative bg-[var(--bg-muted)]">
                   <img
                     src={imageUrl}
                     alt={t('Captured photo')}
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute top-2.5 left-2.5 bg-black/75 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] text-white flex items-center gap-1">
-                    <Check className="w-3 h-3 text-[var(--color-sage)]" /> {t('Live Photo Attached')}
-                  </div>
-                  <div className="absolute bottom-2.5 right-2.5 flex items-center gap-2">
-                    <Button
+                  <div className="absolute bottom-3 right-3 flex items-center gap-2">
+                    <button
                       type="button"
-                      variant="secondary"
-                      size="sm"
-                      icon={Camera}
                       onClick={() => startCamera()}
-                      className="bg-black/75 text-white border-0 hover:bg-black"
+                      className="h-10 px-3.5 rounded-full bg-black/60 text-white text-[13px] font-medium hover:bg-black/80 transition-colors cursor-pointer"
                     >
                       {t('Retake')}
-                    </Button>
-                    <Button
+                    </button>
+                    <button
                       type="button"
-                      variant="ghost"
-                      size="sm"
-                      icon={Trash2}
                       onClick={() => setImageUrl('')}
-                      className="bg-black/75 text-red-400 border-0 hover:bg-black"
+                      className="w-10 h-10 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/80 transition-colors cursor-pointer"
+                      title={t('Remove')}
                     >
-                      {t('Remove')}
-                    </Button>
+                      <Trash2 className="w-[18px] h-[18px]" strokeWidth={1.8} />
+                    </button>
                   </div>
                 </div>
               ) : (
-                <div className="p-6 border-2 border-dashed border-[var(--border)] rounded-[var(--radius-md)] bg-[var(--bg-muted)] text-center space-y-2">
-                  <Camera className="w-8 h-8 text-[var(--color-sage)] mx-auto" />
-                  <div className="text-xs font-semibold text-[var(--fg)]">
-                    {t('Photograph Something You See in Real Life')}
-                  </div>
-                  <p className="text-[11px] text-[var(--fg-muted)] max-w-sm mx-auto">
-                    {t('Spotted a car, a building, a desk or a watch you love? Capture it on the spot.')}
+                <div className="p-6 rounded-[var(--radius-md)] bg-[var(--bg-muted)] text-center space-y-3">
+                  <Camera className="w-6 h-6 text-[var(--fg-subtle)] mx-auto" strokeWidth={1.8} />
+                  <p className="text-[14px] text-[var(--fg-muted)] max-w-sm mx-auto leading-relaxed">
+                    {t('Spotted a car, a home, a desk or a watch you love? Capture it on the spot.')}
                   </p>
-                  <Button
-                    type="button"
-                    variant="accent"
-                    size="sm"
-                    icon={Camera}
-                    onClick={() => startCamera()}
-                  >
-                    {t('Start Camera & Capture')}
+                  <Button type="button" variant="secondary" icon={Camera} onClick={() => startCamera()}>
+                    {t('Open camera')}
                   </Button>
-                  {cameraError && (
-                    <div className="p-2 text-xs bg-amber-500/10 text-amber-700 dark:text-amber-300 rounded border border-amber-500/20">
-                      {cameraError}
-                    </div>
-                  )}
+                  {cameraError && <p className="text-[13px] text-[var(--danger)]">{cameraError}</p>}
                 </div>
               )}
             </div>
@@ -528,19 +460,18 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
             <div className="space-y-3">
               <Field
                 id="dream-web-url"
-                label={t('Web Image Link (URL)')}
-                helper={t('Paste a direct image link from Pinterest, Unsplash, Instagram, architecture magazines or Google Images.')}
+                label={t('Image link')}
+                helper={t('Paste a direct image link from Pinterest, Unsplash or anywhere on the web.')}
               >
                 <Input
                   id="dream-web-url"
                   value={imageUrl}
                   onChange={(e) => setImageUrl(e.target.value)}
-                  placeholder={t('https://images.unsplash.com/... or https://...')}
+                  placeholder="https://"
                 />
               </Field>
-
               {imageUrl && (
-                <div className="w-full h-44 rounded-[var(--radius-md)] overflow-hidden border border-[var(--border)] relative bg-black">
+                <div className="w-full h-44 rounded-[var(--radius-md)] overflow-hidden bg-[var(--bg-muted)]">
                   <img
                     src={imageUrl}
                     alt={t('Web preview')}
@@ -550,9 +481,6 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
                       showToast(t('Could not load the image link. Please enter a valid direct image URL.'), 'error');
                     }}
                   />
-                  <div className="absolute top-2 left-2 bg-black/75 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] text-white">
-                    {t('Web Image Preview')}
-                  </div>
                 </div>
               )}
             </div>
@@ -571,27 +499,21 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
                 }}
                 className="hidden"
               />
-
               {imageUrl ? (
-                <div className="w-full h-44 rounded-[var(--radius-md)] overflow-hidden border border-[var(--border)] relative bg-black">
+                <div className="w-full h-44 rounded-[var(--radius-md)] overflow-hidden relative bg-[var(--bg-muted)]">
                   <img
                     src={imageUrl}
                     alt={t('Uploaded image')}
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute top-2 left-2 bg-black/75 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] text-white">
-                    {t('File Uploaded')}
-                  </div>
-                  <Button
+                  <button
                     type="button"
-                    variant="secondary"
-                    size="sm"
                     onClick={() => fileInputRef.current?.click()}
-                    className="absolute bottom-2 right-2 bg-black/75 text-white"
+                    className="absolute bottom-3 right-3 h-10 px-3.5 rounded-full bg-black/60 text-white text-[13px] font-medium hover:bg-black/80 transition-colors cursor-pointer"
                   >
-                    {t('Choose Another Image')}
-                  </Button>
+                    {t('Choose another')}
+                  </button>
                 </div>
               ) : (
                 <div
@@ -601,27 +523,18 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
                   }}
                   onDragLeave={() => setIsDragOver(false)}
                   onDrop={handleDrop}
-                  className={`p-6 border-2 border-dashed rounded-[var(--radius-md)] text-center transition-all ${
+                  className={`p-6 rounded-[var(--radius-md)] text-center space-y-3 transition-colors border ${
                     isDragOver
-                      ? 'border-[var(--color-sage)] bg-[var(--color-sage)]/5'
-                      : 'border-[var(--border)] bg-[var(--bg-muted)] hover:border-[var(--border-strong)]'
+                      ? 'border-[var(--border-strong)] bg-[var(--bg-inset)]'
+                      : 'border-transparent bg-[var(--bg-muted)]'
                   }`}
                 >
-                  <Upload className="w-8 h-8 text-[var(--fg-muted)] mx-auto mb-2" />
-                  <div className="text-xs font-semibold text-[var(--fg)]">
-                    {t('Drag a Photo Here or Choose a File')}
-                  </div>
-                  <p className="text-[11px] text-[var(--fg-subtle)] my-2">
-                    {t('PNG, JPG and WEBP are supported.')}
+                  <Upload className="w-6 h-6 text-[var(--fg-subtle)] mx-auto" strokeWidth={1.8} />
+                  <p className="text-[14px] text-[var(--fg-muted)] leading-relaxed">
+                    {t('Drop an image here, or choose a file. PNG, JPG and WEBP work.')}
                   </p>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    icon={Upload}
-                    onClick={() => fileInputRef.current?.click()}
-                  >
-                    {t('Upload from Device')}
+                  <Button type="button" variant="secondary" icon={Upload} onClick={() => fileInputRef.current?.click()}>
+                    {t('Choose file')}
                   </Button>
                 </div>
               )}
@@ -629,50 +542,42 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
           )}
 
           {activeTab === 'preset' && (
-            <div className="space-y-2">
-              <span className="text-xs font-semibold text-[var(--fg-muted)] block">
-                {t('Curated Luxury & Vision Templates:')}
-              </span>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-56 overflow-y-auto pr-1">
-                {INSPIRATION_PRESETS.map((preset, idx) => (
-                  <div
-                    key={idx}
-                    onClick={() => handleApplyPreset(preset)}
-                    className="p-2.5 border border-[var(--border)] rounded-[var(--radius-md)] bg-[var(--bg-elevated)] hover:border-[var(--color-sage)] cursor-pointer flex items-center gap-2.5 transition-all group"
-                  >
-                    <img
-                      src={preset.img}
-                      alt={preset.name}
-                      referrerPolicy="no-referrer"
-                      className="w-12 h-12 rounded object-cover border border-[var(--border)] shrink-0 group-hover:scale-105 transition-transform"
-                    />
-                    <div className="min-w-0 flex-1">
-                      <h5 className="text-xs font-bold text-[var(--fg)] truncate">{preset.name}</h5>
-                      <span className="text-[10px] text-[var(--fg-muted)] block">{t(preset.category)}</span>
-                      <span className="text-[10px] font-mono text-[var(--color-sage)] font-semibold">
-                        ${preset.realUsd.toLocaleString()} USD · D$ {preset.dPrice.toLocaleString()}
-                      </span>
+            <div className="rounded-[var(--radius-md)] bg-[var(--bg-muted)] overflow-hidden max-h-72 overflow-y-auto">
+              {INSPIRATION_PRESETS.map((preset, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => handleApplyPreset(preset)}
+                  className={`w-full min-h-[56px] px-4 py-2.5 flex items-center gap-3 text-left cursor-pointer hover:bg-[var(--bg-inset)] transition-colors ${
+                    idx > 0 ? 'border-t border-[var(--border)]' : ''
+                  }`}
+                >
+                  <img
+                    src={preset.img}
+                    alt={preset.name}
+                    referrerPolicy="no-referrer"
+                    className="w-10 h-10 rounded-[var(--radius-xs)] object-cover shrink-0 bg-[var(--bg-inset)]"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[15px] font-medium text-[var(--fg)] truncate">{preset.name}</div>
+                    <div className="text-[13px] text-[var(--fg-muted)] truncate">
+                      {t(preset.category)} · D$ {preset.dPrice.toLocaleString()}
                     </div>
                   </div>
-                ))}
-              </div>
+                </button>
+              ))}
             </div>
           )}
         </div>
 
-        {/* Dream Details Inputs */}
-        <div className="space-y-3.5 pt-2 border-t border-[var(--border)]">
-          <Field
-            id="dream-name"
-            label={t('Dream / Vision Title')}
-            required
-            helper={t('e.g. Porsche 911 GT3 RS, Modern Villa on Lake Como, Patek Philippe Nautilus, Minimalist Studio')}
-          >
+        {/* Details */}
+        <div className="space-y-4">
+          <Field id="dream-name" label={t('Name')} required>
             <Input
               id="dream-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder={t('e.g. Ferrari 296 GTB or a custom mountain retreat')}
+              placeholder={t('e.g. Porsche 911 GT3 RS')}
             />
           </Field>
 
@@ -686,11 +591,7 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
               />
             </Field>
 
-            <Field
-              id="dream-real-price"
-              label={t('Estimated Real-World Value ($ USD)')}
-              helper={t('Estimated market or acquisition price.')}
-            >
+            <Field id="dream-real-price" label={t('Real price (USD)')}>
               <Input
                 id="dream-real-price"
                 type="number"
@@ -701,78 +602,60 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
             </Field>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Field
+          <Field id="dream-d-price" label={t('Dream Dollar price')} helper={t('Suggested from the real price.')}>
+            <Input
               id="dream-d-price"
-              label={t('Dream Dollar Price (D$)')}
-              helper={t('Suggested: real USD × 0.008')}
-            >
-              <Input
-                id="dream-d-price"
-                type="number"
-                min={50}
-                value={dreamDollarPrice}
-                onChange={(e) => setDreamDollarPrice(parseInt(e.target.value) || 100)}
-              />
-            </Field>
+              type="number"
+              min={50}
+              value={dreamDollarPrice}
+              onChange={(e) => setDreamDollarPrice(parseInt(e.target.value) || 100)}
+            />
+          </Field>
 
-            <Field
+          <Field id="dream-why" label={t('Why you want it')}>
+            <Input
               id="dream-why"
-              label={t('Why Do You Want This Dream?')}
-              helper={t('Your emotional anchor and future-self standard.')}
-            >
-              <Input
-                id="dream-why"
-                value={whyWanted}
-                onChange={(e) => setWhyWanted(e.target.value)}
-                placeholder={t('e.g. Focused work discipline and uncompromising personal freedom.')}
-              />
-            </Field>
-          </div>
+              value={whyWanted}
+              onChange={(e) => setWhyWanted(e.target.value)}
+              placeholder={t('One honest sentence.')}
+            />
+          </Field>
 
-          <Field
-            id="dream-first-step"
-            label={t('First Concrete Real-World Step')}
-            helper={t('What is the first physical move that connects this dream to reality?')}
-          >
+          <Field id="dream-first-step" label={t('First real step')}>
             <Input
               id="dream-first-step"
               value={firstRealStep}
               onChange={(e) => setFirstRealStep(e.target.value)}
-              placeholder={t('e.g. Open a dedicated savings sub-account, book a test drive / visit, or study the floor plans.')}
+              placeholder={t('e.g. Open a savings account, book a test drive.')}
             />
           </Field>
 
-          {/* Pin to Vision Board Option */}
-          <div className="p-3 bg-[var(--bg-muted)] border border-[var(--border)] rounded-[var(--radius-md)] flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <Star className="w-4 h-4 text-amber-500 fill-current" />
-              <div>
-                <div className="text-xs font-bold text-[var(--fg)]">
-                  {t('Pin to Vision Board as a Priority ⭐')}
-                </div>
-                <div className="text-[11px] text-[var(--fg-muted)]">
-                  {t('Feature it in your Daily Vision Affirmations on the Home page and on your Vision Board.')}
-                </div>
-              </div>
+          {/* Pin to Vision Board */}
+          <label
+            htmlFor="pin-vision-check"
+            className="min-h-[56px] px-4 py-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)] flex items-center justify-between gap-3 cursor-pointer"
+          >
+            <div className="min-w-0">
+              <div className="text-[15px] font-medium text-[var(--fg)]">{t('Pin to Vision Board')}</div>
+              <div className="text-[13px] text-[var(--fg-muted)]">{t('Shows in your daily vision and on the board.')}</div>
             </div>
             <input
               type="checkbox"
               id="pin-vision-check"
               checked={pinToVision}
               onChange={(e) => setPinToVision(e.target.checked)}
-              className="w-4 h-4 text-[var(--color-sage)] rounded cursor-pointer"
+              className="w-5 h-5 accent-[var(--accent)] cursor-pointer shrink-0"
             />
-          </div>
+          </label>
         </div>
 
-        {/* Modal Actions */}
-        <div className="flex justify-end gap-3 pt-3 border-t border-[var(--border)]">
+        {/* Actions */}
+        <div className="flex justify-end gap-2 pt-1">
           <Button variant="ghost" type="button" onClick={handleClose}>
             {t('Cancel')}
           </Button>
           <Button variant="primary" type="submit" disabled={!name.trim()}>
-            {t('Save to Vision & Market')}
+            {t('Save dream')}
           </Button>
         </div>
       </form>

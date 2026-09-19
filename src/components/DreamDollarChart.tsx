@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   ResponsiveContainer,
   BarChart,
@@ -11,20 +11,35 @@ import {
   ReferenceLine,
 } from 'recharts';
 import { WalletTransaction } from '../types/models';
-import { Card, Badge } from './ui';
-import {
-  TrendingUp,
-  Coins,
-  Sparkles,
-  Calendar,
-  Zap,
-  Target,
-  CheckCircle2,
-  Clock,
-  Flame,
-} from 'lucide-react';
 import { ECONOMY_CONSTANTS } from '../services/economy';
 import { getSpeechLang, useT } from '../i18n';
+
+/* ----------------------------- Chart palette ----------------------------- */
+const readVar = (name: string, fallback: string): string => {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return fallback;
+  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  return v || fallback;
+};
+
+const readChartColors = () => ({
+  accent: readVar('--accent', '#1F5F3F'),
+  secondary: readVar('--border-strong', '#C9C9C6'),
+  tertiary: readVar('--fg-muted', '#6F6F6C'),
+  grid: readVar('--border', '#E4E4E1'),
+  text: readVar('--fg-muted', '#6F6F6C'),
+  fg: readVar('--fg', '#111111'),
+});
+
+const useChartColors = () => {
+  const [colors, setColors] = useState(readChartColors);
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const observer = new MutationObserver(() => setColors(readChartColors()));
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'class'] });
+    return () => observer.disconnect();
+  }, []);
+  return colors;
+};
 
 export interface DreamDollarChartProps {
   transactions: WalletTransaction[];
@@ -66,112 +81,48 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload }) => {
 
   const d = payload[0].payload as DayEarningsData;
 
+  const row = (label: string, amount: number) => (
+    <div className="flex items-center justify-between gap-4 text-[var(--fg-muted)]">
+      <span>{label}</span>
+      <span className="text-[var(--fg)] font-medium">+D$ {amount.toLocaleString()}</span>
+    </div>
+  );
+
   return (
-    <div className="bg-[var(--bg-elevated)] border border-[var(--border-strong)] shadow-[var(--shadow-md)] rounded-[var(--radius-sm)] p-3 text-xs min-w-[200px] pointer-events-none transition-all duration-75">
-      {/* Date Header */}
-      <div className="flex items-center justify-between gap-3 border-b border-[var(--border)] pb-1.5 mb-2 font-sans">
+    <div className="bg-[var(--bg)] border border-[var(--border)] rounded-[var(--radius-sm)] text-[12px] p-3 min-w-[200px] pointer-events-none">
+      <div className="flex items-center justify-between gap-3 pb-2 mb-2 border-b border-[var(--border)]">
         <div>
-          <span className="font-bold text-[var(--fg)] text-xs block">
-            {d.fullWeekday}
-          </span>
-          <span className="text-[10px] text-[var(--fg-subtle)]">
-            {d.dateLabel} ({d.dayKey})
-          </span>
+          <span className="font-semibold text-[var(--fg)] block">{d.fullWeekday}</span>
+          <span className="text-[var(--fg-muted)]">{d.dateLabel}</span>
         </div>
-        {d.isToday && (
-          <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-[var(--color-sage)] text-white">
-            {t('Today')}
-          </span>
-        )}
+        {d.isToday && <span className="text-[var(--accent)] font-medium">{t('Today')}</span>}
       </div>
 
-      {/* Total Earnings */}
-      <div className="space-y-1.5 font-sans">
-        <div className="flex items-center justify-between text-xs pb-1 border-b border-[var(--border)]">
-          <span className="text-[var(--fg-muted)] font-medium">{t('Total Earned:')}</span>
-          <span className="font-mono font-bold text-[var(--color-sage)] text-sm">
-            + D$ {d.earnings.toLocaleString()}
-          </span>
+      <div className="space-y-1">
+        <div className="flex items-center justify-between gap-4">
+          <span className="text-[var(--fg-muted)]">{t('Total Earned:')}</span>
+          <span className="font-semibold text-[var(--accent)]">+D$ {d.earnings.toLocaleString()}</span>
         </div>
 
-        {/* Source breakdown if earnings > 0 */}
         {d.earnings > 0 ? (
-          <div className="space-y-1 pt-0.5 text-[11px]">
-            {d.missionsEarned > 0 && (
-              <div className="flex items-center justify-between text-[var(--fg-muted)]">
-                <span className="flex items-center gap-1">
-                  <Target className="w-3 h-3 text-[var(--color-sage)] shrink-0" />
-                  <span>{t('Missions & Decisions:')}</span>
-                </span>
-                <span className="font-mono font-semibold text-[var(--fg)]">
-                  +D$ {d.missionsEarned.toLocaleString()}
-                </span>
-              </div>
-            )}
-
-            {d.habitsEarned > 0 && (
-              <div className="flex items-center justify-between text-[var(--fg-muted)]">
-                <span className="flex items-center gap-1">
-                  <Zap className="w-3 h-3 text-amber-500 shrink-0" />
-                  <span>{t('Micro-Habits:')}</span>
-                </span>
-                <span className="font-mono font-semibold text-[var(--fg)]">
-                  +D$ {d.habitsEarned.toLocaleString()}
-                </span>
-              </div>
-            )}
-
-            {d.focusEarned > 0 && (
-              <div className="flex items-center justify-between text-[var(--fg-muted)]">
-                <span className="flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-sky-500 shrink-0" />
-                  <span>{t('Focus Deep Work:')}</span>
-                </span>
-                <span className="font-mono font-semibold text-[var(--fg)]">
-                  +D$ {d.focusEarned.toLocaleString()}
-                </span>
-              </div>
-            )}
-
-            {d.checkInsEarned > 0 && (
-              <div className="flex items-center justify-between text-[var(--fg-muted)]">
-                <span className="flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3 text-teal-500 shrink-0" />
-                  <span>{t('Check-In Reflection:')}</span>
-                </span>
-                <span className="font-mono font-semibold text-[var(--fg)]">
-                  +D$ {d.checkInsEarned.toLocaleString()}
-                </span>
-              </div>
-            )}
-
-            {d.bonusesEarned > 0 && (
-              <div className="flex items-center justify-between text-[var(--fg-muted)]">
-                <span className="flex items-center gap-1">
-                  <Flame className="w-3 h-3 text-[var(--color-coral)] shrink-0" />
-                  <span>{t('Streaks & Grants:')}</span>
-                </span>
-                <span className="font-mono font-semibold text-[var(--fg)]">
-                  +D$ {d.bonusesEarned.toLocaleString()}
-                </span>
-              </div>
-            )}
-
-            <div className="text-[10px] text-[var(--fg-subtle)] pt-1 text-right">
+          <div className="space-y-1 pt-1">
+            {d.missionsEarned > 0 && row(t('Missions & Decisions:'), d.missionsEarned)}
+            {d.habitsEarned > 0 && row(t('Micro-Habits:'), d.habitsEarned)}
+            {d.focusEarned > 0 && row(t('Focus Deep Work:'), d.focusEarned)}
+            {d.checkInsEarned > 0 && row(t('Check-In Reflection:'), d.checkInsEarned)}
+            {d.bonusesEarned > 0 && row(t('Streaks & Grants:'), d.bonusesEarned)}
+            <div className="text-[var(--fg-subtle)] pt-1">
               {d.txCount === 1 ? t('1 deposit transaction') : t('{n} deposit transactions', { n: d.txCount })}
             </div>
           </div>
         ) : (
-          <div className="text-[11px] text-[var(--fg-subtle)] py-1 italic">
-            {t('Zero currency generated on this date.')}
-          </div>
+          <div className="text-[var(--fg-subtle)] py-1">{t('Nothing earned on this day.')}</div>
         )}
 
-        {/* Spent info if any */}
         {d.spent > 0 && (
-          <div className="flex items-center justify-between pt-1.5 border-t border-[var(--border)] text-[11px] text-[var(--color-coral)]">
-            <span>{t('Marketplace Outflow:')}</span>
-            <span className="font-mono font-semibold">- D$ {d.spent.toLocaleString()}</span>
+          <div className="flex items-center justify-between gap-4 pt-2 border-t border-[var(--border)] text-[var(--fg-muted)]">
+            <span>{t('Spent:')}</span>
+            <span className="text-[var(--fg)] font-medium">-D$ {d.spent.toLocaleString()}</span>
           </div>
         )}
       </div>
@@ -185,6 +136,7 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
   dailyCap = ECONOMY_CONSTANTS.DAILY_REWARD_CAP,
 }) => {
   const t = useT();
+  const colors = useChartColors();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   // Compute 7-day chronological data array (6 days ago to today)
@@ -300,101 +252,80 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
     return Math.max(Math.ceil((maxVal * 1.2) / 100) * 100, 300);
   }, [chartData]);
 
-  return (
-    <Card padding="md" className={`space-y-4 ${className}`}>
-      {/* Header & Quick Velocity Overview */}
-      <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-3 pb-3 border-b border-[var(--border)]">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="font-sans text-[9px] font-bold uppercase tracking-[0.25em] text-[var(--color-sage)]">
-              {t('Fig. 01 — 7-Day Output')}
-            </span>
-            <Badge variant="sage">{t('Recharts Engine')}</Badge>
-          </div>
-          <h3 className="text-xl font-bold font-display text-[var(--fg)] flex items-center gap-2">
-            <Coins className="w-5 h-5 text-[var(--color-sage)]" />
-            {t('7-Day Dream Dollar Earnings')}
-          </h3>
-          <p className="text-xs text-[var(--fg-muted)] font-sans">
-            {t('Daily distribution of symbolic currency earned through focus sessions, missions, and identity votes.')}
-          </p>
-        </div>
+  const breakdownRows = [
+    { label: t('Missions & OD'), amount: metrics.breakdown.missions },
+    { label: t('Micro-Habits'), amount: metrics.breakdown.habits },
+    { label: t('Focus Work'), amount: metrics.breakdown.focus },
+    { label: t('Check-ins & Bonus'), amount: metrics.breakdown.checkIns + metrics.breakdown.bonuses },
+  ];
 
-        {/* 7-Day Total Tag */}
-        <div className="flex items-center gap-2 self-start sm:self-auto bg-[var(--bg-muted)] border border-[var(--border)] px-3 py-1.5 rounded-[var(--radius-sm)]">
-          <TrendingUp className="w-4 h-4 text-[var(--color-sage)]" />
-          <div className="text-right">
-            <span className="text-[9px] uppercase tracking-wider text-[var(--fg-subtle)] font-bold block">
-              {t('7-Day Total')}
-            </span>
-            <span className="font-mono font-bold text-sm text-[var(--fg)]">
-              + D$ {metrics.totalEarned.toLocaleString()}
-            </span>
+  return (
+    <div className={`bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-6 ${className}`}>
+      {/* Header */}
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h3 className="text-[15px] font-semibold text-[var(--fg)]">{t('Earnings')}</h3>
+          <p className="text-[13px] text-[var(--fg-muted)] mt-0.5">{t('Dream Dollars earned each day, last 7 days.')}</p>
+        </div>
+        <div className="text-right shrink-0">
+          <div className="text-[22px] font-semibold text-[var(--accent)] leading-none">
+            +D$ {metrics.totalEarned.toLocaleString()}
           </div>
+          <div className="text-[12px] text-[var(--fg-muted)] mt-1">{t('7-Day Total')}</div>
         </div>
       </div>
 
-      {/* 4 Key Performance Indicators */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 p-3 bg-[var(--bg-muted)] border border-[var(--border)] rounded-[var(--radius-sm)]">
-        <div className="space-y-0.5">
-          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--fg-subtle)] flex items-center gap-1">
-            <Calendar className="w-3 h-3 text-[var(--color-sage)]" /> {t("Today's Output")}
-          </span>
-          <div className="text-lg font-bold font-display text-[var(--color-sage)]">
-            + D$ {metrics.todayData.earnings.toLocaleString()}
+      {/* KPI tiles */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="bg-[var(--bg)] rounded-[var(--radius-sm)] p-4">
+          <div className="text-[22px] font-semibold text-[var(--accent)] leading-none">
+            +D$ {metrics.todayData.earnings.toLocaleString()}
           </div>
-          <span className="text-[10px] text-[var(--fg-subtle)] font-sans">
+          <div className="text-[12px] text-[var(--fg-muted)] mt-2">{t("Today's Output")}</div>
+          <div className="text-[12px] text-[var(--fg-subtle)] mt-0.5">
             {metrics.todayData.txCount === 1
               ? t('1 action logged today')
               : t('{n} actions logged today', { n: metrics.todayData.txCount })}
-          </span>
+          </div>
         </div>
 
-        <div className="space-y-0.5">
-          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--fg-subtle)] flex items-center gap-1">
-            <TrendingUp className="w-3 h-3 text-[var(--fg-muted)]" /> {t('Daily Average')}
-          </span>
-          <div className="text-lg font-bold font-display text-[var(--fg)]">
-            + D$ {metrics.dailyAvg.toLocaleString()}
+        <div className="bg-[var(--bg)] rounded-[var(--radius-sm)] p-4">
+          <div className="text-[22px] font-semibold text-[var(--fg)] leading-none">
+            +D$ {metrics.dailyAvg.toLocaleString()}
           </div>
-          <span className="text-[10px] text-[var(--fg-subtle)] font-sans">
-            {t('Paced across 7 days')}
-          </span>
+          <div className="text-[12px] text-[var(--fg-muted)] mt-2">{t('Daily Average')}</div>
+          <div className="text-[12px] text-[var(--fg-subtle)] mt-0.5">{t('Paced across 7 days')}</div>
         </div>
 
-        <div className="space-y-0.5">
-          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--fg-subtle)] flex items-center gap-1">
-            <Zap className="w-3 h-3 text-amber-500" /> {t('Best Day')}
-          </span>
-          <div className="text-lg font-bold font-display text-[var(--fg)]">
-            + D$ {metrics.peakDay.earnings.toLocaleString()}
+        <div className="bg-[var(--bg)] rounded-[var(--radius-sm)] p-4">
+          <div className="text-[22px] font-semibold text-[var(--fg)] leading-none">
+            +D$ {metrics.peakDay.earnings.toLocaleString()}
           </div>
-          <span className="text-[10px] text-[var(--fg-subtle)] font-sans">
+          <div className="text-[12px] text-[var(--fg-muted)] mt-2">{t('Best Day')}</div>
+          <div className="text-[12px] text-[var(--fg-subtle)] mt-0.5">
             {metrics.peakDay.earnings > 0
               ? `${metrics.peakDay.weekday} (${metrics.peakDay.dateLabel})`
               : t('No activity yet')}
-          </span>
+          </div>
         </div>
 
-        <div className="space-y-0.5">
-          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--fg-subtle)] flex items-center gap-1">
-            <CheckCircle2 className="w-3 h-3 text-[var(--color-sage)]" /> {t('Consistency')}
-          </span>
-          <div className="text-lg font-bold font-display text-[var(--fg)]">
+        <div className="bg-[var(--bg)] rounded-[var(--radius-sm)] p-4">
+          <div className="text-[22px] font-semibold text-[var(--fg)] leading-none">
             {t('{n} / 7 Days', { n: metrics.activeDays })}
           </div>
-          <span className="text-[10px] text-[var(--fg-subtle)] font-sans">
+          <div className="text-[12px] text-[var(--fg-muted)] mt-2">{t('Consistency')}</div>
+          <div className="text-[12px] text-[var(--fg-subtle)] mt-0.5">
             {t('{pct}% weekly execution rate', { pct: Math.round((metrics.activeDays / 7) * 100) })}
-          </span>
+          </div>
         </div>
       </div>
 
-      {/* Recharts Bar Chart Visualization */}
-      <div className="w-full h-56 pt-2 pb-1 relative">
+      {/* Chart */}
+      <div className="w-full h-56 relative">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={chartData}
-            margin={{ top: 18, right: 12, left: -4, bottom: 0 }}
+            margin={{ top: 12, right: 8, left: -4, bottom: 0 }}
             onMouseMove={(state) => {
               if (state && state.activeTooltipIndex !== undefined) {
                 setHoveredIndex(state.activeTooltipIndex);
@@ -402,17 +333,12 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
             }}
             onMouseLeave={() => setHoveredIndex(null)}
           >
-            <CartesianGrid
-              strokeDasharray="3 3"
-              vertical={false}
-              stroke="var(--border)"
-              opacity={0.7}
-            />
+            <CartesianGrid vertical={false} stroke={colors.grid} />
 
             <XAxis
               dataKey="weekday"
-              axisLine={{ stroke: 'var(--border-strong)' }}
-              tickLine={{ stroke: 'var(--border)' }}
+              axisLine={{ stroke: colors.grid }}
+              tickLine={false}
               tick={({ x, y, payload }) => {
                 const item = chartData.find((d) => d.weekday === payload.value);
                 const isCurrent = item?.isToday;
@@ -423,10 +349,10 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
                       y={0}
                       dy={14}
                       textAnchor="middle"
-                      fill={isCurrent ? 'var(--color-sage)' : 'var(--fg-subtle)'}
+                      fill={isCurrent ? colors.fg : colors.text}
                       fontSize={11}
                       fontFamily="var(--font-sans)"
-                      fontWeight={isCurrent ? 700 : 500}
+                      fontWeight={isCurrent ? 600 : 400}
                     >
                       {payload.value}
                     </text>
@@ -434,12 +360,11 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
                       <text
                         x={0}
                         y={0}
-                        dy={26}
+                        dy={27}
                         textAnchor="middle"
-                        fill="var(--fg-subtle)"
-                        fontSize={9}
-                        fontFamily="var(--font-mono)"
-                        opacity={0.75}
+                        fill={colors.text}
+                        fontSize={10}
+                        fontFamily="var(--font-sans)"
                       >
                         {item.date.getDate()}
                       </text>
@@ -454,123 +379,50 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
               axisLine={false}
               tickLine={false}
               tickFormatter={(val) => `D$ ${val}`}
-              tick={{
-                fill: 'var(--fg-subtle)',
-                fontSize: 10,
-                fontFamily: 'var(--font-mono)',
-              }}
+              tick={{ fill: colors.text, fontSize: 11, fontFamily: 'var(--font-sans)' }}
               width={54}
             />
 
-            <Tooltip
-              content={<CustomTooltip />}
-              cursor={{ fill: 'var(--border)', opacity: 0.18 }}
-            />
+            <Tooltip content={<CustomTooltip />} cursor={{ fill: colors.grid, opacity: 0.5 }} />
 
-            {/* Daily Average Reference Line */}
             {metrics.dailyAvg > 0 && (
-              <ReferenceLine
-                y={metrics.dailyAvg}
-                stroke="var(--color-sage)"
-                strokeDasharray="4 4"
-                strokeWidth={1.2}
-                opacity={0.8}
-              />
+              <ReferenceLine y={metrics.dailyAvg} stroke={colors.tertiary} strokeWidth={1} />
             )}
 
-            <Bar
-              dataKey="earnings"
-              radius={[4, 4, 0, 0]}
-              maxBarSize={44}
-              animationDuration={700}
-            >
+            <Bar dataKey="earnings" radius={[4, 4, 0, 0]} maxBarSize={44} animationDuration={500}>
               {chartData.map((entry, index) => {
                 const isHovered = hoveredIndex === index;
-                // Color assignment: today gets solid sage, active days get sage with subtle tonal step
-                let fillColor = 'var(--color-sage)';
-                let opacity = 0.85;
+                let fillColor = colors.accent;
+                let opacity = 0.75;
 
                 if (entry.earnings === 0) {
-                  fillColor = 'var(--border-strong)';
-                  opacity = 0.45;
-                } else if (entry.isToday) {
-                  fillColor = 'var(--color-sage)';
-                  opacity = 1;
-                } else if (isHovered) {
+                  fillColor = colors.secondary;
+                  opacity = 0.6;
+                } else if (entry.isToday || isHovered) {
                   opacity = 1;
                 }
 
-                return (
-                  <Cell
-                    key={`cell-${entry.dayKey}`}
-                    fill={fillColor}
-                    fillOpacity={opacity}
-                    stroke={entry.isToday ? 'var(--fg)' : undefined}
-                    strokeWidth={entry.isToday ? 1.5 : 0}
-                  />
-                );
+                return <Cell key={`cell-${entry.dayKey}`} fill={fillColor} fillOpacity={opacity} />;
               })}
             </Bar>
           </BarChart>
         </ResponsiveContainer>
       </div>
 
-      {/* 7-Day Source Breakdown Chips */}
-      <div className="pt-2 border-t border-[var(--border)] space-y-2">
-        <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-[var(--fg-subtle)] font-sans">
-          <span>{t('7-Day Earnings by Contribution Source')}</span>
-          <span className="flex items-center gap-1 text-[var(--color-sage)]">
-            <Sparkles className="w-3 h-3" />
-            {t('Immutable Ledger Data')}
-          </span>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-          {/* Missions & Decisions */}
-          <div className="p-2 rounded-[var(--radius-xs)] bg-[var(--bg)] border border-[var(--border)] flex items-center justify-between">
-            <div className="flex items-center gap-1.5 truncate">
-              <div className="w-2 h-2 rounded-full bg-[var(--color-sage)] shrink-0" />
-              <span className="text-[11px] text-[var(--fg-muted)] truncate">{t('Missions & OD')}</span>
+      {/* Source breakdown */}
+      <div className="space-y-3">
+        <h4 className="text-[15px] font-semibold text-[var(--fg)]">{t('By source')}</h4>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {breakdownRows.map((rowItem) => (
+            <div key={rowItem.label} className="bg-[var(--bg)] rounded-[var(--radius-sm)] p-4">
+              <div className="text-[22px] font-semibold text-[var(--fg)] leading-none">
+                +D$ {rowItem.amount.toLocaleString()}
+              </div>
+              <div className="text-[12px] text-[var(--fg-muted)] mt-2">{rowItem.label}</div>
             </div>
-            <span className="font-mono font-bold text-[11px] text-[var(--fg)] shrink-0 pl-1">
-              +D$ {metrics.breakdown.missions.toLocaleString()}
-            </span>
-          </div>
-
-          {/* Micro-Habits */}
-          <div className="p-2 rounded-[var(--radius-xs)] bg-[var(--bg)] border border-[var(--border)] flex items-center justify-between">
-            <div className="flex items-center gap-1.5 truncate">
-              <div className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
-              <span className="text-[11px] text-[var(--fg-muted)] truncate">{t('Micro-Habits')}</span>
-            </div>
-            <span className="font-mono font-bold text-[11px] text-[var(--fg)] shrink-0 pl-1">
-              +D$ {metrics.breakdown.habits.toLocaleString()}
-            </span>
-          </div>
-
-          {/* Focus Sessions */}
-          <div className="p-2 rounded-[var(--radius-xs)] bg-[var(--bg)] border border-[var(--border)] flex items-center justify-between">
-            <div className="flex items-center gap-1.5 truncate">
-              <div className="w-2 h-2 rounded-full bg-sky-500 shrink-0" />
-              <span className="text-[11px] text-[var(--fg-muted)] truncate">{t('Focus Work')}</span>
-            </div>
-            <span className="font-mono font-bold text-[11px] text-[var(--fg)] shrink-0 pl-1">
-              +D$ {metrics.breakdown.focus.toLocaleString()}
-            </span>
-          </div>
-
-          {/* Check-ins & Streaks */}
-          <div className="p-2 rounded-[var(--radius-xs)] bg-[var(--bg)] border border-[var(--border)] flex items-center justify-between">
-            <div className="flex items-center gap-1.5 truncate">
-              <div className="w-2 h-2 rounded-full bg-[var(--color-coral)] shrink-0" />
-              <span className="text-[11px] text-[var(--fg-muted)] truncate">{t('Check-ins & Bonus')}</span>
-            </div>
-            <span className="font-mono font-bold text-[11px] text-[var(--fg)] shrink-0 pl-1">
-              +D$ {(metrics.breakdown.checkIns + metrics.breakdown.bonuses).toLocaleString()}
-            </span>
-          </div>
+          ))}
         </div>
       </div>
-    </Card>
+    </div>
   );
 };

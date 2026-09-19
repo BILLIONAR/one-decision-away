@@ -1,25 +1,7 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useApp } from '../store/useApp';
-import {
-  Modal,
-  Field,
-  Input,
-  Textarea,
-  Select,
-  Button,
-  Badge,
-} from './ui';
-import {
-  BookOpen,
-  Camera,
-  Upload,
-  Sparkles,
-  FlipHorizontal,
-  X,
-  Check,
-  Command,
-  CornerDownLeft,
-} from 'lucide-react';
+import { Modal, Field, Input, Textarea, Select, Button } from './ui';
+import { Camera, Upload, FlipHorizontal, X } from 'lucide-react';
 import { SEED_MARKET_ITEMS } from '../data/seed';
 import { MarketItem } from '../types/models';
 import { soundSynthesizer } from '../utils/soundSynthesizer';
@@ -147,7 +129,7 @@ export const QuickDreamJournalModal: React.FC<QuickDreamJournalModalProps> = ({
       setPhotoDataUrl(dataUrl);
       stopCamera();
       soundSynthesizer.playTapChime();
-      showToast(t('📸 Photo captured from camera!'), 'success');
+      showToast(t('Photo attached.'), 'success');
     }
   };
 
@@ -207,7 +189,7 @@ export const QuickDreamJournalModal: React.FC<QuickDreamJournalModalProps> = ({
       });
 
       soundSynthesizer.playTapChime();
-      showToast(t('✨ Dream Journal entry captured!'), 'success');
+      showToast(t('Saved to your journal.'), 'success');
       resetForm();
       onClose();
     } catch (err) {
@@ -233,102 +215,69 @@ export const QuickDreamJournalModal: React.FC<QuickDreamJournalModalProps> = ({
         resetForm();
         onClose();
       }}
-      title={t('Quick Dream Journal Capture')}
-      subtitle={t('Capture immediate inspirations, mindset breakthroughs, or future reflections instantly from anywhere in the app.')}
-      maxWidth="lg"
+      title={t('Quick note')}
+      maxWidth="md"
     >
-      <div onKeyDown={handleKeyDown} className="space-y-4">
-        {/* Top Shortcut Pill */}
-        <div className="flex items-center justify-between p-2.5 bg-[var(--bg-muted)] border border-[var(--border)] rounded-[var(--radius-sm)] text-xs text-[var(--fg-muted)]">
-          <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-full bg-[var(--color-sage)]/10 text-[var(--color-sage)] flex items-center justify-center shrink-0">
-              <BookOpen className="w-3 h-3" />
-            </div>
-            <span className="font-medium">
-              {t('Global Quick Capture Active')}
-            </span>
-          </div>
-
-          <div className="flex items-center gap-1.5 font-mono text-[11px] font-semibold text-[var(--fg)] bg-[var(--bg-elevated)] px-2 py-0.5 rounded border border-[var(--border)]">
-            <span>{isMac ? '⌘K' : 'Ctrl+K'}</span>
-          </div>
-        </div>
-
-        <form onSubmit={handleSave} className="space-y-4">
-          <Field
-            id="quick-journal-title"
-            label={t('Inspiration Title')}
-            required
-            helper={t('What decision, vision moment, or realization happened?')}
-          >
+      <div onKeyDown={handleKeyDown}>
+        <form onSubmit={handleSave} className="space-y-6">
+          <Field id="quick-journal-title" label={t('Title')} required>
             <Input
               id="quick-journal-title"
               ref={titleInputRef}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder={t('e.g. Breakthrough clarity on high-leverage quarterly milestone')}
+              placeholder={t('What happened?')}
             />
           </Field>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Field id="quick-journal-mood" label={t('Current State of Mind')}>
+            <Field id="quick-journal-mood" label={t('Mood')}>
               <Select
                 id="quick-journal-mood"
                 value={mood}
                 onChange={(e) => setMood(e.target.value as JournalMood)}
                 options={[
-                  { value: 'focused', label: t('🎯 Deep Focus') },
-                  { value: 'triumphant', label: t('🏆 Triumphant Win') },
-                  { value: 'grateful', label: t('🌿 Grateful & Grounded') },
-                  { value: 'visionary', label: t('✨ Visionary Expansion') },
-                  { value: 'breakthrough', label: t('⚡ Breakthrough Realization') },
+                  { value: 'focused', label: t('Focused') },
+                  { value: 'triumphant', label: t('Triumphant') },
+                  { value: 'grateful', label: t('Grateful') },
+                  { value: 'visionary', label: t('Visionary') },
+                  { value: 'breakthrough', label: t('Breakthrough') },
                 ]}
               />
             </Field>
 
-            <Field
-              id="quick-journal-dream"
-              label={t('Linked Vision Target (Optional)')}
-              helper={t('Connect to a specific future milestone.')}
-            >
+            <Field id="quick-journal-dream" label={t('Dream (optional)')}>
               <Select
                 id="quick-journal-dream"
                 value={linkedDreamId}
                 onChange={(e) => setLinkedDreamId(e.target.value)}
                 options={[
-                  { value: '', label: t('— General Future Life Progress —') },
+                  { value: '', label: t('None') },
                   ...allAvailableDreams.map((d) => ({
                     value: d.id,
-                    label: `${d.name} (${d.category})`,
+                    label: t(d.name),
                   })),
                 ]}
               />
             </Field>
           </div>
 
-          <Field
-            id="quick-journal-content"
-            label={t('Reflection Notes')}
-            required
-            helper={t('Describe the insight, mindset shift, or execution victory.')}
-          >
+          <Field id="quick-journal-content" label={t('Notes')} required>
             <Textarea
               id="quick-journal-content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              placeholder={t('Jot down the specific circumstances, thoughts, or next decision to solidify...')}
+              placeholder={t('The insight, the shift, or the next decision.')}
               rows={4}
             />
           </Field>
 
-          {/* Camera / Photo Attachment */}
+          {/* Photo */}
           <div className="space-y-2">
-            <span className="text-xs font-semibold text-[var(--fg)] block">
-              {t('Visual Anchor (Optional Photo)')}
-            </span>
+            <span className="block text-[13px] font-medium text-[var(--fg-muted)]">{t('Photo (optional)')}</span>
 
             {isCameraActive ? (
-              <div className="w-full h-56 rounded-[var(--radius-md)] overflow-hidden relative bg-black border-2 border-[var(--color-sage)] shadow-inner">
+              <div className="w-full h-56 rounded-[var(--radius-md)] overflow-hidden relative bg-[#111111]">
                 <video
                   ref={videoRef}
                   autoPlay
@@ -336,58 +285,53 @@ export const QuickDreamJournalModal: React.FC<QuickDreamJournalModalProps> = ({
                   muted
                   className={`w-full h-full object-cover ${cameraFacing === 'user' ? 'scale-x-[-1]' : ''}`}
                 />
-                
-                <div className="absolute top-2.5 left-2.5 bg-black/70 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] text-white flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                  {t('Live Viewfinder ({facing})', { facing: cameraFacing === 'user' ? t('Front') : t('Back') })}
-                </div>
-
-                <div className="absolute bottom-2.5 inset-x-2.5 flex items-center justify-between">
-                  <button
-                    type="button"
-                    onClick={toggleCameraFacing}
-                    className="p-2 rounded-full bg-black/70 backdrop-blur-xs text-white hover:bg-black transition-colors cursor-pointer"
-                    title={t('Switch Camera')}
-                  >
-                    <FlipHorizontal className="w-4 h-4" />
-                  </button>
-
+                <button
+                  type="button"
+                  onClick={stopCamera}
+                  className="absolute top-3 left-3 w-10 h-10 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/80 transition-colors cursor-pointer"
+                  title={t('Close camera')}
+                  aria-label={t('Close camera')}
+                >
+                  <X className="w-[18px] h-[18px]" strokeWidth={1.8} />
+                </button>
+                <button
+                  type="button"
+                  onClick={toggleCameraFacing}
+                  className="absolute top-3 right-3 w-10 h-10 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/80 transition-colors cursor-pointer"
+                  title={t('Switch camera')}
+                  aria-label={t('Switch camera')}
+                >
+                  <FlipHorizontal className="w-[18px] h-[18px]" strokeWidth={1.8} />
+                </button>
+                <div className="absolute bottom-4 inset-x-0 flex items-center justify-center">
                   <button
                     type="button"
                     onClick={capturePhoto}
-                    className="px-4 py-2 bg-[var(--color-sage)] text-[var(--color-slate)] font-bold text-xs rounded-full shadow-lg hover:scale-105 transition-transform flex items-center gap-1.5 cursor-pointer"
+                    className="w-14 h-14 rounded-full border-4 border-white bg-white/20 hover:bg-white/40 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
+                    title={t('Take photo')}
+                    aria-label={t('Take photo')}
                   >
-                    <Camera className="w-4 h-4" /> {t('Take Snapshot')}
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={stopCamera}
-                    className="p-2 rounded-full bg-black/70 backdrop-blur-xs text-white hover:bg-black transition-colors cursor-pointer"
-                    title={t('Cancel Camera')}
-                  >
-                    <X className="w-4 h-4" />
+                    <Camera className="w-5 h-5 text-white" strokeWidth={1.8} />
                   </button>
                 </div>
               </div>
             ) : photoDataUrl ? (
-              <div className="relative w-full h-44 rounded-[var(--radius-md)] overflow-hidden border border-[var(--border)] bg-black group">
+              <div className="relative w-full h-44 rounded-[var(--radius-md)] overflow-hidden bg-[var(--bg-muted)]">
                 <img
                   src={photoDataUrl}
-                  alt={t('Journal Anchor')}
+                  alt={t('Attached photo')}
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute top-2 right-2 flex items-center gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => setPhotoDataUrl('')}
-                    className="p-1.5 rounded-full bg-black/80 text-white hover:bg-red-600 transition-colors cursor-pointer"
-                    title={t('Remove Photo')}
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => setPhotoDataUrl('')}
+                  className="absolute top-3 right-3 w-10 h-10 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/80 transition-colors cursor-pointer"
+                  title={t('Remove photo')}
+                  aria-label={t('Remove photo')}
+                >
+                  <X className="w-[18px] h-[18px]" strokeWidth={1.8} />
+                </button>
               </div>
             ) : (
               <div
@@ -397,10 +341,10 @@ export const QuickDreamJournalModal: React.FC<QuickDreamJournalModalProps> = ({
                 }}
                 onDragLeave={() => setIsDragOver(false)}
                 onDrop={handleDrop}
-                className={`p-4 border-2 border-dashed rounded-[var(--radius-md)] text-center transition-colors ${
+                className={`p-4 rounded-[var(--radius-md)] border transition-colors ${
                   isDragOver
-                    ? 'border-[var(--color-sage)] bg-[var(--color-sage)]/5'
-                    : 'border-[var(--border)] bg-[var(--bg-muted)] hover:border-[var(--border-strong)]'
+                    ? 'border-[var(--border-strong)] bg-[var(--bg-inset)]'
+                    : 'border-transparent bg-[var(--bg-muted)]'
                 }`}
               >
                 <input
@@ -414,54 +358,29 @@ export const QuickDreamJournalModal: React.FC<QuickDreamJournalModalProps> = ({
                   }}
                   className="hidden"
                 />
-
-                <div className="flex flex-col items-center justify-center gap-2">
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => startCamera('user')}
-                      className="px-3 py-1.5 rounded-[var(--radius-sm)] bg-[var(--bg-elevated)] border border-[var(--border)] text-[var(--fg)] hover:border-[var(--fg)] text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-xs"
-                    >
-                      <Camera className="w-3.5 h-3.5 text-[var(--color-sage)]" />
-                      <span>{t('Take Photo')}</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => fileInputRef.current?.click()}
-                      className="px-3 py-1.5 rounded-[var(--radius-sm)] bg-[var(--bg-elevated)] border border-[var(--border)] text-[var(--fg)] hover:border-[var(--fg)] text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-xs"
-                    >
-                      <Upload className="w-3.5 h-3.5 text-[var(--color-coral)]" />
-                      <span>{t('Upload File')}</span>
-                    </button>
-                  </div>
-                  <span className="text-[11px] text-[var(--fg-subtle)]">
-                    {t('Drag and drop an image or use your device camera')}
-                  </span>
+                <div className="flex items-center justify-center gap-2">
+                  <Button type="button" variant="secondary" size="sm" icon={Camera} onClick={() => startCamera('user')}>
+                    {t('Camera')}
+                  </Button>
+                  <Button type="button" variant="secondary" size="sm" icon={Upload} onClick={() => fileInputRef.current?.click()}>
+                    {t('Upload')}
+                  </Button>
                 </div>
               </div>
             )}
 
-            {cameraError && (
-              <p className="text-xs text-rose-500 font-medium">{cameraError}</p>
-            )}
+            {cameraError && <p className="text-[13px] text-[var(--danger)]">{cameraError}</p>}
           </div>
 
-          {/* Footer Controls */}
-          <div className="pt-3 border-t border-[var(--border)] flex flex-col sm:flex-row items-center justify-between gap-3">
-            <div className="flex items-center gap-1.5 text-[11px] text-[var(--fg-subtle)]">
-              <span>{t('Shortcut hint:')}</span>
-              <kbd className="px-1.5 py-0.5 rounded bg-[var(--bg-muted)] border border-[var(--border)] font-mono text-[10px] font-semibold text-[var(--fg)]">
-                {isMac ? '⌘ + Enter' : 'Ctrl + Enter'}
-              </kbd>
-              <span>{t('to save')}</span>
-            </div>
-
-            <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+          {/* Actions */}
+          <div className="flex items-center justify-between gap-3 pt-1">
+            <span className="text-[12px] text-[var(--fg-subtle)] hidden sm:block">
+              {isMac ? t('⌘ Enter to save') : t('Ctrl Enter to save')}
+            </span>
+            <div className="flex items-center gap-2 ml-auto">
               <Button
                 type="button"
                 variant="ghost"
-                size="sm"
                 onClick={() => {
                   resetForm();
                   onClose();
@@ -472,11 +391,9 @@ export const QuickDreamJournalModal: React.FC<QuickDreamJournalModalProps> = ({
               <Button
                 type="submit"
                 variant="primary"
-                size="sm"
-                icon={Check}
                 disabled={isSubmitting || !title.trim() || !content.trim()}
               >
-                {isSubmitting ? t('Saving...') : t('Save to Journal')}
+                {isSubmitting ? t('Saving…') : t('Save')}
               </Button>
             </div>
           </div>

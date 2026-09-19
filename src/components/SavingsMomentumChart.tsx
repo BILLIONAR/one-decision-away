@@ -2,9 +2,36 @@ import React, { useMemo, useRef, useState, useEffect } from 'react';
 import * as d3 from 'd3';
 import { WalletTransaction, MarketItem, Goal } from '../types/models';
 import { SEED_MARKET_ITEMS } from '../data/seed';
-import { Badge, Card, Select } from './ui';
-import { TrendingUp, Target, Zap, CheckCircle2, Compass, Sparkles } from 'lucide-react';
+import { Select } from './ui';
 import { useT } from '../i18n';
+
+/* ----------------------------- Chart palette ----------------------------- */
+const readVar = (name: string, fallback: string): string => {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return fallback;
+  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  return v || fallback;
+};
+
+const readChartColors = () => ({
+  accent: readVar('--accent', '#1F5F3F'),
+  secondary: readVar('--border-strong', '#C9C9C6'),
+  tertiary: readVar('--fg-muted', '#6F6F6C'),
+  grid: readVar('--border', '#E4E4E1'),
+  text: readVar('--fg-muted', '#6F6F6C'),
+  fg: readVar('--fg', '#111111'),
+  bg: readVar('--bg', '#FFFFFF'),
+});
+
+const useChartColors = () => {
+  const [colors, setColors] = useState(readChartColors);
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const observer = new MutationObserver(() => setColors(readChartColors()));
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'class'] });
+    return () => observer.disconnect();
+  }, []);
+  return colors;
+};
 
 interface SavingsMomentumChartProps {
   transactions: WalletTransaction[];
@@ -41,6 +68,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
   className = '',
 }) => {
   const t = useT();
+  const colors = useChartColors();
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const [containerWidth, setContainerWidth] = useState<number>(600);
@@ -274,29 +302,6 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
     if (g.empty()) {
       svg.selectAll('*').remove(); // Clear any stale artifact
 
-      // Defs (Gradients & Filters)
-      const defs = svg.append('defs');
-
-      const areaGradient = defs
-        .append('linearGradient')
-        .attr('id', 'savingsAreaGrad')
-        .attr('x1', '0%')
-        .attr('y1', '0%')
-        .attr('x2', '0%')
-        .attr('y2', '100%');
-
-      areaGradient
-        .append('stop')
-        .attr('offset', '0%')
-        .attr('stop-color', '#4E6B56')
-        .attr('stop-opacity', 0.28);
-
-      areaGradient
-        .append('stop')
-        .attr('offset', '100%')
-        .attr('stop-color', '#4E6B56')
-        .attr('stop-opacity', 0.0);
-
       g = svg
         .append('g')
         .attr('class', 'chart-root')
@@ -309,14 +314,13 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
       g.append('g').attr('class', 'bars-group');
 
       // 3. Area path
-      g.append('path').attr('class', 'area-path').attr('fill', 'url(#savingsAreaGrad)');
+      g.append('path').attr('class', 'area-path');
 
       // 4. Line path
       g.append('path')
         .attr('class', 'line-path')
         .attr('fill', 'none')
-        .attr('stroke', '#4E6B56')
-        .attr('stroke-width', 2.2)
+        .attr('stroke-width', 2)
         .attr('stroke-linecap', 'round');
 
       // 5. Milestone dots group
@@ -324,30 +328,22 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
 
       // 6. Goal Threshold group
       const goalGroup = g.append('g').attr('class', 'goal-threshold');
-      goalGroup
-        .append('line')
-        .attr('class', 'goal-line')
-        .attr('stroke', '#B8533C')
-        .attr('stroke-width', 1.2)
-        .attr('stroke-dasharray', '5,4');
+      goalGroup.append('line').attr('class', 'goal-line').attr('stroke-width', 1);
 
       goalGroup
         .append('text')
         .attr('class', 'goal-label')
         .attr('text-anchor', 'end')
-        .attr('fill', '#B8533C')
-        .attr('font-size', '9px')
-        .attr('font-weight', '700')
-        .attr('font-family', 'var(--font-sans)')
-        .attr('letter-spacing', '0.1em');
+        .attr('font-size', '11px')
+        .attr('font-weight', '500')
+        .attr('font-family', 'var(--font-sans)');
 
       // 7. Axes groups
       g.append('g').attr('class', 'x-axis-group').attr('transform', `translate(0, ${innerHeight})`);
       g.append('g').attr('class', 'y-axis-group');
 
       // 8. Hover overlay & focus crosshair
-      const overlay = g
-        .append('rect')
+      g.append('rect')
         .attr('class', 'interactive-overlay')
         .attr('fill', 'transparent')
         .style('cursor', 'crosshair');
@@ -359,19 +355,23 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
         .attr('class', 'focus-line')
         .attr('y1', 0)
         .attr('y2', innerHeight)
-        .attr('stroke', 'var(--fg)')
         .attr('stroke-width', 1)
-        .attr('stroke-dasharray', '2,2')
-        .attr('opacity', 0.5);
+        .attr('opacity', 0.4);
 
       focusGroup
         .append('circle')
         .attr('class', 'focus-circle')
         .attr('r', 5)
-        .attr('fill', '#FAF8F5')
-        .attr('stroke', '#1A1A1A')
         .attr('stroke-width', 2);
     }
+
+    // Theme-aware colours (re-applied on every render so dark mode follows)
+    g.select('.area-path').attr('fill', colors.accent).attr('fill-opacity', 0.08);
+    g.select('.line-path').attr('stroke', colors.accent);
+    g.select('.goal-line').attr('stroke', colors.tertiary);
+    g.select('.goal-label').attr('fill', colors.tertiary);
+    g.select('.focus-line').attr('stroke', colors.fg);
+    g.select('.focus-circle').attr('fill', colors.bg).attr('stroke', colors.fg);
 
     // Update dimensions of root container
     g.attr('transform', `translate(${margin.left},${margin.top})`);
@@ -392,14 +392,14 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
             .attr('x2', innerWidth)
             .attr('y1', (d) => yScale(d))
             .attr('y2', (d) => yScale(d))
-            .attr('stroke', 'var(--border)')
-            .attr('stroke-width', 0.8)
-            .attr('stroke-dasharray', '3,3')
+            .attr('stroke', colors.grid)
+            .attr('stroke-width', 1)
             .attr('opacity', 0)
             .call((enterLine) => enterLine.transition(trans).attr('opacity', 1)),
         (update) =>
           update.call((updateLine) =>
             updateLine
+              .attr('stroke', colors.grid)
               .transition(trans)
               .attr('x1', 0)
               .attr('x2', innerWidth)
@@ -424,14 +424,13 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
     } else {
       xAxisGroup.transition(trans).call(xAxis);
     }
-    xAxisGroup.select('.domain').attr('stroke', 'var(--border-strong)');
-    xAxisGroup.selectAll('.tick line').attr('stroke', 'var(--border-strong)');
+    xAxisGroup.select('.domain').attr('stroke', colors.grid);
+    xAxisGroup.selectAll('.tick line').attr('stroke', colors.grid);
     xAxisGroup
       .selectAll('.tick text')
-      .attr('fill', 'var(--fg-subtle)')
-      .attr('font-size', '10px')
+      .attr('fill', colors.text)
+      .attr('font-size', '11px')
       .attr('font-family', 'var(--font-sans)')
-      .attr('letter-spacing', '0.05em')
       .attr('dy', '10px');
 
     const yAxis = d3
@@ -449,8 +448,8 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
     yAxisGroup.select('.domain').remove();
     yAxisGroup
       .selectAll('.tick text')
-      .attr('fill', 'var(--fg-subtle)')
-      .attr('font-size', '10px')
+      .attr('fill', colors.text)
+      .attr('font-size', '11px')
       .attr('font-family', 'var(--font-sans)')
       .attr('dx', '-6px');
 
@@ -468,7 +467,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
             .attr('y', innerHeight)
             .attr('width', barWidth)
             .attr('height', 0)
-            .attr('fill', '#4E6B56')
+            .attr('fill', colors.secondary)
             .attr('opacity', 0)
             .attr('rx', 1)
             .call((enterRect) =>
@@ -480,22 +479,23 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
                     .ease(d3.easeQuadOut)
                     .attr('y', (d: DayPoint) => (d.dayEarned > 0 ? yScale(d.dayEarned) : innerHeight))
                     .attr('height', (d: DayPoint) => (d.dayEarned > 0 ? innerHeight - yScale(d.dayEarned) : 0))
-                    .attr('opacity', 0.18)
+                    .attr('opacity', 1)
                 : enterRect
                     .transition(trans)
                     .attr('y', (d: DayPoint) => (d.dayEarned > 0 ? yScale(d.dayEarned) : innerHeight))
                     .attr('height', (d: DayPoint) => (d.dayEarned > 0 ? innerHeight - yScale(d.dayEarned) : 0))
-                    .attr('opacity', 0.18)
+                    .attr('opacity', 1)
             ),
         (update) =>
           update.call((updateRect) =>
             updateRect
+              .attr('fill', colors.secondary)
               .transition(trans)
               .attr('x', (d: DayPoint) => (xScale(d.date) || 0) - barWidth / 2)
               .attr('y', (d: DayPoint) => (d.dayEarned > 0 ? yScale(d.dayEarned) : innerHeight))
               .attr('width', barWidth)
               .attr('height', (d: DayPoint) => (d.dayEarned > 0 ? innerHeight - yScale(d.dayEarned) : 0))
-              .attr('opacity', 0.18)
+              .attr('opacity', 1)
           ),
         (exit) =>
           exit.call((exitRect) =>
@@ -556,8 +556,8 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
             .attr('cy', (d: DayPoint) => yScale(d.cumulativeBalance))
             .attr('r', 0)
             .attr('opacity', 0)
-            .attr('fill', (d: DayPoint) => (d.dayEarned > 0 ? '#FAF8F5' : '#B8533C'))
-            .attr('stroke', (d: DayPoint) => (d.dayEarned > 0 ? '#4E6B56' : '#B8533C'))
+            .attr('fill', (d: DayPoint) => (d.dayEarned > 0 ? colors.bg : colors.tertiary))
+            .attr('stroke', (d: DayPoint) => (d.dayEarned > 0 ? colors.accent : colors.tertiary))
             .attr('stroke-width', 1.5)
             .call((enterCircle) =>
               isInitial
@@ -565,7 +565,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
                     .transition()
                     .delay((_: DayPoint, i: number) => 400 + i * 28)
                     .duration(400)
-                    .ease(d3.easeBackOut.overshoot(1.5))
+                    .ease(d3.easeCubicOut)
                     .attr('r', 3)
                     .attr('opacity', 1)
                 : enterCircle
@@ -579,8 +579,8 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
               .transition(trans)
               .attr('cx', (d: DayPoint) => xScale(d.date) || 0)
               .attr('cy', (d: DayPoint) => yScale(d.cumulativeBalance))
-              .attr('fill', (d: DayPoint) => (d.dayEarned > 0 ? '#FAF8F5' : '#B8533C'))
-              .attr('stroke', (d: DayPoint) => (d.dayEarned > 0 ? '#4E6B56' : '#B8533C'))
+              .attr('fill', (d: DayPoint) => (d.dayEarned > 0 ? colors.bg : colors.tertiary))
+              .attr('stroke', (d: DayPoint) => (d.dayEarned > 0 ? colors.accent : colors.tertiary))
               .attr('r', 3)
               .attr('opacity', 1)
           ),
@@ -594,6 +594,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
     const goalGroup = g.select<SVGGElement>('.goal-threshold');
     const goalLine = goalGroup.select<SVGLineElement>('.goal-line');
     const goalLabel = goalGroup.select<SVGTextElement>('.goal-label');
+    const goalText = t('Goal: {name} (D$ {amount})', { name: activeGoal.name, amount: activeGoal.targetD$.toLocaleString() });
 
     if (activeGoal.targetD$ <= yMax) {
       const goalY = yScale(activeGoal.targetD$);
@@ -610,13 +611,13 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
           .duration(750)
           .ease(d3.easeCubicOut)
           .attr('x2', innerWidth)
-          .attr('opacity', 0.85);
+          .attr('opacity', 1);
 
         goalLabel
           .attr('x', innerWidth - 6)
           .attr('y', goalY - 6)
           .attr('opacity', 0)
-          .text(t('GOAL TARGET: {name} (D$ {amount})', { name: activeGoal.name.toUpperCase(), amount: activeGoal.targetD$.toLocaleString() }))
+          .text(goalText)
           .transition()
           .delay(350)
           .duration(500)
@@ -628,10 +629,10 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
           .attr('x2', innerWidth)
           .attr('y1', goalY)
           .attr('y2', goalY)
-          .attr('opacity', 0.85);
+          .attr('opacity', 1);
 
         goalLabel
-          .text(t('GOAL TARGET: {name} (D$ {amount})', { name: activeGoal.name.toUpperCase(), amount: activeGoal.targetD$.toLocaleString() }))
+          .text(goalText)
           .transition(trans)
           .attr('x', innerWidth - 6)
           .attr('y', goalY - 6)
@@ -687,101 +688,76 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
 
     // Mark initial entrance complete
     isInitialMountRef.current = false;
-  }, [dataPoints, containerWidth, activeGoal, t]);
+  }, [dataPoints, containerWidth, activeGoal, t, colors]);
 
   return (
-    <Card padding="md" className={`space-y-4 ${className}`}>
-      {/* Header & Goal Target Selector */}
-      <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-3 pb-3 border-b border-[var(--border)]">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="font-sans text-[9px] font-bold uppercase tracking-[0.25em] text-[var(--color-sage)]">
-              {t('Fig. 02 — Velocity Metric')}
-            </span>
-            <Badge variant="sage">{t('30-Day Trajectory')}</Badge>
-          </div>
-          <h3 className="text-xl font-bold font-display text-[var(--fg)]">
-            {t('Savings Momentum')}
-          </h3>
-          <p className="text-xs text-[var(--fg-muted)] font-sans">
-            {t('Visualizing cumulative Dream Dollar momentum and progress toward target acquisitions.')}
+    <div className={`bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-6 ${className}`}>
+      {/* Header & goal selector */}
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+        <div>
+          <h3 className="text-[15px] font-semibold text-[var(--fg)]">{t('Savings Momentum')}</h3>
+          <p className="text-[13px] text-[var(--fg-muted)] mt-0.5">
+            {t('Your balance over the last 30 days and how far it is from a goal.')}
           </p>
         </div>
 
-        {/* Goal Selector */}
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          <div className="flex items-center gap-1.5 text-xs text-[var(--fg-subtle)] shrink-0 font-sans">
-            <Target className="w-3.5 h-3.5 text-[var(--color-coral)]" />
-            <span className="font-semibold uppercase tracking-wider text-[10px]">{t('Track Goal:')}</span>
-          </div>
-          <div className="w-full sm:w-56">
-            <Select
-              id="goal-momentum-select"
-              value={selectedGoalId}
-              onChange={(e) => setSelectedGoalId(e.target.value)}
-              options={goalOptions.map((g) => ({
-                value: g.id,
-                label: `${g.name} (D$ ${g.targetD$.toLocaleString()})`,
-              }))}
-            />
-          </div>
+        <div className="w-full sm:w-56">
+          <label htmlFor="goal-momentum-select" className="block text-[12px] text-[var(--fg-muted)] mb-1">
+            {t('Track Goal:')}
+          </label>
+          <Select
+            id="goal-momentum-select"
+            value={selectedGoalId}
+            onChange={(e) => setSelectedGoalId(e.target.value)}
+            className="bg-[var(--bg)]"
+            options={goalOptions.map((g) => ({
+              value: g.id,
+              label: `${g.name} (D$ ${g.targetD$.toLocaleString()})`,
+            }))}
+          />
         </div>
       </div>
 
-      {/* Key Momentum Indicators Row */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 p-3.5 bg-[var(--bg-muted)] border border-[var(--border)] rounded-[var(--radius-sm)]">
-        <div className="space-y-0.5">
-          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--fg-subtle)] flex items-center gap-1">
-            <TrendingUp className="w-3 h-3 text-[var(--color-sage)]" /> {t('30D Velocity')}
-          </span>
-          <div className="text-lg font-bold font-display text-[var(--fg)]">
-            + D$ {velocityMetrics.dailyAvg} <span className="text-xs font-sans font-normal text-[var(--fg-muted)]">{t('/ day')}</span>
+      {/* KPI tiles */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="bg-[var(--bg)] rounded-[var(--radius-sm)] p-4">
+          <div className="text-[22px] font-semibold text-[var(--fg)] leading-none">
+            +D$ {velocityMetrics.dailyAvg}
           </div>
-          <span className="text-[10px] text-[var(--fg-subtle)] font-sans">
+          <div className="text-[12px] text-[var(--fg-muted)] mt-2">{t('Per day, last 30 days')}</div>
+          <div className="text-[12px] text-[var(--fg-subtle)] mt-0.5">
             {t('Total Net: +D$ {amount}', { amount: velocityMetrics.total30dNet.toLocaleString() })}
-          </span>
+          </div>
         </div>
 
-        <div className="space-y-0.5">
-          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--fg-subtle)] flex items-center gap-1">
-            <Target className="w-3 h-3 text-[var(--color-coral)]" /> {t('Goal Target')}
-          </span>
-          <div className="text-lg font-bold font-display text-[var(--fg)]">
+        <div className="bg-[var(--bg)] rounded-[var(--radius-sm)] p-4">
+          <div className="text-[22px] font-semibold text-[var(--fg)] leading-none">
             D$ {activeGoal.targetD$.toLocaleString()}
           </div>
-          <span className="text-[10px] text-[var(--color-coral)] font-semibold truncate block font-sans">
-            {activeGoal.name}
-          </span>
+          <div className="text-[12px] text-[var(--fg-muted)] mt-2">{t('Goal Target')}</div>
+          <div className="text-[12px] text-[var(--fg-subtle)] mt-0.5 truncate">{activeGoal.name}</div>
         </div>
 
-        <div className="space-y-0.5">
-          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--fg-subtle)] flex items-center gap-1">
-            <Zap className="w-3 h-3 text-[var(--color-sage)]" /> {t('Goal Progress')}
-          </span>
-          <div className="text-lg font-bold font-display text-[var(--color-sage)]">
+        <div className="bg-[var(--bg)] rounded-[var(--radius-sm)] p-4">
+          <div className="text-[22px] font-semibold text-[var(--accent)] leading-none">
             {velocityMetrics.progressPct}%
           </div>
-          <span className="text-[10px] text-[var(--fg-subtle)] font-sans">
+          <div className="text-[12px] text-[var(--fg-muted)] mt-2">{t('Goal Progress')}</div>
+          <div className="text-[12px] text-[var(--fg-subtle)] mt-0.5">
             {t('D$ {amount} reached', { amount: velocityMetrics.latestBalance?.toLocaleString() ?? '0' })}
-          </span>
+          </div>
         </div>
 
-        <div className="space-y-0.5">
-          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--fg-subtle)] flex items-center gap-1">
-            <Compass className="w-3 h-3 text-[var(--fg-muted)]" /> {t('Est. Completion')}
-          </span>
-          <div className="text-lg font-bold font-display text-[var(--fg)]">
-            {velocityMetrics.isReached ? (
-              <span className="text-[var(--color-sage)] flex items-center gap-1 text-sm pt-0.5">
-                <CheckCircle2 className="w-4 h-4" /> {t('Achieved!')}
-              </span>
-            ) : velocityMetrics.daysLeft !== null ? (
-              t('~{n} days', { n: velocityMetrics.daysLeft })
-            ) : (
-              t('Action required')
-            )}
+        <div className="bg-[var(--bg)] rounded-[var(--radius-sm)] p-4">
+          <div className="text-[22px] font-semibold text-[var(--fg)] leading-none">
+            {velocityMetrics.isReached
+              ? t('Reached')
+              : velocityMetrics.daysLeft !== null
+              ? t('~{n} days', { n: velocityMetrics.daysLeft })
+              : t('Action required')}
           </div>
-          <span className="text-[10px] text-[var(--fg-subtle)] font-sans capitalize">
+          <div className="text-[12px] text-[var(--fg-muted)] mt-2">{t('Est. Completion')}</div>
+          <div className="text-[12px] text-[var(--fg-subtle)] mt-0.5">
             {t('Trajectory: {status}', {
               status:
                 velocityMetrics.momentumStatus === 'accelerating'
@@ -790,12 +766,12 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
                   ? t('cooldown')
                   : t('steady'),
             })}
-          </span>
+          </div>
         </div>
       </div>
 
       {/* D3 SVG Chart Container */}
-      <div ref={containerRef} className="relative w-full pt-1">
+      <div ref={containerRef} className="relative w-full">
         <svg
           ref={svgRef}
           width="100%"
@@ -803,45 +779,44 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
           className="overflow-visible select-none"
         />
 
-        {/* Hover Floating Tooltip */}
         {hoveredPoint && tooltipPos && (
           <div
-            className="absolute z-20 pointer-events-none bg-[var(--bg-elevated)] border border-[var(--border-strong)] shadow-[var(--shadow-md)] rounded-[var(--radius-xs)] p-3 text-xs min-w-[170px] -translate-x-1/2 -translate-y-full -mt-2 transition-transform duration-75"
+            className="absolute z-20 pointer-events-none bg-[var(--bg)] border border-[var(--border)] rounded-[var(--radius-sm)] text-[12px] p-3 min-w-[170px] -translate-x-1/2 -translate-y-full -mt-2"
             style={{
               left: `${Math.min(Math.max(tooltipPos.x, 90), containerWidth - 90)}px`,
               top: `${Math.max(tooltipPos.y, 70)}px`,
             }}
           >
-            <div className="font-sans text-[9px] uppercase tracking-[0.2em] text-[var(--fg-subtle)] border-b border-[var(--border)] pb-1 mb-1.5 flex justify-between items-center">
-              <span>{hoveredPoint.label}</span>
-              <span className="text-[var(--fg)] font-bold">{hoveredPoint.dayKey}</span>
+            <div className="flex justify-between items-center gap-3 pb-2 mb-2 border-b border-[var(--border)]">
+              <span className="font-semibold text-[var(--fg)]">{hoveredPoint.label}</span>
+              <span className="text-[var(--fg-muted)]">{hoveredPoint.dayKey}</span>
             </div>
 
-            <div className="space-y-1 font-sans">
-              <div className="flex justify-between items-center">
+            <div className="space-y-1">
+              <div className="flex justify-between items-center gap-3">
                 <span className="text-[var(--fg-muted)]">{t('Ledger Balance:')}</span>
-                <span className="font-bold font-mono text-[var(--fg)]">
+                <span className="font-medium text-[var(--fg)]">
                   D$ {hoveredPoint.cumulativeBalance.toLocaleString()}
                 </span>
               </div>
 
               {hoveredPoint.dayEarned > 0 && (
-                <div className="flex justify-between items-center text-[var(--color-sage)]">
-                  <span>{t('Earned Today:')}</span>
-                  <span className="font-bold font-mono">+ D$ {hoveredPoint.dayEarned}</span>
+                <div className="flex justify-between items-center gap-3">
+                  <span className="text-[var(--fg-muted)]">{t('Earned Today:')}</span>
+                  <span className="font-medium text-[var(--accent)]">+D$ {hoveredPoint.dayEarned}</span>
                 </div>
               )}
 
               {hoveredPoint.daySpent > 0 && (
-                <div className="flex justify-between items-center text-[var(--color-coral)]">
-                  <span>{t('Spent Today:')}</span>
-                  <span className="font-bold font-mono">- D$ {hoveredPoint.daySpent}</span>
+                <div className="flex justify-between items-center gap-3">
+                  <span className="text-[var(--fg-muted)]">{t('Spent Today:')}</span>
+                  <span className="font-medium text-[var(--fg)]">-D$ {hoveredPoint.daySpent}</span>
                 </div>
               )}
 
-              <div className="flex justify-between items-center pt-1 border-t border-[var(--border)] text-[10px] text-[var(--fg-muted)]">
+              <div className="flex justify-between items-center gap-3 pt-2 border-t border-[var(--border)] text-[var(--fg-muted)]">
                 <span>{t('Goal Target ({name}):', { name: activeGoal.name })}</span>
-                <span className="font-bold text-[var(--color-sage)]">
+                <span className="font-medium text-[var(--fg)]">
                   {Math.min(100, Math.round((hoveredPoint.cumulativeBalance / activeGoal.targetD$) * 100))}%
                 </span>
               </div>
@@ -850,28 +825,21 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
         )}
       </div>
 
-      {/* Chart Legend / Footnote */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-[var(--border)] text-[11px] text-[var(--fg-subtle)] font-sans">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1.5">
-            <div className="w-3 h-1 bg-[var(--color-sage)] rounded-full" />
-            <span>{t('Cumulative D$ Trajectory')}</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 bg-[var(--color-sage)]/20 border border-[var(--color-sage)]/40 rounded-xs" />
-            <span>{t('Daily Mission Output')}</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-3 h-[1px] border-b border-dashed border-[var(--color-coral)]" />
-            <span>{t('Goal Threshold')}</span>
-          </div>
+      {/* Legend */}
+      <div className="flex flex-wrap items-center gap-4 text-[12px] text-[var(--fg-muted)]">
+        <div className="flex items-center gap-1.5">
+          <div className="w-3 h-0.5 bg-[var(--accent)] rounded-full" />
+          <span>{t('Balance')}</span>
         </div>
-
-        <div className="flex items-center gap-1 text-[10px] text-[var(--fg-muted)]">
-          <Sparkles className="w-3 h-3 text-[var(--color-sage)]" />
-          <span>{t('Calculated from immutable mission completions')}</span>
+        <div className="flex items-center gap-1.5">
+          <div className="w-2.5 h-2.5 bg-[var(--border-strong)] rounded-[3px]" />
+          <span>{t('Earned that day')}</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="w-3 h-px bg-[var(--fg-muted)]" />
+          <span>{t('Goal Threshold')}</span>
         </div>
       </div>
-    </Card>
+    </div>
   );
 };

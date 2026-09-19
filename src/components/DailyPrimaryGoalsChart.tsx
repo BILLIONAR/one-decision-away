@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useApp } from '../store/useApp';
-import { Card, Badge, Button } from './ui';
+import { Button } from './ui';
 import {
   ResponsiveContainer,
   ComposedChart,
@@ -9,35 +9,50 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  Legend,
   CartesianGrid,
   Cell,
   BarChart,
 } from 'recharts';
-import {
-  Target,
-  CheckCircle2,
-  AlertCircle,
-  Flame,
-  Calendar,
-  Sparkles,
-  TrendingUp,
-  TrendingDown,
-  Minus,
-  ArrowRight,
-  Clock,
-  Layers,
-  Award,
-  Crown,
-  Shield,
-  Trophy,
-  Zap,
-  Download,
-  Share2,
-} from 'lucide-react';
+import { Download } from 'lucide-react';
 import { DailyPrimaryGoal } from '../types/models';
 import { ExportProgressModal } from './ExportProgressModal';
 import { useT, t, getSpeechLang } from '../i18n';
+
+/* ----------------------------- Chart palette ----------------------------- */
+const CHART_FALLBACK = {
+  accent: '#1F5F3F',
+  secondary: '#C9C9C6',
+  tertiary: '#6F6F6C',
+  grid: '#E4E4E1',
+  text: '#6F6F6C',
+  bg: '#FFFFFF',
+};
+
+const readVar = (name: string, fallback: string): string => {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return fallback;
+  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  return v || fallback;
+};
+
+const readChartColors = () => ({
+  accent: readVar('--accent', CHART_FALLBACK.accent),
+  secondary: readVar('--border-strong', CHART_FALLBACK.secondary),
+  tertiary: readVar('--fg-muted', CHART_FALLBACK.tertiary),
+  grid: readVar('--border', CHART_FALLBACK.grid),
+  text: readVar('--fg-muted', CHART_FALLBACK.text),
+  bg: readVar('--bg', CHART_FALLBACK.bg),
+});
+
+const useChartColors = () => {
+  const [colors, setColors] = useState(readChartColors);
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const observer = new MutationObserver(() => setColors(readChartColors()));
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'class'] });
+    return () => observer.disconnect();
+  }, []);
+  return colors;
+};
 
 export interface GoalMilestone {
   streakDays: number;
@@ -54,6 +69,15 @@ export interface GoalMilestone {
   iconName: 'flame' | 'shield' | 'trophy' | 'crown' | 'sparkles';
 }
 
+const MILESTONE_COLORS = {
+  badgeBg: 'var(--accent-soft)',
+  badgeBorder: 'var(--accent)',
+  badgeColor: 'var(--accent)',
+  nodeStroke: 'var(--accent)',
+  nodeFill: 'var(--accent)',
+  haloColor: 'var(--accent-soft)',
+};
+
 export const getStreakMilestone = (streak: number): GoalMilestone | null => {
   if (streak === 5) {
     return {
@@ -62,12 +86,7 @@ export const getStreakMilestone = (streak: number): GoalMilestone | null => {
       label: t('5-Day Streak'),
       title: t('5-Day Momentum Milestone'),
       description: t('5 consecutive days of locked-in daily primary goal focus.'),
-      badgeBg: '#FEF3C7',
-      badgeBorder: '#D97706',
-      badgeColor: '#92400E',
-      nodeStroke: '#D97706',
-      nodeFill: '#F59E0B',
-      haloColor: 'rgba(245, 158, 11, 0.35)',
+      ...MILESTONE_COLORS,
       iconName: 'flame',
     };
   }
@@ -78,12 +97,7 @@ export const getStreakMilestone = (streak: number): GoalMilestone | null => {
       label: t('10-Day Streak'),
       title: t('10-Day Consistency Milestone'),
       description: t('Double-digit streak! 10 unbroken days of high-leverage execution.'),
-      badgeBg: '#D1FAE5',
-      badgeBorder: '#059669',
-      badgeColor: '#065F46',
-      nodeStroke: '#059669',
-      nodeFill: '#10B981',
-      haloColor: 'rgba(16, 185, 129, 0.35)',
+      ...MILESTONE_COLORS,
       iconName: 'shield',
     };
   }
@@ -94,12 +108,7 @@ export const getStreakMilestone = (streak: number): GoalMilestone | null => {
       label: t('15-Day Streak'),
       title: t('15-Day Discipline Milestone'),
       description: t('15 consecutive days of sustained excellence and focus momentum.'),
-      badgeBg: '#DBEAFE',
-      badgeBorder: '#2563EB',
-      badgeColor: '#1E40AF',
-      nodeStroke: '#2563EB',
-      nodeFill: '#3B82F6',
-      haloColor: 'rgba(59, 130, 246, 0.35)',
+      ...MILESTONE_COLORS,
       iconName: 'trophy',
     };
   }
@@ -110,12 +119,7 @@ export const getStreakMilestone = (streak: number): GoalMilestone | null => {
       label: t('20-Day Streak'),
       title: t('20-Day Mastery Milestone'),
       description: t('20 consecutive days of goal completion! Elite top-tier consistency.'),
-      badgeBg: '#EDE9FE',
-      badgeBorder: '#7C3AED',
-      badgeColor: '#5B21B6',
-      nodeStroke: '#7C3AED',
-      nodeFill: '#8B5CF6',
-      haloColor: 'rgba(139, 92, 246, 0.35)',
+      ...MILESTONE_COLORS,
       iconName: 'crown',
     };
   }
@@ -126,12 +130,7 @@ export const getStreakMilestone = (streak: number): GoalMilestone | null => {
       label: t('{n}-Day Streak', { n: streak }),
       title: t('{n}-Day Legendary Milestone', { n: streak }),
       description: t('{n} consecutive days of world-class discipline and execution velocity.', { n: streak }),
-      badgeBg: '#FEF3C7',
-      badgeBorder: '#B45309',
-      badgeColor: '#78350F',
-      nodeStroke: '#B45309',
-      nodeFill: '#FBBF24',
-      haloColor: 'rgba(251, 191, 36, 0.4)',
+      ...MILESTONE_COLORS,
       iconName: 'crown',
     };
   }
@@ -186,20 +185,6 @@ export const MilestoneDot: React.FC<MilestoneDotProps> = ({
   const milestone = payload.milestone;
 
   if (!showMilestones || !milestone) {
-    // Normal day node: subtle small dot if goal completed
-    if (payload.isCompleted) {
-      return (
-        <circle
-          cx={cx}
-          cy={cy}
-          r={2}
-          fill="var(--bg-elevated)"
-          stroke="var(--primary)"
-          strokeWidth={1.2}
-          opacity={0.3}
-        />
-      );
-    }
     return null;
   }
 
@@ -209,86 +194,29 @@ export const MilestoneDot: React.FC<MilestoneDotProps> = ({
   return (
     <g
       key={`milestone-node-${payload.dateKey}`}
-      className="cursor-pointer transition-transform duration-150"
+      className="cursor-pointer"
       onClick={() => onSelectMilestone?.(payload.dateKey)}
     >
-      {/* Ambient Pulsing Halo for key milestone */}
       <circle
         cx={cx}
         cy={cy}
-        r={isSelected ? 18 : 13}
-        fill={milestone.haloColor}
-        className={isSelected ? 'animate-pulse' : ''}
+        r={isSelected ? 6 : 5}
+        fill="var(--bg)"
+        stroke="var(--accent)"
+        strokeWidth={isSelected ? 2.5 : 2}
       />
-
-      {/* Main Node Circle with distinct milestone color */}
-      <circle
-        cx={cx}
-        cy={cy}
-        r={isSelected ? 11 : 9}
-        fill={milestone.nodeFill}
-        stroke={milestone.nodeStroke}
-        strokeWidth={isSelected ? 3 : 2}
-      />
-
-      {/* Center Icon / Glyph inside the circular node */}
-      {streak === 5 && (
-        /* Flame / Fire Icon */
-        <path
-          d={`M ${cx} ${cy - 4} C ${cx + 1.5} ${cy - 2} ${cx + 2.2} ${cy + 0.2} ${cx + 1.2} ${cy + 2.2} C ${cx + 0.6} ${cy + 3.2} ${cx - 0.6} ${cy + 3.2} ${cx - 1.2} ${cy + 2.2} C ${cx - 2.2} ${cy + 0.2} ${cx - 1.5} ${cy - 2} ${cx} ${cy - 4} Z`}
-          fill="#ffffff"
-        />
-      )}
-      {streak === 10 && (
-        /* Shield Icon */
-        <path
-          d={`M ${cx} ${cy - 4} L ${cx + 3.2} ${cy - 2.2} L ${cx + 3.2} ${cy + 0.5} C ${cx + 3.2} ${cy + 2.8} ${cx} ${cy + 4.2} ${cx} ${cy + 4.2} C ${cx} ${cy + 4.2} ${cx - 3.2} ${cy + 2.8} ${cx - 3.2} ${cy + 0.5} L ${cx - 3.2} ${cy - 2.2} Z`}
-          fill="#ffffff"
-        />
-      )}
-      {streak === 15 && (
-        /* Star / Trophy Icon */
-        <path
-          d={`M ${cx} ${cy - 3.6} L ${cx + 1} ${cy - 1} L ${cx + 3.6} ${cy - 1} L ${cx + 1.5} ${cy + 0.6} L ${cx + 2.2} ${cy + 3} L ${cx} ${cy + 1.6} L ${cx - 2.2} ${cy + 3} L ${cx - 1.5} ${cy + 0.6} L ${cx - 3.6} ${cy - 1} L ${cx - 1} ${cy - 1} Z`}
-          fill="#ffffff"
-        />
-      )}
-      {streak >= 20 && (
-        /* Crown Icon */
-        <path
-          d={`M ${cx - 3.2} ${cy + 2.8} L ${cx + 3.2} ${cy + 2.8} L ${cx + 3.2} ${cy - 1.2} L ${cx + 1.6} ${cy + 0.6} L ${cx} ${cy - 3.2} L ${cx - 1.6} ${cy + 0.6} L ${cx - 3.2} ${cy - 1.2} Z`}
-          fill="#ffffff"
-        />
-      )}
-
-      {/* Distinct Floating Milestone Pin Tag above the node */}
-      <g filter="url(#milestone-tag-shadow)">
-        <rect
-          x={cx - 14}
-          y={cy - 28}
-          width={28}
-          height={16}
-          rx={4}
-          fill={milestone.nodeStroke}
-        />
-        {/* Pointed triangle facing downward into the node */}
-        <polygon
-          points={`${cx - 3.5},${cy - 12} ${cx + 3.5},${cy - 12} ${cx},${cy - 8}`}
-          fill={milestone.nodeStroke}
-        />
-        <text
-          x={cx}
-          y={cy - 16.5}
-          textAnchor="middle"
-          fill="#ffffff"
-          fontSize="9"
-          fontWeight="800"
-          fontFamily="system-ui, -apple-system, sans-serif"
-          letterSpacing="0.02em"
-        >
-          {streak}D
-        </text>
-      </g>
+      <rect x={cx - 13} y={cy - 26} width={26} height={16} rx={4} fill="var(--accent)" />
+      <text
+        x={cx}
+        y={cy - 14.5}
+        textAnchor="middle"
+        fill="#FFFFFF"
+        fontSize="9"
+        fontWeight="600"
+        fontFamily="var(--font-sans)"
+      >
+        {t('{n}d', { n: streak })}
+      </text>
     </g>
   );
 };
@@ -299,6 +227,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
 }> = ({ className = '', onExportPng }) => {
   const { data } = useApp();
   const t = useT();
+  const colors = useChartColors();
   const [viewMode, setViewMode] = useState<'daily' | 'weekly'>('daily');
   const [showMilestones, setShowMilestones] = useState<boolean>(true);
   const [selectedMilestoneDateKey, setSelectedMilestoneDateKey] = useState<string | null>(null);
@@ -551,6 +480,11 @@ export const DailyPrimaryGoalsChart: React.FC<{
     return timelineData.find((p) => p.dateKey === selectedMilestoneDateKey) || null;
   }, [timelineData, selectedMilestoneDateKey]);
 
+  const growthLabel =
+    stats.comparison15d.growthRatePct > 0
+      ? `+${stats.comparison15d.growthRatePct}%`
+      : `${stats.comparison15d.growthRatePct}%`;
+
   // Custom chart tooltip
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
@@ -559,79 +493,50 @@ export const DailyPrimaryGoalsChart: React.FC<{
       const milestone = dataPoint.milestone;
 
       return (
-        <div className="bg-[var(--bg-elevated)] border border-[var(--border)] p-3 rounded-[var(--radius-md)] shadow-lg max-w-xs text-xs space-y-2 z-50">
-          <div className="flex items-center justify-between gap-2 border-b border-[var(--border)] pb-1">
-            <span className="font-bold text-[var(--fg)]">{dataPoint.fullDate}</span>
-            <Badge
-              variant={
-                dataPoint.status === 'completed'
-                  ? 'sage'
-                  : dataPoint.status === 'incomplete'
-                  ? 'coral'
-                  : 'neutral'
-              }
-              className="text-[9px] py-0"
-            >
+        <div className="bg-[var(--bg)] border border-[var(--border)] rounded-[var(--radius-sm)] text-[12px] p-3 max-w-xs space-y-2">
+          <div className="flex items-center justify-between gap-3">
+            <span className="font-semibold text-[var(--fg)]">{dataPoint.fullDate}</span>
+            <span className={dataPoint.status === 'completed' ? 'text-[var(--accent)] font-medium' : 'text-[var(--fg-muted)]'}>
               {dataPoint.status === 'completed'
                 ? t('Accomplished')
                 : dataPoint.status === 'incomplete'
                 ? t('Set & Incomplete')
                 : t('No Goal Defined')}
-            </Badge>
+            </span>
           </div>
 
-          {/* Key Milestone Callout Banner */}
           {milestone && (
-            <div
-              className="p-2 rounded-[var(--radius-sm)] border text-white space-y-0.5"
-              style={{
-                backgroundColor: milestone.nodeStroke,
-                borderColor: milestone.badgeBorder,
-              }}
-            >
-              <div className="flex items-center gap-1.5 font-bold text-xs">
-                {milestone.iconName === 'flame' && <Flame className="w-3.5 h-3.5" />}
-                {milestone.iconName === 'shield' && <Shield className="w-3.5 h-3.5" />}
-                {milestone.iconName === 'trophy' && <Trophy className="w-3.5 h-3.5" />}
-                {milestone.iconName === 'crown' && <Crown className="w-3.5 h-3.5" />}
-                <span>{milestone.title}</span>
-              </div>
-              <p className="text-[10px] text-white/95 leading-tight">
-                {milestone.description} {t('({n} consecutive days unlocked!)', { n: milestone.streakDays })}
-              </p>
+            <div className="text-[var(--accent)] font-medium">
+              {milestone.title}
             </div>
           )}
 
           {goal ? (
             <div className="space-y-1">
-              <p className="font-semibold text-sm text-[var(--fg)] font-display leading-tight">
-                {t(goal.title)}
-              </p>
+              <p className="font-medium text-[var(--fg)] leading-snug">{t(goal.title)}</p>
               {goal.notes && (
-                <p className="text-[11px] text-[var(--fg-muted)] italic">
-                  &ldquo;{t(goal.notes)}&rdquo;
-                </p>
+                <p className="text-[var(--fg-muted)]">{t(goal.notes)}</p>
               )}
               {goal.completedAt && (
-                <p className="text-[10px] text-[var(--color-sage)] font-medium">
+                <p className="text-[var(--fg-muted)]">
                   {t('Completed at {time}', { time: new Date(goal.completedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) })}
                 </p>
               )}
             </div>
           ) : (
-            <p className="text-[11px] text-[var(--fg-subtle)]">
+            <p className="text-[var(--fg-muted)]">
               {t('No primary focus was set on this day.')}
             </p>
           )}
 
-          <div className="pt-1.5 border-t border-[var(--border)] space-y-1 text-[10px]">
-            <div className="flex justify-between text-[var(--fg-subtle)]">
+          <div className="pt-2 border-t border-[var(--border)] space-y-1 text-[var(--fg-muted)]">
+            <div className="flex justify-between gap-3">
               <span>{t('Consecutive Streak:')}</span>
-              <span className="font-bold text-[var(--fg)]">{t('{n} days', { n: dataPoint.consecutiveStreak })}</span>
+              <span className="text-[var(--fg)] font-medium">{t('{n} days', { n: dataPoint.consecutiveStreak })}</span>
             </div>
-            <div className="flex justify-between text-[var(--fg-subtle)]">
+            <div className="flex justify-between gap-3">
               <span>{t('7-Day Rolling Rate:')}</span>
-              <span className="font-bold text-[var(--fg)]">{dataPoint.rollingRate}%</span>
+              <span className="text-[var(--fg)] font-medium">{dataPoint.rollingRate}%</span>
             </div>
           </div>
         </div>
@@ -640,57 +545,42 @@ export const DailyPrimaryGoalsChart: React.FC<{
     return null;
   };
 
+  const segmentClass = (active: boolean) =>
+    `h-11 px-3 rounded-[var(--radius-sm)] text-[13px] font-medium transition-colors cursor-pointer ${
+      active ? 'bg-[var(--bg)] text-[var(--fg)]' : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
+    }`;
+
   return (
-    <Card
+    <div
       id="daily-primary-goals-visualization-card"
-      padding="md"
-      className={`space-y-5 border border-[var(--border)] bg-[var(--bg-elevated)] relative ${className}`}
+      className={`bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-6 relative ${className}`}
     >
-      {/* Header & Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[var(--border)]">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
         <div>
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-md bg-[var(--primary)]/15 text-[var(--primary)]">
-              <Target className="w-4 h-4" />
-            </div>
-            <h3 className="text-base font-bold font-display text-[var(--fg)]">
-              {t('Primary Daily Goals (Last 30 Days)')}
-            </h3>
-            <Badge variant="primary" className="text-[10px] uppercase">
-              {t('Recharts Analytics')}
-            </Badge>
-          </div>
-          <p className="text-xs text-[var(--fg-muted)] mt-1">
-            {t('Tracking commitment frequency and accomplishment status of your single daily focus over the past 30 days.')}
+          <h3 className="text-[15px] font-semibold text-[var(--fg)]">{t('Daily goals')}</h3>
+          <p className="text-[13px] text-[var(--fg-muted)] mt-0.5">
+            {t('How often you set and finished your one goal in the last 30 days.')}
           </p>
         </div>
 
-        {/* View Toggle & Export Button */}
-        <div className="flex items-center gap-2 self-start sm:self-auto flex-wrap">
-          <div className="flex items-center gap-1 bg-[var(--bg-muted)] p-1 rounded-[var(--radius-sm)] border border-[var(--border)]">
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-1 bg-[var(--bg-inset)] p-1 rounded-[var(--radius-sm)]">
             <button
               id="chart-toggle-daily-btn"
               type="button"
               onClick={() => setViewMode('daily')}
-              className={`text-xs px-3 py-1 rounded-[var(--radius-sm)] font-medium transition-all cursor-pointer ${
-                viewMode === 'daily'
-                  ? 'bg-[var(--bg-elevated)] text-[var(--fg)] shadow-xs'
-                  : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
-              }`}
+              className={segmentClass(viewMode === 'daily')}
             >
-              {t('30-Day Daily Timeline')}
+              {t('Daily')}
             </button>
             <button
               id="chart-toggle-weekly-btn"
               type="button"
               onClick={() => setViewMode('weekly')}
-              className={`text-xs px-3 py-1 rounded-[var(--radius-sm)] font-medium transition-all cursor-pointer ${
-                viewMode === 'weekly'
-                  ? 'bg-[var(--bg-elevated)] text-[var(--fg)] shadow-xs'
-                  : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
-              }`}
+              className={segmentClass(viewMode === 'weekly')}
             >
-              {t('Weekly Rollup')}
+              {t('Weekly')}
             </button>
           </div>
 
@@ -701,7 +591,6 @@ export const DailyPrimaryGoalsChart: React.FC<{
             icon={Download}
             data-no-export="true"
             onClick={handleExportClick}
-            className="text-xs border-[var(--border)] hover:border-[var(--fg-muted)]"
             title={t('Export this progress visualization as a PNG image for sharing')}
           >
             {t('Export PNG')}
@@ -709,232 +598,115 @@ export const DailyPrimaryGoalsChart: React.FC<{
         </div>
       </div>
 
-      {/* 4-Stat Metric Strip */}
+      {/* KPI tiles */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <div className="p-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)]">
-          <div className="flex items-center justify-between text-xs text-[var(--fg-muted)] mb-1">
-            <span>{t('Setting Frequency')}</span>
-            <Calendar className="w-3.5 h-3.5 text-[var(--primary)]" />
-          </div>
-          <div className="text-xl font-bold font-display text-[var(--fg)]">
-            {stats.setFrequencyPct}%
-          </div>
-          <p className="text-[10px] text-[var(--fg-subtle)] mt-0.5">
+        <div className="bg-[var(--bg)] rounded-[var(--radius-sm)] p-4">
+          <div className="text-[22px] font-semibold text-[var(--fg)] leading-none">{stats.setFrequencyPct}%</div>
+          <div className="text-[12px] text-[var(--fg-muted)] mt-2">{t('Setting Frequency')}</div>
+          <div className="text-[12px] text-[var(--fg-subtle)] mt-0.5">
             {t('{set} of {total} days defined', { set: stats.totalSet, total: stats.totalDays })}
-          </p>
+          </div>
         </div>
 
-        <div className="p-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)]">
-          <div className="flex items-center justify-between text-xs text-[var(--fg-muted)] mb-1">
-            <span>{t('Completion Rate')}</span>
-            <CheckCircle2 className="w-3.5 h-3.5 text-[var(--color-sage)]" />
-          </div>
+        <div className="bg-[var(--bg)] rounded-[var(--radius-sm)] p-4">
           <div className="flex items-baseline gap-2">
-            <span className="text-xl font-bold font-display text-[var(--color-sage)]">
-              {stats.completionRatePct}%
-            </span>
-            <span
-              className={`text-[11px] font-semibold flex items-center gap-0.5 ${
-                stats.comparison15d.growthDirection === 'up'
-                  ? 'text-[var(--color-sage)]'
-                  : stats.comparison15d.growthDirection === 'down'
-                  ? 'text-[var(--color-coral)]'
-                  : 'text-[var(--fg-muted)]'
-              }`}
-            >
-              {stats.comparison15d.growthDirection === 'up' && <TrendingUp className="w-3 h-3" />}
-              {stats.comparison15d.growthDirection === 'down' && <TrendingDown className="w-3 h-3" />}
-              {stats.comparison15d.growthDirection === 'neutral' && <Minus className="w-3 h-3" />}
-              {stats.comparison15d.growthRatePct > 0
-                ? `+${stats.comparison15d.growthRatePct}%`
-                : `${stats.comparison15d.growthRatePct}%`}
-            </span>
+            <span className="text-[22px] font-semibold text-[var(--accent)] leading-none">{stats.completionRatePct}%</span>
+            <span className="text-[12px] text-[var(--fg-muted)]">{growthLabel}</span>
           </div>
-          <p className="text-[10px] text-[var(--fg-subtle)] mt-0.5">
+          <div className="text-[12px] text-[var(--fg-muted)] mt-2">{t('Completion Rate')}</div>
+          <div className="text-[12px] text-[var(--fg-subtle)] mt-0.5">
             {t('{completed} achieved of {set} set', { completed: stats.totalCompleted, set: stats.totalSet })}
-          </p>
+          </div>
         </div>
 
-        <div className="p-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)]">
-          <div className="flex items-center justify-between text-xs text-[var(--fg-muted)] mb-1">
-            <span>{t('Current Streak')}</span>
-            <Flame className="w-3.5 h-3.5 text-[var(--color-coral)]" />
-          </div>
-          <div className="text-xl font-bold font-display text-[var(--fg)]">
+        <div className="bg-[var(--bg)] rounded-[var(--radius-sm)] p-4">
+          <div className="text-[22px] font-semibold text-[var(--fg)] leading-none">
             {t('{n} Days', { n: stats.currentStreak })}
           </div>
-          <p className="text-[10px] text-[var(--fg-subtle)] mt-0.5">
-            {t('Active daily focus momentum')}
-          </p>
+          <div className="text-[12px] text-[var(--fg-muted)] mt-2">{t('Current Streak')}</div>
+          <div className="text-[12px] text-[var(--fg-subtle)] mt-0.5">
+            {t('Best run: {n} consecutive days', { n: stats.longestStreak })}
+          </div>
         </div>
 
-        <div className="p-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)]">
-          <div className="flex items-center justify-between text-xs text-[var(--fg-muted)] mb-1">
-            <span>{t('Milestones Reached')}</span>
-            <Award className="w-3.5 h-3.5 text-amber-500" />
-          </div>
+        <div className="bg-[var(--bg)] rounded-[var(--radius-sm)] p-4">
           <div className="flex items-baseline gap-2">
-            <span className="text-xl font-bold font-display text-[var(--fg)]">
-              {stats.milestoneCount}
-            </span>
+            <span className="text-[22px] font-semibold text-[var(--fg)] leading-none">{stats.milestoneCount}</span>
             {stats.highestMilestone && (
-              <Badge variant="warning" className="text-[9px] py-0 px-1 font-bold">
+              <span className="text-[12px] text-[var(--fg-muted)]">
                 {t('Top: {n}d', { n: stats.highestMilestone.streakDays })}
-              </Badge>
+              </span>
             )}
           </div>
-          <p className="text-[10px] text-[var(--fg-subtle)] mt-0.5">
-            {t('Best run: {n} consecutive days', { n: stats.longestStreak })}
-          </p>
+          <div className="text-[12px] text-[var(--fg-muted)] mt-2">{t('Milestones Reached')}</div>
         </div>
       </div>
 
-      {/* Completion Growth Rate Percentage Trend Banner (Last 15 Days vs Previous 15 Days) */}
-      <div className="p-4 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--bg-muted)]/60 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <div
-              className={`p-1.5 rounded-[var(--radius-sm)] ${
-                stats.comparison15d.growthDirection === 'up'
-                  ? 'bg-[#2A6F4E]/15 text-[#2A6F4E]'
-                  : stats.comparison15d.growthDirection === 'down'
-                  ? 'bg-[#C2593F]/15 text-[#C2593F]'
-                  : 'bg-[var(--bg-elevated)] text-[var(--fg-muted)]'
-              }`}
-            >
-              {stats.comparison15d.growthDirection === 'up' && <TrendingUp className="w-4 h-4" />}
-              {stats.comparison15d.growthDirection === 'down' && <TrendingDown className="w-4 h-4" />}
-              {stats.comparison15d.growthDirection === 'neutral' && <Minus className="w-4 h-4" />}
-            </div>
-            <span className="text-xs font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-              {t('Completion Growth Rate (15d vs 15d Trend)')}
-            </span>
-            <Badge
-              variant={
-                stats.comparison15d.growthDirection === 'up'
-                  ? 'sage'
-                  : stats.comparison15d.growthDirection === 'down'
-                  ? 'coral'
-                  : 'neutral'
-              }
-              className="text-[10px] font-bold"
-            >
+      {/* 15d vs 15d comparison */}
+      <div className="bg-[var(--bg)] rounded-[var(--radius-sm)] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-[22px] font-semibold text-[var(--fg)] leading-none">{growthLabel}</span>
+            <span className="text-[12px] text-[var(--fg-muted)]">
               {stats.comparison15d.pointDelta > 0
                 ? t('+{n}% pts', { n: stats.comparison15d.pointDelta })
                 : stats.comparison15d.pointDelta < 0
                 ? t('{n}% pts', { n: stats.comparison15d.pointDelta })
                 : t('0% pts')}
-            </Badge>
-          </div>
-
-          <div className="flex items-baseline gap-2.5 pt-0.5">
-            <span
-              className={`text-2xl sm:text-3xl font-bold font-display tracking-tight ${
-                stats.comparison15d.growthDirection === 'up'
-                  ? 'text-[#2A6F4E]'
-                  : stats.comparison15d.growthDirection === 'down'
-                  ? 'text-[#C2593F]'
-                  : 'text-[var(--fg)]'
-              }`}
-            >
-              {stats.comparison15d.growthRatePct > 0
-                ? `+${stats.comparison15d.growthRatePct}%`
-                : `${stats.comparison15d.growthRatePct}%`}
-            </span>
-            <span className="text-xs text-[var(--fg-muted)] font-medium">
-              {stats.comparison15d.growthDirection === 'up'
-                ? t('growth in accomplishment rate over the last 15 days')
-                : stats.comparison15d.growthDirection === 'down'
-                ? t('reduction in accomplishment rate over the last 15 days')
-                : t('steady execution velocity over the last 15 days')}
             </span>
           </div>
-
-          <p className="text-[11px] text-[var(--fg-subtle)] leading-relaxed">
+          <div className="text-[12px] text-[var(--fg-muted)] mt-2">
+            {stats.comparison15d.growthDirection === 'up'
+              ? t('growth in accomplishment rate over the last 15 days')
+              : stats.comparison15d.growthDirection === 'down'
+              ? t('reduction in accomplishment rate over the last 15 days')
+              : t('steady execution velocity over the last 15 days')}
+          </div>
+          <div className="text-[12px] text-[var(--fg-subtle)] mt-0.5">
             {t('Comparing the last 15 days ({recent}) against the baseline of the previous 15 days ({prev}).', { recent: stats.comparison15d.recent15RangeLabel, prev: stats.comparison15d.prev15RangeLabel })}
-          </p>
+          </div>
         </div>
 
-        {/* 15d vs 15d Comparison Breakdown Tiles */}
-        <div className="flex items-center gap-2 sm:gap-3 bg-[var(--bg-elevated)] p-2.5 sm:p-3 rounded-[var(--radius-sm)] border border-[var(--border)] shrink-0 self-stretch sm:self-auto justify-between sm:justify-start">
-          <div className="text-left space-y-0.5">
-            <span className="text-[10px] uppercase font-bold text-[var(--fg-subtle)] tracking-wider block">
-              {t('Previous 15 Days')}
-            </span>
-            <div className="text-base font-bold font-display text-[var(--fg)]">
-              {stats.comparison15d.prev15Rate}%
-            </div>
-            <span className="text-[10px] text-[var(--fg-muted)] block">
+        <div className="flex items-center gap-6 shrink-0">
+          <div>
+            <div className="text-[15px] font-semibold text-[var(--fg)]">{stats.comparison15d.prev15Rate}%</div>
+            <div className="text-[12px] text-[var(--fg-muted)]">{t('Previous 15 Days')}</div>
+            <div className="text-[12px] text-[var(--fg-subtle)]">
               {t('{completed} / {set} completed', { completed: stats.comparison15d.prev15Completed, set: stats.comparison15d.prev15Set })}
-            </span>
-          </div>
-
-          <div className="px-1 text-[var(--fg-subtle)] flex flex-col items-center">
-            <ArrowRight className="w-4 h-4" />
-            <span className="text-[9px] font-mono text-[var(--fg-subtle)] mt-0.5">{t('vs')}</span>
-          </div>
-
-          <div className="text-left space-y-0.5">
-            <span className="text-[10px] uppercase font-bold text-[var(--fg-subtle)] tracking-wider block">
-              {t('Last 15 Days')}
-            </span>
-            <div
-              className={`text-base font-bold font-display ${
-                stats.comparison15d.growthDirection === 'up'
-                  ? 'text-[#2A6F4E]'
-                  : stats.comparison15d.growthDirection === 'down'
-                  ? 'text-[#C2593F]'
-                  : 'text-[var(--fg)]'
-              }`}
-            >
-              {stats.comparison15d.recent15Rate}%
             </div>
-            <span className="text-[10px] text-[var(--fg-muted)] block">
+          </div>
+          <div>
+            <div className="text-[15px] font-semibold text-[var(--accent)]">{stats.comparison15d.recent15Rate}%</div>
+            <div className="text-[12px] text-[var(--fg-muted)]">{t('Last 15 Days')}</div>
+            <div className="text-[12px] text-[var(--fg-subtle)]">
               {t('{completed} / {set} completed', { completed: stats.comparison15d.recent15Completed, set: stats.comparison15d.recent15Set })}
-            </span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Key Milestone Markers Header & Filter Strip */}
-      <div className="p-3.5 bg-[var(--bg-muted)]/50 rounded-[var(--radius-md)] border border-[var(--border)] space-y-2.5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-sm bg-amber-500/15 text-amber-600">
-              <Award className="w-4 h-4" />
-            </div>
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-[var(--fg)]">
-                {t('Goal Completion Streak Milestones')}
-              </span>
-              <span className="text-[11px] text-[var(--fg-muted)] block">
-                {t('Key consistency thresholds (5, 10, 20 consecutive days) highlighted directly on the line graph')}
-              </span>
-            </div>
+      {/* Milestones */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <h4 className="text-[15px] font-semibold text-[var(--fg)]">{t('Streak milestones')}</h4>
+            <p className="text-[13px] text-[var(--fg-muted)]">{t('5, 10, 15 and 20 consecutive days, marked on the line.')}</p>
           </div>
-
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={() => setShowMilestones((prev) => !prev)}
-              className={`px-2.5 py-1 rounded-[var(--radius-sm)] text-[11px] font-medium border transition-colors flex items-center gap-1.5 cursor-pointer ${
-                showMilestones
-                  ? 'bg-[var(--primary)] text-white border-[var(--primary)] shadow-xs'
-                  : 'bg-[var(--bg-elevated)] text-[var(--fg-muted)] border-[var(--border)] hover:text-[var(--fg)]'
-              }`}
-            >
-              <Sparkles className="w-3 h-3" />
-              <span>{showMilestones ? t('Milestones Visible') : t('Milestones Hidden')}</span>
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => setShowMilestones((prev) => !prev)}
+            className={`h-11 px-3 rounded-[var(--radius-sm)] text-[13px] font-medium border cursor-pointer transition-colors shrink-0 ${
+              showMilestones
+                ? 'bg-[var(--fg)] text-[var(--bg)] border-[var(--fg)]'
+                : 'bg-transparent text-[var(--fg)] border-[var(--border-strong)]'
+            }`}
+          >
+            {showMilestones ? t('Milestones Visible') : t('Milestones Hidden')}
+          </button>
         </div>
 
-        {/* Achieved Milestones Badges */}
         {achievedMilestones.length > 0 ? (
-          <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-[var(--border)]/60">
-            <span className="text-[11px] font-semibold text-[var(--fg-subtle)] mr-1">
-              {t('Milestones Reached:')}
-            </span>
+          <div className="flex flex-wrap items-center gap-2">
             {achievedMilestones.map((point) => {
               const m = point.milestone!;
               const isSelected = selectedMilestoneDateKey === point.dateKey;
@@ -947,71 +719,47 @@ export const DailyPrimaryGoalsChart: React.FC<{
                       prev === point.dateKey ? null : point.dateKey
                     )
                   }
-                  className={`px-2.5 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 border shadow-2xs cursor-pointer ${
+                  className={`h-11 px-3 rounded-[var(--radius-sm)] text-[13px] font-medium border cursor-pointer transition-colors ${
                     isSelected
-                      ? 'ring-2 ring-offset-1 scale-105'
-                      : 'hover:opacity-90 hover:scale-102'
+                      ? 'bg-[var(--accent)] text-white border-[var(--accent)]'
+                      : 'bg-[var(--bg)] text-[var(--fg)] border-transparent hover:border-[var(--border-strong)]'
                   }`}
-                  style={{
-                    backgroundColor: m.badgeBg,
-                    borderColor: m.badgeBorder,
-                    color: m.badgeColor,
-                  }}
                   title={t('{title} achieved on {date}', { title: m.title, date: point.fullDate })}
                 >
-                  {m.iconName === 'flame' && <Flame className="w-3.5 h-3.5" />}
-                  {m.iconName === 'shield' && <Shield className="w-3.5 h-3.5" />}
-                  {m.iconName === 'trophy' && <Trophy className="w-3.5 h-3.5" />}
-                  {m.iconName === 'crown' && <Crown className="w-3.5 h-3.5" />}
-                  <span>{t('{n}-Day Milestone', { n: m.streakDays })}</span>
-                  <span className="text-[10px] font-normal opacity-80">({point.displayDate})</span>
+                  {t('{n}-Day Milestone', { n: m.streakDays })}
+                  <span className={`ml-1.5 text-[12px] ${isSelected ? 'text-white/80' : 'text-[var(--fg-muted)]'}`}>
+                    {point.displayDate}
+                  </span>
                 </button>
               );
             })}
           </div>
         ) : (
-          <p className="text-[11px] text-[var(--fg-subtle)] italic pt-1 border-t border-[var(--border)]/60">
-            {t('No 5, 10, or 20-day milestones reached yet in this 30-day window. Complete daily primary goals consecutively to unlock milestone markers!')}
+          <p className="text-[13px] text-[var(--fg-muted)]">
+            {t('No milestones yet. Finish your goal on consecutive days to earn one.')}
           </p>
         )}
 
-        {/* Active Milestone Highlight Card */}
         {selectedMilestonePoint && selectedMilestonePoint.milestone && (
-          <div
-            className="p-3 rounded-[var(--radius-sm)] border flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-in fade-in duration-200"
-            style={{
-              backgroundColor: selectedMilestonePoint.milestone.badgeBg,
-              borderColor: selectedMilestonePoint.milestone.badgeBorder,
-            }}
-          >
-            <div className="space-y-0.5">
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-xs" style={{ color: selectedMilestonePoint.milestone.badgeColor }}>
-                  🏆 {selectedMilestonePoint.milestone.title} ({selectedMilestonePoint.fullDate})
-                </span>
-                <Badge
-                  variant="neutral"
-                  className="text-[9px] font-bold"
-                  style={{ color: selectedMilestonePoint.milestone.badgeColor }}
-                >
-                  {t('{n} Consecutive Days', { n: selectedMilestonePoint.milestone.streakDays })}
-                </Badge>
+          <div className="bg-[var(--bg)] rounded-[var(--radius-sm)] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="space-y-1">
+              <div className="text-[13px] font-semibold text-[var(--fg)]">
+                {selectedMilestonePoint.milestone.title} · {selectedMilestonePoint.fullDate}
               </div>
-              <p className="text-xs font-medium text-[var(--fg-muted)]">
+              <p className="text-[13px] text-[var(--fg-muted)]">
                 {selectedMilestonePoint.milestone.description}
               </p>
               {selectedMilestonePoint.goal && (
-                <p className="text-[11px] text-[var(--fg)] italic pt-0.5">
+                <p className="text-[13px] text-[var(--fg-muted)]">
                   {t('Goal completed on this milestone day: “{title}”', { title: selectedMilestonePoint.goal.title })}
                 </p>
               )}
             </div>
-
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setSelectedMilestoneDateKey(null)}
-              className="text-[11px] self-start sm:self-auto h-7 px-2"
+              className="self-start sm:self-auto"
             >
               {t('Clear Focus')}
             </Button>
@@ -1019,33 +767,22 @@ export const DailyPrimaryGoalsChart: React.FC<{
         )}
       </div>
 
-      {/* Main Recharts Visualization Canvas */}
-      <div className="w-full pt-2">
+      {/* Chart */}
+      <div className="w-full">
         {viewMode === 'daily' ? (
-          /* 30-Day Daily Timeline Chart */
-          <div className="space-y-2">
+          <div className="space-y-3">
             <div className="h-72 sm:h-80 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart
                   data={timelineData}
-                  margin={{ top: 32, right: 12, left: -20, bottom: 20 }}
+                  margin={{ top: 32, right: 12, left: -20, bottom: 8 }}
                 >
-                  <defs>
-                    <filter id="milestone-tag-shadow" x="-30%" y="-30%" width="160%" height="160%">
-                      <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" floodColor="#000000" floodOpacity="0.25" />
-                    </filter>
-                  </defs>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    vertical={false}
-                    stroke="var(--border)"
-                    opacity={0.6}
-                  />
+                  <CartesianGrid vertical={false} stroke={colors.grid} />
                   <XAxis
                     dataKey="displayDate"
                     tickLine={false}
-                    axisLine={{ stroke: 'var(--border)' }}
-                    tick={{ fill: 'var(--fg-subtle)', fontSize: 10 }}
+                    axisLine={{ stroke: colors.grid }}
+                    tick={{ fill: colors.text, fontSize: 11 }}
                     interval={3}
                   />
                   <YAxis
@@ -1055,7 +792,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
                     tickFormatter={(val) => (val === 1 ? t('Focus') : t('None'))}
                     tickLine={false}
                     axisLine={false}
-                    tick={{ fill: 'var(--fg-subtle)', fontSize: 10 }}
+                    tick={{ fill: colors.text, fontSize: 11 }}
                   />
                   <YAxis
                     yAxisId="rate"
@@ -1065,23 +802,16 @@ export const DailyPrimaryGoalsChart: React.FC<{
                     tickFormatter={(val) => `${val}%`}
                     tickLine={false}
                     axisLine={false}
-                    tick={{ fill: 'var(--fg-subtle)', fontSize: 10 }}
+                    tick={{ fill: colors.text, fontSize: 11 }}
                   />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Legend
-                    verticalAlign="top"
-                    align="right"
-                    iconSize={8}
-                    wrapperStyle={{ fontSize: '11px', paddingBottom: '8px' }}
-                  />
+                  <Tooltip content={<CustomTooltip />} cursor={{ fill: colors.grid, opacity: 0.5 }} />
 
-                  {/* Primary Daily Goal Status Bar */}
                   <Bar
                     yAxisId="status"
                     dataKey="isCompleted"
                     name={t('Completed Goal')}
                     stackId="goal"
-                    fill="var(--color-sage)"
+                    fill={colors.accent}
                     radius={[2, 2, 0, 0]}
                     maxBarSize={14}
                   >
@@ -1090,23 +820,22 @@ export const DailyPrimaryGoalsChart: React.FC<{
                         key={`cell-${index}`}
                         fill={
                           entry.status === 'completed'
-                            ? '#2A6F4E' // Deep Sage Green
+                            ? colors.accent
                             : entry.status === 'incomplete'
-                            ? '#C2593F' // Coral / Amber
-                            : '#D4CDC3' // Muted / No Goal
+                            ? colors.tertiary
+                            : colors.secondary
                         }
                       />
                     ))}
                   </Bar>
 
-                  {/* 7-Day Rolling Completion Moving Average with Custom Milestone Nodes */}
                   <Line
                     yAxisId="rate"
                     type="monotone"
                     dataKey="rollingRate"
                     name={t('7-Day Rolling Completion Rate (%)')}
-                    stroke="var(--primary)"
-                    strokeWidth={2.5}
+                    stroke={colors.tertiary}
+                    strokeWidth={2}
                     dot={(dotProps: any) => (
                       <MilestoneDot
                         {...dotProps}
@@ -1117,98 +846,74 @@ export const DailyPrimaryGoalsChart: React.FC<{
                         }
                       />
                     )}
-                    activeDot={{ r: 5, stroke: 'var(--primary)', strokeWidth: 2, fill: 'var(--bg-elevated)' }}
+                    activeDot={{ r: 4, stroke: colors.tertiary, strokeWidth: 2, fill: colors.bg }}
                   />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
 
-            {/* Visual Legend Guide */}
-            <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-[var(--border)] text-[11px] text-[var(--fg-muted)]">
-              <div className="flex flex-wrap items-center gap-4">
-                <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-xs bg-[#2A6F4E]" />
-                  <span>{t('Accomplished (100% completed)')}</span>
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-xs bg-[#C2593F]" />
-                  <span>{t('Set, but Incomplete')}</span>
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-xs bg-[#D4CDC3]" />
-                  <span>{t('No Goal Set')}</span>
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="flex items-center -space-x-1">
-                    <span className="w-3 h-3 rounded-full bg-[#F59E0B] border border-[#D97706] inline-block" />
-                    <span className="w-3 h-3 rounded-full bg-[#10B981] border border-[#059669] inline-block" />
-                    <span className="w-3 h-3 rounded-full bg-[#8B5CF6] border border-[#7C3AED] inline-block" />
-                  </span>
-                  <span className="font-semibold text-[var(--fg)]">{t('Key Milestones (5, 10, 20 Days)')}</span>
-                </span>
-              </div>
-              <span className="italic text-[10px] text-[var(--fg-subtle)]">
-                {t('*Click milestone nodes or badges to highlight achievement details; hover bars for goals')}
+            <div className="flex flex-wrap items-center gap-4 text-[12px] text-[var(--fg-muted)]">
+              <span className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-[3px] bg-[var(--accent)]" />
+                <span>{t('Completed Goal')}</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-3 h-0.5 rounded-full bg-[var(--fg-muted)]" />
+                <span>{t('7-Day Rolling Completion Rate (%)')}</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full border-2 border-[var(--accent)] bg-[var(--bg)]" />
+                <span>{t('Milestone')}</span>
               </span>
             </div>
           </div>
         ) : (
-          /* Weekly Rollup Chart */
-          <div className="space-y-2">
+          <div className="space-y-3">
             <div className="h-64 sm:h-72 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                   data={weeklyData}
-                  margin={{ top: 10, right: 10, left: -20, bottom: 20 }}
+                  margin={{ top: 10, right: 10, left: -20, bottom: 8 }}
                 >
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    vertical={false}
-                    stroke="var(--border)"
-                    opacity={0.6}
-                  />
+                  <CartesianGrid vertical={false} stroke={colors.grid} />
                   <XAxis
                     dataKey="weekLabel"
                     tickLine={false}
-                    axisLine={{ stroke: 'var(--border)' }}
-                    tick={{ fill: 'var(--fg-subtle)', fontSize: 11 }}
+                    axisLine={{ stroke: colors.grid }}
+                    tick={{ fill: colors.text, fontSize: 11 }}
                   />
                   <YAxis
                     domain={[0, 7]}
                     ticks={[0, 2, 4, 6, 7]}
                     tickLine={false}
                     axisLine={false}
-                    tick={{ fill: 'var(--fg-subtle)', fontSize: 10 }}
+                    tick={{ fill: colors.text, fontSize: 11 }}
                   />
                   <Tooltip
                     formatter={(value: any, name: any) => [
                       t('{n} days', { n: value }),
                       name === 'completedGoals' ? t('Goals Accomplished') : t('Goals Incomplete'),
                     ]}
+                    cursor={{ fill: colors.grid, opacity: 0.5 }}
                     contentStyle={{
-                      backgroundColor: 'var(--bg-elevated)',
+                      backgroundColor: 'var(--bg)',
                       borderColor: 'var(--border)',
-                      borderRadius: 'var(--radius-md)',
+                      borderRadius: 'var(--radius-sm)',
                       fontSize: '12px',
+                      color: 'var(--fg)',
                     }}
-                  />
-                  <Legend
-                    verticalAlign="top"
-                    align="right"
-                    iconSize={8}
-                    wrapperStyle={{ fontSize: '11px', paddingBottom: '8px' }}
                   />
                   <Bar
                     dataKey="completedGoals"
                     name={t('Accomplished Focus')}
-                    fill="var(--color-sage)"
+                    fill={colors.accent}
                     radius={[3, 3, 0, 0]}
                     maxBarSize={32}
                   />
                   <Bar
                     dataKey="incompleteGoals"
                     name={t('Incomplete Focus')}
-                    fill="var(--color-coral)"
+                    fill={colors.secondary}
                     radius={[3, 3, 0, 0]}
                     maxBarSize={32}
                   />
@@ -1216,13 +921,24 @@ export const DailyPrimaryGoalsChart: React.FC<{
               </ResponsiveContainer>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-[var(--border)] text-xs">
+            <div className="flex flex-wrap items-center gap-4 text-[12px] text-[var(--fg-muted)]">
+              <span className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-[3px] bg-[var(--accent)]" />
+                <span>{t('Accomplished Focus')}</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-[3px] bg-[var(--border-strong)]" />
+                <span>{t('Incomplete Focus')}</span>
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {weeklyData.map((wk, i) => (
-                <div key={i} className="p-2 rounded bg-[var(--bg-muted)] border border-[var(--border)]">
-                  <span className="font-semibold block text-[11px] text-[var(--fg)]">{t('Week {n}', { n: i + 1 })}</span>
-                  <div className="flex justify-between items-center text-[10px] text-[var(--fg-muted)] mt-1">
-                    <span>{t('Rate:')} <strong className="text-[var(--color-sage)]">{wk.completionRate}%</strong></span>
-                    <span>{t('{completed}/{total} goals', { completed: wk.completedGoals, total: wk.daysWithGoal })}</span>
+                <div key={i} className="bg-[var(--bg)] rounded-[var(--radius-sm)] p-4">
+                  <div className="text-[22px] font-semibold text-[var(--fg)] leading-none">{wk.completionRate}%</div>
+                  <div className="text-[12px] text-[var(--fg-muted)] mt-2">{t('Week {n}', { n: i + 1 })}</div>
+                  <div className="text-[12px] text-[var(--fg-subtle)] mt-0.5">
+                    {t('{completed}/{total} goals', { completed: wk.completedGoals, total: wk.daysWithGoal })}
                   </div>
                 </div>
               ))}
@@ -1231,22 +947,17 @@ export const DailyPrimaryGoalsChart: React.FC<{
         )}
       </div>
 
-      {/* Export / Brand Watermark Footer */}
-      <div className="pt-2 border-t border-[var(--border)]/50 flex flex-wrap items-center justify-between gap-2 text-[10px] text-[var(--fg-subtle)] font-sans">
-        <div className="flex items-center gap-1.5">
-          <span className="font-semibold text-[var(--fg-muted)]">{t('One Decision Away')}</span>
-          <span>•</span>
-          <span>{t('30-Day Goal Trajectory & Streak Milestones')}</span>
-        </div>
+      {/* Footer */}
+      <div className="pt-4 border-t border-[var(--border)] flex flex-wrap items-center justify-between gap-2 text-[12px] text-[var(--fg-subtle)]">
+        <span>{t('One Decision Away')}</span>
         <span>{t('Record generated {date}', { date: new Date().toLocaleDateString(getSpeechLang(), { month: 'short', day: 'numeric', year: 'numeric' }) })}</span>
       </div>
 
-      {/* Internal Export Progress Modal if triggered from chart */}
       <ExportProgressModal
         isOpen={showInternalExportModal}
         onClose={() => setShowInternalExportModal(false)}
         targetElementId="daily-primary-goals-visualization-card"
       />
-    </Card>
+    </div>
   );
 };

@@ -1,16 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../store/useApp';
-import { Card, Button, Badge } from './ui';
-import {
-  Download,
-  FileSpreadsheet,
-  X,
-  Calendar,
-  CheckCircle2,
-  Filter,
-  Table,
-  Sparkles,
-} from 'lucide-react';
+import { Modal, Button } from './ui';
+import { Download, Check } from 'lucide-react';
 import {
   generateMicroHabitsDetailedCsv,
   generateMicroHabitsSummaryCsv,
@@ -59,211 +50,155 @@ export const ExportHabitHistoryModal: React.FC<ExportHabitHistoryModalProps> = (
         rangeDays ? `${rangeDays}d` : 'all_time'
       }_${timestamp}.csv`;
       downloadCsvFile(csv, filename);
-      showToast(t('✓ Exported {n} completion records to CSV!', { n: totalFilteredCompletions }), 'success');
+      showToast(t('Exported {n} records.', { n: totalFilteredCompletions }), 'success');
     } else {
       const csv = generateMicroHabitsSummaryCsv(data);
       const filename = `micro_habits_summary_${timestamp}.csv`;
       downloadCsvFile(csv, filename);
-      showToast(t('✓ Exported summary for {n} micro-habits to CSV!', { n: habits.length }), 'success');
+      showToast(t('Exported {n} habits.', { n: habits.length }), 'success');
     }
     onClose();
   };
 
+  const formatOptions: { id: 'detailed' | 'summary'; label: string; description: string }[] = [
+    {
+      id: 'detailed',
+      label: t('Daily log'),
+      description: t('One row per completed day.'),
+    },
+    {
+      id: 'summary',
+      label: t('Summary'),
+      description: t('One row per habit with streaks and totals.'),
+    },
+  ];
+
+  const rangeOptions: { label: string; days: number | undefined }[] = [
+    { label: t('7 days'), days: 7 },
+    { label: t('30 days'), days: 30 },
+    { label: t('90 days'), days: 90 },
+    { label: t('All time'), days: undefined },
+  ];
+
+  const columns =
+    exportType === 'detailed'
+      ? [
+          t('Date'),
+          t('Day of Week'),
+          t('Habit Title'),
+          t('Category'),
+          t('Duration (Mins)'),
+          t('Linked Life Goal'),
+          t('Goal Domain Area'),
+          t('Current Streak'),
+          t('Best Streak'),
+          t('Lifetime Completions'),
+          t('Status'),
+        ]
+      : [
+          t('Habit Title'),
+          t('Category'),
+          t('Duration (Mins)'),
+          t('Description'),
+          t('Linked Life Goal'),
+          t('Goal Area'),
+          t('Current Streak'),
+          t('Best Streak'),
+          t('Total Completed Days'),
+          t('Created At'),
+        ];
+
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-      <Card
-        padding="none"
-        className="w-full max-w-xl max-h-[90vh] flex flex-col bg-[var(--bg-elevated)] border border-[var(--border)] shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200"
-      >
-        {/* Modal Header */}
-        <div className="p-4 sm:p-5 border-b border-[var(--border)] flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-md bg-[var(--primary)]/15 text-[var(--primary)]">
-              <FileSpreadsheet className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-base font-bold font-display text-[var(--fg)]">
-                  {t('Export Micro-Habit History')}
-                </h3>
-                <Badge variant="sage" className="text-[10px] uppercase">
-                  CSV • RFC 4180
-                </Badge>
-              </div>
-              <p className="text-xs text-[var(--fg-muted)]">
-                {t('Download your micro-habit tracking logs for spreadsheet analysis')}
-              </p>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="p-1.5 text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-muted)] rounded-md transition-colors cursor-pointer"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Modal Body */}
-        <div className="p-4 sm:p-5 overflow-y-auto space-y-4">
-          {/* Format Selection */}
-          <div className="space-y-1.5">
-            <label className="block text-xs font-semibold text-[var(--fg)]">
-              {t('Export Format Structure')}
-            </label>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => setExportType('detailed')}
-                className={`p-3 text-left rounded-[var(--radius-md)] border text-xs transition-all cursor-pointer ${
-                  exportType === 'detailed'
-                    ? 'border-[var(--primary)] bg-[var(--primary)]/10 text-[var(--fg)] shadow-xs'
-                    : 'border-[var(--border)] bg-[var(--bg-muted)]/50 text-[var(--fg-muted)] hover:border-[var(--border-strong)]'
-                }`}
-              >
-                <span className="font-bold block text-[var(--fg)] mb-0.5">
-                  {t('Detailed Daily Log')}
-                </span>
-                <span className="text-[11px] text-[var(--fg-subtle)] leading-tight block">
-                  {t('One row per completion date with habit title, category, linked life goal, and streak at completion.')}
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setExportType('summary')}
-                className={`p-3 text-left rounded-[var(--radius-md)] border text-xs transition-all cursor-pointer ${
-                  exportType === 'summary'
-                    ? 'border-[var(--primary)] bg-[var(--primary)]/10 text-[var(--fg)] shadow-xs'
-                    : 'border-[var(--border)] bg-[var(--bg-muted)]/50 text-[var(--fg-muted)] hover:border-[var(--border-strong)]'
-                }`}
-              >
-                <span className="font-bold block text-[var(--fg)] mb-0.5">
-                  {t('Habit Summary Metrics')}
-                </span>
-                <span className="text-[11px] text-[var(--fg-subtle)] leading-tight block">
-                  {t('One row per micro-habit with lifetime completions, active streak, best streak, and linked goals.')}
-                </span>
-              </button>
-            </div>
-          </div>
-
-          {/* Time Range Filter (Only applicable to detailed log) */}
-          {exportType === 'detailed' && (
-            <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-[var(--fg)]">
-                {t('History Time Window')}
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {[
-                  { label: t('Last 7 Days'), days: 7 },
-                  { label: t('Last 30 Days'), days: 30 },
-                  { label: t('Last 90 Days'), days: 90 },
-                  { label: t('All-Time History'), days: undefined },
-                ].map((item) => (
-                  <button
-                    key={item.label}
-                    type="button"
-                    onClick={() => setRangeDays(item.days)}
-                    className={`px-3 py-1.5 text-xs font-medium rounded-[var(--radius-sm)] border transition-all cursor-pointer ${
-                      rangeDays === item.days
-                        ? 'bg-[var(--primary)] text-white border-[var(--primary)] shadow-xs'
-                        : 'bg-[var(--bg)] border-[var(--border)] text-[var(--fg-muted)] hover:text-[var(--fg)]'
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={t('Export habits')}
+      subtitle={t('Download a CSV for Excel, Numbers or Google Sheets.')}
+      maxWidth="md"
+    >
+      <div className="space-y-6">
+        {/* Format */}
+        <div className="space-y-2">
+          <span className="block text-[13px] font-medium text-[var(--fg-muted)]">{t('Format')}</span>
+          <div className="rounded-[var(--radius-md)] bg-[var(--bg-muted)] overflow-hidden">
+            {formatOptions.map((opt, idx) => {
+              const selected = exportType === opt.id;
+              return (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => setExportType(opt.id)}
+                  className={`w-full min-h-[56px] px-4 py-3 flex items-center gap-3 text-left cursor-pointer hover:bg-[var(--bg-inset)] transition-colors ${
+                    idx > 0 ? 'border-t border-[var(--border)]' : ''
+                  }`}
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[15px] font-medium text-[var(--fg)]">{opt.label}</div>
+                    <div className="text-[13px] text-[var(--fg-muted)]">{opt.description}</div>
+                  </div>
+                  <span
+                    className={`w-5 h-5 rounded-full shrink-0 flex items-center justify-center ${
+                      selected ? 'bg-[var(--accent)] text-white' : 'border border-[var(--border-strong)]'
                     }`}
                   >
-                    {item.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Data Summary Stats Box */}
-          <div className="p-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)] flex items-center justify-between text-xs">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-[var(--primary)]" />
-              <span className="text-[var(--fg-muted)]">
-                {exportType === 'detailed' ? (
-                  <>
-                    <strong className="text-[var(--fg)]">{totalFilteredCompletions}</strong> {t('completion records found across')}{' '}
-                    <strong className="text-[var(--fg)]">{habits.length}</strong> {t('micro-habits')}
-                  </>
-                ) : (
-                  <>
-                    <strong className="text-[var(--fg)]">{habits.length}</strong> {t('active micro-habit definitions')}
-                  </>
-                )}
-              </span>
-            </div>
-            <Badge variant="neutral">{t('Excel / Sheets ready')}</Badge>
-          </div>
-
-          {/* Column Schema Preview */}
-          <div className="space-y-1 text-xs">
-            <span className="font-semibold text-[var(--fg-muted)] uppercase tracking-wider text-[10px]">
-              {t('Included CSV Columns:')}
-            </span>
-            <div className="p-2.5 rounded-[var(--radius-sm)] bg-[var(--bg)] border border-[var(--border)] text-[11px] font-mono text-[var(--fg-muted)] flex flex-wrap gap-1.5">
-              {exportType === 'detailed'
-                ? [
-                    t('Date'),
-                    t('Day of Week'),
-                    t('Habit Title'),
-                    t('Category'),
-                    t('Duration (Mins)'),
-                    t('Linked Life Goal'),
-                    t('Goal Domain Area'),
-                    t('Current Streak'),
-                    t('Best Streak'),
-                    t('Lifetime Completions'),
-                    t('Status'),
-                  ].map((col) => (
-                    <span
-                      key={col}
-                      className="px-1.5 py-0.5 bg-[var(--bg-muted)] rounded border border-[var(--border)] text-[10px]"
-                    >
-                      {col}
-                    </span>
-                  ))
-                : [
-                    t('Habit Title'),
-                    t('Category'),
-                    t('Duration (Mins)'),
-                    t('Description'),
-                    t('Linked Life Goal'),
-                    t('Goal Area'),
-                    t('Current Streak'),
-                    t('Best Streak'),
-                    t('Total Completed Days'),
-                    t('Created At'),
-                  ].map((col) => (
-                    <span
-                      key={col}
-                      className="px-1.5 py-0.5 bg-[var(--bg-muted)] rounded border border-[var(--border)] text-[10px]"
-                    >
-                      {col}
-                    </span>
-                  ))}
-            </div>
+                    {selected && <Check className="w-3 h-3" strokeWidth={2.5} />}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* Modal Footer */}
-        <div className="p-4 sm:p-5 border-t border-[var(--border)] flex items-center justify-between bg-[var(--bg-muted)]/30">
-          <Button variant="ghost" size="sm" onClick={onClose}>
+        {/* Range */}
+        {exportType === 'detailed' && (
+          <div className="space-y-2">
+            <span className="block text-[13px] font-medium text-[var(--fg-muted)]">{t('Range')}</span>
+            <div className="flex flex-wrap gap-2">
+              {rangeOptions.map((item) => (
+                <button
+                  key={item.label}
+                  type="button"
+                  onClick={() => setRangeDays(item.days)}
+                  className={`h-9 px-3.5 text-[13px] font-medium rounded-full transition-colors cursor-pointer ${
+                    rangeDays === item.days
+                      ? 'bg-[var(--fg)] text-[var(--bg)]'
+                      : 'bg-[var(--bg-muted)] text-[var(--fg-muted)] hover:text-[var(--fg)]'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Summary */}
+        <div className="space-y-2">
+          <div className="text-[13px] text-[var(--fg-muted)]">
+            {exportType === 'detailed'
+              ? t('{records} records across {habits} habits', { records: totalFilteredCompletions, habits: habits.length })
+              : t('{n} habits', { n: habits.length })}
+          </div>
+          <div className="text-[12px] text-[var(--fg-subtle)] leading-relaxed">
+            {t('Columns')}: {columns.join(', ')}
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center justify-end gap-2 pt-1">
+          <Button variant="ghost" onClick={onClose}>
             {t('Cancel')}
           </Button>
-
           <Button
             variant="primary"
             icon={Download}
             onClick={handleExport}
             disabled={exportType === 'detailed' && totalFilteredCompletions === 0}
           >
-            {t('Download CSV Export')}
+            {t('Download CSV')}
           </Button>
         </div>
-      </Card>
-    </div>
+      </div>
+    </Modal>
   );
 };

@@ -11,29 +11,29 @@ interface DreamArtProps {
 export const DreamArt: React.FC<DreamArtProps> = ({ type, imageUrl, alt, className = 'w-full h-full' }) => {
   const t = useT();
   const [imageFailed, setImageFailed] = useState(false);
-  const altText = alt ?? t('Luxury Dream Asset');
+  const altText = alt ?? t('Dream');
 
   if (imageUrl && !imageFailed) {
     return (
-      <div className={`relative overflow-hidden bg-[#1A1A1A] ${className}`}>
+      <div className={`relative overflow-hidden bg-[var(--bg-inset)] ${className}`}>
         <img
           src={imageUrl}
           alt={altText}
           referrerPolicy="no-referrer"
-          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+          className="w-full h-full object-cover"
           onError={() => setImageFailed(true)}
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
       </div>
     );
   }
 
-  const sage = 'var(--color-sage, #708879)';
-  const coral = 'var(--color-coral, #C98276)';
-  const slate = 'var(--color-slate, #263238)';
-  const ivory = 'var(--color-ivory, #F7F6F2)';
-  const mutedBg = '#EAE8E0';
+  // Monochrome palette: neutral greys plus one accent, all driven by theme variables.
+  const sage = 'var(--border-strong, #C9C9C6)';
+  const coral = 'var(--accent, #1F5F3F)';
+  const slate = 'var(--fg-muted, #6F6F6C)';
+  const ivory = 'var(--bg, #FFFFFF)';
+  const mutedBg = 'var(--bg-inset, #ECECEA)';
 
   switch (type) {
     case 'morning_ritual':
@@ -108,7 +108,7 @@ export const DreamArt: React.FC<DreamArtProps> = ({ type, imageUrl, alt, classNa
           <rect width="200" height="160" rx="12" fill={mutedBg} />
           {/* Ultra-wide Monitor */}
           <rect x="40" y="40" width="120" height="68" rx="6" fill={slate} stroke={slate} strokeWidth="2" />
-          <rect x="45" y="45" width="110" height="58" rx="3" fill="#1C2429" />
+          <rect x="45" y="45" width="110" height="58" rx="3" fill={slate} />
           {/* Clean Code/Design Lines */}
           <line x1="55" y1="58" x2="95" y2="58" stroke={sage} strokeWidth="3" strokeLinecap="round" />
           <line x1="55" y1="68" x2="120" y2="68" stroke={coral} strokeWidth="3" strokeLinecap="round" />
