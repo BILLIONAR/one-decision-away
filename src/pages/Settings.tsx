@@ -1034,6 +1034,10 @@ export const Settings: React.FC = () => {
             <div className="grid grid-cols-2 gap-2 text-[11px] text-[var(--fg-muted)]">
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-3 h-3 text-[var(--color-sage)] shrink-0" />
+                <span>{t('Notebook')} · {t('Dream Journal')}</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <CheckCircle2 className="w-3 h-3 text-[var(--color-sage)] shrink-0" />
                 <span>{t('Two Futures Statements')}</span>
               </div>
               <div className="flex items-center gap-1.5">
@@ -1109,4 +1113,3 @@ export const Settings: React.FC = () => {
     </div>
   );
 };
-

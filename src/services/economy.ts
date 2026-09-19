@@ -14,7 +14,17 @@ export const ECONOMY_CONSTANTS = {
   STREAK_BONUS_AMOUNT: 700,
   STREAK_BONUS_30D_CAP: 2000,
   ONE_DECISION_REWARD: 500,
+  NOTEBOOK_DAILY_REWARD: 25,
 } as const;
+
+/** Notebook uses local days for writing, but shares the existing UTC economy ceiling. */
+export function getNotebookRewardAmount(transactions: WalletTransaction[], now = new Date()): number {
+  const economyDay = now.toISOString().slice(0, 10);
+  const earned = transactions
+    .filter((tx) => tx.dayKey === economyDay && tx.amount > 0 && tx.kind !== 'welcome_grant')
+    .reduce((total, tx) => total + tx.amount, 0);
+  return Math.min(ECONOMY_CONSTANTS.NOTEBOOK_DAILY_REWARD, Math.max(0, ECONOMY_CONSTANTS.DAILY_REWARD_CAP - earned));
+}
 
 export function getBaseReward(type: MissionType, difficulty: MissionDifficulty, isOneDecision: boolean): number {
   if (isOneDecision) {

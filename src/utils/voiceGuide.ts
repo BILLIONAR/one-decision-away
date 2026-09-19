@@ -197,6 +197,16 @@ class VoiceGuide {
   }
 
   /** Speak a cue. Any cue still playing is interrupted so guidance stays in sync with the timer. */
+  public speakBrowserOnly(text: string): boolean {
+    if (!this.isSupported() || !text.trim()) return false;
+    // Explicit Notebook playback uses the free device voice without changing
+    // the user's saved meditation engine or automatic-guidance preference.
+    this.stop();
+    this.speakBrowser(text);
+    return true;
+  }
+
+  /** Speak a meditation cue with the user's configured engine. */
   public speak(text: string) {
     if (!this.enabled || !text.trim()) return;
     const seq = ++this.speakSeq;

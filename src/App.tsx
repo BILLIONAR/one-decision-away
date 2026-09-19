@@ -18,6 +18,7 @@ const Budget = lazy(() => import('./pages/Budget').then((m) => ({ default: m.Bud
 const Seasons = lazy(() => import('./pages/Seasons').then((m) => ({ default: m.Seasons })));
 const Upgrade = lazy(() => import('./pages/Upgrade').then((m) => ({ default: m.Upgrade })));
 const Settings = lazy(() => import('./pages/Settings').then((m) => ({ default: m.Settings })));
+const Notebook = lazy(() => import('./pages/Notebook').then((m) => ({ default: m.Notebook })));
 
 const RouteFallback: React.FC = () => {
   const t = useT();
@@ -89,6 +90,8 @@ const AppRouter: React.FC = () => {
         return <Upgrade />;
       case '/app/settings':
         return <Settings />;
+      case '/app/notebook':
+        return <Notebook />;
       default:
         return <Home />;
     }

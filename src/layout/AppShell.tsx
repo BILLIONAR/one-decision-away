@@ -65,6 +65,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   ];
 
   const moreNavItems = [
+    { label: t('Notebook'), path: '/app/notebook', icon: BookOpen },
     { label: t('Two Futures'), path: '/app/two-futures', icon: Columns },
     { label: t('Future Self'), path: '/app/future-self', icon: UserCheck },
     { label: t('Future Life Score'), path: '/app/life-score', icon: Award },

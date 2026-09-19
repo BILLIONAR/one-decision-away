@@ -9,6 +9,8 @@ import { computeLedgerBalance, evaluateMissionReward, ECONOMY_CONSTANTS } from '
 import { checkAndApplyDailyMicroHabitRollover } from './microHabitsService';
 import { cloudSync } from './cloudSync';
 import { detectLocale, N_, t } from '../i18n';
+import { applyNotebookAction, normalizeNotebook, preserveNotebookWrites } from './notebook';
+import type { NotebookAction, NotebookUpdateResult } from './notebook';
 
 export interface DataRepository {
   readonly mode: 'demo' | 'server';
@@ -16,6 +18,7 @@ export interface DataRepository {
   save(data: UserData): Promise<void>;
   replaceAll(data: UserData): Promise<void>;
   clear(): Promise<void>;
+  mutateNotebook(action: NotebookAction): Promise<NotebookUpdateResult>;
   completeMission(params: {
     missionId: string;
     method: 'self' | 'timer' | 'photo';
@@ -29,6 +32,17 @@ export interface DataRepository {
 }
 
 const STORAGE_KEY = 'one_decision_away_app_data_v1';
+
+// Shared by repository instances; Web Locks also serialize notebook writes across tabs.
+let dataWriteQueue: Promise<unknown> = Promise.resolve();
+function queueDataWrite<T>(operation: () => Promise<T>): Promise<T> {
+  const run = () => typeof navigator !== 'undefined' && navigator.locks
+    ? navigator.locks.request('oda-data-writes', operation)
+    : operation();
+  const result = dataWriteQueue.then(run, run);
+  dataWriteQueue = result.then(() => undefined, () => undefined);
+  return result;
+}
 
 export function getInitialDemoState(): UserData {
   const now = new Date().toISOString();
@@ -167,6 +181,7 @@ export function getInitialDemoState(): UserData {
         createdAt: new Date(Date.now() - 86400000 * 1).toISOString(),
       },
     ],
+    notebook: normalizeNotebook(),
     microHabits: SEED_MICRO_HABITS,
     customHabitCategories: SEED_CUSTOM_CATEGORIES,
     checkIns: SEED_CHECK_INS,
@@ -196,6 +211,7 @@ export class LocalDemoRepository implements DataRepository {
         if (!parsed.archivedMarketItemIds) parsed.archivedMarketItemIds = [];
         if (!parsed.archivedMarketRecords) parsed.archivedMarketRecords = [];
         if (!parsed.dreamJournal) parsed.dreamJournal = [];
+        parsed.notebook = normalizeNotebook(parsed.notebook);
         if (!parsed.microHabits || parsed.microHabits.length === 0) {
           parsed.microHabits = SEED_MICRO_HABITS;
         } else {
@@ -229,7 +245,8 @@ export class LocalDemoRepository implements DataRepository {
         return parsed;
       }
     } catch (e) {
-      console.warn('Could not read from localStorage, using seed demo state', e);
+      // Do not overwrite unreadable or unwritable existing records with demo data.
+      throw new Error(t('Could not read saved data. Your existing records were not replaced.'), { cause: e });
     }
     const initial = getInitialDemoState();
     await this.save(initial);
@@ -237,22 +254,55 @@ export class LocalDemoRepository implements DataRepository {
   }
 
   async save(data: UserData): Promise<void> {
+    await queueDataWrite(async () => { this.saveCurrent(data); });
+  }
+
+  /** Synchronous commit, called only while holding the shared data-write lock. */
+  private saveCurrent(data: UserData): void {
+    let saved: UserData;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const stored = raw ? JSON.parse(raw) as UserData : null;
+      saved = preserveNotebookWrites(data, stored);
+      saved.notebook = normalizeNotebook(saved.notebook);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
     } catch (e) {
-      console.error('Failed to save state to localStorage', e);
+      throw new Error(t('Your changes could not be saved. Free some device storage and try again.'), { cause: e });
     }
+    // Existing callers publish this object to React after saving; include protected newer data.
+    Object.assign(data, saved);
     // Optional cloud backup (no-op unless signed in)
-    cloudSync.schedulePush(data);
+    cloudSync.schedulePush(saved);
   }
 
   /** Replaces the whole local dataset (used by Restore from backup and cloud pull). */
   async replaceAll(data: UserData): Promise<void> {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    await queueDataWrite(async () => {
+      const restored = { ...data, notebook: normalizeNotebook(data.notebook) };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(restored));
+    });
   }
 
   async clear(): Promise<void> {
-    localStorage.removeItem(STORAGE_KEY);
+    await queueDataWrite(async () => { localStorage.removeItem(STORAGE_KEY); });
+  }
+
+  /** Re-read at commit time: a previous asynchronous load is never a write baseline. */
+  private readCurrent(): UserData {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const current: UserData = raw ? JSON.parse(raw) : getInitialDemoState();
+    current.notebook = normalizeNotebook(current.notebook);
+    return current;
+  }
+
+  async mutateNotebook(action: NotebookAction): Promise<NotebookUpdateResult> {
+    await this.load(); // initializes/migrates outside the lock; load may itself save a rollover
+    return queueDataWrite(async () => {
+      const current = this.readCurrent();
+      const update = applyNotebookAction(current, action);
+      if (update.data !== current) this.saveCurrent(update.data);
+      return update;
+    });
   }
 
   async completeMission(params: {
@@ -262,84 +312,87 @@ export class LocalDemoRepository implements DataRepository {
     note?: string;
     reflection?: { completedSummary: string; resistanceNoticed: string; nextStep: string };
   }): Promise<{ data: UserData; rewardAmount: number; message: string }> {
-    const data = await this.load();
-    const mission = data.missions.find((m) => m.id === params.missionId);
-    if (!mission) {
-      throw new Error(t('Mission not found'));
-    }
+    await this.load();
+    return queueDataWrite(async () => {
+      const data = this.readCurrent();
+      const mission = data.missions.find((m) => m.id === params.missionId);
+      if (!mission) {
+        throw new Error(t('Mission not found'));
+      }
 
-    const todayStr = new Date().toISOString().slice(0, 10);
-    const todayTransactions = data.transactions.filter((t) => t.dayKey === todayStr);
-    const todayPaidQuestsCount = data.completions.filter(
-      (c) => c.completedAt.slice(0, 10) === todayStr && c.rewardAmount > 0
-    ).length;
+      const todayStr = new Date().toISOString().slice(0, 10);
+      const todayTransactions = data.transactions.filter((t) => t.dayKey === todayStr);
+      const todayPaidQuestsCount = data.completions.filter(
+        (c) => c.completedAt.slice(0, 10) === todayStr && c.rewardAmount > 0
+      ).length;
 
-    const lastCompletion = data.completions
-      .filter((c) => c.missionId === params.missionId)
-      .sort((a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime())[0];
+      const lastCompletion = data.completions
+        .filter((c) => c.missionId === params.missionId)
+        .sort((a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime())[0];
 
-    const evalResult = evaluateMissionReward({
-      mission,
-      todayTransactions,
-      todayPaidQuestsCount,
-      lastMissionCompletionTime: lastCompletion?.completedAt,
-    });
-
-    const now = new Date().toISOString();
-
-    // Mark mission as completed
-    mission.status = 'completed';
-    mission.completedAt = now;
-    mission.focusMinutesSpent = (mission.focusMinutesSpent || 0) + (params.focusMinutes || 0);
-    if (params.note) mission.note = params.note;
-    if (params.reflection) mission.reflection = params.reflection;
-
-    // Record completion
-    data.completions.unshift({
-      id: `comp-${Date.now()}`,
-      missionId: mission.id,
-      userId: data.profile.id,
-      completedAt: now,
-      method: params.method,
-      focusMinutes: params.focusMinutes,
-      note: params.note,
-      reflection: params.reflection,
-      rewardAmount: evalResult.rewardAmount,
-      streakBonus: 0,
-    });
-
-    // Record transaction in ledger if reward > 0
-    if (evalResult.rewardAmount > 0) {
-      data.transactions.unshift({
-        id: `tx-${Date.now()}`,
-        walletId: 'wallet-demo',
-        userId: data.profile.id,
-        kind: mission.isOneDecision ? 'one_decision_reward' : 'mission_reward',
-        amount: evalResult.rewardAmount,
-        dayKey: todayStr,
-        refType: 'mission',
-        refId: mission.id,
-        memo: mission.isOneDecision
-          ? t('One Decision completed: {title}', { title: mission.title })
-          : t('Mission completed: {title}', { title: mission.title }),
-        createdAt: now,
+      const evalResult = evaluateMissionReward({
+        mission,
+        todayTransactions,
+        todayPaidQuestsCount,
+        lastMissionCompletionTime: lastCompletion?.completedAt,
       });
-    }
 
-    // Update Two Futures Trajectory Vote
-    data.twoFutures.buildingVotes = (data.twoFutures.buildingVotes || 0) + 1;
+      const now = new Date().toISOString();
 
-    await this.save(data);
+      // Mark mission as completed
+      mission.status = 'completed';
+      mission.completedAt = now;
+      mission.focusMinutesSpent = (mission.focusMinutesSpent || 0) + (params.focusMinutes || 0);
+      if (params.note) mission.note = params.note;
+      if (params.reflection) mission.reflection = params.reflection;
 
-    let message = t('Mission completed!');
-    if (evalResult.rewardAmount > 0) {
-      message += ' ' + t('Earned D${amount}.', { amount: evalResult.rewardAmount.toLocaleString() });
-    }
-    if (evalResult.reason) {
-      message += ` (${evalResult.reason})`;
-    }
+      // Record completion
+      data.completions.unshift({
+        id: `comp-${Date.now()}`,
+        missionId: mission.id,
+        userId: data.profile.id,
+        completedAt: now,
+        method: params.method,
+        focusMinutes: params.focusMinutes,
+        note: params.note,
+        reflection: params.reflection,
+        rewardAmount: evalResult.rewardAmount,
+        streakBonus: 0,
+      });
 
-    return { data, rewardAmount: evalResult.rewardAmount, message };
+      // Record transaction in ledger if reward > 0
+      if (evalResult.rewardAmount > 0) {
+        data.transactions.unshift({
+          id: `tx-${Date.now()}`,
+          walletId: 'wallet-demo',
+          userId: data.profile.id,
+          kind: mission.isOneDecision ? 'one_decision_reward' : 'mission_reward',
+          amount: evalResult.rewardAmount,
+          dayKey: todayStr,
+          refType: 'mission',
+          refId: mission.id,
+          memo: mission.isOneDecision
+            ? t('One Decision completed: {title}', { title: mission.title })
+            : t('Mission completed: {title}', { title: mission.title }),
+          createdAt: now,
+        });
+      }
+
+      // Update Two Futures Trajectory Vote
+      data.twoFutures.buildingVotes = (data.twoFutures.buildingVotes || 0) + 1;
+
+      this.saveCurrent(data);
+
+      let message = t('Mission completed!');
+      if (evalResult.rewardAmount > 0) {
+        message += ' ' + t('Earned D${amount}.', { amount: evalResult.rewardAmount.toLocaleString() });
+      }
+      if (evalResult.reason) {
+        message += ` (${evalResult.reason})`;
+      }
+
+      return { data, rewardAmount: evalResult.rewardAmount, message };
+    });
   }
 
   async purchaseItem(itemId: string): Promise<{ data: UserData; purchase: Purchase; message: string }> {

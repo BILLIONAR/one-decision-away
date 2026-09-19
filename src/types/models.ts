@@ -201,6 +201,7 @@ export type TransactionKind =
   | 'focus_reward'
   | 'micro_habit_reward'
   | 'check_in_reward'
+  | 'notebook_reward'
   | 'streak_bonus'
   | 'welcome_grant'
   | 'purchase'
@@ -398,6 +399,86 @@ export interface DreamJournalEntry {
   updatedAt?: string;
 }
 
+export type NotebookEntryKind = 'journal' | 'scripting' | 'future_letter';
+export type NotebookMood = 'joyful' | 'calm' | 'grateful' | 'focused' | 'tired' | 'anxious';
+export type Notebook369Slot = 'morning' | 'midday' | 'evening';
+
+export interface NotebookEntry {
+  id: string;
+  kind: NotebookEntryKind;
+  title: string;
+  content: string;
+  mood?: NotebookMood;
+  promptId?: string;
+  dateKey: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Notebook369Day {
+  morning: string[];
+  midday: string[];
+  evening: string[];
+  updatedAt: string;
+}
+
+export interface Notebook369Practice {
+  id: string;
+  intention: string;
+  startDateKey: string;
+  days: Record<string, Notebook369Day>;
+  createdAt: string;
+  updatedAt: string;
+  archivedAt?: string;
+}
+
+export interface NotebookGratitudeDay {
+  dateKey: string;
+  items: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface NotebookAffirmation {
+  id: string;
+  text: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface NotebookActivityDay {
+  dateKey: string;
+  firstRecordedAt: string;
+  economyDayKey: string;
+  rewardAmount: number;
+  transactionId?: string;
+}
+
+export interface NotebookData {
+  version: 1;
+  revision: number;
+  entries: NotebookEntry[];
+  practices369: Notebook369Practice[];
+  gratitudeDays: NotebookGratitudeDay[];
+  affirmations: NotebookAffirmation[];
+  activityDays: NotebookActivityDay[];
+}
+
+export interface NotebookEntryInput {
+  id?: string;
+  kind: NotebookEntryKind;
+  title?: string;
+  content: string;
+  mood?: NotebookMood;
+  promptId?: string;
+}
+
+export interface NotebookMutationResult {
+  savedId: string;
+  rewardAmount: number;
+  firstActivityToday: boolean;
+}
+
 export interface OfflineAction {
   id: string;
   action: 'complete_mission' | 'purchase_item';
@@ -472,6 +553,7 @@ export interface UserData {
   archivedMarketItemIds?: string[];
   archivedMarketRecords?: ArchivedMarketRecord[];
   dreamJournal?: DreamJournalEntry[];
+  notebook?: NotebookData;
   microHabits?: MicroHabit[];
   customHabitCategories?: CustomHabitCategory[];
   dailyPrimaryGoals?: DailyPrimaryGoal[];

@@ -24,7 +24,7 @@ import {
   Flame,
 } from 'lucide-react';
 import { ECONOMY_CONSTANTS } from '../services/economy';
-import { useT } from '../i18n';
+import { getSpeechLang, useT } from '../i18n';
 
 export interface DreamDollarChartProps {
   transactions: WalletTransaction[];
@@ -198,9 +198,9 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
       d.setDate(d.getDate() - i);
       const dayKey = d.toISOString().slice(0, 10);
 
-      const weekdayShort = d.toLocaleDateString(undefined, { weekday: 'short' });
-      const fullWeekday = d.toLocaleDateString(undefined, { weekday: 'long' });
-      const dateFormatted = d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+      const weekdayShort = d.toLocaleDateString(getSpeechLang(), { weekday: 'short' });
+      const fullWeekday = d.toLocaleDateString(getSpeechLang(), { weekday: 'long' });
+      const dateFormatted = d.toLocaleDateString(getSpeechLang(), { month: 'short', day: 'numeric' });
 
       const dayTxs = transactions.filter((t) => t.dayKey === dayKey);
       const earnTxs = dayTxs.filter((t) => t.amount > 0);
@@ -219,7 +219,7 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
         .reduce((sum, t) => sum + t.amount, 0);
 
       const checkInsEarned = earnTxs
-        .filter((t) => t.kind === 'check_in_reward')
+        .filter((t) => t.kind === 'check_in_reward' || t.kind === 'notebook_reward')
         .reduce((sum, t) => sum + t.amount, 0);
 
       const bonusesEarned = earnTxs

@@ -29,7 +29,13 @@ import {
   CustomHabitCategory,
   DailyCheckIn,
   DailyMicroHabitRolloverSummary,
+  NotebookEntryInput,
+  NotebookMutationResult,
+  Notebook369Practice,
+  Notebook369Slot,
 } from '../types/models';
+import type { NotebookAction } from '../services/notebook';
+import { clearNotebookDrafts } from '../services/notebookDrafts';
 import { createRepository, DataRepository } from '../services/repository';
 import { cloudSync } from '../services/cloudSync';
 import { notificationScheduler } from '../services/notificationScheduler';
@@ -58,7 +64,7 @@ export interface AppContextType {
   setActiveRoute: (route: string) => void;
   showToast: (message: string, type?: 'success' | 'info' | 'error') => void;
   hideToast: () => void;
-  refreshData: () => Promise<void>;
+  refreshData: (options?: { skipCloudPull?: boolean }) => Promise<void>;
   startFocusSession: (params: {
     missionId?: string;
     missionTitle?: string;
@@ -126,6 +132,15 @@ export interface AppContextType {
   saveLifeBudget: (lifeBudget: LifeBudgetData) => Promise<void>;
   addDreamJournalEntry: (entry: Omit<DreamJournalEntry, 'id' | 'createdAt' | 'userId'>) => Promise<void>;
   deleteDreamJournalEntry: (entryId: string) => Promise<void>;
+  updateDreamJournalEntry: (id: string, patch: Partial<Pick<DreamJournalEntry, 'title' | 'content' | 'mood' | 'photoDataUrl' | 'dreamId' | 'dreamName'>>) => Promise<void>;
+  saveNotebookEntry: (input: NotebookEntryInput) => Promise<NotebookMutationResult>;
+  deleteNotebookEntry: (id: string) => Promise<void>;
+  start369Practice: (intention: string) => Promise<Notebook369Practice>;
+  archive369Practice: (id: string) => Promise<void>;
+  save369Slot: (practiceId: string, dateKey: string, slot: Notebook369Slot, writtenLines: string[]) => Promise<NotebookMutationResult>;
+  saveGratitudeDay: (dateKey: string, items: string[]) => Promise<NotebookMutationResult>;
+  saveNotebookAffirmation: (input: { id?: string; text: string }) => Promise<NotebookMutationResult>;
+  deleteNotebookAffirmation: (id: string) => Promise<void>;
   isQuickJournalOpen: boolean;
   openQuickJournal: () => void;
   closeQuickJournal: () => void;
@@ -517,14 +532,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return () => window.removeEventListener('popstate', handlePop);
   }, []);
 
-  const refreshData = useCallback(async () => {
+  const refreshData = useCallback(async (options?: { skipCloudPull?: boolean }) => {
     try {
       setIsLoading(true);
       let loaded = await repository.load();
       // Cloud: if signed in and the cloud copy is newer, prefer it
       try {
         await cloudSync.init();
-        const remote = await cloudSync.pullIfNewer(loaded);
+        const remote = options?.skipCloudPull ? null : await cloudSync.pullIfNewer(loaded);
         if (remote) {
           await repository.replaceAll(remote);
           loaded = await repository.load();
@@ -1296,42 +1311,60 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     [data, showToast]
   );
 
-  const addDreamJournalEntry = useCallback(
-    async (entry: Omit<DreamJournalEntry, 'id' | 'createdAt' | 'userId'>) => {
-      if (!data) return;
-      const now = new Date().toISOString();
-      const newEntry: DreamJournalEntry = {
-        ...entry,
-        id: `journal-${Date.now()}`,
-        userId: data.profile.id,
-        createdAt: now,
-      };
-      const existingJournal = data.dreamJournal || [];
-      const updated: UserData = {
-        ...data,
-        dreamJournal: [newEntry, ...existingJournal],
-      };
-      await repository.save(updated);
-      setData(updated);
-      showToast(t('Dream Journal entry documented in your timeline!'), 'success');
-    },
-    [data, showToast]
-  );
+  // Notebook writes always load the latest document inside the repository queue.
+  // These callbacks deliberately do not close over a captured UserData snapshot.
+  const writeNotebook = useCallback(async (action: NotebookAction) => {
+    try {
+      const update = await repository.mutateNotebook(action);
+      setData(update.data);
+      return update.result;
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : t('Notebook could not be saved.'), 'error');
+      throw error;
+    }
+  }, [showToast]);
 
-  const deleteDreamJournalEntry = useCallback(
-    async (entryId: string) => {
-      if (!data) return;
-      const existingJournal = data.dreamJournal || [];
-      const updated: UserData = {
-        ...data,
-        dreamJournal: existingJournal.filter((e) => e.id !== entryId),
-      };
-      await repository.save(updated);
-      setData(updated);
-      showToast(t('Journal entry removed.'), 'info');
-    },
-    [data, showToast]
-  );
+  const saveNotebookEntry = useCallback(async (input: NotebookEntryInput) =>
+    await writeNotebook({ type: 'save_entry', input }) as NotebookMutationResult, [writeNotebook]);
+
+  const deleteNotebookEntry = useCallback(async (id: string) => {
+    await writeNotebook({ type: 'delete_entry', id });
+  }, [writeNotebook]);
+
+  const start369Practice = useCallback(async (intention: string) =>
+    await writeNotebook({ type: 'start_369', intention }) as Notebook369Practice, [writeNotebook]);
+
+  const archive369Practice = useCallback(async (id: string) => {
+    await writeNotebook({ type: 'archive_369', id });
+  }, [writeNotebook]);
+
+  const save369Slot = useCallback(async (practiceId: string, dateKey: string, slot: Notebook369Slot, writtenLines: string[]) =>
+    await writeNotebook({ type: 'save_369', practiceId, dateKey, slot, writtenLines }) as NotebookMutationResult, [writeNotebook]);
+
+  const saveGratitudeDay = useCallback(async (dateKey: string, items: string[]) =>
+    await writeNotebook({ type: 'save_gratitude', dateKey, items }) as NotebookMutationResult, [writeNotebook]);
+
+  const saveNotebookAffirmation = useCallback(async (input: { id?: string; text: string }) =>
+    await writeNotebook({ type: 'save_affirmation', input }) as NotebookMutationResult, [writeNotebook]);
+
+  const deleteNotebookAffirmation = useCallback(async (id: string) => {
+    await writeNotebook({ type: 'delete_affirmation', id });
+  }, [writeNotebook]);
+
+  const addDreamJournalEntry = useCallback(async (entry: Omit<DreamJournalEntry, 'id' | 'createdAt' | 'userId'>) => {
+    await writeNotebook({ type: 'add_dream', input: entry });
+    showToast(t('Dream Journal entry documented in your timeline!'), 'success');
+  }, [writeNotebook, showToast]);
+
+  const updateDreamJournalEntry = useCallback(async (
+    id: string,
+    patch: Partial<Pick<DreamJournalEntry, 'title' | 'content' | 'mood' | 'photoDataUrl' | 'dreamId' | 'dreamName'>>,
+  ) => { await writeNotebook({ type: 'update_dream', id, patch }); }, [writeNotebook]);
+
+  const deleteDreamJournalEntry = useCallback(async (entryId: string) => {
+    await writeNotebook({ type: 'delete_dream', id: entryId });
+    showToast(t('Journal entry removed.'), 'info');
+  }, [writeNotebook, showToast]);
 
   const toggleMicroHabit = useCallback(
     async (habitId: string) => {
@@ -2123,8 +2156,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setData(updated);
     showToast(
       newTheme === 'dark'
-        ? '🌙 Switched to Midnight Dark theme'
-        : '☀️ Switched to Editorial Light theme',
+        ? t('🌙 Switched to Midnight Dark theme')
+        : t('☀️ Switched to Editorial Light theme'),
       'info'
     );
   }, [data, showToast]);
@@ -2153,8 +2186,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setData(updated);
       showToast(
         newTheme === 'dark'
-          ? '🌙 Switched to Midnight Dark theme'
-          : '☀️ Switched to Editorial Light theme',
+          ? t('🌙 Switched to Midnight Dark theme')
+          : t('☀️ Switched to Editorial Light theme'),
         'info'
       );
     },
@@ -2228,12 +2261,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const resetToDemo = useCallback(async () => {
     await repository.clear();
     await refreshData();
+    clearNotebookDrafts();
     showToast(t('Reset to clean initial state.'), 'info');
   }, [refreshData, showToast]);
 
   const resetAllData = useCallback(async () => {
     await repository.clear();
     await refreshData();
+    clearNotebookDrafts();
     showToast(t('All local data cleared and reset.'), 'info');
   }, [refreshData, showToast]);
 
@@ -2247,7 +2282,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           return;
         }
         await repository.replaceAll(parsed);
-        await refreshData();
+        cloudSync.markLocalRestore();
+        await refreshData({ skipCloudPull: true });
+        clearNotebookDrafts();
+        // Await the optional upload. A failed/offline upload retains the local-restore
+        // marker, so a reload cannot silently pull the previous cloud copy over it.
+        if (cloudSync.isSignedIn()) await cloudSync.push(await repository.load());
         showToast(t('Backup restored. Welcome back.'), 'success');
       } catch {
         showToast(t('Could not read the backup file.'), 'error');
@@ -2333,6 +2373,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     saveLifeBudget,
     addDreamJournalEntry,
     deleteDreamJournalEntry,
+    updateDreamJournalEntry,
+    saveNotebookEntry,
+    deleteNotebookEntry,
+    start369Practice,
+    archive369Practice,
+    save369Slot,
+    saveGratitudeDay,
+    saveNotebookAffirmation,
+    deleteNotebookAffirmation,
     isQuickJournalOpen,
     openQuickJournal,
     closeQuickJournal,
