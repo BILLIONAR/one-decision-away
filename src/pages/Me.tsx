@@ -220,6 +220,6 @@ const StatTile: React.FC<{ value: string; label: string; accent?: boolean }> = (
     >
       {value}
     </div>
-    <div className="text-[12px] text-[var(--fg-muted)] mt-1 truncate">{label}</div>
+    <div className="text-[12px] text-[var(--fg-muted)] mt-1 leading-tight">{label}</div>
   </div>
 );
