@@ -12,6 +12,7 @@
 import { useMemo, useSyncExternalStore } from 'react';
 
 export type Locale = 'en' | 'tr' | 'es';
+export const DEFAULT_LOCALE: Locale = 'en';
 
 export const LOCALES: { code: Locale; name: string; nativeName: string; flag: string; speech: string }[] = [
   { code: 'en', name: 'English', nativeName: 'English', flag: '🇬🇧', speech: 'en-US' },
@@ -61,7 +62,8 @@ export function hasStoredLocale(): boolean {
   return readStoredLocale() !== null;
 }
 
-let currentLocale: Locale = readStoredLocale() ?? detectLocale();
+// A new visitor starts in English; an explicit saved choice takes precedence.
+let currentLocale: Locale = readStoredLocale() ?? DEFAULT_LOCALE;
 let version = 0;
 const listeners = new Set<() => void>();
 

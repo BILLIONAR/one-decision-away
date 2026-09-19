@@ -8,7 +8,7 @@ import { SEED_INITIAL_GOALS, SEED_INITIAL_MISSIONS, DEFAULT_BUDGET, SEED_MARKET_
 import { computeLedgerBalance, evaluateMissionReward, ECONOMY_CONSTANTS } from './economy';
 import { checkAndApplyDailyMicroHabitRollover } from './microHabitsService';
 import { cloudSync } from './cloudSync';
-import { detectLocale, N_, t } from '../i18n';
+import { getLocale, N_, t } from '../i18n';
 import { applyNotebookAction, normalizeNotebook, preserveNotebookWrites } from './notebook';
 import type { NotebookAction, NotebookUpdateResult } from './notebook';
 
@@ -62,7 +62,7 @@ export function getInitialDemoState(): UserData {
       id: 'demo-user',
       displayName: N_('Dream Builder'),
       onboardingStep: 'completed',
-      locale: detectLocale(),
+      locale: getLocale(),
       theme: 'light',
       soundMuted: false,
       focusTabBlinkEnabled: true,
