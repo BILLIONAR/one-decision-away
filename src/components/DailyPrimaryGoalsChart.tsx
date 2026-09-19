@@ -38,7 +38,7 @@ import {
 import { DailyPrimaryGoal } from '../types/models';
 import { SEED_DAILY_PRIMARY_GOALS } from '../data/seed';
 import { ExportProgressModal } from './ExportProgressModal';
-import { useT, t } from '../i18n';
+import { useT, t, getSpeechLang } from '../i18n';
 
 export interface GoalMilestone {
   streakDays: number;
@@ -608,11 +608,11 @@ export const DailyPrimaryGoalsChart: React.FC<{
           {goal ? (
             <div className="space-y-1">
               <p className="font-semibold text-sm text-[var(--fg)] font-display leading-tight">
-                {goal.title}
+                {t(goal.title)}
               </p>
               {goal.notes && (
                 <p className="text-[11px] text-[var(--fg-muted)] italic">
-                  &ldquo;{goal.notes}&rdquo;
+                  &ldquo;{t(goal.notes)}&rdquo;
                 </p>
               )}
               {goal.completedAt && (
@@ -1241,7 +1241,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
           <span>•</span>
           <span>{t('30-Day Goal Trajectory & Streak Milestones')}</span>
         </div>
-        <span>{t('Record generated {date}', { date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) })}</span>
+        <span>{t('Record generated {date}', { date: new Date().toLocaleDateString(getSpeechLang(), { month: 'short', day: 'numeric', year: 'numeric' }) })}</span>
       </div>
 
       {/* Internal Export Progress Modal if triggered from chart */}

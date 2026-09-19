@@ -103,7 +103,7 @@ export const FutureSelf: React.FC = () => {
               {t('Future Self Identity')}
             </span>
           </div>
-          <Badge variant="sage">{data.futureSelf.title || t('The Finisher')}</Badge>
+          <Badge variant="sage">{t(data.futureSelf.title || 'The Finisher')}</Badge>
         </div>
 
         {isEditing ? (
@@ -124,10 +124,10 @@ export const FutureSelf: React.FC = () => {
         ) : (
           <div className="space-y-2">
             <h2 className="text-2xl font-bold font-display text-[var(--fg)]">
-              {data.futureSelf.title}
+              {t(data.futureSelf.title)}
             </h2>
             <p className="text-sm font-serif italic text-[var(--fg)] bg-[var(--bg-muted)] p-4 rounded-[var(--radius-md)] border border-[var(--border)] leading-relaxed">
-              "{data.futureSelf.identityStatement}"
+              "{t(data.futureSelf.identityStatement)}"
             </p>
           </div>
         )}
@@ -169,7 +169,7 @@ export const FutureSelf: React.FC = () => {
                 <div className="flex flex-wrap gap-1.5">
                   {data.futureSelf.coreValues.map((v, i) => (
                     <Badge key={i} variant="subtle">
-                      {v}
+                      {t(v)}
                     </Badge>
                   ))}
                 </div>
@@ -183,7 +183,7 @@ export const FutureSelf: React.FC = () => {
                   {data.futureSelf.dailyStandards.map((s, i) => (
                     <li key={i} className="flex items-start gap-2">
                       <span className="text-[var(--color-sage)] font-bold">•</span>
-                      <span>{s}</span>
+                      <span>{t(s)}</span>
                     </li>
                   ))}
                 </ul>
@@ -227,7 +227,7 @@ export const FutureSelf: React.FC = () => {
                   {data.futureSelf.habits.map((h, i) => (
                     <li key={i} className="flex items-start gap-2">
                       <span className="text-[var(--color-sage)] font-bold">•</span>
-                      <span>{h}</span>
+                      <span>{t(h)}</span>
                     </li>
                   ))}
                 </ul>
@@ -241,7 +241,7 @@ export const FutureSelf: React.FC = () => {
                   {data.futureSelf.boundaries.map((b, i) => (
                     <li key={i} className="flex items-start gap-2">
                       <span className="text-[var(--color-coral)] font-bold">•</span>
-                      <span>{b}</span>
+                      <span>{t(b)}</span>
                     </li>
                   ))}
                 </ul>
@@ -306,7 +306,7 @@ export const FutureSelf: React.FC = () => {
               </span>
               <ul className="space-y-1 text-[var(--fg)]">
                 {data.futureSelf.oldSelfBehaviors.map((b, i) => (
-                  <li key={i}>• {b}</li>
+                  <li key={i}>• {t(b)}</li>
                 ))}
               </ul>
             </div>
@@ -317,7 +317,7 @@ export const FutureSelf: React.FC = () => {
               </span>
               <ul className="space-y-1 text-[var(--fg)]">
                 {data.futureSelf.oldSelfExcuses.map((e, i) => (
-                  <li key={i}>• {e}</li>
+                  <li key={i}>• {t(e)}</li>
                 ))}
               </ul>
             </div>

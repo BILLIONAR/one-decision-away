@@ -140,7 +140,7 @@ export const Missions: React.FC = () => {
                   </div>
 
                   <h3 className="text-base font-bold font-display text-[var(--fg)] leading-snug">
-                    {mission.title}
+                    {t(mission.title)}
                   </h3>
 
                   <div className="flex items-center gap-3 text-xs text-[var(--fg-muted)]">
@@ -159,8 +159,8 @@ export const Missions: React.FC = () => {
                   {mission.reflection && (
                     <div className="p-2.5 bg-[var(--bg-muted)] rounded-[var(--radius-sm)] text-[11px] text-[var(--fg-muted)] space-y-1">
                       <div className="font-semibold text-[var(--fg)]">{t('Reflection:')}</div>
-                      <div>{t('Completed: {text}', { text: mission.reflection.completedSummary })}</div>
-                      <div>{t('Next Step: {text}', { text: mission.reflection.nextStep })}</div>
+                      <div>{t('Completed: {text}', { text: t(mission.reflection.completedSummary) })}</div>
+                      <div>{t('Next Step: {text}', { text: t(mission.reflection.nextStep) })}</div>
                     </div>
                   )}
                 </div>

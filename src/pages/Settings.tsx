@@ -164,7 +164,7 @@ export const Settings: React.FC = () => {
       return;
     }
     soundSynthesizer.playMicroHabitCue(category, 'complete');
-    showToast(t('🎵 Tested {name} cue ({category} habit).', { name, category }), 'info');
+    showToast(t('🎵 Tested {name} cue ({category} habit).', { name, category: t(category) }), 'info');
   };
 
   const handleSaveProfile = async (e: React.FormEvent) => {
@@ -196,8 +196,8 @@ export const Settings: React.FC = () => {
     if (typeof window !== 'undefined' && 'Notification' in window) {
       if (Notification.permission === 'granted') {
         try {
-          new Notification(t('Daily Wisdom: {theme}', { theme: currentWisdom.theme }), {
-            body: t('"{quote}" — {author}', { quote: currentWisdom.quote, author: currentWisdom.author }),
+          new Notification(t('Daily Wisdom: {theme}', { theme: t(currentWisdom.theme) }), {
+            body: t('"{quote}" — {author}', { quote: t(currentWisdom.quote), author: t(currentWisdom.author) }),
             icon: '/favicon.ico',
           });
         } catch (err) {
@@ -208,8 +208,8 @@ export const Settings: React.FC = () => {
           const perm = await Notification.requestPermission();
           setNotificationStatus(perm);
           if (perm === 'granted') {
-            new Notification(t('Daily Wisdom: {theme}', { theme: currentWisdom.theme }), {
-              body: t('"{quote}" — {author}', { quote: currentWisdom.quote, author: currentWisdom.author }),
+            new Notification(t('Daily Wisdom: {theme}', { theme: t(currentWisdom.theme) }), {
+              body: t('"{quote}" — {author}', { quote: t(currentWisdom.quote), author: t(currentWisdom.author) }),
               icon: '/favicon.ico',
             });
           }
@@ -525,10 +525,10 @@ export const Settings: React.FC = () => {
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <span className="text-xs font-bold text-[var(--fg)] flex items-center gap-1">
                         <Compass className="w-3.5 h-3.5 text-[var(--color-sage)]" />
-                        {activeSeason ? activeSeason.title : t('Sovereign Vision (General)')}
+                        {activeSeason ? t(activeSeason.title) : t('Sovereign Vision (General)')}
                       </span>
                       <span className="text-[10px] text-[var(--color-sage)] bg-[var(--color-sage)]/10 px-2 py-0.5 rounded-[var(--radius-xs)] font-semibold">
-                        {currentWisdom.theme}
+                        {t(currentWisdom.theme)}
                       </span>
                     </div>
 
@@ -558,10 +558,10 @@ export const Settings: React.FC = () => {
                   <div className="relative pl-6 py-1">
                     <Quote className="w-4 h-4 text-[var(--fg-subtle)] absolute left-0 top-1.5 opacity-60" />
                     <p className="text-xs font-display font-semibold text-[var(--fg)] italic leading-relaxed">
-                      "{currentWisdom.quote}"
+                      "{t(currentWisdom.quote)}"
                     </p>
                     <span className="text-[10px] text-[var(--fg-subtle)] block mt-1">
-                      — {currentWisdom.author}
+                      — {t(currentWisdom.author)}
                     </span>
                   </div>
 
@@ -572,7 +572,7 @@ export const Settings: React.FC = () => {
                         <Lightbulb className="w-3 h-3 text-amber-500" /> {t('Core Principle')}
                       </span>
                       <p className="text-[var(--fg-subtle)] leading-snug">
-                        {currentWisdom.principle}
+                        {t(currentWisdom.principle)}
                       </p>
                     </div>
                     <div className="space-y-1">
@@ -580,7 +580,7 @@ export const Settings: React.FC = () => {
                         <CheckCircle2 className="w-3 h-3 text-[var(--color-sage)]" /> {t('Actionable Anchor')}
                       </span>
                       <p className="text-[var(--fg-subtle)] leading-snug">
-                        {currentWisdom.actionPrompt}
+                        {t(currentWisdom.actionPrompt)}
                       </p>
                     </div>
                   </div>
@@ -960,7 +960,7 @@ export const Settings: React.FC = () => {
         isOpen={isPreviewModalOpen}
         onClose={() => setIsPreviewModalOpen(false)}
         title={t('Daily Wisdom Notification Preview')}
-        subtitle={t('Scheduled for {time} · Aligned with {season}', { time: dailyWisdomTime, season: activeSeason ? activeSeason.title : t('Active Season') })}
+        subtitle={t('Scheduled for {time} · Aligned with {season}', { time: dailyWisdomTime, season: activeSeason ? t(activeSeason.title) : t('Active Season') })}
       >
         <div className="space-y-4 pt-1">
           <div className="p-4 rounded-[var(--radius-md)] bg-[var(--bg)] border border-[var(--border)] space-y-3 shadow-inner">
@@ -970,20 +970,20 @@ export const Settings: React.FC = () => {
                 {t('Scheduled at {time}', { time: dailyWisdomTime })}
               </span>
               <Badge variant="coral" className="text-[10px]">
-                {currentWisdom.theme}
+                {t(currentWisdom.theme)}
               </Badge>
             </div>
 
             <p className="text-sm font-display font-bold text-[var(--fg)] italic leading-relaxed">
-              "{currentWisdom.quote}"
+              "{t(currentWisdom.quote)}"
             </p>
             <span className="text-xs text-[var(--fg-muted)] block">
-              — {currentWisdom.author}
+              — {t(currentWisdom.author)}
             </span>
 
             <div className="p-2.5 rounded bg-[var(--bg-elevated)] border border-[var(--border)] text-xs text-[var(--fg-muted)] space-y-1">
               <strong className="text-[var(--fg)] block font-semibold">{t("Today's Focus Anchor:")}</strong>
-              <p>{currentWisdom.actionPrompt}</p>
+              <p>{t(currentWisdom.actionPrompt)}</p>
             </div>
           </div>
 

@@ -51,7 +51,9 @@ export const Bank: React.FC = () => {
     if (
       searchTerm &&
       !tx.memo.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      !tx.kind.toLowerCase().includes(searchTerm.toLowerCase())
+      !tx.kind.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      !t(tx.memo).toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()) &&
+      !t(tx.kind.replace('_', ' ')).toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
     ) {
       return false;
     }
@@ -165,12 +167,12 @@ export const Bank: React.FC = () => {
 
                   <div className="space-y-0.5">
                     <div className="font-semibold text-[var(--fg)]">
-                      {tx.memo}
+                      {t(tx.memo)}
                     </div>
                     <div className="text-[11px] text-[var(--fg-subtle)] flex items-center gap-2">
                       <span>{new Date(tx.createdAt).toLocaleDateString()}</span>
                       <span>·</span>
-                      <span className="capitalize">{tx.kind.replace('_', ' ')}</span>
+                      <span className="capitalize">{t(tx.kind.replace('_', ' '))}</span>
                     </div>
                   </div>
                 </div>

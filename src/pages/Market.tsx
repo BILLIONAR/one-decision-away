@@ -164,7 +164,10 @@ export const Market: React.FC = () => {
         !searchQuery.trim() ||
         item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.category.toLowerCase().includes(searchQuery.toLowerCase());
+        item.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        [item.name, item.description, item.category].some((value) =>
+          t(value).toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase())
+        );
       return matchesCategory && matchesQuery;
     });
 
@@ -174,7 +177,7 @@ export const Market: React.FC = () => {
       if (sortBy === 'usd-desc') return b.realPriceUsd - a.realPriceUsd;
       return 0; // featured default
     });
-  }, [allItems, selectedCategory, searchQuery, sortBy, archivedItemIds]);
+  }, [allItems, selectedCategory, searchQuery, sortBy, archivedItemIds, t]);
 
   const handleRealPriceChange = (val: number) => {
     setCustomRealPrice(val);
@@ -390,7 +393,7 @@ export const Market: React.FC = () => {
                         <DreamArt
                           type={item.illustrationKey}
                           imageUrl={item.customImageUrl}
-                          alt={item.name}
+                          alt={t(item.name)}
                           className="w-full h-full object-cover"
                         />
 
@@ -434,12 +437,12 @@ export const Market: React.FC = () => {
                       <div className="p-3.5 space-y-2.5">
                         <div className="flex items-start justify-between gap-2">
                           <h3 className="font-display font-bold text-base text-[var(--fg)] leading-snug group-hover:text-[var(--color-slate)]">
-                            {item.name}
+                            {t(item.name)}
                           </h3>
                         </div>
 
                         <p className="text-xs text-[var(--fg-muted)] line-clamp-2 leading-relaxed">
-                          {item.description}
+                          {t(item.description)}
                         </p>
 
                         <div className="pt-2.5 border-t border-[var(--border)] flex items-center justify-between text-xs">
@@ -553,7 +556,7 @@ export const Market: React.FC = () => {
       <Modal
         isOpen={Boolean(inspectingItem)}
         onClose={() => setInspectingItem(null)}
-        title={inspectingItem?.name || t('Asset Blueprint')}
+        title={t(inspectingItem?.name || 'Asset Blueprint')}
         subtitle={inspectingItem ? t('{category} · Valuation: ${usd} USD', { category: t(inspectingItem.category), usd: inspectingItem.realPriceUsd.toLocaleString() }) : ''}
         maxWidth="lg"
       >
@@ -563,7 +566,7 @@ export const Market: React.FC = () => {
               <DreamArt
                 type={inspectingItem.illustrationKey}
                 imageUrl={inspectingItem.customImageUrl}
-                alt={inspectingItem.name}
+                alt={t(inspectingItem.name)}
                 className="w-full h-full object-cover"
               />
               <div className="absolute top-3 left-3">
@@ -574,17 +577,17 @@ export const Market: React.FC = () => {
             </div>
 
             <div className="space-y-2 text-sm">
-              <p className="text-[var(--fg)] leading-relaxed">{inspectingItem.description}</p>
+              <p className="text-[var(--fg)] leading-relaxed">{t(inspectingItem.description)}</p>
               {inspectingItem.whyWanted && (
                 <div className="p-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)] text-xs text-[var(--fg-muted)]">
                   <span className="font-bold text-[var(--fg)] block mb-0.5">{t('Sovereignty Purpose:')}</span>
-                  {inspectingItem.whyWanted}
+                  {t(inspectingItem.whyWanted)}
                 </div>
               )}
               {inspectingItem.firstRealStep && (
                 <div className="p-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)] text-xs text-[var(--fg-muted)]">
                   <span className="font-bold text-[var(--fg)] block mb-0.5">{t('Physical Milestone Step:')}</span>
-                  {inspectingItem.firstRealStep}
+                  {t(inspectingItem.firstRealStep)}
                 </div>
               )}
             </div>
@@ -636,7 +639,7 @@ export const Market: React.FC = () => {
         isOpen={Boolean(buyingItem)}
         onClose={() => setBuyingItem(null)}
         title={t('Confirm Symbolic Acquisition')}
-        subtitle={buyingItem?.name}
+        subtitle={t(buyingItem?.name || '')}
       >
         {buyingItem && (
           <div className="space-y-4">
@@ -644,7 +647,7 @@ export const Market: React.FC = () => {
               <div className="w-full h-40 rounded-[var(--radius-md)] overflow-hidden border border-[var(--border)]">
                 <img
                   src={buyingItem.customImageUrl}
-                  alt={buyingItem.name}
+                  alt={t(buyingItem.name)}
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover"
                 />
@@ -654,7 +657,7 @@ export const Market: React.FC = () => {
             <div className="p-4 bg-[var(--bg-muted)] border border-[var(--border)] rounded-[var(--radius-md)] space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-[var(--fg-muted)]">{t('Asset:')}</span>
-                <span className="font-bold text-[var(--fg)]">{buyingItem.name}</span>
+                <span className="font-bold text-[var(--fg)]">{t(buyingItem.name)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-[var(--fg-muted)]">{t('Category:')}</span>

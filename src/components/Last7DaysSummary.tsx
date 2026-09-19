@@ -31,7 +31,7 @@ import {
   ComposedChart,
 } from 'recharts';
 import { Mission, MissionCompletion, WalletTransaction } from '../types/models';
-import { useT } from '../i18n';
+import { useT, getSpeechLang } from '../i18n';
 
 interface DaySummaryData {
   dayKey: string; // YYYY-MM-DD
@@ -103,8 +103,8 @@ export const Last7DaysSummary: React.FC = () => {
     for (let i = 6; i >= 0; i--) {
       const d = new Date(todayDate.getTime() - i * 86400000);
       const dayKey = d.toISOString().slice(0, 10);
-      const dayLabel = d.toLocaleDateString('en-US', { weekday: 'short' });
-      const fullDayLabel = d.toLocaleDateString('en-US', {
+      const dayLabel = d.toLocaleDateString(getSpeechLang(), { weekday: 'short' });
+      const fullDayLabel = d.toLocaleDateString(getSpeechLang(), {
         weekday: 'short',
         month: 'short',
         day: 'numeric',
@@ -238,7 +238,7 @@ export const Last7DaysSummary: React.FC = () => {
       all7DayCompletions: allCompletions,
       earningsBySource: sources,
     };
-  }, [data]);
+  }, [data, t]);
 
   if (!data) return null;
 

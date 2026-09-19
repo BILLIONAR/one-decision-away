@@ -164,8 +164,7 @@ export const OneDecisionStreakCounter: React.FC<OneDecisionStreakCounterProps> =
               <span>{t('The Power of Daily Compounding Execution')}</span>
             </div>
             <p>
-              {t('Your future is not forged in occasional marathons—it is constructed by making and executing exactly')}{' '}
-              <strong>{t('One Signature Decision every single day')}</strong>.
+              {t("Your future is not forged in occasional marathons—it is constructed by making and executing One Signature Decision every single day.")}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-[11px]">
               <div className="p-2 rounded bg-[var(--bg-elevated)] border border-[var(--border)]">

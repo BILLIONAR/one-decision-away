@@ -59,11 +59,11 @@ export const Seasons: React.FC = () => {
                 </div>
 
                 <h3 className="font-display font-bold text-base text-[var(--fg)]">
-                  {season.title}
+                  {t(season.title)}
                 </h3>
 
                 <p className="text-xs text-[var(--fg-muted)] line-clamp-2">
-                  {season.theme || season.description}
+                  {t(season.theme || season.description)}
                 </p>
               </div>
             </Card>
@@ -77,12 +77,12 @@ export const Seasons: React.FC = () => {
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <Badge variant="sage">{t('{n} Days Sprint', { n: currentSeason.durationDays || 30 })}</Badge>
-              <Badge variant="slate">{currentSeason.rewardBadgeTitle || currentSeason.badgeName}</Badge>
+              <Badge variant="slate">{t(currentSeason.rewardBadgeTitle || currentSeason.badgeName || '')}</Badge>
             </div>
             <h2 className="text-2xl font-bold font-display text-[var(--fg)]">
-              {currentSeason.title}
+              {t(currentSeason.title)}
             </h2>
-            <p className="text-xs text-[var(--fg-muted)]">{currentSeason.theme || currentSeason.description}</p>
+            <p className="text-xs text-[var(--fg-muted)]">{t(currentSeason.theme || currentSeason.description)}</p>
           </div>
 
           {!isJoined ? (
@@ -131,9 +131,9 @@ export const Seasons: React.FC = () => {
                 className="p-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)] flex items-start justify-between gap-3 text-xs"
               >
                 <div className="space-y-1">
-                  <div className="font-bold text-[var(--fg)]">{mission.title}</div>
+                  <div className="font-bold text-[var(--fg)]">{t(mission.title)}</div>
                   <div className="text-[11px] text-[var(--fg-muted)]">
-                    {mission.area} · {mission.difficulty}
+                    {t(mission.area)} · {t(mission.difficulty)}
                   </div>
                 </div>
 
@@ -155,7 +155,7 @@ export const Seasons: React.FC = () => {
               {t('Cosmetic Milestone Reward')}
             </span>
             <div className="font-bold text-sm text-[var(--fg)]">
-              {t('"{name}" Profile Emblem', { name: currentSeason.rewardBadgeTitle || currentSeason.badgeName || '' })}
+              {t('"{name}" Profile Emblem', { name: t(currentSeason.rewardBadgeTitle || currentSeason.badgeName || '') })}
             </div>
             <p className="text-[11px] text-[var(--fg-muted)]">
               {t('Earned upon completing the 30-day cycle. Purely symbolic recognition with no pay-to-win advantages.')}

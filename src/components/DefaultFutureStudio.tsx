@@ -16,7 +16,7 @@ import {
   X,
 } from 'lucide-react';
 import { DriftCostItem } from '../types/models';
-import { useT, N_ } from '../i18n';
+import { useT, N_, getSpeechLang } from '../i18n';
 
 /**
  * Default Future Studio — the enriched "life you're allowing".
@@ -120,7 +120,7 @@ export const DefaultFutureStudio: React.FC = () => {
       days.push({
         key,
         count: driftLog.filter((e) => e.dateKey === key).length,
-        weekday: d.toLocaleDateString('en-US', { weekday: 'narrow' }),
+        weekday: d.toLocaleDateString(getSpeechLang(), { weekday: 'narrow' }),
       });
     }
     return days;
@@ -370,7 +370,7 @@ export const DefaultFutureStudio: React.FC = () => {
                         {c.dollarsPerMonth ? (
                           <>
                             {' '}
-                            · ${c.dollarsPerMonth}/mo → <strong>${(c.dollarsPerMonth * 120).toLocaleString()}</strong> {t('in 10 years')}
+                            · ${c.dollarsPerMonth}{t(' / month')} → <strong>${(c.dollarsPerMonth * 120).toLocaleString()}</strong> {t('in 10 years')}
                           </>
                         ) : null}
                       </div>

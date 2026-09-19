@@ -21,7 +21,7 @@ import {
   getRandomAffirmation,
 } from '../data/affirmations';
 import { soundSynthesizer } from '../utils/soundSynthesizer';
-import { useT } from '../i18n';
+import { useT, getSpeechLang } from '../i18n';
 
 const FAVORITES_STORAGE_KEY = 'mylife_favorite_affirmations';
 
@@ -52,12 +52,12 @@ export const DailyAffirmationWidget: React.FC<{ className?: string }> = ({ class
 
   // Formatted date string for "Today"
   const formattedToday = useMemo(() => {
-    return new Intl.DateTimeFormat('en-US', {
+    return new Intl.DateTimeFormat(getSpeechLang(), {
       weekday: 'short',
       month: 'short',
       day: 'numeric',
     }).format(new Date());
-  }, []);
+  }, [t]);
 
   // Breath pacing loop when breathing mode is activated
   useEffect(() => {

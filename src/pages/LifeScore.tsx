@@ -123,7 +123,7 @@ export const LifeScore: React.FC = () => {
                   : t('Starting Benchmark')}
               </h2>
               <p className="text-sm text-[var(--fg-muted)] leading-relaxed">
-                {latestScore.interpretation}
+                {t(latestScore.interpretation)}
               </p>
             </div>
           </div>
@@ -136,7 +136,7 @@ export const LifeScore: React.FC = () => {
                   {t('Priority Focus Domains:')}
                 </span>
                 <span className="text-[var(--fg-muted)]">
-                  {t('{areas} are currently asking for deliberate attention.', { areas: latestScore.lowestAreas.join(t(' and ')) })}
+                  {t('{areas} are currently asking for deliberate attention.', { areas: latestScore.lowestAreas.map((area) => t(area)).join(t(' and ')) })}
                 </span>
               </div>
               <Button

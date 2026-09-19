@@ -62,9 +62,7 @@ export const Landing: React.FC = () => {
           </div>
 
           <h1 className="font-display text-5xl sm:text-7xl lg:text-8xl leading-[0.92] font-black italic tracking-tight text-[var(--fg)]">
-            {t('The')} <br />
-            {t('Silence')} <br />
-            {t('Of Intent')}
+            {t('The Silence Of Intent')}
           </h1>
 
           <p className="font-sans text-sm sm:text-base leading-relaxed max-w-lg text-[var(--fg-muted)]">

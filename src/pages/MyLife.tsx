@@ -174,7 +174,7 @@ export const MyLife: React.FC = () => {
 
     await reorderVisionItems(newIds);
     soundSynthesizer.playTapChime();
-    showToast(t('✨ "{name}" moved to priority #{n}.', { name: visionItems[index].name, n: targetIndex + 1 }), 'info');
+    showToast(t('✨ "{name}" moved to priority #{n}.', { name: t(visionItems[index].name), n: targetIndex + 1 }), 'info');
   };
 
   const handleSortPreset = async (type: 'highest_val' | 'lowest_val' | 'highest_dprice' | 'alphabetical') => {
@@ -226,8 +226,8 @@ export const MyLife: React.FC = () => {
     setRealCostUsd(purchase.itemSnapshot.realPriceUsd || 1000);
     setCurrentSavingsUsd(0);
     setIncomeProject(t('Primary Income Allocation'));
-    setFirstRealAction(t('Open a dedicated sub-account for {name}', { name: purchase.itemSnapshot.name }));
-    setNextMilestone(t('Save first 20% of {name} cost', { name: purchase.itemSnapshot.name }));
+    setFirstRealAction(t('Open a dedicated sub-account for {name}', { name: t(purchase.itemSnapshot.name) }));
+    setNextMilestone(t('Save first 20% of {name} cost', { name: t(purchase.itemSnapshot.name) }));
   };
 
   const handleSaveBridge = async (e: React.FormEvent) => {
@@ -249,7 +249,7 @@ export const MyLife: React.FC = () => {
       targetDate,
       requiredMonthlySavingsUsd: requiredMonthly,
       incomeProject: incomeProject.trim() || t('Core Savings Allocation'),
-      firstRealAction: firstRealAction.trim() || t('Draft timeline for {name}', { name: bridgeTargetPurchase.itemSnapshot.name }),
+      firstRealAction: firstRealAction.trim() || t('Draft timeline for {name}', { name: t(bridgeTargetPurchase.itemSnapshot.name) }),
       nextMilestone: nextMilestone.trim() || t('Reach first milestone'),
     });
 
@@ -457,7 +457,7 @@ export const MyLife: React.FC = () => {
                       {t('Your Vision Board Is Empty')}
                     </h3>
                     <p className="text-xs text-[var(--fg-muted)] leading-relaxed">
-                      {t('Photograph the cars, homes and places that inspire you in real life, or pin inspiring dreams from our')}{' '}<strong>{t('curated explore gallery')}</strong>{' '}{t('to your board.')}
+                      {t("Photograph the cars, homes and places that inspire you in real life, or pin inspiring dreams from our curated explore gallery to your board.")}
                     </p>
                   </div>
                   <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
@@ -607,7 +607,7 @@ export const MyLife: React.FC = () => {
                               illustrationKey={item.illustrationKey}
                               customImageUrl={item.customImageUrl}
                               category={item.category}
-                              name={item.name}
+                              name={t(item.name)}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 pointer-events-none select-none"
                             />
 
@@ -693,15 +693,15 @@ export const MyLife: React.FC = () => {
                           <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
                             <div className="space-y-1.5">
                               <h3 className="font-display font-bold text-sm text-[var(--fg)] leading-snug">
-                                {item.name}
+                                {t(item.name)}
                               </h3>
                               <p className="text-xs text-[var(--fg-muted)] line-clamp-2">
-                                {item.description}
+                                {t(item.description)}
                               </p>
 
                               {item.whyWanted && (
                                 <div className="p-2 bg-[var(--bg-muted)] rounded text-[11px] text-[var(--fg-subtle)] italic border border-[var(--border)]">
-                                  "{item.whyWanted}"
+                                  "{t(item.whyWanted)}"
                                 </div>
                               )}
                             </div>
@@ -822,7 +822,7 @@ export const MyLife: React.FC = () => {
               <div key={cat.key} className="space-y-4">
                 <div className="flex items-center gap-2 pb-2 border-b border-[var(--border)]">
                   <h2 className="font-display font-bold text-lg text-[var(--fg)]">
-                    {cat.label}
+                    {t(cat.label)}
                   </h2>
                   <Badge variant="subtle">{itemsInCat.length}</Badge>
                 </div>
@@ -844,7 +844,7 @@ export const MyLife: React.FC = () => {
                             <DreamArt
                               type={purchase.itemSnapshot.illustrationKey}
                               imageUrl={purchase.itemSnapshot.customImageUrl}
-                              alt={purchase.itemSnapshot.name}
+                              alt={t(purchase.itemSnapshot.name)}
                               className="w-full h-full object-cover"
                             />
                             <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5">
@@ -867,10 +867,10 @@ export const MyLife: React.FC = () => {
                           <div className="p-3.5 space-y-3">
                             <div>
                               <h3 className="font-display font-bold text-base text-[var(--fg)]">
-                                {purchase.itemSnapshot.name}
+                                {t(purchase.itemSnapshot.name)}
                               </h3>
                               <p className="text-xs text-[var(--fg-muted)] line-clamp-2 mt-0.5">
-                                {purchase.itemSnapshot.description}
+                                {t(purchase.itemSnapshot.description)}
                               </p>
                             </div>
 
@@ -983,7 +983,7 @@ export const MyLife: React.FC = () => {
         isOpen={Boolean(bridgeTargetPurchase)}
         onClose={() => setBridgeTargetPurchase(null)}
         title={t('Connect to Reality Bridge')}
-        subtitle={t('Bridge "{name}" to a real savings and execution plan.', { name: bridgeTargetPurchase?.itemSnapshot.name ?? '' })}
+        subtitle={t('Bridge "{name}" to a real savings and execution plan.', { name: t(bridgeTargetPurchase?.itemSnapshot.name ?? '') })}
         maxWidth="lg"
       >
         {bridgeTargetPurchase && (

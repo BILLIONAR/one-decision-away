@@ -65,14 +65,14 @@ export const DailyVisionAffirmation: React.FC = () => {
     return allItems.find((item) => !archivedItemIds.has(item.id)) || allItems[0];
   }, [data.inVisionItemIds, data.customMarketItems, allItems, archivedItemIds]);
 
-  const futureRole = data.futureSelf?.title || t('The Finisher');
-  const identityStmt = data.futureSelf?.identityStatement || t('I act before I feel ready.');
+  const futureRole = t(data.futureSelf?.title || 'The Finisher');
+  const identityStmt = t(data.futureSelf?.identityStatement || 'I act before I feel ready.');
 
   // 2. Generate customized inspiring affirmation
   const currentAffirmation: GeneratedQuote = useMemo(() => {
-    const dName = priorityDream.name;
+    const dName = t(priorityDream.name);
     const dCat = priorityDream.category;
-    const whyWanted = priorityDream.whyWanted || t('Uncompromising personal sovereignty and focus.');
+    const whyWanted = t(priorityDream.whyWanted || 'Uncompromising personal sovereignty and focus.');
 
     // Deterministic date + tone + seed index
     const today = new Date();
@@ -176,7 +176,7 @@ export const DailyVisionAffirmation: React.FC = () => {
   };
 
   const handleCopy = () => {
-    const fullText = `"${currentAffirmation.quote}"\n— ${t('Daily Vision Affirmation for {name} ({pillar})', { name: priorityDream.name, pillar: currentAffirmation.themePillar })}`;
+    const fullText = `"${currentAffirmation.quote}"\n— ${t('Daily Vision Affirmation for {name} ({pillar})', { name: t(priorityDream.name), pillar: currentAffirmation.themePillar })}`;
     navigator.clipboard.writeText(fullText);
     setCopied(true);
     showToast(t('Affirmation copied to clipboard'), 'success');
@@ -207,7 +207,7 @@ export const DailyVisionAffirmation: React.FC = () => {
               </span>
             </div>
             <h3 className="text-xs text-[var(--fg-muted)]">
-              {t('Anchored to Priority Dream:')} <span className="font-semibold text-[var(--fg)]">{priorityDream.name}</span>
+              {t('Anchored to Priority Dream:')} <span className="font-semibold text-[var(--fg)]">{t(priorityDream.name)}</span>
             </h3>
           </div>
         </div>
@@ -332,7 +332,7 @@ export const DailyVisionAffirmation: React.FC = () => {
               <DreamArt
                 type={priorityDream.illustrationKey}
                 imageUrl={priorityDream.customImageUrl}
-                alt={priorityDream.name}
+                alt={t(priorityDream.name)}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute bottom-1.5 left-1.5 bg-black/75 backdrop-blur-xs px-1.5 py-0.5 rounded text-[9px] font-mono text-white/90">
@@ -342,7 +342,7 @@ export const DailyVisionAffirmation: React.FC = () => {
 
             <div>
               <h4 className="text-xs font-bold font-display text-[var(--fg)] truncate">
-                {priorityDream.name}
+                {t(priorityDream.name)}
               </h4>
               <span className="text-[10px] text-[var(--fg-muted)] block truncate">
                 {t(priorityDream.category)}

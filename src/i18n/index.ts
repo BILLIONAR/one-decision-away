@@ -11,16 +11,17 @@
  */
 import { useMemo, useSyncExternalStore } from 'react';
 
-export type Locale = 'en' | 'tr' | 'es' | 'de' | 'fr' | 'it' | 'ru';
+export type Locale = 'en' | 'tr' | 'es';
 
 export const LOCALES: { code: Locale; name: string; nativeName: string; flag: string; speech: string }[] = [
   { code: 'en', name: 'English', nativeName: 'English', flag: '🇬🇧', speech: 'en-US' },
   { code: 'tr', name: 'Turkish', nativeName: 'Türkçe', flag: '🇹🇷', speech: 'tr-TR' },
   { code: 'es', name: 'Spanish', nativeName: 'Español', flag: '🇪🇸', speech: 'es-ES' },
-  { code: 'de', name: 'German', nativeName: 'Deutsch', flag: '🇩🇪', speech: 'de-DE' },
-  { code: 'fr', name: 'French', nativeName: 'Français', flag: '🇫🇷', speech: 'fr-FR' },
-  { code: 'it', name: 'Italian', nativeName: 'Italiano', flag: '🇮🇹', speech: 'it-IT' },
-  { code: 'ru', name: 'Russian', nativeName: 'Русский', flag: '🇷🇺', speech: 'ru-RU' },
+  // Additional languages will be enabled once their dictionaries are ready.
+  // { code: 'de', name: 'German', nativeName: 'Deutsch', flag: '🇩🇪', speech: 'de-DE' },
+  // { code: 'fr', name: 'French', nativeName: 'Français', flag: '🇫🇷', speech: 'fr-FR' },
+  // { code: 'it', name: 'Italian', nativeName: 'Italiano', flag: '🇮🇹', speech: 'it-IT' },
+  // { code: 'ru', name: 'Russian', nativeName: 'Русский', flag: '🇷🇺', speech: 'ru-RU' },
 ];
 
 export const LOCALE_CODES = LOCALES.map((l) => l.code);

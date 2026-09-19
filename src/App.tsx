@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { AppProvider, useApp } from './store/useApp';
 import { AppShell } from './layout/AppShell';
 import { Landing } from './pages/Landing';
+import { useT } from './i18n';
 const PublicTwoFutures = lazy(() => import('./pages/PublicTwoFutures').then((m) => ({ default: m.PublicTwoFutures })));
 import { Home } from './pages/Home';
 const Missions = lazy(() => import('./pages/Missions').then((m) => ({ default: m.Missions })));
@@ -18,22 +19,26 @@ const Seasons = lazy(() => import('./pages/Seasons').then((m) => ({ default: m.S
 const Upgrade = lazy(() => import('./pages/Upgrade').then((m) => ({ default: m.Upgrade })));
 const Settings = lazy(() => import('./pages/Settings').then((m) => ({ default: m.Settings })));
 
-const RouteFallback: React.FC = () => (
+const RouteFallback: React.FC = () => {
+  const t = useT();
+  return (
   <div className="min-h-[40vh] flex items-center justify-center text-sm text-[var(--fg-muted)]">
     <div className="w-4 h-4 border-2 border-[var(--color-sage)] border-t-transparent rounded-full animate-spin mr-3" />
-    Loading…
+    {t('Loading…')}
   </div>
-);
+  );
+};
 
 const AppRouter: React.FC = () => {
   const { activeRoute, isLoading } = useApp();
+  const t = useT();
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[var(--bg)] flex items-center justify-center text-sm font-medium text-[var(--fg-muted)]">
         <div className="flex items-center gap-3">
           <div className="w-5 h-5 border-2 border-[var(--color-sage)] border-t-transparent rounded-full animate-spin" />
-          <span>Loading One Decision Away...</span>
+          <span>{t('Loading One Decision Away...')}</span>
         </div>
       </div>
     );
@@ -70,6 +75,7 @@ const AppRouter: React.FC = () => {
       case '/app/future-self':
         return <FutureSelf />;
       case '/app/score':
+      case '/app/life-score':
         return <LifeScore />;
       case '/app/bank':
         return <Bank />;

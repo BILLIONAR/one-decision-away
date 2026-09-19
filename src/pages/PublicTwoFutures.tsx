@@ -122,7 +122,7 @@ export const PublicTwoFutures: React.FC = () => {
       ctx.font = 'italic 34px Fraunces, Georgia, serif';
 
       // Multi-line wrap
-      const words = antiVision.split(' ');
+      const words = t(antiVision).split(' ');
       let line = '';
       for (const word of words) {
         const test = line + word + ' ';
@@ -155,7 +155,7 @@ export const PublicTwoFutures: React.FC = () => {
     ctx.fillStyle = '#263238';
     ctx.font = 'bold 36px Fraunces, Georgia, serif';
 
-    const vWords = vision.split(' ');
+    const vWords = t(vision).split(' ');
     let vLine = '';
     for (const word of vWords) {
       const test = vLine + word + ' ';
@@ -211,7 +211,7 @@ export const PublicTwoFutures: React.FC = () => {
         const file = new File([blob], 'two-futures.png', { type: 'image/png' });
         await navigator.share({
           title: t('My Two Futures — One Decision Away'),
-          text: t('My Vision: {vision}', { vision }),
+          text: t('My Vision: {vision}', { vision: t(vision) }),
           files: [file],
         });
       } else {

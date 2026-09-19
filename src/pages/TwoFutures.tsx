@@ -112,7 +112,7 @@ export const TwoFutures: React.FC = () => {
               </Field>
             ) : (
               <p className="text-sm italic font-serif text-[var(--fg)] bg-[var(--bg-muted)] p-4 rounded-[var(--radius-md)] border border-[var(--border)] leading-relaxed">
-                "{data.twoFutures.antiVision}"
+                "{t(data.twoFutures.antiVision)}"
               </p>
             )}
           </div>
@@ -162,7 +162,7 @@ export const TwoFutures: React.FC = () => {
               </Field>
             ) : (
               <p className="text-sm font-serif font-medium text-[var(--fg)] bg-[var(--bg-muted)] p-4 rounded-[var(--radius-md)] border border-[var(--border)] leading-relaxed">
-                "{data.twoFutures.vision}"
+                "{t(data.twoFutures.vision)}"
               </p>
             )}
           </div>

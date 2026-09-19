@@ -50,7 +50,7 @@ export const Bridge: React.FC = () => {
 
   const handleCreateMissionFromBridge = async (bridge: RealityBridge) => {
     const purchase = data.purchases.find((p) => p.id === bridge.purchaseId);
-    const itemName = purchase?.itemSnapshot.name || t('Dream Item');
+    const itemName = t(purchase?.itemSnapshot.name || 'Dream Item');
 
     await addMission({
       title: bridge.nextMilestone || t('Execute next milestone for {itemName}', { itemName }),
@@ -102,7 +102,7 @@ export const Bridge: React.FC = () => {
                   </div>
 
                   <h3 className="text-lg font-bold font-display text-[var(--fg)]">
-                    {purchase?.itemSnapshot.name || t('Connected Dream')}
+                    {t(purchase?.itemSnapshot.name || 'Connected Dream')}
                   </h3>
 
                   {/* Dual Savings Progress */}
@@ -128,11 +128,11 @@ export const Bridge: React.FC = () => {
                     </div>
                     <div>
                       <span className="font-semibold text-[var(--fg)] block">{t('Income / Funding Channel:')}</span>
-                      {bridge.incomeProject}
+                      {t(bridge.incomeProject)}
                     </div>
                     <div>
                       <span className="font-semibold text-[var(--fg)] block">{t('Next Physical Milestone:')}</span>
-                      {bridge.nextMilestone}
+                      {t(bridge.nextMilestone)}
                     </div>
                   </div>
                 </div>

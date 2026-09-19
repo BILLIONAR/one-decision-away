@@ -70,15 +70,15 @@ export const MorningVision: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-[65] bg-black text-white animate-in fade-in duration-500">
-      <img src={pick.image} alt={pick.name} referrerPolicy="no-referrer" className="absolute inset-0 w-full h-full object-cover animate-in zoom-in-105 duration-[6000ms]" />
+      <img src={pick.image} alt={t(pick.name)} referrerPolicy="no-referrer" className="absolute inset-0 w-full h-full object-cover animate-in zoom-in-105 duration-[6000ms]" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/40" />
       <button type="button" onClick={() => close()} className="absolute top-5 right-5 text-[11px] uppercase tracking-widest text-white/70 hover:text-white cursor-pointer">
         {t('Skip')}
       </button>
       <div className="absolute inset-x-0 bottom-0 p-8 sm:p-14 max-w-3xl">
         <div className="text-[11px] uppercase tracking-[0.35em] text-white/60">{name ? t('Good morning, {name}', { name }) : t('Good morning')}</div>
-        <h1 className="font-display text-3xl sm:text-5xl font-bold leading-tight mt-2">{pick.name}</h1>
-        {pick.why && <p className="font-display italic text-base sm:text-xl text-white/80 mt-2">{pick.why}</p>}
+        <h1 className="font-display text-3xl sm:text-5xl font-bold leading-tight mt-2">{t(pick.name)}</h1>
+        {pick.why && <p className="font-display italic text-base sm:text-xl text-white/80 mt-2">{t(pick.why)}</p>}
         <p className="text-sm text-white/70 mt-4">
           {days === 0
             ? t('You can already afford this. Today is the day you go and get it.')

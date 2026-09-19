@@ -183,7 +183,7 @@ export const Home: React.FC = () => {
                   : t('What makes today meaningful:')}
               </span>
               <h3 className="text-xl sm:text-2xl font-bold font-display text-[var(--fg)]">
-                {todayOneDecision.title}
+                {t(todayOneDecision.title)}
               </h3>
             </div>
 
@@ -194,7 +194,7 @@ export const Home: React.FC = () => {
                   {t('{n} mins', { n: todayOneDecision.estimatedMinutes || 45 })}
                 </span>
                 <span className="capitalize px-2 py-0.5 rounded bg-[var(--bg-muted)] border border-[var(--border)]">
-                  {t('{difficulty} difficulty', { difficulty: todayOneDecision.difficulty })}
+                  {t('{difficulty} difficulty', { difficulty: t(todayOneDecision.difficulty) })}
                 </span>
               </div>
 
@@ -349,7 +349,7 @@ export const Home: React.FC = () => {
           value={t('{n} Days', { n: decisionStreak.currentStreak })}
           subtext={
             decisionStreak.currentStreak > 0
-              ? t('{tier} Tier ({n}d record)', { tier: decisionStreak.tier.name, n: decisionStreak.longestStreak })
+              ? t('{tier} Tier ({n}d record)', { tier: t(decisionStreak.tier.name), n: decisionStreak.longestStreak })
               : t('Execute today to ignite')
           }
           icon={Flame}
@@ -389,14 +389,14 @@ export const Home: React.FC = () => {
               <div className="p-4 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)] space-y-2.5">
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-[11px] font-bold uppercase px-2 py-0.5 bg-[var(--bg-elevated)] rounded-full text-[var(--fg-muted)]">
-                    {currentActiveMission.area} · {currentActiveMission.type.replace('_', ' ')}
+                    {t(currentActiveMission.area)} · {t(currentActiveMission.type.replace('_', ' '))}
                   </span>
                   <span className="text-xs font-bold text-[var(--color-sage)]">
                     {currentActiveMission.type === 'constraint' ? t('+ D$ 0 (Rule)') : t('+ D$ 150-1,000')}
                   </span>
                 </div>
                 <h4 className="text-base font-bold font-display text-[var(--fg)]">
-                  {currentActiveMission.title}
+                  {t(currentActiveMission.title)}
                 </h4>
                 <div className="flex items-center gap-2 text-xs text-[var(--fg-muted)]">
                   <Clock className="w-3.5 h-3.5" />
@@ -453,7 +453,7 @@ export const Home: React.FC = () => {
                 </div>
                 <div className="space-y-1 flex-1 min-w-0">
                   <div className="text-sm font-bold font-display text-[var(--fg)] truncate">
-                    {targetItem.name}
+                    {t(targetItem.name)}
                   </div>
                   <div className="flex items-center justify-between text-xs text-[var(--fg-muted)]">
                     <span>{t('Price: D$ {price}', { price: targetItem.dreamDollarPrice.toLocaleString() })}</span>
@@ -512,7 +512,7 @@ export const Home: React.FC = () => {
         </div>
 
         <div className="flex items-center justify-between text-[11px] text-[var(--fg-subtle)] pt-1">
-          <span>{t('Anti-Vision: "{text}..."', { text: data.twoFutures.antiVision.slice(0, 45) })}</span>
+          <span>{t('Anti-Vision: "{text}..."', { text: t(data.twoFutures.antiVision).slice(0, 45) })}</span>
           <button
             onClick={() => setActiveRoute('/app/two-futures')}
             className="text-[var(--color-coral)] hover:underline shrink-0"

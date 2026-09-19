@@ -1,6 +1,6 @@
 import React from 'react';
 import { Globe } from 'lucide-react';
-import { LOCALES, useLocale, useT, type Locale } from '../i18n';
+import { LOCALES, ensureLocaleLoaded, getLocale, useLocale, useT, type Locale } from '../i18n';
 import { useApp } from '../store/useApp';
 
 interface LanguagePickerProps {
@@ -18,8 +18,11 @@ export const LanguagePicker: React.FC<LanguagePickerProps> = ({ variant = 'compa
   const t = useT();
   const { data, updateProfile } = useApp();
 
-  const choose = (code: Locale) => {
+  const choose = async (code: Locale) => {
     setLocale(code);
+    await ensureLocaleLoaded(code);
+    // A slower dictionary load must not overwrite a more recent selection.
+    if (getLocale() !== code) return;
     if (data && data.profile.locale !== code) {
       void updateProfile({ locale: code });
     }
@@ -27,7 +30,7 @@ export const LanguagePicker: React.FC<LanguagePickerProps> = ({ variant = 'compa
 
   if (variant === 'grid') {
     return (
-      <div className={`grid grid-cols-2 sm:grid-cols-4 gap-2 ${className}`}>
+      <div className={`grid grid-cols-1 sm:grid-cols-3 gap-2 ${className}`}>
         {LOCALES.map((l) => {
           const active = l.code === locale;
           return (

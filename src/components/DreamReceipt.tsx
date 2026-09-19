@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Purchase } from '../types/models';
 import { Modal, Button } from './ui';
 import { Download, Share2, Check } from 'lucide-react';
-import { useT } from '../i18n';
+import { useT, getSpeechLang } from '../i18n';
 
 interface DreamReceiptModalProps {
   purchase: Purchase | null;
@@ -140,7 +140,7 @@ export const DreamReceiptModal: React.FC<DreamReceiptModalProps> = ({
     drawStatBox(620, 930, 420, 140, t('Missions Completed'), t('{n} Missions', { n: completedMissionsCount }), t('Fueling Real Momentum'));
 
     // Date & Timestamp
-    const dateStr = new Date(purchase.purchasedAt).toLocaleDateString('en-US', {
+    const dateStr = new Date(purchase.purchasedAt).toLocaleDateString(getSpeechLang(), {
       year: 'numeric',
       month: 'long',
       day: 'numeric',

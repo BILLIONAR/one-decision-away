@@ -278,7 +278,7 @@ export const Progress: React.FC = () => {
                 >
                   <div className="flex items-center justify-between text-xs">
                     <span className="font-bold text-[var(--fg)]">
-                      {purchase?.itemSnapshot.name || t('Dream Item')}
+                      {t(purchase?.itemSnapshot.name || 'Dream Item')}
                     </span>
                     <span className="font-semibold text-[var(--color-coral)]">
                       ${bridge.currentSavingsUsd.toLocaleString()} / ${bridge.realCostUsd.toLocaleString()} ({bridge.realProgressPct}%)

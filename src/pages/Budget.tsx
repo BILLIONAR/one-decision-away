@@ -84,8 +84,8 @@ export const Budget: React.FC = () => {
               className="grid grid-cols-1 sm:grid-cols-[180px_1fr_60px] md:grid-cols-[210px_1fr_70px] items-center gap-4 sm:gap-6 py-5"
             >
               <div className="space-y-0.5">
-                <h3 className="text-sm font-semibold text-[var(--ink)] leading-tight">{cat.name}</h3>
-                <p className="text-xs text-[var(--ink-faint)] leading-normal">{cat.description}</p>
+                <h3 className="text-sm font-semibold text-[var(--ink)] leading-tight">{t(cat.name)}</h3>
+                <p className="text-xs text-[var(--ink-faint)] leading-normal">{t(cat.description)}</p>
               </div>
 
               <div className="relative py-2">
@@ -96,7 +96,7 @@ export const Budget: React.FC = () => {
                   value={cat.percentage}
                   onChange={(e) => handlePercentageChange(cat.id, parseInt(e.target.value) || 0)}
                   className="variation3-slider"
-                  aria-label={t('{name} percentage', { name: cat.name })}
+                  aria-label={t('{name} percentage', { name: t(cat.name) })}
                 />
               </div>
 
@@ -155,7 +155,7 @@ export const Budget: React.FC = () => {
                   backgroundColor: segmentColors[idx % segmentColors.length],
                 }}
                 className="h-full transition-all duration-150"
-                title={`${cat.name}: ${cat.percentage}%`}
+                title={`${t(cat.name)}: ${cat.percentage}%`}
               />
             );
           })}

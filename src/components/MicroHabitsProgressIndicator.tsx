@@ -210,7 +210,7 @@ export const MicroHabitsProgressIndicator: React.FC<MicroHabitsProgressIndicator
                   key={habit.id}
                   type="button"
                   onClick={() => toggleMicroHabit(habit.id)}
-                  title={`${habit.title} (${isDone ? t('Completed today · Click to undo') : t('Pending · Click to complete')})`}
+                  title={`${t(habit.title)} (${isDone ? t('Completed today · Click to undo') : t('Pending · Click to complete')})`}
                   className={`group inline-flex items-center gap-2 px-3 py-1.5 rounded-[var(--radius-sm)] text-xs transition-all cursor-pointer border text-left ${
                     isDone
                       ? 'bg-[var(--color-sage)]/10 border-[var(--color-sage)]/40 text-[var(--color-sage)] font-medium'
@@ -224,7 +224,7 @@ export const MicroHabitsProgressIndicator: React.FC<MicroHabitsProgressIndicator
                     category={habit.category}
                   />
                   <span className={`truncate max-w-[150px] sm:max-w-[200px] ${isDone ? 'line-through opacity-85' : ''}`}>
-                    {habit.title}
+                    {t(habit.title)}
                   </span>
                   <span
                     className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold shrink-0 ${

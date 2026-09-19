@@ -254,7 +254,7 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
     }
 
     return result;
-  }, [transactions]);
+  }, [transactions, t]);
 
   // Aggregate metrics over the 7 days
   const metrics = useMemo(() => {

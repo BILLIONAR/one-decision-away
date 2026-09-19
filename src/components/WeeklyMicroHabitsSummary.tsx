@@ -24,7 +24,7 @@ import { MicroHabit, MicroHabitCategory } from '../types/models';
 import { PREDEFINED_CATEGORIES, CategoryConfig, HabitBestStreakIndicator } from './DailyMicroHabits';
 import { calculateBestMicroHabitStreak } from '../services/microHabitsService';
 import { resolveCategoryConfig } from '../utils/categoryHelpers';
-import { useT, N_ } from '../i18n';
+import { useT, N_, getSpeechLang } from '../i18n';
 
 interface DayHabitStats {
   dateKey: string; // YYYY-MM-DD
@@ -92,8 +92,8 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
       d.setDate(d.getDate() - i);
       const dateKey = d.toISOString().slice(0, 10);
       const isToday = i === 0;
-      const dayLabel = d.toLocaleDateString('en-US', { weekday: 'short' });
-      const fullDateLabel = d.toLocaleDateString('en-US', {
+      const dayLabel = d.toLocaleDateString(getSpeechLang(), { weekday: 'short' });
+      const fullDateLabel = d.toLocaleDateString(getSpeechLang(), {
         weekday: 'short',
         month: 'short',
         day: 'numeric',
@@ -346,7 +346,7 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
       avgDailyCompletions,
       totalHabitsCount: habits.length,
     };
-  }, [data]);
+  }, [data, t]);
 
   if (!data || !data.microHabits || data.microHabits.length === 0) {
     return (

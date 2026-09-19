@@ -96,18 +96,18 @@ export const ArchiveDreamModal: React.FC<ArchiveDreamModalProps> = ({
             <DreamArt
               type={item.illustrationKey}
               imageUrl={item.customImageUrl}
-              alt={item.name}
+              alt={t(item.name)}
               className="w-full h-full object-cover"
             />
           </div>
 
           <div className="flex-1 min-w-0 space-y-1">
             <div className="flex items-center gap-2">
-              <Badge variant="subtle">{item.category}</Badge>
+              <Badge variant="subtle">{t(item.category)}</Badge>
               {isOwned && <Badge variant="success">{t('Acquired 100%')}</Badge>}
             </div>
             <h4 className="font-display font-bold text-sm text-[var(--fg)] truncate">
-              {item.name}
+              {t(item.name)}
             </h4>
             <div className="flex items-center gap-3 text-xs font-mono text-[var(--fg-muted)]">
               <span>${item.realPriceUsd.toLocaleString()} USD</span>

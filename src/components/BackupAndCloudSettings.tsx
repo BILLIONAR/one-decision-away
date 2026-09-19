@@ -99,10 +99,7 @@ export const BackupAndCloudSettings: React.FC = () => {
         {!cloud.configured ? (
           <div className="text-xs text-[var(--fg-muted)] space-y-2">
             <p>
-              {t('Not connected to a cloud project yet. To enable sync, create a free Supabase project, run')}{' '}
-              <code className="px-1 bg-[var(--bg-muted)] rounded">supabase/schema.sql</code>{t(', and paste the project URL and anon key here (or set')}{' '}
-              <code className="px-1 bg-[var(--bg-muted)] rounded">VITE_SUPABASE_URL</code> /{' '}
-              <code className="px-1 bg-[var(--bg-muted)] rounded">VITE_SUPABASE_ANON_KEY</code> {t('at build time).')}
+              {t("Not connected to a cloud project yet. To enable sync, create a free Supabase project, run {schema}, and paste the project URL and anon key here (or set {url} / {key} at build time).", { schema: 'supabase/schema.sql', url: 'VITE_SUPABASE_URL', key: 'VITE_SUPABASE_ANON_KEY' })}
             </p>
             <Button variant="outline" size="sm" onClick={() => setShowSetup(!showSetup)}>
               {showSetup ? t('Hide setup') : t('Enter project keys')}

@@ -51,11 +51,11 @@ export const PurchaseReveal: React.FC<Props> = ({ item, dreamDollarPaid, onDone 
             transitionDuration: '2000ms',
           }}
         >
-          <DreamArt type={item.illustrationKey} imageUrl={item.customImageUrl} alt={item.name} className="w-full h-full" />
+          <DreamArt type={item.illustrationKey} imageUrl={item.customImageUrl} alt={t(item.name)} className="w-full h-full" />
         </div>
         <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
           <div className="text-[10px] uppercase tracking-[0.3em] text-[#9A8F86]">{stage < 2 ? t('Becoming yours…') : t('Yours.')}</div>
-          <div className="font-display text-2xl sm:text-4xl font-bold leading-tight">{item.name}</div>
+          <div className="font-display text-2xl sm:text-4xl font-bold leading-tight">{t(item.name)}</div>
         </div>
       </div>
       <div className={`mt-8 text-center transition-opacity duration-700 ${stage === 2 ? 'opacity-100' : 'opacity-0'}`}>
