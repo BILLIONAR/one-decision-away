@@ -15,7 +15,7 @@ export const TwoFutures: React.FC = () => {
   if (!data) return null;
 
   const totalVotes = (data.twoFutures.buildingVotes || 0) + (data.twoFutures.allowingVotes || 0);
-  const buildingPct = totalVotes > 0 ? Math.round(((data.twoFutures.buildingVotes || 0) / totalVotes) * 100) : 75;
+  const buildingPct = totalVotes > 0 ? Math.round(((data.twoFutures.buildingVotes || 0) / totalVotes) * 100) : 0;
 
   const handleSave = async () => {
     await saveTwoFutures({
@@ -103,13 +103,13 @@ export const TwoFutures: React.FC = () => {
             <div>
               <div className="text-xs text-[var(--fg-muted)]">{t('What you keep accepting')}</div>
               <div className="text-[var(--fg)] mt-0.5">
-                {data.twoFutures.allowingAnswers?.q1 || t('Letting tiredness decide what gets done.')}
+                {data.twoFutures.allowingAnswers?.q1 || t('Not answered yet')}
               </div>
             </div>
             <div>
               <div className="text-xs text-[var(--fg-muted)]">{t('What avoidance protects')}</div>
               <div className="text-[var(--fg)] mt-0.5">
-                {data.twoFutures.allowingAnswers?.q7 || t('Fear of being judged.')}
+                {data.twoFutures.allowingAnswers?.q7 || t('Not answered yet')}
               </div>
             </div>
           </div>

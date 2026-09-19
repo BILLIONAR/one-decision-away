@@ -126,7 +126,7 @@ export const Me: React.FC = () => {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3">
         <StatTile value={String(stats.streak)} label={t('Day streak')} />
-        <StatTile value={`D$${stats.earned.toLocaleString()}`} label={t('Earned')} accent />
+        <StatTile value={stats.earned >= 10000 ? `${(stats.earned / 1000).toFixed(1)}k` : stats.earned.toLocaleString()} label={t('D$ earned')} accent />
         <StatTile
           value={stats.latestScore !== null ? String(stats.latestScore) : '—'}
           label={t('Life score')}

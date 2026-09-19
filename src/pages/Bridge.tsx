@@ -56,8 +56,8 @@ export const Bridge: React.FC = () => {
           <h1 className="text-2xl font-semibold tracking-tight text-[var(--fg)]">{t('Bridges')}</h1>
           <p className="text-sm text-[var(--fg-muted)] mt-1">{t('Real savings plans for the dreams you bought.')}</p>
         </div>
-        <button type="button" onClick={() => setActiveRoute('/app/life')} className={`${secondaryBtn} shrink-0`}>
-          {t('My life')}
+        <button type="button" onClick={() => setActiveRoute('/app/dreams')} className={`${secondaryBtn} shrink-0`}>
+          {t('Dreams')}
         </button>
       </div>
 
@@ -128,8 +128,8 @@ export const Bridge: React.FC = () => {
           <p className="text-sm text-[var(--fg-muted)] mt-1">
             {t('Buy a dream, then open it in My life to build a savings plan.')}
           </p>
-          <button type="button" onClick={() => setActiveRoute('/app/life')} className={`${primaryBtn} mt-4`}>
-            {t('Go to My life')}
+          <button type="button" onClick={() => setActiveRoute('/app/dreams')} className={`${primaryBtn} mt-4`}>
+            {t('Go to Dreams')}
           </button>
         </div>
       )}
