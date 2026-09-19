@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../store/useApp';
-import { Download, X, ShieldAlert } from 'lucide-react';
+import { Download, X } from 'lucide-react';
 import { Button } from './ui';
 import { cloudSync } from '../services/cloudSync';
 import { useT } from '../i18n';
@@ -40,24 +40,21 @@ export const BackupReminder: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 bg-[var(--bg-muted)] border border-[var(--border-strong)] rounded-[var(--radius-md)]">
-      <div className="flex items-start gap-3">
-        <ShieldAlert className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
-        <p className="text-xs text-[var(--fg-muted)]">
-          <strong className="text-[var(--fg)]">{t('Your data lives only in this browser.')}</strong>{' '}
-          {last ? t('Last backup was {n} days ago.', { n: daysSince }) : t('You have never made a backup.')}{' '}
-          {t('Download one, or sign in to sync to the cloud.')}
-        </p>
-      </div>
-      <div className="flex items-center gap-1.5 self-start sm:self-auto">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-5 bg-[var(--bg-muted)] rounded-[var(--radius-md)]">
+      <p className="text-[14px] text-[var(--fg-muted)] leading-relaxed">
+        <span className="text-[var(--fg)] font-medium">{t('Your data lives only in this browser.')}</span>{' '}
+        {last ? t('Last backup was {n} days ago.', { n: daysSince }) : t('You have never made a backup.')}{' '}
+        {t('Download one, or sign in to sync to the cloud.')}
+      </p>
+      <div className="flex items-center gap-1.5 self-start sm:self-auto shrink-0">
         <Button size="sm" variant="secondary" icon={Download} onClick={exportDataJson}>
-          {t('Backup now')}
+          {t('Back up')}
         </Button>
         <Button size="sm" variant="ghost" onClick={() => setActiveRoute('/app/settings')}>
           {t('Cloud sync')}
         </Button>
-        <button type="button" onClick={dismiss} className="p-1.5 text-[var(--fg-subtle)] hover:text-[var(--fg)] cursor-pointer" title={t('Not now')}>
-          <X className="w-4 h-4" />
+        <button type="button" onClick={dismiss} className="w-9 h-9 rounded-full flex items-center justify-center text-[var(--fg-muted)] hover:text-[var(--fg)] cursor-pointer" title={t('Not now')} aria-label={t('Not now')}>
+          <X className="w-[18px] h-[18px]" strokeWidth={1.8} />
         </button>
       </div>
     </div>

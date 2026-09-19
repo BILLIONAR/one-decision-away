@@ -26,16 +26,17 @@ interface ParticleConfig {
   delay: number;
 }
 
-// Category accent colors for particles & glowing micro-effects
+// One accent for every built-in category; custom categories keep their own colour.
+const ACCENT_PARTICLE = { primary: 'var(--accent)', secondary: 'var(--accent)', glow: 'var(--accent-soft)' };
 const CATEGORY_PARTICLE_COLORS: Record<string, { primary: string; secondary: string; glow: string }> = {
-  Health: { primary: '#708879', secondary: '#95b3a0', glow: 'rgba(112, 136, 121, 0.4)' },
-  Learning: { primary: '#263238', secondary: '#607d8b', glow: 'rgba(38, 50, 56, 0.35)' },
-  Discipline: { primary: '#b8533c', secondary: '#e07a60', glow: 'rgba(184, 83, 60, 0.4)' },
-  Mindset: { primary: '#b8533c', secondary: '#d4a373', glow: 'rgba(184, 83, 60, 0.35)' },
-  Clarity: { primary: '#708879', secondary: '#a3c4b1', glow: 'rgba(112, 136, 121, 0.4)' },
-  Craft: { primary: '#475569', secondary: '#94a3b8', glow: 'rgba(71, 85, 105, 0.35)' },
-  Environment: { primary: '#64748b', secondary: '#cbd5e1', glow: 'rgba(100, 116, 139, 0.35)' },
-  Wealth: { primary: '#d4a373', secondary: '#f3c99f', glow: 'rgba(212, 163, 115, 0.45)' },
+  Health: ACCENT_PARTICLE,
+  Learning: ACCENT_PARTICLE,
+  Discipline: ACCENT_PARTICLE,
+  Mindset: ACCENT_PARTICLE,
+  Clarity: ACCENT_PARTICLE,
+  Craft: ACCENT_PARTICLE,
+  Environment: ACCENT_PARTICLE,
+  Wealth: ACCENT_PARTICLE,
 };
 
 export const MicroHabitCheckbox: React.FC<MicroHabitCheckboxProps> = ({
@@ -59,7 +60,7 @@ export const MicroHabitCheckbox: React.FC<MicroHabitCheckboxProps> = ({
     ? {
         primary: customColor,
         secondary: customColor,
-        glow: customColor.startsWith('#') ? `${customColor}50` : 'rgba(112, 136, 121, 0.4)',
+        glow: customColor.startsWith('#') ? `${customColor}50` : 'var(--accent-soft)',
       }
     : CATEGORY_PARTICLE_COLORS[category] || CATEGORY_PARTICLE_COLORS['Health'];
 
@@ -168,20 +169,19 @@ export const MicroHabitCheckbox: React.FC<MicroHabitCheckboxProps> = ({
           scale: 1,
           transition: { duration: 0.2 },
         },
-    className: `relative z-10 ${sizeConfig.button} rounded-full flex items-center justify-center shrink-0 cursor-pointer border-2 transition-colors duration-200 outline-none ${
-      as === 'button' ? 'focus-visible:ring-2 focus-visible:ring-[var(--color-sage)] focus-visible:ring-offset-2' : ''
+    className: `relative z-10 ${sizeConfig.button} rounded-full flex items-center justify-center shrink-0 cursor-pointer border-[1.5px] transition-colors duration-200 outline-none ${
+      as === 'button' ? 'focus-visible:ring-2 focus-visible:ring-[var(--border-strong)] focus-visible:ring-offset-2' : ''
     } ${
       checked
         ? customColor
-          ? 'text-white shadow-xs'
-          : 'bg-[var(--color-sage)] border-[var(--color-sage)] text-white shadow-xs'
-        : 'border-[var(--border-strong)] bg-[var(--bg-elevated)] hover:border-[var(--color-sage)] hover:bg-[var(--bg-muted)]/50'
+          ? 'text-white'
+          : 'bg-[var(--accent)] border-[var(--accent)] text-white'
+        : 'border-[var(--border-strong)] bg-transparent hover:border-[var(--fg)]'
     }`,
     style: checked
       ? {
           backgroundColor: customColor || undefined,
           borderColor: customColor || undefined,
-          boxShadow: `0 2px 8px ${colors.glow}`,
         }
       : undefined,
   };
@@ -196,7 +196,7 @@ export const MicroHabitCheckbox: React.FC<MicroHabitCheckboxProps> = ({
           viewBox="0 0 20 20"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="text-white drop-shadow-xs"
+          className="text-white"
           initial={{ scale: 0.5, rotate: -15, opacity: 0 }}
           animate={{ scale: 1, rotate: 0, opacity: 1 }}
           exit={{ scale: 0.4, opacity: 0, transition: { duration: 0.12 } }}
@@ -278,8 +278,7 @@ export const MicroHabitCheckbox: React.FC<MicroHabitCheckboxProps> = ({
                     width: p.size,
                     height: p.size,
                     backgroundColor: p.color,
-                    boxShadow: `0 0 4px ${p.color}`,
-                    borderRadius: p.isSparkle ? '1px' : '9999px',
+                                        borderRadius: p.isSparkle ? '1px' : '9999px',
                     transform: p.isSparkle ? 'rotate(45deg)' : undefined,
                   }}
                 />

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Field, Input, Select, Button, Textarea } from './ui';
 import { Goal, MissionArea } from '../types/models';
-import { Target, Calendar, CheckCircle2 } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useT } from '../i18n';
 
 interface GoalModalProps {
@@ -16,6 +15,12 @@ interface GoalModalProps {
   }) => Promise<void>;
   initialGoal?: Goal | null;
 }
+
+const inputCls =
+  'w-full h-11 px-3 bg-[var(--bg-muted)] text-[var(--fg)] rounded-[var(--radius-sm)] text-sm focus:outline-none placeholder:text-[var(--fg-subtle)]';
+const textareaCls =
+  'w-full p-3 bg-[var(--bg-muted)] text-[var(--fg)] rounded-[var(--radius-sm)] text-sm focus:outline-none placeholder:text-[var(--fg-subtle)] resize-y min-h-[88px] leading-relaxed';
+const labelCls = 'block text-sm text-[var(--fg-muted)]';
 
 export const GoalModal: React.FC<GoalModalProps> = ({
   isOpen,
@@ -66,99 +71,138 @@ export const GoalModal: React.FC<GoalModalProps> = ({
     }
   };
 
+  if (!isOpen) return null;
+
+  const areaOptions = [
+    { value: 'Work', label: t('Work') },
+    { value: 'Money', label: t('Money') },
+    { value: 'Health', label: t('Health') },
+    { value: 'Learning', label: t('Learning') },
+    { value: 'Relationships', label: t('Relationships') },
+    { value: 'Environment', label: t('Environment') },
+    { value: 'Personal Meaning', label: t('Meaning') },
+  ];
+  const statusOptions = [
+    { value: 'active', label: t('Active') },
+    { value: 'achieved', label: t('Achieved') },
+    { value: 'archived', label: t('Archived') },
+  ];
+
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title={initialGoal ? t('Edit Life Goal') : t('Create Life Goal')}
-      subtitle={t('Anchor your daily micro-habits and focused missions to an overarching vision.')}
-    >
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <Field
-          id="goal-title"
-          label={t('Goal Title')}
-          required
-          helper={t("Define the overarching outcome or standard (e.g. 'Build a sustainable online income', 'Peak Physical Vitality').")}
-        >
-          <Input
-            id="goal-title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder={t('e.g. Build a sustainable online income')}
-            autoFocus
-          />
-        </Field>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Field id="goal-area" label={t('Life Domain')}>
-            <Select
-              id="goal-area"
-              value={area}
-              onChange={(e) => setArea(e.target.value as MissionArea)}
-              options={[
-                { value: 'Work', label: t('Work & Enterprise') },
-                { value: 'Money', label: t('Money & Wealth') },
-                { value: 'Health', label: t('Health & Vitality') },
-                { value: 'Learning', label: t('Learning & Craft') },
-                { value: 'Relationships', label: t('Relationships') },
-                { value: 'Environment', label: t('Environment & Space') },
-                { value: 'Personal Meaning', label: t('Personal Meaning') },
-              ]}
-            />
-          </Field>
-
-          <Field
-            id="goal-target-date"
-            label={t('Target Date (Optional)')}
-            helper={t('Estimated completion or horizon.')}
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/40 overflow-y-auto" onClick={onClose}>
+      <div
+        className="w-full max-w-md bg-[var(--bg)] rounded-[var(--radius-lg)] p-5 space-y-5 my-auto max-h-[92vh] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="text-lg font-semibold tracking-tight text-[var(--fg)]">
+            {initialGoal ? t('Edit goal') : t('New goal')}
+          </h3>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label={t('Close')}
+            className="w-11 h-11 -mr-2 -mt-2 shrink-0 flex items-center justify-center text-[var(--fg-muted)] cursor-pointer"
           >
-            <Input
-              id="goal-target-date"
-              type="date"
-              value={targetDate}
-              onChange={(e) => setTargetDate(e.target.value)}
-            />
-          </Field>
+            <X className="w-5 h-5" strokeWidth={1.8} />
+          </button>
         </div>
 
-        <Field
-          id="goal-description"
-          label={t('Why This Matters / Core Vision (Optional)')}
-          helper={t('A short rationale to reinforce motivation during resistance.')}
-        >
-          <Textarea
-            id="goal-description"
-            rows={3}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder={t('Describe the real-life transformation this goal creates...')}
-          />
-        </Field>
-
-        {initialGoal && (
-          <Field id="goal-status" label={t('Status')}>
-            <Select
-              id="goal-status"
-              value={status}
-              onChange={(e) => setStatus(e.target.value as 'active' | 'achieved' | 'archived')}
-              options={[
-                { value: 'active', label: t('Active (Currently Pursuing)') },
-                { value: 'achieved', label: t('Achieved (Celebrated Outcome)') },
-                { value: 'archived', label: t('Archived (Deferred)') },
-              ]}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-1.5">
+            <label htmlFor="goal-title" className={labelCls}>
+              {t('Goal')}
+            </label>
+            <input
+              id="goal-title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder={t('e.g. Build a steady online income')}
+              autoFocus
+              className={inputCls}
             />
-          </Field>
-        )}
+          </div>
 
-        <div className="flex justify-end gap-2 pt-2 border-t border-[var(--border)]">
-          <Button variant="ghost" type="button" onClick={onClose} disabled={isSubmitting}>
-            {t('Cancel')}
-          </Button>
-          <Button variant="primary" type="submit" loading={isSubmitting} icon={CheckCircle2}>
-            {initialGoal ? t('Save Changes') : t('Create Goal')}
-          </Button>
-        </div>
-      </form>
-    </Modal>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label htmlFor="goal-area" className={labelCls}>
+                {t('Area')}
+              </label>
+              <select id="goal-area" value={area} onChange={(e) => setArea(e.target.value as MissionArea)} className={inputCls}>
+                {areaOptions.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="space-y-1.5">
+              <label htmlFor="goal-target-date" className={labelCls}>
+                {t('Target date')}
+              </label>
+              <input
+                id="goal-target-date"
+                type="date"
+                value={targetDate}
+                onChange={(e) => setTargetDate(e.target.value)}
+                className={inputCls}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <label htmlFor="goal-description" className={labelCls}>
+              {t('Why it matters')}
+            </label>
+            <textarea
+              id="goal-description"
+              rows={3}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder={t('Optional')}
+              className={textareaCls}
+            />
+          </div>
+
+          {initialGoal && (
+            <div className="space-y-1.5">
+              <label htmlFor="goal-status" className={labelCls}>
+                {t('Status')}
+              </label>
+              <select
+                id="goal-status"
+                value={status}
+                onChange={(e) => setStatus(e.target.value as 'active' | 'achieved' | 'archived')}
+                className={inputCls}
+              >
+                {statusOptions.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          <div className="flex justify-end gap-2 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={isSubmitting}
+              className="h-11 px-3 inline-flex items-center justify-center text-sm text-[var(--fg-muted)] hover:text-[var(--fg)] cursor-pointer disabled:opacity-40"
+            >
+              {t('Cancel')}
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting || !title.trim()}
+              className="h-11 px-4 inline-flex items-center justify-center rounded-[var(--radius-sm)] bg-[var(--fg)] text-[var(--bg)] text-sm font-semibold cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? t('Saving') : initialGoal ? t('Save') : t('Add')}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useApp } from '../store/useApp';
-import { Card, Badge } from './ui';
-import { CalendarCheck, Flame, Target } from 'lucide-react';
+import { Card } from './ui';
+import { ArrowRight } from 'lucide-react';
 import { SEED_MARKET_ITEMS } from '../data/seed';
 import { EXPLORE_DREAM_ITEMS } from '../data/exploreDreams';
 import { computeLedgerBalance, estimateDailyEarningPace, daysToAfford, calculateOneDecisionStreakData } from '../services/economy';
@@ -33,41 +33,38 @@ export const WeekendSummary: React.FC = () => {
   const daysLeft = closest ? daysToAfford(closest.dreamDollarPrice, balance, pace.perDay) : null;
 
   return (
-    <Card padding="md" className="space-y-3 bg-[var(--bg-elevated)] border border-[var(--color-sage)]/30">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-[var(--color-sage)]/15 text-[var(--color-sage)] flex items-center justify-center">
-            <CalendarCheck className="w-4 h-4" />
-          </div>
-          <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--fg)]">{t('This Week, In 30 Seconds')}</h3>
-            <p className="text-[11px] text-[var(--fg-muted)]">{t('Weekend review — no judgment, just the numbers.')}</p>
-          </div>
+    <Card padding="md" className="space-y-4">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h3 className="text-[15px] font-semibold text-[var(--fg)]">{t('This week')}</h3>
+          <p className="text-[13px] text-[var(--fg-muted)] mt-0.5">{t('Just the numbers, no judgment.')}</p>
         </div>
-        <Badge variant={earned > 0 ? 'sage' : 'subtle'}>+ D$ {earned.toLocaleString()}</Badge>
+        <span className={`text-[15px] font-semibold tabular-nums shrink-0 ${earned > 0 ? 'text-[var(--accent)]' : 'text-[var(--fg-muted)]'}`}>
+          + D$ {earned.toLocaleString()}
+        </span>
       </div>
-      <div className="grid grid-cols-3 gap-2 text-center">
-        <div className="p-3 bg-[var(--bg-muted)]/60 rounded-[var(--radius-sm)]">
-          <div className="text-xl font-bold font-display text-[var(--fg)]">{decisions}</div>
-          <div className="text-[10px] uppercase tracking-wider text-[var(--fg-muted)]">{t('One Decisions')}</div>
+      <div className="grid grid-cols-3 gap-2">
+        <div className="p-3 bg-[var(--bg)] rounded-[var(--radius-sm)]">
+          <div className="text-[12px] text-[var(--fg-subtle)]">{t('Decisions')}</div>
+          <div className="text-[17px] font-semibold text-[var(--fg)] tabular-nums">{decisions}</div>
         </div>
-        <div className="p-3 bg-[var(--bg-muted)]/60 rounded-[var(--radius-sm)]">
-          <div className="text-xl font-bold font-display text-[var(--fg)]">{focusMin}</div>
-          <div className="text-[10px] uppercase tracking-wider text-[var(--fg-muted)]">{t('Focus minutes')}</div>
+        <div className="p-3 bg-[var(--bg)] rounded-[var(--radius-sm)]">
+          <div className="text-[12px] text-[var(--fg-subtle)]">{t('Focus minutes')}</div>
+          <div className="text-[17px] font-semibold text-[var(--fg)] tabular-nums">{focusMin}</div>
         </div>
-        <div className="p-3 bg-[var(--bg-muted)]/60 rounded-[var(--radius-sm)]">
-          <div className="text-xl font-bold font-display text-[var(--fg)] flex items-center justify-center gap-1"><Flame className="w-4 h-4 text-[var(--color-coral)]" />{streak.currentStreak}</div>
-          <div className="text-[10px] uppercase tracking-wider text-[var(--fg-muted)]">{t('Day streak')}</div>
+        <div className="p-3 bg-[var(--bg)] rounded-[var(--radius-sm)]">
+          <div className="text-[12px] text-[var(--fg-subtle)]">{t('Day streak')}</div>
+          <div className="text-[17px] font-semibold text-[var(--fg)] tabular-nums">{streak.currentStreak}</div>
         </div>
       </div>
       {closest && (
-        <button type="button" onClick={() => setActiveRoute('/app/life')} className="w-full text-left flex items-center gap-3 p-3 rounded-[var(--radius-sm)] border border-[var(--border)] hover:border-[var(--color-sage)] cursor-pointer">
-          <Target className="w-4 h-4 text-[var(--color-sage)] shrink-0" />
-          <div className="text-xs">
+        <button type="button" onClick={() => setActiveRoute('/app/life')} className="w-full text-left flex items-center justify-between gap-3 p-3 rounded-[var(--radius-sm)] bg-[var(--bg)] hover:bg-[var(--bg-inset)] transition-colors cursor-pointer min-h-[44px]">
+          <div className="text-[14px] min-w-0">
             <span className="text-[var(--fg-muted)]">{t('Closest dream:')} </span>
-            <strong className="text-[var(--fg)]">{closest.name}</strong>
+            <span className="text-[var(--fg)] font-medium">{closest.name}</span>
             <span className="text-[var(--fg-muted)]"> — {daysLeft === 0 ? t('affordable now') : t('~{n} days at this pace', { n: daysLeft ?? 0 })}</span>
           </div>
+          <ArrowRight className="w-4 h-4 text-[var(--fg-subtle)] shrink-0" strokeWidth={1.8} />
         </button>
       )}
     </Card>

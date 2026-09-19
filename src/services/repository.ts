@@ -4,7 +4,7 @@
  */
 
 import { UserData, WalletTransaction, Mission, Purchase, RealityBridge, LifeScoreRecord, Goal } from '../types/models';
-import { SEED_INITIAL_GOALS, SEED_INITIAL_MISSIONS, DEFAULT_BUDGET, SEED_MARKET_ITEMS, SEED_SEASONS, SEED_MICRO_HABITS, SEED_CHECK_INS, SEED_CUSTOM_CATEGORIES, SEED_DAILY_PRIMARY_GOALS } from '../data/seed';
+import { SEED_INITIAL_GOALS, SEED_INITIAL_MISSIONS, DEFAULT_BUDGET, SEED_MARKET_ITEMS, SEED_SEASONS, SEED_MICRO_HABITS, SEED_CUSTOM_CATEGORIES } from '../data/seed';
 import { computeLedgerBalance, evaluateMissionReward, ECONOMY_CONSTANTS } from './economy';
 import { checkAndApplyDailyMicroHabitRollover } from './microHabitsService';
 import { cloudSync } from './cloudSync';
@@ -57,11 +57,15 @@ export function getInitialDemoState(): UserData {
     createdAt: now,
   };
 
+  // A new user starts with an empty personal record: no scores, answers,
+  // journal entries or check-ins that they did not write themselves.
+  // Structural seeds (dreams catalogue, seasons, missions, budget, default
+  // habits and categories) stay so the app has something to work with.
   return {
     profile: {
       id: 'demo-user',
-      displayName: N_('Dream Builder'),
-      onboardingStep: 'completed',
+      displayName: '',
+      onboardingStep: 'welcome',
       locale: getLocale(),
       theme: 'light',
       soundMuted: false,
@@ -74,62 +78,29 @@ export function getInitialDemoState(): UserData {
       lastOpenedAt: now,
       createdAt: now,
     },
-    lifeScores: [
-      {
-        id: 'initial-score',
-        userId: 'demo-user',
-        scores: {
-          money: 6,
-          workAndPurpose: 7,
-          health: 8,
-          relationships: 6,
-          discipline: 6,
-          environment: 7,
-          learning: 8,
-          personalMeaning: 7,
-        },
-        totalScore: 69,
-        lowestAreas: [N_('Money'), N_('Discipline')],
-        interpretation: N_('Some areas are carrying you; others are quietly asking for attention. A single daily decision can shift the balance.'),
-        createdAt: now,
-      },
-    ],
+    lifeScores: [],
     twoFutures: {
-      allowingAnswers: {
-        q1: N_('Quietly accepting that evening tiredness dictates what gets worked on.'),
-        q2: N_('Complaining about lack of time while spending an hour scrolling.'),
-        q3: N_('Wake up rushed, commute with friction, do reactive tasks, return drained.'),
-        q4: N_('The ability to build my own business or travel for a month freely.'),
-        q5: N_('Not having given my true ideas a dedicated year of consistent focus.'),
-        q6: N_('The version that waits for perfect certainty before publishing.'),
-        q7: N_('Fear of putting out work and having it meet total silence.'),
-        q8: N_('Years of postponement and staying in a comfortable plateau.'),
-      },
-      buildingAnswers: {
-        q1: N_('Wake up with a clear calendar, two hours of deep creation, afternoon training, evening reading.'),
-        q2: N_('Known for craftsmanship, consistency, and clear systems by peers and clients.'),
-        q3: N_('Saying no to frantic projects, rush hours, and misaligned requests.'),
-        q4: N_('Present, calm, and generous with family and close collaborators.'),
-      },
-      antiVision: N_('I refuse to become someone who leaves their best ideas in notes and lets distraction decide their life.'),
-      vision: N_('I am building a life of creative sovereignty, calm energy, and meaningful craftsmanship.'),
-      buildingVotes: 14,
-      allowingVotes: 4,
+      allowingAnswers: {},
+      buildingAnswers: {},
+      antiVision: '',
+      vision: '',
+      buildingVotes: 0,
+      allowingVotes: 0,
       updatedAt: now,
     },
     futureSelf: {
-      title: N_('The Finisher'),
-      coreValues: [N_('Craftsmanship'), N_('Calm Autonomy'), N_('Relentless Focus'), N_('Honesty')],
-      dailyStandards: [N_('First 90 minutes dedicated to high leverage work'), N_('No digital noise at meals'), N_('Daily physical movement')],
-      habits: [N_('Daily One Decision'), N_('Evening workspace reset'), N_('Weekly retrospective')],
-      skills: [N_('System Design'), N_('Writing & Clarity'), N_('Deep Work Endurance')],
-      boundaries: [N_('No morning meetings before 11:00 AM'), N_('Strict bedtime at 10:30 PM')],
-      noLongerDoes: [N_('Endless bookmarking without execution'), N_('Checking email first thing in bed')],
-      identityStatement: N_('I am someone who finishes important work, protects my attention, and acts before I feel ready.'),
-      oldSelfBehaviors: [N_('Starting 5 projects and finishing zero'), N_('Postponing tough outreach')],
-      oldSelfExcuses: [N_('"I need more research first"'), N_('"I will start next Monday"')],
-      oldSelfPatterns: [N_('Cleaning the desk when hard thinking is required')],
-      oldSelfLabels: [N_('The perfectionist procrastinator')],
+      title: '',
+      coreValues: [],
+      dailyStandards: [],
+      habits: [],
+      skills: [],
+      boundaries: [],
+      noLongerDoes: [],
+      identityStatement: '',
+      oldSelfBehaviors: [],
+      oldSelfExcuses: [],
+      oldSelfPatterns: [],
+      oldSelfLabels: [],
       updatedAt: now,
     },
     goals: SEED_INITIAL_GOALS,
@@ -154,42 +125,29 @@ export function getInitialDemoState(): UserData {
       cancelAtPeriodEnd: false,
       updatedAt: now,
     },
-    inVisionItemIds: ['seed-morning-ritual', 'seed-work-machine'],
+    inVisionItemIds: [],
     archivedMarketItemIds: [],
     archivedMarketRecords: [],
-    dreamJournal: [
-      {
-        id: 'journal-seed-1',
-        userId: 'demo-user',
-        title: N_('Morning Focus & Sanctuary Awakening'),
-        content: N_('Woke up at 6:00 AM without hitting snooze. Sat in quiet stillness with black coffee before looking at any screens. Visualized walking into the morning light of the waterfront villa—felt the standard of the day elevate immediately.'),
-        dreamId: 'seed-lake-como-villa',
-        dreamName: N_('Lake Como Waterfront Modernist Villa'),
-        mood: 'focused',
-        photoDataUrl: 'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=1200&q=80',
-        createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-      },
-      {
-        id: 'journal-seed-2',
-        userId: 'demo-user',
-        title: N_('Locked In: 90-Minute Pure Deep Work Sprint'),
-        content: N_('Finished the core architecture milestone ahead of schedule. When the urge to open social media hit at minute 40, I remembered my Future Self identity. Refused to yield.'),
-        dreamId: 'seed-work-machine',
-        dreamName: N_('Bespoke Executive Studio & Work Machine'),
-        mood: 'triumphant',
-        photoDataUrl: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80',
-        createdAt: new Date(Date.now() - 86400000 * 1).toISOString(),
-      },
-    ],
+    dreamJournal: [],
     notebook: normalizeNotebook(),
-    microHabits: SEED_MICRO_HABITS,
+    microHabits: getFreshMicroHabits(),
     customHabitCategories: SEED_CUSTOM_CATEGORIES,
-    checkIns: SEED_CHECK_INS,
-    dailyPrimaryGoals: SEED_DAILY_PRIMARY_GOALS,
+    checkIns: [],
+    dailyPrimaryGoals: [],
     lastActiveDateKey: now.slice(0, 10),
     lastDailyResetTimestamp: now,
     offlineQueue: [],
   };
+}
+
+/** Default habits (max 3) with no completion history — a new user has not done anything yet. */
+function getFreshMicroHabits() {
+  return SEED_MICRO_HABITS.slice(0, 3).map((h) => ({
+    ...h,
+    completedDates: [],
+    streakCount: 0,
+    bestStreak: 0,
+  }));
 }
 
 export class LocalDemoRepository implements DataRepository {
@@ -212,27 +170,22 @@ export class LocalDemoRepository implements DataRepository {
         if (!parsed.archivedMarketRecords) parsed.archivedMarketRecords = [];
         if (!parsed.dreamJournal) parsed.dreamJournal = [];
         parsed.notebook = normalizeNotebook(parsed.notebook);
-        if (!parsed.microHabits || parsed.microHabits.length === 0) {
-          parsed.microHabits = SEED_MICRO_HABITS;
+        if (!parsed.microHabits) {
+          parsed.microHabits = getFreshMicroHabits();
         } else {
-          // Guard against undefined completedDates
+          // Guard against undefined completedDates; never invent completion history.
           parsed.microHabits = parsed.microHabits.map((h) => ({
             ...h,
             completedDates: Array.isArray(h.completedDates) ? h.completedDates : [],
           }));
-          // If every habit has zero completions, populate with seed completions for demo richness
-          const totalCompletions = parsed.microHabits.reduce((acc, h) => acc + h.completedDates.length, 0);
-          if (totalCompletions === 0) {
-            parsed.microHabits = SEED_MICRO_HABITS;
-          }
         }
-        if (!parsed.checkIns || parsed.checkIns.length === 0) parsed.checkIns = SEED_CHECK_INS;
+        if (!parsed.lifeScores) parsed.lifeScores = [];
+        if (!parsed.checkIns) parsed.checkIns = [];
         if (!parsed.customHabitCategories || parsed.customHabitCategories.length === 0) {
           parsed.customHabitCategories = SEED_CUSTOM_CATEGORIES;
         }
-        if (!parsed.dailyPrimaryGoals || parsed.dailyPrimaryGoals.length === 0) {
-          parsed.dailyPrimaryGoals = SEED_DAILY_PRIMARY_GOALS;
-        }
+        if (!parsed.dailyPrimaryGoals) parsed.dailyPrimaryGoals = [];
+        if (!parsed.profile.onboardingStep) parsed.profile.onboardingStep = 'completed';
 
         // Check upon application load if dateKey has changed since last app usage
         // Automatically resets uncompleted daily micro-habits and recalculates broken streaks

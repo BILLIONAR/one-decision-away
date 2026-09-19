@@ -39,10 +39,10 @@ export const LanguagePicker: React.FC<LanguagePickerProps> = ({ variant = 'compa
               type="button"
               onClick={() => choose(l.code)}
               aria-pressed={active}
-              className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-sm transition-all cursor-pointer ${
+              className={`flex items-center gap-3 min-h-[48px] px-4 py-2.5 rounded-[var(--radius-sm)] text-[15px] transition-colors cursor-pointer ${
                 active
-                  ? 'border-[var(--color-sage)] bg-[var(--accent-soft)] text-[var(--fg)] font-semibold'
-                  : 'border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--fg-muted)] hover:text-[var(--fg)] hover:border-[var(--fg-subtle)]'
+                  ? 'bg-[var(--fg)] text-[var(--bg)] font-medium'
+                  : 'bg-[var(--bg-muted)] text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-inset)]'
               }`}
             >
               <span className="text-lg leading-none" aria-hidden>
@@ -50,7 +50,7 @@ export const LanguagePicker: React.FC<LanguagePickerProps> = ({ variant = 'compa
               </span>
               <span className="flex flex-col items-start leading-tight">
                 <span>{l.nativeName}</span>
-                <span className="text-[10px] uppercase tracking-wider opacity-60">{t(l.name)}</span>
+                <span className="text-[12px] opacity-60">{t(l.name)}</span>
               </span>
             </button>
           );
@@ -60,13 +60,13 @@ export const LanguagePicker: React.FC<LanguagePickerProps> = ({ variant = 'compa
   }
 
   return (
-    <label className={`inline-flex items-center gap-1.5 text-xs text-[var(--fg-muted)] ${className}`} title={t('Language')}>
-      <Globe className="w-3.5 h-3.5" aria-hidden />
+    <label className={`inline-flex items-center gap-1.5 min-h-[44px] text-[13px] text-[var(--fg-muted)] ${className}`} title={t('Language')}>
+      <Globe className="w-4 h-4" strokeWidth={1.8} aria-hidden />
       <span className="sr-only">{t('Language')}</span>
       <select
         value={locale}
         onChange={(e) => choose(e.target.value as Locale)}
-        className="bg-transparent border-none outline-none cursor-pointer text-xs font-medium text-[var(--fg)] pr-1"
+        className="bg-transparent border-none outline-none cursor-pointer text-[13px] font-medium text-[var(--fg)] pr-1"
         aria-label={t('Language')}
       >
         {LOCALES.map((l) => (

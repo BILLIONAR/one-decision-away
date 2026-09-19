@@ -10,21 +10,8 @@ import {
   Legend,
 } from 'recharts';
 import { useApp } from '../store/useApp';
-import { Card, Badge, Button, Textarea } from './ui';
-import {
-  Activity,
-  Flame,
-  BatteryCharging,
-  Sparkles,
-  CheckCircle2,
-  TrendingUp,
-  RotateCcw,
-  Calendar,
-  ChevronRight,
-  Info,
-  Edit3,
-} from 'lucide-react';
-import { DailyCheckIn as DailyCheckInModel } from '../types/models';
+import { Card, Button, Textarea } from './ui';
+import { CheckCircle2 } from 'lucide-react';
 import { useT, N_ } from '../i18n';
 
 const FOCUS_LABELS: Record<number, string> = {
@@ -65,6 +52,18 @@ const MOOD_LABELS: Record<number, string> = {
   9: N_('Joyful Momentum'),
   10: N_('Sovereign & Inspired'),
 };
+
+// Three metrics, three tones from the system: accent, ink, and a lighter neutral.
+const METRIC_COLOR = {
+  focus: 'var(--accent)',
+  energy: 'var(--fg)',
+  mood: 'var(--fg-subtle)',
+} as const;
+
+const segmentBase =
+  'h-9 px-3 text-[13px] font-medium rounded-full transition-colors cursor-pointer whitespace-nowrap';
+const segmentOn = 'bg-[var(--fg)] text-[var(--bg)]';
+const segmentOff = 'text-[var(--fg-muted)] hover:text-[var(--fg)]';
 
 export const DailyCheckIn: React.FC = () => {
   const { data, saveDailyCheckIn } = useApp();
@@ -206,45 +205,39 @@ export const DailyCheckIn: React.FC = () => {
     if (active && payload && payload.length) {
       const dataPoint = payload[0]?.payload;
       return (
-        <div className="bg-[var(--bg-elevated)] border border-[var(--border-strong)] p-3 rounded-[var(--radius-md)] shadow-lg text-xs space-y-1.5 min-w-[170px] z-50">
-          <div className="flex items-center justify-between border-b border-[var(--border)] pb-1">
-            <span className="font-bold text-[var(--fg)] font-display">{label} ({dataPoint?.fullDate})</span>
+        <div className="bg-[var(--bg-elevated)] border border-[var(--border)] p-3 rounded-[var(--radius-sm)] shadow-[var(--shadow-md)] text-[13px] space-y-1.5 min-w-[170px] z-50">
+          <div className="flex items-center justify-between gap-3">
+            <span className="font-semibold text-[var(--fg)]">{label} ({dataPoint?.fullDate})</span>
             {dataPoint?.hasRecord ? (
-              <span className="text-[10px] text-[var(--color-sage)] font-semibold">{t('Logged')}</span>
+              <span className="text-[12px] text-[var(--accent)]">{t('Logged')}</span>
             ) : (
-              <span className="text-[10px] text-[var(--fg-subtle)]">{t('No Check-in')}</span>
+              <span className="text-[12px] text-[var(--fg-subtle)]">{t('No Check-in')}</span>
             )}
           </div>
           {dataPoint?.hasRecord ? (
             <>
               <div className="space-y-1 pt-1">
-                <div className="flex items-center justify-between text-[11px]">
-                  <span className="flex items-center gap-1 text-[var(--color-sage)] font-medium">
-                    <span className="w-2 h-2 rounded-full bg-[var(--color-sage)]" /> {t('Focus:')}
-                  </span>
-                  <span className="font-bold text-[var(--fg)]">{dataPoint.focus}/10</span>
+                <div className="flex items-center justify-between">
+                  <span className="text-[var(--fg-muted)]">{t('Focus:')}</span>
+                  <span className="font-semibold text-[var(--fg)]">{dataPoint.focus}/10</span>
                 </div>
-                <div className="flex items-center justify-between text-[11px]">
-                  <span className="flex items-center gap-1 text-[var(--color-coral)] font-medium">
-                    <span className="w-2 h-2 rounded-full bg-[var(--color-coral)]" /> {t('Energy:')}
-                  </span>
-                  <span className="font-bold text-[var(--fg)]">{dataPoint.energy}/10</span>
+                <div className="flex items-center justify-between">
+                  <span className="text-[var(--fg-muted)]">{t('Energy:')}</span>
+                  <span className="font-semibold text-[var(--fg)]">{dataPoint.energy}/10</span>
                 </div>
-                <div className="flex items-center justify-between text-[11px]">
-                  <span className="flex items-center gap-1 text-sky-600 dark:text-sky-400 font-medium">
-                    <span className="w-2 h-2 rounded-full bg-sky-500" /> {t('Mood:')}
-                  </span>
-                  <span className="font-bold text-[var(--fg)]">{dataPoint.mood}/10</span>
+                <div className="flex items-center justify-between">
+                  <span className="text-[var(--fg-muted)]">{t('Mood:')}</span>
+                  <span className="font-semibold text-[var(--fg)]">{dataPoint.mood}/10</span>
                 </div>
               </div>
               {dataPoint?.notes && (
-                <div className="mt-1.5 pt-1.5 border-t border-[var(--border)] text-[10px] text-[var(--fg-muted)] italic">
-                  "{dataPoint.notes}"
+                <div className="mt-1.5 pt-1.5 border-t border-[var(--border)] text-[12px] text-[var(--fg-muted)]">
+                  {dataPoint.notes}
                 </div>
               )}
             </>
           ) : (
-            <p className="text-[11px] text-[var(--fg-muted)] pt-1">
+            <p className="text-[12px] text-[var(--fg-muted)] pt-1">
               {t('No rating recorded on this date.')}
             </p>
           )}
@@ -254,65 +247,84 @@ export const DailyCheckIn: React.FC = () => {
     return null;
   };
 
+  const renderSlider = (
+    label: string,
+    value: number,
+    onChange: (n: number) => void,
+    labels: Record<number, string>,
+    low: string,
+    high: string,
+    accent: string,
+  ) => (
+    <div className="p-4 rounded-[var(--radius-sm)] bg-[var(--bg)] space-y-3">
+      <div className="flex items-center justify-between">
+        <span className="text-[14px] font-medium text-[var(--fg)]">{label}</span>
+        <span className="text-[15px] font-semibold text-[var(--fg)]">{value}/10</span>
+      </div>
+      <input
+        type="range"
+        min="1"
+        max="10"
+        step="1"
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="w-full cursor-pointer"
+        style={{ accentColor: accent }}
+      />
+      <div className="flex items-center justify-between text-[12px] text-[var(--fg-subtle)] gap-2">
+        <span className="shrink-0">{low}</span>
+        <span className="text-[var(--fg-muted)] text-center truncate">{t(labels[value])}</span>
+        <span className="shrink-0">{high}</span>
+      </div>
+    </div>
+  );
+
+  const renderAvg = (label: string, value: number, color: string) => (
+    <div className="p-4 rounded-[var(--radius-sm)] bg-[var(--bg)] space-y-2">
+      <span className="text-[13px] text-[var(--fg-muted)]">{label}</span>
+      <div className="flex items-baseline gap-1">
+        <span className="text-[22px] font-semibold tracking-tight text-[var(--fg)]">{value || '—'}</span>
+        <span className="text-[12px] text-[var(--fg-subtle)]">/ 10</span>
+      </div>
+      <div className="w-full bg-[var(--bg-inset)] h-1.5 rounded-full overflow-hidden">
+        <div className="h-full rounded-full transition-all duration-500" style={{ width: `${(value / 10) * 100}%`, background: color }} />
+      </div>
+    </div>
+  );
+
   return (
-    <Card padding="md" className="border border-[var(--border)] bg-[var(--bg-elevated)] space-y-4">
+    <Card padding="md" className="space-y-5">
       {/* Header Row */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[var(--border)]">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-[var(--radius-xs)] bg-[var(--color-sage)]/10 text-[var(--color-sage)] border border-[var(--color-sage)]/20">
-              <Activity className="w-4 h-4" />
-            </span>
-            <h3 className="font-display font-bold text-base text-[var(--fg)] tracking-tight">
-              {t('Daily Check-in & Internal Vitality')}
-            </h3>
-            {todayCheckIn ? (
-              <Badge variant="sage" className="text-[10px] py-0 px-2 flex items-center gap-1">
-                <CheckCircle2 className="w-3 h-3" /> {t('Logged Today')}
-              </Badge>
-            ) : (
-              <Badge variant="coral" className="text-[10px] py-0 px-2 flex items-center gap-1">
-                <Sparkles className="w-3 h-3" /> {t('+ D$50 Daily Fuel')}
-              </Badge>
-            )}
-          </div>
-          <p className="text-xs text-[var(--fg-muted)]">
-            {t('Rate focus, energy, and state of mind to track long-term compounding clarity.')}
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h3 className="text-[15px] font-semibold text-[var(--fg)]">{t('Daily check-in')}</h3>
+          <p className="text-[13px] text-[var(--fg-muted)] mt-0.5">
+            {todayCheckIn
+              ? t('Logged today. You can still update it.')
+              : t('Rate focus, energy and mood. Earns D$50.')}
           </p>
         </div>
 
         {/* Tab Selector */}
-        <div className="flex items-center gap-1 bg-[var(--bg)] p-0.5 rounded-[var(--radius-sm)] border border-[var(--border)] self-start sm:self-auto">
+        <div className="flex items-center gap-1 bg-[var(--bg)] p-1 rounded-full self-start overflow-x-auto max-w-full">
           <button
             type="button"
             onClick={() => setActiveTab('checkin')}
-            className={`px-3 py-1 text-xs font-semibold rounded-[var(--radius-xs)] transition-all cursor-pointer ${
-              activeTab === 'checkin'
-                ? 'bg-[var(--fg)] text-[var(--bg)] shadow-xs'
-                : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
-            }`}
+            className={`${segmentBase} ${activeTab === 'checkin' ? segmentOn : segmentOff}`}
           >
-            {todayCheckIn ? t('Update Today') : t('Rate Today')}
+            {todayCheckIn ? t('Update') : t('Rate')}
           </button>
           <button
             type="button"
             onClick={() => setActiveTab('trends')}
-            className={`px-3 py-1 text-xs font-semibold rounded-[var(--radius-xs)] transition-all cursor-pointer flex items-center gap-1 ${
-              activeTab === 'trends'
-                ? 'bg-[var(--fg)] text-[var(--bg)] shadow-xs'
-                : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
-            }`}
+            className={`${segmentBase} ${activeTab === 'trends' ? segmentOn : segmentOff}`}
           >
-            <TrendingUp className="w-3.5 h-3.5" /> {t('7-Day Trend')}
+            {t('Trend')}
           </button>
           <button
             type="button"
             onClick={() => setActiveTab('history')}
-            className={`px-2.5 py-1 text-xs font-semibold rounded-[var(--radius-xs)] transition-all cursor-pointer ${
-              activeTab === 'history'
-                ? 'bg-[var(--fg)] text-[var(--bg)] shadow-xs'
-                : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
-            }`}
+            className={`${segmentBase} ${activeTab === 'history' ? segmentOn : segmentOff}`}
           >
             {t('Logs ({n})', { n: checkIns.length })}
           </button>
@@ -321,292 +333,90 @@ export const DailyCheckIn: React.FC = () => {
 
       {/* TAB 1: Rate Today's Check-in */}
       {activeTab === 'checkin' && (
-        <form onSubmit={handleSubmit} className="space-y-4 pt-1">
-          {/* Sliders Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* 1. FOCUS RATING */}
-            <div className="p-3.5 rounded-[var(--radius-md)] bg-[var(--bg)] border border-[var(--border)] space-y-2.5">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-[var(--fg)] flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-[var(--color-sage)]" /> {t('Focus Rating')}
-                </span>
-                <span className="text-sm font-extrabold text-[var(--color-sage)] font-display">
-                  {focus}/10
-                </span>
-              </div>
-              <input
-                type="range"
-                min="1"
-                max="10"
-                step="1"
-                value={focus}
-                onChange={(e) => setFocus(Number(e.target.value))}
-                className="w-full accent-[var(--color-sage)] cursor-pointer"
-              />
-              <div className="flex items-center justify-between text-[10px] text-[var(--fg-subtle)]">
-                <span>{t('1 (Scattered)')}</span>
-                <span className="font-semibold text-[var(--color-sage)] text-center px-1 truncate max-w-[130px]">
-                  {t(FOCUS_LABELS[focus])}
-                </span>
-                <span>{t('10 (Flow)')}</span>
-              </div>
-            </div>
-
-            {/* 2. ENERGY RATING */}
-            <div className="p-3.5 rounded-[var(--radius-md)] bg-[var(--bg)] border border-[var(--border)] space-y-2.5">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-[var(--fg)] flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-[var(--color-coral)]" /> {t('Energy Reserve')}
-                </span>
-                <span className="text-sm font-extrabold text-[var(--color-coral)] font-display">
-                  {energy}/10
-                </span>
-              </div>
-              <input
-                type="range"
-                min="1"
-                max="10"
-                step="1"
-                value={energy}
-                onChange={(e) => setEnergy(Number(e.target.value))}
-                className="w-full accent-[var(--color-coral)] cursor-pointer"
-              />
-              <div className="flex items-center justify-between text-[10px] text-[var(--fg-subtle)]">
-                <span>{t('1 (Drained)')}</span>
-                <span className="font-semibold text-[var(--color-coral)] text-center px-1 truncate max-w-[130px]">
-                  {t(ENERGY_LABELS[energy])}
-                </span>
-                <span>{t('10 (Peak)')}</span>
-              </div>
-            </div>
-
-            {/* 3. MOOD RATING */}
-            <div className="p-3.5 rounded-[var(--radius-md)] bg-[var(--bg)] border border-[var(--border)] space-y-2.5">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-[var(--fg)] flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-sky-500" /> {t('State of Mind')}
-                </span>
-                <span className="text-sm font-extrabold text-sky-600 dark:text-sky-400 font-display">
-                  {mood}/10
-                </span>
-              </div>
-              <input
-                type="range"
-                min="1"
-                max="10"
-                step="1"
-                value={mood}
-                onChange={(e) => setMood(Number(e.target.value))}
-                className="w-full accent-sky-500 cursor-pointer"
-              />
-              <div className="flex items-center justify-between text-[10px] text-[var(--fg-subtle)]">
-                <span>{t('1 (Reactive)')}</span>
-                <span className="font-semibold text-sky-600 dark:text-sky-400 text-center px-1 truncate max-w-[130px]">
-                  {t(MOOD_LABELS[mood])}
-                </span>
-                <span>{t('10 (Inspired)')}</span>
-              </div>
-            </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {renderSlider(t('Focus'), focus, setFocus, FOCUS_LABELS, '1', '10', METRIC_COLOR.focus)}
+            {renderSlider(t('Energy'), energy, setEnergy, ENERGY_LABELS, '1', '10', METRIC_COLOR.energy)}
+            {renderSlider(t('Mood'), mood, setMood, MOOD_LABELS, '1', '10', METRIC_COLOR.mood)}
           </div>
 
-          {/* Quick reflection notes input */}
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-[var(--fg)] flex items-center gap-1.5">
-              <Edit3 className="w-3.5 h-3.5 text-[var(--fg-muted)]" /> {t('Daily Internal Note (Optional)')}
+            <label htmlFor="checkin-notes" className="text-[13px] font-medium text-[var(--fg-muted)]">
+              {t('Note (optional)')}
             </label>
             <Textarea
               id="checkin-notes"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder={t('What fueled your focus or caused friction today? (e.g. 7 hours uninterrupted sleep, box breathing session, deep work win)...')}
+              placeholder={t('What helped or got in the way today?')}
               rows={2}
-              className="text-xs"
+              className="bg-[var(--bg)] min-h-[72px]"
             />
           </div>
 
-          {/* Action Row */}
-          <div className="flex items-center justify-between pt-1">
-            <div className="flex items-center gap-2 text-xs text-[var(--fg-muted)]">
-              <Flame className="w-4 h-4 text-[var(--color-coral)]" />
-              <span>{t('{n} total check-ins recorded', { n: stats.count })}</span>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Button
-                type="submit"
-                variant="primary"
-                size="sm"
-                isLoading={isSubmitting}
-                icon={CheckCircle2}
-              >
-                {todayCheckIn ? t('Update Check-in') : t('Record Today (+ D$50)')}
-              </Button>
-            </div>
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <span className="text-[13px] text-[var(--fg-muted)]">
+              {t('{n} total check-ins recorded', { n: stats.count })}
+            </span>
+            <Button type="submit" variant="primary" size="md" isLoading={isSubmitting} icon={CheckCircle2}>
+              {todayCheckIn ? t('Update check-in') : t('Save (+ D$50)')}
+            </Button>
           </div>
         </form>
       )}
 
       {/* TAB 2: 7-Day Trend Visualization using Recharts */}
       {activeTab === 'trends' && (
-        <div className="space-y-4 pt-1">
-          {/* Quick Stat Gauges Row */}
+        <div className="space-y-4">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="p-3 rounded-[var(--radius-md)] bg-[var(--bg)] border border-[var(--border)] space-y-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-                {t('7-Day Avg Focus')}
-              </span>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-xl font-extrabold font-display text-[var(--color-sage)]">
-                  {stats.avgFocus || '—'}
-                </span>
-                <span className="text-[10px] text-[var(--fg-subtle)]">/ 10</span>
-              </div>
-              <div className="w-full bg-[var(--bg-muted)] h-1.5 rounded-full overflow-hidden">
-                <div
-                  className="bg-[var(--color-sage)] h-full transition-all duration-500"
-                  style={{ width: `${(stats.avgFocus / 10) * 100}%` }}
-                />
-              </div>
-            </div>
-
-            <div className="p-3 rounded-[var(--radius-md)] bg-[var(--bg)] border border-[var(--border)] space-y-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-                {t('7-Day Avg Energy')}
-              </span>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-xl font-extrabold font-display text-[var(--color-coral)]">
-                  {stats.avgEnergy || '—'}
-                </span>
-                <span className="text-[10px] text-[var(--fg-subtle)]">/ 10</span>
-              </div>
-              <div className="w-full bg-[var(--bg-muted)] h-1.5 rounded-full overflow-hidden">
-                <div
-                  className="bg-[var(--color-coral)] h-full transition-all duration-500"
-                  style={{ width: `${(stats.avgEnergy / 10) * 100}%` }}
-                />
-              </div>
-            </div>
-
-            <div className="p-3 rounded-[var(--radius-md)] bg-[var(--bg)] border border-[var(--border)] space-y-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-                {t('7-Day Avg Mood')}
-              </span>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-xl font-extrabold font-display text-sky-600 dark:text-sky-400">
-                  {stats.avgMood || '—'}
-                </span>
-                <span className="text-[10px] text-[var(--fg-subtle)]">/ 10</span>
-              </div>
-              <div className="w-full bg-[var(--bg-muted)] h-1.5 rounded-full overflow-hidden">
-                <div
-                  className="bg-sky-500 h-full transition-all duration-500"
-                  style={{ width: `${(stats.avgMood / 10) * 100}%` }}
-                />
-              </div>
-            </div>
-
-            <div className="p-3 rounded-[var(--radius-md)] bg-[var(--bg)] border border-[var(--border)] space-y-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-                {t('Leading Driver')}
-              </span>
-              <div className="text-sm font-bold text-[var(--fg)] truncate pt-0.5">
-                {stats.peakState}
-              </div>
-              <p className="text-[10px] text-[var(--fg-muted)] truncate">
+            {renderAvg(t('Focus, 7 days'), stats.avgFocus, METRIC_COLOR.focus)}
+            {renderAvg(t('Energy, 7 days'), stats.avgEnergy, METRIC_COLOR.energy)}
+            {renderAvg(t('Mood, 7 days'), stats.avgMood, METRIC_COLOR.mood)}
+            <div className="p-4 rounded-[var(--radius-sm)] bg-[var(--bg)] space-y-2">
+              <span className="text-[13px] text-[var(--fg-muted)]">{t('Strongest')}</span>
+              <div className="text-[15px] font-semibold text-[var(--fg)] truncate">{stats.peakState}</div>
+              <p className="text-[12px] text-[var(--fg-subtle)] truncate">
                 {t('{n} days logged in 7d', { n: stats.count })}
               </p>
             </div>
           </div>
 
-          {/* Metric Filter Toggles */}
-          <div className="flex items-center justify-between flex-wrap gap-2 pt-1">
-            <div className="flex items-center gap-1 text-[11px]">
-              <span className="text-[var(--fg-muted)] font-medium mr-1">{t('Metrics:')}</span>
+          <div className="flex items-center gap-1 flex-wrap">
+            {([
+              ['all', t('All')],
+              ['focus', t('Focus')],
+              ['energy', t('Energy')],
+              ['mood', t('Mood')],
+            ] as const).map(([key, label]) => (
               <button
+                key={key}
                 type="button"
-                onClick={() => setSelectedMetric('all')}
-                className={`px-2.5 py-0.5 rounded-[var(--radius-xs)] font-semibold cursor-pointer border ${
-                  selectedMetric === 'all'
-                    ? 'bg-[var(--fg)] text-[var(--bg)] border-[var(--fg)]'
-                    : 'bg-[var(--bg)] text-[var(--fg-muted)] border-[var(--border)]'
-                }`}
+                onClick={() => setSelectedMetric(key)}
+                className={`${segmentBase} ${selectedMetric === key ? segmentOn : 'bg-[var(--bg)] text-[var(--fg-muted)] hover:text-[var(--fg)]'}`}
               >
-                {t('All 3 Metrics')}
+                {label}
               </button>
-              <button
-                type="button"
-                onClick={() => setSelectedMetric('focus')}
-                className={`px-2.5 py-0.5 rounded-[var(--radius-xs)] font-semibold cursor-pointer border ${
-                  selectedMetric === 'focus'
-                    ? 'bg-[var(--color-sage)] text-white border-[var(--color-sage)]'
-                    : 'bg-[var(--bg)] text-[var(--fg-muted)] border-[var(--border)]'
-                }`}
-              >
-                {t('Focus Only')}
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedMetric('energy')}
-                className={`px-2.5 py-0.5 rounded-[var(--radius-xs)] font-semibold cursor-pointer border ${
-                  selectedMetric === 'energy'
-                    ? 'bg-[var(--color-coral)] text-white border-[var(--color-coral)]'
-                    : 'bg-[var(--bg)] text-[var(--fg-muted)] border-[var(--border)]'
-                }`}
-              >
-                {t('Energy Only')}
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedMetric('mood')}
-                className={`px-2.5 py-0.5 rounded-[var(--radius-xs)] font-semibold cursor-pointer border ${
-                  selectedMetric === 'mood'
-                    ? 'bg-sky-600 text-white border-sky-600'
-                    : 'bg-[var(--bg)] text-[var(--fg-muted)] border-[var(--border)]'
-                }`}
-              >
-                {t('Mood Only')}
-              </button>
-            </div>
-
-            <span className="text-[11px] text-[var(--fg-subtle)] flex items-center gap-1">
-              <Info className="w-3 h-3" /> {t('Scale: 1 (Lowest) to 10 (Peak)')}
-            </span>
+            ))}
           </div>
 
-          {/* Recharts LineChart Visualization */}
-          <div className="w-full h-64 bg-[var(--bg)] rounded-[var(--radius-md)] border border-[var(--border)] p-3 pt-4">
+          <div className="w-full h-64 bg-[var(--bg)] rounded-[var(--radius-sm)] p-3 pt-4">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={trendData} margin={{ top: 10, right: 20, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.6} />
-                <XAxis
-                  dataKey="label"
-                  stroke="var(--fg-subtle)"
-                  fontSize={11}
-                  tickLine={false}
-                  dy={6}
-                />
-                <YAxis
-                  domain={[0, 10]}
-                  ticks={[2, 4, 6, 8, 10]}
-                  stroke="var(--fg-subtle)"
-                  fontSize={11}
-                  tickLine={false}
-                />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.8} />
+                <XAxis dataKey="label" stroke="var(--fg-subtle)" fontSize={11} tickLine={false} dy={6} />
+                <YAxis domain={[0, 10]} ticks={[2, 4, 6, 8, 10]} stroke="var(--fg-subtle)" fontSize={11} tickLine={false} />
                 <Tooltip content={<CustomTooltip />} />
-                <Legend
-                  wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }}
-                  iconType="circle"
-                />
+                <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '8px' }} iconType="circle" />
 
                 {(selectedMetric === 'all' || selectedMetric === 'focus') && (
                   <Line
                     type="monotone"
                     dataKey="focus"
                     name={t('Focus')}
-                    stroke="var(--color-sage, #4E6B56)"
-                    strokeWidth={2.5}
-                    dot={{ r: 4, fill: 'var(--color-sage, #4E6B56)', strokeWidth: 1.5, stroke: 'var(--bg)' }}
-                    activeDot={{ r: 6 }}
+                    stroke={METRIC_COLOR.focus}
+                    strokeWidth={2}
+                    dot={{ r: 3.5, fill: METRIC_COLOR.focus, strokeWidth: 1.5, stroke: 'var(--bg)' }}
+                    activeDot={{ r: 5 }}
                     connectNulls
                   />
                 )}
@@ -616,10 +426,10 @@ export const DailyCheckIn: React.FC = () => {
                     type="monotone"
                     dataKey="energy"
                     name={t('Energy')}
-                    stroke="var(--color-coral, #B8533C)"
-                    strokeWidth={2.5}
-                    dot={{ r: 4, fill: 'var(--color-coral, #B8533C)', strokeWidth: 1.5, stroke: 'var(--bg)' }}
-                    activeDot={{ r: 6 }}
+                    stroke={METRIC_COLOR.energy}
+                    strokeWidth={2}
+                    dot={{ r: 3.5, fill: METRIC_COLOR.energy, strokeWidth: 1.5, stroke: 'var(--bg)' }}
+                    activeDot={{ r: 5 }}
                     connectNulls
                   />
                 )}
@@ -629,10 +439,10 @@ export const DailyCheckIn: React.FC = () => {
                     type="monotone"
                     dataKey="mood"
                     name={t('Mood')}
-                    stroke="#0284c7"
-                    strokeWidth={2.5}
-                    dot={{ r: 4, fill: '#0284c7', strokeWidth: 1.5, stroke: 'var(--bg)' }}
-                    activeDot={{ r: 6 }}
+                    stroke={METRIC_COLOR.mood}
+                    strokeWidth={2}
+                    dot={{ r: 3.5, fill: METRIC_COLOR.mood, strokeWidth: 1.5, stroke: 'var(--bg)' }}
+                    activeDot={{ r: 5 }}
                     connectNulls
                   />
                 )}
@@ -644,7 +454,7 @@ export const DailyCheckIn: React.FC = () => {
 
       {/* TAB 3: History & Past Reflections */}
       {activeTab === 'history' && (
-        <div className="space-y-2.5 pt-1">
+        <div>
           {checkIns.length > 0 ? (
             <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
               {checkIns.slice(0, 10).map((entry) => {
@@ -655,40 +465,25 @@ export const DailyCheckIn: React.FC = () => {
                 return (
                   <div
                     key={entry.id}
-                    className="p-3 rounded-[var(--radius-sm)] bg-[var(--bg)] border border-[var(--border)] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5"
+                    className="p-4 rounded-[var(--radius-sm)] bg-[var(--bg)] flex flex-col sm:flex-row sm:items-center justify-between gap-2"
                   >
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-xs font-bold text-[var(--fg)] flex items-center gap-1">
-                          <Calendar className="w-3 h-3 text-[var(--fg-muted)]" />
-                          {formattedDate}
+                    <div className="space-y-1 min-w-0">
+                      <div className="flex items-center gap-3 flex-wrap">
+                        <span className="text-[14px] font-medium text-[var(--fg)]">{formattedDate}</span>
+                        <span className="text-[13px] text-[var(--fg-muted)]">
+                          {t('Focus {n}/10', { n: entry.focus })} · {t('Energy {n}/10', { n: entry.energy })} · {t('Mood {n}/10', { n: entry.mood })}
                         </span>
-                        <div className="flex items-center gap-1.5 text-[10px]">
-                          <span className="px-1.5 py-0.2 rounded bg-[var(--color-sage)]/10 text-[var(--color-sage)] font-semibold">
-                            {t('Focus {n}/10', { n: entry.focus })}
-                          </span>
-                          <span className="px-1.5 py-0.2 rounded bg-[var(--color-coral)]/10 text-[var(--color-coral)] font-semibold">
-                            {t('Energy {n}/10', { n: entry.energy })}
-                          </span>
-                          <span className="px-1.5 py-0.2 rounded bg-sky-500/10 text-sky-600 dark:text-sky-400 font-semibold">
-                            {t('Mood {n}/10', { n: entry.mood })}
-                          </span>
-                        </div>
                       </div>
-                      {entry.notes && (
-                        <p className="text-xs text-[var(--fg-muted)] italic">
-                          "{entry.notes}"
-                        </p>
-                      )}
+                      {entry.notes && <p className="text-[13px] text-[var(--fg-muted)]">{entry.notes}</p>}
                     </div>
 
                     {entry.dateKey === todayStr && (
                       <button
                         type="button"
                         onClick={() => setActiveTab('checkin')}
-                        className="text-[11px] text-[var(--color-sage)] hover:underline font-semibold flex items-center gap-1 shrink-0 self-end sm:self-auto cursor-pointer"
+                        className="h-9 px-2 text-[13px] text-[var(--accent)] font-medium shrink-0 self-end sm:self-auto cursor-pointer"
                       >
-                        <Edit3 className="w-3 h-3" /> {t('Edit Today')}
+                        {t('Edit')}
                       </button>
                     )}
                   </div>
@@ -696,8 +491,8 @@ export const DailyCheckIn: React.FC = () => {
               })}
             </div>
           ) : (
-            <div className="p-6 text-center text-xs text-[var(--fg-muted)]">
-              {t('No previous check-ins logged yet.')}
+            <div className="py-8 text-center text-[14px] text-[var(--fg-muted)]">
+              {t('No check-ins yet.')}
             </div>
           )}
         </div>

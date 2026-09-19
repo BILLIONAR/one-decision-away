@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../store/useApp';
-import { PageHeader, Button, Card, Field, Textarea, Badge, Disclaimer } from '../components/ui';
-import { Check, Edit2, Share2 } from 'lucide-react';
+import { Check, Pencil, Share2 } from 'lucide-react';
 import { DefaultFutureStudio } from '../components/DefaultFutureStudio';
 import { useT } from '../i18n';
 
@@ -26,170 +25,142 @@ export const TwoFutures: React.FC = () => {
     setIsEditing(false);
   };
 
+  const textarea =
+    'w-full p-3 bg-[var(--bg)] text-[var(--fg)] border border-[var(--border)] rounded-[var(--radius-sm)] text-sm focus:outline-none focus:border-[var(--fg)] resize-y min-h-[100px] leading-relaxed';
+  const secondaryBtn =
+    'h-11 px-4 inline-flex items-center gap-2 rounded-[var(--radius-sm)] border border-[var(--border-strong)] bg-transparent text-[var(--fg)] text-sm font-medium';
+  const primaryBtn =
+    'h-11 px-4 inline-flex items-center gap-2 rounded-[var(--radius-sm)] bg-[var(--fg)] text-[var(--bg)] text-sm font-semibold';
+
   return (
     <div className="space-y-6">
-      <PageHeader
-        title={t('Two Futures')}
-        subtitle={t('The life you are building against the life you will live if nothing changes.')}
-        action={
-          <div className="flex items-center gap-2">
-            {!isEditing ? (
-              <Button variant="outline" size="sm" icon={Edit2} onClick={() => setIsEditing(true)}>
-                {t('Edit Statements')}
-              </Button>
-            ) : (
-              <Button variant="accent" size="sm" icon={Check} onClick={handleSave}>
-                {t('Save Declarations')}
-              </Button>
-            )}
-            <Button
-              variant="secondary"
-              size="sm"
-              icon={Share2}
-              onClick={() => setActiveRoute('/two-futures')}
-            >
-              {t('Public Compass')}
-            </Button>
-          </div>
-        }
-      />
+      <div>
+        <h1 className="text-2xl font-semibold tracking-tight text-[var(--fg)]">{t('Two futures')}</h1>
+        <p className="text-sm text-[var(--fg-muted)] mt-1">
+          {t('The life you are building, and the one you get if nothing changes.')}
+        </p>
+      </div>
 
-      {/* Trajectory Bar */}
-      <Card padding="md" className="space-y-3 bg-[var(--bg-elevated)]">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div className="space-y-0.5">
-            <span className="text-xs font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-              {t('Trajectory Momentum')}
-            </span>
-            <div className="text-sm font-semibold text-[var(--fg)]">
-              {t('{pct}% of daily decisions have cast votes for the Built Future', { pct: buildingPct })}
-            </div>
-          </div>
-          <div className="flex items-center gap-3 text-xs">
-            <Badge variant="sage">{t('Building: {n}', { n: data.twoFutures.buildingVotes || 0 })}</Badge>
-            <Badge variant="subtle">{t('Default: {n}', { n: data.twoFutures.allowingVotes || 0 })}</Badge>
-          </div>
+      <div className="flex flex-wrap gap-2">
+        {!isEditing ? (
+          <button type="button" onClick={() => setIsEditing(true)} className={secondaryBtn}>
+            <Pencil className="w-[18px] h-[18px]" strokeWidth={1.8} />
+            {t('Edit')}
+          </button>
+        ) : (
+          <button type="button" onClick={handleSave} className={primaryBtn}>
+            <Check className="w-[18px] h-[18px]" strokeWidth={1.8} />
+            {t('Save')}
+          </button>
+        )}
+        <button type="button" onClick={() => setActiveRoute('/two-futures')} className={secondaryBtn}>
+          <Share2 className="w-[18px] h-[18px]" strokeWidth={1.8} />
+          {t('Share')}
+        </button>
+      </div>
+
+      <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-3">
+        <div className="flex items-center justify-between text-sm">
+          <span className="font-medium text-[var(--fg)]">{t('{n}% of decisions building', { n: buildingPct })}</span>
+          <span className="text-[var(--fg-muted)]">
+            {t('{a} to {b}', {
+              a: data.twoFutures.buildingVotes || 0,
+              b: data.twoFutures.allowingVotes || 0,
+            })}
+          </span>
         </div>
-
-        <div className="h-3.5 w-full bg-[#9A8F86]/30 rounded-full overflow-hidden flex border border-[var(--border)]">
+        <div className="h-2 w-full bg-[var(--border-strong)] rounded-full overflow-hidden">
           <div
-            className="h-full bg-[var(--color-sage)] transition-all duration-500 ease-out"
+            className="h-full bg-[var(--accent)] transition-all duration-500"
             style={{ width: `${buildingPct}%` }}
           />
         </div>
-
-        <p className="text-[11px] text-[var(--fg-subtle)] pt-1 leading-relaxed">
-          {t('There is no penalty for missed days — only the quiet math of where your days go.')}
+        <p className="text-xs text-[var(--fg-muted)]">
+          {t('No penalty for missed days. Just the math of where your days go.')}
         </p>
-      </Card>
-
-      {/* Side-by-Side Declarations */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* The Life You're Allowing */}
-        <Card
-          padding="lg"
-          className="border-2 border-[#9A8F86]/40 bg-[var(--bg-elevated)] space-y-4"
-        >
-          <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#9A8F86]">
-              {t("The Life You're Allowing")}
-            </span>
-            <Badge variant="subtle">{t('Default Future')}</Badge>
-          </div>
-
-          <div className="space-y-2">
-            <h3 className="font-display font-bold text-xl text-[var(--fg)]">
-              {t('Anti-Vision Statement')}
-            </h3>
-            {isEditing ? (
-              <Field id="edit-anti-vision" label={t('I refuse to become someone who...')}>
-                <Textarea
-                  id="edit-anti-vision"
-                  value={antiVision}
-                  onChange={(e) => setAntiVision(e.target.value)}
-                  rows={4}
-                />
-              </Field>
-            ) : (
-              <p className="text-sm italic font-serif text-[var(--fg)] bg-[var(--bg-muted)] p-4 rounded-[var(--radius-md)] border border-[var(--border)] leading-relaxed">
-                "{t(data.twoFutures.antiVision)}"
-              </p>
-            )}
-          </div>
-
-          {/* Key Allowing Questions Snapshot */}
-          <div className="space-y-2.5 pt-2 border-t border-[var(--border)]">
-            <span className="text-[11px] font-bold uppercase text-[var(--fg-muted)]">
-              {t('Recorded Observations')}
-            </span>
-            <div className="text-xs text-[var(--fg-muted)] space-y-2">
-              <div className="p-2.5 bg-[var(--bg-muted)]/60 rounded-[var(--radius-sm)]">
-                <span className="font-semibold text-[var(--fg)] block">{t('Quiet Dissatisfaction:')}</span>
-                {data.twoFutures.allowingAnswers?.q1 || t('Quietly accepting tiredness dictating outputs.')}
-              </div>
-              <div className="p-2.5 bg-[var(--bg-muted)]/60 rounded-[var(--radius-sm)]">
-                <span className="font-semibold text-[var(--fg)] block">{t('What Avoidance Protects:')}</span>
-                {data.twoFutures.allowingAnswers?.q7 || t('Protects against fear of judgment.')}
-              </div>
-            </div>
-          </div>
-        </Card>
-
-        {/* The Life You're Building */}
-        <Card
-          padding="lg"
-          className="border-2 border-[var(--color-sage)]/50 bg-[var(--bg-elevated)] space-y-4"
-        >
-          <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
-            <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-sage)]">
-              {t("The Life You're Building")}
-            </span>
-            <Badge variant="sage">{t('Built Future')}</Badge>
-          </div>
-
-          <div className="space-y-2">
-            <h3 className="font-display font-bold text-xl text-[var(--fg)]">
-              {t('Vision Statement')}
-            </h3>
-            {isEditing ? (
-              <Field id="edit-vision" label={t('I am building a life where...')}>
-                <Textarea
-                  id="edit-vision"
-                  value={vision}
-                  onChange={(e) => setVision(e.target.value)}
-                  rows={4}
-                />
-              </Field>
-            ) : (
-              <p className="text-sm font-serif font-medium text-[var(--fg)] bg-[var(--bg-muted)] p-4 rounded-[var(--radius-md)] border border-[var(--border)] leading-relaxed">
-                "{t(data.twoFutures.vision)}"
-              </p>
-            )}
-          </div>
-
-          {/* Key Building Questions Snapshot */}
-          <div className="space-y-2.5 pt-2 border-t border-[var(--border)]">
-            <span className="text-[11px] font-bold uppercase text-[var(--fg-muted)]">
-              {t('Vision Pillars')}
-            </span>
-            <div className="text-xs text-[var(--fg-muted)] space-y-2">
-              <div className="p-2.5 bg-[var(--bg-muted)]/60 rounded-[var(--radius-sm)]">
-                <span className="font-semibold text-[var(--fg)] block">{t('Ordinary Day in 3 Years:')}</span>
-                {data.twoFutures.buildingAnswers?.b1 || data.twoFutures.buildingAnswers?.q1 || t('Calm mornings, deep creative blocks, financial autonomy.')}
-              </div>
-              <div className="p-2.5 bg-[var(--bg-muted)]/60 rounded-[var(--radius-sm)]">
-                <span className="font-semibold text-[var(--fg)] block">{t('What Money Lets You Say No To:')}</span>
-                {data.twoFutures.buildingAnswers?.b3 || data.twoFutures.buildingAnswers?.q3 || t('Frantic schedules, hurried commutes, and misaligned work.')}
-              </div>
-            </div>
-          </div>
-        </Card>
       </div>
 
-      {/* Enriched anti-vision: the future you're running from */}
+      <div className="space-y-3">
+        <h2 className="text-[15px] font-semibold text-[var(--fg)]">{t('If nothing changes')}</h2>
+        <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-4">
+          {isEditing ? (
+            <div className="space-y-1.5">
+              <label htmlFor="edit-anti-vision" className="block text-sm text-[var(--fg-muted)]">
+                {t('I refuse to become someone who...')}
+              </label>
+              <textarea
+                id="edit-anti-vision"
+                value={antiVision}
+                onChange={(e) => setAntiVision(e.target.value)}
+                rows={4}
+                className={textarea}
+              />
+            </div>
+          ) : (
+            <p className="text-[15px] text-[var(--fg)] leading-relaxed">{t(data.twoFutures.antiVision)}</p>
+          )}
+          <div className="space-y-3 text-sm border-t border-[var(--border)] pt-4">
+            <div>
+              <div className="text-xs text-[var(--fg-muted)]">{t('What you keep accepting')}</div>
+              <div className="text-[var(--fg)] mt-0.5">
+                {data.twoFutures.allowingAnswers?.q1 || t('Letting tiredness decide what gets done.')}
+              </div>
+            </div>
+            <div>
+              <div className="text-xs text-[var(--fg-muted)]">{t('What avoidance protects')}</div>
+              <div className="text-[var(--fg)] mt-0.5">
+                {data.twoFutures.allowingAnswers?.q7 || t('Fear of being judged.')}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        <h2 className="text-[15px] font-semibold text-[var(--fg)]">{t('What you are building')}</h2>
+        <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-4">
+          {isEditing ? (
+            <div className="space-y-1.5">
+              <label htmlFor="edit-vision" className="block text-sm text-[var(--fg-muted)]">
+                {t('I am building a life where...')}
+              </label>
+              <textarea
+                id="edit-vision"
+                value={vision}
+                onChange={(e) => setVision(e.target.value)}
+                rows={4}
+                className={textarea}
+              />
+            </div>
+          ) : (
+            <p className="text-[15px] text-[var(--fg)] leading-relaxed">{t(data.twoFutures.vision)}</p>
+          )}
+          <div className="space-y-3 text-sm border-t border-[var(--border)] pt-4">
+            <div>
+              <div className="text-xs text-[var(--fg-muted)]">{t('An ordinary day in three years')}</div>
+              <div className="text-[var(--fg)] mt-0.5">
+                {data.twoFutures.buildingAnswers?.b1 ||
+                  data.twoFutures.buildingAnswers?.q1 ||
+                  t('Calm mornings, deep work, money that gives you room.')}
+              </div>
+            </div>
+            <div>
+              <div className="text-xs text-[var(--fg-muted)]">{t('What money lets you say no to')}</div>
+              <div className="text-[var(--fg)] mt-0.5">
+                {data.twoFutures.buildingAnswers?.b3 ||
+                  data.twoFutures.buildingAnswers?.q3 ||
+                  t('Frantic schedules and work that does not fit.')}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <DefaultFutureStudio />
 
-      <Disclaimer text={t('Reviewing your Two Futures weekly reinforces your identity shift and aligns daily mission choices.')} />
+      <p className="text-xs text-[var(--fg-subtle)]">
+        {t('Reread this once a week. It keeps your daily choices pointed the right way.')}
+      </p>
     </div>
   );
 };

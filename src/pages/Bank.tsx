@@ -1,29 +1,11 @@
 import React, { useState } from 'react';
 import { useApp } from '../store/useApp';
-import {
-  PageHeader,
-  Card,
-  Stat,
-  Badge,
-  Input,
-  Select,
-  Disclaimer,
-} from '../components/ui';
-import {
-  CreditCard,
-  ArrowUpRight,
-  ArrowDownLeft,
-  ShieldCheck,
-  Search,
-  Flame,
-  Calendar,
-} from 'lucide-react';
+import { ArrowUpRight, ArrowDownLeft } from 'lucide-react';
 import {
   computeLedgerBalance,
   computeLifetimeEarned,
   computeLifetimeSpent,
   computeTodayEarnings,
-  calculateCurrentStreak,
   ECONOMY_CONSTANTS,
 } from '../services/economy';
 import { useT } from '../i18n';
@@ -43,7 +25,6 @@ export const Bank: React.FC = () => {
   const earned = computeLifetimeEarned(data.transactions);
   const spent = computeLifetimeSpent(data.transactions);
   const todayEarned = computeTodayEarnings(data.transactions);
-  const streak = calculateCurrentStreak(data.completions.map((c) => c.completedAt));
 
   const filteredTransactions = data.transactions.filter((tx) => {
     if (filterType === 'earn' && tx.amount < 0) return false;
@@ -60,46 +41,39 @@ export const Bank: React.FC = () => {
     return true;
   });
 
+  const stats = [
+    { label: t('Earned'), value: `D$ ${earned.toLocaleString()}` },
+    { label: t('Spent'), value: `D$ ${spent.toLocaleString()}` },
+    {
+      label: t('Today'),
+      value: `D$ ${todayEarned.toLocaleString()} / ${ECONOMY_CONSTANTS.DAILY_REWARD_CAP.toLocaleString()}`,
+    },
+  ];
+
   return (
     <div className="space-y-6">
-      <PageHeader
-        title={t('Dream Bank')}
-        subtitle={t('Your immutable ledger of symbolic earnings, marketplace expenditures, and savings momentum.')}
-        issueNumber={t('Issue No. 03 — Ledger & Velocity')}
-      />
-
-      {/* Hero Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Stat
-          label={t('Current Balance')}
-          value={`D$ ${balance.toLocaleString()}`}
-          subtext={t('Available to allocate')}
-          badge={t('Verified')}
-        />
-        <Stat
-          label={t('Lifetime Earned')}
-          value={`D$ ${earned.toLocaleString()}`}
-          subtext={t('Through direct execution')}
-          icon={ArrowUpRight}
-        />
-        <Stat
-          label={t('Lifetime Spent')}
-          value={`D$ ${spent.toLocaleString()}`}
-          subtext={t('Furnished in My Life')}
-          icon={ArrowDownLeft}
-        />
-        <Stat
-          label={t("Today's Cap Usage")}
-          value={`D$ ${todayEarned.toLocaleString()} / ${ECONOMY_CONSTANTS.DAILY_REWARD_CAP.toLocaleString()}`}
-          subtext={t('Daily anti-binge guardrail')}
-          icon={Calendar}
-        />
+      <div>
+        <h1 className="text-2xl font-semibold tracking-tight text-[var(--fg)]">{t('Bank')}</h1>
+        <p className="text-sm text-[var(--fg-muted)] mt-1">{t('What you have earned and spent.')}</p>
       </div>
 
-      {/* 7-Day Dream Dollar Earnings Visual Chart (Recharts) */}
+      <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5">
+        <div className="text-xs text-[var(--fg-muted)]">{t('Balance')}</div>
+        <div className="text-3xl font-semibold tracking-tight text-[var(--accent)] mt-1">
+          D$ {balance.toLocaleString()}
+        </div>
+        <div className="grid grid-cols-3 gap-3 mt-5 pt-4 border-t border-[var(--border)]">
+          {stats.map((s) => (
+            <div key={s.label} className="min-w-0">
+              <div className="text-xs text-[var(--fg-muted)]">{s.label}</div>
+              <div className="text-sm font-medium text-[var(--fg)] mt-0.5 truncate">{s.value}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <DreamDollarChart transactions={data.transactions} />
 
-      {/* Savings Momentum Visual Chart (D3) */}
       <SavingsMomentumChart
         transactions={data.transactions}
         inVisionItemIds={data.inVisionItemIds}
@@ -107,95 +81,67 @@ export const Bank: React.FC = () => {
         userGoals={data.goals}
       />
 
-      {/* Ledger Section */}
-      <Card padding="md" className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[var(--border)]">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-[var(--color-sage)]" />
-            <h3 className="font-display font-bold text-base text-[var(--fg)]">
-              {t('Simulation Ledger ({n} entries)', { n: data.transactions.length })}
-            </h3>
-          </div>
+      <div className="space-y-3">
+        <h2 className="text-[15px] font-semibold text-[var(--fg)]">
+          {t('Activity')} <span className="text-[var(--fg-muted)] font-normal">({data.transactions.length})</span>
+        </h2>
 
-          <div className="flex items-center gap-2 w-full sm:w-auto">
-            <div className="w-full sm:w-48">
-              <Input
-                id="search-tx"
-                placeholder={t('Search ledger...')}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            <div className="w-32">
-              <Select
-                id="filter-type"
-                value={filterType}
-                onChange={(e) => setFilterType(e.target.value)}
-                options={[
-                  { value: 'all', label: t('All') },
-                  { value: 'earn', label: t('Deposits') },
-                  { value: 'spend', label: t('Spends') },
-                ]}
-              />
-            </div>
-          </div>
+        <div className="flex gap-2">
+          <input
+            id="search-tx"
+            placeholder={t('Search')}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="flex-1 h-11 px-3 bg-[var(--bg-muted)] text-[var(--fg)] rounded-[var(--radius-sm)] text-sm focus:outline-none placeholder:text-[var(--fg-subtle)]"
+          />
+          <select
+            id="filter-type"
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value)}
+            className="w-32 h-11 px-3 bg-[var(--bg-muted)] text-[var(--fg)] rounded-[var(--radius-sm)] text-sm focus:outline-none"
+          >
+            <option value="all">{t('All')}</option>
+            <option value="earn">{t('Earned')}</option>
+            <option value="spend">{t('Spent')}</option>
+          </select>
         </div>
 
-        {/* Transactions Table / List */}
-        <div className="divide-y divide-[var(--border)]">
-          {filteredTransactions.map((tx) => {
-            const isDeposit = tx.amount > 0;
-            return (
-              <div
-                key={tx.id}
-                className="py-3 flex items-center justify-between gap-3 hover:bg-[var(--bg-muted)]/50 px-2 rounded-[var(--radius-sm)] transition-colors text-xs"
-              >
-                <div className="flex items-center gap-3">
-                  <div
-                    className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${
-                      isDeposit
-                        ? 'bg-[var(--success-soft)] text-[var(--color-sage)]'
-                        : 'bg-[var(--accent-soft)] text-[var(--color-coral)]'
-                    }`}
-                  >
+        {filteredTransactions.length > 0 ? (
+          <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] divide-y divide-[var(--border)]">
+            {filteredTransactions.map((tx) => {
+              const isDeposit = tx.amount > 0;
+              return (
+                <div key={tx.id} className="px-4 min-h-[56px] py-2 flex items-center gap-3 text-sm">
+                  <div className="w-9 h-9 rounded-full bg-[var(--bg)] flex items-center justify-center shrink-0 text-[var(--fg-muted)]">
                     {isDeposit ? (
-                      <ArrowUpRight className="w-4 h-4" />
+                      <ArrowUpRight className="w-[18px] h-[18px]" strokeWidth={1.8} />
                     ) : (
-                      <ArrowDownLeft className="w-4 h-4" />
+                      <ArrowDownLeft className="w-[18px] h-[18px]" strokeWidth={1.8} />
                     )}
                   </div>
-
-                  <div className="space-y-0.5">
-                    <div className="font-semibold text-[var(--fg)]">
-                      {t(tx.memo)}
-                    </div>
-                    <div className="text-[11px] text-[var(--fg-subtle)] flex items-center gap-2">
-                      <span>{new Date(tx.createdAt).toLocaleDateString()}</span>
-                      <span>·</span>
-                      <span className="capitalize">{t(tx.kind.replace('_', ' '))}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-[var(--fg)] truncate">{t(tx.memo)}</div>
+                    <div className="text-xs text-[var(--fg-subtle)]">
+                      {new Date(tx.createdAt).toLocaleDateString()} · {t(tx.kind.replace('_', ' '))}
                     </div>
                   </div>
-                </div>
-
-                <div className="text-right">
-                  <span
-                    className={`font-mono font-bold text-sm ${
-                      isDeposit ? 'text-[var(--color-sage)]' : 'text-[var(--color-coral)]'
-                    }`}
-                  >
-                    {isDeposit ? `+ D$ ${tx.amount.toLocaleString()}` : `- D$ ${Math.abs(tx.amount).toLocaleString()}`}
-                  </span>
-                  <span className="text-[10px] text-[var(--fg-subtle)] block">
-                    {tx.dayKey}
+                  <span className={`font-medium shrink-0 ${isDeposit ? 'text-[var(--accent)]' : 'text-[var(--fg)]'}`}>
+                    {isDeposit ? `+${tx.amount.toLocaleString()}` : `−${Math.abs(tx.amount).toLocaleString()}`}
                   </span>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-      </Card>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5">
+            <p className="text-sm text-[var(--fg-muted)]">{t('Nothing here yet.')}</p>
+          </div>
+        )}
+      </div>
 
-      <Disclaimer text={t('Dream Dollars is a virtual simulation currency designed to anchor focus. It cannot be purchased, transferred, or exchanged for fiat currency.')} />
+      <p className="text-xs text-[var(--fg-subtle)]">
+        {t('D$ is a practice currency. It cannot be bought, transferred or exchanged for real money.')}
+      </p>
     </div>
   );
 };

@@ -1,42 +1,27 @@
 import React, { useMemo, useState } from 'react';
 import { useApp } from '../store/useApp';
-import { Card, Button, Field, Textarea, Input, Badge } from '../components/ui';
-import {
-  AlertTriangle,
-  Clock,
-  Hourglass,
-  Plus,
-  Trash2,
-  Check,
-  Edit2,
-  Mail,
-  Eye,
-  Footprints,
-  Play,
-  X,
-} from 'lucide-react';
+import { Plus, Trash2, Check, Pencil, Play, X } from 'lucide-react';
 import { DriftCostItem } from '../types/models';
 import { useT, N_, getSpeechLang } from '../i18n';
 
 /**
- * Default Future Studio — the enriched "life you're allowing".
- * Makes the future the user is running from concrete, measurable and noticeable,
- * so the daily One Decision has real gravity behind it.
+ * Default Future Studio — the "life you're allowing", made concrete:
+ * drift signals, the cost of drift, a timeline and a letter from the default self.
  */
 
 const TIMELINE_PROMPTS = {
   oneYear: {
-    label: N_('One year from now — if nothing changes'),
+    label: N_('One year from now'),
     placeholder:
       N_('Same job, same excuses, one more year older. What does an ordinary Tuesday look like? What have you quietly stopped mentioning to friends?'),
   },
   threeYears: {
-    label: N_('Three years from now — if nothing changes'),
+    label: N_('Three years from now'),
     placeholder:
       N_('Which opportunities did you watch other people take? What does your body feel like? What do you tell yourself at 11pm?'),
   },
   tenYears: {
-    label: N_('Ten years from now — if nothing changes'),
+    label: N_('Ten years from now'),
     placeholder:
       N_('Which doors are closed for good? Who did you become to the people who depend on you? What is the one sentence you would say about the last decade?'),
   },
@@ -70,6 +55,16 @@ function formatDays(minutesPerDay: number): { hoursPerYear: number; daysPerYear:
   return { hoursPerYear, daysPerYear, daysPerDecade: daysPerYear * 10 };
 }
 
+const card = 'bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-4';
+const inputCls =
+  'w-full h-11 px-3 bg-[var(--bg)] text-[var(--fg)] border border-[var(--border)] rounded-[var(--radius-sm)] text-sm focus:outline-none focus:border-[var(--fg)] placeholder:text-[var(--fg-subtle)]';
+const textareaCls =
+  'w-full p-3 bg-[var(--bg)] text-[var(--fg)] border border-[var(--border)] rounded-[var(--radius-sm)] text-sm focus:outline-none focus:border-[var(--fg)] placeholder:text-[var(--fg-subtle)] resize-y min-h-[88px] leading-relaxed';
+const secondaryBtn =
+  'h-11 px-4 inline-flex items-center justify-center gap-2 rounded-[var(--radius-sm)] border border-[var(--border-strong)] bg-transparent text-[var(--fg)] text-sm font-medium cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shrink-0';
+const primaryBtn =
+  'h-11 px-4 inline-flex items-center justify-center gap-2 rounded-[var(--radius-sm)] bg-[var(--fg)] text-[var(--bg)] text-sm font-semibold cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shrink-0';
+
 export const DefaultFutureStudio: React.FC = () => {
   const t = useT();
   const { data, saveDefaultFuture, logDriftSignal, removeDriftEntry, startFocusSession, setActiveRoute } = useApp();
@@ -96,7 +91,6 @@ export const DefaultFutureStudio: React.FC = () => {
 
   const driftLog = df.driftLog || [];
 
-  // Candidate drift signals: the user's own old-self patterns first, then sensible defaults
   const signals = useMemo(() => {
     const fs = data?.futureSelf;
     const own = [
@@ -110,7 +104,6 @@ export const DefaultFutureStudio: React.FC = () => {
     return Array.from(new Set(merged)).slice(0, 10);
   }, [data?.futureSelf]);
 
-  // Last 14 days strip
   const last14 = useMemo(() => {
     const days: { key: string; count: number; weekday: string }[] = [];
     for (let i = 13; i >= 0; i--) {
@@ -189,74 +182,69 @@ export const DefaultFutureStudio: React.FC = () => {
 
   const visibleDrift = showAllDrift ? driftLog : driftLog.slice(0, 6);
 
+  const EditToggle: React.FC<{ editing: boolean; hasContent: boolean; onEdit: () => void; onSave: () => void }> = ({ editing, hasContent, onEdit, onSave }) =>
+    !editing ? (
+      <button type="button" onClick={onEdit} className={secondaryBtn}>
+        <Pencil className="w-4 h-4" strokeWidth={1.8} />
+        {hasContent ? t('Edit') : t('Write')}
+      </button>
+    ) : (
+      <button type="button" onClick={onSave} className={primaryBtn}>
+        <Check className="w-4 h-4" strokeWidth={1.8} />
+        {t('Save')}
+      </button>
+    );
+
   return (
     <div className="space-y-6">
-      {/* Section header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+      <div className="space-y-3">
         <div>
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#9A8F86]">
-            {t("The Future You're Running From")}
-          </span>
-          <h2 className="font-display font-bold text-2xl text-[var(--fg)] mt-1">{t('Default Future Studio')}</h2>
-          <p className="text-sm text-[var(--fg-muted)] max-w-2xl mt-1">
-            {t('Fear is a poor long-term fuel, but a clear picture of the default path is a superb compass. Make it concrete, count what it costs, and notice the small moments you drift toward it.')}
+          <h2 className="text-[15px] font-semibold text-[var(--fg)]">{t('The default path')}</h2>
+          <p className="text-sm text-[var(--fg-muted)] mt-1">
+            {t('Make it concrete, count what it costs, notice when you drift toward it.')}
           </p>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          icon={Play}
+        <button
+          type="button"
           onClick={() =>
             startFocusSession({
-              missionTitle: t('🌗 The Two Futures Walk'),
+              missionTitle: t('The Two Futures Walk'),
               durationMinutes: 9,
               soundTrack: 'solfeggio_396hz',
               guidedMeditationId: 'gm-two-futures',
             })
           }
+          className={secondaryBtn}
         >
-          {t('Guided: The Two Futures Walk (9m)')}
-        </Button>
+          <Play className="w-4 h-4" strokeWidth={1.8} />
+          {t('Guided walk, 9 min')}
+        </button>
       </div>
 
-      {/* Drift signals + 14 day strip */}
-      <Card padding="lg" className="space-y-5 bg-[var(--bg-elevated)] border-2 border-[#9A8F86]/40">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-[#9A8F86]/20 text-[#9A8F86] flex items-center justify-center">
-              <Footprints className="w-4 h-4" />
-            </div>
-            <div>
-              <h3 className="text-sm font-bold text-[var(--fg)]">{t('Drift Signals')}</h3>
-              <p className="text-[11px] text-[var(--fg-muted)]">
-                {t('Tap the moment you catch yourself sliding. Each tap is one honest vote for the default future — and noticing it is the first vote back.')}
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 text-[11px]">
-            <Badge variant={cleanDaysInRow >= 3 ? 'sage' : 'subtle'}>
-              {cleanDaysInRow === 1 ? t('1 clean day in a row') : t('{n} clean days in a row', { n: cleanDaysInRow })}
-            </Badge>
-            <Badge variant={driftLast7 <= driftPrev7 ? 'sage' : 'coral'}>
-              {t('7d: {n} {arrow} (prev {prev})', { n: driftLast7, arrow: driftLast7 <= driftPrev7 ? '↓' : '↑', prev: driftPrev7 })}
-            </Badge>
-          </div>
+      <div className={card}>
+        <div>
+          <h3 className="text-[15px] font-semibold text-[var(--fg)]">{t('Drift')}</h3>
+          <p className="text-sm text-[var(--fg-muted)] mt-1">{t('Tap the moment you catch yourself sliding. Noticing is the first step back.')}</p>
         </div>
 
-        {/* 14-day strip */}
-        <div className="flex items-end gap-1.5">
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+          <span className="text-[var(--fg)]">
+            {cleanDaysInRow === 1 ? t('1 clean day') : t('{n} clean days', { n: cleanDaysInRow })}
+          </span>
+          <span className="text-[var(--fg-muted)]">
+            {t('{n} this week, {prev} last week', { n: driftLast7, prev: driftPrev7 })}
+          </span>
+        </div>
+
+        <div className="flex items-end gap-1">
           {last14.map((d) => (
             <div key={d.key} className="flex-1 flex flex-col items-center gap-1" title={t('{date}: {n} drift', { date: d.key, n: d.count })}>
               <div
-                className={`w-full h-7 rounded-md border transition-all ${
-                  d.count === 0
-                    ? 'bg-[var(--color-sage)]/20 border-[var(--color-sage)]/40'
-                    : d.count === 1
-                    ? 'bg-[#9A8F86]/40 border-[#9A8F86]/60'
-                    : 'bg-[#9A8F86]/80 border-[#9A8F86]'
-                } ${d.key === todayKey ? 'ring-2 ring-[var(--fg)]/40' : ''}`}
+                className={`w-full h-6 rounded-[var(--radius-xs)] ${
+                  d.count === 0 ? 'bg-[var(--accent)]' : d.count === 1 ? 'bg-[var(--border-strong)]' : 'bg-[var(--fg-subtle)]'
+                } ${d.key === todayKey ? 'ring-2 ring-[var(--fg)] ring-offset-2 ring-offset-[var(--bg-muted)]' : ''}`}
               />
-              <span className="text-[9px] text-[var(--fg-subtle)]">{d.weekday}</span>
+              <span className="text-[10px] text-[var(--fg-subtle)]">{d.weekday}</span>
             </div>
           ))}
         </div>
@@ -270,13 +258,11 @@ export const DefaultFutureStudio: React.FC = () => {
                 type="button"
                 onClick={() => logDriftSignal(sig)}
                 disabled={done}
-                className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all cursor-pointer disabled:cursor-default ${
-                  done
-                    ? 'bg-[#9A8F86] text-white border-[#9A8F86]'
-                    : 'bg-[var(--bg-muted)] text-[var(--fg-muted)] border-[var(--border)] hover:text-[var(--fg)] hover:border-[#9A8F86]'
+                className={`h-10 px-3.5 rounded-full text-sm inline-flex items-center gap-1.5 cursor-pointer disabled:cursor-default ${
+                  done ? 'bg-[var(--fg)] text-[var(--bg)]' : 'bg-[var(--bg)] text-[var(--fg)]'
                 }`}
               >
-                {done ? '✓ ' : ''}
+                {done && <Check className="w-4 h-4" strokeWidth={1.8} />}
                 {t(sig)}
               </button>
             );
@@ -290,281 +276,235 @@ export const DefaultFutureStudio: React.FC = () => {
           }}
           className="flex gap-2"
         >
-          <Input
+          <input
             id="custom-drift"
             value={customSignal}
             onChange={(e) => setCustomSignal(e.target.value)}
-            placeholder={t('Something else you noticed today…')}
-            className="flex-1"
+            placeholder={t('Something else you noticed')}
+            className={inputCls}
           />
-          <Button type="submit" variant="secondary" size="sm" icon={Plus} disabled={!customSignal.trim()}>
-            {t('Log')}
-          </Button>
+          <button type="submit" disabled={!customSignal.trim()} aria-label={t('Log')} className={`${secondaryBtn} w-11 px-0`}>
+            <Plus className="w-5 h-5" strokeWidth={1.8} />
+          </button>
         </form>
 
         {driftLog.length > 0 && (
-          <div className="pt-3 border-t border-[var(--border)] space-y-1.5">
+          <div className="border-t border-[var(--border)] pt-3">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-subtle)]">{t('Recent drift log')}</span>
+              <span className="text-xs text-[var(--fg-muted)]">{t('Recent')}</span>
               {driftLog.length > 6 && (
                 <button
                   type="button"
                   onClick={() => setShowAllDrift(!showAllDrift)}
-                  className="text-[11px] underline text-[var(--fg-muted)] cursor-pointer"
+                  className="min-h-[44px] text-sm text-[var(--fg-muted)] hover:text-[var(--fg)] cursor-pointer"
                 >
                   {showAllDrift ? t('Show less') : t('Show all ({n})', { n: driftLog.length })}
                 </button>
               )}
             </div>
-            {visibleDrift.map((e) => (
-              <div
-                key={e.id}
-                className="flex items-center justify-between text-xs px-3 py-1.5 bg-[var(--bg-muted)]/60 rounded-[var(--radius-sm)]"
-              >
-                <span className="text-[var(--fg)]">
-                  <span className="font-mono text-[var(--fg-subtle)] mr-2">{e.dateKey.slice(5)}</span>
-                  {t(e.signal)}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => removeDriftEntry(e.id)}
-                  title={t('Remove (logged by mistake)')}
-                  className="p-1 text-[var(--fg-subtle)] hover:text-red-500 cursor-pointer"
-                >
-                  <X className="w-3 h-3" />
-                </button>
+            <div className="divide-y divide-[var(--border)]">
+              {visibleDrift.map((e) => (
+                <div key={e.id} className="flex items-center justify-between gap-3 min-h-[44px] text-sm">
+                  <span className="text-[var(--fg)] min-w-0 truncate">
+                    <span className="text-[var(--fg-subtle)] mr-2">{e.dateKey.slice(5)}</span>
+                    {t(e.signal)}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => removeDriftEntry(e.id)}
+                    title={t('Remove')}
+                    aria-label={t('Remove')}
+                    className="w-11 h-11 -mr-3 shrink-0 flex items-center justify-center text-[var(--fg-subtle)] hover:text-[var(--danger)] cursor-pointer"
+                  >
+                    <X className="w-4 h-4" strokeWidth={1.8} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className={card}>
+        <div>
+          <h3 className="text-[15px] font-semibold text-[var(--fg)]">{t('What drift costs')}</h3>
+          <p className="text-sm text-[var(--fg-muted)] mt-1">{t('The habits that eat your days, and what they add up to.')}</p>
+        </div>
+
+        {costs.length > 0 && (
+          <div className="divide-y divide-[var(--border)]">
+            {costs.map((c) => {
+              const fd = formatDays(c.minutesPerDay);
+              return (
+                <div key={c.id} className="flex items-center justify-between gap-3 min-h-[56px] py-2 text-sm">
+                  <div className="min-w-0">
+                    <div className="font-medium text-[var(--fg)] truncate">{c.label}</div>
+                    <div className="text-xs text-[var(--fg-muted)]">
+                      {t('{n} min/day', { n: c.minutesPerDay })} · {t('{n} days a year', { n: fd.daysPerYear.toFixed(1) })} ·{' '}
+                      {t('{n} months a decade', { n: (fd.daysPerDecade / 30.4).toFixed(1) })}
+                      {c.dollarsPerMonth ? ` · $${(c.dollarsPerMonth * 120).toLocaleString()} ${t('in 10 years')}` : ''}
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveCost(c.id)}
+                    className="w-11 h-11 -mr-3 shrink-0 flex items-center justify-center text-[var(--fg-subtle)] hover:text-[var(--danger)] cursor-pointer"
+                    title={t('Remove')}
+                    aria-label={t('Remove')}
+                  >
+                    <Trash2 className="w-4 h-4" strokeWidth={1.8} />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {costs.length > 0 && (
+          <div className="grid grid-cols-3 gap-3 border-t border-[var(--border)] pt-4">
+            <div>
+              <div className="text-lg font-semibold tracking-tight text-[var(--fg)]">{totals.hoursPerYear.toFixed(0)}h</div>
+              <div className="text-xs text-[var(--fg-muted)]">{t('per year')}</div>
+            </div>
+            <div>
+              <div className="text-lg font-semibold tracking-tight text-[var(--fg)]">
+                {t('{n} mo', { n: (totals.daysPerDecade / 30.4).toFixed(1) })}
+              </div>
+              <div className="text-xs text-[var(--fg-muted)]">{t('per decade')}</div>
+            </div>
+            <div>
+              <div className="text-lg font-semibold tracking-tight text-[var(--fg)]">
+                {decadeDollars > 0 ? `$${Math.round(decadeDollars / 1000)}k` : '—'}
+              </div>
+              <div className="text-xs text-[var(--fg-muted)]">{t('in 10 years')}</div>
+            </div>
+          </div>
+        )}
+
+        <div className="space-y-2 border-t border-[var(--border)] pt-4">
+          <input
+            id="cost-label"
+            value={newCostLabel}
+            onChange={(e) => setNewCostLabel(e.target.value)}
+            placeholder={t('e.g. Doomscrolling, food delivery')}
+            className={inputCls}
+          />
+          <div className="grid grid-cols-[1fr_1fr_auto] gap-2">
+            <input
+              id="cost-minutes"
+              type="number"
+              min={0}
+              max={1440}
+              value={newCostMinutes}
+              onChange={(e) => setNewCostMinutes(parseInt(e.target.value) || 0)}
+              placeholder={t('min/day')}
+              title={t('Minutes per day')}
+              className={inputCls}
+            />
+            <input
+              id="cost-dollars"
+              type="number"
+              min={0}
+              value={newCostDollars}
+              onChange={(e) => setNewCostDollars(e.target.value === '' ? '' : parseInt(e.target.value) || 0)}
+              placeholder={t('$/month')}
+              title={t('Dollars per month, optional')}
+              className={inputCls}
+            />
+            <button type="button" onClick={handleAddCost} disabled={!newCostLabel.trim()} className={primaryBtn}>
+              {t('Add')}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className={card}>
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="text-[15px] font-semibold text-[var(--fg)]">{t('If nothing changes')}</h3>
+          <EditToggle
+            editing={editingTimeline}
+            hasContent={Boolean(df.oneYear || df.threeYears || df.tenYears)}
+            onEdit={() => setEditingTimeline(true)}
+            onSave={handleSaveTimeline}
+          />
+        </div>
+
+        {(
+          [
+            ['oneYear', oneYear, setOneYear, df.oneYear],
+            ['threeYears', threeYears, setThreeYears, df.threeYears],
+            ['tenYears', tenYears, setTenYears, df.tenYears],
+          ] as const
+        ).map(([key, value, setter, saved]) => (
+          <div key={key} className="space-y-1.5">
+            <label htmlFor={`df-${key}`} className="block text-sm text-[var(--fg-muted)]">
+              {t(TIMELINE_PROMPTS[key].label)}
+            </label>
+            {editingTimeline ? (
+              <textarea
+                id={`df-${key}`}
+                value={value}
+                onChange={(e) => setter(e.target.value)}
+                rows={3}
+                placeholder={t(TIMELINE_PROMPTS[key].placeholder)}
+                className={textareaCls}
+              />
+            ) : saved ? (
+              <p className="text-[15px] text-[var(--fg)] leading-relaxed">{saved}</p>
+            ) : (
+              <p className="text-sm text-[var(--fg-subtle)]">{t(TIMELINE_PROMPTS[key].placeholder)}</p>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <div className={card}>
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h3 className="text-[15px] font-semibold text-[var(--fg)]">{t('A letter from your default self')}</h3>
+            <p className="text-sm text-[var(--fg-muted)] mt-1">{t('Written ten years down the default path. Read it when you feel the pull to postpone.')}</p>
+          </div>
+          <EditToggle
+            editing={editingLetter}
+            hasContent={Boolean(df.letterFromDefaultSelf)}
+            onEdit={() => {
+              if (!letter.trim()) setLetter(t(LETTER_TEMPLATE));
+              setEditingLetter(true);
+            }}
+            onSave={handleSaveLetter}
+          />
+        </div>
+        {editingLetter ? (
+          <textarea id="df-letter" value={letter} onChange={(e) => setLetter(e.target.value)} rows={12} className={textareaCls} />
+        ) : df.letterFromDefaultSelf ? (
+          <pre className="whitespace-pre-wrap font-sans text-[15px] text-[var(--fg)] leading-relaxed">{df.letterFromDefaultSelf}</pre>
+        ) : (
+          <pre className="whitespace-pre-wrap font-sans text-sm text-[var(--fg-subtle)] leading-relaxed">{t(LETTER_TEMPLATE)}</pre>
+        )}
+      </div>
+
+      <div className={card}>
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="text-[15px] font-semibold text-[var(--fg)]">{t('Your answers')}</h3>
+          <span className="text-sm text-[var(--fg-muted)] shrink-0">{answeredAllowing.length} / 8</span>
+        </div>
+        {answeredAllowing.length === 0 ? (
+          <div className="space-y-3">
+            <p className="text-sm text-[var(--fg-muted)]">{t('You have not answered the eight questions yet.')}</p>
+            <button type="button" onClick={() => setActiveRoute('/two-futures')} className={secondaryBtn}>
+              {t('Answer them')}
+            </button>
+          </div>
+        ) : (
+          <div className="divide-y divide-[var(--border)] max-h-[420px] overflow-y-auto">
+            {answeredAllowing.map(([id, answer]) => (
+              <div key={id} className="py-3 text-sm">
+                <div className="text-xs text-[var(--fg-muted)]">{ALLOWING_TITLES[id] ? t(ALLOWING_TITLES[id]) : id}</div>
+                <div className="text-[var(--fg)] mt-0.5 leading-relaxed">{answer}</div>
               </div>
             ))}
           </div>
         )}
-      </Card>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Cost of drift */}
-        <Card padding="lg" className="space-y-4 bg-[var(--bg-elevated)]">
-          <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
-            <div className="flex items-center gap-2">
-              <Hourglass className="w-4 h-4 text-[#9A8F86]" />
-              <h3 className="text-sm font-bold text-[var(--fg)]">{t('The Cost of Drift')}</h3>
-            </div>
-            <Badge variant="subtle">{t('Quiet math')}</Badge>
-          </div>
-          <p className="text-[11px] text-[var(--fg-muted)]">
-            {t('List the default habits that eat your days. The numbers are not a judgment — they are the invoice the default future sends every decade.')}
-          </p>
-
-          {costs.length > 0 && (
-            <div className="space-y-1.5">
-              {costs.map((c) => {
-                const fd = formatDays(c.minutesPerDay);
-                return (
-                  <div
-                    key={c.id}
-                    className="flex items-center justify-between gap-3 px-3 py-2 bg-[var(--bg-muted)]/60 rounded-[var(--radius-sm)] text-xs"
-                  >
-                    <div className="min-w-0">
-                      <div className="font-semibold text-[var(--fg)] truncate">{c.label}</div>
-                      <div className="text-[var(--fg-muted)]">
-                        {t('{n} min/day →', { n: c.minutesPerDay })} <strong>{t('{n} full days', { n: fd.daysPerYear.toFixed(1) })}</strong> {t('a year,')}{' '}
-                        <strong>{t('{n} months', { n: (fd.daysPerDecade / 30.4).toFixed(1) })}</strong> {t('a decade')}
-                        {c.dollarsPerMonth ? (
-                          <>
-                            {' '}
-                            · ${c.dollarsPerMonth}{t(' / month')} → <strong>${(c.dollarsPerMonth * 120).toLocaleString()}</strong> {t('in 10 years')}
-                          </>
-                        ) : null}
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveCost(c.id)}
-                      className="p-1.5 text-[var(--fg-subtle)] hover:text-red-500 cursor-pointer shrink-0"
-                      title={t('Remove')}
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          {costs.length > 0 && (
-            <div className="grid grid-cols-3 gap-2 text-center">
-              <div className="p-3 bg-[#9A8F86]/10 border border-[#9A8F86]/30 rounded-[var(--radius-sm)]">
-                <div className="text-lg font-bold font-display text-[var(--fg)]">{totals.hoursPerYear.toFixed(0)}h</div>
-                <div className="text-[10px] uppercase tracking-wider text-[var(--fg-muted)]">{t('per year')}</div>
-              </div>
-              <div className="p-3 bg-[#9A8F86]/10 border border-[#9A8F86]/30 rounded-[var(--radius-sm)]">
-                <div className="text-lg font-bold font-display text-[var(--fg)]">
-                  {t('{n} mo', { n: (totals.daysPerDecade / 30.4).toFixed(1) })}
-                </div>
-                <div className="text-[10px] uppercase tracking-wider text-[var(--fg-muted)]">{t('per decade')}</div>
-              </div>
-              <div className="p-3 bg-[#9A8F86]/10 border border-[#9A8F86]/30 rounded-[var(--radius-sm)]">
-                <div className="text-lg font-bold font-display text-[var(--fg)]">
-                  {decadeDollars > 0 ? `$${Math.round(decadeDollars / 1000)}k` : '—'}
-                </div>
-                <div className="text-[10px] uppercase tracking-wider text-[var(--fg-muted)]">{t('10-yr spend')}</div>
-              </div>
-            </div>
-          )}
-
-          <div className="pt-3 border-t border-[var(--border)] space-y-2">
-            <div className="grid grid-cols-1 sm:grid-cols-[1fr_90px_90px] gap-2">
-              <Input
-                id="cost-label"
-                value={newCostLabel}
-                onChange={(e) => setNewCostLabel(e.target.value)}
-                placeholder={t('e.g. Doomscrolling, late-night TV, food delivery')}
-              />
-              <Input
-                id="cost-minutes"
-                type="number"
-                min={0}
-                max={1440}
-                value={newCostMinutes}
-                onChange={(e) => setNewCostMinutes(parseInt(e.target.value) || 0)}
-                placeholder={t('min/day')}
-                title={t('Minutes per day')}
-              />
-              <Input
-                id="cost-dollars"
-                type="number"
-                min={0}
-                value={newCostDollars}
-                onChange={(e) => setNewCostDollars(e.target.value === '' ? '' : parseInt(e.target.value) || 0)}
-                placeholder={t('$/mo')}
-                title={t('Dollars per month (optional)')}
-              />
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] text-[var(--fg-subtle)]">{t('minutes per day · optional $ per month')}</span>
-              <Button variant="secondary" size="sm" icon={Plus} onClick={handleAddCost} disabled={!newCostLabel.trim()}>
-                {t('Add cost')}
-              </Button>
-            </div>
-          </div>
-        </Card>
-
-        {/* Timeline if nothing changes */}
-        <Card padding="lg" className="space-y-4 bg-[var(--bg-elevated)]">
-          <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-[#9A8F86]" />
-              <h3 className="text-sm font-bold text-[var(--fg)]">{t('If Nothing Changes — Timeline')}</h3>
-            </div>
-            {!editingTimeline ? (
-              <Button variant="outline" size="sm" icon={Edit2} onClick={() => setEditingTimeline(true)}>
-                {df.oneYear || df.threeYears || df.tenYears ? t('Edit') : t('Write it')}
-              </Button>
-            ) : (
-              <Button variant="accent" size="sm" icon={Check} onClick={handleSaveTimeline}>
-                {t('Save')}
-              </Button>
-            )}
-          </div>
-
-          {(
-            [
-              ['oneYear', oneYear, setOneYear, df.oneYear],
-              ['threeYears', threeYears, setThreeYears, df.threeYears],
-              ['tenYears', tenYears, setTenYears, df.tenYears],
-            ] as const
-          ).map(([key, value, setter, saved]) => (
-            <div key={key} className="space-y-1.5">
-              <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#9A8F86]">
-                {t(TIMELINE_PROMPTS[key].label)}
-              </span>
-              {editingTimeline ? (
-                <Textarea
-                  id={`df-${key}`}
-                  value={value}
-                  onChange={(e) => setter(e.target.value)}
-                  rows={3}
-                  placeholder={t(TIMELINE_PROMPTS[key].placeholder)}
-                />
-              ) : saved ? (
-                <p className="text-sm italic font-serif text-[var(--fg)] bg-[var(--bg-muted)] p-3 rounded-[var(--radius-sm)] border border-[var(--border)] leading-relaxed">
-                  {saved}
-                </p>
-              ) : (
-                <p className="text-xs text-[var(--fg-subtle)] italic">{t(TIMELINE_PROMPTS[key].placeholder)}</p>
-              )}
-            </div>
-          ))}
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Letter from default self */}
-        <Card padding="lg" className="space-y-4 bg-[var(--bg-elevated)]">
-          <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
-            <div className="flex items-center gap-2">
-              <Mail className="w-4 h-4 text-[#9A8F86]" />
-              <h3 className="text-sm font-bold text-[var(--fg)]">{t('A Letter From Your Default Self')}</h3>
-            </div>
-            {!editingLetter ? (
-              <Button
-                variant="outline"
-                size="sm"
-                icon={Edit2}
-                onClick={() => {
-                  if (!letter.trim()) setLetter(t(LETTER_TEMPLATE));
-                  setEditingLetter(true);
-                }}
-              >
-                {df.letterFromDefaultSelf ? t('Edit') : t('Write it')}
-              </Button>
-            ) : (
-              <Button variant="accent" size="sm" icon={Check} onClick={handleSaveLetter}>
-                {t('Save')}
-              </Button>
-            )}
-          </div>
-          <p className="text-[11px] text-[var(--fg-muted)]">
-            {t('Written from ten years down the default path. Read it when you feel the pull to postpone.')}
-          </p>
-          {editingLetter ? (
-            <Textarea id="df-letter" value={letter} onChange={(e) => setLetter(e.target.value)} rows={12} />
-          ) : df.letterFromDefaultSelf ? (
-            <pre className="whitespace-pre-wrap text-sm font-serif italic text-[var(--fg)] bg-[var(--bg-muted)] p-4 rounded-[var(--radius-md)] border border-[var(--border)] leading-relaxed">
-              {df.letterFromDefaultSelf}
-            </pre>
-          ) : (
-            <pre className="whitespace-pre-wrap text-xs font-serif italic text-[var(--fg-subtle)] leading-relaxed">
-              {t(LETTER_TEMPLATE)}
-            </pre>
-          )}
-        </Card>
-
-        {/* All recorded observations */}
-        <Card padding="lg" className="space-y-4 bg-[var(--bg-elevated)]">
-          <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
-            <div className="flex items-center gap-2">
-              <Eye className="w-4 h-4 text-[#9A8F86]" />
-              <h3 className="text-sm font-bold text-[var(--fg)]">{t('Recorded Observations')}</h3>
-            </div>
-            <Badge variant="subtle">{t('{n} / 8 answered', { n: answeredAllowing.length })}</Badge>
-          </div>
-          {answeredAllowing.length === 0 ? (
-            <div className="text-xs text-[var(--fg-muted)] space-y-2">
-              <p>{t('You haven\'t answered the eight "life you\'re allowing" questions yet.')}</p>
-              <Button variant="secondary" size="sm" onClick={() => setActiveRoute('/two-futures')}>
-                <AlertTriangle className="w-3.5 h-3.5 mr-1" /> {t('Open the Public Compass to answer them')}
-              </Button>
-            </div>
-          ) : (
-            <div className="space-y-2 text-xs text-[var(--fg-muted)] max-h-[420px] overflow-y-auto pr-1">
-              {answeredAllowing.map(([id, answer]) => (
-                <div key={id} className="p-2.5 bg-[var(--bg-muted)]/60 rounded-[var(--radius-sm)]">
-                  <span className="font-semibold text-[var(--fg)] block">{ALLOWING_TITLES[id] ? t(ALLOWING_TITLES[id]) : id}</span>
-                  {answer}
-                </div>
-              ))}
-            </div>
-          )}
-        </Card>
       </div>
     </div>
   );

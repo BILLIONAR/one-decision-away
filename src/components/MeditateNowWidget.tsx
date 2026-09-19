@@ -1,7 +1,7 @@
 import React from 'react';
 import { useApp } from '../store/useApp';
-import { Card, Button } from './ui';
-import { Headphones, Play, ArrowRight } from 'lucide-react';
+import { Card } from './ui';
+import { Play, ArrowRight } from 'lucide-react';
 import { GUIDED_MEDITATIONS, GuidedMeditation } from '../data/guidedMeditations';
 import { useT, N_ } from '../i18n';
 
@@ -31,23 +31,18 @@ export const MeditateNowWidget: React.FC = () => {
     });
 
   return (
-    <Card padding="md" className="space-y-3 bg-[var(--bg-elevated)]">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-[var(--color-sage)]/15 text-[var(--color-sage)] flex items-center justify-center">
-            <Headphones className="w-4 h-4" />
-          </div>
-          <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--fg)]">{t('Meditate Now')}</h3>
-            <p className="text-[11px] text-[var(--fg-muted)]">{t('{greeting} · voice-guided', { greeting: t(greeting) })}</p>
-          </div>
+    <Card padding="md" className="space-y-4">
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <h3 className="text-[15px] font-semibold text-[var(--fg)]">{t('Meditate')}</h3>
+          <p className="text-[13px] text-[var(--fg-muted)] truncate">{t(greeting)}</p>
         </div>
         <button
           type="button"
           onClick={() => setActiveRoute('/app/missions')}
-          className="text-[11px] font-semibold text-[var(--fg-muted)] hover:text-[var(--fg)] flex items-center gap-1 cursor-pointer"
+          className="h-9 px-2 text-[13px] font-medium text-[var(--fg-muted)] hover:text-[var(--fg)] flex items-center gap-1 cursor-pointer shrink-0"
         >
-          {t('All sessions')} <ArrowRight className="w-3 h-3" />
+          {t('All sessions')} <ArrowRight className="w-4 h-4" strokeWidth={1.8} />
         </button>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -56,16 +51,15 @@ export const MeditateNowWidget: React.FC = () => {
             key={m.id}
             type="button"
             onClick={() => start(m)}
-            className="text-left p-3 rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--bg)] hover:border-[var(--color-sage)] transition-all cursor-pointer group"
+            className="text-left p-4 rounded-[var(--radius-sm)] bg-[var(--bg)] hover:bg-[var(--bg-inset)] transition-colors cursor-pointer min-h-[44px]"
           >
-            <div className="flex items-center justify-between">
-              <span className="text-lg leading-none">{m.emoji}</span>
-              <span className="text-[10px] font-mono text-[var(--fg-subtle)]">{t('{n} min', { n: m.durationMinutes })}</span>
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[15px] font-semibold text-[var(--fg)] truncate">{t(m.title)}</span>
+              <span className="text-[12px] text-[var(--fg-subtle)] shrink-0">{t('{n} min', { n: m.durationMinutes })}</span>
             </div>
-            <div className="text-xs font-bold text-[var(--fg)] mt-1.5">{t(m.title)}</div>
-            <div className="text-[11px] italic text-[var(--fg-subtle)]">{t(m.tagline)}</div>
-            <div className="mt-2 text-[10px] font-bold uppercase tracking-wider text-[var(--color-sage)] flex items-center gap-1 opacity-70 group-hover:opacity-100">
-              <Play className="w-3 h-3 fill-current" /> {t('Start')}
+            <div className="text-[13px] text-[var(--fg-muted)] mt-0.5">{t(m.tagline)}</div>
+            <div className="mt-3 text-[13px] font-medium text-[var(--accent)] flex items-center gap-1.5">
+              <Play className="w-4 h-4" strokeWidth={1.8} /> {t('Start')}
             </div>
           </button>
         ))}

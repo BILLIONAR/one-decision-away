@@ -1,26 +1,32 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useApp } from '../store/useApp';
-import { Button, Card, Field, Input, Textarea, Progress, Disclaimer } from '../components/ui';
-import { ArrowLeft, ArrowRight, Download, Share2, Sparkles, CheckCircle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Download, Share2 } from 'lucide-react';
 import { useT, N_ } from '../i18n';
 
 const ALLOWING_QUESTIONS = [
-  { id: 'q1', title: N_('1. Quiet Dissatisfaction'), prompt: N_('What dissatisfaction have you quietly agreed to live with?') },
-  { id: 'q2', title: N_('2. Unchanged Complaints'), prompt: N_('What do you complain about but never actually take action to change?') },
-  { id: 'q3', title: N_('3. A Tuesday in 5 Years'), prompt: N_('If nothing changes, describe an ordinary Tuesday five years from now — wake-up to lights-out.') },
-  { id: 'q4', title: N_('4. Closed Doors in 10 Years'), prompt: N_('Ten years on this default path — which doors have quietly closed for good?') },
-  { id: 'q5', title: N_('5. Late Life Regret'), prompt: N_('At the end of your life, what would you deeply regret not trying?') },
-  { id: 'q6', title: N_('6. Identity to Release'), prompt: N_('Which outdated version of yourself would you need to let go of to change?') },
-  { id: 'q7', title: N_('7. The Shield'), prompt: N_('What fear, discomfort, or judgment are your current avoidance habits protecting you from?') },
-  { id: 'q8', title: N_('8. The Real Price'), prompt: N_('What is that protection actually costing you in time, dignity, and potential?') },
+  { id: 'q1', title: N_('Quiet dissatisfaction'), prompt: N_('What dissatisfaction have you quietly agreed to live with?') },
+  { id: 'q2', title: N_('Unchanged complaints'), prompt: N_('What do you complain about but never actually take action to change?') },
+  { id: 'q3', title: N_('A Tuesday in five years'), prompt: N_('If nothing changes, describe an ordinary Tuesday five years from now, from waking up to lights out.') },
+  { id: 'q4', title: N_('Closed doors in ten years'), prompt: N_('Ten years on this path, which doors have quietly closed for good?') },
+  { id: 'q5', title: N_('Late regret'), prompt: N_('At the end of your life, what would you deeply regret not trying?') },
+  { id: 'q6', title: N_('Identity to release'), prompt: N_('Which outdated version of yourself would you need to let go of to change?') },
+  { id: 'q7', title: N_('The shield'), prompt: N_('What fear, discomfort or judgment are your avoidance habits protecting you from?') },
+  { id: 'q8', title: N_('The real price'), prompt: N_('What is that protection actually costing you in time, dignity and potential?') },
 ];
 
 const BUILDING_QUESTIONS = [
-  { id: 'b1', title: N_('1. A Day in the Built Life'), prompt: N_('Describe an ordinary day in the life you want, three years from now.') },
-  { id: 'b2', title: N_('2. Reputation & Mastery'), prompt: N_('What are you known for, and by whom?') },
-  { id: 'b3', title: N_('3. Sovereignty & Money'), prompt: N_('What does financial autonomy let you say "no" to?') },
-  { id: 'b4', title: N_('4. Inner Circle'), prompt: N_('Who is around you, and how do you show up for them?') },
+  { id: 'b1', title: N_('A day in the built life'), prompt: N_('Describe an ordinary day in the life you want, three years from now.') },
+  { id: 'b2', title: N_('Reputation'), prompt: N_('What are you known for, and by whom?') },
+  { id: 'b3', title: N_('Money'), prompt: N_('What does financial autonomy let you say no to?') },
+  { id: 'b4', title: N_('Inner circle'), prompt: N_('Who is around you, and how do you show up for them?') },
 ];
+
+const primaryBtn =
+  'h-12 px-5 inline-flex items-center justify-center gap-2 rounded-[var(--radius-sm)] bg-[var(--fg)] text-[var(--bg)] font-semibold text-[15px]';
+const secondaryBtn =
+  'h-12 px-5 inline-flex items-center justify-center gap-2 rounded-[var(--radius-sm)] border border-[var(--border-strong)] bg-transparent text-[var(--fg)] font-medium text-[15px]';
+const textareaCls =
+  'w-full p-3 bg-[var(--bg)] text-[var(--fg)] border border-[var(--border)] rounded-[var(--radius-sm)] text-[15px] focus:outline-none focus:border-[var(--fg)] resize-y min-h-[120px] leading-relaxed placeholder:text-[var(--fg-subtle)]';
 
 export const PublicTwoFutures: React.FC = () => {
   const { data, saveTwoFutures, setActiveRoute } = useApp();
@@ -72,113 +78,81 @@ export const PublicTwoFutures: React.FC = () => {
     canvas.width = w;
     canvas.height = h;
 
-    // Background
-    ctx.fillStyle = '#F7F6F2';
+    const FG = '#111111';
+    const MUTED = '#6F6F6C';
+    const ACCENT = '#1F5F3F';
+    const LINE = '#C9C9C6';
+    const FONT = 'Geist, system-ui, sans-serif';
+
+    ctx.fillStyle = '#FFFFFF';
     ctx.fillRect(0, 0, w, h);
 
-    // Frame
-    ctx.strokeStyle = '#E2DFD6';
-    ctx.lineWidth = 4;
-    ctx.strokeRect(50, 50, w - 100, h - 100);
+    ctx.fillStyle = ACCENT;
+    ctx.font = `600 28px ${FONT}`;
+    ctx.textAlign = 'left';
+    ctx.fillText('One Decision Away', 120, 160);
 
-    // Inner Card
-    ctx.fillStyle = '#FFFFFF';
-    ctx.beginPath();
-    ctx.roundRect(80, 80, w - 160, h - 160, 28);
-    ctx.fill();
-    ctx.strokeStyle = '#CFCBC0';
-    ctx.lineWidth = 2;
-    ctx.stroke();
+    ctx.fillStyle = MUTED;
+    ctx.font = `400 22px ${FONT}`;
+    ctx.fillText(t('Two futures'), 120, 200);
 
-    // Brand Tag
-    ctx.fillStyle = '#708879';
-    ctx.font = '600 28px Inter, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('ONE DECISION AWAY', w / 2, 170);
-
-    ctx.fillStyle = '#8A969C';
-    ctx.font = '400 22px Inter, sans-serif';
-    ctx.fillText(t('by AurelyStudio · Two Futures Compass'), w / 2, 210);
-
-    // Divider
-    ctx.strokeStyle = '#E2DFD6';
+    ctx.strokeStyle = LINE;
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(140, 250);
-    ctx.lineTo(w - 140, 250);
+    ctx.moveTo(120, 250);
+    ctx.lineTo(w - 120, 250);
     ctx.stroke();
 
-    let currentY = 320;
+    let currentY = 330;
 
-    // 1. The Life You're Allowing (Anti-Vision)
-    if (includeAntiVisionOnCard) {
-      ctx.fillStyle = '#9A8F86';
-      ctx.font = '600 22px Inter, sans-serif';
-      ctx.textAlign = 'left';
-      ctx.fillText(t("THE LIFE YOU'RE ALLOWING (ANTI-VISION)"), 140, currentY);
-
-      currentY += 40;
-      ctx.fillStyle = '#263238';
-      ctx.font = 'italic 34px Fraunces, Georgia, serif';
-
-      // Multi-line wrap
-      const words = t(antiVision).split(' ');
+    const wrap = (text: string, lineHeight: number) => {
+      const words = text.split(' ');
       let line = '';
       for (const word of words) {
         const test = line + word + ' ';
-        if (ctx.measureText(test).width > w - 280) {
-          ctx.fillText(line, 140, currentY);
+        if (ctx.measureText(test).width > w - 240) {
+          ctx.fillText(line, 120, currentY);
           line = word + ' ';
-          currentY += 46;
+          currentY += lineHeight;
         } else {
           line = test;
         }
       }
-      ctx.fillText(line, 140, currentY);
+      ctx.fillText(line, 120, currentY);
+    };
+
+    if (includeAntiVisionOnCard) {
+      ctx.fillStyle = MUTED;
+      ctx.font = `500 22px ${FONT}`;
+      ctx.fillText(t('If nothing changes'), 120, currentY);
+
+      currentY += 50;
+      ctx.fillStyle = FG;
+      ctx.font = `500 34px ${FONT}`;
+      wrap(t(antiVision), 46);
 
       currentY += 80;
-      ctx.strokeStyle = '#E2DFD6';
+      ctx.strokeStyle = LINE;
       ctx.beginPath();
-      ctx.moveTo(140, currentY);
-      ctx.lineTo(w - 140, currentY);
+      ctx.moveTo(120, currentY);
+      ctx.lineTo(w - 120, currentY);
       ctx.stroke();
-      currentY += 60;
+      currentY += 70;
     }
 
-    // 2. The Life You're Building (Vision)
-    ctx.fillStyle = '#708879';
-    ctx.font = '600 22px Inter, sans-serif';
+    ctx.fillStyle = ACCENT;
+    ctx.font = `500 22px ${FONT}`;
+    ctx.fillText(t('What I am building'), 120, currentY);
+
+    currentY += 50;
+    ctx.fillStyle = FG;
+    ctx.font = `600 38px ${FONT}`;
+    wrap(t(vision), 50);
+
+    ctx.fillStyle = MUTED;
+    ctx.font = `400 20px ${FONT}`;
     ctx.textAlign = 'left';
-    ctx.fillText(t("THE LIFE YOU'RE BUILDING (VISION)"), 140, currentY);
-
-    currentY += 40;
-    ctx.fillStyle = '#263238';
-    ctx.font = 'bold 36px Fraunces, Georgia, serif';
-
-    const vWords = t(vision).split(' ');
-    let vLine = '';
-    for (const word of vWords) {
-      const test = vLine + word + ' ';
-      if (ctx.measureText(test).width > w - 280) {
-        ctx.fillText(vLine, 140, currentY);
-        vLine = word + ' ';
-        currentY += 48;
-      } else {
-        vLine = test;
-      }
-    }
-    ctx.fillText(vLine, 140, currentY);
-
-    // Bottom Badge
-    ctx.fillStyle = '#EFEDE7';
-    ctx.beginPath();
-    ctx.roundRect(140, h - 230, w - 280, 80, 16);
-    ctx.fill();
-
-    ctx.fillStyle = '#5C6A72';
-    ctx.font = '600 20px Inter, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(t('DESIGNED ON ONEDECISIONAWAY.APP'), w / 2, h - 180);
+    ctx.fillText('onedecisionaway.app', 120, h - 120);
 
     setCardImage(canvas.toDataURL('image/png'));
   }, [step, antiVision, vision, includeAntiVisionOnCard, t]);
@@ -197,7 +171,7 @@ export const PublicTwoFutures: React.FC = () => {
     if (!cardImage) return;
     const a = document.createElement('a');
     a.href = cardImage;
-    a.download = 'two-futures-compass.png';
+    a.download = 'two-futures.png';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -210,8 +184,8 @@ export const PublicTwoFutures: React.FC = () => {
         const blob = await (await fetch(cardImage)).blob();
         const file = new File([blob], 'two-futures.png', { type: 'image/png' });
         await navigator.share({
-          title: t('My Two Futures — One Decision Away'),
-          text: t('My Vision: {vision}', { vision: t(vision) }),
+          title: t('My two futures'),
+          text: t('My vision: {vision}', { vision: t(vision) }),
           files: [file],
         });
       } else {
@@ -222,90 +196,78 @@ export const PublicTwoFutures: React.FC = () => {
     }
   };
 
+  const NavRow: React.FC<{ onNext: () => void; nextLabel: string }> = ({ onNext, nextLabel }) => (
+    <div className="flex justify-between items-center pt-2">
+      <button type="button" onClick={handlePrev} className="h-12 px-3 text-[15px] text-[var(--fg-muted)]">
+        {t('Back')}
+      </button>
+      <button type="button" onClick={onNext} className={primaryBtn}>
+        {nextLabel}
+        <ArrowRight className="w-[18px] h-[18px]" strokeWidth={1.8} />
+      </button>
+    </div>
+  );
+
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] flex flex-col justify-between p-4 sm:p-8">
-      {/* Top Bar */}
-      <header className="max-w-3xl mx-auto w-full flex items-center justify-between pb-6 border-b border-[var(--border)]">
-        <div>
-          <button
-            onClick={() => setActiveRoute('/')}
-            className="text-xs font-semibold text-[var(--fg-muted)] hover:text-[var(--fg)] flex items-center gap-1 cursor-pointer"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" /> {t('Back to Home')}
-          </button>
-          <span className="font-display font-bold text-lg text-[var(--fg)] block mt-1">
-            {t('Two Futures Compass')}
-          </span>
-        </div>
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] flex flex-col px-4 py-5 sm:px-8">
+      <header className="max-w-2xl mx-auto w-full flex items-center justify-between gap-4">
+        <button
+          type="button"
+          onClick={() => setActiveRoute('/')}
+          className="h-11 -ml-2 px-2 text-sm text-[var(--fg-muted)] flex items-center gap-1.5"
+        >
+          <ArrowLeft className="w-[18px] h-[18px]" strokeWidth={1.8} /> {t('Home')}
+        </button>
 
         {step > 0 && step <= 13 && (
-          <div className="text-right">
-            <span className="text-xs text-[var(--fg-subtle)]">{t('Step {n} of 13', { n: step })}</span>
-            <div className="w-24 sm:w-32 mt-1">
-              <Progress value={(step / 13) * 100} variant="sage" />
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-[var(--fg-muted)]">{step} / 13</span>
+            <div className="w-24 h-1.5 bg-[var(--border-strong)] rounded-full overflow-hidden">
+              <div className="h-full bg-[var(--accent)] transition-all" style={{ width: `${(step / 13) * 100}%` }} />
             </div>
           </div>
         )}
       </header>
 
-      {/* Main Container */}
       <main className="max-w-2xl mx-auto w-full py-8 sm:py-12 my-auto">
-        {/* Step 0: Intro */}
         {step === 0 && (
-          <Card padding="lg" className="space-y-6 text-center">
-            <div className="w-12 h-12 rounded-full bg-[var(--success-soft)] text-[var(--color-sage)] mx-auto flex items-center justify-center">
-              <Sparkles className="w-6 h-6" />
-            </div>
-
+          <div className="space-y-6">
             <div className="space-y-2">
-              <h1 className="text-3xl sm:text-4xl font-bold font-display text-[var(--fg)]">
-                {t('The Two Futures Exercise')}
-              </h1>
-              <p className="text-sm text-[var(--fg-muted)] leading-relaxed max-w-lg mx-auto">
-                {t("Lasting discipline doesn't come from willpower. It comes from looking directly at the price of inaction, and defining the exact life you are building instead.")}
+              <h1 className="text-3xl font-semibold tracking-tight text-[var(--fg)]">{t('Two futures')}</h1>
+              <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed">
+                {t('Discipline does not come from willpower. It comes from looking at the cost of changing nothing, and naming the life you want instead.')}
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left pt-2">
-              <div className="p-4 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)]">
-                <span className="text-xs font-bold uppercase text-[#9A8F86]">{t('Part 1')}</span>
-                <div className="font-bold text-sm text-[var(--fg)] mt-1">{t('The Default Future')}</div>
-                <p className="text-xs text-[var(--fg-muted)] mt-1">{t('What happens if you change nothing for 5 to 10 years.')}</p>
+            <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] divide-y divide-[var(--border)]">
+              <div className="px-4 py-3 min-h-[56px]">
+                <div className="text-[15px] font-medium text-[var(--fg)]">{t('Part 1. If nothing changes')}</div>
+                <div className="text-sm text-[var(--fg-muted)]">{t('Eight questions. About five minutes.')}</div>
               </div>
-
-              <div className="p-4 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)]">
-                <span className="text-xs font-bold uppercase text-[var(--color-sage)]">{t('Part 2')}</span>
-                <div className="font-bold text-sm text-[var(--fg)] mt-1">{t('The Built Future')}</div>
-                <p className="text-xs text-[var(--fg-muted)] mt-1">{t('The daily reality you are actively working toward.')}</p>
+              <div className="px-4 py-3 min-h-[56px]">
+                <div className="text-[15px] font-medium text-[var(--fg)]">{t('Part 2. What you are building')}</div>
+                <div className="text-sm text-[var(--fg-muted)]">{t('Four questions. Then two sentences.')}</div>
               </div>
             </div>
 
-            <Button variant="accent" size="lg" onClick={() => setStep(1)} className="w-full sm:w-auto">
-              {t('Begin Exercise (5 mins)')}
-            </Button>
-          </Card>
+            <button type="button" onClick={() => setStep(1)} className={`${primaryBtn} w-full`}>
+              {t('Start')}
+            </button>
+          </div>
         )}
 
-        {/* Steps 1..8: The Life You're Allowing */}
         {step >= 1 && step <= 8 && (
-          <Card padding="lg" className="space-y-6">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#9A8F86]">
-                {t("The Life You're Allowing")}
-              </span>
-              <span className="text-xs text-[var(--fg-subtle)]">{t('Question {n} of 8', { n: step })}</span>
+          <div className="space-y-5">
+            <div className="text-sm text-[var(--fg-muted)]">
+              {t('If nothing changes')} · {step} / 8
             </div>
-
-            <div className="space-y-2">
-              <h2 className="text-2xl font-bold font-display text-[var(--fg)]">
-                {t(ALLOWING_QUESTIONS[step - 1].prompt)}
-              </h2>
-              <p className="text-xs text-[var(--fg-muted)]">
-                {t('Be radically honest. Nobody else sees these answers unless you choose to share your summary card.')}
-              </p>
-            </div>
-
-            <Textarea
+            <h2 className="text-2xl font-semibold tracking-tight text-[var(--fg)] leading-snug">
+              {t(ALLOWING_QUESTIONS[step - 1].prompt)}
+            </h2>
+            <p className="text-sm text-[var(--fg-muted)]">
+              {t('Be honest. Nobody sees these answers unless you share your card.')}
+            </p>
+            <textarea
               id={`allowing-${ALLOWING_QUESTIONS[step - 1].id}`}
               value={allowingAnswers[ALLOWING_QUESTIONS[step - 1].id] || ''}
               onChange={(e) =>
@@ -314,41 +276,26 @@ export const PublicTwoFutures: React.FC = () => {
                   [ALLOWING_QUESTIONS[step - 1].id]: e.target.value,
                 })
               }
-              placeholder={t('Write your honest observation here...')}
+              placeholder={t('Write here')}
               rows={4}
+              className={textareaCls}
             />
-
-            <div className="flex justify-between items-center pt-4 border-t border-[var(--border)]">
-              <Button variant="ghost" size="sm" onClick={handlePrev}>
-                {t('Back')}
-              </Button>
-              <Button variant="primary" size="md" onClick={handleNext} icon={ArrowRight} iconPosition="right">
-                {t('Next')}
-              </Button>
-            </div>
-          </Card>
+            <NavRow onNext={handleNext} nextLabel={t('Next')} />
+          </div>
         )}
 
-        {/* Steps 9..12: The Life You're Building */}
         {step >= 9 && step <= 12 && (
-          <Card padding="lg" className="space-y-6">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-sage)]">
-                {t("The Life You're Building")}
-              </span>
-              <span className="text-xs text-[var(--fg-subtle)]">{t('Question {n} of 4', { n: step - 8 })}</span>
+          <div className="space-y-5">
+            <div className="text-sm text-[var(--fg-muted)]">
+              {t('What you are building')} · {step - 8} / 4
             </div>
-
-            <div className="space-y-2">
-              <h2 className="text-2xl font-bold font-display text-[var(--fg)]">
-                {t(BUILDING_QUESTIONS[step - 9].prompt)}
-              </h2>
-              <p className="text-xs text-[var(--fg-muted)]">
-                {t('Describe specifics: sensory details, rhythms, boundaries, and concrete freedom.')}
-              </p>
-            </div>
-
-            <Textarea
+            <h2 className="text-2xl font-semibold tracking-tight text-[var(--fg)] leading-snug">
+              {t(BUILDING_QUESTIONS[step - 9].prompt)}
+            </h2>
+            <p className="text-sm text-[var(--fg-muted)]">
+              {t('Be specific. Details, rhythms, boundaries.')}
+            </p>
+            <textarea
               id={`building-${BUILDING_QUESTIONS[step - 9].id}`}
               value={buildingAnswers[BUILDING_QUESTIONS[step - 9].id] || ''}
               onChange={(e) =>
@@ -357,137 +304,103 @@ export const PublicTwoFutures: React.FC = () => {
                   [BUILDING_QUESTIONS[step - 9].id]: e.target.value,
                 })
               }
-              placeholder={t('Describe your vision concretely...')}
+              placeholder={t('Write here')}
               rows={4}
+              className={textareaCls}
             />
-
-            <div className="flex justify-between items-center pt-4 border-t border-[var(--border)]">
-              <Button variant="ghost" size="sm" onClick={handlePrev}>
-                {t('Back')}
-              </Button>
-              <Button variant="primary" size="md" onClick={handleNext} icon={ArrowRight} iconPosition="right">
-                {t('Next')}
-              </Button>
-            </div>
-          </Card>
+            <NavRow onNext={handleNext} nextLabel={t('Next')} />
+          </div>
         )}
 
-        {/* Step 13: Synthesis Sentences */}
         {step === 13 && (
-          <Card padding="lg" className="space-y-6">
-            <div className="space-y-2 text-center">
-              <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-coral)]">
-                {t('Final Synthesis')}
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-bold font-display text-[var(--fg)]">
-                {t('Distill Your Two Futures')}
-              </h2>
-              <p className="text-xs text-[var(--fg-muted)] max-w-md mx-auto">
-                {t('Condense your answers into two clear, non-negotiable declarations.')}
-              </p>
+          <div className="space-y-5">
+            <div className="space-y-2">
+              <h2 className="text-2xl font-semibold tracking-tight text-[var(--fg)]">{t('Two sentences')}</h2>
+              <p className="text-sm text-[var(--fg-muted)]">{t('Condense your answers into two clear statements.')}</p>
             </div>
 
             <div className="space-y-4">
-              <Field
-                id="anti-vision-synthesis"
-                label={t('Anti-Vision: What you refuse to become')}
-                helper={t("Begin with 'I refuse to become someone who...'")}
-              >
-                <Textarea
+              <div className="space-y-1.5">
+                <label htmlFor="anti-vision-synthesis" className="block text-sm text-[var(--fg-muted)]">
+                  {t('I refuse to become someone who...')}
+                </label>
+                <textarea
                   id="anti-vision-synthesis"
                   value={antiVision}
                   onChange={(e) => setAntiVision(e.target.value)}
                   rows={3}
+                  className={textareaCls}
                 />
-              </Field>
-
-              <Field
-                id="vision-synthesis"
-                label={t('Vision: The life you are building')}
-                helper={t("Begin with 'I am building a life where...'")}
-              >
-                <Textarea
+              </div>
+              <div className="space-y-1.5">
+                <label htmlFor="vision-synthesis" className="block text-sm text-[var(--fg-muted)]">
+                  {t('I am building a life where...')}
+                </label>
+                <textarea
                   id="vision-synthesis"
                   value={vision}
                   onChange={(e) => setVision(e.target.value)}
                   rows={3}
+                  className={textareaCls}
                 />
-              </Field>
+              </div>
             </div>
 
-            <div className="flex justify-between items-center pt-4 border-t border-[var(--border)]">
-              <Button variant="ghost" size="sm" onClick={handlePrev}>
-                {t('Back')}
-              </Button>
-              <Button variant="accent" size="lg" onClick={() => setStep(14)}>
-                {t('Generate Shareable Card')}
-              </Button>
-            </div>
-          </Card>
+            <NavRow onNext={() => setStep(14)} nextLabel={t('Make card')} />
+          </div>
         )}
 
-        {/* Step 14: Result Card & Migration CTA */}
         {step === 14 && (
           <div className="space-y-6">
             <canvas ref={canvasRef} className="hidden" />
 
-            <div className="text-center space-y-2">
-              <h2 className="text-2xl sm:text-3xl font-bold font-display text-[var(--fg)]">
-                {t('Your Two Futures Compass')}
-              </h2>
-              <p className="text-xs text-[var(--fg-muted)]">
-                {t('Save or share this compass as an honest anchor. Private question answers remain on your device.')}
+            <div className="space-y-2">
+              <h2 className="text-2xl font-semibold tracking-tight text-[var(--fg)]">{t('Your card')}</h2>
+              <p className="text-sm text-[var(--fg-muted)]">
+                {t('Save or share it. Your answers stay on your device.')}
               </p>
             </div>
 
-            {/* Generated Canvas Preview */}
             {cardImage && (
-              <div className="p-2 bg-[var(--bg-muted)] border border-[var(--border)] rounded-[var(--radius-xl)] flex justify-center shadow-[var(--shadow-md)]">
+              <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-3 flex justify-center">
                 <img
                   src={cardImage}
-                  alt={t('Two Futures Compass')}
-                  className="max-h-[480px] object-contain rounded-[var(--radius-lg)]"
+                  alt={t('Two futures')}
+                  className="max-h-[480px] object-contain rounded-[var(--radius-sm)]"
                 />
               </div>
             )}
 
-            {/* Controls */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-              <label className="flex items-center gap-2 text-xs text-[var(--fg-muted)] cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={includeAntiVisionOnCard}
-                  onChange={(e) => setIncludeAntiVisionOnCard(e.target.checked)}
-                  className="rounded text-[var(--color-slate)]"
-                />
-                <span>{t('Include Anti-Vision on Card')}</span>
-              </label>
+            <label className="flex items-center gap-3 min-h-[44px] text-sm text-[var(--fg)] cursor-pointer">
+              <input
+                type="checkbox"
+                checked={includeAntiVisionOnCard}
+                onChange={(e) => setIncludeAntiVisionOnCard(e.target.checked)}
+                className="w-5 h-5 accent-[var(--accent)]"
+              />
+              <span>{t('Include the "if nothing changes" line')}</span>
+            </label>
 
-              <div className="flex items-center gap-2.5 w-full sm:w-auto">
-                <Button variant="outline" size="sm" icon={Download} onClick={handleDownload} className="flex-1 sm:flex-initial">
-                  {t('Download PNG')}
-                </Button>
-                <Button variant="secondary" size="sm" icon={Share2} onClick={handleShare} className="flex-1 sm:flex-initial">
-                  {t('Share Card')}
-                </Button>
-              </div>
+            <div className="grid grid-cols-2 gap-2">
+              <button type="button" onClick={handleDownload} className={secondaryBtn}>
+                <Download className="w-[18px] h-[18px]" strokeWidth={1.8} />
+                {t('Download')}
+              </button>
+              <button type="button" onClick={handleShare} className={secondaryBtn}>
+                <Share2 className="w-[18px] h-[18px]" strokeWidth={1.8} />
+                {t('Share')}
+              </button>
             </div>
 
-            {/* Migration & Next Step Call to Action */}
-            <Card padding="lg" className="bg-[var(--bg-elevated)] border-[var(--color-sage)]/40 space-y-4 text-center">
-              <div className="w-10 h-10 rounded-full bg-[var(--success-soft)] text-[var(--color-sage)] mx-auto flex items-center justify-center">
-                <CheckCircle className="w-5 h-5" />
-              </div>
-              <h3 className="text-xl font-bold font-display text-[var(--fg)]">
-                {t('Track This Direction Every Day in Life OS')}
-              </h3>
-              <p className="text-xs text-[var(--fg-muted)] max-w-md mx-auto leading-relaxed">
-                {t('Your vision is now drafted. Continue into Life OS to set your daily One Decision, earn Dream Dollars, and build your future world step by step.')}
+            <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-3">
+              <h3 className="text-lg font-semibold tracking-tight text-[var(--fg)]">{t('Keep going')}</h3>
+              <p className="text-sm text-[var(--fg-muted)] leading-relaxed">
+                {t('Save this and continue into the app to set your one decision for today.')}
               </p>
-              <Button variant="accent" size="lg" onClick={handleMigrateAndOpenApp} className="w-full sm:w-auto">
-                {t('Enter Life OS (Save & Continue)')}
-              </Button>
-            </Card>
+              <button type="button" onClick={handleMigrateAndOpenApp} className={`${primaryBtn} w-full`}>
+                {t('Save and continue')}
+              </button>
+            </div>
           </div>
         )}
       </main>

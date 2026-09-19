@@ -23,27 +23,23 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const base =
-    'inline-flex items-center justify-center font-medium transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-[var(--fg)] focus:ring-offset-1 disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap cursor-pointer select-none';
+    'inline-flex items-center justify-center font-semibold font-sans rounded-[var(--radius-sm)] transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-strong)] disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap cursor-pointer select-none';
 
   const sizeClasses = {
-    sm: 'h-8 px-3 text-[11px] uppercase tracking-wider font-semibold rounded-[var(--radius-xs)] gap-1.5',
-    md: 'h-10 px-4 text-xs uppercase tracking-wider font-semibold rounded-[var(--radius-sm)] gap-2',
-    lg: 'h-12 px-6 text-xs uppercase tracking-widest font-bold rounded-[var(--radius-sm)] gap-2.5',
+    sm: 'h-11 px-4 text-[14px] gap-2',
+    md: 'h-11 px-5 text-[15px] gap-2',
+    lg: 'h-12 px-6 text-[15px] gap-2',
   };
 
   const variantClasses = {
-    primary:
-      'bg-[var(--fg)] text-[var(--bg)] border border-[var(--fg)] hover:bg-transparent hover:text-[var(--fg)] active:opacity-80',
+    primary: 'bg-[var(--fg)] text-[var(--bg)] hover:opacity-90 active:opacity-80',
     secondary:
-      'bg-[var(--bg-muted)] text-[var(--fg)] hover:bg-[var(--bg-inset)] border border-[var(--border-strong)]',
-    accent:
-      'bg-[var(--color-coral)] text-white border border-[var(--color-coral)] hover:bg-transparent hover:text-[var(--color-coral)] active:opacity-80',
+      'border border-[var(--border-strong)] bg-transparent text-[var(--fg)] hover:bg-[var(--bg-muted)]',
+    accent: 'bg-[var(--accent)] text-white hover:opacity-90 active:opacity-80',
     outline:
-      'border border-[var(--fg)] bg-transparent text-[var(--fg)] hover:bg-[var(--fg)] hover:text-[var(--bg)]',
-    ghost:
-      'bg-transparent text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-muted)]',
-    danger:
-      'bg-[var(--danger)] text-white border border-[var(--danger)] hover:bg-transparent hover:text-[var(--danger)]',
+      'border border-[var(--border-strong)] bg-transparent text-[var(--fg)] hover:bg-[var(--bg-muted)]',
+    ghost: 'bg-transparent text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-muted)]',
+    danger: 'bg-[var(--danger)] text-white hover:opacity-90 active:opacity-80',
   };
 
   return (
@@ -53,11 +49,11 @@ export const Button: React.FC<ButtonProps> = ({
       {...props}
     >
       {isLoading && (
-        <span className="inline-block w-3.5 h-3.5 border border-current border-t-transparent rounded-full animate-spin mr-1.5" />
+        <span className="inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
       )}
-      {!isLoading && Icon && iconPosition === 'left' && <Icon className="w-3.5 h-3.5 shrink-0" />}
+      {!isLoading && Icon && iconPosition === 'left' && <Icon className="w-[18px] h-[18px] shrink-0" strokeWidth={1.8} />}
       <span>{children}</span>
-      {!isLoading && Icon && iconPosition === 'right' && <Icon className="w-3.5 h-3.5 shrink-0" />}
+      {!isLoading && Icon && iconPosition === 'right' && <Icon className="w-[18px] h-[18px] shrink-0" strokeWidth={1.8} />}
     </button>
   );
 };
@@ -76,22 +72,22 @@ export const Card: React.FC<CardProps> = ({
   ...props
 }) => {
   const variantStyles = {
-    elevated: 'bg-[var(--bg-elevated)] border border-[var(--border)] shadow-[var(--shadow-sm)]',
-    flat: 'bg-[var(--bg-muted)] border border-[var(--border)]',
-    subtle: 'bg-[var(--bg)] border border-[var(--border)]',
-    bordered: 'bg-transparent border border-[var(--border-strong)]',
+    elevated: 'bg-[var(--bg-muted)]',
+    flat: 'bg-[var(--bg-muted)]',
+    subtle: 'bg-[var(--bg-muted)]',
+    bordered: 'bg-[var(--bg)] border border-[var(--border)]',
   };
 
   const paddingStyles = {
     none: 'p-0',
     sm: 'p-4',
-    md: 'p-6',
-    lg: 'p-8',
+    md: 'p-5',
+    lg: 'p-6',
   };
 
   return (
     <div
-      className={`rounded-[var(--radius-md)] transition-all ${variantStyles[variant]} ${paddingStyles[padding]} ${className}`}
+      className={`rounded-[var(--radius-md)] ${variantStyles[variant]} ${paddingStyles[padding]} ${className}`}
       {...props}
     >
       {children}
@@ -121,12 +117,12 @@ export const Field: React.FC<FieldProps> = ({
 }) => {
   return (
     <div className={`space-y-1.5 ${className}`}>
-      <label htmlFor={id} className="block text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--fg-muted)]">
+      <label htmlFor={id} className="block text-[13px] font-medium text-[var(--fg-muted)]">
         {label} {required && <span className="text-[var(--danger)]">*</span>}
       </label>
       {children}
-      {helper && !error && <p className="text-xs text-[var(--fg-subtle)] leading-relaxed">{helper}</p>}
-      {error && <p className="text-xs text-[var(--danger)] font-medium">{error}</p>}
+      {helper && !error && <p className="text-[12px] text-[var(--fg-subtle)] leading-relaxed">{helper}</p>}
+      {error && <p className="text-[12px] text-[var(--danger)]">{error}</p>}
     </div>
   );
 };
@@ -139,9 +135,9 @@ export const Input: React.FC<InputProps> = ({ className = '', hasError, id, ...p
   return (
     <input
       id={id}
-      className={`w-full h-10 px-3 bg-[var(--bg-elevated)] text-[var(--fg)] border ${
-        hasError ? 'border-[var(--danger)]' : 'border-[var(--border)]'
-      } rounded-[var(--radius-sm)] text-sm transition-colors focus:outline-none focus:border-[var(--fg)] placeholder:text-[var(--fg-subtle)] ${className}`}
+      className={`w-full h-11 px-3.5 bg-[var(--bg-muted)] text-[var(--fg)] border ${
+        hasError ? 'border-[var(--danger)]' : 'border-transparent'
+      } rounded-[var(--radius-sm)] text-[15px] transition-colors focus:outline-none focus:border-[var(--border-strong)] placeholder:text-[var(--fg-subtle)] ${className}`}
       {...props}
     />
   );
@@ -155,9 +151,9 @@ export const Textarea: React.FC<TextareaProps> = ({ className = '', hasError, id
   return (
     <textarea
       id={id}
-      className={`w-full p-3 bg-[var(--bg-elevated)] text-[var(--fg)] border ${
-        hasError ? 'border-[var(--danger)]' : 'border-[var(--border)]'
-      } rounded-[var(--radius-sm)] text-sm transition-colors focus:outline-none focus:border-[var(--fg)] placeholder:text-[var(--fg-subtle)] resize-y min-h-[100px] leading-relaxed ${className}`}
+      className={`w-full p-3.5 bg-[var(--bg-muted)] text-[var(--fg)] border ${
+        hasError ? 'border-[var(--danger)]' : 'border-transparent'
+      } rounded-[var(--radius-sm)] text-[15px] transition-colors focus:outline-none focus:border-[var(--border-strong)] placeholder:text-[var(--fg-subtle)] resize-y min-h-[100px] leading-relaxed ${className}`}
       {...props}
     />
   );
@@ -174,7 +170,7 @@ export const Select: React.FC<SelectProps> = ({ options, className = '', id, ...
   return (
     <select
       id={id}
-      className={`w-full h-10 px-3 bg-[var(--bg-elevated)] text-[var(--fg)] border border-[var(--border)] rounded-[var(--radius-sm)] text-sm transition-colors focus:outline-none focus:border-[var(--fg)] ${className}`}
+      className={`w-full h-11 px-3.5 bg-[var(--bg-muted)] text-[var(--fg)] border border-transparent rounded-[var(--radius-sm)] text-[15px] transition-colors focus:outline-none focus:border-[var(--border-strong)] ${className}`}
       {...props}
     >
       {options.map((opt) => (
@@ -199,17 +195,17 @@ export const Badge: React.FC<BadgeProps> = ({
   className = '',
 }) => {
   const variantStyles = {
-    sage: 'bg-[var(--success-soft)] text-[var(--color-sage)] border border-[var(--color-sage)]/30',
-    coral: 'bg-[var(--accent-soft)] text-[var(--color-coral)] border border-[var(--color-coral)]/30',
-    slate: 'bg-[var(--fg)] text-[var(--bg)] border border-[var(--fg)]',
-    subtle: 'bg-[var(--bg-muted)] text-[var(--fg-muted)] border border-[var(--border)]',
-    outline: 'border border-[var(--border-strong)] text-[var(--fg)] bg-transparent',
-    danger: 'bg-[var(--danger-soft)] text-[var(--danger)] border border-[var(--danger)]/30',
+    sage: 'bg-[var(--accent-soft)] text-[var(--accent)]',
+    coral: 'bg-[var(--accent-soft)] text-[var(--accent)]',
+    slate: 'bg-[var(--fg)] text-[var(--bg)]',
+    subtle: 'bg-[var(--bg-inset)] text-[var(--fg-muted)]',
+    outline: 'bg-[var(--bg-inset)] text-[var(--fg)]',
+    danger: 'bg-[var(--danger-soft)] text-[var(--danger)]',
   };
 
   return (
     <span
-      className={`inline-flex items-center px-2 py-0.5 rounded-[var(--radius-xs)] text-[9px] font-bold uppercase tracking-[0.2em] whitespace-nowrap ${variantStyles[variant]} ${className}`}
+      className={`inline-flex items-center px-2 py-0.5 rounded-full text-[12px] font-medium whitespace-nowrap ${variantStyles[variant]} ${className}`}
     >
       {children}
     </span>
@@ -234,22 +230,22 @@ export const Progress: React.FC<ProgressProps> = ({
   const clamped = Math.min(100, Math.max(0, value));
 
   const colors = {
-    sage: 'bg-[var(--color-sage)]',
-    coral: 'bg-[var(--color-coral)]',
+    sage: 'bg-[var(--accent)]',
+    coral: 'bg-[var(--accent)]',
     slate: 'bg-[var(--fg)]',
   };
 
   return (
     <div className={`w-full ${className}`}>
       {showLabel && (
-        <div className="flex justify-between text-[10px] uppercase tracking-wider text-[var(--fg-muted)] font-semibold mb-1.5">
+        <div className="flex justify-between text-[12px] text-[var(--fg-muted)] mb-1.5">
           <span>{t('Progress')}</span>
           <span>{Math.round(clamped)}%</span>
         </div>
       )}
-      <div className="h-1.5 w-full bg-[var(--bg-muted)] rounded-none overflow-hidden border border-[var(--border)]">
+      <div className="h-1.5 w-full bg-[var(--bg-inset)] rounded-full overflow-hidden">
         <div
-          className={`h-full transition-all duration-300 ease-out ${colors[variant]}`}
+          className={`h-full rounded-full transition-all duration-300 ease-out ${colors[variant]}`}
           style={{ width: `${clamped}%` }}
         />
       </div>
@@ -276,18 +272,14 @@ export const Stat: React.FC<StatProps> = ({
   className = '',
 }) => {
   return (
-    <div className={`p-4 rounded-[var(--radius-sm)] bg-[var(--bg-elevated)] border border-[var(--border)] relative ${className}`}>
-      <div className="flex items-center justify-between gap-2 mb-1.5">
-        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--fg-muted)] truncate">
-          {label}
-        </span>
-        {Icon && <Icon className="w-3.5 h-3.5 text-[var(--fg-subtle)] shrink-0" />}
+    <div className={`p-4 rounded-[var(--radius-md)] bg-[var(--bg-muted)] ${className}`}>
+      <div className="flex items-center justify-between gap-2 mb-1">
+        <span className="text-[13px] text-[var(--fg-muted)] truncate">{label}</span>
+        {Icon && <Icon className="w-[18px] h-[18px] text-[var(--fg-subtle)] shrink-0" strokeWidth={1.8} />}
         {badge && <Badge variant="sage">{badge}</Badge>}
       </div>
-      <div className="text-2xl font-bold font-display text-[var(--fg)] tracking-tight">
-        {value}
-      </div>
-      {subtext && <p className="text-xs text-[var(--fg-subtle)] mt-1 font-sans">{subtext}</p>}
+      <div className="text-[22px] font-semibold text-[var(--fg)] tracking-tight">{value}</div>
+      {subtext && <p className="text-[12px] text-[var(--fg-subtle)] mt-1">{subtext}</p>}
     </div>
   );
 };
@@ -314,35 +306,37 @@ export const Modal: React.FC<ModalProps> = ({
   if (!isOpen) return null;
 
   const maxWidthStyles = {
-    sm: 'max-w-sm',
-    md: 'max-w-md',
-    lg: 'max-w-lg',
-    xl: 'max-w-2xl',
+    sm: 'sm:max-w-sm',
+    md: 'sm:max-w-md',
+    lg: 'sm:max-w-lg',
+    xl: 'sm:max-w-2xl',
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/40 backdrop-blur-xs animate-in fade-in duration-200">
+    <div
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-6 bg-black/40 animate-in fade-in duration-200"
+      onClick={onClose}
+    >
       <div
-        className={`relative w-full ${maxWidthStyles[maxWidth]} bg-[var(--bg-elevated)] border border-[var(--border-strong)] rounded-[var(--radius-md)] shadow-[var(--shadow-lg)] overflow-hidden my-auto`}
+        className={`relative w-full ${maxWidthStyles[maxWidth]} bg-[var(--bg-elevated)] rounded-t-2xl sm:rounded-[var(--radius-lg)] shadow-[var(--shadow-lg)] overflow-hidden max-h-[92vh] sm:max-h-[85vh] flex flex-col`}
         onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
       >
-        <div className="flex items-start justify-between p-6 border-b border-[var(--border)]">
-          <div>
-            <span className="font-sans text-[9px] uppercase tracking-[0.25em] text-[var(--fg-subtle)] block mb-1">
-              {t('Dialogue Window')}
-            </span>
-            <h3 className="text-xl font-bold font-display text-[var(--fg)] leading-tight">{title}</h3>
-            {subtitle && <p className="text-xs text-[var(--fg-muted)] mt-1 leading-relaxed">{subtitle}</p>}
+        <div className="flex items-start justify-between gap-4 px-5 pt-5 pb-3 sm:px-6 sm:pt-6">
+          <div className="min-w-0">
+            <h3 className="text-[20px] font-semibold tracking-tight text-[var(--fg)] leading-tight">{title}</h3>
+            {subtitle && <p className="text-[14px] text-[var(--fg-muted)] mt-1 leading-relaxed">{subtitle}</p>}
           </div>
           <button
             onClick={onClose}
-            className="w-7 h-7 rounded-full border border-[var(--border-strong)] flex items-center justify-center text-[var(--fg-subtle)] hover:text-[var(--fg)] hover:border-[var(--fg)] transition-colors cursor-pointer"
-            aria-label={t('Close dialog')}
+            className="w-9 h-9 -mr-2 -mt-1 rounded-full flex items-center justify-center text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-muted)] transition-colors cursor-pointer shrink-0"
+            aria-label={t('Close')}
           >
-            <X className="w-3.5 h-3.5" />
+            <X className="w-5 h-5" strokeWidth={1.8} />
           </button>
         </div>
-        <div className="p-6 max-h-[80vh] overflow-y-auto">{children}</div>
+        <div className="px-5 pb-6 sm:px-6 overflow-y-auto">{children}</div>
       </div>
     </div>
   );
@@ -371,10 +365,10 @@ export const ChipGroup: React.FC<ChipGroupProps> = ({
             key={item}
             type="button"
             onClick={() => onSelect(item)}
-            className={`px-3 py-1 text-[10px] uppercase font-bold tracking-wider rounded-[var(--radius-xs)] transition-all cursor-pointer ${
+            className={`h-9 px-3.5 text-[13px] font-medium rounded-full transition-colors cursor-pointer ${
               isSelected
-                ? 'bg-[var(--fg)] text-[var(--bg)] border border-[var(--fg)]'
-                : 'bg-[var(--bg-muted)] text-[var(--fg-muted)] hover:bg-[var(--bg-inset)] border border-[var(--border)]'
+                ? 'bg-[var(--fg)] text-[var(--bg)]'
+                : 'bg-[var(--bg-muted)] text-[var(--fg-muted)] hover:bg-[var(--bg-inset)]'
             }`}
           >
             {item}
@@ -403,23 +397,13 @@ export const Empty: React.FC<EmptyProps> = ({
   onAction,
   className = '',
 }) => {
-  const t = useT();
   return (
-    <div
-      className={`flex flex-col items-center justify-center p-8 text-center bg-[var(--bg-muted)] border border-[var(--border)] rounded-[var(--radius-sm)] relative ${className}`}
-    >
-      <div className="text-[9px] font-sans uppercase tracking-[0.3em] opacity-50 mb-3">
-        {t('Fig. 00 — State')}
-      </div>
-      {Icon && (
-        <div className="w-10 h-10 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-strong)] flex items-center justify-center text-[var(--fg-muted)] mb-3">
-          <Icon className="w-5 h-5" />
-        </div>
-      )}
-      <h4 className="text-base font-bold font-display text-[var(--fg)] mb-1.5">{title}</h4>
-      <p className="text-xs text-[var(--fg-muted)] max-w-sm mb-5 leading-relaxed font-sans">{description}</p>
+    <div className={`flex flex-col items-center justify-center py-10 px-4 text-center ${className}`}>
+      {Icon && <Icon className="w-6 h-6 text-[var(--fg-subtle)] mb-3" strokeWidth={1.8} />}
+      <h4 className="text-[15px] font-semibold text-[var(--fg)] mb-1">{title}</h4>
+      <p className="text-[14px] text-[var(--fg-muted)] max-w-sm leading-relaxed">{description}</p>
       {actionLabel && onAction && (
-        <Button variant="primary" size="sm" onClick={onAction}>
+        <Button variant="secondary" size="sm" onClick={onAction} className="mt-5">
           {actionLabel}
         </Button>
       )}
@@ -443,14 +427,7 @@ export const Disclaimer: React.FC<{ text?: string; className?: string }> = ({
 }) => {
   const t = useT();
   const body = text ?? t('Dream Dollars is a virtual simulation economy with no cash value. Purchases and allocations are symbolic.');
-  return (
-    <div
-      className={`p-3.5 bg-[var(--bg-muted)] border border-[var(--border)] rounded-[var(--radius-xs)] text-xs text-[var(--fg-muted)] leading-relaxed flex items-start gap-2.5 ${className}`}
-    >
-      <span className="font-bold text-[10px] uppercase tracking-wider text-[var(--fg)] shrink-0 mt-0.5">{t('Note:')}</span>
-      <span>{body}</span>
-    </div>
-  );
+  return <p className={`text-[12px] text-[var(--fg-muted)] leading-relaxed ${className}`}>{body}</p>;
 };
 
 /* -------------------------------- Page Header -------------------------------- */
@@ -467,33 +444,17 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
   title,
   subtitle,
   action,
-  badge,
-  issueNumber,
   className = '',
 }) => {
-  const t = useT();
   return (
-    <div className={`mb-8 pb-4 border-b border-[var(--border)] ${className}`}>
-      <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-3 mb-1.5">
-            <span className="font-sans text-[9px] font-semibold uppercase tracking-[0.3em] text-[var(--fg-subtle)]">
-              {issueNumber || t('One Decision Away — OS')}
-            </span>
-            {badge && <Badge variant="sage">{badge}</Badge>}
-          </div>
-          <h1 className="text-2xl sm:text-4xl font-bold font-display text-[var(--fg)] tracking-tight">
-            {title}
-          </h1>
-          {subtitle && (
-            <p className="text-xs sm:text-sm text-[var(--fg-muted)] mt-2 max-w-2xl font-sans leading-relaxed">
-              {subtitle}
-            </p>
-          )}
+    <div className={`mb-6 ${className}`}>
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <h1 className="text-[28px] font-semibold tracking-tight text-[var(--fg)]">{title}</h1>
+          {subtitle && <p className="text-[15px] text-[var(--fg-muted)] mt-1 leading-relaxed">{subtitle}</p>}
         </div>
         {action && <div className="flex items-center gap-2 shrink-0">{action}</div>}
       </div>
-      <div className="w-12 h-[1px] bg-[var(--fg)] mt-4 opacity-70" />
     </div>
   );
 };

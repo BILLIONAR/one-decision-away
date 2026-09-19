@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../store/useApp';
-import { PageHeader, Button, Card, Badge, Disclaimer } from '../components/ui';
-import { Award, RotateCcw, Check, ArrowRight } from 'lucide-react';
+import { RotateCcw, Check } from 'lucide-react';
 import { LifeScoreCategories } from '../types/models';
 import { useT, N_ } from '../i18n';
 
@@ -10,14 +9,14 @@ const DOMAINS: {
   label: string;
   helper: string;
 }[] = [
-  { key: 'money', label: N_('Money & Wealth'), helper: N_('How secure, intentional, and autonomous does your capital feel?') },
-  { key: 'workAndPurpose', label: N_('Work & Purpose'), helper: N_('How aligned and high-leverage is your daily enterprise?') },
-  { key: 'health', label: N_('Health & Vitality'), helper: N_('How resilient, well-rested, and energised is your physical body?') },
-  { key: 'relationships', label: N_('Relationships'), helper: N_('How present, honest, and generous are you with your closest people?') },
-  { key: 'discipline', label: N_('Discipline & Follow-Through'), helper: N_('How often do you do what you said you would, without delay?') },
-  { key: 'environment', label: N_('Environment & Space'), helper: N_('How calm, orderly, and inspiring is your physical sanctuary?') },
-  { key: 'learning', label: N_('Learning & Mastery'), helper: N_('How consistently are you mastering high-value skills?') },
-  { key: 'personalMeaning', label: N_('Personal Meaning'), helper: N_('How clear and grounding is your reason for daily action?') },
+  { key: 'money', label: N_('Money'), helper: N_('How secure and intentional does your money feel?') },
+  { key: 'workAndPurpose', label: N_('Work'), helper: N_('How aligned is your daily work?') },
+  { key: 'health', label: N_('Health'), helper: N_('How rested and energised are you?') },
+  { key: 'relationships', label: N_('Relationships'), helper: N_('How present are you with the people closest to you?') },
+  { key: 'discipline', label: N_('Discipline'), helper: N_('How often do you do what you said you would?') },
+  { key: 'environment', label: N_('Environment'), helper: N_('How calm and orderly is your space?') },
+  { key: 'learning', label: N_('Learning'), helper: N_('How consistently are you learning something valuable?') },
+  { key: 'personalMeaning', label: N_('Meaning'), helper: N_('How clear is your reason for showing up?') },
 ];
 
 export const LifeScore: React.FC = () => {
@@ -52,134 +51,92 @@ export const LifeScore: React.FC = () => {
     setIsAssessing(false);
   };
 
+  const primaryBtn =
+    'h-11 px-4 inline-flex items-center gap-2 rounded-[var(--radius-sm)] bg-[var(--fg)] text-[var(--bg)] text-sm font-semibold shrink-0';
+  const secondaryBtn =
+    'h-11 px-4 inline-flex items-center gap-2 rounded-[var(--radius-sm)] border border-[var(--border-strong)] bg-transparent text-[var(--fg)] text-sm font-medium shrink-0';
+
   return (
     <div className="space-y-6">
-      <PageHeader
-        title={t('Future Life Score')}
-        subtitle={t('A periodic diagnostic of the 8 essential foundations of your life.')}
-        action={
-          !isAssessing ? (
-            <Button
-              variant="outline"
-              size="sm"
-              icon={RotateCcw}
-              onClick={() => setIsAssessing(true)}
-            >
-              {t('Retake Assessment')}
-            </Button>
-          ) : (
-            <Button variant="accent" size="sm" icon={Check} onClick={handleSaveScore}>
-              {t('Save Diagnostic Score')}
-            </Button>
-          )
-        }
-      />
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight text-[var(--fg)]">{t('Life score')}</h1>
+          <p className="text-sm text-[var(--fg-muted)] mt-1">{t('Eight areas, rated by you.')}</p>
+        </div>
+        {!isAssessing ? (
+          <button type="button" onClick={() => setIsAssessing(true)} className={secondaryBtn}>
+            <RotateCcw className="w-[18px] h-[18px]" strokeWidth={1.8} />
+            {t('Rate')}
+          </button>
+        ) : (
+          <button type="button" onClick={handleSaveScore} className={primaryBtn}>
+            <Check className="w-[18px] h-[18px]" strokeWidth={1.8} />
+            {t('Save')}
+          </button>
+        )}
+      </div>
 
-      {/* Hero Score Display */}
       {latestScore && !isAssessing ? (
-        <Card padding="lg" className="space-y-6 bg-[var(--bg-elevated)]">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-            {/* SVG Ring Chart */}
-            <div className="relative w-36 h-36 shrink-0 flex items-center justify-center">
+        <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-5">
+          <div className="flex items-center gap-5">
+            <div className="relative w-28 h-28 shrink-0 flex items-center justify-center">
               <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="var(--border-strong)" strokeWidth="8" />
                 <circle
                   cx="60"
                   cy="60"
                   r="50"
                   fill="none"
-                  stroke="var(--border)"
-                  strokeWidth="10"
-                />
-                <circle
-                  cx="60"
-                  cy="60"
-                  r="50"
-                  fill="none"
-                  stroke="var(--color-sage)"
-                  strokeWidth="10"
+                  stroke="var(--accent)"
+                  strokeWidth="8"
                   strokeDasharray={`${(latestScore.totalScore / 100) * 314} 314`}
                   strokeLinecap="round"
                   className="transition-all duration-1000 ease-out"
                 />
               </svg>
-              <div className="absolute flex flex-col items-center justify-center text-center">
-                <span className="text-3xl font-bold font-display text-[var(--fg)]">
-                  {latestScore.totalScore}
-                </span>
-                <span className="text-[10px] uppercase font-bold text-[var(--fg-subtle)]">
-                  / 100
-                </span>
+              <div className="absolute text-center">
+                <span className="text-2xl font-semibold tracking-tight text-[var(--fg)]">{latestScore.totalScore}</span>
               </div>
             </div>
-
-            {/* Interpretation Text */}
-            <div className="space-y-2 text-center sm:text-left flex-1">
-              <Badge variant="sage">{t('Diagnostic Overview')}</Badge>
-              <h2 className="text-xl font-bold font-display text-[var(--fg)]">
+            <div className="space-y-1 flex-1 min-w-0">
+              <h2 className="text-lg font-semibold tracking-tight text-[var(--fg)]">
                 {latestScore.totalScore >= 75
-                  ? t('Strong Life Foundation')
+                  ? t('Strong foundation')
                   : latestScore.totalScore >= 50
-                  ? t('Emerging Alignment')
-                  : t('Starting Benchmark')}
+                  ? t('Getting there')
+                  : t('Starting point')}
               </h2>
-              <p className="text-sm text-[var(--fg-muted)] leading-relaxed">
-                {t(latestScore.interpretation)}
-              </p>
+              <p className="text-sm text-[var(--fg-muted)] leading-relaxed">{t(latestScore.interpretation)}</p>
             </div>
           </div>
 
-          {/* Lowest scoring areas highlight */}
           {latestScore.lowestAreas.length > 0 && (
-            <div className="p-4 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-              <div>
-                <span className="font-bold text-[var(--color-coral)] block">
-                  {t('Priority Focus Domains:')}
-                </span>
-                <span className="text-[var(--fg-muted)]">
-                  {t('{areas} are currently asking for deliberate attention.', { areas: latestScore.lowestAreas.map((area) => t(area)).join(t(' and ')) })}
-                </span>
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setIsAssessing(true)}
-              >
-                {t('Rebalance Sliders')}
-              </Button>
-            </div>
+            <p className="text-sm text-[var(--fg-muted)] border-t border-[var(--border)] pt-4">
+              {t('{areas} need the most attention right now.', {
+                areas: latestScore.lowestAreas.map((area) => t(area)).join(t(' and ')),
+              })}
+            </p>
           )}
-        </Card>
+        </div>
       ) : null}
 
-      {/* Interactive Sliders (When assessing or first time) */}
       {isAssessing && (
-        <Card padding="lg" className="space-y-6">
-          <div className="flex items-center justify-between pb-4 border-b border-[var(--border)]">
-            <h2 className="text-lg font-bold font-display text-[var(--fg)]">
-              {t('Rate Each Foundation (1 to 10)')}
-            </h2>
-            <span className="text-sm font-bold text-[var(--color-sage)]">
-              {t('Live Score: {n} / 100', { n: calculatedTotal })}
-            </span>
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-[15px] font-semibold text-[var(--fg)]">{t('Rate each area')}</h2>
+            <span className="text-sm text-[var(--accent)] font-medium">{calculatedTotal} / 100</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] divide-y divide-[var(--border)]">
             {DOMAINS.map((domain) => {
               const val = scores[domain.key];
               return (
-                <div
-                  key={domain.key}
-                  className="p-4 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)] space-y-2"
-                >
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="font-bold text-[var(--fg)]">{t(domain.label)}</span>
-                    <span className="font-mono font-bold text-sm text-[var(--color-slate)] bg-[var(--bg-elevated)] px-2 py-0.5 rounded">
-                      {val} / 10
-                    </span>
+                <div key={domain.key} className="px-4 py-3 space-y-2">
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="font-medium text-[var(--fg)]">{t(domain.label)}</span>
+                    <span className="text-[var(--fg-muted)]">{val} / 10</span>
                   </div>
-
-                  <p className="text-[11px] text-[var(--fg-subtle)]">{t(domain.helper)}</p>
-
+                  <p className="text-xs text-[var(--fg-subtle)]">{t(domain.helper)}</p>
                   <input
                     type="range"
                     min={1}
@@ -191,45 +148,41 @@ export const LifeScore: React.FC = () => {
                         [domain.key]: parseInt(e.target.value) || 5,
                       })
                     }
-                    className="w-full accent-[var(--color-slate)] cursor-pointer"
+                    className="w-full accent-[var(--accent)] cursor-pointer"
                   />
                 </div>
               );
             })}
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-[var(--border)]">
-            <Button variant="ghost" onClick={() => setIsAssessing(false)}>
+          <div className="flex justify-end gap-2 pt-2">
+            <button type="button" onClick={() => setIsAssessing(false)} className={secondaryBtn}>
               {t('Cancel')}
-            </Button>
-            <Button variant="accent" onClick={handleSaveScore}>
-              {t('Save Diagnostic ({n}/100)', { n: calculatedTotal })}
-            </Button>
+            </button>
+            <button type="button" onClick={handleSaveScore} className={primaryBtn}>
+              {t('Save')}
+            </button>
           </div>
-        </Card>
+        </div>
       )}
 
-      {/* History Log */}
       {data.lifeScores.length > 1 && (
-        <Card padding="md" className="space-y-3">
-          <span className="text-xs font-bold uppercase tracking-wider text-[var(--fg-muted)]">
-            {t('Score History')}
-          </span>
-          <div className="space-y-2 text-xs">
+        <div className="space-y-3">
+          <h2 className="text-[15px] font-semibold text-[var(--fg)]">{t('History')}</h2>
+          <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] divide-y divide-[var(--border)]">
             {data.lifeScores.slice(1, 5).map((entry) => (
-              <div
-                key={entry.id}
-                className="p-2.5 bg-[var(--bg-muted)] rounded-[var(--radius-sm)] flex justify-between items-center text-[var(--fg-muted)]"
-              >
-                <span>{new Date(entry.createdAt).toLocaleDateString()}</span>
-                <span className="font-bold text-[var(--fg)]">{entry.totalScore} / 100</span>
+              <div key={entry.id} className="px-4 min-h-[52px] flex justify-between items-center text-sm">
+                <span className="text-[var(--fg-muted)]">{new Date(entry.createdAt).toLocaleDateString()}</span>
+                <span className="font-medium text-[var(--fg)]">{entry.totalScore} / 100</span>
               </div>
             ))}
           </div>
-        </Card>
+        </div>
       )}
 
-      <Disclaimer text={t('The Future Life Score is an honest reflection tool. It does not measure your worth — it measures alignment with your stated ambitions.')} />
+      <p className="text-xs text-[var(--fg-subtle)]">
+        {t('This is not your worth. It measures how close your life is to what you said you want.')}
+      </p>
     </div>
   );
 };

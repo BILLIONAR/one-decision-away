@@ -1,8 +1,46 @@
 import React, { useState } from 'react';
 import { useApp } from '../store/useApp';
-import { PageHeader, Button, Card, Field, Input, Textarea, Badge } from '../components/ui';
-import { UserCheck, Edit2, Check, ShieldAlert, Sparkles, Plus, X } from 'lucide-react';
+import { Pencil, Check } from 'lucide-react';
 import { useT } from '../i18n';
+
+const textareaCls =
+  'w-full p-3 bg-[var(--bg)] text-[var(--fg)] border border-[var(--border)] rounded-[var(--radius-sm)] text-sm focus:outline-none focus:border-[var(--fg)] resize-y min-h-[88px] leading-relaxed';
+const inputCls =
+  'w-full h-11 px-3 bg-[var(--bg)] text-[var(--fg)] border border-[var(--border)] rounded-[var(--radius-sm)] text-sm focus:outline-none focus:border-[var(--fg)]';
+
+const LinesField: React.FC<{
+  id: string;
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  hint?: string;
+}> = ({ id, label, value, onChange, hint }) => (
+  <div className="space-y-1.5">
+    <label htmlFor={id} className="block text-sm text-[var(--fg-muted)]">
+      {label}
+    </label>
+    <textarea id={id} value={value} onChange={(e) => onChange(e.target.value)} rows={3} className={textareaCls} />
+    {hint && <p className="text-xs text-[var(--fg-subtle)]">{hint}</p>}
+  </div>
+);
+
+const ListBlock: React.FC<{ label: string; items: string[]; t: (s: string) => string }> = ({ label, items, t }) => (
+  <div>
+    <div className="text-xs text-[var(--fg-muted)] mb-1.5">{label}</div>
+    {items.length > 0 ? (
+      <ul className="space-y-1.5 text-sm text-[var(--fg)]">
+        {items.map((s, i) => (
+          <li key={i} className="flex items-start gap-2">
+            <span className="w-1 h-1 rounded-full bg-[var(--fg-subtle)] mt-2 shrink-0" />
+            <span>{t(s)}</span>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p className="text-sm text-[var(--fg-subtle)]">{t('Nothing yet')}</p>
+    )}
+  </div>
+);
 
 export const FutureSelf: React.FC = () => {
   const { data, saveFutureSelf } = useApp();
@@ -16,39 +54,17 @@ export const FutureSelf: React.FC = () => {
       t('I am someone who finishes important work, protects my attention, and acts before I feel ready.')
   );
 
-  // Multi-line list string states for editing
-  const [coreValuesText, setCoreValuesText] = useState(
-    (data?.futureSelf?.coreValues || []).join('\n')
-  );
-  const [standardsText, setStandardsText] = useState(
-    (data?.futureSelf?.dailyStandards || []).join('\n')
-  );
-  const [habitsText, setHabitsText] = useState(
-    (data?.futureSelf?.habits || []).join('\n')
-  );
-  const [skillsText, setSkillsText] = useState(
-    (data?.futureSelf?.skills || []).join('\n')
-  );
-  const [boundariesText, setBoundariesText] = useState(
-    (data?.futureSelf?.boundaries || []).join('\n')
-  );
-  const [noLongerDoesText, setNoLongerDoesText] = useState(
-    (data?.futureSelf?.noLongerDoes || []).join('\n')
-  );
+  const [coreValuesText, setCoreValuesText] = useState((data?.futureSelf?.coreValues || []).join('\n'));
+  const [standardsText, setStandardsText] = useState((data?.futureSelf?.dailyStandards || []).join('\n'));
+  const [habitsText, setHabitsText] = useState((data?.futureSelf?.habits || []).join('\n'));
+  const [skillsText, setSkillsText] = useState((data?.futureSelf?.skills || []).join('\n'));
+  const [boundariesText, setBoundariesText] = useState((data?.futureSelf?.boundaries || []).join('\n'));
+  const [noLongerDoesText, setNoLongerDoesText] = useState((data?.futureSelf?.noLongerDoes || []).join('\n'));
 
-  // Old Self
-  const [oldBehaviorsText, setOldBehaviorsText] = useState(
-    (data?.futureSelf?.oldSelfBehaviors || []).join('\n')
-  );
-  const [oldExcusesText, setOldExcusesText] = useState(
-    (data?.futureSelf?.oldSelfExcuses || []).join('\n')
-  );
-  const [oldPatternsText, setOldPatternsText] = useState(
-    (data?.futureSelf?.oldSelfPatterns || []).join('\n')
-  );
-  const [oldLabelsText, setOldLabelsText] = useState(
-    (data?.futureSelf?.oldSelfLabels || []).join('\n')
-  );
+  const [oldBehaviorsText, setOldBehaviorsText] = useState((data?.futureSelf?.oldSelfBehaviors || []).join('\n'));
+  const [oldExcusesText, setOldExcusesText] = useState((data?.futureSelf?.oldSelfExcuses || []).join('\n'));
+  const [oldPatternsText, setOldPatternsText] = useState((data?.futureSelf?.oldSelfPatterns || []).join('\n'));
+  const [oldLabelsText, setOldLabelsText] = useState((data?.futureSelf?.oldSelfLabels || []).join('\n'));
 
   if (!data) return null;
 
@@ -78,252 +94,104 @@ export const FutureSelf: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        title={t('Future Self & Old Self')}
-        subtitle={t('Identity shift precedes behavioural change. Define who you are becoming and what you leave behind.')}
-        action={
-          !isEditing ? (
-            <Button variant="outline" size="sm" icon={Edit2} onClick={() => setIsEditing(true)}>
-              {t('Edit Identity')}
-            </Button>
-          ) : (
-            <Button variant="accent" size="sm" icon={Check} onClick={handleSave}>
-              {t('Save Identity Profile')}
-            </Button>
-          )
-        }
-      />
-
-      {/* Identity Statement Hero */}
-      <Card padding="lg" className="border-2 border-[var(--color-sage)]/40 bg-[var(--bg-elevated)] space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <UserCheck className="w-5 h-5 text-[var(--color-sage)]" />
-            <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-sage)]">
-              {t('Future Self Identity')}
-            </span>
-          </div>
-          <Badge variant="sage">{t(data.futureSelf.title || 'The Finisher')}</Badge>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight text-[var(--fg)]">{t('Future self')}</h1>
+          <p className="text-sm text-[var(--fg-muted)] mt-1">{t('Who you are becoming, and what you leave behind.')}</p>
         </div>
+        {!isEditing ? (
+          <button
+            type="button"
+            onClick={() => setIsEditing(true)}
+            className="h-11 px-4 inline-flex items-center gap-2 rounded-[var(--radius-sm)] border border-[var(--border-strong)] bg-transparent text-[var(--fg)] text-sm font-medium shrink-0"
+          >
+            <Pencil className="w-[18px] h-[18px]" strokeWidth={1.8} />
+            {t('Edit')}
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={handleSave}
+            className="h-11 px-4 inline-flex items-center gap-2 rounded-[var(--radius-sm)] bg-[var(--fg)] text-[var(--bg)] text-sm font-semibold shrink-0"
+          >
+            <Check className="w-[18px] h-[18px]" strokeWidth={1.8} />
+            {t('Save')}
+          </button>
+        )}
+      </div>
 
+      <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-3">
         {isEditing ? (
           <div className="space-y-4">
-            <Field id="role-title" label={t('Future Self Role (Not a job title)')} helper={t('e.g. The Finisher, The Architect, The Grounded Creator')}>
-              <Input id="role-title" value={title} onChange={(e) => setTitle(e.target.value)} />
-            </Field>
-
-            <Field id="identity-stmt" label={t('Core Identity Statement')}>
-              <Textarea
+            <div className="space-y-1.5">
+              <label htmlFor="role-title" className="block text-sm text-[var(--fg-muted)]">
+                {t('Who you are')}
+              </label>
+              <input id="role-title" value={title} onChange={(e) => setTitle(e.target.value)} className={inputCls} />
+              <p className="text-xs text-[var(--fg-subtle)]">{t('e.g. The Finisher, The Architect')}</p>
+            </div>
+            <div className="space-y-1.5">
+              <label htmlFor="identity-stmt" className="block text-sm text-[var(--fg-muted)]">
+                {t('Identity statement')}
+              </label>
+              <textarea
                 id="identity-stmt"
                 value={identityStatement}
                 onChange={(e) => setIdentityStatement(e.target.value)}
                 rows={3}
+                className={textareaCls}
               />
-            </Field>
+            </div>
           </div>
         ) : (
-          <div className="space-y-2">
-            <h2 className="text-2xl font-bold font-display text-[var(--fg)]">
-              {t(data.futureSelf.title)}
-            </h2>
-            <p className="text-sm font-serif italic text-[var(--fg)] bg-[var(--bg-muted)] p-4 rounded-[var(--radius-md)] border border-[var(--border)] leading-relaxed">
-              "{t(data.futureSelf.identityStatement)}"
-            </p>
-          </div>
+          <>
+            <h2 className="text-xl font-semibold tracking-tight text-[var(--fg)]">{t(data.futureSelf.title)}</h2>
+            <p className="text-[15px] text-[var(--fg)] leading-relaxed">{t(data.futureSelf.identityStatement)}</p>
+          </>
         )}
-      </Card>
-
-      {/* Future Self Pillars */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Core Values & Standards */}
-        <Card padding="md" className="space-y-4">
-          <h3 className="font-display font-bold text-base text-[var(--fg)]">
-            {t('Core Values & Daily Standards')}
-          </h3>
-
-          {isEditing ? (
-            <div className="space-y-4">
-              <Field id="core-values" label={t('Core Values (1 per line)')}>
-                <Textarea
-                  id="core-values"
-                  value={coreValuesText}
-                  onChange={(e) => setCoreValuesText(e.target.value)}
-                  rows={3}
-                />
-              </Field>
-              <Field id="daily-standards" label={t('Daily Standards (1 per line)')}>
-                <Textarea
-                  id="daily-standards"
-                  value={standardsText}
-                  onChange={(e) => setStandardsText(e.target.value)}
-                  rows={3}
-                />
-              </Field>
-            </div>
-          ) : (
-            <div className="space-y-4 text-xs">
-              <div>
-                <span className="font-bold text-[var(--fg-muted)] block mb-1.5 uppercase tracking-wider text-[10px]">
-                  {t('Core Values')}
-                </span>
-                <div className="flex flex-wrap gap-1.5">
-                  {data.futureSelf.coreValues.map((v, i) => (
-                    <Badge key={i} variant="subtle">
-                      {t(v)}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <span className="font-bold text-[var(--fg-muted)] block mb-1.5 uppercase tracking-wider text-[10px]">
-                  {t('Daily Standards')}
-                </span>
-                <ul className="space-y-1.5 text-[var(--fg)]">
-                  {data.futureSelf.dailyStandards.map((s, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <span className="text-[var(--color-sage)] font-bold">•</span>
-                      <span>{t(s)}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          )}
-        </Card>
-
-        {/* Habits & Boundaries */}
-        <Card padding="md" className="space-y-4">
-          <h3 className="font-display font-bold text-base text-[var(--fg)]">
-            {t('Habits, Skills & Boundaries')}
-          </h3>
-
-          {isEditing ? (
-            <div className="space-y-4">
-              <Field id="habits" label={t('Non-Negotiable Habits (1 per line)')}>
-                <Textarea
-                  id="habits"
-                  value={habitsText}
-                  onChange={(e) => setHabitsText(e.target.value)}
-                  rows={3}
-                />
-              </Field>
-              <Field id="boundaries" label={t('Clear Boundaries (1 per line)')}>
-                <Textarea
-                  id="boundaries"
-                  value={boundariesText}
-                  onChange={(e) => setBoundariesText(e.target.value)}
-                  rows={3}
-                />
-              </Field>
-            </div>
-          ) : (
-            <div className="space-y-4 text-xs">
-              <div>
-                <span className="font-bold text-[var(--fg-muted)] block mb-1.5 uppercase tracking-wider text-[10px]">
-                  {t('Non-Negotiable Habits')}
-                </span>
-                <ul className="space-y-1.5 text-[var(--fg)]">
-                  {data.futureSelf.habits.map((h, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <span className="text-[var(--color-sage)] font-bold">•</span>
-                      <span>{t(h)}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <span className="font-bold text-[var(--fg-muted)] block mb-1.5 uppercase tracking-wider text-[10px]">
-                  {t('Clear Boundaries')}
-                </span>
-                <ul className="space-y-1.5 text-[var(--fg)]">
-                  {data.futureSelf.boundaries.map((b, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <span className="text-[var(--color-coral)] font-bold">•</span>
-                      <span>{t(b)}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          )}
-        </Card>
       </div>
 
-      {/* Old Self Section */}
-      <Card padding="lg" className="border border-[#9A8F86]/40 bg-[var(--bg-elevated)] space-y-4">
-        <div className="flex items-center gap-2 pb-3 border-b border-[var(--border)]">
-          <ShieldAlert className="w-5 h-5 text-[#9A8F86]" />
-          <h3 className="font-display font-bold text-lg text-[var(--fg)]">
-            {t('Old Self — Patterns to Leave Behind')}
-          </h3>
+      <div className="space-y-3">
+        <h2 className="text-[15px] font-semibold text-[var(--fg)]">{t('Standards')}</h2>
+        <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-4">
+          {isEditing ? (
+            <>
+              <LinesField id="core-values" label={t('Values, one per line')} value={coreValuesText} onChange={setCoreValuesText} />
+              <LinesField id="daily-standards" label={t('Daily standards, one per line')} value={standardsText} onChange={setStandardsText} />
+              <LinesField id="habits" label={t('Habits, one per line')} value={habitsText} onChange={setHabitsText} />
+              <LinesField id="skills" label={t('Skills, one per line')} value={skillsText} onChange={setSkillsText} />
+              <LinesField id="boundaries" label={t('Boundaries, one per line')} value={boundariesText} onChange={setBoundariesText} />
+              <LinesField id="no-longer" label={t('No longer does, one per line')} value={noLongerDoesText} onChange={setNoLongerDoesText} />
+            </>
+          ) : (
+            <>
+              <ListBlock label={t('Values')} items={data.futureSelf.coreValues} t={t} />
+              <ListBlock label={t('Daily standards')} items={data.futureSelf.dailyStandards} t={t} />
+              <ListBlock label={t('Habits')} items={data.futureSelf.habits} t={t} />
+              <ListBlock label={t('Boundaries')} items={data.futureSelf.boundaries} t={t} />
+            </>
+          )}
         </div>
+      </div>
 
-        {isEditing ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Field id="old-behaviors" label={t('Behaviors to Leave Behind (1 per line)')}>
-              <Textarea
-                id="old-behaviors"
-                value={oldBehaviorsText}
-                onChange={(e) => setOldBehaviorsText(e.target.value)}
-                rows={3}
-              />
-            </Field>
-
-            <Field id="old-excuses" label={t('Outdated Excuses (1 per line)')}>
-              <Textarea
-                id="old-excuses"
-                value={oldExcusesText}
-                onChange={(e) => setOldExcusesText(e.target.value)}
-                rows={3}
-              />
-            </Field>
-
-            <Field id="old-patterns" label={t('Self-Sabotage Triggers (1 per line)')}>
-              <Textarea
-                id="old-patterns"
-                value={oldPatternsText}
-                onChange={(e) => setOldPatternsText(e.target.value)}
-                rows={3}
-              />
-            </Field>
-
-            <Field id="old-labels" label={t('Identity Labels to Release (1 per line)')}>
-              <Textarea
-                id="old-labels"
-                value={oldLabelsText}
-                onChange={(e) => setOldLabelsText(e.target.value)}
-                rows={3}
-              />
-            </Field>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-            <div className="p-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)]">
-              <span className="font-bold text-[var(--fg-muted)] block mb-1 text-[11px]">
-                {t('Behaviors Left Behind')}
-              </span>
-              <ul className="space-y-1 text-[var(--fg)]">
-                {data.futureSelf.oldSelfBehaviors.map((b, i) => (
-                  <li key={i}>• {t(b)}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="p-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)]">
-              <span className="font-bold text-[var(--fg-muted)] block mb-1 text-[11px]">
-                {t('Old Excuses & Patterns')}
-              </span>
-              <ul className="space-y-1 text-[var(--fg)]">
-                {data.futureSelf.oldSelfExcuses.map((e, i) => (
-                  <li key={i}>• {t(e)}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        )}
-      </Card>
+      <div className="space-y-3">
+        <h2 className="text-[15px] font-semibold text-[var(--fg)]">{t('Old self')}</h2>
+        <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-4">
+          {isEditing ? (
+            <>
+              <LinesField id="old-behaviors" label={t('Behaviours to leave behind, one per line')} value={oldBehaviorsText} onChange={setOldBehaviorsText} />
+              <LinesField id="old-excuses" label={t('Old excuses, one per line')} value={oldExcusesText} onChange={setOldExcusesText} />
+              <LinesField id="old-patterns" label={t('Triggers, one per line')} value={oldPatternsText} onChange={setOldPatternsText} />
+              <LinesField id="old-labels" label={t('Labels to drop, one per line')} value={oldLabelsText} onChange={setOldLabelsText} />
+            </>
+          ) : (
+            <>
+              <ListBlock label={t('Behaviours')} items={data.futureSelf.oldSelfBehaviors} t={t} />
+              <ListBlock label={t('Excuses')} items={data.futureSelf.oldSelfExcuses} t={t} />
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

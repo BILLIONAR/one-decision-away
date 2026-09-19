@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useApp } from '../store/useApp';
-import { Card, Button, Field, Input, Badge } from './ui';
-import { Cloud, Download, Upload, LogOut, RefreshCw, ShieldCheck, Mail } from 'lucide-react';
+import { Card, Button, Field, Input } from './ui';
+import { Download, Upload, LogOut, RefreshCw, Mail } from 'lucide-react';
 import { cloudSync, CloudState } from '../services/cloudSync';
 import { useT } from '../i18n';
 
@@ -49,33 +49,30 @@ export const BackupAndCloudSettings: React.FC = () => {
   };
 
   return (
-    <Card padding="lg" className="space-y-5 bg-[var(--bg-elevated)]">
-      <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
-        <div className="flex items-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-[var(--color-sage)]" />
-          <h3 className="font-display font-bold text-base text-[var(--fg)]">{t('Backup, Restore & Cloud Sync')}</h3>
-        </div>
-        <Badge variant={cloud.session ? 'sage' : 'subtle'}>
+    <Card padding="md" className="space-y-5">
+      <div className="min-w-0">
+        <h3 className="text-[15px] font-semibold text-[var(--fg)]">{t('Backup and sync')}</h3>
+        <p className="text-[13px] text-[var(--fg-muted)] mt-0.5">
           {cloud.session ? t('Cloud: {email}', { email: cloud.session.user.email || '' }) : t('Local only')}
-        </Badge>
+        </p>
       </div>
 
-      <p className="text-xs text-[var(--fg-muted)] leading-relaxed">
-        {t('Your whole life OS lives in this browser. Download a backup regularly, and sign in to sync it across your phone and laptop.')}
+      <p className="text-[14px] text-[var(--fg-muted)] leading-relaxed">
+        {t('Everything lives in this browser. Download a backup regularly, and sign in to sync across your phone and laptop.')}
         {lastBackup && (
           <>
             {' '}
-            {t('Last backup:')} <strong>{new Date(lastBackup).toLocaleDateString()}</strong>.
+            {t('Last backup:')} <span className="text-[var(--fg)] font-medium">{new Date(lastBackup).toLocaleDateString()}</span>.
           </>
         )}
       </p>
 
       <div className="flex flex-wrap gap-2">
         <Button variant="primary" size="sm" icon={Download} onClick={exportDataJson}>
-          {t('Download backup (.json)')}
+          {t('Download backup')}
         </Button>
-        <Button variant="outline" size="sm" icon={Upload} onClick={() => fileRef.current?.click()}>
-          {t('Restore from backup')}
+        <Button variant="secondary" size="sm" icon={Upload} onClick={() => fileRef.current?.click()}>
+          {t('Restore')}
         </Button>
         <input
           ref={fileRef}
@@ -91,17 +88,14 @@ export const BackupAndCloudSettings: React.FC = () => {
       </div>
 
       <div className="pt-4 border-t border-[var(--border)] space-y-3">
-        <div className="flex items-center gap-2">
-          <Cloud className="w-4 h-4 text-[var(--color-slate)]" />
-          <h4 className="text-sm font-bold text-[var(--fg)]">{t('Cloud sync (optional)')}</h4>
-        </div>
+        <h4 className="text-[15px] font-semibold text-[var(--fg)]">{t('Cloud sync (optional)')}</h4>
 
         {!cloud.configured ? (
-          <div className="text-xs text-[var(--fg-muted)] space-y-2">
+          <div className="text-[14px] text-[var(--fg-muted)] leading-relaxed space-y-2">
             <p>
               {t("Not connected to a cloud project yet. To enable sync, create a free Supabase project, run {schema}, and paste the project URL and anon key here (or set {url} / {key} at build time).", { schema: 'supabase/schema.sql', url: 'VITE_SUPABASE_URL', key: 'VITE_SUPABASE_ANON_KEY' })}
             </p>
-            <Button variant="outline" size="sm" onClick={() => setShowSetup(!showSetup)}>
+            <Button variant="secondary" size="sm" onClick={() => setShowSetup(!showSetup)}>
               {showSetup ? t('Hide setup') : t('Enter project keys')}
             </Button>
             {showSetup && (
@@ -133,8 +127,8 @@ export const BackupAndCloudSettings: React.FC = () => {
                 </Button>
               </div>
             </Field>
-            {msg && <p className="text-[11px] text-[var(--fg-muted)]">{msg}</p>}
-            <button type="button" onClick={() => setShowSetup(!showSetup)} className="text-[11px] underline text-[var(--fg-subtle)] cursor-pointer">
+            {msg && <p className="text-[13px] text-[var(--fg-muted)]">{msg}</p>}
+            <button type="button" onClick={() => setShowSetup(!showSetup)} className="h-9 text-[13px] text-[var(--fg-muted)] hover:text-[var(--fg)] cursor-pointer">
               {t('Change project keys')}
             </button>
             {showSetup && (
@@ -150,10 +144,10 @@ export const BackupAndCloudSettings: React.FC = () => {
           </div>
         ) : (
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div className="text-xs text-[var(--fg-muted)]">
-              {t('Signed in as')} <strong className="text-[var(--fg)]">{cloud.session.user.email}</strong>.
+            <div className="text-[14px] text-[var(--fg-muted)]">
+              {t('Signed in as')} <span className="text-[var(--fg)] font-medium">{cloud.session.user.email}</span>.
               {cloud.lastSyncAt && <> {t('Last sync {time}.', { time: new Date(cloud.lastSyncAt).toLocaleString() })}</>}
-              {cloud.error && <span className="text-red-500"> {cloud.error}</span>}
+              {cloud.error && <span className="text-[var(--danger)]"> {cloud.error}</span>}
             </div>
             <div className="flex gap-2">
               <Button variant="secondary" size="sm" icon={RefreshCw} onClick={handleSyncNow} disabled={cloud.syncing}>

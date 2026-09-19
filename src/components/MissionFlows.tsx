@@ -1,9 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import { Mission, MissionDifficulty, MissionType, MissionArea } from '../types/models';
-import { Modal, Button, Field, Input, Textarea, Select, Badge, Card } from './ui';
-import { Play, Pause, Square, CheckCircle, Clock, ShieldCheck, Flame } from 'lucide-react';
-import { getBaseReward, evaluateMissionReward, computeLedgerBalance } from '../services/economy';
+import { Play, Pause, Square, X } from 'lucide-react';
+import { getBaseReward } from '../services/economy';
 import { useT } from '../i18n';
+
+const primaryBtn =
+  'h-11 px-4 inline-flex items-center justify-center gap-2 rounded-[var(--radius-sm)] bg-[var(--fg)] text-[var(--bg)] text-sm font-semibold cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed';
+const secondaryBtn =
+  'h-11 px-4 inline-flex items-center justify-center gap-2 rounded-[var(--radius-sm)] border border-[var(--border-strong)] bg-transparent text-[var(--fg)] text-sm font-medium cursor-pointer disabled:opacity-40';
+const ghostBtn = 'h-11 px-3 inline-flex items-center justify-center text-sm text-[var(--fg-muted)] hover:text-[var(--fg)] cursor-pointer';
+const inputCls =
+  'w-full h-11 px-3 bg-[var(--bg-muted)] text-[var(--fg)] rounded-[var(--radius-sm)] text-sm focus:outline-none placeholder:text-[var(--fg-subtle)]';
+const labelCls = 'block text-sm text-[var(--fg-muted)]';
+
+const Sheet: React.FC<{ isOpen: boolean; onClose: () => void; title: string; subtitle?: string; children: React.ReactNode }> = ({
+  isOpen,
+  onClose,
+  title,
+  subtitle,
+  children,
+}) => {
+  const t = useT();
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/40 overflow-y-auto" onClick={onClose}>
+      <div
+        className="w-full max-w-lg bg-[var(--bg)] rounded-[var(--radius-lg)] p-5 space-y-5 my-auto max-h-[92vh] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <h3 className="text-lg font-semibold tracking-tight text-[var(--fg)]">{title}</h3>
+            {subtitle && <p className="text-sm text-[var(--fg-muted)] mt-0.5 break-words">{subtitle}</p>}
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label={t('Close')}
+            className="w-11 h-11 -mr-2 -mt-2 shrink-0 flex items-center justify-center text-[var(--fg-muted)] cursor-pointer"
+          >
+            <X className="w-5 h-5" strokeWidth={1.8} />
+          </button>
+        </div>
+        {children}
+      </div>
+    </div>
+  );
+};
 
 interface CompleteMissionModalProps {
   mission: Mission | null;
@@ -30,7 +73,6 @@ export const CompleteMissionModal: React.FC<CompleteMissionModalProps> = ({
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [targetMinutes, setTargetMinutes] = useState(mission?.estimatedMinutes || 25);
 
-  // Reflection questions
   const [completedSummary, setCompletedSummary] = useState('');
   const [resistanceNoticed, setResistanceNoticed] = useState('');
   const [nextStep, setNextStep] = useState('');
@@ -93,182 +135,141 @@ export const CompleteMissionModal: React.FC<CompleteMissionModalProps> = ({
     }
   };
 
+  const methods: { id: 'self' | 'timer' | 'photo'; label: string }[] = [
+    { id: 'self', label: t('Done') },
+    { id: 'timer', label: t('Timer') },
+    { id: 'photo', label: t('Note') },
+  ];
+
   return (
-    <Modal
+    <Sheet
       isOpen={isOpen}
       onClose={onClose}
-      title={mission.isOneDecision ? t("Complete Today's One Decision") : t('Complete Mission')}
-      subtitle={mission.title}
-      maxWidth="lg"
+      title={mission.isOneDecision ? t("Complete today's decision") : t('Complete mission')}
+      subtitle={t(mission.title)}
     >
-      <div className="space-y-6">
-        {/* Method selector */}
-        <div className="flex rounded-[var(--radius-md)] bg-[var(--bg-muted)] p-1 border border-[var(--border)]">
-          <button
-            type="button"
-            onClick={() => setMethod('self')}
-            className={`flex-1 py-2 text-xs font-semibold rounded-[var(--radius-sm)] transition-all cursor-pointer ${
-              method === 'self'
-                ? 'bg-[var(--bg-elevated)] text-[var(--fg)] shadow-xs'
-                : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
-            }`}
-          >
-            {t('Direct Completion')}
-          </button>
-          <button
-            type="button"
-            onClick={() => setMethod('timer')}
-            className={`flex-1 py-2 text-xs font-semibold rounded-[var(--radius-sm)] transition-all cursor-pointer ${
-              method === 'timer'
-                ? 'bg-[var(--bg-elevated)] text-[var(--fg)] shadow-xs'
-                : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
-            }`}
-          >
-            {t('Focus Timer')}
-          </button>
-          <button
-            type="button"
-            onClick={() => setMethod('photo')}
-            className={`flex-1 py-2 text-xs font-semibold rounded-[var(--radius-sm)] transition-all cursor-pointer ${
-              method === 'photo'
-                ? 'bg-[var(--bg-elevated)] text-[var(--fg)] shadow-xs'
-                : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
-            }`}
-          >
-            {t('Proof Note')}
-          </button>
+      <div className="space-y-5">
+        <div className="flex p-1 bg-[var(--bg-muted)] rounded-[var(--radius-sm)]">
+          {methods.map((m) => (
+            <button
+              key={m.id}
+              type="button"
+              onClick={() => setMethod(m.id)}
+              className={`flex-1 h-10 rounded-[var(--radius-xs)] text-sm font-medium transition-colors cursor-pointer ${
+                method === m.id ? 'bg-[var(--bg)] text-[var(--fg)]' : 'text-[var(--fg-muted)]'
+              }`}
+            >
+              {m.label}
+            </button>
+          ))}
         </div>
 
-        {/* Timer View */}
         {method === 'timer' && (
-          <div className="p-6 bg-[var(--bg-muted)] border border-[var(--border)] rounded-[var(--radius-lg)] text-center">
-            <div className="text-4xl font-mono font-bold text-[var(--fg)] mb-4">
-              {formatTime(timerSeconds)}
-            </div>
-            <div className="flex items-center justify-center gap-3">
+          <div className="p-5 bg-[var(--bg-muted)] rounded-[var(--radius-md)] text-center space-y-4">
+            <div className="text-4xl font-semibold tracking-tight text-[var(--fg)] tabular-nums">{formatTime(timerSeconds)}</div>
+            <div className="flex items-center justify-center gap-2">
               {!isTimerRunning ? (
-                <Button
-                  variant="primary"
-                  size="sm"
-                  icon={Play}
-                  onClick={() => setIsTimerRunning(true)}
-                >
-                  {t('Start Focus')}
-                </Button>
+                <button type="button" onClick={() => setIsTimerRunning(true)} className={primaryBtn}>
+                  <Play className="w-[18px] h-[18px]" strokeWidth={1.8} />
+                  {t('Start')}
+                </button>
               ) : (
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  icon={Pause}
-                  onClick={() => setIsTimerRunning(false)}
-                >
+                <button type="button" onClick={() => setIsTimerRunning(false)} className={secondaryBtn}>
+                  <Pause className="w-[18px] h-[18px]" strokeWidth={1.8} />
                   {t('Pause')}
-                </Button>
+                </button>
               )}
-              <Button
-                variant="outline"
-                size="sm"
-                icon={Square}
+              <button
+                type="button"
                 onClick={() => {
                   setIsTimerRunning(false);
                   setTimerSeconds(targetMinutes * 60);
                 }}
+                className={secondaryBtn}
               >
+                <Square className="w-[18px] h-[18px]" strokeWidth={1.8} />
                 {t('Reset')}
-              </Button>
+              </button>
             </div>
           </div>
         )}
 
-        {/* Proof Note */}
         {method === 'photo' && (
-          <Field id="photo-note" label={t('Optional Proof / Observation')} helper={t('Record any specific outcome or metric.')}>
-            <Input
+          <div className="space-y-1.5">
+            <label htmlFor="photo-note" className={labelCls}>
+              {t('What did you produce?')}
+            </label>
+            <input
               id="photo-note"
               value={photoNote}
               onChange={(e) => setPhotoNote(e.target.value)}
-              placeholder={t('e.g. 1,200 words drafted in Obsidian, 3 bug fixes pushed')}
+              placeholder={t('e.g. 1,200 words drafted')}
+              className={inputCls}
             />
-          </Field>
+          </div>
         )}
 
-        {/* Required 3 Reflection Questions */}
-        <div className="p-4 bg-[var(--bg-muted)]/60 rounded-[var(--radius-md)] border border-[var(--border)] space-y-4">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-[var(--color-sage)]" />
-            <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--fg)]">
-              {t('30-Second Reflection Loop')}
-            </h4>
-          </div>
-
-          <Field
-            id="q1"
-            label={t('1. What did you complete?')}
-            required
-            helper={t('Name the tangible output or boundary held.')}
-          >
-            <Input
+        <div className="space-y-4">
+          <div className="space-y-1.5">
+            <label htmlFor="q1" className={labelCls}>
+              {t('What did you complete?')}
+            </label>
+            <input
               id="q1"
               value={completedSummary}
               onChange={(e) => setCompletedSummary(e.target.value)}
-              placeholder={t('e.g. Completed initial wireframes and reviewed database schema')}
+              placeholder={t('The tangible output')}
+              className={inputCls}
             />
-          </Field>
-
-          <Field
-            id="q2"
-            label={t('2. What resistance did you notice?')}
-            helper={t('Distraction urges, boredom, self-doubt, perfectionism.')}
-          >
-            <Input
+          </div>
+          <div className="space-y-1.5">
+            <label htmlFor="q2" className={labelCls}>
+              {t('What resistance did you notice?')}
+            </label>
+            <input
               id="q2"
               value={resistanceNoticed}
               onChange={(e) => setResistanceNoticed(e.target.value)}
-              placeholder={t('e.g. Felt the urge to check phone at the 20-minute mark')}
+              placeholder={t('Optional')}
+              className={inputCls}
             />
-          </Field>
-
-          <Field
-            id="q3"
-            label={t('3. What is the next meaningful step?')}
-            helper={t('The next single domino to set up tomorrow.')}
-          >
-            <Input
+          </div>
+          <div className="space-y-1.5">
+            <label htmlFor="q3" className={labelCls}>
+              {t('What is the next step?')}
+            </label>
+            <input
               id="q3"
               value={nextStep}
               onChange={(e) => setNextStep(e.target.value)}
-              placeholder={t('e.g. Connect the payment webhook and test edge case')}
+              placeholder={t('Optional')}
+              className={inputCls}
             />
-          </Field>
-        </div>
-
-        {/* Reward Preview */}
-        <div className="flex items-center justify-between p-3.5 bg-[var(--bg-elevated)] border border-[var(--border)] rounded-[var(--radius-md)]">
-          <div>
-            <span className="text-xs text-[var(--fg-muted)]">{t('Verified Reward')}</span>
-            <div className="text-sm font-bold text-[var(--color-sage)]">
-              {mission.type === 'constraint' ? t('Rule Kept (Vote Recorded)') : `+ D$${reward.toLocaleString()}`}
-            </div>
           </div>
-          <Badge variant="sage">{t('Vote for Future')}</Badge>
         </div>
 
-        <div className="flex justify-end gap-3 pt-2">
-          <Button variant="ghost" onClick={onClose}>
+        <div className="flex items-center justify-between text-sm border-t border-[var(--border)] pt-4">
+          <span className="text-[var(--fg-muted)]">{t('Reward')}</span>
+          <span className="font-medium text-[var(--accent)]">
+            {mission.type === 'constraint' ? t('Rule kept') : `D$ ${reward.toLocaleString()}`}
+          </span>
+        </div>
+
+        <div className="flex justify-end gap-2">
+          <button type="button" onClick={onClose} className={ghostBtn}>
             {t('Cancel')}
-          </Button>
-          <Button
-            variant="accent"
-            icon={CheckCircle}
-            isLoading={isSubmitting}
+          </button>
+          <button
+            type="button"
             onClick={handleFinish}
-            disabled={!completedSummary.trim()}
+            disabled={!completedSummary.trim() || isSubmitting}
+            className={primaryBtn}
           >
-            {t('Confirm & Claim D$')}
-          </Button>
+            {isSubmitting ? t('Saving') : t('Confirm')}
+          </button>
         </div>
       </div>
-    </Modal>
+    </Sheet>
   );
 };
 
@@ -318,87 +319,114 @@ export const CreateMissionModal: React.FC<CreateMissionModalProps> = ({
     }
   };
 
+  const typeOptions = [
+    { value: 'daily_quest', label: t('Daily (D$50–400)') },
+    { value: 'weekly_mission', label: t('Weekly (D$1,000)') },
+    { value: 'monthly_boss_fight', label: t('Monthly (D$5,000–10,000)') },
+    { value: 'one_year_mission', label: t('One year (D$25,000)') },
+    { value: 'constraint', label: t('Rule') },
+  ];
+  const areaOptions = [
+    { value: 'Work', label: t('Work') },
+    { value: 'Money', label: t('Money') },
+    { value: 'Health', label: t('Health') },
+    { value: 'Learning', label: t('Learning') },
+    { value: 'Relationships', label: t('Relationships') },
+    { value: 'Environment', label: t('Environment') },
+    { value: 'Personal Meaning', label: t('Meaning') },
+  ];
+  const difficultyOptions = [
+    { value: 'easy', label: t('Easy, under 45 min') },
+    { value: 'medium', label: t('Medium, 45–120 min') },
+    { value: 'hard', label: t('Hard, 2 hours or more') },
+  ];
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={t('Create Mission')} subtitle={t('Structure a real-world task tied to your future.')}>
+    <Sheet isOpen={isOpen} onClose={onClose} title={t('New mission')}>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <Field id="mission-title" label={t('Mission Title')} required helper={t('Be concrete: specify what finishing looks like.')}>
-          <Input
+        <div className="space-y-1.5">
+          <label htmlFor="mission-title" className={labelCls}>
+            {t('What will you do?')}
+          </label>
+          <input
             id="mission-title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder={t('e.g. Write and send proposal to 2 corporate clients')}
+            placeholder={t('e.g. Send the proposal to two clients')}
+            className={inputCls}
           />
-        </Field>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Field id="mission-type" label={t('Mission Type')}>
-            <Select
-              id="mission-type"
-              value={type}
-              onChange={(e) => setType(e.target.value as MissionType)}
-              options={[
-                { value: 'daily_quest', label: t('Daily Quest (D$50-400)') },
-                { value: 'weekly_mission', label: t('Weekly Mission (D$1,000)') },
-                { value: 'monthly_boss_fight', label: t('Monthly Boss Fight (D$5,000-10,000)') },
-                { value: 'one_year_mission', label: t('One-Year Mission (D$25,000)') },
-                { value: 'constraint', label: t('Personal Constraint (Rule of Game)') },
-              ]}
-            />
-          </Field>
-
-          <Field id="mission-area" label={t('Life Domain')}>
-            <Select
-              id="mission-area"
-              value={area}
-              onChange={(e) => setArea(e.target.value as MissionArea)}
-              options={[
-                { value: 'Work', label: t('Work & Enterprise') },
-                { value: 'Money', label: t('Money & Wealth') },
-                { value: 'Health', label: t('Health & Vitality') },
-                { value: 'Learning', label: t('Learning & Craft') },
-                { value: 'Relationships', label: t('Relationships') },
-                { value: 'Environment', label: t('Environment & Space') },
-                { value: 'Personal Meaning', label: t('Personal Meaning') },
-              ]}
-            />
-          </Field>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Field id="mission-difficulty" label={t('Difficulty')}>
-            <Select
+          <div className="space-y-1.5">
+            <label htmlFor="mission-type" className={labelCls}>
+              {t('Type')}
+            </label>
+            <select id="mission-type" value={type} onChange={(e) => setType(e.target.value as MissionType)} className={inputCls}>
+              {typeOptions.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="space-y-1.5">
+            <label htmlFor="mission-area" className={labelCls}>
+              {t('Area')}
+            </label>
+            <select id="mission-area" value={area} onChange={(e) => setArea(e.target.value as MissionArea)} className={inputCls}>
+              {areaOptions.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <label htmlFor="mission-difficulty" className={labelCls}>
+              {t('Difficulty')}
+            </label>
+            <select
               id="mission-difficulty"
               value={difficulty}
               onChange={(e) => setDifficulty(e.target.value as MissionDifficulty)}
-              options={[
-                { value: 'easy', label: t('Easy (< 45 min)') },
-                { value: 'medium', label: t('Medium (45-119 min)') },
-                { value: 'hard', label: t('Hard (120+ min / High Resistance)') },
-              ]}
-            />
-          </Field>
-
-          <Field id="mission-time" label={t('Estimated Minutes')}>
-            <Input
+              className={inputCls}
+            >
+              {difficultyOptions.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="space-y-1.5">
+            <label htmlFor="mission-time" className={labelCls}>
+              {t('Minutes')}
+            </label>
+            <input
               id="mission-time"
               type="number"
               min={5}
               max={600}
               value={estimatedMinutes}
               onChange={(e) => setEstimatedMinutes(parseInt(e.target.value) || 30)}
+              className={inputCls}
             />
-          </Field>
+          </div>
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-[var(--border)]">
-          <Button variant="ghost" type="button" onClick={onClose}>
+        <div className="flex justify-end gap-2 pt-2">
+          <button type="button" onClick={onClose} className={ghostBtn}>
             {t('Cancel')}
-          </Button>
-          <Button variant="primary" type="submit" isLoading={isSubmitting} disabled={!title.trim()}>
-            {t('Create Mission')}
-          </Button>
+          </button>
+          <button type="submit" disabled={!title.trim() || isSubmitting} className={primaryBtn}>
+            {isSubmitting ? t('Saving') : t('Add')}
+          </button>
         </div>
       </form>
-    </Modal>
+    </Sheet>
   );
 };

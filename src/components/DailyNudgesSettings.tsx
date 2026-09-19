@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useApp } from '../store/useApp';
-import { Card, Button, Field, Badge } from './ui';
-import { BellRing, Send, Check } from 'lucide-react';
+import { Card, Button, Field } from './ui';
+import { Send, Check } from 'lucide-react';
 import { notificationScheduler } from '../services/notificationScheduler';
 import { DEFAULT_NUDGE_TIMES, NUDGE_TITLES, NudgeSlot, getNudgeLine } from '../data/dailyNudges';
 import { useT, N_ } from '../i18n';
@@ -60,26 +60,25 @@ export const DailyNudgesSettings: React.FC = () => {
     await notificationScheduler.show(slot);
   };
 
+  const status = !supported ? t('Not supported here') : perm === 'denied' ? t('Blocked by browser') : enabled ? t('On, 3 a day') : t('Off');
+
   return (
-    <Card padding="lg" className="space-y-5 bg-[var(--bg-elevated)]">
-      <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
-        <div className="flex items-center gap-2">
-          <BellRing className="w-4 h-4 text-[var(--color-coral)]" />
-          <h3 className="font-display font-bold text-base text-[var(--fg)]">{t('Daily Nudges')}</h3>
+    <Card padding="md" className="space-y-5">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h3 className="text-[15px] font-semibold text-[var(--fg)]">{t('Daily nudges')}</h3>
+          <p className="text-[13px] text-[var(--fg-muted)] mt-0.5">{status}</p>
         </div>
-        <Badge variant={enabled && perm === 'granted' ? 'sage' : 'subtle'}>
-          {!supported ? t('Not supported here') : perm === 'denied' ? t('Blocked by browser') : enabled ? t('On · 3 a day') : t('Off')}
-        </Badge>
       </div>
 
-      <p className="text-xs text-[var(--fg-muted)] leading-relaxed">
-        {t('Three short, honest lines a day — one to start, one to re-aim, one to close. They arrive as notifications while the app is open or installed on your home screen. Never the same line twice in a day.')}
+      <p className="text-[14px] text-[var(--fg-muted)] leading-relaxed">
+        {t('Three short lines a day: one to start, one to re-aim, one to close. They arrive as notifications while the app is open or installed on your home screen.')}
       </p>
 
-      <div className="flex items-center justify-between p-3 rounded-[var(--radius-sm)] bg-[var(--bg-muted)]/60 border border-[var(--border)]">
-        <div className="text-xs">
-          <div className="font-bold text-[var(--fg)]">{t('Send me daily nudges')}</div>
-          <div className="text-[var(--fg-muted)]">
+      <div className="flex items-center justify-between gap-4 p-4 rounded-[var(--radius-sm)] bg-[var(--bg)]">
+        <div className="text-[14px] min-w-0">
+          <div className="font-medium text-[var(--fg)]">{t('Send me daily nudges')}</div>
+          <div className="text-[13px] text-[var(--fg-muted)]">
             {perm === 'granted' ? t('Notification permission granted.') : perm === 'denied' ? t('Permission denied — enable it in browser site settings.') : t("We'll ask for permission once.")}
           </div>
         </div>
@@ -87,10 +86,11 @@ export const DailyNudgesSettings: React.FC = () => {
           type="button"
           onClick={handleToggle}
           disabled={!supported}
-          className={`relative w-11 h-6 rounded-full transition-colors cursor-pointer disabled:opacity-40 ${enabled ? 'bg-[var(--color-sage)]' : 'bg-[var(--border-strong)]'}`}
+          className={`relative w-12 h-7 rounded-full transition-colors cursor-pointer disabled:opacity-40 shrink-0 ${enabled ? 'bg-[var(--accent)]' : 'bg-[var(--border-strong)]'}`}
           aria-pressed={enabled}
+          aria-label={t('Send me daily nudges')}
         >
-          <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${enabled ? 'translate-x-5' : ''}`} />
+          <span className={`absolute top-0.5 left-0.5 w-6 h-6 rounded-full bg-white transition-transform ${enabled ? 'translate-x-5' : ''}`} />
         </button>
       </div>
 
@@ -102,31 +102,31 @@ export const DailyNudgesSettings: React.FC = () => {
               type="time"
               value={times[s.key]}
               onChange={(e) => setTimes({ ...times, [s.key]: e.target.value })}
-              className="w-full px-3 py-2 text-xs bg-[var(--bg)] border border-[var(--border)] rounded-[var(--radius-xs)] text-[var(--fg)]"
+              className="w-full h-11 px-3.5 text-[15px] bg-[var(--bg)] rounded-[var(--radius-sm)] text-[var(--fg)] focus:outline-none"
             />
           </Field>
         ))}
       </div>
 
-      <div className="p-3 rounded-[var(--radius-sm)] bg-[var(--bg-muted)]/40 border border-[var(--border)] space-y-1.5">
-        <div className="text-[10px] uppercase tracking-wider font-bold text-[var(--fg-subtle)]">{t("Today's lines")}</div>
+      <div className="space-y-2">
+        <div className="text-[13px] font-medium text-[var(--fg-muted)]">{t("Today's lines")}</div>
         {SLOTS.map((s) => (
-          <div key={s.key} className="text-xs text-[var(--fg-muted)]">
-            <span className="font-semibold text-[var(--fg)]">{t(NUDGE_TITLES[s.key])} · {times[s.key]}</span> — {t(getNudgeLine(s.key))}
+          <div key={s.key} className="text-[13px] text-[var(--fg-muted)] leading-relaxed">
+            <span className="font-medium text-[var(--fg)]">{t(NUDGE_TITLES[s.key])} · {times[s.key]}</span> — {t(getNudgeLine(s.key))}
           </div>
         ))}
       </div>
 
-      <div className="flex items-center justify-between pt-3 border-t border-[var(--border)]">
-        <Button variant="outline" size="sm" icon={Send} onClick={handleTest} disabled={!supported}>
-          {t('Send a test now')}
+      <div className="flex items-center justify-between gap-2 flex-wrap">
+        <Button variant="secondary" size="sm" icon={Send} onClick={handleTest} disabled={!supported}>
+          {t('Send a test')}
         </Button>
         <Button variant="primary" size="sm" icon={saved ? Check : undefined} onClick={handleSave}>
           {saved ? t('Saved') : t('Save times')}
         </Button>
       </div>
-      <p className="text-[11px] text-[var(--fg-subtle)]">
-        {t("Browser limitation: when the app is fully closed, nudges can't fire without a push server. Keep it installed on your home screen or open in a tab, and they arrive on time; if you open the app within 90 minutes of a slot, the missed nudge is delivered then.")}
+      <p className="text-[12px] text-[var(--fg-subtle)] leading-relaxed">
+        {t("When the app is fully closed, nudges can't fire without a push server. Keep it installed or open in a tab. If you open the app within 90 minutes of a slot, the missed nudge is delivered then.")}
       </p>
     </Card>
   );

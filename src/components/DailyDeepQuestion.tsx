@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useApp } from '../store/useApp';
-import { Card, Button, Textarea, Badge } from './ui';
-import { MessageCircleQuestion, Check, ArrowRight } from 'lucide-react';
+import { Card, Button, Textarea } from './ui';
+import { Check, ArrowRight } from 'lucide-react';
 import { useT, N_ } from '../i18n';
 
 /**
@@ -95,30 +95,25 @@ export const DailyDeepQuestion: React.FC = () => {
   };
 
   return (
-    <Card padding="md" className="space-y-3 bg-[var(--bg-elevated)]">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-[var(--color-coral)]/15 text-[var(--color-coral)] flex items-center justify-center">
-            <MessageCircleQuestion className="w-4 h-4" />
-          </div>
-          <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--fg)]">{t('One Question Today')}</h3>
-            <p className="text-[11px] text-[var(--fg-muted)]">
-              {q.group === 'allowing' ? t("The life you're allowing") : q.group === 'building' ? t("The life you're building") : t('Future self')} · {t(q.title)}
-            </p>
-          </div>
+    <Card padding="md" className="space-y-4">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h3 className="text-[15px] font-semibold text-[var(--fg)]">{t('One question')}</h3>
+          <p className="text-[13px] text-[var(--fg-muted)]">
+            {q.group === 'allowing' ? t("The life you're allowing") : q.group === 'building' ? t("The life you're building") : t('Future self')} · {t(q.title)}
+          </p>
         </div>
-        <Badge variant="subtle">{t('{answered} / {total} answered', { answered, total })}</Badge>
+        <span className="text-[13px] text-[var(--fg-subtle)] shrink-0 tabular-nums">{t('{answered} / {total}', { answered, total })}</span>
       </div>
-      <p className="text-base font-display italic text-[var(--fg)] leading-relaxed">{t(q.prompt)}</p>
-      <Textarea id={`deep-${q.id}`} rows={3} value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder={t('One honest paragraph is enough.')} />
-      <div className="flex items-center justify-between">
-        <button type="button" onClick={() => setActiveRoute('/app/two-futures')} className="text-[11px] text-[var(--fg-subtle)] underline cursor-pointer flex items-center gap-1">
-          {t('See all answers')} <ArrowRight className="w-3 h-3" />
+      <p className="text-[17px] font-medium tracking-tight text-[var(--fg)] leading-snug">{t(q.prompt)}</p>
+      <Textarea id={`deep-${q.id}`} rows={3} value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder={t('One honest paragraph is enough.')} className="bg-[var(--bg)]" />
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <button type="button" onClick={() => setActiveRoute('/app/two-futures')} className="h-10 text-[13px] text-[var(--fg-muted)] hover:text-[var(--fg)] cursor-pointer flex items-center gap-1">
+          {t('See all answers')} <ArrowRight className="w-4 h-4" strokeWidth={1.8} />
         </button>
         <div className="flex gap-2">
           <Button variant="ghost" size="sm" onClick={skipToday}>{t('Not today')}</Button>
-          <Button variant="primary" size="sm" icon={Check} onClick={save} disabled={saving || !answer.trim()}>{t('Save answer')}</Button>
+          <Button variant="primary" size="sm" icon={Check} onClick={save} disabled={saving || !answer.trim()}>{t('Save')}</Button>
         </div>
       </div>
     </Card>

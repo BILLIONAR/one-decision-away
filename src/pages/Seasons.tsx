@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { useApp } from '../store/useApp';
-import { PageHeader, Button, Card, Badge, Progress, Disclaimer } from '../components/ui';
-import { Compass, CheckCircle, Flame, Award, Calendar, Sparkles } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { SEED_SEASONS } from '../data/seed';
-import { Season } from '../types/models';
 import { useT } from '../i18n';
 
 export const Seasons: React.FC = () => {
-  const { data, joinSeason, completeMission } = useApp();
+  const { data, joinSeason } = useApp();
   const t = useT();
 
   const [activeSeasonTab, setActiveSeasonTab] = useState<string>(
@@ -20,151 +18,100 @@ export const Seasons: React.FC = () => {
     SEED_SEASONS.find((s) => s.id === activeSeasonTab) || SEED_SEASONS[0];
   const isJoined = data.activeSeason?.id === currentSeason.id;
 
-  // Calculate progress for current season
   const completedMissionsCount = data.completions.length;
   const seasonProgress = isJoined
     ? Math.min(100, Math.round((completedMissionsCount / currentSeason.missions.length) * 100))
     : 0;
 
+  const badgeName = currentSeason.rewardBadgeTitle || currentSeason.badgeName || '';
+
   return (
     <div className="space-y-6">
-      <PageHeader
-        title={t('30-Day Themed Seasons')}
-        subtitle={t('Intensive 30-day focus cycles to create decisive breakthroughs.')}
-      />
+      <div>
+        <h1 className="text-2xl font-semibold tracking-tight text-[var(--fg)]">{t('Seasons')}</h1>
+        <p className="text-sm text-[var(--fg-muted)] mt-1">{t('Thirty days on one theme.')}</p>
+      </div>
 
-      {/* Seasons Selector Tabs */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] divide-y divide-[var(--border)]">
         {SEED_SEASONS.map((season) => {
           const isSelected = activeSeasonTab === season.id;
           const isCurrentlyActive = data.activeSeason?.id === season.id;
 
           return (
-            <Card
+            <button
               key={season.id}
-              padding="md"
-              className={`cursor-pointer transition-all border ${
-                isSelected
-                  ? 'border-[var(--color-slate)] bg-[var(--bg-elevated)] shadow-sm'
-                  : 'border-[var(--border)] bg-[var(--bg-elevated)] opacity-80 hover:opacity-100'
-              }`}
+              type="button"
               onClick={() => setActiveSeasonTab(season.id)}
+              className="w-full text-left px-4 min-h-[56px] py-3 flex items-center gap-3"
             >
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold uppercase text-[var(--color-sage)]">
-                    {t('{n} Days Focus', { n: season.durationDays || 30 })}
-                  </span>
-                  {isCurrentlyActive && <Badge variant="coral">{t('Active Focus')}</Badge>}
-                </div>
-
-                <h3 className="font-display font-bold text-base text-[var(--fg)]">
+              <div className="flex-1 min-w-0">
+                <div className={`text-[15px] truncate ${isSelected ? 'font-semibold text-[var(--fg)]' : 'font-medium text-[var(--fg)]'}`}>
                   {t(season.title)}
-                </h3>
-
-                <p className="text-xs text-[var(--fg-muted)] line-clamp-2">
-                  {t(season.theme || season.description)}
-                </p>
+                </div>
+                <div className="text-xs text-[var(--fg-muted)] truncate">
+                  {t('{n} days', { n: season.durationDays || 30 })}
+                  {isCurrentlyActive ? ` · ${t('Joined')}` : ''}
+                </div>
               </div>
-            </Card>
+              {isSelected && <Check className="w-[18px] h-[18px] text-[var(--accent)] shrink-0" strokeWidth={1.8} />}
+            </button>
           );
         })}
       </div>
 
-      {/* Selected Season Detail Card */}
-      <Card padding="lg" className="space-y-6 bg-[var(--bg-elevated)]">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--border)]">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <Badge variant="sage">{t('{n} Days Sprint', { n: currentSeason.durationDays || 30 })}</Badge>
-              <Badge variant="slate">{t(currentSeason.rewardBadgeTitle || currentSeason.badgeName || '')}</Badge>
-            </div>
-            <h2 className="text-2xl font-bold font-display text-[var(--fg)]">
-              {t(currentSeason.title)}
-            </h2>
-            <p className="text-xs text-[var(--fg-muted)]">{t(currentSeason.theme || currentSeason.description)}</p>
-          </div>
-
-          {!isJoined ? (
-            <Button
-              variant="accent"
-              icon={Sparkles}
-              onClick={() => joinSeason(currentSeason)}
-            >
-              {t('Enroll in This Season')}
-            </Button>
-          ) : (
-            <div className="text-right">
-              <span className="text-xs font-bold text-[var(--color-sage)] block">
-                {t('Enrolled · 30 Days Active')}
-              </span>
-              <span className="text-[11px] text-[var(--fg-subtle)]">
-                {t('{pct}% Completed', { pct: seasonProgress })}
-              </span>
-            </div>
-          )}
+      <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-4">
+        <div>
+          <h2 className="text-xl font-semibold tracking-tight text-[var(--fg)]">{t(currentSeason.title)}</h2>
+          <p className="text-sm text-[var(--fg-muted)] mt-1">{t(currentSeason.theme || currentSeason.description)}</p>
         </div>
 
-        {/* Season Progress */}
-        {isJoined && (
-          <div className="space-y-2 p-4 bg-[var(--bg-muted)] rounded-[var(--radius-md)]">
-            <div className="flex justify-between text-xs">
-              <span className="font-bold text-[var(--fg)]">{t('Seasonal Mission Progress')}</span>
-              <span className="font-mono text-[var(--color-sage)] font-bold">
-                {seasonProgress}%
-              </span>
+        {!isJoined ? (
+          <button
+            type="button"
+            onClick={() => joinSeason(currentSeason)}
+            className="w-full h-12 rounded-[var(--radius-sm)] bg-[var(--fg)] text-[var(--bg)] font-semibold text-[15px]"
+          >
+            {t('Join')}
+          </button>
+        ) : (
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span className="text-[var(--fg)]">{t('Progress')}</span>
+              <span className="text-[var(--accent)] font-medium">{seasonProgress}%</span>
             </div>
-            <Progress value={seasonProgress} variant="sage" />
+            <div className="h-2 w-full bg-[var(--border-strong)] rounded-full overflow-hidden">
+              <div className="h-full bg-[var(--accent)] rounded-full transition-all" style={{ width: `${seasonProgress}%` }} />
+            </div>
           </div>
         )}
+      </div>
 
-        {/* Missions Checklist for this Season */}
-        <div className="space-y-3">
-          <h3 className="font-display font-bold text-base text-[var(--fg)]">
-            {t('Core Seasonal Quests ({n})', { n: currentSeason.missions.length })}
-          </h3>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {currentSeason.missions.map((mission, idx) => (
-              <div
-                key={idx}
-                className="p-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)] flex items-start justify-between gap-3 text-xs"
-              >
-                <div className="space-y-1">
-                  <div className="font-bold text-[var(--fg)]">{t(mission.title)}</div>
-                  <div className="text-[11px] text-[var(--fg-muted)]">
-                    {t(mission.area)} · {t(mission.difficulty)}
-                  </div>
+      <div className="space-y-3">
+        <h2 className="text-[15px] font-semibold text-[var(--fg)]">
+          {t('Missions')} <span className="text-[var(--fg-muted)] font-normal">({currentSeason.missions.length})</span>
+        </h2>
+        <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] divide-y divide-[var(--border)]">
+          {currentSeason.missions.map((mission, idx) => (
+            <div key={idx} className="px-4 min-h-[56px] py-3 flex items-center justify-between gap-3">
+              <div className="min-w-0">
+                <div className="text-[15px] font-medium text-[var(--fg)] truncate">{t(mission.title)}</div>
+                <div className="text-xs text-[var(--fg-muted)]">
+                  {t(mission.area)} · {t(mission.difficulty)}
                 </div>
-
-                <span className="text-xs font-bold text-[var(--color-sage)] shrink-0">
-                  + D$ {mission.rewardDreamDollar || 250}
-                </span>
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Cosmetic Reward Preview */}
-        <div className="p-4 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-[var(--border)] flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-[var(--accent-soft)] text-[var(--color-coral)] flex items-center justify-center font-bold shrink-0">
-            <Award className="w-6 h-6" />
-          </div>
-          <div className="space-y-0.5">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-coral)]">
-              {t('Cosmetic Milestone Reward')}
-            </span>
-            <div className="font-bold text-sm text-[var(--fg)]">
-              {t('"{name}" Profile Emblem', { name: t(currentSeason.rewardBadgeTitle || currentSeason.badgeName || '') })}
+              <span className="text-sm text-[var(--accent)] shrink-0">D$ {mission.rewardDreamDollar || 250}</span>
             </div>
-            <p className="text-[11px] text-[var(--fg-muted)]">
-              {t('Earned upon completing the 30-day cycle. Purely symbolic recognition with no pay-to-win advantages.')}
-            </p>
-          </div>
+          ))}
         </div>
-      </Card>
+      </div>
 
-      <Disclaimer text={t('Seasons are designed to provide sprint focus without artificial urgency or streak penalties.')} />
+      {badgeName && (
+        <p className="text-sm text-[var(--fg-muted)]">
+          {t('Finish the season to earn the {name} badge on your profile.', { name: t(badgeName) })}
+        </p>
+      )}
+
+      <p className="text-xs text-[var(--fg-subtle)]">{t('No streak penalties. No artificial urgency.')}</p>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useApp } from '../store/useApp';
-import { Card, Button, Badge } from './ui';
-import { Columns, ArrowRight, Footprints, Check, X, ShieldCheck } from 'lucide-react';
+import { Card, Button } from './ui';
+import { ArrowRight, Check, X } from 'lucide-react';
 import { useT, N_ } from '../i18n';
 
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
@@ -29,30 +29,21 @@ export const WeeklyTwoFuturesReview: React.FC = () => {
   if (Date.now() - lastMs < WEEK_MS) return null;
 
   return (
-    <Card padding="md" className="space-y-3 bg-[var(--bg-elevated)] border border-[#9A8F86]/40">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-start gap-3">
-          <div className="w-8 h-8 shrink-0 rounded-full bg-[#9A8F86]/20 text-[#9A8F86] flex items-center justify-center">
-            <Columns className="w-4 h-4" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--fg)]">{t('Weekly Two Futures Review')}</h3>
-              <Badge variant="subtle">{daysSince >= 99 ? t('never reviewed') : t('{n} days ago', { n: daysSince })}</Badge>
-            </div>
-            <p className="text-[11px] text-[var(--fg-muted)] mt-0.5">
-              {t("Re-read the life you're allowing and the life you're building. Two minutes, once a week, keeps every One Decision pointed the right way.")}
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2 self-start sm:self-auto">
-          <Button size="sm" variant="primary" onClick={() => setActiveRoute('/app/two-futures')}>
-            {t('Review now')} <ArrowRight className="w-3.5 h-3.5 ml-1" />
-          </Button>
-          <Button size="sm" variant="ghost" onClick={() => saveDefaultFuture({})} title={t('I already reviewed it')}>
-            <Check className="w-3.5 h-3.5 mr-1" /> {t('Done')}
-          </Button>
-        </div>
+    <Card padding="md" className="space-y-4">
+      <div className="min-w-0">
+        <h3 className="text-[15px] font-semibold text-[var(--fg)]">{t('Weekly review')}</h3>
+        <p className="text-[13px] text-[var(--fg-muted)] mt-0.5">
+          {daysSince >= 99 ? t('Never reviewed.') : t('Last reviewed {n} days ago.', { n: daysSince })}{' '}
+          {t("Re-read the life you're allowing and the life you're building. Two minutes keeps every decision pointed the right way.")}
+        </p>
+      </div>
+      <div className="flex items-center gap-2">
+        <Button size="sm" variant="primary" icon={ArrowRight} iconPosition="right" onClick={() => setActiveRoute('/app/two-futures')}>
+          {t('Review now')}
+        </Button>
+        <Button size="sm" variant="ghost" icon={Check} onClick={() => saveDefaultFuture({})} title={t('I already reviewed it')}>
+          {t('Done')}
+        </Button>
       </div>
     </Card>
   );
@@ -96,35 +87,30 @@ export const EveningDriftCheck: React.FC = () => {
   };
 
   return (
-    <Card padding="md" className="space-y-3 bg-[var(--bg-elevated)]">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-[#9A8F86]/20 text-[#9A8F86] flex items-center justify-center">
-            <Footprints className="w-4 h-4" />
-          </div>
-          <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--fg)]">{t('Evening Drift Check')}</h3>
-            <p className="text-[11px] text-[var(--fg-muted)]">{t('Did the default future get a vote today? Honest answer, no judgment.')}</p>
-          </div>
+    <Card padding="md" className="space-y-4">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h3 className="text-[15px] font-semibold text-[var(--fg)]">{t('Evening check')}</h3>
+          <p className="text-[13px] text-[var(--fg-muted)] mt-0.5">{t('Did the default future get a vote today? Honest answer, no judgment.')}</p>
         </div>
-        <button type="button" onClick={dismiss} className="p-1.5 text-[var(--fg-subtle)] hover:text-[var(--fg)] cursor-pointer" title={t('Not now')}>
-          <X className="w-4 h-4" />
+        <button type="button" onClick={dismiss} className="w-9 h-9 rounded-full flex items-center justify-center text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-inset)] cursor-pointer shrink-0" title={t('Not now')} aria-label={t('Not now')}>
+          <X className="w-[18px] h-[18px]" strokeWidth={1.8} />
         </button>
       </div>
       <div className="flex flex-wrap gap-2">
         <button
           type="button"
           onClick={dismiss}
-          className="px-3 py-1.5 rounded-full text-xs font-bold border bg-[var(--color-sage)]/15 text-[var(--color-sage)] border-[var(--color-sage)]/40 hover:bg-[var(--color-sage)]/25 cursor-pointer flex items-center gap-1"
+          className="h-10 px-4 rounded-full text-[13px] font-medium bg-[var(--fg)] text-[var(--bg)] cursor-pointer"
         >
-          <ShieldCheck className="w-3.5 h-3.5" /> {t('Clean day — no drift')}
+          {t('Clean day')}
         </button>
         {signals.map((sig) => (
           <button
             key={sig}
             type="button"
             onClick={() => logDriftSignal(sig)}
-            className="px-3 py-1.5 rounded-full text-xs font-medium border bg-[var(--bg-muted)] text-[var(--fg-muted)] border-[var(--border)] hover:text-[var(--fg)] hover:border-[#9A8F86] cursor-pointer"
+            className="h-10 px-4 rounded-full text-[13px] font-medium bg-[var(--bg)] text-[var(--fg-muted)] hover:text-[var(--fg)] cursor-pointer"
           >
             {t(sig)}
           </button>
@@ -132,7 +118,7 @@ export const EveningDriftCheck: React.FC = () => {
         <button
           type="button"
           onClick={() => setActiveRoute('/app/two-futures')}
-          className="px-3 py-1.5 rounded-full text-xs font-medium text-[var(--fg-subtle)] underline cursor-pointer"
+          className="h-10 px-3 rounded-full text-[13px] font-medium text-[var(--fg-subtle)] hover:text-[var(--fg)] cursor-pointer"
         >
           {t('Something else…')}
         </button>

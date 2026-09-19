@@ -1,232 +1,227 @@
 import React from 'react';
+import { ArrowRight, Check, CircleDot, Layers, Target } from 'lucide-react';
 import { useApp } from '../store/useApp';
-import { Button, Card, Disclaimer } from '../components/ui';
-import { ArrowRight, Sparkles, CheckCircle, ShieldCheck } from 'lucide-react';
+import { Logo } from '../components/Logo';
 import { LanguagePicker } from '../components/LanguagePicker';
 import { useT } from '../i18n';
+import { ECONOMY_CONSTANTS } from '../services/economy';
 
 export const Landing: React.FC = () => {
   const { setActiveRoute } = useApp();
   const t = useT();
 
-  return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] flex flex-col justify-between selection:bg-[var(--fg)] selection:text-[var(--bg)]">
-      {/* Editorial Navigation */}
-      <header className="border-b border-[var(--border)] bg-[var(--bg)]">
-        <div className="max-w-6xl mx-auto px-6 py-6 flex items-baseline justify-between">
-          <div className="flex items-baseline gap-4">
-            <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.3em] text-[var(--fg-subtle)]">
-              {t('Issue No. 01 — Blueprint')}
-            </span>
-          </div>
+  const steps = [
+    {
+      icon: Target,
+      title: t('Decide'),
+      text: t('Each morning, write the one thing that would make today count.'),
+    },
+    {
+      icon: Check,
+      title: t('Keep'),
+      text: t('Do it, mark it done, and earn Dream Dollars for keeping your word.'),
+    },
+    {
+      icon: Layers,
+      title: t('Build'),
+      text: t('Spend them on the dreams you chose and watch a different year take shape.'),
+    },
+  ];
 
-          <div className="flex items-center space-x-6 sm:space-x-10 font-sans text-[10px] font-semibold uppercase tracking-[0.25em]">
-            <LanguagePicker className="normal-case tracking-normal" />
+  const features = [
+    { title: t('Dreams'), text: t('A vision board with a price tag, funded by what you actually do.') },
+    { title: t('Notebook'), text: t('Journal, gratitude and written practices, all in one quiet place.') },
+    { title: t('Meditations'), text: t('Short guided sessions and focus timers for the work that matters.') },
+    { title: t('Two Futures'), text: t('See the life you are building next to the one you are allowing.') },
+  ];
+
+  return (
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] font-sans flex flex-col">
+      {/* Nav */}
+      <header className="w-full">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2 min-w-0">
+            <Logo className="w-6 h-6 shrink-0" />
+            <span className="text-[15px] font-semibold tracking-tight truncate">{t('One Decision Away')}</span>
+          </div>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <LanguagePicker />
             <button
-              onClick={() => setActiveRoute('/two-futures')}
-              className="hover:opacity-50 transition-opacity cursor-pointer text-[var(--fg)]"
-            >
-              {t('Two Futures')}
-            </button>
-            <button
+              type="button"
               onClick={() => setActiveRoute('/app')}
-              className="hover:opacity-50 transition-opacity cursor-pointer text-[var(--fg)]"
+              className="h-11 px-4 rounded-[var(--radius-sm)] bg-[var(--fg)] text-[var(--bg)] text-[14px] font-semibold cursor-pointer"
             >
-              {t('Open Life OS')}
+              {t('Open app')}
             </button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setActiveRoute('/app')}
-            >
-              {t('Enter System')}
-            </Button>
           </div>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <main className="max-w-6xl mx-auto px-6 py-12 sm:py-20 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative">
-        {/* Left Vertical volume tag */}
-        <div className="hidden lg:flex lg:col-span-1 flex-col justify-end pb-8">
-          <span className="vertical-text font-sans text-[9px] uppercase tracking-[0.5em] opacity-40">
-            {t('VOLUME TWENTY SIX — SPECIFICATION')}
-          </span>
-        </div>
-
-        {/* Center Main Headline */}
-        <div className="lg:col-span-6 flex flex-col justify-center space-y-6 text-left">
-          <div className="inline-flex items-center gap-2 font-sans text-[10px] uppercase tracking-[0.25em] text-[var(--fg-muted)]">
-            <span className="w-2 h-2 rounded-full bg-[var(--color-sage)]" />
-            <span>{t('A Personal Transformation & Future Life OS')}</span>
+      <main className="flex-1">
+        {/* Hero */}
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 pt-14 sm:pt-24 pb-16 sm:pb-24">
+          <div className="max-w-3xl space-y-6">
+            <h1 className="text-[44px] sm:text-[64px] font-semibold tracking-tight leading-[1.02]">
+              {t('One decision a day. A different life in a year.')}
+            </h1>
+            <p className="text-[17px] sm:text-[19px] text-[var(--fg-muted)] leading-relaxed max-w-xl">
+              {t('A calm daily practice that turns the things you say you will do into a life you can point to.')}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setActiveRoute('/app')}
+                className="h-12 px-6 rounded-[var(--radius-sm)] bg-[var(--fg)] text-[var(--bg)] font-semibold text-[15px] inline-flex items-center justify-center gap-2 cursor-pointer"
+              >
+                {t('Start free')}
+                <ArrowRight size={18} strokeWidth={1.8} />
+              </button>
+              <a
+                href="#how-it-works"
+                className="h-12 px-6 rounded-[var(--radius-sm)] border border-[var(--border-strong)] bg-transparent text-[var(--fg)] font-semibold text-[15px] inline-flex items-center justify-center"
+              >
+                {t('See how it works')}
+              </a>
+            </div>
+            <p className="text-[13px] text-[var(--fg-subtle)]">
+              {t('No account needed. Your data stays on your device.')}
+            </p>
           </div>
+        </section>
 
-          <h1 className="font-display text-5xl sm:text-7xl lg:text-8xl leading-[0.92] font-black italic tracking-tight text-[var(--fg)]">
-            {t('The Silence Of Intent')}
-          </h1>
-
-          <p className="font-sans text-sm sm:text-base leading-relaxed max-w-lg text-[var(--fg-muted)]">
-            {t('Turn decisive daily action into Dream Dollars, furnish your future life in a symbolic economy, and connect every dream to an actionable real-world bridge.')}
-          </p>
-
-          <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-            <Button
-              variant="primary"
-              size="lg"
-              icon={ArrowRight}
-              iconPosition="right"
-              onClick={() => setActiveRoute('/app')}
-            >
-              {t('Design My Future')}
-            </Button>
-
-            <Button
-              variant="secondary"
-              size="lg"
-              onClick={() => setActiveRoute('/two-futures')}
-            >
-              {t('Examine Two Futures')}
-            </Button>
-          </div>
-
-          <div className="flex items-center space-x-4 pt-4">
-            <div className="w-12 h-[1px] bg-[var(--fg)] opacity-60" />
-            <span className="font-sans text-[9px] uppercase font-semibold tracking-widest text-[var(--fg-subtle)]">
-              {t('Symbolic Economy & Reality Bridges')}
-            </span>
-          </div>
-        </div>
-
-        {/* Right Hero Figure Frame */}
-        <div className="lg:col-span-5 relative flex items-center justify-center">
-          <div className="w-full aspect-[4/5] bg-[var(--bg-muted)] asymmetric-border flex flex-col items-center justify-center p-8 overflow-hidden relative shadow-[var(--shadow-md)]">
-            <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" className="opacity-15 absolute inset-0 pointer-events-none">
-              <line x1="0" y1="100" x2="100" y2="0" stroke="currentColor" strokeWidth="0.5" />
-              <line x1="0" y1="0" x2="100" y2="100" stroke="currentColor" strokeWidth="0.5" />
-            </svg>
-
-            <div className="bg-[var(--bg-elevated)]/90 backdrop-blur-xs p-6 border border-black/10 text-center max-w-xs space-y-3 z-10">
-              <span className="font-sans text-[9px] uppercase tracking-[0.25em] text-[var(--fg-subtle)] block">
-                {t('Fig. 01 — The Fork')}
-              </span>
-              <div className="font-display italic text-2xl font-bold text-[var(--fg)]">
-                {t('One Decision Away')}
+        {/* How it works */}
+        <section id="how-it-works" className="max-w-5xl mx-auto px-4 sm:px-6 py-14 sm:py-20 scroll-mt-16">
+          <h2 className="text-[26px] sm:text-[32px] font-semibold tracking-tight mb-8">{t('How it works')}</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {steps.map(({ icon: Icon, title, text }) => (
+              <div key={title} className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-3">
+                <span className="w-10 h-10 rounded-full bg-[var(--bg)] flex items-center justify-center text-[var(--accent)]">
+                  <Icon size={20} strokeWidth={1.8} />
+                </span>
+                <p className="text-[17px] font-semibold">{title}</p>
+                <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed">{text}</p>
               </div>
-              <p className="text-xs text-[var(--fg-muted)] leading-relaxed font-sans">
-                {t('"Between stimulus and response, there is a space. In that space is our power to choose our future."')}
+            ))}
+          </div>
+        </section>
+
+        {/* Preview */}
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+            <div className="space-y-4 md:order-1">
+              <h2 className="text-[26px] sm:text-[32px] font-semibold tracking-tight">{t('Your day, on one screen.')}</h2>
+              <p className="text-[15px] sm:text-[17px] text-[var(--fg-muted)] leading-relaxed">
+                {t('Today shows one decision, three small habits and the dream you are funding. Nothing else competes for your attention.')}
               </p>
             </div>
-          </div>
 
-          {/* Date stamp box */}
-          <div className="absolute -top-3 -right-3 w-20 h-20 border border-[var(--fg)] flex flex-col items-center justify-center bg-[var(--bg)] shadow-xs">
-            <span className="font-display text-2xl font-black text-[var(--fg)]">01</span>
-            <span className="font-sans text-[8px] uppercase tracking-wider text-[var(--fg-muted)]">{t('Decision')}</span>
+            <div className="flex justify-center md:order-2">
+              <div
+                className="w-full max-w-[340px] rounded-[40px] border border-[var(--border-strong)] bg-[var(--bg)] p-3"
+                aria-hidden="true"
+              >
+                <div className="rounded-[30px] bg-[var(--bg)] overflow-hidden px-4 pt-6 pb-5 space-y-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-[12px] text-[var(--fg-muted)]">{t('Tuesday, 14 October')}</p>
+                      <p className="text-[24px] font-semibold tracking-tight leading-tight">{t('Good morning, Ada')}</p>
+                    </div>
+                    <span className="inline-flex items-center gap-1 h-9 px-3 rounded-full bg-[var(--bg-muted)] text-[13px] text-[var(--fg-muted)]">
+                      D$ <span className="font-semibold text-[var(--accent)]">2,150</span>
+                    </span>
+                  </div>
+
+                  <div className="bg-[var(--fg)] text-[var(--bg)] rounded-[var(--radius-lg)] p-5 space-y-4">
+                    <div className="flex items-center justify-between text-[12px] opacity-70">
+                      <span>{t("Today's one decision")}</span>
+                      <span>{t('{n} days', { n: 12 })}</span>
+                    </div>
+                    <p className="text-[19px] font-medium leading-snug">{t('Send the proposal before lunch.')}</p>
+                    <div className="w-full h-11 rounded-[var(--radius-sm)] bg-[var(--bg)] text-[var(--fg)] font-semibold text-[14px] flex items-center justify-center">
+                      {t('Done · +D$ {amount}', { amount: ECONOMY_CONSTANTS.ONE_DECISION_REWARD.toLocaleString() })}
+                    </div>
+                  </div>
+
+                  <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-4 space-y-3">
+                    <p className="text-[14px] font-semibold">{t('Small habits')}</p>
+                    {[t('Ten minutes of reading'), t('Walk outside'), t('No phone before nine')].map((h, i) => (
+                      <div key={h} className="flex items-center gap-3 text-[14px]">
+                        <span
+                          className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                            i === 0 ? 'bg-[var(--accent)] text-[var(--bg)]' : 'border border-[var(--border-strong)]'
+                          }`}
+                        >
+                          {i === 0 && <Check size={13} strokeWidth={2.2} />}
+                        </span>
+                        <span className={i === 0 ? 'text-[var(--fg-muted)] line-through' : ''}>{h}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-4 flex items-center gap-3">
+                    <span className="w-10 h-10 rounded-[var(--radius-sm)] bg-[var(--accent-soft)] text-[var(--accent)] flex items-center justify-center shrink-0">
+                      <CircleDot size={18} strokeWidth={1.8} />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[14px] font-semibold truncate">{t('Paris Slow Week')}</p>
+                      <div className="mt-1.5 h-1.5 rounded-full bg-[var(--border)] overflow-hidden">
+                        <div className="h-full w-[62%] bg-[var(--accent)]" />
+                      </div>
+                    </div>
+                    <span className="text-[13px] text-[var(--fg-muted)] shrink-0">62%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
+
+        {/* What you get */}
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+          <h2 className="text-[26px] sm:text-[32px] font-semibold tracking-tight mb-8">{t('What you get')}</h2>
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {features.map((f) => (
+              <li key={f.title} className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-1">
+                <p className="text-[17px] font-semibold">{f.title}</p>
+                <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed">{f.text}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* Closing CTA */}
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+          <div className="bg-[var(--fg)] text-[var(--bg)] rounded-[var(--radius-lg)] p-6 sm:p-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+            <div className="space-y-1">
+              <p className="text-[24px] sm:text-[28px] font-semibold tracking-tight">{t('Start with today.')}</p>
+              <p className="text-[15px] opacity-70">{t('Three questions and you are in. Takes a minute.')}</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setActiveRoute('/app')}
+              className="h-12 px-6 rounded-[var(--radius-sm)] bg-[var(--bg)] text-[var(--fg)] font-semibold text-[15px] inline-flex items-center justify-center gap-2 shrink-0 cursor-pointer"
+            >
+              {t('Start free')}
+              <ArrowRight size={18} strokeWidth={1.8} />
+            </button>
+          </div>
+        </section>
       </main>
 
-      {/* 3 Principles / Editorial Columns */}
-      <section className="max-w-6xl mx-auto px-6 py-12 border-t border-[var(--border)] w-full">
-        <div className="flex items-baseline justify-between mb-8">
-          <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.3em] text-[var(--fg-subtle)]">
-            {t('Section 02 — Systematic Architecture')}
-          </span>
-          <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.3em] text-[var(--fg-subtle)]">
-            {t('Philosophy')}
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="p-6 bg-[var(--bg-elevated)] border border-[var(--border)] space-y-3 relative">
-            <span className="font-sans text-[9px] font-bold tracking-[0.25em] text-[var(--color-sage)] uppercase">
-              {t('Module 01')}
-            </span>
-            <h3 className="font-bold font-display text-xl text-[var(--fg)]">
-              {t('Complete High-Leverage Missions')}
-            </h3>
-            <p className="text-xs text-[var(--fg-muted)] leading-relaxed font-sans">
-              {t('Choose one high-leverage decision each day that truly moves your needle. Finish it, honor your boundaries, and lock in the identity shift.')}
-            </p>
+      <footer className="border-t border-[var(--border)]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-[13px] text-[var(--fg-muted)]">
+          <div className="flex items-center gap-2">
+            <Logo className="w-5 h-5" />
+            <span>{t('One Decision Away by AurelyStudio')}</span>
           </div>
-
-          <div className="p-6 bg-[var(--bg-elevated)] border border-[var(--border)] space-y-3 relative">
-            <span className="font-sans text-[9px] font-bold tracking-[0.25em] text-[var(--color-coral)] uppercase">
-              {t('Module 02')}
-            </span>
-            <h3 className="font-bold font-display text-xl text-[var(--fg)]">
-              {t('Earn Transparent Dream Dollars')}
-            </h3>
-            <p className="text-xs text-[var(--fg-muted)] leading-relaxed font-sans">
-              {t('Every completed mission deposits D$ into your ledger in the Dream Bank. No fake math, no pay-to-win mechanics, and anti-binge caps.')}
-            </p>
-          </div>
-
-          <div className="p-6 bg-[var(--bg-elevated)] border border-[var(--border)] space-y-3 relative">
-            <span className="font-sans text-[9px] font-bold tracking-[0.25em] text-[var(--fg-subtle)] uppercase">
-              {t('Module 03')}
-            </span>
-            <h3 className="font-bold font-display text-xl text-[var(--fg)]">
-              {t('Furnish & Bridge Future Life')}
-            </h3>
-            <p className="text-xs text-[var(--fg-muted)] leading-relaxed font-sans">
-              {t('Spend D$ in the Dream Market, curate your 2D life gallery in My Future Life, and connect every aspiration to a concrete financial reality bridge.')}
-            </p>
-          </div>
-        </div>
-
-        {/* Contrast Details */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8">
-          <div className="p-6 bg-[var(--bg-muted)] border border-[var(--border)] space-y-2">
-            <div className="flex items-center gap-2 text-sm font-bold font-display text-[var(--fg)]">
-              <CheckCircle className="w-4 h-4 text-[var(--color-sage)] shrink-0" />
-              <span>{t('Not a generic to-do checklist')}</span>
-            </div>
-            <p className="text-xs text-[var(--fg-muted)] leading-relaxed font-sans">
-              {t('To-do lists accumulate friction and endless trivial checkboxes. One Decision Away centers entirely on identity conviction, strategic milestones, and calm directional focus.')}
-            </p>
-          </div>
-
-          <div className="p-6 bg-[var(--bg-muted)] border border-[var(--border)] space-y-2">
-            <div className="flex items-center gap-2 text-sm font-bold font-display text-[var(--fg)]">
-              <ShieldCheck className="w-4 h-4 text-[var(--color-coral)] shrink-0" />
-              <span>{t('Not a real currency or casino')}</span>
-            </div>
-            <p className="text-xs text-[var(--fg-muted)] leading-relaxed font-sans">
-              {t('Dream Dollars (D$) are symbolic simulation tokens that cannot be purchased, gambled, or withdrawn. They act as a behavioral mirror for where your daily energy is invested.')}
-            </p>
-          </div>
-        </div>
-
-        <div className="pt-8 max-w-xl mx-auto text-center">
-          <Disclaimer text={t('Dream Dollars (D$) is a virtual simulation economy with no cash value. Purchases and allocations are symbolic representations of your life design.')} />
-        </div>
-      </section>
-
-      {/* Editorial Footer */}
-      <footer className="mt-auto border-t border-[var(--border)] py-8 px-6 bg-[var(--bg)]">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-baseline gap-6">
-          <div className="flex space-x-12 sm:space-x-16">
-            <div className="flex flex-col">
-              <span className="font-sans text-[9px] uppercase tracking-widest opacity-50 mb-1">{t('Edition')}</span>
-              <span className="font-sans text-[11px] font-semibold">{t('Volume 01 — 2026')}</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-sans text-[9px] uppercase tracking-widest opacity-50 mb-1">{t('Curator')}</span>
-              <span className="font-sans text-[11px] font-semibold">AurelyStudio</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-sans text-[9px] uppercase tracking-widest opacity-50 mb-1">{t('System')}</span>
-              <span className="font-sans text-[11px] font-semibold">{t('One Decision Away')}</span>
-            </div>
-          </div>
-
-          <div className="flex items-center space-x-6 text-[10px] uppercase tracking-widest font-semibold text-[var(--fg-muted)]">
-            <button onClick={() => setActiveRoute('/two-futures')} className="hover:text-[var(--fg)] cursor-pointer">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <span>{t('Your data stays on your device unless you turn on sync.')}</span>
+            <button
+              type="button"
+              onClick={() => setActiveRoute('/two-futures')}
+              className="text-[var(--fg-muted)] hover:text-[var(--fg)] underline underline-offset-4 cursor-pointer"
+            >
               {t('Two Futures')}
-            </button>
-            <button onClick={() => setActiveRoute('/app/settings')} className="hover:text-[var(--fg)] cursor-pointer">
-              {t('Disclaimers')}
             </button>
           </div>
         </div>

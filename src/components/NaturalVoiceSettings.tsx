@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Card, Button, Field, Input, Badge } from './ui';
-import { Mic, Sparkles, CheckCircle2, AlertTriangle, Volume2 } from 'lucide-react';
+import { Card, Button, Field, Input } from './ui';
+import { Sparkles, Volume2 } from 'lucide-react';
 import { voiceGuide, VoiceEngine } from '../utils/voiceGuide';
 import { GEMINI_TTS_VOICES } from '../utils/geminiVoice';
 import { useT } from '../i18n';
@@ -54,18 +54,13 @@ export const NaturalVoiceSettings: React.FC = () => {
   const naturalReady = engine === 'gemini' && apiKey.trim().length > 10;
 
   return (
-    <Card padding="lg" className="space-y-5 bg-[var(--bg-elevated)]">
-      <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
-        <div className="flex items-center gap-2">
-          <Mic className="w-4 h-4 text-[var(--color-sage)]" />
-          <h3 className="font-display font-bold text-base text-[var(--fg)]">{t('Meditation Voice')}</h3>
-        </div>
-        <Badge variant={naturalReady ? 'sage' : 'subtle'}>
-          {naturalReady ? t('Natural voice active') : t('Built-in voice')}
-        </Badge>
+    <Card padding="md" className="space-y-5">
+      <div className="min-w-0">
+        <h3 className="text-[15px] font-semibold text-[var(--fg)]">{t('Meditation voice')}</h3>
+        <p className="text-[13px] text-[var(--fg-muted)] mt-0.5">{naturalReady ? t('Natural voice active') : t('Built-in voice')}</p>
       </div>
 
-      <p className="text-xs text-[var(--fg-muted)] leading-relaxed">
+      <p className="text-[14px] text-[var(--fg-muted)] leading-relaxed">
         {t('Guided meditations are narrated by a voice. The built-in voice is free and works offline. For a warmer, more human narration you can use a Gemini voice with your own API key — the key stays on this device only.')}
       </p>
 
@@ -83,16 +78,16 @@ export const NaturalVoiceSettings: React.FC = () => {
               key={opt.id}
               type="button"
               onClick={() => chooseEngine(opt.id)}
-              className={`text-left p-3 rounded-[var(--radius-sm)] border transition-all cursor-pointer ${
+              className={`text-left p-4 rounded-[var(--radius-sm)] transition-colors cursor-pointer min-h-[44px] ${
                 active
-                  ? 'bg-[var(--fg)] text-[var(--bg)] border-[var(--fg)] shadow-xs'
-                  : 'bg-[var(--bg)] text-[var(--fg)] border-[var(--border)] hover:border-[var(--border-strong)]'
+                  ? 'bg-[var(--fg)] text-[var(--bg)]'
+                  : 'bg-[var(--bg)] text-[var(--fg)] hover:bg-[var(--bg-inset)]'
               }`}
             >
-              <div className="flex items-center gap-2 text-xs font-bold">
-                <Icon className="w-3.5 h-3.5" /> {opt.title}
+              <div className="flex items-center gap-2 text-[15px] font-medium">
+                <Icon className="w-[18px] h-[18px]" strokeWidth={1.8} /> {opt.title}
               </div>
-              <div className={`text-[11px] mt-0.5 ${active ? 'opacity-80' : 'text-[var(--fg-subtle)]'}`}>{opt.sub}</div>
+              <div className={`text-[13px] mt-0.5 ${active ? 'opacity-70' : 'text-[var(--fg-muted)]'}`}>{opt.sub}</div>
             </button>
           );
         })}
@@ -108,7 +103,7 @@ export const NaturalVoiceSettings: React.FC = () => {
               voiceGuide.setVoice(e.target.value || null);
               setTestResult(null);
             }}
-            className="w-full px-3 py-2 text-xs bg-[var(--bg)] border border-[var(--border)] rounded-[var(--radius-xs)] text-[var(--fg)]"
+            className="w-full h-11 px-3.5 text-[15px] bg-[var(--bg)] rounded-[var(--radius-sm)] text-[var(--fg)] focus:outline-none"
           >
             {browserVoices.map((v) => (
               <option key={v.voiceURI} value={v.voiceURI}>
@@ -136,7 +131,7 @@ export const NaturalVoiceSettings: React.FC = () => {
                 autoComplete="off"
                 className="flex-1"
               />
-              <Button variant="outline" size="sm" onClick={() => setShowKey(!showKey)}>
+              <Button variant="secondary" size="sm" onClick={() => setShowKey(!showKey)}>
                 {showKey ? t('Hide') : t('Show')}
               </Button>
             </div>
@@ -151,7 +146,7 @@ export const NaturalVoiceSettings: React.FC = () => {
                 voiceGuide.setGeminiVoiceName(e.target.value);
                 setTestResult(null);
               }}
-              className="w-full px-3 py-2 text-xs bg-[var(--bg)] border border-[var(--border)] rounded-[var(--radius-xs)] text-[var(--fg)]"
+              className="w-full h-11 px-3.5 text-[15px] bg-[var(--bg)] rounded-[var(--radius-sm)] text-[var(--fg)] focus:outline-none"
             >
               {GEMINI_TTS_VOICES.map((v) => (
                 <option key={v.id} value={v.id}>
@@ -177,22 +172,17 @@ export const NaturalVoiceSettings: React.FC = () => {
               setRate(v);
               voiceGuide.setRate(v);
             }}
-            className="w-full h-1 bg-[var(--border)] rounded-lg appearance-none cursor-pointer accent-[var(--color-sage)]"
+            className="w-full cursor-pointer"
+            style={{ accentColor: 'var(--accent)' }}
           />
         </Field>
       )}
 
-      <div className="flex items-center justify-between pt-3 border-t border-[var(--border)]">
-        <div className="text-[11px]">
-          {testResult === 'ok' && (
-            <span className="flex items-center gap-1 text-[var(--color-sage)] font-semibold">
-              <CheckCircle2 className="w-3.5 h-3.5" /> {t('Voice is working.')}
-            </span>
-          )}
+      <div className="flex items-center justify-between gap-3">
+        <div className="text-[13px] min-w-0">
+          {testResult === 'ok' && <span className="text-[var(--accent)] font-medium">{t('Voice is working.')}</span>}
           {testResult === 'fail' && (
-            <span className="flex items-center gap-1 text-amber-600 font-semibold">
-              <AlertTriangle className="w-3.5 h-3.5" /> {t('Could not reach Gemini — check the key. Meditations will use the built-in voice meanwhile.')}
-            </span>
+            <span className="text-[var(--danger)]">{t('Could not reach Gemini — check the key. Meditations will use the built-in voice meanwhile.')}</span>
           )}
         </div>
         <Button

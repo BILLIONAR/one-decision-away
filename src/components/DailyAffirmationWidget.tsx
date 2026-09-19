@@ -1,22 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useApp } from '../store/useApp';
-import { Card, Badge, Button } from './ui';
-import {
-  Quote,
-  Sparkles,
-  Shuffle,
-  Heart,
-  Copy,
-  Check,
-  Wind,
-  Calendar,
-  Layers,
-  ChevronRight,
-  Share2,
-} from 'lucide-react';
+import { Card } from './ui';
+import { Shuffle, Heart, Copy, Check, Wind } from 'lucide-react';
 import {
   Affirmation,
-  CURATED_AFFIRMATIONS,
   getDailyAffirmation,
   getRandomAffirmation,
 } from '../data/affirmations';
@@ -135,166 +122,115 @@ export const DailyAffirmationWidget: React.FC<{ className?: string }> = ({ class
 
   const categories = ['All', 'Mastery', 'Vision', 'Discipline', 'Agency', 'Peace', 'Compounding'];
 
+  const iconBtn =
+    'w-10 h-10 rounded-full flex items-center justify-center transition-colors cursor-pointer text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-inset)]';
+
   return (
-    <Card
-      padding="md"
-      className={`border border-[var(--border)] bg-[var(--bg-elevated)] relative overflow-hidden transition-all duration-300 shadow-xs ${className}`}
-    >
-      {/* Decorative subtle background accents */}
-      <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/5 dark:bg-amber-400/5 rounded-full blur-2xl pointer-events-none -mr-10 -mt-10" />
-
-      {/* Top Meta Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[var(--border)] relative z-10">
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-full bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
-            <Sparkles className="w-3.5 h-3.5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs font-bold uppercase tracking-wider text-[var(--fg)]">
-                {t('Daily Affirmation')}
-              </span>
-              <span className="text-[10px] text-[var(--fg-subtle)] font-medium flex items-center gap-1">
-                <Calendar className="w-3 h-3" />
-                {formattedToday}
-              </span>
-            </div>
-          </div>
+    <Card padding="md" className={`space-y-4 ${className}`}>
+      {/* Top row */}
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <h3 className="text-[15px] font-semibold text-[var(--fg)]">{t('Affirmation')}</h3>
+          <p className="text-[13px] text-[var(--fg-muted)]">{formattedToday}</p>
         </div>
-
-        {/* Right Controls: Category Pills / Shuffle / Favorite */}
-        <div className="flex items-center gap-1.5">
-          <Badge variant="subtle" className="text-[10px] py-0.5 px-2 font-medium">
-            {t(currentAffirmation.category)}
-          </Badge>
-
+        <div className="flex items-center gap-0.5 shrink-0">
           <button
             type="button"
             onClick={handleToggleFavorite}
-            className={`p-1.5 rounded-full transition-colors cursor-pointer ${
-              isFavorited
-                ? 'text-rose-500 bg-rose-500/10'
-                : 'text-[var(--fg-subtle)] hover:text-rose-500 hover:bg-[var(--bg-muted)]'
-            }`}
+            className={`${iconBtn} ${isFavorited ? 'text-[var(--accent)]' : ''}`}
+            aria-label={isFavorited ? t('Remove from favorites') : t('Save to favorite mantras')}
             title={isFavorited ? t('Remove from favorites') : t('Save to favorite mantras')}
           >
-            <Heart className={`w-3.5 h-3.5 ${isFavorited ? 'fill-current' : ''}`} />
+            <Heart className={`w-[18px] h-[18px] ${isFavorited ? 'fill-current' : ''}`} strokeWidth={1.8} />
           </button>
-
-          <button
-            type="button"
-            onClick={handleCopy}
-            className="p-1.5 rounded-full text-[var(--fg-subtle)] hover:text-[var(--fg)] hover:bg-[var(--bg-muted)] transition-colors cursor-pointer"
-            title={t('Copy quote')}
-          >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+          <button type="button" onClick={handleCopy} className={iconBtn} aria-label={t('Copy quote')} title={t('Copy quote')}>
+            {copied ? (
+              <Check className="w-[18px] h-[18px] text-[var(--accent)]" strokeWidth={1.8} />
+            ) : (
+              <Copy className="w-[18px] h-[18px]" strokeWidth={1.8} />
+            )}
           </button>
-
           <button
             type="button"
             onClick={handleShuffle}
             disabled={isShuffling}
-            className="flex items-center gap-1 px-2 py-1 text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 rounded-[var(--radius-sm)] transition-colors cursor-pointer"
-            title={t('Roll a new random daily quote')}
+            className={iconBtn}
+            aria-label={t('New quote')}
+            title={t('New quote')}
           >
-            <Shuffle className={`w-3 h-3 ${isShuffling ? 'animate-spin' : ''}`} />
-            <span>{t('Randomize')}</span>
+            <Shuffle className={`w-[18px] h-[18px] ${isShuffling ? 'animate-spin' : ''}`} strokeWidth={1.8} />
           </button>
         </div>
       </div>
 
-      {/* Main Quote Body */}
-      <div className="pt-3.5 pb-2 relative z-10">
-        {isBreathingMode ? (
-          /* Guided Mindful Breath Overlay */
-          <div className="py-4 text-center space-y-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)] border border-amber-500/20 p-4 animate-in fade-in">
-            <div className="flex items-center justify-center gap-2 text-xs font-bold text-amber-500 uppercase tracking-widest">
-              <Wind className="w-4 h-4 animate-pulse" />
-              <span>{t('Mindful Affirmation Pause')}</span>
-            </div>
+      {isBreathingMode ? (
+        /* Guided breath */
+        <div className="py-6 text-center space-y-4 bg-[var(--bg)] rounded-[var(--radius-sm)] animate-in fade-in">
+          <div className="flex items-center justify-center gap-2 text-[13px] font-medium text-[var(--fg-muted)]">
+            <Wind className="w-4 h-4" strokeWidth={1.8} />
+            <span>{t('Breathe with it')}</span>
+          </div>
 
-            <div className="relative flex items-center justify-center my-3">
-              <div
-                className={`w-20 h-20 rounded-full flex items-center justify-center transition-all duration-1000 border-2 ${
-                  breathPhase === 'Inhale'
-                    ? 'scale-125 bg-amber-500/20 border-amber-500 text-amber-600 dark:text-amber-400'
-                    : breathPhase === 'Hold'
-                    ? 'scale-110 bg-indigo-500/20 border-indigo-500 text-indigo-600 dark:text-indigo-400'
-                    : 'scale-90 bg-emerald-500/20 border-emerald-500 text-emerald-600 dark:text-emerald-400'
-                }`}
-              >
-                <div className="text-center">
-                  <div className="text-xs font-bold">{t(breathPhase)}</div>
-                  <div className="text-sm font-mono font-extrabold">{breathCount}s</div>
-                </div>
+          <div className="relative flex items-center justify-center py-3">
+            <div
+              className={`w-24 h-24 rounded-full flex items-center justify-center transition-transform duration-1000 bg-[var(--accent-soft)] text-[var(--accent)] ${
+                breathPhase === 'Inhale' ? 'scale-125' : breathPhase === 'Hold' ? 'scale-110' : 'scale-90'
+              }`}
+            >
+              <div className="text-center">
+                <div className="text-[13px] font-medium">{t(breathPhase)}</div>
+                <div className="text-[18px] font-semibold tabular-nums">{breathCount}s</div>
               </div>
             </div>
+          </div>
 
-            <p className="text-xs italic text-[var(--fg-muted)] max-w-md mx-auto">
-              "{t(currentAffirmation.quote)}"
-            </p>
+          <p className="text-[14px] text-[var(--fg-muted)] max-w-md mx-auto px-4">{t(currentAffirmation.quote)}</p>
 
+          <button
+            type="button"
+            onClick={handleToggleBreath}
+            className="h-10 px-4 text-[13px] font-medium text-[var(--fg-muted)] hover:text-[var(--fg)] cursor-pointer"
+          >
+            {t('Done')}
+          </button>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          <div>
+            <blockquote className="text-[17px] font-medium text-[var(--fg)] leading-snug tracking-tight">
+              {t(currentAffirmation.quote)}
+            </blockquote>
+            <div className="text-[13px] text-[var(--fg-muted)] mt-2">{currentAffirmation.author}</div>
+          </div>
+
+          <p className="text-[14px] text-[var(--fg-muted)] leading-relaxed">{t(currentAffirmation.actionCue)}</p>
+
+          <div className="flex items-center justify-between gap-3 flex-wrap">
             <button
               type="button"
               onClick={handleToggleBreath}
-              className="text-[11px] text-[var(--fg-subtle)] hover:text-[var(--fg)] underline cursor-pointer"
+              className="h-10 px-3 -ml-3 text-[13px] font-medium text-[var(--fg-muted)] hover:text-[var(--fg)] flex items-center gap-1.5 transition-colors cursor-pointer"
+              title={t('Pause and breathe with this affirmation for 15 seconds')}
             >
-              {t('Exit Breathing Mode')}
+              <Wind className="w-4 h-4" strokeWidth={1.8} />
+              <span>{t('Breathe')}</span>
             </button>
+
+            <select
+              aria-label={t('Filter category')}
+              value={selectedCategory}
+              onChange={(e) => handleCategoryChange(e.target.value)}
+              className="h-10 text-[13px] px-3 rounded-[var(--radius-sm)] bg-[var(--bg)] text-[var(--fg-muted)] focus:outline-none cursor-pointer"
+            >
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat === 'All' ? t('All themes') : t(cat)}
+                </option>
+              ))}
+            </select>
           </div>
-        ) : (
-          /* Standard Inspiring Quote Display */
-          <div className="space-y-2.5">
-            <div className="flex gap-2.5 items-start">
-              <Quote className="w-4 h-4 text-amber-500/50 shrink-0 mt-0.5" />
-              <div className="space-y-1.5 flex-1 min-w-0">
-                <blockquote className="text-sm sm:text-base font-serif italic text-[var(--fg)] leading-relaxed">
-                  "{t(currentAffirmation.quote)}"
-                </blockquote>
-                <div className="text-xs font-semibold text-[var(--fg-muted)] flex items-center gap-1.5">
-                  <span>— {currentAffirmation.author}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Reflection & Action Prompt */}
-            <div className="mt-2.5 pt-2.5 border-t border-[var(--border)]/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
-              <div className="text-[11px] text-[var(--fg-muted)] flex items-center gap-1.5">
-                <span className="font-bold text-amber-500 uppercase tracking-wider text-[10px]">
-                  {t('Daily Prompt:')}
-                </span>
-                <span className="line-clamp-1">{t(currentAffirmation.actionCue)}</span>
-              </div>
-
-              <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
-                <button
-                  type="button"
-                  onClick={handleToggleBreath}
-                  className="text-[11px] font-medium text-[var(--fg-subtle)] hover:text-amber-500 flex items-center gap-1 transition-colors cursor-pointer"
-                  title={t('Pause and breathe with this affirmation for 15 seconds')}
-                >
-                  <Wind className="w-3 h-3" />
-                  <span>{t('Reflect')}</span>
-                </button>
-
-                {/* Quick Theme Selector Dropdown */}
-                <select
-                  aria-label={t('Filter category')}
-                  value={selectedCategory}
-                  onChange={(e) => handleCategoryChange(e.target.value)}
-                  className="text-[11px] py-0.5 px-1.5 rounded-[var(--radius-sm)] bg-[var(--bg-muted)] border border-[var(--border)] text-[var(--fg-muted)] focus:outline-none cursor-pointer"
-                >
-                  {categories.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat === 'All' ? t('All Themes') : t(cat)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
     </Card>
   );
 };

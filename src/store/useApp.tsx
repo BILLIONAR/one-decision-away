@@ -52,7 +52,7 @@ import { SEED_MARKET_ITEMS } from '../data/seed';
 import { soundSynthesizer } from '../utils/soundSynthesizer';
 import { voiceGuide } from '../utils/voiceGuide';
 import { getGuidedMeditation } from '../data/guidedMeditations';
-import { t, getLocale, setLocale, isLocale, hasStoredLocale, ensureLocaleLoaded } from '../i18n';
+import { t, getLocale, setLocale, isLocale, hasStoredLocale, ensureLocaleLoaded, type Locale } from '../i18n';
 
 export interface AppContextType {
   data: UserData | null;
@@ -205,6 +205,27 @@ export interface AppContextType {
   importDataJson: (file: File) => Promise<void>;
   /** Pull newest data from cloud (if signed in) and reload */
   syncFromCloud: () => Promise<boolean>;
+  /**
+   * First-run finish: saves name + locale, marks onboarding completed, pins the
+   * chosen starter dream as the primary Vision target and locks in today's One Decision.
+   * One save, so the app moves to Today in a single render.
+   */
+  completeOnboarding: (params: {
+    displayName: string;
+    locale: Locale;
+    dream?: {
+      id: string;
+      name: string;
+      category: MarketCategory;
+      realPriceUsd: number;
+      dreamDollarPrice: number;
+      description: string;
+      imageUrl: string;
+      whyWanted?: string;
+      firstRealStep?: string;
+    };
+    decision: string;
+  }) => Promise<void>;
 }
 
 
@@ -2332,6 +2353,98 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     showToast(t('Data exported to JSON file.'), 'success');
   }, [data, showToast]);
 
+  const completeOnboarding = useCallback(
+    async (params: {
+      displayName: string;
+      locale: Locale;
+      dream?: {
+        id: string;
+        name: string;
+        category: MarketCategory;
+        realPriceUsd: number;
+        dreamDollarPrice: number;
+        description: string;
+        imageUrl: string;
+        whyWanted?: string;
+        firstRealStep?: string;
+      };
+      decision: string;
+    }) => {
+      if (!data) return;
+      const nowIso = new Date().toISOString();
+      const todayStr = nowIso.slice(0, 10);
+
+      // 1. Dream → custom market item pinned first in the Vision Board (same shape as pinExploreDream)
+      let customMarketItems = data.customMarketItems || [];
+      let inVisionItemIds = data.inVisionItemIds || [];
+      if (params.dream) {
+        const dream = params.dream;
+        const existing = customMarketItems.find((c) => c.id === dream.id);
+        if (!existing) {
+          const item: MarketItem = {
+            id: dream.id,
+            name: dream.name,
+            category: dream.category,
+            realPriceUsd: dream.realPriceUsd,
+            dreamDollarPrice: dream.dreamDollarPrice,
+            description: dream.description,
+            illustrationKey: 'custom_dream',
+            customImageUrl: dream.imageUrl,
+            whyWanted: dream.whyWanted || '',
+            firstRealStep: dream.firstRealStep || '',
+            isCustom: true,
+            createdAt: nowIso,
+          };
+          customMarketItems = [item, ...customMarketItems];
+        }
+        inVisionItemIds = Array.from(new Set([dream.id, ...inVisionItemIds]));
+      }
+
+      // 2. Today's One Decision (same rules as setOneDecision)
+      const decision = params.decision.trim();
+      let missions = data.missions;
+      if (decision) {
+        const archived = missions.map((m) =>
+          m.isOneDecision && m.status === 'active' ? { ...m, status: 'archived' as const } : m
+        );
+        const oneDecision: Mission = {
+          id: `one-decision-${Date.now()}`,
+          userId: data.profile.id,
+          title: decision,
+          type: 'daily_quest',
+          area: 'Work',
+          difficulty: 'medium',
+          estimatedMinutes: 45,
+          isOneDecision: true,
+          scheduledFor: todayStr,
+          status: 'active',
+          createdAt: nowIso,
+        };
+        missions = [oneDecision, ...archived];
+      }
+
+      // 3. Profile
+      if (isLocale(params.locale) && getLocale() !== params.locale) setLocale(params.locale);
+      const updated: UserData = {
+        ...data,
+        profile: {
+          ...data.profile,
+          displayName: params.displayName.trim(),
+          locale: params.locale,
+          onboardingStep: 'completed',
+          lastOpenedAt: nowIso,
+        },
+        customMarketItems,
+        inVisionItemIds,
+        missions,
+      };
+      await repository.save(updated);
+      setData(updated);
+      setActiveRoute('/app');
+    },
+    [data, setActiveRoute]
+  );
+
   const value: AppContextType = {
     data,
     isLoading,
@@ -2425,6 +2538,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     exportDataJson,
     importDataJson,
     syncFromCloud,
+    completeOnboarding,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
