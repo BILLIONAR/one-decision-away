@@ -9,8 +9,6 @@ import { Onboarding } from './components/Onboarding';
 const Dreams = lazy(() => import('./pages/Dreams').then((m) => ({ default: m.Dreams })));
 const Me = lazy(() => import('./pages/Me').then((m) => ({ default: m.Me })));
 const Missions = lazy(() => import('./pages/Missions').then((m) => ({ default: m.Missions })));
-const Market = lazy(() => import('./pages/Market').then((m) => ({ default: m.Market })));
-const MyLife = lazy(() => import('./pages/MyLife').then((m) => ({ default: m.MyLife })));
 const Progress = lazy(() => import('./pages/Progress').then((m) => ({ default: m.Progress })));
 const TwoFutures = lazy(() => import('./pages/TwoFutures').then((m) => ({ default: m.TwoFutures })));
 const FutureSelf = lazy(() => import('./pages/FutureSelf').then((m) => ({ default: m.FutureSelf })));
@@ -78,9 +76,9 @@ const AppRouter: React.FC = () => {
       case '/app/missions':
         return <Missions />;
       case '/app/market':
-        return <Market />;
+        return <Dreams />;
       case '/app/life':
-        return <MyLife />;
+        return <Dreams />;
       case '/app/progress':
         return <Progress />;
       case '/app/two-futures':

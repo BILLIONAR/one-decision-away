@@ -36,7 +36,6 @@ import {
   Share2,
 } from 'lucide-react';
 import { DailyPrimaryGoal } from '../types/models';
-import { SEED_DAILY_PRIMARY_GOALS } from '../data/seed';
 import { ExportProgressModal } from './ExportProgressModal';
 import { useT, t, getSpeechLang } from '../i18n';
 
@@ -313,9 +312,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
     }
   };
 
-  const dailyGoals = (data?.dailyPrimaryGoals && data.dailyPrimaryGoals.length > 0)
-    ? data.dailyPrimaryGoals
-    : SEED_DAILY_PRIMARY_GOALS;
+  const dailyGoals = data?.dailyPrimaryGoals ?? [];
   const missions = data?.missions || [];
   const goalsMap = useMemo(() => {
     const map = new Map<string, DailyPrimaryGoal>();
