@@ -13,6 +13,22 @@ export default defineConfig(({ mode }) => {
   return {
     base,
     plugins: [react(), tailwindcss()],
+    build: {
+      chunkSizeWarningLimit: 700,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules/recharts') || id.includes('node_modules/d3') || id.includes('node_modules/victory') || id.includes('node_modules/internmap') || id.includes('node_modules/delaunator') || id.includes('node_modules/robust-predicates')) return 'charts';
+            if (id.includes('node_modules/@google/genai')) return 'genai';
+            if (id.includes('node_modules/@supabase')) return 'supabase';
+            if (id.includes('node_modules/motion') || id.includes('node_modules/framer-motion')) return 'motion';
+            if (id.includes('node_modules/html-to-image') || id.includes('node_modules/canvas-confetti')) return 'media';
+            if (id.includes('node_modules/react') || id.includes('node_modules/scheduler')) return 'react';
+            return undefined;
+          },
+        },
+      },
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
