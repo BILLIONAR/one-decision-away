@@ -488,11 +488,11 @@ const getDaysAgo = (n: number) => {
 export const SEED_MICRO_HABITS: MicroHabit[] = [
   {
     id: 'habit-seed-1',
-    title: N_('5-Min Hydration & Mineral Protocol'),
+    title: N_('Drink a glass of water'),
     category: 'Health',
     goalId: 'goal-seed-2',
     durationMinutes: 5,
-    description: N_('500ml room temp water with sea salt & lemon to immediately activate cognitive readiness.'),
+    description: N_('First thing after waking, before coffee.'),
     completedDates: [
       getDaysAgo(20), getDaysAgo(19), getDaysAgo(18), getDaysAgo(17), getDaysAgo(16),
       getDaysAgo(15), getDaysAgo(14), getDaysAgo(13), getDaysAgo(12), getDaysAgo(11),
@@ -505,11 +505,11 @@ export const SEED_MICRO_HABITS: MicroHabit[] = [
   },
   {
     id: 'habit-seed-2',
-    title: N_('Review 10-Year Future Self Identity Card'),
+    title: N_('Read for 10 minutes'),
     category: 'Mindset',
     goalId: 'goal-seed-3',
     durationMinutes: 3,
-    description: N_('Read your core standards and boundaries before opening reactive feeds or email.'),
+    description: N_('A book, not a feed.'),
     completedDates: [
       getDaysAgo(24), getDaysAgo(23), getDaysAgo(22), getDaysAgo(21), getDaysAgo(20),
       getDaysAgo(19), getDaysAgo(18), getDaysAgo(17), getDaysAgo(16), getDaysAgo(15),
@@ -521,11 +521,11 @@ export const SEED_MICRO_HABITS: MicroHabit[] = [
   },
   {
     id: 'habit-seed-6',
-    title: N_('Zero Reactive Phone Check (First 30m)'),
+    title: N_('No phone for the first 30 minutes'),
     category: 'Discipline',
     goalId: 'goal-seed-3',
     durationMinutes: 5,
-    description: N_('Guard your morning neurotransmitters from low-dopamine feed scrolling.'),
+    description: N_('Start the day on your own terms.'),
     completedDates: [
       getDaysAgo(22), getDaysAgo(21), getDaysAgo(20), getDaysAgo(19),
       getDaysAgo(18), getDaysAgo(17), getDaysAgo(16), getDaysAgo(15),

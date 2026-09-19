@@ -127,7 +127,7 @@ export const Today: React.FC = () => {
       <header className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <p className="text-[13px] text-[var(--fg-muted)]">{dateLine}</p>
-          <h1 className="text-[28px] font-semibold tracking-tight text-[var(--fg)] leading-tight truncate">
+          <h1 className="text-[26px] font-semibold tracking-tight text-[var(--fg)] leading-tight">
             {greeting}
           </h1>
         </div>

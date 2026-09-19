@@ -208,6 +208,9 @@ export const Onboarding: React.FC = () => {
                         alt=""
                         loading="lazy"
                         className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).style.visibility = 'hidden';
+                        }}
                       />
                     </div>
                     <div className="p-3 space-y-1">
