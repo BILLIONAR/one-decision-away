@@ -122,6 +122,8 @@ export const Today: React.FC = () => {
     writeRitualsOpen(next);
   };
 
+  const quote = getDailyQuote();
+
   return (
     <div className="space-y-6">
       {/* 1. Header */}
@@ -146,9 +148,16 @@ export const Today: React.FC = () => {
       {/* Quote of the day */}
       <figure className="flex gap-3">
         <span aria-hidden className="w-[3px] shrink-0 rounded-full bg-[var(--accent)]" />
-        <blockquote className="text-[16px] leading-snug text-[var(--fg)] max-w-[46ch]">
-          {t(getDailyQuote())}
-        </blockquote>
+        <div className="min-w-0">
+          <blockquote className="text-[16px] leading-snug text-[var(--fg)] max-w-[46ch]">
+            {t(quote.text)}
+          </blockquote>
+          {quote.source && (
+            <figcaption className="mt-1 text-[12px] font-medium text-[var(--fg-muted)]">
+              — {t(quote.source)}
+            </figcaption>
+          )}
+        </div>
       </figure>
 
       {/* 2. One decision */}
