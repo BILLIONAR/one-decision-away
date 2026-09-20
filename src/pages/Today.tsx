@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { AudioLines, Check, ChevronDown, ChevronRight, Plus } from 'lucide-react';
 import { useApp } from '../store/useApp';
+import { getDailyQuote } from '../data/dailyQuotes';
 import { Modal } from '../components/ui';
 import { CompleteMissionModal } from '../components/MissionFlows';
 import { DreamArt } from '../components/DreamArt';
@@ -141,6 +142,14 @@ export const Today: React.FC = () => {
           <span className="font-semibold text-[var(--accent)]">{balance.toLocaleString()}</span>
         </button>
       </header>
+
+      {/* Quote of the day */}
+      <figure className="flex gap-3">
+        <span aria-hidden className="w-[3px] shrink-0 rounded-full bg-[var(--accent)]" />
+        <blockquote className="text-[16px] leading-snug text-[var(--fg)] max-w-[46ch]">
+          {t(getDailyQuote())}
+        </blockquote>
+      </figure>
 
       {/* 2. One decision */}
       <section
