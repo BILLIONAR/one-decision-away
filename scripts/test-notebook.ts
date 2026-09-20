@@ -272,7 +272,7 @@ test('concurrent mission and Notebook reward evaluation share the same 2500 ceil
   await repo.replaceAll(data);
   await Promise.all([
     repo.mutateNotebook(source()),
-    repo.completeMission({ missionId: 'mission-seed-1', method: 'self' }),
+    repo.completeMission({ missionId: 'mission-seed-3', method: 'self' }),
   ]);
   const saved = await repo.load();
   assert.equal(saved.transactions.reduce((sum, tx) => sum + tx.amount, 0), 2500);
