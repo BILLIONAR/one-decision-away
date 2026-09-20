@@ -39,6 +39,10 @@ interface DreamCardProps {
   action?: React.ReactNode;
 }
 
+/** Smaller Unsplash rendition for grid cards so the grid fills fast. */
+const cardImageUrl = (url: string) =>
+  url.includes('images.unsplash.com') ? url.replace(/w=\d+/, 'w=600') : url;
+
 const DreamCard: React.FC<DreamCardProps> = ({
   name,
   imageUrl,
@@ -56,12 +60,13 @@ const DreamCard: React.FC<DreamCardProps> = ({
         <div className="aspect-[4/3] w-full overflow-hidden bg-[var(--bg-muted)]">
           {imageUrl && !imgFailed ? (
             <img
-              src={imageUrl}
+              src={cardImageUrl(imageUrl)}
               alt={name}
               loading="lazy"
               referrerPolicy="no-referrer"
               onError={() => setImgFailed(true)}
-              className="w-full h-full object-cover"
+              onLoad={(e) => e.currentTarget.classList.remove('opacity-0')}
+              className="w-full h-full object-cover opacity-0 transition-opacity duration-500"
             />
           ) : (
             <DreamArt type={illustrationKey} alt={name} className="w-full h-full" />
