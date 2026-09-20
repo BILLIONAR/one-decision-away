@@ -17,6 +17,7 @@ import {
   CloudUpload,
   SunMoon,
   Sparkles,
+  AudioLines,
   LucideIcon,
 } from 'lucide-react';
 
@@ -72,6 +73,7 @@ export const Me: React.FC = () => {
     {
       title: t('Your future'),
       rows: [
+        { icon: AudioLines, label: t('Focus & meditations'), hint: t('Guided sessions and sound waves'), route: '/app/focus' },
         { icon: UserRound, label: t('Future self'), hint: t('Roles, standards, letters'), route: '/app/future-self' },
         { icon: Target, label: t('Missions'), route: '/app/missions' },
         { icon: CalendarRange, label: t('Seasons'), route: '/app/seasons' },

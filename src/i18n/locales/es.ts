@@ -1492,7 +1492,7 @@ const dict: Record<string, string> = {
   "Flow State": "Estado de fluidez",
   "Flow entry": "Entrada en fluidez",
   "Flybridge": "Puente superior",
-  "Focus": "Concentración",
+  "Focus": "Enfoque",
   "Focus & Energy": "Concentración y energía",
   "Focus & Meditation Engine": "Motor de concentración y meditación",
   "Focus ({n}m)": "Concentración ({n}m)",
@@ -5246,6 +5246,11 @@ const dict: Record<string, string> = {
   "Turn on Pro (demo)": "Activar Pro (demo)",
   "No pay-to-win. D$ is only earned by doing.": "Sin pagar para ganar. Los D$ solo se ganan haciendo.",
   "No selling your data.": "No vendemos tus datos.",
-  "No manipulative streaks or fake urgency.": "Sin rachas manipuladoras ni urgencia falsa."
+  "No manipulative streaks or fake urgency.": "Sin rachas manipuladoras ni urgencia falsa.",
+  "Guided meditations, sound waves and a focus timer.": "Meditaciones guiadas, ondas de sonido y un temporizador de enfoque.",
+  "Meditate & focus": "Meditar y enfocar",
+  "11 guided meditations · sound waves · focus timer": "11 meditaciones guiadas · ondas de sonido · temporizador de enfoque",
+  "Focus & meditations": "Enfoque y meditaciones",
+  "Guided sessions and sound waves": "Sesiones guiadas y ondas de sonido"
 };
 export default dict;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Check, ChevronDown, ChevronRight, Plus } from 'lucide-react';
+import { AudioLines, Check, ChevronDown, ChevronRight, Plus } from 'lucide-react';
 import { useApp } from '../store/useApp';
 import { Modal } from '../components/ui';
 import { CompleteMissionModal } from '../components/MissionFlows';
@@ -300,6 +300,24 @@ export const Today: React.FC = () => {
           <ChevronRight size={18} strokeWidth={1.8} className="shrink-0 text-[var(--fg-subtle)]" />
         </button>
       )}
+
+      {/* Meditate & focus */}
+      <button
+        type="button"
+        onClick={() => setActiveRoute('/app/focus')}
+        className="w-full bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 flex items-center gap-4 text-left cursor-pointer hover:bg-[var(--bg-inset)] transition-colors"
+      >
+        <span className="w-11 h-11 rounded-full bg-[var(--accent-soft)] flex items-center justify-center shrink-0">
+          <AudioLines size={20} strokeWidth={1.8} className="text-[var(--accent)]" />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-[15px] font-semibold text-[var(--fg)]">{t('Meditate & focus')}</span>
+          <span className="block text-[13px] text-[var(--fg-muted)] truncate">
+            {t('11 guided meditations · sound waves · focus timer')}
+          </span>
+        </span>
+        <ChevronRight size={18} strokeWidth={1.8} className="shrink-0 text-[var(--fg-subtle)]" />
+      </button>
 
       {/* 5. Daily rituals */}
       <section className="bg-[var(--bg-muted)] rounded-[var(--radius-md)]">

@@ -18,6 +18,7 @@ const Bridge = lazy(() => import('./pages/Bridge').then((m) => ({ default: m.Bri
 const Budget = lazy(() => import('./pages/Budget').then((m) => ({ default: m.Budget })));
 const Seasons = lazy(() => import('./pages/Seasons').then((m) => ({ default: m.Seasons })));
 const Upgrade = lazy(() => import('./pages/Upgrade').then((m) => ({ default: m.Upgrade })));
+const Focus = lazy(() => import('./pages/Focus').then((m) => ({ default: m.Focus })));
 const Settings = lazy(() => import('./pages/Settings').then((m) => ({ default: m.Settings })));
 const Notebook = lazy(() => import('./pages/Notebook').then((m) => ({ default: m.Notebook })));
 
@@ -100,6 +101,8 @@ const AppRouter: React.FC = () => {
         return <Upgrade />;
       case '/app/settings':
         return <Settings />;
+      case '/app/focus':
+        return <Focus />;
       case '/app/notebook':
         return <Notebook />;
       default:

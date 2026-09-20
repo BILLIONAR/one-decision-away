@@ -5246,6 +5246,11 @@ const dict: Record<string, string> = {
   "Turn on Pro (demo)": "Pro'yu aç (demo)",
   "No pay-to-win. D$ is only earned by doing.": "Parayla kazanmak yok. D$ yalnızca yaparak kazanılır.",
   "No selling your data.": "Verilerin satılmaz.",
-  "No manipulative streaks or fake urgency.": "Manipülatif seriler ya da sahte aciliyet yok."
+  "No manipulative streaks or fake urgency.": "Manipülatif seriler ya da sahte aciliyet yok.",
+  "Guided meditations, sound waves and a focus timer.": "Sesli meditasyonlar, ses dalgaları ve odak zamanlayıcısı.",
+  "Meditate & focus": "Meditasyon ve odak",
+  "11 guided meditations · sound waves · focus timer": "11 sesli meditasyon · ses dalgaları · odak zamanlayıcısı",
+  "Focus & meditations": "Odak ve meditasyonlar",
+  "Guided sessions and sound waves": "Rehberli seanslar ve ses dalgaları"
 };
 export default dict;

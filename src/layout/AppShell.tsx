@@ -24,6 +24,7 @@ const SECONDARY_ROUTE_PARENT: Record<string, string> = {
   '/app/market': '/app/dreams',
   '/app/life': '/app/dreams',
   '/app/missions': '/app',
+  '/app/focus': '/app',
   '/app/progress': '/app/me',
   '/app/two-futures': '/app/me',
   '/app/future-self': '/app/me',
