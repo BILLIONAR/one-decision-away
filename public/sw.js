@@ -4,7 +4,7 @@ const CACHE_PREFIX = `oda:${encodeURIComponent(BASE.pathname)}:`;
 const SHELL_CACHE = `${CACHE_PREFIX}v2`;
 const MEDIA_CACHE = `${SHELL_CACHE}:media`;
 const INDEX_URL = new URL('index.html', BASE).href;
-const SHELL = ['', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-192-maskable.png', 'icon-512-maskable.png', 'apple-touch-icon.png'].map(path => new URL(path, BASE).href);
+const SHELL = ['', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-192-maskable.png', 'icon-512-maskable.png', 'apple-touch-icon.png', 'brand/oda-c4.png'].map(path => new URL(path, BASE).href);
 const inScope = url => url.origin === BASE.origin && url.pathname.startsWith(BASE.pathname);
 
 self.addEventListener('install', event => {
@@ -69,6 +69,22 @@ self.addEventListener('fetch', event => {
     event.waitUntil(refresh.then(() => undefined));
     event.respondWith(caches.open(MEDIA_CACHE).then(async cache => (await cache.match(request)) || (await refresh) || Response.error()));
   }
+});
+
+self.addEventListener('push', event => {
+  // The browser invokes this event even when no ODA tab is open.
+  // A deployed VAPID sender and an opted-in subscription are still required.
+  let payload = {};
+  try { payload = event.data?.json() || {}; } catch { /* Use a visible safe default. */ }
+  const title = typeof payload.title === 'string' ? payload.title.slice(0, 120) : 'ODA';
+  const body = typeof payload.body === 'string' ? payload.body.slice(0, 2000) : 'Yeni sözün hazır. Bugün kendine küçük bir alan aç.';
+  event.waitUntil(self.registration.showNotification(title, {
+    body,
+    icon: new URL('icon-192.png', BASE).href,
+    badge: new URL('icon-192.png', BASE).href,
+    tag: typeof payload.tag === 'string' ? payload.tag.slice(0, 120) : 'oda-daily-inspiration',
+    data: { url: typeof payload.url === 'string' ? payload.url : '/app' },
+  }));
 });
 
 self.addEventListener('notificationclick', event => {

@@ -1,133 +1,87 @@
 import React, { useEffect, useState } from 'react';
 import { useApp } from '../store/useApp';
 import { Card, Button, Field } from './ui';
-import { Send, Check } from 'lucide-react';
+import { Send, Check, Bell } from 'lucide-react';
 import { notificationScheduler } from '../services/notificationScheduler';
-import { DEFAULT_NUDGE_TIMES, NUDGE_TITLES, NudgeSlot, getNudgeLine } from '../data/dailyNudges';
-import { useT, N_ } from '../i18n';
-
-const SLOTS: { key: NudgeSlot; label: string; hint: string }[] = [
-  { key: 'morning', label: N_('Morning ignite'), hint: N_('Sets the One Decision before the day starts') },
-  { key: 'midday', label: N_('Midday re-aim'), hint: N_('Catches the drift, brings you back') },
-  { key: 'evening', label: N_('Evening close'), hint: N_('Kind review, tomorrow\'s first step') },
-];
+import { getPushStatus, enablePush, disablePush, syncPushPreferences } from '../services/pushNotifications';
+import { cloudSync } from '../services/cloudSync';
+import { NUDGE_SLOTS, NudgeSlot, getNudgeLine, normaliseNudgeTimes, isNudgeTime } from '../data/dailyNudges';
+import { useT, useLocale } from '../i18n';
+import { companionCopy } from '../i18n/companion';
 
 export const DailyNudgesSettings: React.FC = () => {
-  const t = useT();
+  const t = useT(); const [locale] = useLocale(); const c = companionCopy(locale);
   const { data, updateProfile, showToast } = useApp();
   const [perm, setPerm] = useState(notificationScheduler.permission());
-  const [enabled, setEnabled] = useState<boolean>(data?.profile.nudgesEnabled === true);
-  const [times, setTimes] = useState<Record<NudgeSlot, string>>({
-    morning: data?.profile.nudgeTimes?.morning || DEFAULT_NUDGE_TIMES.morning,
-    midday: data?.profile.nudgeTimes?.midday || DEFAULT_NUDGE_TIMES.midday,
-    evening: data?.profile.nudgeTimes?.evening || DEFAULT_NUDGE_TIMES.evening,
-  });
+  const [enabled, setEnabled] = useState(data?.profile.nudgesEnabled === true);
+  const [times, setTimes] = useState<Record<NudgeSlot, string>>(() => normaliseNudgeTimes(data?.profile.nudgeTimes));
   const [saved, setSaved] = useState(false);
-
-  useEffect(() => setPerm(notificationScheduler.permission()), []);
+  const [busy, setBusy] = useState(false);
+  const [push, setPush] = useState<Awaited<ReturnType<typeof getPushStatus>> | null>(null);
+  useEffect(() => {
+    let active = true;
+    const refresh = () => { setPerm(notificationScheduler.permission()); getPushStatus().then(state => { if (active) setPush(state); }).catch(() => {}); };
+    refresh(); const unsubscribe = cloudSync.subscribe(refresh);
+    return () => { active = false; unsubscribe(); };
+  }, []);
   if (!data) return null;
-
   const supported = notificationScheduler.isSupported();
+  const valid = () => NUDGE_SLOTS.every(slot => isNudgeTime(times[slot])) && new Set(Object.values(times)).size === 6;
+  const report = (error: unknown) => showToast(error instanceof Error ? error.message : t('Something went wrong. Please try again.'), 'error');
 
   const handleToggle = async () => {
+    if (busy) return;
     const next = !enabled;
-    if (next && perm !== 'granted') {
-      const p = await notificationScheduler.requestPermission();
-      setPerm(p);
-      if (p !== 'granted') {
-        showToast(t('Notifications are blocked in the browser. Allow them to receive nudges.'), 'error');
-        return;
+    if (next && !valid()) { showToast(c.timeInvalid, 'error'); return; }
+    setBusy(true);
+    try {
+      if (next && perm !== 'granted') {
+        const permission = await notificationScheduler.requestPermission(); setPerm(permission);
+        if (permission !== 'granted') { showToast(t('Notifications are blocked in the browser. Allow them to receive nudges.'), 'error'); return; }
       }
-    }
-    setEnabled(next);
-    await updateProfile({ nudgesEnabled: next, nudgeTimes: times });
+      if (!next) {
+        // Stop this device's local reminders even if remote cleanup is offline.
+        await updateProfile({ nudgesEnabled: false, nudgeTimes: times }); setEnabled(false);
+        await disablePush();
+      }
+      await updateProfile({ nudgesEnabled: next, nudgeTimes: times }); setEnabled(next);
+      setPush(await getPushStatus());
+    } catch (error) { report(error); } finally { setBusy(false); }
   };
-
   const handleSave = async () => {
-    await updateProfile({ nudgesEnabled: enabled, nudgeTimes: times });
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    if (!valid()) { showToast(c.timeInvalid, 'error'); return; }
+    setBusy(true);
+    try {
+      if (push?.subscribed) await syncPushPreferences(times, locale);
+      await updateProfile({ nudgesEnabled: enabled, nudgeTimes: times }); setSaved(true);
+    } catch (error) { report(error); } finally { setBusy(false); }
   };
-
+  const handleBackground = async () => {
+    if (!valid()) { showToast(c.timeInvalid, 'error'); return; }
+    setBusy(true);
+    try {
+      setPush(await enablePush(times, locale)); setPerm(notificationScheduler.permission());
+      await updateProfile({ nudgesEnabled: true, nudgeTimes: times }); setEnabled(true);
+    } catch (error) { report(error); } finally { setBusy(false); }
+  };
   const handleTest = async () => {
     if (perm !== 'granted') {
-      const p = await notificationScheduler.requestPermission();
-      setPerm(p);
-      if (p !== 'granted') return;
+      const permission = await notificationScheduler.requestPermission(); setPerm(permission);
+      if (permission !== 'granted') return;
     }
-    const hour = new Date().getHours();
-    const slot: NudgeSlot = hour < 12 ? 'morning' : hour < 18 ? 'midday' : 'evening';
-    await notificationScheduler.show(slot);
+    await notificationScheduler.show('morning');
   };
-
-  const status = !supported ? t('Not supported here') : perm === 'denied' ? t('Blocked by browser') : enabled ? t('On, 3 a day') : t('Off');
-
-  return (
-    <Card padding="md" className="space-y-5">
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <h3 className="text-[15px] font-semibold text-[var(--fg)]">{t('Daily nudges')}</h3>
-          <p className="text-[13px] text-[var(--fg-muted)] mt-0.5">{status}</p>
-        </div>
-      </div>
-
-      <p className="text-[14px] text-[var(--fg-muted)] leading-relaxed">
-        {t('Three short lines a day: one to start, one to re-aim, one to close. They arrive as notifications while the app is open or installed on your home screen.')}
-      </p>
-
-      <div className="flex items-center justify-between gap-4 p-4 rounded-[var(--radius-sm)] bg-[var(--bg)]">
-        <div className="text-[14px] min-w-0">
-          <div className="font-medium text-[var(--fg)]">{t('Send me daily nudges')}</div>
-          <div className="text-[13px] text-[var(--fg-muted)]">
-            {perm === 'granted' ? t('Notification permission granted.') : perm === 'denied' ? t('Permission denied — enable it in browser site settings.') : t("We'll ask for permission once.")}
-          </div>
-        </div>
-        <button
-          type="button"
-          onClick={handleToggle}
-          disabled={!supported}
-          className={`relative w-12 h-7 rounded-full transition-colors cursor-pointer disabled:opacity-40 shrink-0 ${enabled ? 'bg-[var(--accent)]' : 'bg-[var(--border-strong)]'}`}
-          aria-pressed={enabled}
-          aria-label={t('Send me daily nudges')}
-        >
-          <span className={`absolute top-0.5 left-0.5 w-6 h-6 rounded-full bg-white transition-transform ${enabled ? 'translate-x-5' : ''}`} />
-        </button>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        {SLOTS.map((s) => (
-          <Field key={s.key} id={`nudge-${s.key}`} label={t(s.label)} helper={t(s.hint)}>
-            <input
-              id={`nudge-${s.key}`}
-              type="time"
-              value={times[s.key]}
-              onChange={(e) => setTimes({ ...times, [s.key]: e.target.value })}
-              className="w-full h-11 px-3.5 text-[15px] bg-[var(--bg)] rounded-[var(--radius-sm)] text-[var(--fg)] focus:outline-none"
-            />
-          </Field>
-        ))}
-      </div>
-
-      <div className="space-y-2">
-        <div className="text-[13px] font-medium text-[var(--fg-muted)]">{t("Today's lines")}</div>
-        {SLOTS.map((s) => (
-          <div key={s.key} className="text-[13px] text-[var(--fg-muted)] leading-relaxed">
-            <span className="font-medium text-[var(--fg)]">{t(NUDGE_TITLES[s.key])} · {times[s.key]}</span> — {t(getNudgeLine(s.key))}
-          </div>
-        ))}
-      </div>
-
-      <div className="flex items-center justify-between gap-2 flex-wrap">
-        <Button variant="secondary" size="sm" icon={Send} onClick={handleTest} disabled={!supported}>
-          {t('Send a test')}
-        </Button>
-        <Button variant="primary" size="sm" icon={saved ? Check : undefined} onClick={handleSave}>
-          {saved ? t('Saved') : t('Save times')}
-        </Button>
-      </div>
-      <p className="text-[12px] text-[var(--fg-subtle)] leading-relaxed">
-        {t("When the app is fully closed, nudges can't fire without a push server. Keep it installed or open in a tab. If you open the app within 90 minutes of a slot, the missed nudge is delivered then.")}
-      </p>
-    </Card>
-  );
+  const status = !supported ? t('Not supported here') : perm === 'denied' ? t('Blocked by browser') : enabled ? c.notificationOn : c.notificationOff;
+  return <Card padding="md" className="space-y-5">
+    <div><h3 className="text-[17px] font-semibold">{c.reminders}</h3><p className="text-[13px] text-[var(--fg-muted)] mt-1">{status}</p></div>
+    <p className="text-sm text-[var(--fg-muted)] leading-relaxed">{c.remindersHint}</p>
+    <div className="flex items-center justify-between gap-4 p-4 rounded-[var(--radius-sm)] bg-[var(--bg)]">
+      <div className="text-sm"><p className="font-medium">{t('Send me daily nudges')}</p><p className="text-xs mt-1 text-[var(--fg-muted)]">{perm === 'granted' ? t('Notification permission granted.') : perm === 'denied' ? t('Permission denied — enable it in browser site settings.') : t("We'll ask for permission once.")}</p></div>
+      <button type="button" onClick={handleToggle} disabled={!supported || busy} aria-pressed={enabled} aria-label={t('Send me daily nudges')} className={`relative w-12 h-7 rounded-full transition-colors disabled:opacity-40 shrink-0 ${enabled ? 'bg-[var(--accent)]' : 'bg-[var(--border-strong)]'}`}><span className={`absolute top-0.5 left-0.5 w-6 h-6 rounded-full bg-white transition-transform ${enabled ? 'translate-x-5' : ''}`} /></button>
+    </div>
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">{NUDGE_SLOTS.map(slot => <Field key={slot} id={`nudge-${slot}`} label={c[slot]}><input id={`nudge-${slot}`} type="time" value={times[slot]} onChange={event => { setTimes({ ...times, [slot]: event.target.value }); setSaved(false); }} className="w-full h-11 px-3 text-sm bg-[var(--bg)] rounded-[var(--radius-sm)]" /></Field>)}</div>
+    <details className="text-sm"><summary className="min-h-10 cursor-pointer font-medium">{c.showToday}</summary><ol className="space-y-4 mt-2">{NUDGE_SLOTS.map(slot => <li key={slot} className="text-[13px] leading-relaxed text-[var(--fg-muted)]"><strong className="text-[var(--fg)] block mb-1">{c[slot]} · {times[slot]}</strong>{getNudgeLine(slot)}</li>)}</ol></details>
+    <div className="flex justify-between gap-3 flex-wrap"><Button variant="secondary" size="sm" icon={Send} onClick={handleTest} disabled={!supported || busy}>{t('Send a test')}</Button><Button variant="primary" size="sm" icon={saved ? Check : undefined} onClick={handleSave} disabled={busy}>{saved ? t('Saved') : t('Save times')}</Button></div>
+    <section className="border-t border-[var(--border)] pt-4 space-y-2"><p className="text-sm font-semibold flex items-center gap-2"><Bell size={16} />{c.background}</p><p className="text-xs leading-relaxed text-[var(--fg-muted)]">{push?.subscribed ? c.backgroundOn : !push?.configured ? c.backgroundSetup : !push?.signedIn ? c.backgroundSignIn : c.notificationLocal}</p>{push?.configured && push.signedIn && !push.subscribed && <Button variant="secondary" size="sm" onClick={handleBackground} disabled={busy || !supported}>{c.backgroundEnable}</Button>}</section>
+  </Card>;
 };

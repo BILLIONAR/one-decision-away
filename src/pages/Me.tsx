@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { useApp } from '../store/useApp';
-import { useT } from '../i18n';
+import { useT, useLocale } from '../i18n';
+import { companionCopy } from '../i18n/companion';
 import { calculateCurrentStreak, computeLifetimeEarned } from '../services/economy';
 import {
   ChevronRight,
@@ -19,6 +20,7 @@ import {
   Sparkles,
   AudioLines,
   LucideIcon,
+  GraduationCap,
 } from 'lucide-react';
 
 interface MenuRow {
@@ -34,6 +36,8 @@ const FEEDBACK_EMAIL = 'ufrldk13@gmail.com';
 export const Me: React.FC = () => {
   const { data, setActiveRoute } = useApp();
   const t = useT();
+  const [locale] = useLocale();
+  const c = companionCopy(locale);
 
   const stats = useMemo(() => {
     if (!data) return null;
@@ -73,6 +77,9 @@ export const Me: React.FC = () => {
     {
       title: t('Your future'),
       rows: [
+        { icon: UserRound, label: c.coach, hint: c.talk, route: '/app/coach' },
+        { icon: Sparkles, label: c.inspiration, hint: c.subtitle, route: '/app/inspiration' },
+        { icon: GraduationCap, label: c.courses, hint: c.courseHint, route: '/app/courses' },
         { icon: AudioLines, label: t('Focus & meditations'), hint: t('Guided sessions and sound waves'), route: '/app/focus' },
         { icon: UserRound, label: t('Future self'), hint: t('Roles, standards, letters'), route: '/app/future-self' },
         { icon: Target, label: t('Missions'), route: '/app/missions' },

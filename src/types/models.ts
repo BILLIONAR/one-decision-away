@@ -20,9 +20,9 @@ export interface Profile {
   reminderTime?: string;
   dailyWisdomEnabled?: boolean;
   dailyWisdomTime?: string;
-  /** Daily motivational nudges (2–3 notifications a day) */
+  /** Opt-in daily inspiration: six different passages a day. */
   nudgesEnabled?: boolean;
-  nudgeTimes?: { morning: string; midday: string; evening: string };
+  nudgeTimes?: { morning: string; lateMorning?: string; midday: string; afternoon?: string; evening: string; night?: string };
   firstOpenedAt: string;
   lastOpenedAt: string;
   createdAt: string;

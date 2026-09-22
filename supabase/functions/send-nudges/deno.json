@@ -1,0 +1,7 @@
+{
+  "compilerOptions": { "lib": ["deno.window", "dom", "dom.iterable"] },
+  "tasks": {
+    "check": "deno check index.ts",
+    "test-schema": "deno run --allow-read --allow-env --allow-sys schema.test.ts"
+  }
+}

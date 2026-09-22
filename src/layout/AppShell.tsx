@@ -1,26 +1,30 @@
 import React from 'react';
 import { useApp } from '../store/useApp';
-import { Sun, Star, BookOpen, User, X, ArrowLeft } from 'lucide-react';
+import { Sun, Star, BookOpen, User, X, ArrowLeft, MessageCircle } from 'lucide-react';
 import { computeLedgerBalance } from '../services/economy';
 import { FocusLockView } from '../components/FocusLockView';
 import { QuickDreamJournalModal } from '../components/QuickDreamJournalModal';
-import { useT } from '../i18n';
-import { Logo } from '../components/Logo';
+import { useT, useLocale } from '../i18n';
+import { companionCopy } from '../i18n/companion';
+import { LogoLockup } from '../components/Logo';
 
 interface AppShellProps {
   children: React.ReactNode;
 }
 
-/** The four primary destinations. Everything else is reachable from "Me". */
+/** The five primary destinations. Everything else is reachable from "Me". */
 export const PRIMARY_TABS = [
   { key: 'today', path: '/app', icon: Sun },
   { key: 'dreams', path: '/app/dreams', icon: Star },
   { key: 'notebook', path: '/app/notebook', icon: BookOpen },
+  { key: 'coach', path: '/app/coach', icon: MessageCircle },
   { key: 'me', path: '/app/me', icon: User },
 ] as const;
 
 /** Legacy / secondary routes grouped under "Me" — which tab they belong to for highlighting. */
 const SECONDARY_ROUTE_PARENT: Record<string, string> = {
+  '/app/inspiration': '/app',
+  '/app/courses': '/app',
   '/app/market': '/app/dreams',
   '/app/life': '/app/dreams',
   '/app/missions': '/app',
@@ -51,9 +55,11 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
     closeQuickJournal,
   } = useApp();
   const t = useT();
+  const [locale] = useLocale();
 
   const balance = data ? computeLedgerBalance(data.transactions) : 0;
   const labels: Record<string, string> = {
+    coach: companionCopy(locale).coach,
     today: t('Today'),
     dreams: t('Dreams'),
     notebook: t('Notebook'),
@@ -99,8 +105,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           className="flex items-center gap-2.5 cursor-pointer text-left"
           aria-label={t('One Decision Away')}
         >
-          <Logo className="w-7 h-7" />
-          <span className="font-semibold text-[15px] tracking-tight">{t('One Decision Away')}</span>
+          <LogoLockup className="w-14 h-20" />
         </button>
 
         <nav className="flex flex-col gap-1" aria-label={t('Main')}>
@@ -139,7 +144,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
       {/* Mobile top bar: only on secondary pages, gives a way back */}
       {isSecondary && (
         <header className="md:hidden sticky top-0 z-30 bg-[var(--bg)]/95 backdrop-blur border-b border-[var(--border)] pt-safe">
-          <div className="h-12 px-2 flex items-center">
+          <div className="h-14 px-2 flex items-center">
             <button
               type="button"
               onClick={() => handleNav(activeTabPath)}
@@ -148,6 +153,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
               <ArrowLeft className="w-5 h-5" />
               {labels[PRIMARY_TABS.find((p) => p.path === activeTabPath)?.key ?? 'me']}
             </button>
+            <LogoLockup className="w-7 h-10 ml-auto mr-3" />
           </div>
         </header>
       )}
@@ -162,7 +168,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
         className="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--bg)]/95 backdrop-blur-md border-t border-[var(--border)] z-30 pb-safe"
         aria-label={t('Main')}
       >
-        <div className="grid grid-cols-4 h-16">
+        <div className="grid grid-cols-5 h-16">
           {PRIMARY_TABS.map((item) => {
             const Icon = item.icon;
             const isActive = activeTabPath === item.path;

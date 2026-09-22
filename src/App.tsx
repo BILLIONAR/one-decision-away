@@ -20,6 +20,9 @@ const Seasons = lazy(() => import('./pages/Seasons').then((m) => ({ default: m.S
 const Upgrade = lazy(() => import('./pages/Upgrade').then((m) => ({ default: m.Upgrade })));
 const Focus = lazy(() => import('./pages/Focus').then((m) => ({ default: m.Focus })));
 const Settings = lazy(() => import('./pages/Settings').then((m) => ({ default: m.Settings })));
+const Coach = lazy(() => import('./pages/Coach').then(m => ({ default: m.Coach })));
+const Inspiration = lazy(() => import('./pages/Inspiration').then(m => ({ default: m.Inspiration })));
+const Courses = lazy(() => import('./pages/Courses').then(m => ({ default: m.Courses })));
 const Notebook = lazy(() => import('./pages/Notebook').then((m) => ({ default: m.Notebook })));
 
 const RouteFallback: React.FC = () => {
@@ -70,6 +73,12 @@ const AppRouter: React.FC = () => {
     switch (activeRoute) {
       case '/app':
         return <Today />;
+      case '/app/coach':
+        return <Coach />;
+      case '/app/inspiration':
+        return <Inspiration />;
+      case '/app/courses':
+        return <Courses />;
       case '/app/dreams':
         return <Dreams />;
       case '/app/me':

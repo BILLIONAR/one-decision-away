@@ -1,13 +1,14 @@
 /**
- * Daily nudges — short, second-person lines sent as notifications 2–3 times a day.
- * Morning ignites, midday re-aims, evening closes with kindness.
+ * Six source-labelled passages each day, from morning through evening.
  */
 
-import { N_ } from '../i18n';
+import { N_, getLocale } from '../i18n';
+import { getScheduledQuote, quoteText, quoteSource } from './quoteCollection';
 
-export type NudgeSlot = 'morning' | 'midday' | 'evening';
+export const NUDGE_SLOTS = ['morning', 'lateMorning', 'midday', 'afternoon', 'evening', 'night'] as const;
+export type NudgeSlot = typeof NUDGE_SLOTS[number];
 
-export const NUDGE_LINES: Record<NudgeSlot, string[]> = {
+export const NUDGE_LINES: Record<'morning' | 'midday' | 'evening', string[]> = {
   morning: [
     N_('Good morning. One decision today is enough. Choose it before the day chooses for you.'),
     N_('Your future self is already awake. Give them one thing to be proud of by tonight.'),
@@ -62,20 +63,53 @@ export const NUDGE_LINES: Record<NudgeSlot, string[]> = {
 };
 
 export const DEFAULT_NUDGE_TIMES: Record<NudgeSlot, string> = {
-  morning: '08:00',
-  midday: '13:30',
-  evening: '20:30',
+  morning: '08:00', lateMorning: '10:30', midday: '13:00',
+  afternoon: '15:30', evening: '18:00', night: '21:30',
 };
 
 export const NUDGE_TITLES: Record<NudgeSlot, string> = {
-  morning: N_('☀️ One Decision Away'),
-  midday: N_('🎯 Midday check-in'),
-  evening: N_('🌙 Close the day well'),
+  morning: 'ODA · ☀️', lateMorning: 'ODA · 🌿', midday: 'ODA · ☀️',
+  afternoon: 'ODA · 🌱', evening: 'ODA · 🌅', night: 'ODA · 🌙',
 };
 
-/** Deterministic line per slot per day, so a nudge never repeats on the same day. */
+export function isNudgeTime(value: unknown): value is string {
+  return typeof value === 'string' && /^([01]\d|2[0-3]):[0-5]\d$/.test(value);
+}
+
+export function normaliseNudgeTimes(times?: Partial<Record<NudgeSlot, string>>): Record<NudgeSlot, string> {
+  const result = {} as Record<NudgeSlot, string>;
+  const occupied = new Set<string>();
+  // Reserve every saved time first, including slots that occur later in this
+  // list. Migration must not move a user's valid, explicitly chosen time.
+  for (const slot of NUDGE_SLOTS) {
+    const value = times?.[slot];
+    if (isNudgeTime(value)) {
+      result[slot] = value;
+      occupied.add(value);
+    }
+  }
+  for (const slot of NUDGE_SLOTS) {
+    if (result[slot]) continue;
+    let candidate = DEFAULT_NUDGE_TIMES[slot];
+    // Only newly filled slots move; half-hour steps keep a collision away
+    // from the saved reminder rather than sending two almost simultaneously.
+    while (occupied.has(candidate)) {
+      const [hour, minute] = candidate.split(':').map(Number);
+      const next = (hour * 60 + minute + 30) % (24 * 60);
+      candidate = `${String(Math.floor(next / 60)).padStart(2, '0')}:${String(next % 60).padStart(2, '0')}`;
+    }
+    result[slot] = candidate;
+    occupied.add(candidate);
+  }
+  return result;
+}
+
+/** Six distinct, source-labelled passages per local calendar day; the collection cycles after 100 days. */
 export function getNudgeLine(slot: NudgeSlot, date = new Date()): string {
-  const pool = NUDGE_LINES[slot];
-  const dayIndex = Math.floor(date.getTime() / 86400000);
-  return pool[(dayIndex * 7 + slot.length) % pool.length];
+  const quote = getScheduledQuote(NUDGE_SLOTS.indexOf(slot), date);
+  const locale = getLocale();
+  const label = quote.kind === 'adaptation'
+    ? locale === 'tr' ? 'uyarlama' : locale === 'es' ? 'adaptación' : 'adapted'
+    : locale === 'tr' ? 'çeviri' : locale === 'es' ? 'traducción' : 'translation';
+  return `${quoteText(quote, locale)} — ${quoteSource(quote, locale)} (${label})`;
 }

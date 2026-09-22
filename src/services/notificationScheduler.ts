@@ -4,8 +4,9 @@ import { appRouteHref, publicAssetPath } from '../utils/routing';
  * Runs while the app (or its installed PWA) is open — including background tabs.
  * True server push (app fully closed) needs a Web Push backend; see README notes.
  */
-import { NudgeSlot, DEFAULT_NUDGE_TIMES, NUDGE_TITLES, getNudgeLine } from '../data/dailyNudges';
+import { NudgeSlot, NUDGE_SLOTS, DEFAULT_NUDGE_TIMES, NUDGE_TITLES, getNudgeLine, normaliseNudgeTimes } from '../data/dailyNudges';
 import { t } from '../i18n';
+import { isPushActive } from './pushNotifications';
 
 const FIRED_KEY = 'oda_nudges_fired';
 const CATCH_UP_MINUTES = 90;
@@ -18,6 +19,12 @@ export interface NudgePrefs {
 class NotificationScheduler {
   private timer: number | null = null;
   private prefs: NudgePrefs = { enabled: false, times: { ...DEFAULT_NUDGE_TIMES } };
+  private onVisible = () => { if (document.visibilityState === 'visible') this.tick(); };
+
+  private todayKey(): string {
+    const date = new Date();
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  }
 
   public isSupported(): boolean {
     return typeof window !== 'undefined' && 'Notification' in window;
@@ -37,23 +44,22 @@ class NotificationScheduler {
   }
 
   public configure(prefs: NudgePrefs) {
-    this.prefs = { enabled: prefs.enabled, times: { ...DEFAULT_NUDGE_TIMES, ...(prefs.times || {}) } };
+    this.prefs = { enabled: prefs.enabled, times: normaliseNudgeTimes(prefs.times) };
     this.start();
   }
 
   private start() {
     if (this.timer) window.clearInterval(this.timer);
     this.timer = null;
+    document.removeEventListener('visibilitychange', this.onVisible);
     if (!this.prefs.enabled || !this.isSupported()) return;
     this.tick();
     this.timer = window.setInterval(() => this.tick(), 60 * 1000);
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') this.tick();
-    });
+    document.addEventListener('visibilitychange', this.onVisible);
   }
 
   private firedToday(): Set<string> {
-    const today = new Date().toISOString().slice(0, 10);
+    const today = this.todayKey();
     try {
       const raw = JSON.parse(localStorage.getItem(FIRED_KEY) || '{}');
       if (raw.date !== today) return new Set();
@@ -64,7 +70,7 @@ class NotificationScheduler {
   }
 
   private markFired(slot: NudgeSlot) {
-    const today = new Date().toISOString().slice(0, 10);
+    const today = this.todayKey();
     const slots = [...this.firedToday(), slot];
     try {
       localStorage.setItem(FIRED_KEY, JSON.stringify({ date: today, slots }));
@@ -74,18 +80,24 @@ class NotificationScheduler {
   }
 
   private tick() {
-    if (!this.prefs.enabled || Notification.permission !== 'granted') return;
+    if (!this.prefs.enabled || Notification.permission !== 'granted' || isPushActive()) return;
     const now = new Date();
     const minutesNow = now.getHours() * 60 + now.getMinutes();
     const fired = this.firedToday();
-    (Object.keys(this.prefs.times) as NudgeSlot[]).forEach((slot) => {
+    NUDGE_SLOTS.forEach((slot) => {
       if (fired.has(slot)) return;
       const [h, m] = (this.prefs.times[slot] || DEFAULT_NUDGE_TIMES[slot]).split(':').map((n) => parseInt(n, 10));
       const slotMinutes = h * 60 + m;
       // fire at the exact minute, or catch up if the app was opened shortly after
       if (minutesNow >= slotMinutes && minutesNow - slotMinutes <= CATCH_UP_MINUTES) {
-        this.markFired(slot);
-        this.show(slot);
+        const deliver = () => {
+          if (!this.prefs.enabled || isPushActive() || this.firedToday().has(slot)) return;
+          this.markFired(slot);
+          void this.show(slot);
+        };
+        // An open second tab must not send the same scheduled notification again.
+        if (navigator.locks) void navigator.locks.request(`oda-nudge-${this.todayKey()}-${slot}`, { ifAvailable: true }, lock => { if (lock) deliver(); });
+        else deliver();
       }
     });
   }

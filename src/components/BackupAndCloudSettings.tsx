@@ -1,3 +1,4 @@
+import { disablePush } from '../services/pushNotifications';
 import React, { useEffect, useRef, useState } from 'react';
 import { useApp } from '../store/useApp';
 import { Card, Button, Field, Input } from './ui';
@@ -30,6 +31,11 @@ export const BackupAndCloudSettings: React.FC = () => {
       return null;
     }
   })();
+
+  const handleSignOut = async () => {
+    try { await disablePush(); await cloudSync.signOut(); }
+    catch (error) { showToast(error instanceof Error ? error.message : t('Something went wrong. Please try again.'), 'error'); }
+  };
 
   const handleSendLink = async () => {
     if (!email.trim()) return;
@@ -153,7 +159,7 @@ export const BackupAndCloudSettings: React.FC = () => {
               <Button variant="secondary" size="sm" icon={RefreshCw} onClick={handleSyncNow} disabled={cloud.syncing}>
                 {cloud.syncing ? t('Syncing…') : t('Sync now')}
               </Button>
-              <Button variant="ghost" size="sm" icon={LogOut} onClick={() => cloudSync.signOut()}>
+              <Button variant="ghost" size="sm" icon={LogOut} onClick={handleSignOut}>
                 {t('Sign out')}
               </Button>
             </div>

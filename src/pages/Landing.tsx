@@ -1,14 +1,17 @@
 import React from 'react';
 import { ArrowRight, Check, CircleDot, Layers, Target } from 'lucide-react';
 import { useApp } from '../store/useApp';
-import { Logo } from '../components/Logo';
+import { Logo, LogoLockup } from '../components/Logo';
 import { LanguagePicker } from '../components/LanguagePicker';
-import { useT } from '../i18n';
+import { useT, useLocale } from '../i18n';
+import { companionCopy } from '../i18n/companion';
 import { ECONOMY_CONSTANTS } from '../services/economy';
 
 export const Landing: React.FC = () => {
   const { setActiveRoute } = useApp();
   const t = useT();
+  const [locale] = useLocale();
+  const c = companionCopy(locale);
 
   const steps = [
     {
@@ -29,6 +32,9 @@ export const Landing: React.FC = () => {
   ];
 
   const features = [
+    { title: c.coach, text: c.talkHint },
+    { title: c.inspiration, text: c.collection },
+    { title: c.courses, text: c.courseHint },
     { title: t('Dreams'), text: t('A vision board with a price tag, funded by what you actually do.') },
     { title: t('Notebook'), text: t('Journal, gratitude and written practices, all in one quiet place.') },
     { title: t('Meditations'), text: t('Short guided sessions and focus timers for the work that matters.') },
@@ -39,10 +45,9 @@ export const Landing: React.FC = () => {
     <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] font-sans flex flex-col">
       {/* Nav */}
       <header className="w-full">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 min-h-24 py-2 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2 min-w-0">
-            <Logo className="w-6 h-6 shrink-0" />
-            <span className="text-[15px] font-semibold tracking-tight truncate">{t('One Decision Away')}</span>
+            <LogoLockup className="w-12 h-18 shrink-0" />
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
             <LanguagePicker />

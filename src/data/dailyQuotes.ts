@@ -1,3 +1,4 @@
+import { QUOTE_COLLECTION, localCalendarDay } from './quoteCollection';
 import { N_ } from '../i18n';
 
 export interface DailyQuote {
@@ -5,6 +6,10 @@ export interface DailyQuote {
   text: string;
   /** Attribution — a Quran reference or a thinker's name. Omitted for the app's own lines. */
   source?: string;
+  tr?: string;
+  sourceTr?: string;
+  sourceUrl?: string;
+  kind?: 'translation' | 'adaptation';
 }
 
 /**
@@ -431,11 +436,11 @@ export const DAILY_QUOTES: DailyQuote[] = [
   { text: N_("Be water, my friend."), source: N_("Bruce Lee") },
   { text: N_("Stay hungry, stay foolish."), source: N_("Steve Jobs") },
   { text: N_("The only way to do great work is to love what you do."), source: N_("Steve Jobs") },
+  ...QUOTE_COLLECTION,
 ];
 
 /** Deterministic quote of the day (stable for the whole calendar day). */
 export function getDailyQuote(date: Date = new Date()): DailyQuote {
-  const start = Date.UTC(date.getFullYear(), 0, 0);
-  const day = Math.floor((Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) - start) / 86400000);
-  return DAILY_QUOTES[(date.getFullYear() * 366 + day) % DAILY_QUOTES.length];
+  const day = localCalendarDay(date);
+  return DAILY_QUOTES[((day % DAILY_QUOTES.length) + DAILY_QUOTES.length) % DAILY_QUOTES.length];
 }

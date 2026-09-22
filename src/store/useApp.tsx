@@ -1,3 +1,5 @@
+import { getPushStatus } from '../services/pushNotifications';
+import { normaliseNudgeTimes } from '../data/dailyNudges';
 import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { appRouteHref, normalizeAppRoute, readAppRoute } from '../utils/routing';
 import { AppContext } from './AppContext';
@@ -341,18 +343,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeFocusSession?.remainingSeconds, activeFocusSession?.isPaused, activeFocusSession?.guidedMeditationId]);
 
-  // Daily nudges: (re)configure the local notification scheduler whenever prefs change
+  // Restore membership/subscription before starting local timers to avoid duplicate push delivery.
   useEffect(() => {
     if (!data) return;
-    notificationScheduler.configure({
-      enabled: data.profile.nudgesEnabled === true,
-      times: {
-        morning: data.profile.nudgeTimes?.morning || '08:00',
-        midday: data.profile.nudgeTimes?.midday || '13:30',
-        evening: data.profile.nudgeTimes?.evening || '20:30',
-      },
-    });
-  }, [data?.profile.nudgesEnabled, data?.profile.nudgeTimes?.morning, data?.profile.nudgeTimes?.midday, data?.profile.nudgeTimes?.evening]);
+    let active = true;
+    const configure = () => {
+      if (active) notificationScheduler.configure({
+        enabled: data.profile.nudgesEnabled === true,
+        times: normaliseNudgeTimes(data.profile.nudgeTimes),
+      });
+    };
+    const refresh = async () => { await getPushStatus(); configure(); };
+    void cloudSync.init().then(refresh).catch(configure);
+    const unsubscribe = cloudSync.subscribe(() => { void refresh().catch(configure); });
+    window.addEventListener('oda:push-status', configure);
+    return () => {
+      active = false; unsubscribe(); window.removeEventListener('oda:push-status', configure);
+      notificationScheduler.configure({ enabled: false, times: normaliseNudgeTimes(data.profile.nudgeTimes) });
+    };
+  }, [data?.profile.nudgesEnabled, data?.profile.nudgeTimes]);
 
   // Tab Title synchronization during Focus Mode & Alert Simulation
   useEffect(() => {
