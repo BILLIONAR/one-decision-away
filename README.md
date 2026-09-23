@@ -18,6 +18,7 @@ The core application works without an account or API key. New visitors start in 
 - 600 sourced Turkish/English passages extend the original daily pool to 1,018 entries. Translations and original adaptations are labelled separately. The notification collection supplies six distinct passages per day for a 100-day cycle.
 - Five Turkish guided courses contain 25 lessons: confidence, everyday ADHD skills, motivation, faith and manifesting through action. Each lesson includes a reading, three practical steps, an optional note, a learning question with feedback and sequential progression. Six scientific publications were reviewed before writing; findings and limitations are available within the courses and in [the evidence review](docs/COURSE_EVIDENCE.md).
 - Course progress and notes use browser-local storage, independently of profile JSON backups and cloud sync. They are currently **not included in profile export/import**. Do not clear browser storage if you need to preserve them.
+- The designer signature is **Designed by Yahya** in English, Turkish and Spanish. Keep that exact wording untranslated. See [brand decisions](docs/BRAND.md) for the persistent visual identity.
 - The selected C4 symbol with ODA beneath it is supplied as a transparent PNG in `public/brand/oda-c4.png`, used for the app, landing page and install metadata.
 
 See [inspiration and coach notes](docs/INSPIRATION_AND_COACH.md) and [push setup](docs/PUSH_NOTIFICATIONS.md) for details.

@@ -233,7 +233,7 @@ export const Settings: React.FC = () => {
     const fire = () => {
       new Notification(t('Daily wisdom: {theme}', { theme: t(currentWisdom.theme) }), {
         body: t('"{quote}" — {author}', { quote: t(currentWisdom.quote), author: t(currentWisdom.author) }),
-        icon: publicAssetPath('icon-192.png'),
+        icon: publicAssetPath('brand/oda-app-c4-v1-192.png'),
       });
     };
 
@@ -496,7 +496,7 @@ export const Settings: React.FC = () => {
         <div className="px-1 space-y-2 text-[12px] text-[var(--fg-subtle)] leading-relaxed">
           <p>{t('Dream Dollars (D$) are a simulation. They have no monetary value and cannot be exchanged or withdrawn.')}</p>
           <p>{t('Dream purchases are visual anchors. Real acquisition happens through your own action, as modelled in the Reality bridge.')}</p>
-          <p>{t('Built by AurelyStudio. Your answers and reflections are never sold or shared.')}</p>
+          <p>{t('Designed by Yahya. Your answers and reflections are never sold or shared.')}</p>
         </div>
       </Section>
 

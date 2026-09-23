@@ -1,12 +1,12 @@
 /**
  * One Decision Away — English String Dictionary
- * by AurelyStudio
+ * Designed by Yahya
  */
 
 export const en = {
   brand: {
     name: 'One Decision Away',
-    byLine: 'by AurelyStudio',
+    byLine: 'Designed by Yahya',
     tagline: 'Build the life before you live it.',
     subline: 'Turn meaningful action into Dream Dollars, build your future life, and connect every dream to a real plan.',
     disclaimerSimulation: 'Dream Dollars is a virtual simulation currency with no cash value. Purchases are symbolic.',

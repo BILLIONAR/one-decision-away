@@ -1,10 +1,11 @@
 /* One Decision Away — each deployment owns its own offline shell and caches. */
 const BASE = new URL(self.registration.scope);
 const CACHE_PREFIX = `oda:${encodeURIComponent(BASE.pathname)}:`;
-const SHELL_CACHE = `${CACHE_PREFIX}v2`;
+const SHELL_CACHE = `${CACHE_PREFIX}v3`;
 const MEDIA_CACHE = `${SHELL_CACHE}:media`;
 const INDEX_URL = new URL('index.html', BASE).href;
-const SHELL = ['', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-192-maskable.png', 'icon-512-maskable.png', 'apple-touch-icon.png', 'brand/oda-c4.png'].map(path => new URL(path, BASE).href);
+const MANIFEST_URL = new URL('manifest.webmanifest', BASE).href;
+const SHELL = ['', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-192-maskable.png', 'icon-512-maskable.png', 'apple-touch-icon.png', 'brand/oda-c4.png', 'brand/oda-app-c4-v1-192.png', 'brand/oda-app-c4-v1-512.png', 'brand/oda-app-c4-v1-maskable-192.png', 'brand/oda-app-c4-v1-maskable-512.png', 'brand/oda-apple-c4-v1-180.png', 'brand/oda-favicon-c4-v1-32.png'].map(path => new URL(path, BASE).href);
 const inScope = url => url.origin === BASE.origin && url.pathname.startsWith(BASE.pathname);
 
 self.addEventListener('install', event => {
@@ -45,6 +46,19 @@ self.addEventListener('fetch', event => {
     return;
   }
 
+  // Installed app metadata must refresh even when a previous shell is cached.
+  if (url.href === MANIFEST_URL) {
+    event.respondWith((async () => {
+      const cache = await caches.open(SHELL_CACHE);
+      try {
+        const response = await fetch(request, { cache: 'no-cache' });
+        if (response.ok) { await cache.put(request, response.clone()); return response; }
+        return (await cache.match(request)) || response;
+      } catch { return (await cache.match(request)) || Response.error(); }
+    })());
+    return;
+  }
+
   if ((inScope(url) && url.pathname.startsWith(`${BASE.pathname}assets/`)) || SHELL.includes(url.href)) {
     event.respondWith((async () => {
       const cache = await caches.open(SHELL_CACHE);
@@ -80,8 +94,8 @@ self.addEventListener('push', event => {
   const body = typeof payload.body === 'string' ? payload.body.slice(0, 2000) : 'Yeni sözün hazır. Bugün kendine küçük bir alan aç.';
   event.waitUntil(self.registration.showNotification(title, {
     body,
-    icon: new URL('icon-192.png', BASE).href,
-    badge: new URL('icon-192.png', BASE).href,
+    icon: new URL('brand/oda-app-c4-v1-192.png', BASE).href,
+    badge: new URL('brand/oda-app-c4-v1-192.png', BASE).href,
     tag: typeof payload.tag === 'string' ? payload.tag.slice(0, 120) : 'oda-daily-inspiration',
     data: { url: typeof payload.url === 'string' ? payload.url : '/app' },
   }));

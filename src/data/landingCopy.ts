@@ -24,7 +24,7 @@ const en = {
   dreamsTitle: 'Give a dream a place', dreamsBody: 'Keep what matters in view and connect your chosen dreams with your daily practice.',
   closingLabel: 'There is no perfect moment', closingTitle: 'Today can be a beginning.',
   closingBody: 'You do not have to settle everything at once. Choose one thing you can try.',
-  footer: 'ODA · One Decision Away by AurelyStudio', footerNote: 'A little space for a meaningful day.',
+  footer: 'ODA · One Decision Away · Designed by Yahya', footerNote: 'A little space for a meaningful day.',
   mainNavigation: 'Main navigation', illustration: 'An intention becomes a small step, then a practice you return to.',
 };
 
@@ -52,7 +52,7 @@ const tr: typeof en = {
   dreamsTitle: 'Hayaline bir yer ver', dreamsBody: 'Senin için önemli olanı göz önünde tut. Seçtiğin hayaller ile günlük emeğin arasında bağ kur.',
   closingLabel: 'Kusursuz bir an gerekmiyor', closingTitle: 'Bugün bir başlangıç olabilir.',
   closingBody: 'Her şeyi bir anda çözmek zorunda değilsin. Deneyebileceğin tek bir şey seç.',
-  footer: 'ODA · One Decision Away by AurelyStudio', footerNote: 'Anlamlı bir gün için küçük bir alan.',
+  footer: 'ODA · One Decision Away · Designed by Yahya', footerNote: 'Anlamlı bir gün için küçük bir alan.',
   mainNavigation: 'Ana gezinme', illustration: 'Niyet küçük bir adıma, küçük adım geri dönülen bir pratiğe dönüşür.',
 };
 
@@ -80,7 +80,7 @@ const es: typeof en = {
   dreamsTitle: 'Dale un lugar a un sueño', dreamsBody: 'Mantén a la vista lo que te importa y conecta tus sueños con tu práctica diaria.',
   closingLabel: 'No hace falta el momento perfecto', closingTitle: 'Hoy puede ser un comienzo.',
   closingBody: 'No tienes que resolverlo todo de una vez. Elige una cosa que puedas intentar.',
-  footer: 'ODA · One Decision Away by AurelyStudio', footerNote: 'Un pequeño espacio para un día con sentido.',
+  footer: 'ODA · One Decision Away · Designed by Yahya', footerNote: 'Un pequeño espacio para un día con sentido.',
   mainNavigation: 'Navegación principal', illustration: 'Una intención se convierte en un pequeño paso y después en una práctica a la que volver.',
 };
 

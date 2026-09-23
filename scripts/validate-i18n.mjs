@@ -54,7 +54,11 @@ for (const locale of locales) {
     if (!value.trim() && key.trim()) errors.push(`${locale}: Empty translation ${JSON.stringify(key)}`);
     if (parts(key) !== parts(value)) { placeholders++; errors.push(`${locale}: Placeholder mismatch ${JSON.stringify(key)}`); }
     if (edgeSpaces(key) !== edgeSpaces(value)) errors.push(`${locale}: Edge whitespace mismatch ${JSON.stringify(key)}`);
-    for (const token of ['D$', 'One Decision Away', 'AurelyStudio']) {
+    // Legacy keys remain aliases; visible signatures use the current, untranslated credit.
+    if ((key.includes('AurelyStudio') || key.includes('Designed by Yahya')) && !value.includes('Designed by Yahya')) {
+      errors.push(`${locale}: Missing protected designer credit: ${JSON.stringify(key)}`);
+    }
+    for (const token of ['D$', 'One Decision Away']) {
       if (key.split(token).length !== value.split(token).length) errors.push(`${locale}: Changed protected token ${token}: ${JSON.stringify(key)}`);
     }
   }
