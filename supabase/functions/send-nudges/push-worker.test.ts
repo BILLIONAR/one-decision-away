@@ -25,7 +25,7 @@ test('push event displays the real server payload without an open client', async
   await push({ title: 'ODA · Sabahın sözü', body: 'Şimdi küçük bir adım at.\n— Kaynak · yorumlama', tag: 'oda-nudge-morning', url: '/app' });
   assert.equal(shown[0].title, 'ODA · Sabahın sözü');
   assert.equal(shown[0].options.body, 'Şimdi küçük bir adım at.\n— Kaynak · yorumlama');
-  assert.equal(shown[0].options.icon, 'https://example.github.io/one-decision-away/icon-192.png');
+  assert.equal(shown[0].options.icon, 'https://example.github.io/one-decision-away/brand/oda-app-c4-v1-192.png');
   assert.equal(shown[0].options.tag, 'oda-nudge-morning');
 });
 
@@ -33,7 +33,7 @@ test('unexpected push fields cannot become arbitrary notification options', asyn
   const { shown, push } = setup();
   await push({ title: {}, body: null, icon: 'https://outside.example/tracker.png', vibrate: [999], actions: [{ action: 'evil' }] });
   assert.equal(shown[0].title, 'ODA');
-  assert.equal(shown[0].options.icon, 'https://example.github.io/one-decision-away/icon-192.png');
+  assert.equal(shown[0].options.icon, 'https://example.github.io/one-decision-away/brand/oda-app-c4-v1-192.png');
   assert.equal(shown[0].options.actions, undefined);
   assert.equal(shown[0].options.vibrate, undefined);
 });
