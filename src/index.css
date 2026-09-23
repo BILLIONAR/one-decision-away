@@ -27,7 +27,7 @@
 
 ::selection {
   background: var(--accent);
-  color: #ffffff;
+  color: var(--on-accent);
 }
 
 /* Variation 3 Custom Slider Input */
@@ -177,4 +177,49 @@ input[type="range"].variation3-slider::-moz-range-thumb {
 button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+/* Editorial type is reserved for key titles and reflective passages. */
+.oda-display {
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.oda-kicker {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.oda-nav-active { position: relative; }
+.oda-nav-active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 3px;
+  height: 18px;
+  border-radius: 2px;
+  background: var(--brand-burgundy);
+}
+.oda-decision {
+  background: var(--forest);
+  color: var(--on-forest);
+  border-radius: 20px 20px 48px 20px;
+}
+.oda-decision input { color: var(--on-forest); border-color: #708E7B; }
+.oda-decision input::placeholder { color: #C2CDBF; opacity: 1; }
+.oda-decision input:focus { border-color: var(--on-forest); }
+.oda-decision .oda-decision-action { background: #F7F4EC; color: #173E35; }
+.oda-quote { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.oda-quote-mark { font-family: var(--font-editorial); color: var(--brand-burgundy); line-height: 1; }
+.oda-discovery-link { transition: background-color 160ms ease; }
+.oda-discovery-link:hover { background: var(--bg-muted); }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
+/* The transparent C4 master keeps its shape; lift its ink on dark surfaces. */
+:root[data-theme="dark"] .oda-brand-mark, html.dark .oda-brand-mark {
+  filter: brightness(2.2) saturate(.7);
 }

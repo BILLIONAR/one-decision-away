@@ -1,236 +1,106 @@
 import React from 'react';
-import { ArrowRight, Check, CircleDot, Layers, Target } from 'lucide-react';
+import { ArrowDown, ArrowRight, BookOpen, Feather, MessageCircle, Sparkle } from 'lucide-react';
 import { useApp } from '../store/useApp';
 import { Logo, LogoLockup } from '../components/Logo';
 import { LanguagePicker } from '../components/LanguagePicker';
-import { useT, useLocale } from '../i18n';
-import { companionCopy } from '../i18n/companion';
-import { ECONOMY_CONSTANTS } from '../services/economy';
+import { useLocale } from '../i18n';
+import { landingCopy } from '../data/landingCopy';
+import '../styles/landing.css';
+
+/** Original diagram: a direction, a small ascent, and a path to return to. */
+const IntentionPath: React.FC<{ label: string }> = ({ label }) => (
+  <svg className="oda-landing-path" viewBox="0 0 360 216" role="img" aria-label={label}>
+    <path d="M22 181H338" fill="none" stroke="var(--border)" />
+    <path d="M42 161C69 161 67 129 99 129H130C152 129 148 99 175 99H203C227 99 223 67 251 67H296" fill="none" stroke="currentColor" strokeWidth="2.5" />
+    <path d="M44 172H97V140H151V110H226V78H299" fill="none" stroke="currentColor" strokeOpacity="0.2" strokeWidth="1.5" />
+    <circle cx="43" cy="160" r="8" fill="var(--bg-elevated)" stroke="currentColor" strokeWidth="2" />
+    <circle cx="173" cy="99" r="8" fill="var(--bg-elevated)" stroke="var(--brand-burgundy)" strokeWidth="2" />
+    <path d="M170 99L172 101L177 96" fill="none" stroke="var(--brand-burgundy)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M285 67V37A17 17 0 0 1 319 37V67" fill="var(--brand-burgundy-soft)" stroke="var(--brand-burgundy)" strokeWidth="2" />
+    <path d="M302 67V42M297 48L302 42L307 48" fill="none" stroke="var(--brand-burgundy)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M287 94C305 134 270 184 191 190C122 196 67 193 43 183" fill="none" stroke="currentColor" strokeOpacity="0.45" strokeWidth="1.2" strokeDasharray="3 5" />
+    <path d="M46 190L42 183L51 182" fill="none" stroke="currentColor" strokeOpacity="0.45" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+    <circle cx="84" cy="49" r="22" fill="var(--accent-soft)" />
+    <path d="M76 49H92M84 41V57" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+    <path d="M217 28H225M221 24V32" stroke="var(--brand-burgundy)" strokeWidth="1.2" strokeLinecap="round" />
+  </svg>
+);
 
 export const Landing: React.FC = () => {
   const { setActiveRoute } = useApp();
-  const t = useT();
   const [locale] = useLocale();
-  const c = companionCopy(locale);
-
+  const c = landingCopy(locale);
   const steps = [
-    {
-      icon: Target,
-      title: t('Decide'),
-      text: t('Each morning, write the one thing that would make today count.'),
-    },
-    {
-      icon: Check,
-      title: t('Keep'),
-      text: t('Do it, mark it done, and earn Dream Dollars for keeping your word.'),
-    },
-    {
-      icon: Layers,
-      title: t('Build'),
-      text: t('Spend them on the dreams you chose and watch a different year take shape.'),
-    },
+    { title: c.stepOneTitle, text: c.stepOneBody },
+    { title: c.stepTwoTitle, text: c.stepTwoBody },
+    { title: c.stepThreeTitle, text: c.stepThreeBody },
   ];
-
-  const features = [
-    { title: c.coach, text: c.talkHint },
-    { title: c.inspiration, text: c.collection },
-    { title: c.courses, text: c.courseHint },
-    { title: t('Dreams'), text: t('A vision board with a price tag, funded by what you actually do.') },
-    { title: t('Notebook'), text: t('Journal, gratitude and written practices, all in one quiet place.') },
-    { title: t('Meditations'), text: t('Short guided sessions and focus timers for the work that matters.') },
-    { title: t('Two Futures'), text: t('See the life you are building next to the one you are allowing.') },
+  const resources = [
+    { icon: BookOpen, title: c.quoteTitle, text: c.quoteBody, path: '/app/inspiration' },
+    { icon: MessageCircle, title: c.coachTitle, text: c.coachBody, path: '/app/coach', tag: c.coachTag },
+    { icon: Feather, title: c.notebookTitle, text: c.notebookBody, path: '/app/notebook' },
+    { icon: Sparkle, title: c.dreamsTitle, text: c.dreamsBody, path: '/app/dreams' },
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] font-sans flex flex-col">
-      {/* Nav */}
-      <header className="w-full">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 min-h-24 py-2 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2 min-w-0">
-            <LogoLockup className="w-12 h-18 shrink-0" />
-          </div>
-          <div className="flex items-center gap-2 sm:gap-3">
-            <LanguagePicker />
-            <button
-              type="button"
-              onClick={() => setActiveRoute('/app')}
-              className="h-11 px-4 rounded-[var(--radius-sm)] bg-[var(--fg)] text-[var(--bg)] text-[14px] font-semibold cursor-pointer"
-            >
-              {t('Open app')}
-            </button>
-          </div>
-        </div>
+    <div className="oda-landing" lang={locale}>
+      <header className="oda-landing-shell oda-landing-nav">
+        <LogoLockup className="oda-landing-wordmark" />
+        <nav className="oda-landing-nav-actions" aria-label={c.mainNavigation}>
+          <LanguagePicker />
+          <button type="button" onClick={() => setActiveRoute('/app')} className="oda-landing-button oda-landing-button-plain">{c.open}<ArrowRight size={15} aria-hidden="true" /></button>
+        </nav>
       </header>
 
-      <main className="flex-1">
-        {/* Hero */}
-        <section className="max-w-5xl mx-auto px-4 sm:px-6 pt-14 sm:pt-24 pb-16 sm:pb-24">
-          <div className="max-w-3xl space-y-6">
-            <h1 className="text-[44px] sm:text-[64px] font-semibold tracking-tight leading-[1.02]">
-              {t('One decision a day. A different life in a year.')}
-            </h1>
-            <p className="text-[17px] sm:text-[19px] text-[var(--fg-muted)] leading-relaxed max-w-xl">
-              {t('A calm daily practice that turns the things you say you will do into a life you can point to.')}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              <button
-                type="button"
-                onClick={() => setActiveRoute('/app')}
-                className="h-12 px-6 rounded-[var(--radius-sm)] bg-[var(--fg)] text-[var(--bg)] font-semibold text-[15px] inline-flex items-center justify-center gap-2 cursor-pointer"
-              >
-                {t('Start free')}
-                <ArrowRight size={18} strokeWidth={1.8} />
-              </button>
-              <a
-                href="#how-it-works"
-                className="h-12 px-6 rounded-[var(--radius-sm)] border border-[var(--border-strong)] bg-transparent text-[var(--fg)] font-semibold text-[15px] inline-flex items-center justify-center"
-              >
-                {t('See how it works')}
-              </a>
+      <main>
+        <section className="oda-landing-shell oda-landing-hero" aria-labelledby="landing-title">
+          <div>
+            <p className="oda-landing-kicker">{c.eyebrow}</p>
+            <h1 id="landing-title" className="oda-display oda-landing-title">{c.title}<span>{c.titleAccent}</span></h1>
+            <p className="oda-landing-introduction">{c.introduction}</p>
+            <div className="oda-landing-hero-actions">
+              <button type="button" onClick={() => setActiveRoute('/app')} className="oda-landing-button oda-landing-button-primary">{c.start}<ArrowRight size={17} aria-hidden="true" /></button>
+              <button type="button" onClick={() => document.getElementById('oda-discover')?.scrollIntoView({ block: 'start' })} className="oda-landing-link">{c.explore}<ArrowDown size={15} aria-hidden="true" /></button>
             </div>
-            <p className="text-[13px] text-[var(--fg-subtle)]">
-              {t('No account needed. Your data stays on your device.')}
-            </p>
+            <p className="oda-landing-privacy">{c.privacy}</p>
+          </div>
+          <figure className="oda-landing-page">
+            <div className="oda-landing-page-top"><p>{c.pageTitle}</p><span className="oda-landing-page-date" aria-hidden="true">01 / ODA</span></div>
+            <IntentionPath label={c.illustration} />
+            <div className="oda-landing-example"><p className="oda-landing-example-label">{c.exampleLabel}</p><p className="oda-landing-example-text">{c.example}</p></div>
+            <ol className="oda-landing-mini-path">
+              {[c.intention, c.action, c.repeat].map((label, i) => <li key={label}><span aria-hidden="true">0{i + 1}</span>{label}</li>)}
+            </ol>
+            <figcaption className="oda-landing-page-note">{c.pageNote}</figcaption>
+          </figure>
+        </section>
+
+        <div className="oda-landing-shell oda-landing-principle"><p>{c.principle}</p><Logo className="w-7 h-7" /></div>
+
+        <section className="oda-landing-shell oda-landing-method" aria-labelledby="landing-method-title">
+          <p className="oda-landing-kicker">{c.methodLabel}</p>
+          <h2 id="landing-method-title" className="oda-display oda-landing-section-heading">{c.methodTitle}</h2>
+          <div className="oda-landing-steps">{steps.map((step, i) => <article key={step.title} className="oda-landing-step"><span className="oda-landing-step-number" aria-hidden="true">0{i + 1}</span><h3>{step.title}</h3><p>{step.text}</p></article>)}</div>
+        </section>
+
+        <section id="oda-discover" className="oda-landing-discover scroll-mt-6" aria-labelledby="landing-discover-title">
+          <div className="oda-landing-shell">
+            <div className="oda-landing-discover-header"><div><p className="oda-landing-kicker">{c.discoverLabel}</p><h2 id="landing-discover-title" className="oda-display oda-landing-section-heading">{c.discoverTitle}</h2></div><p>{c.discoverBody}</p></div>
+            <article className="oda-landing-course">
+              <div><p className="oda-landing-course-label">{c.courseLabel}</p><h3 className="oda-display">{c.courseTitle}</h3><button type="button" onClick={() => setActiveRoute('/app/courses')} className="oda-landing-link">{c.courseCta}<ArrowRight size={17} aria-hidden="true" /></button></div>
+              <div><p className="oda-landing-course-meta">{c.courseMeta}</p><p>{c.courseBody}</p><p className="oda-landing-course-note">{c.courseNote}</p></div>
+            </article>
+            <div className="oda-landing-resources">{resources.map(({ icon: Icon, title, text, path, tag }) => <button key={path} type="button" onClick={() => setActiveRoute(path)} className="oda-landing-resource"><Icon size={22} strokeWidth={1.5} className="oda-landing-resource-icon" aria-hidden="true" /><span className="oda-landing-resource-copy"><span className="oda-landing-resource-title">{title}</span><span className="oda-landing-resource-body">{text}</span>{tag && <span className="oda-landing-resource-tag">{tag}</span>}</span><ArrowRight size={17} className="oda-landing-resource-arrow" aria-hidden="true" /></button>)}</div>
           </div>
         </section>
 
-        {/* How it works */}
-        <section id="how-it-works" className="max-w-5xl mx-auto px-4 sm:px-6 py-14 sm:py-20 scroll-mt-16">
-          <h2 className="text-[26px] sm:text-[32px] font-semibold tracking-tight mb-8">{t('How it works')}</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {steps.map(({ icon: Icon, title, text }) => (
-              <div key={title} className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-3">
-                <span className="w-10 h-10 rounded-full bg-[var(--bg)] flex items-center justify-center text-[var(--accent)]">
-                  <Icon size={20} strokeWidth={1.8} />
-                </span>
-                <p className="text-[17px] font-semibold">{title}</p>
-                <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed">{text}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Preview */}
-        <section className="max-w-5xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-            <div className="space-y-4 md:order-1">
-              <h2 className="text-[26px] sm:text-[32px] font-semibold tracking-tight">{t('Your day, on one screen.')}</h2>
-              <p className="text-[15px] sm:text-[17px] text-[var(--fg-muted)] leading-relaxed">
-                {t('Today shows one decision, three small habits and the dream you are funding. Nothing else competes for your attention.')}
-              </p>
-            </div>
-
-            <div className="flex justify-center md:order-2">
-              <div
-                className="w-full max-w-[340px] rounded-[40px] border border-[var(--border-strong)] bg-[var(--bg)] p-3"
-                aria-hidden="true"
-              >
-                <div className="rounded-[30px] bg-[var(--bg)] overflow-hidden px-4 pt-6 pb-5 space-y-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-[12px] text-[var(--fg-muted)]">{t('Tuesday, 14 October')}</p>
-                      <p className="text-[24px] font-semibold tracking-tight leading-tight">{t('Good morning, Ada')}</p>
-                    </div>
-                    <span className="inline-flex items-center gap-1 h-9 px-3 rounded-full bg-[var(--bg-muted)] text-[13px] text-[var(--fg-muted)]">
-                      D$ <span className="font-semibold text-[var(--accent)]">2,150</span>
-                    </span>
-                  </div>
-
-                  <div className="bg-[var(--fg)] text-[var(--bg)] rounded-[var(--radius-lg)] p-5 space-y-4">
-                    <div className="flex items-center justify-between text-[12px] opacity-70">
-                      <span>{t("Today's one decision")}</span>
-                      <span>{t('{n} days', { n: 12 })}</span>
-                    </div>
-                    <p className="text-[19px] font-medium leading-snug">{t('Send the proposal before lunch.')}</p>
-                    <div className="w-full h-11 rounded-[var(--radius-sm)] bg-[var(--bg)] text-[var(--fg)] font-semibold text-[14px] flex items-center justify-center">
-                      {t('Done · +D$ {amount}', { amount: ECONOMY_CONSTANTS.ONE_DECISION_REWARD.toLocaleString() })}
-                    </div>
-                  </div>
-
-                  <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-4 space-y-3">
-                    <p className="text-[14px] font-semibold">{t('Small habits')}</p>
-                    {[t('Ten minutes of reading'), t('Walk outside'), t('No phone before nine')].map((h, i) => (
-                      <div key={h} className="flex items-center gap-3 text-[14px]">
-                        <span
-                          className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                            i === 0 ? 'bg-[var(--accent)] text-[var(--bg)]' : 'border border-[var(--border-strong)]'
-                          }`}
-                        >
-                          {i === 0 && <Check size={13} strokeWidth={2.2} />}
-                        </span>
-                        <span className={i === 0 ? 'text-[var(--fg-muted)] line-through' : ''}>{h}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-4 flex items-center gap-3">
-                    <span className="w-10 h-10 rounded-[var(--radius-sm)] bg-[var(--accent-soft)] text-[var(--accent)] flex items-center justify-center shrink-0">
-                      <CircleDot size={18} strokeWidth={1.8} />
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-[14px] font-semibold truncate">{t('Paris Slow Week')}</p>
-                      <div className="mt-1.5 h-1.5 rounded-full bg-[var(--border)] overflow-hidden">
-                        <div className="h-full w-[62%] bg-[var(--accent)]" />
-                      </div>
-                    </div>
-                    <span className="text-[13px] text-[var(--fg-muted)] shrink-0">62%</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* What you get */}
-        <section className="max-w-5xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
-          <h2 className="text-[26px] sm:text-[32px] font-semibold tracking-tight mb-8">{t('What you get')}</h2>
-          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {features.map((f) => (
-              <li key={f.title} className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-1">
-                <p className="text-[17px] font-semibold">{f.title}</p>
-                <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed">{f.text}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        {/* Closing CTA */}
-        <section className="max-w-5xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
-          <div className="bg-[var(--fg)] text-[var(--bg)] rounded-[var(--radius-lg)] p-6 sm:p-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-            <div className="space-y-1">
-              <p className="text-[24px] sm:text-[28px] font-semibold tracking-tight">{t('Start with today.')}</p>
-              <p className="text-[15px] opacity-70">{t('Three questions and you are in. Takes a minute.')}</p>
-            </div>
-            <button
-              type="button"
-              onClick={() => setActiveRoute('/app')}
-              className="h-12 px-6 rounded-[var(--radius-sm)] bg-[var(--bg)] text-[var(--fg)] font-semibold text-[15px] inline-flex items-center justify-center gap-2 shrink-0 cursor-pointer"
-            >
-              {t('Start free')}
-              <ArrowRight size={18} strokeWidth={1.8} />
-            </button>
-          </div>
+        <section className="oda-landing-shell oda-landing-closing" aria-labelledby="landing-closing-title">
+          <div><p className="oda-landing-kicker">{c.closingLabel}</p><h2 id="landing-closing-title" className="oda-display oda-landing-section-heading">{c.closingTitle}</h2><p>{c.closingBody}</p></div>
+          <div className="oda-landing-closing-actions"><button type="button" onClick={() => setActiveRoute('/app')} className="oda-landing-button">{c.start}<ArrowRight size={17} aria-hidden="true" /></button></div>
         </section>
       </main>
 
-      <footer className="border-t border-[var(--border)]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-[13px] text-[var(--fg-muted)]">
-          <div className="flex items-center gap-2">
-            <Logo className="w-5 h-5" />
-            <span>{t('One Decision Away by AurelyStudio')}</span>
-          </div>
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-            <span>{t('Your data stays on your device unless you turn on sync.')}</span>
-            <button
-              type="button"
-              onClick={() => setActiveRoute('/two-futures')}
-              className="text-[var(--fg-muted)] hover:text-[var(--fg)] underline underline-offset-4 cursor-pointer"
-            >
-              {t('Two Futures')}
-            </button>
-          </div>
-        </div>
-      </footer>
+      <footer className="oda-landing-shell oda-landing-footer"><div className="oda-landing-footer-brand"><Logo className="w-5 h-5" /><span>{c.footer}</span></div><p>{c.footerNote}</p></footer>
     </div>
   );
 };

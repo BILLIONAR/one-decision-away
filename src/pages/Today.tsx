@@ -23,6 +23,7 @@ import {
 } from '../services/economy';
 import { Mission } from '../types/models';
 import { useT, formatDate, useLocale } from '../i18n';
+import { designCopy } from '../i18n/design';
 import { companionCopy } from '../i18n/companion';
 
 const RITUALS_KEY = 'oda_rituals_open';
@@ -48,6 +49,7 @@ export const Today: React.FC = () => {
   const t = useT();
   const [locale] = useLocale();
   const c = companionCopy(locale);
+  const d = designCopy(locale);
 
   const [completingMission, setCompletingMission] = useState<Mission | null>(null);
   const [newDecisionTitle, setNewDecisionTitle] = useState('');
@@ -133,7 +135,7 @@ export const Today: React.FC = () => {
       <header className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <p className="text-[13px] text-[var(--fg-muted)]">{dateLine}</p>
-          <h1 className="text-[26px] font-semibold tracking-tight text-[var(--fg)] leading-tight">
+          <h1 className="oda-display text-[30px] sm:text-[34px] tracking-tight text-[var(--fg)] leading-tight">
             {greeting}
           </h1>
         </div>
@@ -148,46 +150,13 @@ export const Today: React.FC = () => {
         </button>
       </header>
 
-      {/* Quote of the day */}
-      <figure className="flex gap-3">
-        <span aria-hidden className="w-[3px] shrink-0 rounded-full bg-[var(--accent)]" />
-        <div className="min-w-0">
-          <blockquote className="text-[16px] leading-snug text-[var(--fg)] max-w-[46ch]">
-            {locale === 'tr' && quote.tr ? quote.tr : t(quote.text)}
-          </blockquote>
-          {quote.source && (
-            <figcaption className="mt-1 text-[12px] font-medium text-[var(--fg-muted)]">
-              — {quote.sourceUrl ? <a href={quote.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">{locale === 'tr' && quote.sourceTr ? quote.sourceTr : t(quote.source)}</a> : t(quote.source)}
-              {quote.kind && <span className="block mt-1 font-normal">{quote.kind === 'adaptation' ? c.adaptation : c.translation}</span>}
-            </figcaption>
-          )}
-        </div>
-      </figure>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <button type="button" onClick={() => setActiveRoute('/app/coach')} className="flex items-center gap-3 text-left border border-[var(--border)] rounded-[var(--radius-md)] p-4 hover:border-[var(--accent)]">
-          <MessageCircle className="text-[var(--accent)] shrink-0" size={22} />
-          <div><p className="text-sm font-semibold">{c.talk}</p><p className="text-xs text-[var(--fg-muted)] mt-1">{c.coach}</p></div>
-          <ChevronRight size={16} className="ml-auto shrink-0" />
-        </button>
-        <button type="button" onClick={() => setActiveRoute('/app/inspiration')} className="flex items-center gap-3 text-left border border-[var(--border)] rounded-[var(--radius-md)] p-4 hover:border-[var(--accent)]">
-          <BookOpen className="text-[#8a3042] shrink-0" size={22} />
-          <div><p className="text-sm font-semibold">{c.inspiration}</p><p className="text-xs text-[var(--fg-muted)] mt-1">{c.courage}</p></div>
-          <ChevronRight size={16} className="ml-auto shrink-0" />
-        </button>
-      </div>
-
-      <button type="button" onClick={() => setActiveRoute('/app/courses')} className="w-full flex items-center gap-4 text-left p-5 rounded-[var(--radius-md)] bg-[#173e35] text-[#f7f3ea]">
-        <GraduationCap size={25} className="shrink-0" /><span><span className="block text-sm font-semibold">{c.courses}</span><span className="block text-xs leading-relaxed text-[#dce6df] mt-1">{c.courseHint}</span></span><ChevronRight size={18} className="ml-auto shrink-0" />
-      </button>
-
       {/* 2. One decision */}
       <section
         id="set-one-decision"
-        className="bg-[var(--fg)] text-[var(--bg)] rounded-[var(--radius-lg)] p-6 space-y-5"
+        className="oda-decision p-6 sm:p-8 space-y-5"
       >
         <div className="flex items-center justify-between gap-3">
-          <span className="text-[13px] opacity-70">{t("Today's one decision")}</span>
+          <span className="oda-kicker opacity-90">{t("Today's one decision")}</span>
           {decisionStreak.currentStreak > 0 && (
             <span className="text-[13px] opacity-70">{t('{n} days', { n: decisionStreak.currentStreak })}</span>
           )}
@@ -195,7 +164,7 @@ export const Today: React.FC = () => {
 
         {todayOneDecision ? (
           <>
-            <p className="text-[22px] font-medium leading-snug">{t(todayOneDecision.title)}</p>
+            <p className="oda-display text-[30px] sm:text-[34px] leading-snug">{t(todayOneDecision.title)}</p>
             {decisionDone ? (
               <div className="flex items-center gap-2.5 text-[15px] opacity-80">
                 <span className="w-6 h-6 rounded-full bg-[var(--bg)] text-[var(--fg)] flex items-center justify-center">
@@ -207,7 +176,7 @@ export const Today: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setCompletingMission(todayOneDecision)}
-                className="w-full h-12 rounded-[var(--radius-sm)] bg-[var(--bg)] text-[var(--fg)] font-semibold text-[15px]"
+                className="oda-decision-action w-full h-12 rounded-[var(--radius-sm)] font-semibold text-[15px]"
               >
                 {t('Done · +D$ {amount}', { amount: ECONOMY_CONSTANTS.ONE_DECISION_REWARD.toLocaleString() })}
               </button>
@@ -228,7 +197,7 @@ export const Today: React.FC = () => {
             <button
               type="submit"
               disabled={!newDecisionTitle.trim() || isSaving}
-              className="w-full h-12 rounded-[var(--radius-sm)] bg-[var(--bg)] text-[var(--fg)] font-semibold text-[15px] disabled:opacity-40"
+              className="oda-decision-action w-full h-12 rounded-[var(--radius-sm)] font-semibold text-[15px] disabled:opacity-40"
             >
               {t('Set decision')}
             </button>
@@ -237,7 +206,7 @@ export const Today: React.FC = () => {
       </section>
 
       {/* 3. Three small habits */}
-      <section className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5">
+      <section className="bg-[var(--bg-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] p-5">
         <div className="flex items-center justify-between gap-3 mb-2">
           <h2 className="text-[15px] font-semibold text-[var(--fg)]">{t('Three small habits')}</h2>
           <span className="text-[13px] text-[var(--fg-muted)]">
@@ -300,6 +269,34 @@ export const Today: React.FC = () => {
             {t('See all {n}', { n: habits.length })}
           </button>
         )}
+      </section>
+
+      {/* Quote of the day */}
+      <figure className="oda-quote flex gap-3 py-6">
+        <span aria-hidden="true" className="oda-quote-mark text-5xl">“</span>
+        <div className="min-w-0">
+          <p className="oda-kicker text-[var(--fg-muted)] mb-2">{d.quote}</p>
+          <blockquote className="oda-display text-[22px] leading-snug text-[var(--fg)] max-w-[46ch]">
+            {locale === 'tr' && quote.tr ? quote.tr : t(quote.text)}
+          </blockquote>
+          {quote.source && (
+            <figcaption className="mt-1 text-[12px] font-medium text-[var(--fg-muted)]">
+              — {quote.sourceUrl ? <a href={quote.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">{locale === 'tr' && quote.sourceTr ? quote.sourceTr : t(quote.source)}</a> : t(quote.source)}
+              {quote.kind && <span className="block mt-1 font-normal">{quote.kind === 'adaptation' ? c.adaptation : c.translation}</span>}
+            </figcaption>
+          )}
+        </div>
+      </figure>
+
+      <section aria-labelledby="today-discover" className="space-y-3">
+        <h2 id="today-discover" className="text-sm font-semibold">{d.discover}</h2>
+        <button type="button" onClick={() => setActiveRoute('/app/courses')} className="oda-discovery-link w-full flex items-center gap-4 text-left py-5 border-y border-[var(--border)]">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--brand-burgundy-soft)] text-[var(--brand-burgundy)]"><GraduationCap size={24} strokeWidth={1.5} /></span><span><span className="block text-base font-semibold">{c.courses}</span><span className="block text-xs leading-relaxed text-[var(--fg-muted)] mt-1">{c.courseHint}</span></span><ChevronRight size={18} className="ml-auto shrink-0" />
+        </button>
+        <div className="grid grid-cols-2 gap-3">
+          <button type="button" onClick={() => setActiveRoute('/app/coach')} className="oda-discovery-link flex items-center gap-2.5 text-left min-h-14"><MessageCircle className="text-[var(--accent)] shrink-0" size={20} /><span className="text-sm font-medium">{c.talk}</span><ChevronRight size={15} className="ml-auto shrink-0" /></button>
+          <button type="button" onClick={() => setActiveRoute('/app/inspiration')} className="oda-discovery-link flex items-center gap-2.5 text-left min-h-14"><BookOpen className="text-[var(--brand-burgundy)] shrink-0" size={20} /><span className="text-sm font-medium">{c.inspiration}</span><ChevronRight size={15} className="ml-auto shrink-0" /></button>
+        </div>
       </section>
 
       {/* 4. Active dream */}

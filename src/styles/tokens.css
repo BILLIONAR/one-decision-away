@@ -1,88 +1,84 @@
 :root {
-  /* One Decision Away — "Paper" system: white, near-black, one deep green. Two neutrals + one accent. */
-  --bg: #FFFFFF;
-  --ink: #111111;
-  --accent: #1F5F3F;
-  --bg-elevated: #FFFFFF;
-  --bg-muted: #F3F3F1;
-  --bg-inset: #ECECEA;
-  --border: #E4E4E1;
-  --border-strong: #C9C9C6;
-  --ink-faint: #8A8A87;
-
-  /* Semantic System Mapping */
-  --fg: #111111;
-  --fg-muted: #6F6F6C;
-  --fg-subtle: #8A8A87;
-  --accent-soft: #E7F0EA;
-  --color-coral: #1F5F3F;
-  --color-sage: #1F5F3F;
-  --color-slate: #111111;
-  --color-sand: #3F3F3F;
-  --color-navy: #14402B;
-  --success: #1F5F3F;
-  --success-soft: #E7F0EA;
-  --danger: #B3261E;
+  /* ODA: warm paper, forest green and a distinct burgundy action color. */
+  --bg: #F7F4EC;
+  --ink: #20362E;
+  --fg: #20362E;
+  --fg-muted: #5F6B61;
+  --fg-subtle: #687267;
+  --ink-faint: #687267;
+  --bg-elevated: #FFFDF8;
+  --bg-muted: #EDEFE5;
+  --bg-inset: #E4E8DC;
+  --border: #DADFD2;
+  --border-strong: #A3B09F;
+  --accent: #234F3E;
+  --on-accent: #FFFDF8;
+  --accent-soft: #E4EBDD;
+  --brand-burgundy: #843D4B;
+  --brand-burgundy-soft: #F1E2E2;
+  --on-burgundy: #FFFDF8;
+  --forest: #173E35;
+  --on-forest: #F7F4EC;
+  --color-coral: #843D4B;
+  --color-sage: #234F3E;
+  --color-slate: #20362E;
+  --color-sand: #5F6B61;
+  --color-navy: #173E35;
+  --success: #234F3E;
+  --success-soft: #E4EBDD;
+  --danger: #AC2C25;
   --danger-soft: #FCEBEA;
-  --money: #1F5F3F;
-  --money-soft: #E7F0EA;
-
-  /* Two Futures Colors */
-  --future-building: #1F5F3F;
-  --future-allowing: #C9C9C6;
-
-  /* Typography */
-  --font-display: 'Geist', 'Manrope', system-ui, sans-serif;
+  --money: #234F3E;
+  --money-soft: #E4EBDD;
+  --future-building: #234F3E;
+  --future-allowing: #A3B09F;
+  --font-display: 'Geist', system-ui, sans-serif;
+  --font-editorial: Georgia, 'Times New Roman', serif;
   --font-sans: 'Geist', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-
-  /* Soft, generous radii */
   --radius-xs: 8px;
   --radius-sm: 12px;
   --radius-md: 16px;
   --radius-lg: 20px;
   --radius-xl: 24px;
   --radius-full: 9999px;
-
-  /* Hairline depth, no heavy shadows */
   --shadow-sm: none;
-  --shadow-md: 0 1px 2px rgba(17, 17, 17, 0.04);
-  --shadow-lg: 0 12px 28px rgba(17, 17, 17, 0.08);
+  --shadow-md: 0 2px 5px rgb(32 54 46 / 4%);
+  --shadow-lg: 0 12px 28px rgb(32 54 46 / 8%);
 }
 
 :root[data-theme="dark"], html.dark {
-  --bg: #0F0F0F;
-  --ink: #F3F3F1;
-  --accent: #7BB08F;
-  --bg-elevated: #171717;
-  --bg-muted: #1F1F1F;
-  --bg-inset: #0A0A0A;
-  --border: #2A2A2A;
-  --border-strong: #3F3F3F;
-  --ink-faint: #8A8A87;
-
-  --fg: #F3F3F1;
-  --fg-muted: #A3A3A0;
-  --fg-subtle: #8A8A87;
-  --accent-soft: #1B2B22;
-  --color-coral: #7BB08F;
-  --color-sage: #7BB08F;
-  --color-slate: #F3F3F1;
-  --color-sand: #3F3F3F;
-  --color-navy: #A9CDB6;
-  --success: #7BB08F;
-  --success-soft: #1B2B22;
-  --danger: #E5766F;
-  --danger-soft: #3A1F1D;
-  --money: #7BB08F;
-  --money-soft: #1B2B22;
-
-  /* Two Futures Colors */
-  --future-building: #7BB08F;
-  --future-allowing: #4A4A4A;
-
-  /* Shadows for dark mode */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.55);
-  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.75);
+  --bg: #141E19;
+  --ink: #F0F1E8;
+  --fg: #F0F1E8;
+  --fg-muted: #B3C0B3;
+  --fg-subtle: #A6B4A5;
+  --ink-faint: #A6B4A5;
+  --bg-elevated: #1B2921;
+  --bg-muted: #243329;
+  --bg-inset: #101813;
+  --border: #3C4B3D;
+  --border-strong: #6B806C;
+  --accent: #ACC9A3;
+  --on-accent: #172B20;
+  --accent-soft: #283E2F;
+  --brand-burgundy: #E4A4AC;
+  --brand-burgundy-soft: #432A31;
+  --on-burgundy: #3D1722;
+  --color-coral: #E4A4AC;
+  --color-sage: #ACC9A3;
+  --color-slate: #F0F1E8;
+  --color-sand: #B3C0B3;
+  --color-navy: #ACC9A3;
+  --success: #ACC9A3;
+  --success-soft: #283E2F;
+  --danger: #FFADA5;
+  --danger-soft: #482B28;
+  --money: #ACC9A3;
+  --money-soft: #283E2F;
+  --future-building: #ACC9A3;
+  --future-allowing: #6B806C;
+  --shadow-sm: none;
+  --shadow-md: 0 2px 5px rgb(0 0 0 / 12%);
+  --shadow-lg: 0 12px 28px rgb(0 0 0 / 25%);
 }

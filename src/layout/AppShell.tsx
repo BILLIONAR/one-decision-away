@@ -1,18 +1,19 @@
 import React from 'react';
 import { useApp } from '../store/useApp';
-import { Sun, Star, BookOpen, User, X, ArrowLeft, MessageCircle } from 'lucide-react';
+import { Sun, Star, BookOpen, User, X, ArrowLeft, MessageCircle, GraduationCap, Quote } from 'lucide-react';
 import { computeLedgerBalance } from '../services/economy';
 import { FocusLockView } from '../components/FocusLockView';
 import { QuickDreamJournalModal } from '../components/QuickDreamJournalModal';
 import { useT, useLocale } from '../i18n';
 import { companionCopy } from '../i18n/companion';
+import { designCopy } from '../i18n/design';
 import { LogoLockup } from '../components/Logo';
 
 interface AppShellProps {
   children: React.ReactNode;
 }
 
-/** The five primary destinations. Everything else is reachable from "Me". */
+/** Five primary mobile destinations; learning also has direct desktop links. */
 export const PRIMARY_TABS = [
   { key: 'today', path: '/app', icon: Sun },
   { key: 'dreams', path: '/app/dreams', icon: Star },
@@ -56,6 +57,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   } = useApp();
   const t = useT();
   const [locale] = useLocale();
+  const c = designCopy(locale);
 
   const balance = data ? computeLedgerBalance(data.transactions) : 0;
   const labels: Record<string, string> = {
@@ -73,6 +75,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] flex flex-col md:flex-row">
+      <a href="#oda-main" onClick={(event) => { event.preventDefault(); document.getElementById('oda-main')?.focus(); }} className="sr-only focus:not-sr-only focus:fixed focus:z-50 focus:top-3 focus:left-3 focus:p-3 focus:bg-[var(--bg-elevated)]">{c.skip}</a>
       {/* Toast */}
       {toast && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 max-w-md w-[calc(100%-2rem)] animate-in fade-in slide-in-from-top-2 duration-200">
@@ -98,20 +101,20 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
       )}
 
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex flex-col w-60 bg-[var(--bg)] border-r border-[var(--border)] shrink-0 h-screen sticky top-0 p-5 gap-6">
+      <aside className="hidden md:flex flex-col w-56 bg-[var(--bg-elevated)] border-r border-[var(--border)] shrink-0 h-screen overflow-y-auto sticky top-0 p-5 gap-7">
         <button
           type="button"
           onClick={() => handleNav('/app')}
           className="flex items-center gap-2.5 cursor-pointer text-left"
           aria-label={t('One Decision Away')}
         >
-          <LogoLockup className="w-14 h-20" />
+          <LogoLockup className="w-16 h-24" />
         </button>
 
         <nav className="flex flex-col gap-1" aria-label={t('Main')}>
           {PRIMARY_TABS.map((item) => {
             const Icon = item.icon;
-            const isActive = activeTabPath === item.path;
+            const isActive = activeRoute === item.path || (activeTabPath === item.path && !['/app/courses', '/app/inspiration'].includes(activeRoute));
             return (
               <button
                 key={item.path}
@@ -120,7 +123,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
                 aria-current={isActive ? 'page' : undefined}
                 className={`w-full flex items-center gap-3 px-3 h-11 rounded-[var(--radius-sm)] text-[14px] transition-colors cursor-pointer text-left ${
                   isActive
-                    ? 'bg-[var(--bg-muted)] text-[var(--fg)] font-semibold'
+                    ? 'oda-nav-active bg-[var(--accent-soft)] text-[var(--accent)] font-semibold'
                     : 'text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-muted)]'
                 }`}
               >
@@ -128,6 +131,15 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
                 <span>{labels[item.key]}</span>
               </button>
             );
+          })}
+        </nav>
+
+        <nav className="flex flex-col gap-1 border-t border-[var(--border)] pt-5" aria-label={c.learn}>
+          <p className="oda-kicker text-[var(--fg-muted)] px-3 mb-2">{c.learn}</p>
+          {[{ path: '/app/courses', label: c.courses, icon: GraduationCap }, { path: '/app/inspiration', label: c.inspiration, icon: Quote }].map(item => {
+            const Icon = item.icon;
+            const active = activeRoute === item.path;
+            return <button key={item.path} type="button" onClick={() => handleNav(item.path)} aria-current={active ? 'page' : undefined} className={`flex items-center gap-3 px-3 min-h-11 rounded-[var(--radius-sm)] text-sm text-left ${active ? 'oda-nav-active bg-[var(--accent-soft)] text-[var(--accent)] font-semibold' : 'text-[var(--fg-muted)] hover:bg-[var(--bg-muted)]'}`}><Icon size={18} strokeWidth={1.8} />{item.label}</button>;
           })}
         </nav>
 
@@ -159,8 +171,8 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
       )}
 
       {/* Content */}
-      <main className="flex-1 min-w-0 overflow-y-auto pb-28 md:pb-12 min-h-screen">
-        <div className="max-w-2xl mx-auto px-5 sm:px-6 pt-6 md:pt-10">{children}</div>
+      <main id="oda-main" tabIndex={-1} className="outline-none flex-1 min-w-0 overflow-y-auto pb-28 md:pb-12 min-h-screen">
+        <div className={`${['/app/courses', '/app/inspiration'].includes(activeRoute) ? 'max-w-[1040px]' : 'max-w-[760px]'} mx-auto px-5 sm:px-8 pt-6 md:pt-12`}>{children}</div>
       </main>
 
       {/* Mobile bottom tabs */}
