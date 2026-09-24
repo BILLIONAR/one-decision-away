@@ -58,7 +58,7 @@ export const Progress: React.FC = () => {
     { label: t('This week'), value: String(weeklyCompletions), sub: t('missions done') },
     {
       label: t('Streak'),
-      value: t('{n} days', { n: decisionStreak.currentStreak }),
+      value: decisionStreak.currentStreak === 1 ? t('1 day') : t('{n} days', { n: decisionStreak.currentStreak }),
       sub: t('best {n}', { n: decisionStreak.longestStreak }),
     },
     { label: t('Earned'), value: `D$ ${earned.toLocaleString()}`, sub: t('all time') },

@@ -26,6 +26,25 @@ export interface Profile {
   firstOpenedAt: string;
   lastOpenedAt: string;
   createdAt: string;
+  /** Member chose to see every tool before the first-week simple mode ends. */
+  simpleModeOff?: boolean;
+  /** Answer to the day-14 question "Did you start something you had been putting off?" */
+  twoWeekCheckIn?: { answer: 'yes' | 'a-little' | 'not-yet'; note?: string; at: string };
+}
+
+/** Mental contrasting for the daily decision: feeling → obstacle → if-then plan. */
+export interface DecisionPlan {
+  feeling?: 'overwhelming' | 'boring' | 'scary' | 'unclear' | 'fine';
+  obstacle?: string;
+  ifThen?: string;
+  plannedAt: string;
+}
+
+/** Obstacle and next small step for a dream, so it is not only imagined. */
+export interface DreamPlan {
+  obstacle?: string;
+  step?: string;
+  updatedAt: string;
 }
 
 export interface LifeScoreCategories {
@@ -148,6 +167,10 @@ export interface Mission {
   photoUrl?: string;
   createdAt: string;
   completedAt?: string;
+  /** One Decision only: plan made before starting. */
+  plan?: DecisionPlan;
+  /** One Decision only: first time the member pressed "just two minutes". */
+  startedAt?: string;
 }
 
 export interface MissionCompletion {
@@ -550,6 +573,7 @@ export interface UserData {
   seasonProgress: SeasonProgress[];
   subscription: Subscription;
   inVisionItemIds: string[];
+  dreamPlans?: Record<string, DreamPlan>;
   archivedMarketItemIds?: string[];
   archivedMarketRecords?: ArchivedMarketRecord[];
   dreamJournal?: DreamJournalEntry[];

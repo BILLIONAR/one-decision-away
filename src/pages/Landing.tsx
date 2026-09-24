@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowDown, ArrowRight, BookOpen, Feather, MessageCircle, Sparkle } from 'lucide-react';
+import { ArrowDown, ArrowRight, Feather, MessageCircle, Sparkle, Timer } from 'lucide-react';
 import { useApp } from '../store/useApp';
 import { Logo, LogoLockup } from '../components/Logo';
 import { LanguagePicker } from '../components/LanguagePicker';
@@ -36,7 +36,7 @@ export const Landing: React.FC = () => {
     { title: c.stepThreeTitle, text: c.stepThreeBody },
   ];
   const resources = [
-    { icon: BookOpen, title: c.quoteTitle, text: c.quoteBody, path: '/app/inspiration' },
+    { icon: Timer, title: c.startTitle, text: c.startBody, path: '/app' },
     { icon: MessageCircle, title: c.coachTitle, text: c.coachBody, path: '/app/coach', tag: c.coachTag },
     { icon: Feather, title: c.notebookTitle, text: c.notebookBody, path: '/app/notebook' },
     { icon: Sparkle, title: c.dreamsTitle, text: c.dreamsBody, path: '/app/dreams' },

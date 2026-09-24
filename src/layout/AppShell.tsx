@@ -1,6 +1,6 @@
 import React from 'react';
 import { useApp } from '../store/useApp';
-import { Sun, Star, BookOpen, User, X, ArrowLeft, MessageCircle, GraduationCap, Quote } from 'lucide-react';
+import { Sun, Star, BookOpen, User, X, ArrowLeft, MessageCircle, GraduationCap } from 'lucide-react';
 import { computeLedgerBalance } from '../services/economy';
 import { FocusLockView } from '../components/FocusLockView';
 import { QuickDreamJournalModal } from '../components/QuickDreamJournalModal';
@@ -24,8 +24,8 @@ export const PRIMARY_TABS = [
 
 /** Legacy / secondary routes grouped under "Me" — which tab they belong to for highlighting. */
 const SECONDARY_ROUTE_PARENT: Record<string, string> = {
-  '/app/inspiration': '/app',
   '/app/courses': '/app',
+  '/app/evidence': '/app',
   '/app/market': '/app/dreams',
   '/app/life': '/app/dreams',
   '/app/missions': '/app',
@@ -114,7 +114,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
         <nav className="flex flex-col gap-1" aria-label={t('Main')}>
           {PRIMARY_TABS.map((item) => {
             const Icon = item.icon;
-            const isActive = activeRoute === item.path || (activeTabPath === item.path && !['/app/courses', '/app/inspiration'].includes(activeRoute));
+            const isActive = activeRoute === item.path || (activeTabPath === item.path && activeRoute !== '/app/courses');
             return (
               <button
                 key={item.path}
@@ -136,7 +136,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
 
         <nav className="flex flex-col gap-1 border-t border-[var(--border)] pt-5" aria-label={c.learn}>
           <p className="oda-kicker text-[var(--fg-muted)] px-3 mb-2">{c.learn}</p>
-          {[{ path: '/app/courses', label: c.courses, icon: GraduationCap }, { path: '/app/inspiration', label: c.inspiration, icon: Quote }].map(item => {
+          {[{ path: '/app/courses', label: c.courses, icon: GraduationCap }].map(item => {
             const Icon = item.icon;
             const active = activeRoute === item.path;
             return <button key={item.path} type="button" onClick={() => handleNav(item.path)} aria-current={active ? 'page' : undefined} className={`flex items-center gap-3 px-3 min-h-11 rounded-[var(--radius-sm)] text-sm text-left ${active ? 'oda-nav-active bg-[var(--accent-soft)] text-[var(--accent)] font-semibold' : 'text-[var(--fg-muted)] hover:bg-[var(--bg-muted)]'}`}><Icon size={18} strokeWidth={1.8} />{item.label}</button>;
@@ -172,7 +172,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
 
       {/* Content */}
       <main id="oda-main" tabIndex={-1} className="outline-none flex-1 min-w-0 overflow-y-auto pb-28 md:pb-12 min-h-screen">
-        <div className={`${['/app/courses', '/app/inspiration'].includes(activeRoute) ? 'max-w-[1040px]' : 'max-w-[760px]'} mx-auto px-5 sm:px-8 pt-6 md:pt-12`}>{children}</div>
+        <div className={`${activeRoute === '/app/courses' ? 'max-w-[1040px]' : 'max-w-[760px]'} mx-auto px-5 sm:px-8 pt-6 md:pt-12`}>{children}</div>
       </main>
 
       {/* Mobile bottom tabs */}

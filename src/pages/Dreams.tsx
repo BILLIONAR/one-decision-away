@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Search, Plus, Check, Receipt } from 'lucide-react';
 import { useApp } from '../store/useApp';
 import { Modal } from '../components/ui';
+import { DreamRealityCheck } from '../components/momentum/DreamRealityCheck';
 import { DreamArt } from '../components/DreamArt';
 import { DreamReceiptModal } from '../components/DreamReceipt';
 import { PurchaseReveal } from '../components/PurchaseReveal';
@@ -551,6 +552,8 @@ export const Dreams: React.FC = () => {
                 </div>
               )}
             </div>
+
+            <DreamRealityCheck item={detailItem} onDecisionSet={() => { setDetailItem(null); setActiveRoute('/app'); }} />
 
             <div className="space-y-2 pt-1">
               <button

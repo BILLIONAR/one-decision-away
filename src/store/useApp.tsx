@@ -36,6 +36,7 @@ import {
   NotebookMutationResult,
   Notebook369Practice,
   Notebook369Slot,
+  DreamPlan,
 } from '../types/models';
 import type { NotebookAction } from '../services/notebook';
 import { clearNotebookDrafts } from '../services/notebookDrafts';
@@ -108,6 +109,11 @@ export interface AppContextType {
   saveFutureSelf: (futureSelfData: Partial<FutureSelfData>) => Promise<void>;
   addMission: (mission: Omit<Mission, 'id' | 'createdAt' | 'status' | 'userId'>) => Promise<void>;
   setOneDecision: (title: string, goalId?: string, estimatedMinutes?: number) => Promise<void>;
+  /** Plan, two-minute start or a smaller wording for a One Decision (no toast). */
+  updateDecision: (missionId: string, patch: Partial<Pick<Mission, 'plan' | 'startedAt' | 'title'>>) => Promise<void>;
+  saveDreamPlan: (itemId: string, plan: Omit<DreamPlan, 'updatedAt'>, makeTodaysDecision?: boolean) => Promise<void>;
+  /** Quiet profile flags for simple mode and the day-14 check-in. */
+  updateMomentumProfile: (patch: Pick<Partial<Profile>, 'simpleModeOff' | 'twoWeekCheckIn'>) => Promise<void>;
   addCustomDream: (
     item: Omit<MarketItem, 'id' | 'createdAt' | 'isCustom'>,
     pinToVision?: boolean
@@ -233,6 +239,28 @@ export interface AppContextType {
 
 
 const repository: DataRepository = createRepository();
+
+/** Adds today's One Decision, archiving any unfinished one (pure). */
+function withOneDecision(data: UserData, title: string, goalId?: string, estimatedMinutes = 45): UserData {
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const difficulty = estimatedMinutes < 45 ? 'easy' : estimatedMinutes < 120 ? 'medium' : 'hard';
+  const missions = data.missions.map((m) => (m.isOneDecision && m.status === 'active' ? { ...m, status: 'archived' as const } : m));
+  const decision: Mission = {
+    id: `one-decision-${Date.now()}`,
+    userId: data.profile.id,
+    goalId,
+    title,
+    type: 'daily_quest',
+    area: 'Work',
+    difficulty,
+    estimatedMinutes,
+    isOneDecision: true,
+    scheduledFor: todayStr,
+    status: 'active',
+    createdAt: new Date().toISOString(),
+  };
+  return { ...data, missions: [decision, ...missions] };
+}
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [data, setData] = useState<UserData | null>(null);
@@ -982,41 +1010,51 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const setOneDecision = useCallback(
     async (title: string, goalId?: string, estimatedMinutes: number = 45) => {
       if (!data) return;
-      const todayStr = new Date().toISOString().slice(0, 10);
-      const difficulty = estimatedMinutes < 45 ? 'easy' : estimatedMinutes < 120 ? 'medium' : 'hard';
-
-      // Archive any previous unfinished one_decision for today
-      const updatedMissions = data.missions.map((m) => {
-        if (m.isOneDecision && m.status === 'active') {
-          return { ...m, status: 'archived' as const };
-        }
-        return m;
-      });
-
-      const newOneDecision: Mission = {
-        id: `one-decision-${Date.now()}`,
-        userId: data.profile.id,
-        goalId,
-        title,
-        type: 'daily_quest',
-        area: 'Work',
-        difficulty,
-        estimatedMinutes,
-        isOneDecision: true,
-        scheduledFor: todayStr,
-        status: 'active',
-        createdAt: new Date().toISOString(),
-      };
-
-      const updated: UserData = {
-        ...data,
-        missions: [newOneDecision, ...updatedMissions],
-      };
+      const updated = withOneDecision(data, title, goalId, estimatedMinutes);
       await repository.save(updated);
       setData(updated);
       showToast(t('Today’s One Decision is locked in. Complete it to earn D$500!'), 'success');
     },
     [data, showToast]
+  );
+
+  const updateDecision = useCallback(
+    async (missionId: string, patch: Partial<Pick<Mission, 'plan' | 'startedAt' | 'title'>>) => {
+      if (!data) return;
+      const updated: UserData = {
+        ...data,
+        missions: data.missions.map((m) => (m.id === missionId ? { ...m, ...patch } : m)),
+      };
+      await repository.save(updated);
+      setData(updated);
+    },
+    [data]
+  );
+
+  const saveDreamPlan = useCallback(
+    async (itemId: string, plan: Omit<DreamPlan, 'updatedAt'>, makeTodaysDecision = false) => {
+      if (!data) return;
+      // One write so the plan and the new decision cannot overwrite each other.
+      const base = makeTodaysDecision && plan.step ? withOneDecision(data, plan.step) : data;
+      const updated: UserData = {
+        ...base,
+        dreamPlans: { ...(base.dreamPlans || {}), [itemId]: { ...plan, updatedAt: new Date().toISOString() } },
+      };
+      await repository.save(updated);
+      setData(updated);
+      if (makeTodaysDecision) showToast(t('Today’s One Decision is locked in. Complete it to earn D$500!'), 'success');
+    },
+    [data, showToast]
+  );
+
+  const updateMomentumProfile = useCallback(
+    async (patch: Pick<Partial<Profile>, 'simpleModeOff' | 'twoWeekCheckIn'>) => {
+      if (!data) return;
+      const updated: UserData = { ...data, profile: { ...data.profile, ...patch } };
+      await repository.save(updated);
+      setData(updated);
+    },
+    [data]
   );
 
   const addCustomDream = useCallback(
@@ -2514,6 +2552,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     saveFutureSelf,
     addMission,
     setOneDecision,
+    updateDecision,
+    saveDreamPlan,
+    updateMomentumProfile,
     addCustomDream,
     pinExploreDream,
     grantSimulationBonus,

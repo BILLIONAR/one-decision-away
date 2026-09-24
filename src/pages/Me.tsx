@@ -1,3 +1,4 @@
+import { FEEDBACK_EMAIL } from '../data/contact';
 import React, { useMemo } from 'react';
 import { useApp } from '../store/useApp';
 import { useT, useLocale } from '../i18n';
@@ -21,6 +22,7 @@ import {
   AudioLines,
   LucideIcon,
   GraduationCap,
+  CheckCircle2,
 } from 'lucide-react';
 
 interface MenuRow {
@@ -31,7 +33,6 @@ interface MenuRow {
 }
 
 const APP_VERSION = '2.0';
-const FEEDBACK_EMAIL = 'ufrldk13@gmail.com';
 
 export const Me: React.FC = () => {
   const { data, setActiveRoute } = useApp();
@@ -78,7 +79,7 @@ export const Me: React.FC = () => {
       title: t('Your future'),
       rows: [
         { icon: UserRound, label: c.coach, hint: c.talk, route: '/app/coach' },
-        { icon: Sparkles, label: c.inspiration, hint: c.subtitle, route: '/app/inspiration' },
+        { icon: CheckCircle2, label: t('Your evidence'), hint: t('Every decision you kept'), route: '/app/evidence' },
         { icon: GraduationCap, label: c.courses, hint: c.courseHint, route: '/app/courses' },
         { icon: AudioLines, label: t('Focus & meditations'), hint: t('Guided sessions and sound waves'), route: '/app/focus' },
         { icon: UserRound, label: t('Future self'), hint: t('Roles, standards, letters'), route: '/app/future-self' },

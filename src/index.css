@@ -211,6 +211,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .oda-decision input::placeholder { color: #C2CDBF; opacity: 1; }
 .oda-decision input:focus { border-color: var(--on-forest); }
 .oda-decision .oda-decision-action { background: #F7F4EC; color: #173E35; }
+.oda-decision .oda-decision-secondary { background: transparent; color: var(--on-forest); border: 1px solid #708E7B; }
+.oda-decision .oda-decision-secondary:hover { border-color: var(--on-forest); }
+.oda-decision .oda-decision-link { min-height: 44px; font-size: 14px; font-weight: 600; color: #C2CDBF; }
+.oda-decision .oda-decision-link:hover { color: var(--on-forest); }
+.oda-decision .oda-decision-plan { background: rgba(247, 244, 236, 0.08); border-left: 2px solid #C2CDBF; border-radius: 4px 12px 12px 4px; color: var(--on-forest); }
 .oda-quote { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 .oda-quote-mark { font-family: var(--font-editorial); color: var(--brand-burgundy); line-height: 1; }
 .oda-discovery-link { transition: background-color 160ms ease; }

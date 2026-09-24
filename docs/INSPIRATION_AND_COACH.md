@@ -5,7 +5,7 @@
 `src/data/quoteCollection.ts`, inanç, felsefe, bilim ve toplum derlemelerini tek sırada birleştirir. Her kayıt İngilizce/Türkçe metin, kaynak kişi/eser, bölüm veya ayet/hadis numarası, birincil kaynak bağlantısı ve `adaptation` ya da `translation` etiketi taşır. Koleksiyonda 573 özgün uyarlama ve 27 çeviri bulunur. Uyarlamalar birebir alıntı gibi sunulmaz; anlatımları ODA için yazılmıştır. Kaynaklar kamu malı klasik eserleri, ayet ve hadisleri, bilim kurumlarının açıklamalarını ve araştırmacıların birincil metinlerini kapsar.
 
 - 185 inanç, 165 felsefe, 75 toplum, 175 bilim kaydı.
-- Korku, belirsizlik ve cesaret için ayrı filtre; arama ve cihazda kaydedilen favoriler.
+- **24 Eyl 2026:** Ayrı Inspiration sayfası kaldırıldı (menü, route, Today/Me/Landing bağlantıları). Koleksiyon Today'deki günün sözü ve bildirimler için duruyor.
 - İlk 300 kaynaklı kaydın sırası korunur. `quoteExpansionFaithMore.ts`, `quoteExpansionScienceMore.ts` ve `quoteExpansionPhilosophyMore.ts` dosyalarından 100'er yeni kayıt, inanç/bilim/felsefe sırasıyla eklenir.
 - 418 eski günlük kayıt ile toplam 1.018 günlük metin; kaynaklı 600 kaydın bağlantıları günlük kartta da görünür.
 - Yeni bilim derlemesinde kuantum fiziği, enerji, madde ve araştırma süreçleri bulunur. Bilimsel olgulara dayanan ODA anlatımları, bilim insanlarının birebir sözleri veya düşünceyle evreni yönetme iddiaları olarak sunulmaz.

@@ -6,6 +6,7 @@ import { useT } from './i18n';
 const PublicTwoFutures = lazy(() => import('./pages/PublicTwoFutures').then((m) => ({ default: m.PublicTwoFutures })));
 import { Today } from './pages/Today';
 import { Onboarding } from './components/Onboarding';
+const Evidence = lazy(() => import('./pages/Evidence').then((m) => ({ default: m.Evidence })));
 const Dreams = lazy(() => import('./pages/Dreams').then((m) => ({ default: m.Dreams })));
 const Me = lazy(() => import('./pages/Me').then((m) => ({ default: m.Me })));
 const Missions = lazy(() => import('./pages/Missions').then((m) => ({ default: m.Missions })));
@@ -21,7 +22,6 @@ const Upgrade = lazy(() => import('./pages/Upgrade').then((m) => ({ default: m.U
 const Focus = lazy(() => import('./pages/Focus').then((m) => ({ default: m.Focus })));
 const Settings = lazy(() => import('./pages/Settings').then((m) => ({ default: m.Settings })));
 const Coach = lazy(() => import('./pages/Coach').then(m => ({ default: m.Coach })));
-const Inspiration = lazy(() => import('./pages/Inspiration').then(m => ({ default: m.Inspiration })));
 const Courses = lazy(() => import('./pages/Courses').then(m => ({ default: m.Courses })));
 const Notebook = lazy(() => import('./pages/Notebook').then((m) => ({ default: m.Notebook })));
 
@@ -75,8 +75,8 @@ const AppRouter: React.FC = () => {
         return <Today />;
       case '/app/coach':
         return <Coach />;
-      case '/app/inspiration':
-        return <Inspiration />;
+      case '/app/evidence':
+        return <Evidence />;
       case '/app/courses':
         return <Courses />;
       case '/app/dreams':

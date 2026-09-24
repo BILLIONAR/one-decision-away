@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AudioLines, Check, ChevronDown, ChevronRight, Plus, MessageCircle, BookOpen, GraduationCap } from 'lucide-react';
+import { AudioLines, Check, ChevronDown, ChevronRight, Plus, MessageCircle, GraduationCap, Timer, Share2, Route } from 'lucide-react';
 import { useApp } from '../store/useApp';
 import { getDailyQuote } from '../data/dailyQuotes';
 import { Modal } from '../components/ui';
@@ -25,6 +25,11 @@ import { Mission } from '../types/models';
 import { useT, formatDate, useLocale } from '../i18n';
 import { designCopy } from '../i18n/design';
 import { companionCopy } from '../i18n/companion';
+import { DecisionPlanModal } from '../components/momentum/DecisionPlanModal';
+import { TwoMinuteStart } from '../components/momentum/TwoMinuteStart';
+import { MomentumCard, EvidenceStrip, SimpleModeNote, TwoWeekCheckIn } from '../components/momentum/TodayMomentum';
+import { shareDecision } from '../components/momentum/shareDecision';
+import { isSimpleMode, keptDecisions, twoWeekCheckInDue } from '../services/momentum';
 
 const RITUALS_KEY = 'oda_rituals_open';
 
@@ -45,7 +50,7 @@ function writeRitualsOpen(open: boolean) {
 }
 
 export const Today: React.FC = () => {
-  const { data, setActiveRoute, completeMission, setOneDecision, toggleMicroHabit } = useApp();
+  const { data, setActiveRoute, completeMission, setOneDecision, toggleMicroHabit, showToast } = useApp();
   const t = useT();
   const [locale] = useLocale();
   const c = companionCopy(locale);
@@ -56,6 +61,8 @@ export const Today: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [ritualsOpen, setRitualsOpen] = useState<boolean>(readRitualsOpen);
   const [habitsModalOpen, setHabitsModalOpen] = useState(false);
+  const [plan, setPlan] = useState<{ open: boolean; justSet?: boolean; smaller?: boolean }>({ open: false });
+  const [startOpen, setStartOpen] = useState(false);
 
   if (!data) return null;
 
@@ -101,6 +108,8 @@ export const Today: React.FC = () => {
     try {
       await setOneDecision(title);
       setNewDecisionTitle('');
+      // Right after choosing is the best moment to plan for the obstacle.
+      setPlan({ open: true, justSet: true });
     } finally {
       setIsSaving(false);
     }
@@ -128,6 +137,17 @@ export const Today: React.FC = () => {
   };
 
   const quote = getDailyQuote();
+  const simple = isSimpleMode(data);
+  const checkInDue = !simple && twoWeekCheckInDue(data);
+  const keptCount = keptDecisions(data.missions).length;
+  const decisionPlan = todayOneDecision?.plan;
+
+  const handleShare = async () => {
+    if (!todayOneDecision) return;
+    const result = await shareDecision(t(todayOneDecision.title));
+    if (result === 'copied') showToast(t('Copied. Send it to one person you trust.'), 'success');
+    else if (result === 'failed') showToast(t('Sharing isn’t available here.'), 'error');
+  };
 
   return (
     <div className="space-y-6">
@@ -150,6 +170,13 @@ export const Today: React.FC = () => {
         </button>
       </header>
 
+      <MomentumCard
+        decisionOpen={!decisionDone}
+        hasDecision={Boolean(todayOneDecision)}
+        onMakeSmaller={() => setPlan({ open: true, smaller: true })}
+        onChoose={() => document.getElementById('today-decision-input')?.focus()}
+      />
+
       {/* 2. One decision */}
       <section
         id="set-one-decision"
@@ -158,28 +185,61 @@ export const Today: React.FC = () => {
         <div className="flex items-center justify-between gap-3">
           <span className="oda-kicker opacity-90">{t("Today's one decision")}</span>
           {decisionStreak.currentStreak > 0 && (
-            <span className="text-[13px] opacity-70">{t('{n} days', { n: decisionStreak.currentStreak })}</span>
+            <span className="text-[13px] opacity-70">{decisionStreak.currentStreak === 1 ? t('1 day') : t('{n} days', { n: decisionStreak.currentStreak })}</span>
           )}
         </div>
 
         {todayOneDecision ? (
           <>
-            <p className="oda-display text-[30px] sm:text-[34px] leading-snug">{t(todayOneDecision.title)}</p>
-            {decisionDone ? (
-              <div className="flex items-center gap-2.5 text-[15px] opacity-80">
-                <span className="w-6 h-6 rounded-full bg-[var(--bg)] text-[var(--fg)] flex items-center justify-center">
-                  <Check size={14} strokeWidth={2.2} />
+            <p className="oda-display text-[30px] sm:text-[34px] leading-snug break-words">{t(todayOneDecision.title)}</p>
+            {decisionPlan?.ifThen && !decisionDone && (
+              <button type="button" onClick={() => setPlan({ open: true })} className="oda-decision-plan w-full text-left px-4 py-3 space-y-0.5">
+                <span className="block text-[13px] font-semibold opacity-75">
+                  {decisionPlan.obstacle ? t('If {obstacle}', { obstacle: decisionPlan.obstacle }) : t('If it gets hard')}
                 </span>
-                <span>{t('Done for today · +D$ {amount}', { amount: earnedAmount.toLocaleString() })}</span>
+                <span className="block text-[15px] leading-snug">{t('then I will {plan}', { plan: decisionPlan.ifThen })}</span>
+              </button>
+            )}
+            {decisionDone ? (
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-2.5 text-[15px] opacity-80">
+                  <span className="w-6 h-6 rounded-full bg-[var(--bg)] text-[var(--fg)] flex items-center justify-center">
+                    <Check size={14} strokeWidth={2.2} />
+                  </span>
+                  <span>{t('Done for today · +D$ {amount}', { amount: earnedAmount.toLocaleString() })}</span>
+                </div>
+                <p className="text-[14px] opacity-75">{t('That’s proof #{n} that you keep your word.', { n: keptCount })}</p>
               </div>
             ) : (
-              <button
-                type="button"
-                onClick={() => setCompletingMission(todayOneDecision)}
-                className="oda-decision-action w-full h-12 rounded-[var(--radius-sm)] font-semibold text-[15px]"
-              >
-                {t('Done · +D$ {amount}', { amount: ECONOMY_CONSTANTS.ONE_DECISION_REWARD.toLocaleString() })}
-              </button>
+              <div className="space-y-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setStartOpen(true)}
+                    className="oda-decision-action w-full h-12 rounded-[var(--radius-sm)] font-semibold text-[15px] inline-flex items-center justify-center gap-2"
+                  >
+                    <Timer size={18} strokeWidth={2} />
+                    {t('Start · just 2 minutes')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setCompletingMission(todayOneDecision)}
+                    className="oda-decision-secondary w-full h-12 rounded-[var(--radius-sm)] font-semibold text-[15px]"
+                  >
+                    {t('Done · +D$ {amount}', { amount: ECONOMY_CONSTANTS.ONE_DECISION_REWARD.toLocaleString() })}
+                  </button>
+                </div>
+                <div className="flex flex-wrap gap-x-5">
+                  {!decisionPlan?.ifThen && (
+                    <button type="button" onClick={() => setPlan({ open: true })} className="oda-decision-link inline-flex items-center gap-1.5">
+                      <Route size={15} />{t('Plan for obstacles · 30 sec')}
+                    </button>
+                  )}
+                  <button type="button" onClick={() => void handleShare()} className="oda-decision-link inline-flex items-center gap-1.5">
+                    <Share2 size={15} />{t('Tell one person')}
+                  </button>
+                </div>
+              </div>
             )}
           </>
         ) : (
@@ -204,6 +264,9 @@ export const Today: React.FC = () => {
           </form>
         )}
       </section>
+
+      <EvidenceStrip />
+      {checkInDue && <TwoWeekCheckIn />}
 
       {/* 3. Three small habits */}
       <section className="bg-[var(--bg-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] p-5">
@@ -288,15 +351,15 @@ export const Today: React.FC = () => {
         </div>
       </figure>
 
+      {simple ? <SimpleModeNote /> : <>
       <section aria-labelledby="today-discover" className="space-y-3">
         <h2 id="today-discover" className="text-sm font-semibold">{d.discover}</h2>
         <button type="button" onClick={() => setActiveRoute('/app/courses')} className="oda-discovery-link w-full flex items-center gap-4 text-left py-5 border-y border-[var(--border)]">
           <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--brand-burgundy-soft)] text-[var(--brand-burgundy)]"><GraduationCap size={24} strokeWidth={1.5} /></span><span><span className="block text-base font-semibold">{c.courses}</span><span className="block text-xs leading-relaxed text-[var(--fg-muted)] mt-1">{c.courseHint}</span></span><ChevronRight size={18} className="ml-auto shrink-0" />
         </button>
-        <div className="grid grid-cols-2 gap-3">
-          <button type="button" onClick={() => setActiveRoute('/app/coach')} className="oda-discovery-link flex items-center gap-2.5 text-left min-h-14"><MessageCircle className="text-[var(--accent)] shrink-0" size={20} /><span className="text-sm font-medium">{c.talk}</span><ChevronRight size={15} className="ml-auto shrink-0" /></button>
-          <button type="button" onClick={() => setActiveRoute('/app/inspiration')} className="oda-discovery-link flex items-center gap-2.5 text-left min-h-14"><BookOpen className="text-[var(--brand-burgundy)] shrink-0" size={20} /><span className="text-sm font-medium">{c.inspiration}</span><ChevronRight size={15} className="ml-auto shrink-0" /></button>
-        </div>
+        <button type="button" onClick={() => setActiveRoute('/app/coach')} className="oda-discovery-link w-full flex items-center gap-4 text-left py-4 border-b border-[var(--border)]">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] text-[var(--accent)]"><MessageCircle size={22} strokeWidth={1.6} /></span><span className="text-base font-semibold">{c.talk}</span><ChevronRight size={18} className="ml-auto shrink-0" />
+        </button>
       </section>
 
       {/* 4. Active dream */}
@@ -390,7 +453,22 @@ export const Today: React.FC = () => {
         )}
       </section>
 
+      </>}
+
       {/* Modals */}
+      <DecisionPlanModal
+        mission={todayOneDecision ?? null}
+        isOpen={plan.open && Boolean(todayOneDecision)}
+        justSet={plan.justSet}
+        initialFeeling={plan.smaller ? 'overwhelming' : undefined}
+        onClose={() => setPlan({ open: false })}
+      />
+      <TwoMinuteStart
+        mission={todayOneDecision ?? null}
+        isOpen={startOpen && Boolean(todayOneDecision)}
+        onClose={() => setStartOpen(false)}
+        onDone={() => todayOneDecision && setCompletingMission(todayOneDecision)}
+      />
       <CompleteMissionModal
         mission={completingMission}
         isOpen={Boolean(completingMission)}
