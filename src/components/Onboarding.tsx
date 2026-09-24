@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { ArrowLeft, Check } from 'lucide-react';
-import { Logo } from './Logo';
+import { LogoLockup } from './Logo';
 import { useApp } from '../store/useApp';
 import { LOCALES, ensureLocaleLoaded, useLocale, useT, type Locale } from '../i18n';
 import { EXPLORE_DREAM_ITEMS, type ExploreDreamItem } from '../data/exploreDreams';
@@ -86,10 +86,9 @@ export const Onboarding: React.FC = () => {
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] font-sans flex flex-col">
       {/* Top bar */}
-      <header className="px-4 sm:px-6 h-16 flex items-center justify-between max-w-lg w-full mx-auto">
+      <header className="px-4 sm:px-6 h-20 flex items-center justify-between max-w-lg w-full mx-auto">
         <div className="flex items-center gap-2 min-w-0">
-          <Logo className="w-6 h-6 shrink-0" />
-          <span className="text-[15px] font-semibold tracking-tight truncate">{t('One Decision Away')}</span>
+          <LogoLockup className="w-10 h-14 shrink-0" title="ODA" />
         </div>
         <div className="flex items-center gap-1.5" aria-label={t('Step {current} of {total}', { current: step, total: 3 })}>
           {[1, 2, 3].map((n) => (

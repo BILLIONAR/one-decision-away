@@ -377,12 +377,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }, 850);
       return () => {
         clearInterval(simTimer);
-        document.title = t('One Decision Away — Life OS & Future Self');
+        document.title = 'ODA';
       };
     }
 
     if (!activeFocusSession) {
-      document.title = t('One Decision Away — Life OS & Future Self');
+      document.title = 'ODA';
       return;
     }
 
@@ -393,7 +393,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     if (activeFocusSession.remainingSeconds === 0) {
       if (!tabBlinkEnabled) {
-        document.title = t('✨ [Finished!] {title} — One Decision Away', { title: activeFocusSession.missionTitle });
+        document.title = t('✨ [Finished!] {title} — ODA', { title: activeFocusSession.missionTitle });
         return;
       }
 
@@ -411,9 +411,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         clearInterval(blinkTimer);
       };
     } else if (activeFocusSession.isPaused) {
-      document.title = t('⏸️ [Paused {time}] {title} — One Decision Away', { time: timeStr, title: activeFocusSession.missionTitle });
+      document.title = t('⏸️ [Paused {time}] {title} — ODA', { time: timeStr, title: activeFocusSession.missionTitle });
     } else {
-      document.title = t('⏱️ [{time}] {title} — One Decision Away', { time: timeStr, title: activeFocusSession.missionTitle });
+      document.title = t('⏱️ [{time}] {title} — ODA', { time: timeStr, title: activeFocusSession.missionTitle });
     }
   }, [
     isSimulatingFocusAlert,

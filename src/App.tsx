@@ -44,7 +44,7 @@ const AppRouter: React.FC = () => {
       <div className="min-h-screen bg-[var(--bg)] flex items-center justify-center text-sm font-medium text-[var(--fg-muted)]">
         <div className="flex items-center gap-3">
           <div className="w-5 h-5 border-2 border-[var(--color-sage)] border-t-transparent rounded-full animate-spin" />
-          <span>{t('Loading One Decision Away...')}</span>
+          <span>{t('Loading ODA...')}</span>
         </div>
       </div>
     );

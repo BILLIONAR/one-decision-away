@@ -1,5 +1,9 @@
 /** es dictionary — English source → es. Generated; edit freely. */
 const dict: Record<string, string> = {
+  "Loading ODA...": "Cargando ODA...",
+  "✨ [Finished!] {title} — ODA": "✨ [¡Terminado!] {title} — ODA",
+  "⏸️ [Paused {time}] {title} — ODA": "⏸️ [En pausa {time}] {title} — ODA",
+  "⏱️ [{time}] {title} — ODA": "⏱️ [{time}] {title} — ODA",
   "Designed by Yahya": "Designed by Yahya",
   "Designed by Yahya. Your answers and reflections are never sold or shared.": "Designed by Yahya. Tus respuestas y reflexiones nunca se venden ni se comparten.",
   " / month": " / mes",

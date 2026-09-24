@@ -1,5 +1,9 @@
 /** tr dictionary — English source → tr. Generated; edit freely. */
 const dict: Record<string, string> = {
+  "Loading ODA...": "ODA yükleniyor...",
+  "✨ [Finished!] {title} — ODA": "✨ [Bitti!] {title} — ODA",
+  "⏸️ [Paused {time}] {title} — ODA": "⏸️ [Duraklatıldı {time}] {title} — ODA",
+  "⏱️ [{time}] {title} — ODA": "⏱️ [{time}] {title} — ODA",
   "Designed by Yahya": "Designed by Yahya",
   "Designed by Yahya. Your answers and reflections are never sold or shared.": "Designed by Yahya. Cevapların ve düşüncelerin asla satılmaz ya da paylaşılmaz.",
   " / month": " / ay",
