@@ -1,4 +1,5 @@
 import { cloudSync } from './cloudSync';
+import { t } from '../i18n';
 import { getAppBase, publicAssetPath } from '../utils/routing';
 
 export type PushTimes = Record<'morning' | 'lateMorning' | 'midday' | 'afternoon' | 'evening' | 'night', string>;
@@ -43,37 +44,37 @@ function initialStatus(): PushStatus {
     supported, configured, signedIn, subscribed: isPushActive(),
     permission: supported ? Notification.permission : 'unsupported',
     reason: !supported
-      ? 'Bu tarayıcı arka plan bildirimlerini desteklemiyor. iPhone/iPad için siteyi ana ekrana ekleyip oradan aç.'
-      : !configured ? 'Arka plan bildirim sunucusu henüz kurulmadı.'
-      : !signedIn ? 'Site kapalıyken bildirim almak için üyeliğine giriş yap.' : undefined,
+      ? t("This browser doesn't support background notifications. On iPhone/iPad, add the site to your Home Screen and open it from there.")
+      : !configured ? t("The background notification server isn't set up yet.")
+      : !signedIn ? t('Sign in to your account to get notifications while the site is closed.') : undefined,
   };
 }
 
 function authHeaders(): Record<string, string> {
   const config = cloudSync.getConfig();
   const session = cloudSync.getState().session;
-  if (!config || !session) throw new Error('Bildirim ayarlarını değiştirmek için üyeliğine giriş yap.');
+  if (!config || !session) throw new Error(t('Sign in to your account to change notification settings.'));
   return { apikey: config.anonKey, Authorization: `Bearer ${session.access_token}`, 'Content-Type': 'application/json' };
 }
 
 async function rest(path: string, init: RequestInit = {}): Promise<Response> {
   const config = cloudSync.getConfig();
-  if (!config) throw new Error('Arka plan bildirim sunucusu henüz kurulmadı.');
+  if (!config) throw new Error(t("The background notification server isn't set up yet."));
   let response: Response;
   try {
     response = await fetch(`${config.url.replace(/\/$/, '')}/rest/v1/${path}`, {
       ...init, headers: { ...authHeaders(), ...init.headers }, signal: AbortSignal.timeout(15000),
     });
   } catch {
-    throw new Error('Bildirim sunucusuna ulaşılamadı. Bağlantını kontrol edip tekrar dene.');
+    throw new Error(t("Couldn't reach the notification server. Check your connection and try again."));
   }
   if (!response.ok) {
-    if (response.status === 401) throw new Error('Oturumun yenilenmeli. Çıkış yapıp tekrar giriş yap.');
+    if (response.status === 401) throw new Error(t('Your session needs refreshing. Sign out and sign in again.'));
     if (response.status === 404 || response.status === 400) {
-      throw new Error('Arka plan bildirim altyapısı hazır değil. Sunucudaki bildirim kurulumunun tamamlanması gerekiyor.');
+      throw new Error(t("Background notifications aren't ready yet. The notification setup on the server needs to be completed."));
     }
-    if (response.status === 403) throw new Error('Bu üyelik için bildirim kaydı doğrulanamadı. Yeniden giriş yapmayı dene.');
-    throw new Error('Bildirim ayarı sunucuya kaydedilemedi. Tekrar dene.');
+    if (response.status === 403) throw new Error(t("Couldn't verify the notification registration for this account. Try signing in again."));
+    throw new Error(t("Couldn't save the notification setting to the server. Try again."));
   }
   return response;
 }
@@ -81,10 +82,10 @@ async function rest(path: string, init: RequestInit = {}): Promise<Response> {
 function validateTimes(times: PushTimes): PushTimes {
   const result = {} as PushTimes;
   for (const slot of SLOTS) {
-    if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(times[slot] ?? '')) throw new Error('Altı bildirim için geçerli bir saat seç.');
+    if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(times[slot] ?? '')) throw new Error(t('Choose a valid time for all six notifications.'));
     result[slot] = times[slot];
   }
-  if (new Set(Object.values(result)).size !== SLOTS.length) throw new Error('Altı bildirim için birbirinden farklı saatler seç.');
+  if (new Set(Object.values(result)).size !== SLOTS.length) throw new Error(t('Choose a different time for each of the six notifications.'));
   return result;
 }
 
@@ -95,7 +96,7 @@ async function registration(): Promise<ServiceWorkerRegistration> {
   if (registered.active) return registered;
   return Promise.race([
     navigator.serviceWorker.ready,
-    new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Bildirim servisi hazırlanamadı. Sayfayı yenileyip tekrar dene.')), 15000)),
+    new Promise<never>((_, reject) => setTimeout(() => reject(new Error(t("The notification service couldn't start. Refresh the page and try again."))), 15000)),
   ]);
 }
 
@@ -106,7 +107,7 @@ export async function getPushStatus(): Promise<PushStatus> {
   const project = cloudSync.getConfig()!.url;
   try {
     const reg = await navigator.serviceWorker.getRegistration(new URL(getAppBase(), location.origin).href);
-    const subscription = await reg?.pushManager.getSubscription();
+    const subscription = await reg?.pushManager?.getSubscription();
     if (!subscription || Notification.permission !== 'granted') {
       if (readLocal()) clearLocal();
       return { ...status, subscribed: false };
@@ -121,7 +122,7 @@ export async function getPushStatus(): Promise<PushStatus> {
     } else clearLocal();
     return { ...status, subscribed };
   } catch (error) {
-    return { ...status, reason: error instanceof Error ? error.message : 'Bildirim durumu doğrulanamadı.' };
+    return { ...status, reason: error instanceof Error ? error.message : t("Couldn't verify notification status.") };
   }
 }
 
@@ -131,7 +132,7 @@ export async function enablePush(times: PushTimes, locale: string): Promise<Push
   if (!status.supported || !status.configured || !status.signedIn) throw new Error(status.reason);
   const schedule = validateTimes(times);
   const permission = Notification.permission === 'default' ? await Notification.requestPermission() : Notification.permission;
-  if (permission !== 'granted') throw new Error('Bildirim izni verilmedi. Tarayıcının site ayarlarından izin verebilirsin.');
+  if (permission !== 'granted') throw new Error(t("Notification permission wasn't granted. You can allow it in your browser's site settings."));
   const reg = await registration();
   let subscription = await reg.pushManager.getSubscription();
   const previous = readLocal();
@@ -139,7 +140,7 @@ export async function enablePush(times: PushTimes, locale: string): Promise<Push
   const project = cloudSync.getConfig()!.url;
   // A shared browser must not reuse a different member's endpoint.
   if (subscription && (!previous || previous.userId !== owner || previous.project !== project)) {
-    if (!await subscription.unsubscribe()) throw new Error('Önceki cihaz aboneliği kapatılamadı. Sayfayı yenileyip tekrar dene.');
+    if (!await subscription.unsubscribe()) throw new Error(t("Couldn't close the previous device subscription. Refresh the page and try again."));
     subscription = null;
     clearLocal();
   }
@@ -167,7 +168,7 @@ export async function enablePush(times: PushTimes, locale: string): Promise<Push
   if (cloudSync.getState().session?.user.id !== owner || cloudSync.getConfig()?.url !== project) {
     await subscription.unsubscribe().catch(() => undefined);
     clearLocal();
-    throw new Error('Üyelik oturumu değişti. Bildirimleri açık olan üyelikte yeniden etkinleştir.');
+    throw new Error(t("The signed-in account changed. Turn notifications on again from the account you're using."));
   }
   localStorage.setItem(ACTIVE_KEY, JSON.stringify({ project, userId: owner, endpoint: subscription.endpoint }));
   window.dispatchEvent(new Event('oda:push-status'));
@@ -178,7 +179,7 @@ export async function enablePush(times: PushTimes, locale: string): Promise<Push
 export async function disablePush(): Promise<void> {
   const local = readLocal();
   const reg = 'serviceWorker' in navigator ? await navigator.serviceWorker.getRegistration(new URL(getAppBase(), location.origin).href) : undefined;
-  const subscription = await reg?.pushManager.getSubscription();
+  const subscription = await reg?.pushManager?.getSubscription();
   const endpoint = subscription?.endpoint ?? local?.endpoint;
   let serverError: unknown;
   let serverStopped = !endpoint;
@@ -190,10 +191,10 @@ export async function disablePush(): Promise<void> {
   if (subscription) {
     try { browserStopped = await subscription.unsubscribe(); } catch { browserStopped = false; }
   }
-  if (!browserStopped && !serverStopped) throw new Error('Bildirimler henüz durdurulamadı. Bağlantıyı kontrol et veya tarayıcının site bildirim iznini kapat.');
+  if (!browserStopped && !serverStopped) throw new Error(t("Notifications couldn't be stopped yet. Check your connection or turn off notification permission in your browser's site settings."));
   clearLocal();
-  if (serverError) throw new Error('Bu cihazdaki bildirimler kapatıldı; sunucu kaydı temizlenemedi. Bağlantı gelince tekrar kapatmayı dene.');
-  if (!browserStopped) throw new Error('Sunucu bildirimleri kapatıldı; tarayıcı aboneliği kaldırılamadı. Sayfayı yenileyip tekrar dene.');
+  if (serverError) throw new Error(t("Notifications are off on this device, but the server record couldn't be cleared. Try turning them off again when you're back online."));
+  if (!browserStopped) throw new Error(t("Server notifications are off, but the browser subscription couldn't be removed. Refresh the page and try again."));
 }
 
 /** Updates an already opted-in device; never requests permission or subscribes. */
@@ -204,6 +205,6 @@ export async function syncPushPreferences(times: PushTimes, locale: string): Pro
     method: 'PATCH', headers: { Prefer: 'return=representation' },
     body: JSON.stringify({ times: validateTimes(times), locale: locale === 'tr' ? 'tr' : 'en', timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC' }),
   }).then(async response => {
-    if (!(await response.json()).length) { clearLocal(); throw new Error('Sunucu aboneliği bulunamadı. Arka plan bildirimlerini yeniden aç.'); }
+    if (!(await response.json()).length) { clearLocal(); throw new Error(t("The server subscription wasn't found. Turn background notifications on again.")); }
   });
 }

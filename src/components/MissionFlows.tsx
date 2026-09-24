@@ -83,7 +83,7 @@ export const CompleteMissionModal: React.FC<CompleteMissionModalProps> = ({
     if (mission) {
       setTargetMinutes(mission.estimatedMinutes || 25);
       setTimerSeconds((mission.estimatedMinutes || 25) * 60);
-      setCompletedSummary(t('Finished: {title}', { title: mission.title }));
+      setCompletedSummary(t('Finished: {title}', { title: t(mission.title) }));
       setResistanceNoticed('');
       setNextStep('');
     }

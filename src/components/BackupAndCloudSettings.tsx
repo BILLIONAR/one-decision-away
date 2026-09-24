@@ -33,8 +33,10 @@ export const BackupAndCloudSettings: React.FC = () => {
   })();
 
   const handleSignOut = async () => {
-    try { await disablePush(); await cloudSync.signOut(); }
+    // Turning push off is best-effort: a notification failure must never block signing out.
+    try { await disablePush(); }
     catch (error) { showToast(error instanceof Error ? error.message : t('Something went wrong. Please try again.'), 'error'); }
+    finally { await cloudSync.signOut(); }
   };
 
   const handleSendLink = async () => {

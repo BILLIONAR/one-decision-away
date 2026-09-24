@@ -1,4 +1,4 @@
-import { getPushStatus } from '../services/pushNotifications';
+import { disablePush, getPushStatus, isPushActive } from '../services/pushNotifications';
 import { normaliseNudgeTimes } from '../data/dailyNudges';
 import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { appRouteHref, normalizeAppRoute, readAppRoute } from '../utils/routing';
@@ -39,6 +39,7 @@ import {
 } from '../types/models';
 import type { NotebookAction } from '../services/notebook';
 import { clearNotebookDrafts } from '../services/notebookDrafts';
+import { COURSE_PROGRESS_STORAGE_KEY } from '../services/courseProgress';
 import { createRepository, DataRepository } from '../services/repository';
 import { cloudSync } from '../services/cloudSync';
 import { notificationScheduler } from '../services/notificationScheduler';
@@ -344,24 +345,39 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [activeFocusSession?.remainingSeconds, activeFocusSession?.isPaused, activeFocusSession?.guidedMeditationId]);
 
   // Restore membership/subscription before starting local timers to avoid duplicate push delivery.
+  // Depend on primitive values: `data` is replaced on every save, and re-running this effect
+  // would otherwise query the push server after nearly every tap.
+  const nudgesEnabled = data?.profile.nudgesEnabled === true;
+  const nudgeTimesKey = data ? JSON.stringify(normaliseNudgeTimes(data.profile.nudgeTimes)) : '';
   useEffect(() => {
-    if (!data) return;
+    if (!nudgeTimesKey) return;
     let active = true;
+    const times = JSON.parse(nudgeTimesKey) as ReturnType<typeof normaliseNudgeTimes>;
     const configure = () => {
-      if (active) notificationScheduler.configure({
-        enabled: data.profile.nudgesEnabled === true,
-        times: normaliseNudgeTimes(data.profile.nudgeTimes),
-      });
+      if (active) notificationScheduler.configure({ enabled: nudgesEnabled, times });
     };
-    const refresh = async () => { await getPushStatus(); configure(); };
-    void cloudSync.init().then(refresh).catch(configure);
-    const unsubscribe = cloudSync.subscribe(() => { void refresh().catch(configure); });
+    const refresh = async () => {
+      await getPushStatus();
+      // Nudges were switched off elsewhere (another device, a reset): stop server delivery here too.
+      if (active && !nudgesEnabled && isPushActive()) await disablePush().catch(() => undefined);
+      configure();
+    };
+    // Cloud state changes on every sync; only a different member needs a fresh push status.
+    let lastUser: string | null | undefined;
+    const onCloud = () => {
+      const user = cloudSync.getState().session?.user.id ?? null;
+      if (user === lastUser) return;
+      lastUser = user;
+      void refresh().catch(configure);
+    };
+    void cloudSync.init().then(onCloud).catch(configure);
+    const unsubscribe = cloudSync.subscribe(onCloud);
     window.addEventListener('oda:push-status', configure);
     return () => {
       active = false; unsubscribe(); window.removeEventListener('oda:push-status', configure);
-      notificationScheduler.configure({ enabled: false, times: normaliseNudgeTimes(data.profile.nudgeTimes) });
+      notificationScheduler.configure({ enabled: false, times });
     };
-  }, [data?.profile.nudgesEnabled, data?.profile.nudgeTimes]);
+  }, [nudgesEnabled, nudgeTimesKey]);
 
   // Tab Title synchronization during Focus Mode & Alert Simulation
   useEffect(() => {
@@ -1419,7 +1435,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         updatedDates = habit.completedDates.filter((d) => d !== todayStr);
         updatedStreak = Math.max(0, updatedStreak - 1);
         soundSynthesizer.playMicroHabitCue(habit.category, 'undo');
-        showToast(t('Untoggled: {title}', { title: habit.title }), 'info');
+        showToast(t('Untoggled: {title}', { title: t(habit.title) }), 'info');
       } else {
         // Toggle on
         updatedDates = [...habit.completedDates, todayStr];
@@ -1458,7 +1474,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (isLastRemaining) {
           showToast(t('✨ All micro-habits completed today! Full momentum secured! (+ D$25)'), 'success');
         } else {
-          showToast(t('✓ Micro-Habit completed: "{title}"! (+ D$25 momentum)', { title: habit.title }), 'success');
+          showToast(t('✓ Micro-Habit completed: "{title}"! (+ D$25 momentum)', { title: t(habit.title) }), 'success');
         }
       }
 
@@ -1967,7 +1983,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           createdAt: now,
         };
         newTransactions = [checkInTx, ...newTransactions];
-        showToast('✓ Daily Check-in recorded! (+ D$50 Focus Fuel)', 'success');
+        showToast(t('Daily check-in recorded. +D$50'), 'success');
       } else {
         soundSynthesizer.playTapChime();
         showToast(t('Daily Check-in updated.'), 'info');
@@ -2078,7 +2094,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     await repository.save(updated);
     setData(updated);
     showToast(
-      nextMuted ? '🔇 Audio muted (UI sounds silent)' : '🔊 Audio enabled (UI chimes active)',
+      nextMuted ? t('UI Sound Effects Muted') : t('UI Sound Effects Active'),
       'info'
     );
   }, [data, showToast]);
@@ -2102,7 +2118,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       await repository.save(updated);
       setData(updated);
       showToast(
-        muted ? '🔇 Audio muted (UI sounds silent)' : '🔊 Audio enabled (UI chimes active)',
+        muted ? t('UI Sound Effects Muted') : t('UI Sound Effects Active'),
         'info'
       );
     },
@@ -2125,8 +2141,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     soundSynthesizer.playTapChime();
     showToast(
       nextVal
-        ? '🔔 Tab title blink animation enabled for timer 0 alerts'
-        : '🔕 Tab title blink animation disabled',
+        ? t('Tab title blink is on.')
+        : t('Tab title blink is off.'),
       'info'
     );
   }, [data, showToast]);
@@ -2147,8 +2163,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     soundSynthesizer.playTapChime();
     showToast(
       nextVal
-        ? '✨ Screen edge pulsing border enabled for timer 0 alerts'
-        : '🚫 Screen edge pulsing border disabled',
+        ? t('Screen edge pulse is on.')
+        : t('Screen edge pulse is off.'),
       'info'
     );
   }, [data, showToast]);
@@ -2159,7 +2175,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       soundSynthesizer.playFocusCompleteChime();
     }
     showToast(
-      '🔔 Previewing Timer 0 Alert: Browser Tab Title Blink & Screen Border Pulse active for 5s',
+      t('Previewing the finish alert for 5 seconds.'),
       'info'
     );
     setTimeout(() => {
@@ -2293,19 +2309,29 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     showToast(t('Pro subscription cancelled.'), 'info');
   }, [data, showToast]);
 
+  // Data kept outside the main repository must be cleared with it, and a reset
+  // device must stop receiving server push for the old profile.
+  const clearSideStores = useCallback(async () => {
+    await disablePush().catch(() => undefined);
+    for (const key of [COURSE_PROGRESS_STORAGE_KEY, 'oda_course_selection_v1', 'oda_saved_sourced_quotes_v1']) {
+      try { localStorage.removeItem(key); } catch { /* storage unavailable */ }
+    }
+    clearNotebookDrafts();
+  }, []);
+
   const resetToDemo = useCallback(async () => {
     await repository.clear();
     await refreshData();
-    clearNotebookDrafts();
+    await clearSideStores();
     showToast(t('Reset to clean initial state.'), 'info');
-  }, [refreshData, showToast]);
+  }, [refreshData, showToast, clearSideStores]);
 
   const resetAllData = useCallback(async () => {
     await repository.clear();
     await refreshData();
-    clearNotebookDrafts();
+    await clearSideStores();
     showToast(t('All local data cleared and reset.'), 'info');
-  }, [refreshData, showToast]);
+  }, [refreshData, showToast, clearSideStores]);
 
   const importDataJson = useCallback(
     async (file: File) => {

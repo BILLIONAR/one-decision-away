@@ -478,7 +478,7 @@ export const DailyMicroHabits: React.FC = () => {
                 onClick={() => setSelectedGoalFilter(g.id)}
                 className={`h-9 px-3.5 rounded-full text-[13px] font-medium cursor-pointer transition-colors shrink-0 whitespace-nowrap ${isSelected ? 'bg-[var(--fg)] text-[var(--bg)]' : 'bg-[var(--bg)] text-[var(--fg-muted)] hover:text-[var(--fg)]'}`}
               >
-                {g.title} <span className="opacity-60">{goalHabitsCount}</span>
+                {t(g.title)} <span className="opacity-60">{goalHabitsCount}</span>
               </button>
             );
           })}
@@ -529,7 +529,7 @@ export const DailyMicroHabits: React.FC = () => {
               <option value="">{t('None')}</option>
               {goals.map((g) => (
                 <option key={g.id} value={g.id}>
-                  {g.title} ({g.area})
+                  {t(g.title)} ({t(g.area)})
                 </option>
               ))}
             </select>
@@ -740,12 +740,12 @@ export const DailyMicroHabits: React.FC = () => {
                               category={habit.category}
                               color={group.config.color}
                               size="md"
-                              ariaLabel={isCompletedToday ? t('Mark {title} as incomplete', { title: habit.title }) : t('Mark {title} as completed', { title: habit.title })}
+                              ariaLabel={isCompletedToday ? t('Mark {title} as incomplete', { title: t(habit.title) }) : t('Mark {title} as completed', { title: t(habit.title) })}
                             />
 
                             <div className="min-w-0 flex-1">
                               <div className={`text-[15px] font-medium truncate ${isCompletedToday ? 'line-through text-[var(--fg-muted)]' : 'text-[var(--fg)]'}`}>
-                                {habit.title}
+                                {t(habit.title)}
                               </div>
                               <div className="flex items-center gap-2 text-[12px] text-[var(--fg-subtle)] flex-wrap">
                                 <span>{t('{n} min', { n: habit.durationMinutes })}</span>
@@ -761,9 +761,9 @@ export const DailyMicroHabits: React.FC = () => {
                                       setEditingHabit(habit);
                                     }}
                                     className="truncate max-w-[140px] sm:max-w-[200px] text-[var(--fg-muted)] hover:text-[var(--fg)] cursor-pointer"
-                                    title={t('Linked to Goal: "{title}" ({area}). Click to edit.', { title: linkedGoal.title, area: linkedGoal.area })}
+                                    title={t('Linked to Goal: "{title}" ({area}). Click to edit.', { title: t(linkedGoal.title), area: t(linkedGoal.area) })}
                                   >
-                                    {linkedGoal.title}
+                                    {t(linkedGoal.title)}
                                   </button>
                                 )}
                               </div>
@@ -775,7 +775,7 @@ export const DailyMicroHabits: React.FC = () => {
                               type="button"
                               onClick={() =>
                                 startFocusSession({
-                                  missionTitle: t('Micro-Habit: {title}', { title: habit.title }),
+                                  missionTitle: t('Micro-Habit: {title}', { title: t(habit.title) }),
                                   durationMinutes: habit.durationMinutes || 5,
                                 })
                               }

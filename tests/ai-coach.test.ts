@@ -40,7 +40,7 @@ test('context retains the latest user turn, merges interrupted turns, and ignore
   assert.equal(result[1].role, 'user');
   assert.equal(result.at(-1)?.content, 'Şimdi başlayacağım.\nİlk adım ne?');
   assert.ok(result.slice(1).reduce((sum, message) => sum + message.content.length, 0) <= 4400);
-  assert.throws(() => prepareCoachMessages([{ role: 'user', content: '  ' }]), /mesaj yaz/);
+  assert.throws(() => prepareCoachMessages([{ role: 'user', content: '  ' }]), /Write a message/);
 });
 
 test('streams accumulated visible content and disables reasoning output', async () => {
@@ -119,7 +119,7 @@ test('generation failures are actionable, never become a canned coach reply, and
   }) });
   await coach.initialize();
   const updates: string[] = [];
-  await assert.rejects(coach.stream([{ role: 'user', content: 'Selam' }], text => updates.push(text)), /boş belleği/);
+  await assert.rejects(coach.stream([{ role: 'user', content: 'Selam' }], text => updates.push(text)), /enough memory/);
   assert.equal(disposed, true);
   assert.equal(coach.isReady, false);
   assert.deepEqual(updates, []);

@@ -724,7 +724,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
                       ? 'bg-[var(--accent)] text-white border-[var(--accent)]'
                       : 'bg-[var(--bg)] text-[var(--fg)] border-transparent hover:border-[var(--border-strong)]'
                   }`}
-                  title={t('{title} achieved on {date}', { title: m.title, date: point.fullDate })}
+                  title={t('{title} achieved on {date}', { title: t(m.title), date: point.fullDate })}
                 >
                   {t('{n}-Day Milestone', { n: m.streakDays })}
                   <span className={`ml-1.5 text-[12px] ${isSelected ? 'text-white/80' : 'text-[var(--fg-muted)]'}`}>
@@ -751,7 +751,7 @@ export const DailyPrimaryGoalsChart: React.FC<{
               </p>
               {selectedMilestonePoint.goal && (
                 <p className="text-[13px] text-[var(--fg-muted)]">
-                  {t('Goal completed on this milestone day: “{title}”', { title: selectedMilestonePoint.goal.title })}
+                  {t('Goal completed on this milestone day: “{title}”', { title: t(selectedMilestonePoint.goal.title) })}
                 </p>
               )}
             </div>

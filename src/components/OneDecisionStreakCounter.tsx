@@ -138,7 +138,7 @@ export const OneDecisionStreakCounter: React.FC<OneDecisionStreakCounterProps> =
                 </div>
                 {isHovered && day.title && (
                   <div className="absolute -top-9 left-1/2 -translate-x-1/2 z-20 px-2.5 py-1 bg-[var(--fg)] text-[var(--bg)] text-[12px] rounded-[var(--radius-xs)] whitespace-nowrap pointer-events-none">
-                    {day.title}
+                    {t(day.title)}
                   </div>
                 )}
               </div>
@@ -170,7 +170,7 @@ export const OneDecisionStreakCounter: React.FC<OneDecisionStreakCounterProps> =
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="min-w-0">
             <div className="text-[12px] text-[var(--fg-subtle)]">{t('Today')}</div>
-            <p className="text-[15px] font-medium text-[var(--fg)] truncate">{todayDecision.title}</p>
+            <p className="text-[15px] font-medium text-[var(--fg)] truncate">{t(todayDecision.title)}</p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <Button

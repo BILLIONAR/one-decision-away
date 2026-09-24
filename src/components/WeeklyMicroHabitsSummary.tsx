@@ -571,7 +571,7 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
                     >
                       <div className="flex items-center gap-2 min-w-0">
                         <span className="w-2 h-2 rounded-full shrink-0 bg-[var(--accent)]" />
-                        <span className="font-medium text-[var(--fg)] truncate">{habit.title}</span>
+                        <span className="font-medium text-[var(--fg)] truncate">{t(habit.title)}</span>
                       </div>
                       <span className="text-[12px] text-[var(--fg-muted)] shrink-0">{t(hConfig.label)}</span>
                     </div>
@@ -703,7 +703,7 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
                               isDoneToday ? 'bg-[var(--accent)]' : 'bg-[var(--border-strong)]'
                             }`}
                           />
-                          <span className="font-medium text-[var(--fg)] truncate">{h.title}</span>
+                          <span className="font-medium text-[var(--fg)] truncate">{t(h.title)}</span>
                         </div>
                         <div className="flex items-center gap-1.5 shrink-0 text-[12px] text-[var(--fg-muted)]">
                           <span>{t('{n}d streak', { n: h.streakCount })}</span>

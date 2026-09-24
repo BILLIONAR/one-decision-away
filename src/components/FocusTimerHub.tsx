@@ -379,7 +379,7 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
               return (
                 <div key={session.id} className="px-4 min-h-[56px] py-2.5 flex items-center gap-3">
                   <div className="flex-1 min-w-0">
-                    <div className="text-[15px] font-medium text-[var(--fg)] truncate">{session.title}</div>
+                    <div className="text-[15px] font-medium text-[var(--fg)] truncate">{t(session.title)}</div>
                     <div className="text-xs text-[var(--fg-muted)] truncate">
                       {t('{n} min', { n: session.durationMinutes })} · {session.subtitle}
                     </div>
@@ -424,7 +424,7 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
               {activeMissions.map((m) => (
                 <option key={m.id} value={m.id}>
                   {m.isOneDecision ? `${t('One decision')} · ` : `${t(m.area)} · `}
-                  {m.title} ({m.estimatedMinutes || 30}m)
+                  {t(m.title)} ({m.estimatedMinutes || 30}m)
                 </option>
               ))}
             </select>

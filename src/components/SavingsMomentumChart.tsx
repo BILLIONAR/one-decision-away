@@ -594,7 +594,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
     const goalGroup = g.select<SVGGElement>('.goal-threshold');
     const goalLine = goalGroup.select<SVGLineElement>('.goal-line');
     const goalLabel = goalGroup.select<SVGTextElement>('.goal-label');
-    const goalText = t('Goal: {name} (D$ {amount})', { name: activeGoal.name, amount: activeGoal.targetD$.toLocaleString() });
+    const goalText = t('Goal: {name} (D$ {amount})', { name: t(activeGoal.name), amount: activeGoal.targetD$.toLocaleString() });
 
     if (activeGoal.targetD$ <= yMax) {
       const goalY = yScale(activeGoal.targetD$);
@@ -712,7 +712,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
             className="bg-[var(--bg)]"
             options={goalOptions.map((g) => ({
               value: g.id,
-              label: `${g.name} (D$ ${g.targetD$.toLocaleString()})`,
+              label: `${t(g.name)} (D$ ${g.targetD$.toLocaleString()})`,
             }))}
           />
         </div>
@@ -735,7 +735,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
             D$ {activeGoal.targetD$.toLocaleString()}
           </div>
           <div className="text-[12px] text-[var(--fg-muted)] mt-2">{t('Goal Target')}</div>
-          <div className="text-[12px] text-[var(--fg-subtle)] mt-0.5 truncate">{activeGoal.name}</div>
+          <div className="text-[12px] text-[var(--fg-subtle)] mt-0.5 truncate">{t(activeGoal.name)}</div>
         </div>
 
         <div className="bg-[var(--bg)] rounded-[var(--radius-sm)] p-4">
@@ -815,7 +815,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
               )}
 
               <div className="flex justify-between items-center gap-3 pt-2 border-t border-[var(--border)] text-[var(--fg-muted)]">
-                <span>{t('Goal Target ({name}):', { name: activeGoal.name })}</span>
+                <span>{t('Goal Target ({name}):', { name: t(activeGoal.name) })}</span>
                 <span className="font-medium text-[var(--fg)]">
                   {Math.min(100, Math.round((hoveredPoint.cumulativeBalance / activeGoal.targetD$) * 100))}%
                 </span>

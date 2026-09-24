@@ -7,10 +7,12 @@ import { companionCopy } from '../i18n/companion';
 import { useApp } from '../store/useApp';
 
 const SAVED_KEY = 'oda_saved_sourced_quotes_v1';
-function readSaved(): string[] {
-  try { const parsed = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]'); return Array.isArray(parsed) ? parsed.filter(id => typeof id === 'string') : []; } catch { return []; }
+function readStoredSaved(): string[] | null {
+  try { const parsed = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]'); return Array.isArray(parsed) ? parsed.filter(id => typeof id === 'string') : []; } catch { return null; }
 }
-const normalise = (text: string) => text.toLocaleLowerCase('tr').normalize('NFD').replace(/\p{M}/gu, '');
+const readSaved = () => readStoredSaved() ?? [];
+// Locale-neutral folding so "I", "İ" and "ı" all match "i" in every language.
+const normalise = (text: string) => text.toLowerCase().normalize('NFD').replace(/\p{M}/gu, '').replace(/ı/g, 'i');
 
 export const Inspiration: React.FC = () => {
   const [locale] = useLocale(); const c = companionCopy(locale);
@@ -29,11 +31,11 @@ export const Inspiration: React.FC = () => {
   }), [locale, filter, saved, search]);
 
   function toggleSaved(id: string) {
-    setSaved(current => {
-      const next = current.includes(id) ? current.filter(value => value !== id) : [...current, id];
-      try { localStorage.setItem(SAVED_KEY, JSON.stringify(next)); } catch { /* Reading remains available without storage. */ }
-      return next;
-    });
+    // Start from storage so a save made in another tab is not overwritten.
+    const current = readStoredSaved() ?? saved;
+    const next = current.includes(id) ? current.filter(value => value !== id) : [...current, id];
+    try { localStorage.setItem(SAVED_KEY, JSON.stringify(next)); } catch { /* Reading remains available without storage. */ }
+    setSaved(next);
   }
 
   function sourceLine(quote: SourcedQuote) {

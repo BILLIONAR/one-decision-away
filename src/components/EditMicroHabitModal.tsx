@@ -98,7 +98,7 @@ export const EditMicroHabitModal: React.FC<EditMicroHabitModalProps> = ({
   };
 
   const handleDelete = async () => {
-    if (window.confirm(t('Are you sure you want to delete the micro-habit "{title}"?', { title: habit.title }))) {
+    if (window.confirm(t('Are you sure you want to delete the micro-habit "{title}"?', { title: t(habit.title) }))) {
       try {
         setIsDeleting(true);
         await onDelete(habit.id);
@@ -183,7 +183,7 @@ export const EditMicroHabitModal: React.FC<EditMicroHabitModalProps> = ({
               { value: '', label: t('None') },
               ...goals.map((g) => ({
                 value: g.id,
-                label: `${g.title} · ${t(g.area)}`,
+                label: `${t(g.title)} · ${t(g.area)}`,
               })),
             ]}
           />

@@ -146,7 +146,7 @@ export const Missions: React.FC = () => {
                       onClick={() =>
                         startFocusSession({
                           missionId: mission.id,
-                          missionTitle: mission.title,
+                          missionTitle: t(mission.title),
                           missionType: mission.type,
                           missionArea: mission.area,
                           durationMinutes: minutes,

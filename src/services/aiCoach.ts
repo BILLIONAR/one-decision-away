@@ -1,3 +1,4 @@
+import { t } from '../i18n';
 /** Local inference only. The model download starts exclusively in initialize(). */
 export const COACH_MODEL = {
   id: 'Qwen3.5-2B-q4f16_1-MLC',
@@ -53,43 +54,43 @@ export class CoachError extends Error {
   }
 }
 
-const abortError = () => new DOMException('İşlem durduruldu.', 'AbortError');
+const abortError = () => new DOMException(t('The operation was stopped.'), 'AbortError');
 const isAbort = (error: unknown) => error instanceof Error && error.name === 'AbortError';
 
 export function coachErrorMessage(error: unknown): string {
   if (error instanceof CoachError) return error.message;
   const detail = String(error instanceof Error ? error.message : error).toLowerCase();
   if (/memory|out of|allocation|buffer size|device.?lost|gpu device/.test(detail)) {
-    return 'Cihazın yapay zekâ için yeterli boş belleği sağlayamadı. Diğer sekmeleri kapatıp koçu yeniden başlatmayı dene.';
+    return t("Your device couldn't free up enough memory for the AI. Close other tabs and try restarting the coach.");
   }
   if (/fetch|network|offline|download|cache|quota|storage/.test(detail)) {
-    return 'Model dosyaları yüklenemedi. İnternet bağlantını ve tarayıcının boş depolama alanını kontrol edip yeniden dene.';
+    return t("The model files couldn't be loaded. Check your internet connection and your browser's free storage, then try again.");
   }
   if (/webgpu|adapter|shader-f16/.test(detail)) {
-    return 'Bu tarayıcı veya cihaz yapay zekâ motorunu desteklemiyor. Güncel, WebGPU destekli bir tarayıcıda tekrar dene.';
+    return t("This browser or device doesn't support the AI engine. Try again in an up-to-date browser with WebGPU support.");
   }
-  return 'Yapay zekâ yanıtı tamamlayamadı. Koçu yeniden başlatıp tekrar dene.';
+  return t("The AI couldn't finish its reply. Restart the coach and try again.");
 }
 
 /** Checks capabilities only; never imports WebLLM or downloads model weights. */
 export async function getCoachAvailability(): Promise<CoachAvailability> {
   if (typeof navigator === 'undefined' || typeof Worker === 'undefined') {
-    return { supported: false, reason: 'Canlı koç için WebGPU destekli güncel bir tarayıcı gerekiyor.' };
+    return { supported: false, reason: t('The live coach needs an up-to-date browser with WebGPU support.') };
   }
   if (!globalThis.isSecureContext) {
-    return { supported: false, reason: 'Canlı koçu sitenin güvenli HTTPS adresinden aç.' };
+    return { supported: false, reason: t("Open the live coach from the site's secure HTTPS address.") };
   }
   const gpu = (navigator as Navigator & { gpu?: { requestAdapter(): Promise<{ features: { has(feature: string): boolean } } | null> } }).gpu;
-  if (!gpu) return { supported: false, reason: 'Bu tarayıcıda WebGPU kullanılamıyor. Güncel Chrome veya Edge ile tekrar dene.' };
+  if (!gpu) return { supported: false, reason: t("WebGPU isn't available in this browser. Try again with an up-to-date Chrome or Edge.") };
   try {
     const adapter = await gpu.requestAdapter();
-    if (!adapter) return { supported: false, reason: 'Ekran kartına erişilemedi. Tarayıcının donanım hızlandırmasını açıp tekrar dene.' };
+    if (!adapter) return { supported: false, reason: t("Couldn't access the graphics card. Turn on hardware acceleration in your browser and try again.") };
     return {
       supported: true,
       modelId: adapter.features.has('shader-f16') ? COACH_MODEL.id : 'Qwen3.5-2B-q4f32_1-MLC',
     };
   } catch {
-    return { supported: false, reason: 'Tarayıcı ekran kartına erişemedi. Güncel ve WebGPU destekli başka bir tarayıcıda dene.' };
+    return { supported: false, reason: t("The browser couldn't access the graphics card. Try another up-to-date browser with WebGPU support.") };
   }
 }
 
@@ -108,7 +109,7 @@ export function prepareCoachMessages(messages: readonly CoachMessage[]): PromptM
       clean.push({ role: message.role, content: bounded });
     }
   }
-  if (clean.at(-1)?.role !== 'user') throw new CoachError('input', 'Koça göndermek için bir mesaj yaz.');
+  if (clean.at(-1)?.role !== 'user') throw new CoachError('input', t('Write a message to send to the coach.'));
   const recent = clean.slice(-MAX_HISTORY_MESSAGES);
   let size = recent.reduce((sum, message) => sum + message.content.length, 0);
   while (recent.length > 1 && (size > MAX_HISTORY_CHARACTERS || recent[0].role !== 'user')) {
@@ -144,7 +145,7 @@ async function createBrowserRuntime(onProgress: (progress: CoachProgress) => voi
   const failure = new Promise<never>((_resolve, reject) => { fail = reject; });
   // A worker can fail while idle; retain the rejection for the next operation.
   void failure.catch(() => undefined);
-  const workerError = () => fail(new CoachError('runtime', 'Yapay zekâ motoru durdu. Koçu yeniden başlatıp tekrar dene.'));
+  const workerError = () => fail(new CoachError('runtime', t('The AI engine stopped. Restart the coach and try again.')));
   worker.addEventListener('error', workerError);
   worker.addEventListener('messageerror', workerError);
   const engine = new WebWorkerMLCEngine(worker, {
@@ -154,7 +155,7 @@ async function createBrowserRuntime(onProgress: (progress: CoachProgress) => voi
     logLevel: 'ERROR',
     initProgressCallback: report => {
       const progress = Math.max(0, Math.min(1, Number.isFinite(report.progress) ? report.progress : 0));
-      onProgress({ progress, text: progress >= 1 ? 'Model hazır.' : `Model indiriliyor ve hazırlanıyor · %${Math.round(progress * 100)}` });
+      onProgress({ progress, text: progress >= 1 ? t('Model ready.') : t('Downloading and preparing the model · {percent}%', { percent: Math.round(progress * 100) }) });
     },
   });
   return {
@@ -200,9 +201,9 @@ export function createAICoach(dependencies: CoachDependencies = {}) {
     const unlink = forwardAbort(signal, operation);
     loading = (async () => {
       try {
-        onProgress({ progress: 0, text: 'Cihaz uyumluluğu kontrol ediliyor…' });
+        onProgress({ progress: 0, text: t('Checking device compatibility…') });
         const availability = await abortable(checkAvailability(), operation.signal);
-        if (!availability.supported) throw new CoachError('unsupported', availability.reason ?? 'Bu cihazda canlı koç desteklenmiyor.');
+        if (!availability.supported) throw new CoachError('unsupported', availability.reason ?? t("The live coach isn't supported on this device."));
         const created = makeRuntime(progress => { if (!operation.signal.aborted) onProgress(progress); }).then(value => {
           if (operation.signal.aborted) { value.dispose(); throw abortError(); }
           return value;
@@ -211,7 +212,7 @@ export function createAICoach(dependencies: CoachDependencies = {}) {
         await abortable(Promise.race([runtime.load(availability.modelId ?? COACH_MODEL.id), runtime.failure]), operation.signal);
         if (operation.signal.aborted) throw abortError();
         ready = true;
-        onProgress({ progress: 1, text: 'Koç hazır. Konuşmaya başlayabilirsin.' });
+        onProgress({ progress: 1, text: t('The coach is ready. You can start talking.') });
       } catch (error) {
         dispose();
         if (isAbort(error)) throw error;
@@ -228,8 +229,8 @@ export function createAICoach(dependencies: CoachDependencies = {}) {
 
   /** onText receives the accumulated visible reply, not a token delta. */
   const stream = (messages: readonly CoachMessage[], onText: (fullText: string) => void, signal?: AbortSignal): Promise<string> => {
-    if (!ready || !runtime) return Promise.reject(new CoachError('not-ready', 'Önce canlı koçu başlat.'));
-    if (generating) return Promise.reject(new CoachError('busy', 'Önceki yanıtın bitmesini bekle veya yanıtı durdur.'));
+    if (!ready || !runtime) return Promise.reject(new CoachError('not-ready', t('Start the live coach first.')));
+    if (generating) return Promise.reject(new CoachError('busy', t('Wait for the previous reply to finish or stop it.')));
     let prompt: PromptMessage[];
     try { prompt = prepareCoachMessages(messages); } catch (error) { return Promise.reject(error); }
     const activeRuntime = runtime;
@@ -256,7 +257,7 @@ export function createAICoach(dependencies: CoachDependencies = {}) {
           const updated = visibleReply(raw);
           if (updated !== visible) { visible = updated; onText(visible); }
         }
-        if (!visible.trim()) throw new CoachError('runtime', 'Koç bu kez bir yanıt oluşturamadı. Mesajını yeniden gönderebilirsin.');
+        if (!visible.trim()) throw new CoachError('runtime', t("The coach couldn't create a reply this time. You can send your message again."));
         return visible.trim();
       } catch (error) {
         if (isAbort(error)) {
