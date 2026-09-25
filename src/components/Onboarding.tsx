@@ -10,12 +10,12 @@ const ONBOARDING_LOCALES: Locale[] = ['en', 'tr', 'es'];
 
 /** Six varied, affordable starter dreams from the Explore catalogue (by id). */
 const STARTER_DREAM_IDS = [
+  'explore-grow-language',
+  'explore-health-half-marathon',
+  'explore-people-parents-trip',
+  'explore-work-debt-free',
+  'explore-grow-book',
   'explore-travel-paris-week',
-  'explore-ws-home-library',
-  'explore-exp-scuba',
-  'explore-exp-surf-camp',
-  'explore-ws-minimal-desk',
-  'explore-travel-iceland-aurora',
 ];
 
 type Step = 1 | 2 | 3;

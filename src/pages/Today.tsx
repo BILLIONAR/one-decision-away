@@ -27,9 +27,9 @@ import { designCopy } from '../i18n/design';
 import { companionCopy } from '../i18n/companion';
 import { DecisionPlanModal } from '../components/momentum/DecisionPlanModal';
 import { TwoMinuteStart } from '../components/momentum/TwoMinuteStart';
-import { MomentumCard, EvidenceStrip, SimpleModeNote, TwoWeekCheckIn } from '../components/momentum/TodayMomentum';
+import { MomentumCard, EvidenceStrip, SimpleModeNote, TwoWeekCheckIn, WeeklyReviewCard, WeeklyFocusNote } from '../components/momentum/TodayMomentum';
 import { shareDecision } from '../components/momentum/shareDecision';
-import { isSimpleMode, keptDecisions, twoWeekCheckInDue } from '../services/momentum';
+import { isSimpleMode, keptDecisions, twoWeekCheckInDue, weeklyFocus, weeklyReviewDue } from '../services/momentum';
 
 const RITUALS_KEY = 'oda_rituals_open';
 
@@ -156,6 +156,8 @@ export const Today: React.FC = () => {
   const quote = getDailyQuote();
   const simple = isSimpleMode(data);
   const checkInDue = !simple && twoWeekCheckInDue(data);
+  const reviewWeek = weeklyReviewDue(data);
+  const focusChange = weeklyFocus(data);
   const keptCount = keptDecisions(data.missions).length;
   const decisionPlan = todayOneDecision?.plan;
 
@@ -282,8 +284,10 @@ export const Today: React.FC = () => {
         )}
       </section>
 
+      {focusChange && <WeeklyFocusNote change={focusChange} />}
       <EvidenceStrip />
-      {checkInDue && <TwoWeekCheckIn />}
+      {reviewWeek && <WeeklyReviewCard weekKey={reviewWeek} />}
+      {checkInDue && !reviewWeek && <TwoWeekCheckIn />}
 
       {/* 3. Three small habits */}
       <section className="bg-[var(--bg-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] p-5">

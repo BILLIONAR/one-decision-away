@@ -1,5 +1,6 @@
 import { MarketCategory } from '../types/models';
 import { N_ } from '../i18n';
+import { MEANINGFUL_DREAMS } from './exploreDreamsMeaningful';
 
 export interface ExploreDreamItem {
   id: string;
@@ -22,17 +23,24 @@ export const EXPLORE_CATEGORIES: {
   iconName: string;
   description: string;
 }[] = [
-  { key: 'all', label: N_('All Dreams'), category: 'All', iconName: 'Sparkles', description: N_('Every curated home, car, watch, journey and experience — browse like a shop, choose like a builder.') },
+  { key: 'all', label: N_('All Dreams'), category: 'All', iconName: 'Sparkles', description: N_('Who you want to become first, then the places and things you’d love. Choose one and give it a first step.') },
+  { key: 'growth', label: N_('Skills & learning'), category: 'Education', iconName: 'GraduationCap', description: N_('Things you can learn, finish and make with your own hands.') },
+  { key: 'health', label: N_('Health & energy'), category: 'Health & Wellness', iconName: 'Heart', description: N_('A stronger body, a calmer mind and more energy for everything else.') },
+  { key: 'people', label: N_('Family & friends'), category: 'Family & Friends', iconName: 'Users', description: N_('Time with the people who matter, planned instead of postponed.') },
+  { key: 'giving', label: N_('Giving back'), category: 'Giving', iconName: 'HandHeart', description: N_('Ways your effort can change someone else’s life too.') },
+  { key: 'work', label: N_('Work & money'), category: 'Business', iconName: 'Briefcase', description: N_('Your own business, no debt and room to make brave choices.') },
+  { key: 'travel', label: N_('Travel'), category: 'Travel', iconName: 'Compass', description: N_('Journeys of the heart, slow weeks in beautiful cities, safaris and alpine retreats.') },
+  { key: 'experiences', label: N_('Experiences'), category: 'Experiences', iconName: 'Sparkles', description: N_('Nights, dinners and flights you will describe for the rest of your life.') },
   { key: 'homes', label: N_('Homes & Apartments'), category: 'Homes', iconName: 'Home', description: N_('Penthouses, lofts, villas, chalets and lake houses in the world\'s most desirable places.') },
+  { key: 'workspace', label: N_('Workspace'), category: 'Dream Workspace', iconName: 'Briefcase', description: N_('Desks, studios, libraries and offices that make deep work the default.') },
   { key: 'cars', label: N_('Cars'), category: 'Cars & Mobility', iconName: 'Car', description: N_('Supercars, grand tourers, luxury SUVs and classics with a story.') },
   { key: 'watches', label: N_('Watches'), category: 'Luxury Watches', iconName: 'Briefcase', description: N_('Milestone pieces — dive watches, dress watches and haute horlogerie.') },
-  { key: 'travel', label: N_('Travel'), category: 'Travel', iconName: 'Compass', description: N_('Overwater villas, alpine retreats, safaris and slow weeks in beautiful cities.') },
   { key: 'yachts', label: N_('Yachts & Jets'), category: 'Yachts & Aviation', iconName: 'Compass', description: N_('Charters first, ownership later — the sea and the sky on your schedule.') },
-  { key: 'workspace', label: N_('Workspace'), category: 'Dream Workspace', iconName: 'Briefcase', description: N_('Desks, studios, libraries and offices that make deep work the default.') },
-  { key: 'experiences', label: N_('Experiences'), category: 'Experiences', iconName: 'Sparkles', description: N_('Nights, dinners and flights you will describe for the rest of your life.') },
 ];
 
 export const EXPLORE_DREAM_ITEMS: ExploreDreamItem[] = [
+  // Meaningful goals first (skills, health, people, giving, work, pilgrimage).
+  ...MEANINGFUL_DREAMS,
   // --- LUXURY HOMES ---
   {
     id: 'explore-como-villa',

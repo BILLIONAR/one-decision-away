@@ -37,6 +37,7 @@ import {
   Notebook369Practice,
   Notebook369Slot,
   DreamPlan,
+  WeeklyReview,
 } from '../types/models';
 import type { NotebookAction } from '../services/notebook';
 import { clearNotebookDrafts } from '../services/notebookDrafts';
@@ -114,6 +115,7 @@ export interface AppContextType {
   saveDreamPlan: (itemId: string, plan: Omit<DreamPlan, 'updatedAt'>, makeTodaysDecision?: boolean) => Promise<void>;
   /** Quiet profile flags for simple mode and the day-14 check-in. */
   updateMomentumProfile: (patch: Pick<Partial<Profile>, 'simpleModeOff' | 'twoWeekCheckIn'>) => Promise<void>;
+  saveWeeklyReview: (review: Omit<WeeklyReview, 'createdAt'>) => Promise<void>;
   addCustomDream: (
     item: Omit<MarketItem, 'id' | 'createdAt' | 'isCustom'>,
     pinToVision?: boolean
@@ -1055,6 +1057,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (makeTodaysDecision) showToast(t('Today’s One Decision is locked in. Complete it to earn D$500!'), 'success');
     },
     [data, showToast]
+  );
+
+  const saveWeeklyReview = useCallback(
+    async (review: Omit<WeeklyReview, 'createdAt'>) => {
+      if (!data) return;
+      const others = (data.weeklyReviews || []).filter((r) => r.weekKey !== review.weekKey);
+      const updated: UserData = { ...data, weeklyReviews: [{ ...review, createdAt: new Date().toISOString() }, ...others].slice(0, 104) };
+      await repository.save(updated);
+      setData(updated);
+    },
+    [data]
   );
 
   const updateMomentumProfile = useCallback(
@@ -2565,6 +2578,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     updateDecision,
     saveDreamPlan,
     updateMomentumProfile,
+    saveWeeklyReview,
     addCustomDream,
     pinExploreDream,
     grantSimulationBonus,

@@ -41,6 +41,17 @@ export interface DecisionPlan {
 }
 
 /** Obstacle and next small step for a dream, so it is not only imagined. */
+/** Sunday look-back: what helped, what got in the way, one change for next week. */
+export interface WeeklyReview {
+  /** Local YYYY-MM-DD of the Sunday that closes the reviewed week. */
+  weekKey: string;
+  kept: number;
+  helped?: string;
+  blocked?: string;
+  change?: string;
+  createdAt: string;
+}
+
 export interface DreamPlan {
   obstacle?: string;
   step?: string;
@@ -256,6 +267,7 @@ export type MarketCategory =
   | 'Business'
   | 'Health & Wellness'
   | 'Experiences'
+  | 'Family & Friends'
   | 'Giving'
   | 'Custom';
 
@@ -574,6 +586,7 @@ export interface UserData {
   subscription: Subscription;
   inVisionItemIds: string[];
   dreamPlans?: Record<string, DreamPlan>;
+  weeklyReviews?: WeeklyReview[];
   archivedMarketItemIds?: string[];
   archivedMarketRecords?: ArchivedMarketRecord[];
   dreamJournal?: DreamJournalEntry[];

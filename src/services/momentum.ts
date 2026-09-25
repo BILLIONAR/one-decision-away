@@ -110,3 +110,32 @@ export function usageStats(data: Pick<UserData, 'profile' | 'missions'>, now = n
     twoMinuteStarts: decisions.filter(m => m.startedAt).length,
   };
 }
+
+/** The week under review: on Sunday it is this week, on Monday the one that just ended. */
+export function reviewWeekKey(now = new Date()): string | null {
+  if (now.getDay() === 0) return localDayKey(now);
+  if (now.getDay() === 1) return localDayKey(new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1));
+  return null;
+}
+
+/** Kept-decision days in the seven days ending on `weekKey`. */
+export function keptInWeek(missions: Mission[], weekKey: string): number {
+  const [y, m, d] = weekKey.split('-').map(Number);
+  const days = new Set(Array.from({ length: 7 }, (_, i) => localDayKey(new Date(y, m - 1, d - i))));
+  return new Set(keptDecisions(missions).map(e => e.dayKey).filter(k => days.has(k))).size;
+}
+
+export function weeklyReviewDue(data: Pick<UserData, 'missions' | 'weeklyReviews'>, now = new Date()): string | null {
+  const key = reviewWeekKey(now);
+  if (!key || !data.missions.some(m => m.isOneDecision)) return null;
+  return (data.weeklyReviews || []).some(r => r.weekKey === key) ? null : key;
+}
+
+/** The one change chosen in the last look-back, shown during the following week. */
+export function weeklyFocus(data: Pick<UserData, 'weeklyReviews'>, now = new Date()): string | null {
+  const latest = [...(data.weeklyReviews || [])].sort((a, b) => b.weekKey.localeCompare(a.weekKey))[0];
+  if (!latest?.change?.trim()) return null;
+  const [y, m, d] = latest.weekKey.split('-').map(Number);
+  const gap = daysBetween(new Date(y, m - 1, d, 12), now);
+  return gap >= 1 && gap <= 7 ? latest.change.trim() : null;
+}

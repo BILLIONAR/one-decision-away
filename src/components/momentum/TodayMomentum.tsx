@@ -5,7 +5,7 @@ import { useT } from '../../i18n';
 import { FEEDBACK_EMAIL } from '../../data/contact';
 import {
   comebackState, evidenceSummary, freshStart, localDayKey, usageStats,
-  type CheckInAnswer, SIMPLE_MODE_KEPT,
+  type CheckInAnswer, SIMPLE_MODE_KEPT, keptInWeek,
 } from '../../services/momentum';
 
 const DISMISS_KEY = 'oda_momentum_card_dismissed';
@@ -145,5 +145,68 @@ export const TwoWeekCheckIn: React.FC = () => {
         <p className="text-[12px] text-[var(--fg-muted)]">{t('Sending opens your email app with your answer and a few usage numbers. Nothing is sent automatically.')}</p>
       </>}
     </section>
+  );
+};
+
+/**
+ * Sunday (or Monday) look-back: learning from the week is what turns a streak
+ * app into change. The chosen "one change" is shown during the next week.
+ */
+export const WeeklyReviewCard: React.FC<{ weekKey: string }> = ({ weekKey }) => {
+  const t = useT();
+  const { data, saveWeeklyReview, showToast } = useApp();
+  const [helped, setHelped] = useState('');
+  const [blocked, setBlocked] = useState('');
+  const [change, setChange] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [later, setLater] = useState(() => { try { return localStorage.getItem('oda_review_later') === localDayKey(); } catch { return false; } });
+  if (!data || later) return null;
+  const kept = keptInWeek(data.missions, weekKey);
+  const field = 'w-full px-4 py-3 rounded-[var(--radius-sm)] bg-[var(--bg)] border border-[var(--border)] text-[16px] text-[var(--fg)] outline-none focus:border-[var(--accent)]';
+
+  const save = async () => {
+    setSaving(true);
+    try {
+      await saveWeeklyReview({ weekKey, kept, helped: helped.trim() || undefined, blocked: blocked.trim() || undefined, change: change.trim() || undefined });
+      showToast(change.trim() ? t('Saved. Your one change will be here all week.') : t('Saved.'), 'success');
+    } finally { setSaving(false); }
+  };
+  const skip = () => { setLater(true); try { localStorage.setItem('oda_review_later', localDayKey()); } catch { /* per-device */ } };
+
+  return (
+    <section aria-labelledby="weekly-review-title" className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--bg-elevated)] p-5 space-y-4">
+      <div className="space-y-1">
+        <p className="oda-kicker text-[var(--accent)]">{t('Weekly look-back · 2 minutes')}</p>
+        <h2 id="weekly-review-title" className="text-[18px] font-semibold text-[var(--fg)]">
+          {kept === 1 ? t('This week you kept your word on 1 day.') : t('This week you kept your word on {n} days.', { n: kept })}
+        </h2>
+        <p className="text-[14px] leading-relaxed text-[var(--fg-muted)]">{t('No grades. Just notice what worked, so next week is a little easier.')}</p>
+      </div>
+      {[
+        { id: 'review-helped', label: t('What helped this week?'), value: helped, set: setHelped, placeholder: t('e.g. deciding the night before') },
+        { id: 'review-blocked', label: t('What got in the way?'), value: blocked, set: setBlocked, placeholder: t('e.g. starting too late in the day') },
+        { id: 'review-change', label: t('One thing to change next week'), value: change, set: setChange, placeholder: t('e.g. do the decision before checking messages') },
+      ].map(f => (
+        <div key={f.id} className="space-y-1.5">
+          <label htmlFor={f.id} className="block text-[14px] font-medium text-[var(--fg)]">{f.label}</label>
+          <input id={f.id} value={f.value} onChange={e => f.set(e.target.value)} maxLength={160} placeholder={f.placeholder} className={field} />
+        </div>
+      ))}
+      <div className="flex flex-col sm:flex-row gap-2">
+        <button type="button" disabled={saving} onClick={() => void save()} className="h-12 w-full sm:flex-1 rounded-[var(--radius-sm)] bg-[var(--accent)] text-[var(--bg)] text-[15px] font-semibold disabled:opacity-50">{t('Save my look-back')}</button>
+        <button type="button" onClick={skip} className="h-12 px-5 rounded-[var(--radius-sm)] text-[15px] font-semibold text-[var(--fg-muted)]">{t('Later')}</button>
+      </div>
+    </section>
+  );
+};
+
+/** During the week after a look-back, keep the chosen change in view. */
+export const WeeklyFocusNote: React.FC<{ change: string }> = ({ change }) => {
+  const t = useT();
+  return (
+    <p className="rounded-[var(--radius-md)] border-l-2 border-[var(--brand-burgundy)] bg-[var(--bg-muted)] px-4 py-3 text-[14px] leading-relaxed text-[var(--fg)]">
+      <span className="block text-[12px] font-semibold text-[var(--fg-muted)]">{t('This week’s one change')}</span>
+      {change}
+    </p>
   );
 };

@@ -69,3 +69,20 @@ test('the day-14 question appears once, only for people who used decisions', () 
   const stats = usageStats({ profile: profile(at(2026, 9, 10)), missions: [decision(at(2026, 9, 12), { startedAt: 'x' }), decision()] }, now);
   assert.deepEqual(stats, { daysSinceStart: 14, decisionsSet: 2, decisionsKept: 1, plansMade: 0, twoMinuteStarts: 1 });
 });
+
+test('the weekly look-back is offered on Sunday and Monday, once per week, and its change lasts a week', async () => {
+  const { reviewWeekKey, keptInWeek, weeklyReviewDue, weeklyFocus } = await import('../src/services/momentum');
+  const sunday = at(2026, 9, 27), monday = at(2026, 9, 28), wednesday = at(2026, 9, 30);
+  assert.equal(reviewWeekKey(sunday), '2026-09-27');
+  assert.equal(reviewWeekKey(monday), '2026-09-27');
+  assert.equal(reviewWeekKey(wednesday), null);
+  const missions = [decision(at(2026, 9, 21)), decision(at(2026, 9, 25)), decision(at(2026, 9, 27)), decision(at(2026, 9, 20))];
+  assert.equal(keptInWeek(missions, '2026-09-27'), 3);
+  assert.equal(weeklyReviewDue({ missions, weeklyReviews: [] }, sunday), '2026-09-27');
+  assert.equal(weeklyReviewDue({ missions: [], weeklyReviews: [] }, sunday), null);
+  const reviews = [{ weekKey: '2026-09-27', kept: 3, change: 'Decide the night before', createdAt: '' }];
+  assert.equal(weeklyReviewDue({ missions, weeklyReviews: reviews }, monday), null);
+  assert.equal(weeklyFocus({ weeklyReviews: reviews }, sunday), null, 'the new change starts with the new week');
+  assert.equal(weeklyFocus({ weeklyReviews: reviews }, wednesday), 'Decide the night before');
+  assert.equal(weeklyFocus({ weeklyReviews: reviews }, at(2026, 10, 5)), null);
+});

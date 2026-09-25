@@ -59,6 +59,24 @@ export const Evidence: React.FC = () => {
         ))}
       </section>
 
+      {(data.weeklyReviews?.length ?? 0) > 0 && (
+        <section className="space-y-3" aria-labelledby="reviews-title">
+          <h2 id="reviews-title" className="text-[16px] font-semibold text-[var(--fg)]">{t('Weekly look-backs')}</h2>
+          <ul className="space-y-3">
+            {[...(data.weeklyReviews ?? [])].sort((a, b) => b.weekKey.localeCompare(a.weekKey)).slice(0, 12).map(review => (
+              <li key={review.weekKey} className="rounded-[var(--radius-md)] bg-[var(--bg-muted)] p-4 space-y-1.5 text-[14px]">
+                <p className="text-[12px] font-semibold text-[var(--fg-muted)]">
+                  {t('Week ending {date} · {n}/7 days', { date: formatDate(`${review.weekKey}T12:00:00`, { day: 'numeric', month: 'long' }), n: review.kept })}
+                </p>
+                {review.helped && <p><span className="font-medium">{t('Helped:')}</span> {review.helped}</p>}
+                {review.blocked && <p><span className="font-medium">{t('Got in the way:')}</span> {review.blocked}</p>}
+                {review.change && <p><span className="font-medium">{t('Changed next:')}</span> {review.change}</p>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       {kept.length === 0 ? (
         <button type="button" onClick={() => setActiveRoute('/app')} className="w-full h-12 rounded-[var(--radius-sm)] bg-[var(--accent)] text-[var(--bg)] text-[15px] font-semibold">
           {t('Go to today’s decision')}
