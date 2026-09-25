@@ -16,8 +16,13 @@ export interface NudgePrefs {
   times: Record<NudgeSlot, string>; // HH:MM local
 }
 
+/** Slots where an open decision is worth more than a quote: nudge action, not inspiration. */
+const FOLLOW_THROUGH_SLOTS: NudgeSlot[] = ['afternoon', 'evening'];
+const CHOOSE_SLOTS: NudgeSlot[] = ['lateMorning', 'midday'];
+
 class NotificationScheduler {
   private timer: number | null = null;
+  private decision: { title: string | null; done: boolean } = { title: null, done: false };
   private prefs: NudgePrefs = { enabled: false, times: { ...DEFAULT_NUDGE_TIMES } };
   private onVisible = () => { if (document.visibilityState === 'visible') this.tick(); };
 
@@ -41,6 +46,23 @@ class NotificationScheduler {
     } catch {
       return Notification.permission;
     }
+  }
+
+  /** Today's One Decision, so reminders can point at the actual next step. */
+  public setDecision(title: string | null, done: boolean) {
+    this.decision = { title, done };
+  }
+
+  private actionLine(slot: NudgeSlot): string | undefined {
+    const { title, done } = this.decision;
+    if (done) return undefined;
+    if (title && FOLLOW_THROUGH_SLOTS.includes(slot)) {
+      return t('Your decision is still open: “{title}”. Two minutes is enough to start.', { title: t(title) });
+    }
+    if (!title && CHOOSE_SLOTS.includes(slot)) {
+      return t('You haven’t chosen today’s decision yet. What one small thing would make today count?');
+    }
+    return undefined;
   }
 
   public configure(prefs: NudgePrefs) {
@@ -104,12 +126,12 @@ class NotificationScheduler {
 
   public async show(slot: NudgeSlot, customBody?: string) {
     if (!this.isSupported() || Notification.permission !== 'granted') return;
-    const body = customBody || t(getNudgeLine(slot));
+    const body = customBody || this.actionLine(slot) || t(getNudgeLine(slot));
     const title = t(NUDGE_TITLES[slot]);
     const opts: NotificationOptions = {
       body,
-      icon: publicAssetPath('brand/oda-app-c4-v1-192.png'),
-      badge: publicAssetPath('brand/oda-app-c4-v1-192.png'),
+      icon: publicAssetPath('brand/v2/oda-app-v2-192.png'),
+      badge: publicAssetPath('brand/v2/oda-app-v2-192.png'),
       tag: `oda-nudge-${slot}`,
       data: { url: appRouteHref('/app') },
     };

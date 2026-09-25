@@ -407,6 +407,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
   }, [nudgesEnabled, nudgeTimesKey]);
 
+  // Local reminders point at today's actual decision instead of another quote.
+  const todayDecisionForNudges = data?.missions.find(
+    (m) => m.isOneDecision && (m.scheduledFor === new Date().toISOString().slice(0, 10) || m.status === 'active')
+  );
+  const nudgeDecisionTitle = todayDecisionForNudges?.title ?? null;
+  const nudgeDecisionDone = todayDecisionForNudges?.status === 'completed';
+  useEffect(() => {
+    notificationScheduler.setDecision(nudgeDecisionTitle, nudgeDecisionDone);
+  }, [nudgeDecisionTitle, nudgeDecisionDone]);
+
   // Tab Title synchronization during Focus Mode & Alert Simulation
   useEffect(() => {
     // If user is previewing / testing timer 0 alert in settings

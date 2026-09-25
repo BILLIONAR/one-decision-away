@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AudioLines, Check, ChevronDown, ChevronRight, Plus, MessageCircle, GraduationCap, Timer, Share2, Route } from 'lucide-react';
 import { useApp } from '../store/useApp';
 import { getDailyQuote } from '../data/dailyQuotes';
@@ -63,6 +63,23 @@ export const Today: React.FC = () => {
   const [habitsModalOpen, setHabitsModalOpen] = useState(false);
   const [plan, setPlan] = useState<{ open: boolean; justSet?: boolean; smaller?: boolean }>({ open: false });
   const [startOpen, setStartOpen] = useState(false);
+
+  // A new member's first decision comes from onboarding: offer the 30-second plan once.
+  const mountedAt = useRef(new Date().toISOString());
+  const firstPlanCandidate = data?.missions.find(
+    // Decisions chosen on this page already open the plan themselves.
+    (m) => m.isOneDecision && m.status === 'active' && !m.plan && m.createdAt < mountedAt.current
+  );
+  const firstWeek = data ? isSimpleMode(data) : false;
+  useEffect(() => {
+    if (!firstPlanCandidate || !firstWeek) return;
+    try {
+      if (localStorage.getItem('oda_plan_prompted') === firstPlanCandidate.id) return;
+      localStorage.setItem('oda_plan_prompted', firstPlanCandidate.id);
+    } catch { return; }
+    const timer = window.setTimeout(() => setPlan({ open: true, justSet: true }), 700);
+    return () => window.clearTimeout(timer);
+  }, [firstPlanCandidate?.id, firstWeek]);
 
   if (!data) return null;
 

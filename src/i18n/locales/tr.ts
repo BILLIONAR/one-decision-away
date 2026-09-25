@@ -6059,6 +6059,11 @@ const dict: Record<string, string> = {
   "Unclear tasks stall. Write down the very first physical action, like opening the file.": "Belirsiz işler takılır. İlk fiziksel hareketi yaz; örneğin dosyayı açmak.",
   "I’m okay": "İyiyim",
   "Good. Protect this moment and start before the feeling changes.": "Güzel. Bu anı koru ve his değişmeden başla.",
-  "Yes": "Evet"
+  "Yes": "Evet",
+  "Your practice": "Pratiğin",
+  "Reminders, language, backup, appearance": "Hatırlatıcılar, dil, yedekleme, görünüm",
+  "More tools": "Diğer araçlar",
+  "Your decision is still open: “{title}”. Two minutes is enough to start.": "Kararın hâlâ açık: “{title}”. Başlamak için iki dakika yeter.",
+  "You haven’t chosen today’s decision yet. What one small thing would make today count?": "Bugünün kararını henüz seçmedin. Bugünü değerli kılacak küçük bir şey ne olabilir?"
 };
 export default dict;

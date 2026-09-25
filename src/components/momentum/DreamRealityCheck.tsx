@@ -59,7 +59,7 @@ export const DreamRealityCheck: React.FC<{ item: MarketItem; onDecisionSet?: () 
         <input id={`step-${item.id}`} value={step} onChange={e => setStep(e.target.value)} maxLength={140} className={field} />
       </div>
       <div className="flex flex-col sm:flex-row gap-2">
-        <button type="button" disabled={busy || !step.trim() || hasTodayDecision} onClick={() => void makeDecision()} className="h-12 flex-1 rounded-[var(--radius-sm)] bg-[var(--accent)] text-[var(--bg)] text-[15px] font-semibold disabled:opacity-40">
+        <button type="button" disabled={busy || !step.trim() || hasTodayDecision} onClick={() => void makeDecision()} className="h-12 w-full sm:flex-1 rounded-[var(--radius-sm)] bg-[var(--accent)] text-[var(--bg)] text-[15px] font-semibold disabled:opacity-40">
           {t('Make it today’s decision')}
         </button>
         <button type="button" disabled={busy} onClick={() => void save()} className="h-12 px-5 rounded-[var(--radius-sm)] bg-[var(--bg-elevated)] border border-[var(--border)] text-[15px] font-semibold text-[var(--fg)]">

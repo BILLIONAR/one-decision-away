@@ -139,7 +139,7 @@ export const TwoWeekCheckIn: React.FC = () => {
           placeholder={t('What helped, or what got in the way? (optional)')}
           className="w-full px-4 py-3 rounded-[var(--radius-sm)] bg-[var(--bg)] border border-[var(--border)] text-[16px] outline-none focus:border-[var(--accent)]" />
         <div className="flex flex-col sm:flex-row gap-2">
-          <button type="button" onClick={() => void save(true)} className="h-12 flex-1 rounded-[var(--radius-sm)] bg-[var(--accent)] text-[var(--bg)] text-[15px] font-semibold">{t('Send to the ODA team')}</button>
+          <button type="button" onClick={() => void save(true)} className="h-12 w-full sm:flex-1 rounded-[var(--radius-sm)] bg-[var(--accent)] text-[var(--bg)] text-[15px] font-semibold">{t('Send to the ODA team')}</button>
           <button type="button" onClick={() => void save(false)} className="h-12 px-5 rounded-[var(--radius-sm)] text-[15px] font-semibold text-[var(--fg-muted)]">{t('Just save')}</button>
         </div>
         <p className="text-[12px] text-[var(--fg-muted)]">{t('Sending opens your email app with your answer and a few usage numbers. Nothing is sent automatically.')}</p>

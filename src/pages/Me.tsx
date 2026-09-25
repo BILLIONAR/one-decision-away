@@ -4,6 +4,7 @@ import { useApp } from '../store/useApp';
 import { useT, useLocale } from '../i18n';
 import { companionCopy } from '../i18n/companion';
 import { calculateCurrentStreak, computeLifetimeEarned } from '../services/economy';
+import { evidenceSummary } from '../services/momentum';
 import {
   ChevronRight,
   UserRound,
@@ -15,8 +16,6 @@ import {
   TrendingUp,
   Gauge,
   Bell,
-  Languages,
-  CloudUpload,
   SunMoon,
   Sparkles,
   AudioLines,
@@ -74,40 +73,37 @@ export const Me: React.FC = () => {
   const initial = displayName.charAt(0).toUpperCase();
   const role = data.futureSelf?.title?.trim();
 
+  // Few, clear choices first; every other tool still one tap away under "More tools".
   const groups: { title: string; rows: MenuRow[] }[] = [
     {
-      title: t('Your future'),
+      title: t('Your practice'),
       rows: [
-        { icon: UserRound, label: c.coach, hint: c.talk, route: '/app/coach' },
         { icon: CheckCircle2, label: t('Your evidence'), hint: t('Every decision you kept'), route: '/app/evidence' },
+        { icon: UserRound, label: c.coach, hint: c.talk, route: '/app/coach' },
         { icon: GraduationCap, label: c.courses, hint: c.courseHint, route: '/app/courses' },
         { icon: AudioLines, label: t('Focus & meditations'), hint: t('Guided sessions and sound waves'), route: '/app/focus' },
-        { icon: UserRound, label: t('Future self'), hint: t('Roles, standards, letters'), route: '/app/future-self' },
-        { icon: Target, label: t('Missions'), route: '/app/missions' },
-        { icon: CalendarRange, label: t('Seasons'), route: '/app/seasons' },
-        { icon: TrendingUp, label: t('Progress'), route: '/app/progress' },
-        { icon: Gauge, label: t('Life score'), route: '/app/score' },
-      ],
-    },
-    {
-      title: t('Money'),
-      rows: [
-        { icon: Wallet, label: t('Wallet & savings'), hint: t('D$ ledger and real-money bridge'), route: '/app/bank' },
-        { icon: Landmark, label: t('Reality bridge'), route: '/app/bridge' },
-        { icon: PieChart, label: t('Budget'), route: '/app/budget' },
       ],
     },
     {
       title: t('App'),
       rows: [
-        { icon: Bell, label: t('Reminders'), route: '/app/settings' },
-        { icon: Languages, label: t('Language'), route: '/app/settings' },
-        { icon: CloudUpload, label: t('Backup & sync'), route: '/app/settings' },
-        { icon: SunMoon, label: t('Appearance'), route: '/app/settings' },
+        { icon: Bell, label: t('Settings'), hint: t('Reminders, language, backup, appearance'), route: '/app/settings' },
         { icon: Sparkles, label: t('Pro plan'), route: '/app/upgrade' },
       ],
     },
   ];
+  const moreTools: MenuRow[] = [
+    { icon: UserRound, label: t('Future self'), hint: t('Roles, standards, letters'), route: '/app/future-self' },
+    { icon: SunMoon, label: t('Two futures'), route: '/app/two-futures' },
+    { icon: Target, label: t('Missions'), route: '/app/missions' },
+    { icon: CalendarRange, label: t('Seasons'), route: '/app/seasons' },
+    { icon: TrendingUp, label: t('Progress'), route: '/app/progress' },
+    { icon: Gauge, label: t('Life score'), route: '/app/score' },
+    { icon: Wallet, label: t('Wallet & savings'), hint: t('D$ ledger and real-money bridge'), route: '/app/bank' },
+    { icon: Landmark, label: t('Reality bridge'), route: '/app/bridge' },
+    { icon: PieChart, label: t('Budget'), route: '/app/budget' },
+  ];
+  const evidence = evidenceSummary(data.missions);
 
   const feedbackHref = `mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent('One Decision Away feedback')}`;
 
@@ -134,47 +130,10 @@ export const Me: React.FC = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-3">
-        <StatTile value={String(stats.streak)} label={t('Day streak')} />
-        <StatTile value={stats.earned >= 10000 ? `${(stats.earned / 1000).toFixed(1)}k` : stats.earned.toLocaleString()} label={t('D$ earned')} accent />
-        <StatTile
-          value={stats.latestScore !== null ? String(stats.latestScore) : '—'}
-          label={t('Life score')}
-        />
-      </div>
-
-      {/* Two futures */}
-      <button
-        type="button"
-        onClick={() => setActiveRoute('/app/two-futures')}
-        className="w-full text-left bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-4 cursor-pointer transition-opacity active:opacity-80"
-      >
-        <div className="flex items-center justify-between">
-          <span className="text-[15px] font-semibold text-[var(--fg)]">{t('Two futures')}</span>
-          <span className="flex items-center gap-1 text-[13px] text-[var(--fg-muted)]">
-            {t('This month')}
-            <ChevronRight className="w-4 h-4" strokeWidth={1.8} />
-          </span>
-        </div>
-
-        <div className="h-2.5 w-full rounded-full overflow-hidden flex bg-[var(--future-allowing)]">
-          <div
-            className="h-full bg-[var(--accent)] transition-all duration-500 ease-out"
-            style={{ width: `${stats.total > 0 ? stats.buildingPct : 0}%` }}
-          />
-        </div>
-
-        <div className="flex items-center justify-between text-[13px]">
-          <span className="text-[var(--fg)] font-medium">
-            {t('Building {pct}%', { pct: stats.buildingPct })}
-          </span>
-          <span className="text-[var(--fg-muted)]">
-            {t('Allowing {pct}%', { pct: stats.total > 0 ? 100 - stats.buildingPct : 0 })}
-          </span>
-        </div>
-        {stats.total === 0 && (
-          <p className="text-[13px] text-[var(--fg-subtle)]">{t('No votes yet this month.')}</p>
-        )}
+      <button type="button" onClick={() => setActiveRoute('/app/evidence')} className="w-full grid grid-cols-3 gap-3 text-left">
+        <StatTile value={String(evidence.total)} label={t('Kept decisions')} accent />
+        <StatTile value={`${evidence.last7}/7`} label={t('This week')} />
+        <StatTile value={stats.earned >= 10000 ? `${(stats.earned / 1000).toFixed(1)}k` : stats.earned.toLocaleString()} label={t('D$ earned')} />
       </button>
 
       {/* Menu groups */}
@@ -204,6 +163,29 @@ export const Me: React.FC = () => {
           </div>
         </section>
       ))}
+
+      <details className="oda-more-tools group bg-[var(--bg-muted)] rounded-[var(--radius-md)] overflow-hidden">
+        <summary className="h-14 px-4 flex items-center gap-3 cursor-pointer list-none text-[15px] font-semibold text-[var(--fg)]">
+          <span className="flex-1">{t('More tools')}</span>
+          <span className="text-[12px] font-normal text-[var(--fg-subtle)]">{moreTools.length}</span>
+          <ChevronRight className="w-5 h-5 text-[var(--fg-subtle)] shrink-0 transition-transform group-open:rotate-90" strokeWidth={1.8} />
+        </summary>
+        {moreTools.map((row) => (
+          <button
+            key={row.route}
+            type="button"
+            onClick={() => setActiveRoute(row.route)}
+            className="w-full h-14 px-4 flex items-center gap-3 text-left cursor-pointer transition-colors hover:bg-[var(--bg-inset)] border-t border-[var(--border)]"
+          >
+            <row.icon className="w-5 h-5 text-[var(--accent)] shrink-0" strokeWidth={1.8} />
+            <span className="flex-1 min-w-0">
+              <span className="block text-[15px] text-[var(--fg)] truncate">{row.label}</span>
+              {row.hint && <span className="block text-[12px] text-[var(--fg-subtle)] truncate">{row.hint}</span>}
+            </span>
+            <ChevronRight className="w-5 h-5 text-[var(--fg-subtle)] shrink-0" strokeWidth={1.8} />
+          </button>
+        ))}
+      </details>
 
       {/* Footer */}
       <div className="pt-2 pb-4 text-center space-y-1">

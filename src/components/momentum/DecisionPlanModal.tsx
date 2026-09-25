@@ -97,7 +97,7 @@ export const DecisionPlanModal: React.FC<{ mission: Mission | null; isOpen: bool
           <button type="button" onClick={onClose} className="h-12 px-5 rounded-[var(--radius-sm)] text-[15px] font-semibold text-[var(--fg-muted)] hover:text-[var(--fg)]">
             {justSet ? t('Skip for now') : t('Cancel')}
           </button>
-          <button type="button" onClick={save} disabled={saving} className="h-12 flex-1 rounded-[var(--radius-sm)] bg-[var(--accent)] text-[var(--bg)] text-[15px] font-semibold disabled:opacity-50">
+          <button type="button" onClick={save} disabled={saving} className="h-12 w-full sm:flex-1 rounded-[var(--radius-sm)] bg-[var(--accent)] text-[var(--bg)] text-[15px] font-semibold disabled:opacity-50">
             {t('Save plan')}
           </button>
         </div>

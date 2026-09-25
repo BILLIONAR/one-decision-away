@@ -1,18 +1,10 @@
 import React from 'react';
+import { BRAND } from '../brand/current';
+import { LogoC4, LogoC4Lockup } from './brand/LogoC4';
+import { LogoV2, LogoV2Lockup } from './brand/LogoV2';
 
-const brandImage = `${import.meta.env.BASE_URL}brand/oda-c4.png`;
 type LogoProps = { className?: string; title?: string };
 
-/** C4 mark and stacked ODA lockup share the selected transparent master asset. */
-export const Logo: React.FC<LogoProps> = ({ className = 'w-6 h-6', title }) => (
-  <svg viewBox="280 130 700 640" className={`oda-brand-mark ${className}`} aria-hidden={title ? undefined : true} role={title ? 'img' : undefined}>
-    {title && <title>{title}</title>}
-    <image href={brandImage} width="1254" height="1254" />
-  </svg>
-);
-
-export const LogoLockup: React.FC<LogoProps> = ({ className = 'w-12 h-18', title = 'ODA' }) => (
-  <svg viewBox="280 130 700 1000" className={`oda-brand-mark ${className}`} role="img" aria-label={title}>
-    <image href={brandImage} width="1254" height="1254" />
-  </svg>
-);
+/** Brand switch: v2 (vector) by default; the C4 raster brand stays available. */
+export const Logo: React.FC<LogoProps> = (props) => (BRAND === 'c4' ? <LogoC4 {...props} /> : <LogoV2 {...props} />);
+export const LogoLockup: React.FC<LogoProps> = (props) => (BRAND === 'c4' ? <LogoC4Lockup {...props} /> : <LogoV2Lockup {...props} />);

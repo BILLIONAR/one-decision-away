@@ -6059,6 +6059,11 @@ const dict: Record<string, string> = {
   "Unclear tasks stall. Write down the very first physical action, like opening the file.": "Las tareas poco claras se atascan. Escribe la primera acción física, como abrir el archivo.",
   "I’m okay": "Estoy bien",
   "Good. Protect this moment and start before the feeling changes.": "Bien. Protege este momento y empieza antes de que cambie la sensación.",
-  "Yes": "Sí"
+  "Yes": "Sí",
+  "Your practice": "Tu práctica",
+  "Reminders, language, backup, appearance": "Recordatorios, idioma, copia de seguridad, apariencia",
+  "More tools": "Más herramientas",
+  "Your decision is still open: “{title}”. Two minutes is enough to start.": "Tu decisión sigue abierta: “{title}”. Dos minutos bastan para empezar.",
+  "You haven’t chosen today’s decision yet. What one small thing would make today count?": "Aún no has elegido la decisión de hoy. ¿Qué pequeña cosa haría que hoy cuente?"
 };
 export default dict;
