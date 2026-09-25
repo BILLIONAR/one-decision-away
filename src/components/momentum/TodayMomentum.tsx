@@ -55,7 +55,7 @@ export const EvidenceStrip: React.FC = () => {
   if (!data) return null;
   const s = evidenceSummary(data.missions);
   return (
-    <button type="button" onClick={() => setActiveRoute('/app/evidence')} className="w-full flex items-center gap-4 rounded-[var(--radius-md)] bg-[var(--bg-muted)] px-5 py-4 text-left hover:bg-[var(--bg-inset)] transition-colors">
+    <button type="button" onClick={() => setActiveRoute('/app/evidence')} className="w-full flex items-center gap-4 rounded-[var(--radius-md)] bg-[var(--bg-elevated)] border border-[var(--border)] px-5 py-4 text-left hover:border-[var(--border-strong)] transition-colors">
       <span className="min-w-0 flex-1">
         <span className="block text-[15px] font-semibold text-[var(--fg)]">
           {s.total === 0 ? t('Your evidence starts today') : s.total === 1 ? t('1 kept promise') : t('{n} kept promises', { n: s.total })}

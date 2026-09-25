@@ -1,3 +1,6 @@
+@import "@fontsource-variable/fraunces/opsz.css";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
 @import "tailwindcss";
 @import "./styles/tokens.css";
 
@@ -16,6 +19,13 @@
     font-weight: 600;
     letter-spacing: -0.02em;
     font-style: normal;
+  }
+  /* Page titles use the warm editorial serif (Fraunces, calm optical size). */
+  h1 {
+    font-family: var(--font-editorial);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    font-variation-settings: 'opsz' 36;
   }
   /* Paper system: no italic display type, no letter-spaced micro labels */
   .font-display.italic, h1.italic, h2.italic, h3.italic { font-style: normal; }
@@ -182,8 +192,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 /* Editorial type is reserved for key titles and reflective passages. */
 .oda-display {
   font-family: var(--font-editorial);
-  font-weight: 400;
-  letter-spacing: -0.035em;
+  font-weight: 430;
+  letter-spacing: -0.015em;
+  font-variation-settings: 'opsz' 36;
   text-wrap: balance;
 }
 .oda-kicker {
@@ -207,6 +218,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   color: var(--on-forest);
   border-radius: 20px 20px 48px 20px;
 }
+.oda-decision-door { color: var(--on-forest); opacity: 0.07; }
+.oda-decision > :not(.oda-decision-door) { position: relative; }
 .oda-decision input { color: var(--on-forest); border-color: #708E7B; }
 .oda-decision input::placeholder { color: #C2CDBF; opacity: 1; }
 .oda-decision input:focus { border-color: var(--on-forest); }

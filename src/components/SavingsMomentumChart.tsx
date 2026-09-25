@@ -753,7 +753,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
             {velocityMetrics.isReached
               ? t('Reached')
               : velocityMetrics.daysLeft !== null
-              ? t('~{n} days', { n: velocityMetrics.daysLeft })
+              ? (velocityMetrics.daysLeft === 1 ? t('~1 day') : t('~{n} days', { n: velocityMetrics.daysLeft }))
               : t('Action required')}
           </div>
           <div className="text-[12px] text-[var(--fg-muted)] mt-2">{t('Est. Completion')}</div>

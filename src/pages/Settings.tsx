@@ -233,7 +233,7 @@ export const Settings: React.FC = () => {
     const fire = () => {
       new Notification(t('Daily wisdom: {theme}', { theme: t(currentWisdom.theme) }), {
         body: t('"{quote}" — {author}', { quote: t(currentWisdom.quote), author: t(currentWisdom.author) }),
-        icon: publicAssetPath('brand/v2/oda-app-v2-192.png'),
+        icon: publicAssetPath('brand/v3/oda-app-v3-192.png'),
       });
     };
 

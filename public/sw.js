@@ -5,7 +5,7 @@ const SHELL_CACHE = `${CACHE_PREFIX}v3`;
 const MEDIA_CACHE = `${SHELL_CACHE}:media`;
 const INDEX_URL = new URL('index.html', BASE).href;
 const MANIFEST_URL = new URL('manifest.webmanifest', BASE).href;
-const SHELL = ['', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-192-maskable.png', 'icon-512-maskable.png', 'apple-touch-icon.png', 'brand/oda-c4.png', 'brand/v2/oda-app-v2-192.png', 'brand/v2/oda-app-v2-512.png', 'brand/v2/oda-app-v2-maskable-192.png', 'brand/v2/oda-app-v2-maskable-512.png', 'brand/v2/oda-apple-v2-180.png', 'brand/v2/oda-favicon-v2-32.png'].map(path => new URL(path, BASE).href);
+const SHELL = ['', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-192-maskable.png', 'icon-512-maskable.png', 'apple-touch-icon.png', 'brand/oda-c4.png', 'brand/v3/oda-app-v3-192.png', 'brand/v3/oda-app-v3-512.png', 'brand/v3/oda-app-v3-maskable-192.png', 'brand/v3/oda-app-v3-maskable-512.png', 'brand/v3/oda-apple-v3-180.png', 'brand/v3/oda-favicon-v3-32.png'].map(path => new URL(path, BASE).href);
 const inScope = url => url.origin === BASE.origin && url.pathname.startsWith(BASE.pathname);
 
 self.addEventListener('install', event => {
@@ -94,8 +94,8 @@ self.addEventListener('push', event => {
   const body = typeof payload.body === 'string' ? payload.body.slice(0, 2000) : 'Yeni sözün hazır. Bugün kendine küçük bir alan aç.';
   event.waitUntil(self.registration.showNotification(title, {
     body,
-    icon: new URL('brand/v2/oda-app-v2-192.png', BASE).href,
-    badge: new URL('brand/v2/oda-app-v2-192.png', BASE).href,
+    icon: new URL('brand/v3/oda-app-v3-192.png', BASE).href,
+    badge: new URL('brand/v3/oda-app-v3-192.png', BASE).href,
     tag: typeof payload.tag === 'string' ? payload.tag.slice(0, 120) : 'oda-daily-inspiration',
     data: { url: typeof payload.url === 'string' ? payload.url : '/app' },
   }));

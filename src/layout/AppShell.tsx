@@ -190,11 +190,13 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
                 type="button"
                 onClick={() => handleNav(item.path)}
                 aria-current={isActive ? 'page' : undefined}
-                className={`flex flex-col items-center justify-center gap-1 text-[11px] transition-colors cursor-pointer ${
-                  isActive ? 'text-[var(--fg)] font-semibold' : 'text-[var(--fg-subtle)] font-medium'
+                className={`flex flex-col items-center justify-center gap-0.5 text-[11px] transition-colors cursor-pointer ${
+                  isActive ? 'text-[var(--accent)] font-semibold' : 'text-[var(--fg-subtle)] font-medium'
                 }`}
               >
-                <Icon className="w-[22px] h-[22px]" strokeWidth={isActive ? 2.2 : 1.8} />
+                <span className={`flex items-center justify-center w-14 h-8 rounded-full transition-colors ${isActive ? 'bg-[var(--accent-soft)]' : ''}`}>
+                  <Icon className="w-[21px] h-[21px]" strokeWidth={isActive ? 2.2 : 1.8} />
+                </span>
                 <span>{labels[item.key]}</span>
               </button>
             );

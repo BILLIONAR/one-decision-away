@@ -199,8 +199,13 @@ export const Today: React.FC = () => {
       {/* 2. One decision */}
       <section
         id="set-one-decision"
-        className="oda-decision p-6 sm:p-8 space-y-5"
+        className="oda-decision relative overflow-hidden p-6 sm:p-8 space-y-5"
       >
+        {/* Brand motif: a faint open doorway behind today's decision. */}
+        <svg aria-hidden="true" viewBox="0 0 100 100" className="oda-decision-door pointer-events-none absolute -right-6 -top-4 w-40 h-40 sm:w-48 sm:h-48">
+          <path d="M49 84 V31.5 C57 32.5 63 37 65.5 44 V84 Z" fill="currentColor" opacity="0.5" />
+          <path d="M30 84 V46 A20 20 0 0 1 70 46 V84" stroke="currentColor" strokeWidth="5" strokeLinecap="round" fill="none" />
+        </svg>
         <div className="flex items-center justify-between gap-3">
           <span className="oda-kicker opacity-90">{t("Today's one decision")}</span>
           {decisionStreak.currentStreak > 0 && (

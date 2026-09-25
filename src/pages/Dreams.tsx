@@ -164,7 +164,7 @@ export const Dreams: React.FC = () => {
   const days = (price: number) => daysToAfford(price, balance, pace.perDay);
   const daysLabel = (price: number) => {
     const d = days(price);
-    return d === 0 ? t('Affordable now') : t('~{n} days', { n: d });
+    return d === 0 ? t('Affordable now') : d === 1 ? t('~1 day') : t('~{n} days', { n: d });
   };
   const pctFor = (price: number) => Math.min(100, Math.round((balance / Math.max(1, price)) * 100));
 

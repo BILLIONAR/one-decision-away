@@ -6268,6 +6268,7 @@ const dict: Record<string, string> = {
   "Family & Friends": "Aile ve Arkadaşlar",
   "Education": "Eğitim",
   "Health & Wellness": "Sağlık ve Zindelik",
-  "Business": "İş"
+  "Business": "İş",
+  "~1 day": "~1 gün"
 };
 export default dict;
