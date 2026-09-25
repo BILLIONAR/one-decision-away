@@ -3,9 +3,15 @@ import * as procrastination from './courseContent/procrastination';
 import * as focus from './courseContent/focus';
 import * as sleep from './courseContent/sleep';
 import * as calm from './courseContent/calm';
+import * as turningDay from './courseContent/turningDay';
+import * as meditation from './courseContent/meditation';
+import * as suggestion from './courseContent/suggestion';
+import * as photosA from './courseContent/photosA';
+import * as photosB from './courseContent/photosB';
+import * as photosC from './courseContent/photosC';
 
 export interface CourseSource {
-  id: string; title: string; url: string; type: 'research' | 'guidance' | 'religious'; finding: string; limitation: string;
+  id: string; title: string; url: string; type: 'research' | 'guidance' | 'religious' | 'technique'; finding: string; limitation: string;
 }
 /**
  * One visual per lesson, rendered between the reading and the practice.
@@ -17,13 +23,27 @@ export type LessonVisual =
   | { kind: 'steps'; title: string; steps: { label: string; text: string }[]; note?: string }
   | { kind: 'bars'; title: string; bars: { label: string; value: number; display: string }[]; note: string; sourceId: string };
 
+/**
+ * A named technique from a well-known teacher or author, retold in ODA's own
+ * words (no quotations). `sourceId` points to a 'technique' source (the book
+ * or teacher) and `evidence` says honestly what research does and does not
+ * support about it.
+ */
+export interface LessonTechnique { name: string; origin: string; steps: string[]; evidence: string; sourceId: string }
+
+/** A verified Unsplash photo (free licence): `id` is the part after "photo-" in images.unsplash.com URLs. */
+export interface CoursePhoto { id: string; alt: string }
+
 export interface CourseLesson {
   id: string; title: string; minutes: number; goal: string; reading: string[]; practice: string[];
   reflection: string; question: string; options: string[]; correct: number; feedback: string; takeaway: string; sources: string[];
   visual?: LessonVisual;
+  technique?: LessonTechnique;
+  photo?: CoursePhoto;
 }
 export interface GuidedCourse {
   id: string; title: string; subtitle: string; description: string; scope: string; outcome: string; lessons: CourseLesson[];
+  photo?: CoursePhoto;
 }
 
 const BASE_SOURCES: CourseSource[] = [
@@ -31,7 +51,7 @@ const BASE_SOURCES: CourseSource[] = [
   { id: 'adhd-cbt', title: 'Safren ve ark. · 2010 · Yetişkin ADHD randomize çalışması', url: 'https://jamanetwork.com/journals/jama/fullarticle/186469', type: 'research', finding: 'İlaç kullanan ve belirtileri süren 86 yetişkinde, uzmanların yürüttüğü 12 seanslık BDT aktif karşılaştırmadan daha iyi sonuç verdi.', limitation: 'Bu kısa eğitim, araştırmadaki terapi değildir. İlaç kullanmayan kişilere veya çocuklara aynı sonuç çıkarılamaz; takipteki ek tedaviler yorumu sınırlar.' },
   { id: 'self-compassion', title: 'Han & Kim · 2023 · Öz şefkat meta-analizi', url: 'https://pubmed.ncbi.nlm.nih.gov/37362192/', type: 'research', finding: '56 randomize çalışmada öz şefkat müdahaleleri kısa vadede stres, kaygı ve depresif belirtilerde küçük–orta ortalama etkiler gösterdi.', limitation: 'Genel yanlılık riski yüksek; aktif karşılaştırma ve çevrim içi uygulama verileri daha sınırlı. İncelenen yayın özeti bu alıştırmanın tedavi etkisini kanıtlamaz.' },
   { id: 'gratitude', title: 'Kirca, Malouff & Meynadier · 2023 · Şükran meta-analizi', url: 'https://link.springer.com/article/10.1007/s41042-023-00086-6', type: 'research', finding: '25 randomize çalışma, 6.745 kişi: teşekkür ifade etmenin iyi oluş üzerindeki ortalama etkisi nötr karşılaştırmaya göre küçüktü (g=0,22).', limitation: 'Zor duyguları bastırma önerisi değildir. Bu psikolojik araştırma dinî iddiaları veya ibadetin klinik etkisini sınamaz.' },
-  { id: 'habits', title: 'Lally ve ark. · 2010 · Günlük yaşamda alışkanlık oluşumu', url: 'https://onlinelibrary.wiley.com/doi/10.1002/ejsp.674', type: 'research', finding: '96 gönüllünün 12 haftalık takibinde aynı bağlamda tekrar ve otomatikleşme incelendi; süreler kişiler arasında belirgin farklılık gösterdi.', limitation: 'Öz bildirime dayalı gözlemsel çalışma; herkes için kesin bir gün sayısı vermez. Yayıncı özeti incelendi.' },
+  { id: 'habits', title: 'Lally ve ark. · 2010 · Günlük yaşamda alışkanlık oluşumu', url: 'https://onlinelibrary.wiley.com/doi/10.1002/ejsp.674', type: 'research', finding: '96 gönüllünün 12 haftalık takibinde aynı bağlamda tekrar ve otomatikleşme incelendi; süreler kişiler arasında belirgin farklılık gösterdi ve davranışı bir kez yapmamak alışkanlık sürecini belirgin biçimde etkilemedi.', limitation: 'Öz bildirime dayalı gözlemsel çalışma; herkes için kesin bir gün sayısı vermez. Yayıncı özeti incelendi.' },
   { id: 'monitoring', title: 'Harkin ve ark. · 2016 · İlerleme takibi meta-analizi', url: 'https://pubmed.ncbi.nlm.nih.gov/26479070/', type: 'research', finding: '138 deneysel çalışma, 19.951 kişi: ilerlemeyi izlemeyi artıran müdahaleler hedefe ulaşmada ortalama fayda gösterdi (d=0,40).', limitation: 'Farklı hedefler ve takip yöntemleri birleştirildi. Özel notlarını paylaşman gerekmez; burada kullanılan takip ekranı ayrıca sınanmadı. Yayın özeti incelendi.' },
   { id: 'nimh', title: 'NIMH · Yetişkinlerde ADHD rehberi', url: 'https://www.nimh.nih.gov/health/publications/adhd-what-you-need-to-know', type: 'guidance', finding: 'ADHD günlük işlevleri etkileyen gelişimsel bir durumdur. Değerlendirme ve kişiye uygun tedavi, sağlık uzmanıyla yürütülür.', limitation: 'Bir kurs ya da kısa soru tanı koyamaz. Zorlanma kalıcıysa ve günlük yaşamını etkiliyorsa uzman değerlendirmesi alabilirsin.' },
   { id: 'quran-trust', title: 'Kur’an · Âl-i İmrân 3:159', url: 'https://quran.com/3/159', type: 'religious', finding: 'Ayetin istişare, karar ve tevekkül vurgusu üzerine dinî düşünme.', limitation: 'Ders metni ODA yorumudur; ayetin tamamının meali veya bilimsel kanıt değildir.' },
@@ -208,22 +228,39 @@ const BASE_COURSES: GuidedCourse[] = [
   },
 ];
 
-// --- Added 25 Sep 2026: four new courses and a visual for every lesson (see docs/COURSE_EVIDENCE.md). ---
+// --- 25 Sep 2026: new courses, a visual and a photo for every lesson, technique cards (see docs/COURSE_EVIDENCE.md). ---
 
 export const COURSE_SOURCES: CourseSource[] = [
   ...BASE_SOURCES, ...procrastination.SOURCES, ...focus.SOURCES, ...sleep.SOURCES, ...calm.SOURCES,
+  ...turningDay.SOURCES, ...meditation.SOURCES, ...suggestion.SOURCES,
 ];
 
-const withVisuals = (course: GuidedCourse): GuidedCourse => ({
+// Real photos (verified Unsplash, free licence) for the courses written before photos existed.
+const COURSE_PHOTOS: Record<string, CoursePhoto> = { ...photosA.COURSE_PHOTOS, ...photosB.COURSE_PHOTOS, ...photosC.COURSE_PHOTOS };
+const LESSON_PHOTOS: Record<string, CoursePhoto> = { ...photosA.LESSON_PHOTOS, ...photosB.LESSON_PHOTOS, ...photosC.LESSON_PHOTOS };
+
+const withExtras = (course: GuidedCourse): GuidedCourse => ({
   ...course,
-  lessons: course.lessons.map(lesson => ({ ...lesson, visual: lesson.visual ?? EXISTING_VISUALS[lesson.id] })),
+  photo: course.photo ?? COURSE_PHOTOS[course.id],
+  lessons: course.lessons.map(lesson => ({
+    ...lesson,
+    visual: lesson.visual ?? EXISTING_VISUALS[lesson.id],
+    photo: lesson.photo ?? LESSON_PHOTOS[lesson.id],
+  })),
 });
 
-/** Procrastination leads (the app's core problem); the original five keep their IDs and progress. */
+/**
+ * The one-day course leads (it is the front door); procrastination follows as
+ * the app's core problem. Stored progress is keyed by course and lesson IDs,
+ * so order can change freely.
+ */
 export const COURSES: GuidedCourse[] = [
+  turningDay.COURSE,
   procrastination.COURSE,
-  ...BASE_COURSES.map(withVisuals),
+  ...BASE_COURSES,
   focus.COURSE,
   sleep.COURSE,
   calm.COURSE,
-];
+  meditation.COURSE,
+  suggestion.COURSE,
+].map(withExtras);

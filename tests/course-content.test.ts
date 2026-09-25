@@ -18,18 +18,49 @@ function assertDistinctText(values: string[], count: number, label: string): voi
   assert.equal(new Set(values.map(normalise)).size, count, `${label} must not repeat an entry`);
 }
 
-test('nine stable course IDs retain five ordered lesson IDs each for stored progress', () => {
+test('stable course IDs keep their ordered lesson IDs for stored progress', () => {
   // These IDs are persisted in the browser; renaming them needs an explicit migration.
-  const stableIds = ['confidence', 'adhd', 'motivation', 'faith', 'manifest', 'procrastination', 'focus', 'sleep', 'calm'];
-  assert.equal(COURSES.length, 9);
-  assert.deepEqual(COURSES.map(course => course.id).sort(), [...stableIds].sort());
-  assert.equal(lessons.length, 45);
-  assert.equal(new Set(lessons.map(lesson => lesson.id)).size, 45);
+  const lessonCounts: Record<string, number> = {
+    confidence: 5, adhd: 5, motivation: 5, faith: 5, manifest: 5, procrastination: 5, focus: 5, sleep: 5, calm: 5,
+    'turning-day': 6, meditation: 7, suggestion: 7,
+  };
+  assert.deepEqual(COURSES.map(course => course.id).sort(), Object.keys(lessonCounts).sort());
+  const total = Object.values(lessonCounts).reduce((sum, n) => sum + n, 0);
+  assert.equal(lessons.length, total);
+  assert.equal(new Set(lessons.map(lesson => lesson.id)).size, total);
   for (const course of COURSES) {
-    assert.equal(course.lessons.length, 5, course.id);
+    assert.equal(course.lessons.length, lessonCounts[course.id], course.id);
     course.lessons.forEach((lesson, index) => {
       assert.equal(lesson.id, `${course.id}-${index + 1}`, `${course.id} lesson order must preserve its storage IDs`);
     });
+  }
+});
+
+test('every course and lesson has a real, distinct photo with Turkish alt text', () => {
+  const photos = [...COURSES.map(course => ({ owner: course.id, photo: course.photo })), ...lessons.map(lesson => ({ owner: lesson.id, photo: lesson.photo }))];
+  for (const { owner, photo } of photos) {
+    assert.ok(photo, `${owner} needs a photo`);
+    assert.match(photo.id, /^\d{9,13}-[0-9a-f]{12}$/, `${owner} photo id must be an images.unsplash.com photo id`);
+    assertText(photo.alt, `${owner}.photo.alt`);
+  }
+  const ids = photos.map(item => item.photo!.id);
+  assert.equal(new Set(ids).size, ids.length, 'a photo must not be reused');
+});
+
+test('technique cards name their origin, give doable steps and say honestly what the evidence supports', () => {
+  const sources = new Map(COURSE_SOURCES.map(source => [source.id, source]));
+  const withTechnique = lessons.filter(lesson => lesson.technique);
+  assert.ok(withTechnique.length >= 15);
+  for (const lesson of withTechnique) {
+    const technique = lesson.technique!;
+    for (const field of ['name', 'origin', 'evidence'] as const) assertText(technique[field], `${lesson.id}.technique.${field}`);
+    assert.ok(technique.steps.length >= 3 && technique.steps.length <= 7, `${lesson.id} technique steps`);
+    technique.steps.forEach((step, index) => assertText(step, `${lesson.id}.technique.steps[${index}]`));
+    assert.equal(sources.get(technique.sourceId)?.type, 'technique', `${lesson.id} technique must cite a technique source`);
+    assert.ok(lesson.sources.includes(technique.sourceId), `${lesson.id} must list its technique source`);
+  }
+  for (const source of COURSE_SOURCES.filter(source => source.type === 'technique')) {
+    assert.ok(withTechnique.some(lesson => lesson.technique!.sourceId === source.id || lesson.sources.includes(source.id)), `${source.id} is never used`);
   }
 });
 
@@ -50,7 +81,7 @@ test('the bibliography distinguishes research from guidance and includes usable 
   assert.equal(new Set(COURSE_SOURCES.map(source => source.id)).size, COURSE_SOURCES.length);
   for (const source of COURSE_SOURCES) {
     assert.match(source.id, /^[a-z]+(?:-[a-z]+)*$/, `Invalid source ID: ${source.id}`);
-    assert.ok(['research', 'guidance', 'religious'].includes(source.type), source.id);
+    assert.ok(['research', 'guidance', 'religious', 'technique'].includes(source.type), source.id);
     for (const field of ['title', 'finding', 'limitation'] as const) assertText(source[field], `${source.id}.${field}`);
     const url = new URL(source.url);
     assert.equal(url.protocol, 'https:', source.id);

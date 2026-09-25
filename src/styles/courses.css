@@ -18,10 +18,10 @@
 .oda-course-section-heading p { font-size: .78rem; color: var(--fg-muted); }
 .oda-course-list { border-top: 1px solid var(--border); }
 .oda-course-row { display: grid; grid-template-columns: 104px minmax(0, 1fr) 24px; align-items: center; gap: 1.1rem; width: 100%; text-align: left; padding: 1.4rem .25rem; border-bottom: 1px solid var(--border); cursor: pointer; border-radius: 3px; }
-.oda-course-art-wrap { display: block; position: relative; background: var(--bg-muted); border-radius: 12px 34px 12px 12px; padding: .5rem 0; }
+.oda-course-art-wrap { display: block; position: relative; background: var(--bg-muted); border-radius: 12px 34px 12px 12px; overflow: hidden; aspect-ratio: 1; }
 .oda-course-row:nth-child(even) .oda-course-art-wrap { background: var(--brand-burgundy-soft); border-radius: 34px 12px 12px 12px; }
 .oda-course-art { display: block; width: 100%; height: auto; overflow: visible; }
-.oda-course-row-number { position: absolute; top: .5rem; left: .6rem; font-size: .6rem; font-weight: 650; color: var(--fg-muted); }
+.oda-course-row-number { position: absolute; top: .45rem; left: .5rem; padding: .1rem .35rem; border-radius: 999px; font-size: .6rem; font-weight: 650; color: #fff; background: rgb(20 20 20 / .45); backdrop-filter: blur(4px); }
 .oda-course-row-content { display: block; min-width: 0; }
 .oda-course-row-title { display: block; font-size: 1.4rem; line-height: 1.25; letter-spacing: -.02em; font-weight: 600; }
 .oda-course-row-subtitle { display: block; margin-top: .35rem; font-size: .86rem; color: var(--accent); font-weight: 550; }
@@ -43,7 +43,7 @@
 .oda-course-lesson-header-copy { flex: 1; min-width: 0; }
 .oda-course-lesson-header .oda-course-art { width: 124px; flex: none; }
 .oda-course-lesson-title { margin-block: .6rem .8rem; font-size: clamp(2rem, 4.5vw, 3rem); line-height: 1.12; letter-spacing: -.035em; }
-.oda-course-steps { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .5rem; }
+.oda-course-steps { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: .5rem; }
 .oda-course-step { display: flex; justify-content: center; align-items: center; gap: .4rem; min-height: 44px; border: 1px solid var(--border); border-radius: 9px; font-size: .82rem; background: var(--bg-elevated); color: var(--fg-muted); cursor: pointer; }
 .oda-course-step[data-completed="true"] { background: var(--accent-soft); color: var(--accent); }
 .oda-course-step[aria-current="step"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 650; }
@@ -136,3 +136,26 @@
   .oda-course-bars li { grid-template-columns: 1fr auto; }
   .oda-course-bar-track { grid-column: 1 / -1; grid-row: 2; }
 }
+
+/* Real photographs (Unsplash, free licence) with an illustrated fallback. */
+.oda-course-photo { display: block; overflow: hidden; background: var(--bg-muted); }
+.oda-course-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.oda-course-photo-thumb { width: 100%; height: 100%; }
+.oda-course-photo-thumb img { transition: transform 400ms ease; }
+.oda-course-row:hover .oda-course-photo-thumb img { transform: scale(1.04); }
+.oda-course-photo-fallback { display: flex; align-items: center; justify-content: center; padding: .5rem; }
+.oda-course-photo-hero { aspect-ratio: 16 / 9; border-radius: 18px; box-shadow: 0 1px 0 var(--border); }
+@media (prefers-reduced-motion: reduce) { .oda-course-photo-thumb img { transition: none; } }
+
+/* Technique card: a named method, step by step, with an honest evidence note. */
+.oda-course-technique { margin-top: 1.25rem; padding: 1.2rem 1.2rem 1.1rem; border-radius: 16px; background: var(--accent-soft); border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent); }
+.oda-course-technique-kicker { font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.oda-course-technique-name { margin-top: .35rem; font-size: 1.3rem; line-height: 1.25; letter-spacing: -.02em; }
+.oda-course-technique-origin { margin-top: .3rem; font-size: .76rem; color: var(--fg-muted); font-style: italic; }
+.oda-course-technique-steps { margin-top: .9rem; display: grid; gap: .55rem; list-style: none; padding: 0; }
+.oda-course-technique-steps li { display: grid; grid-template-columns: 1.6rem minmax(0, 1fr); gap: .6rem; align-items: start; }
+.oda-course-technique-steps li > span { width: 1.6rem; height: 1.6rem; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-size: .72rem; font-weight: 700; color: var(--bg); background: var(--accent); }
+.oda-course-technique-steps li p { font-size: .88rem; line-height: 1.6; padding-top: .1rem; }
+.oda-course-technique-evidence { margin-top: 1rem; padding-top: .8rem; border-top: 1px dashed color-mix(in srgb, var(--accent) 35%, transparent); }
+.oda-course-technique-evidence-label { font-size: .7rem; font-weight: 700; color: var(--fg); }
+.oda-course-technique-evidence p:last-child { margin-top: .25rem; font-size: .8rem; line-height: 1.6; color: var(--fg-muted); }

@@ -5899,7 +5899,6 @@ const dict: Record<string, string> = {
   "Try": "Practica",
   "Reinforce": "Refuerza",
   "{courses} courses · {lessons} lessons": "{courses} cursos · {lessons} lecciones",
-  "6–8 minutes for yourself in each lesson.": "6–8 minutos para ti en cada lección.",
   "Content based on {count} scientific publications": "Contenido basado en {count} publicaciones científicas",
   "Continue the course you started": "Continúa el curso que empezaste",
   "Where you left off": "Donde lo dejaste",
@@ -6271,6 +6270,10 @@ const dict: Record<string, string> = {
   "Business": "Negocio",
   "~1 day": "~1 día",
   "{count} scientific publications were reviewed before the lessons were written, alongside official health guidance. Findings were adapted into original daily exercises. ODA courses themselves have not been clinically tested; they are for education and personal practice.": "Antes de escribir las lecciones se revisaron {count} publicaciones científicas y guías sanitarias oficiales. Los hallazgos se adaptaron a ejercicios diarios originales. Los cursos de ODA no se han probado clínicamente; son para educación y práctica personal.",
-  "Source": "Fuente"
+  "Source": "Fuente",
+  "5–9 minutes for yourself in each lesson.": "5–9 minutos para ti en cada lección.",
+  "Technique": "Técnica",
+  "What research says": "Qué dice la investigación",
+  "Technique from a book or teacher": "Técnica de un libro o maestro"
 };
 export default dict;

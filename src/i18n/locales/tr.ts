@@ -5899,7 +5899,6 @@ const dict: Record<string, string> = {
   "Try": "Dene",
   "Reinforce": "Pekiştir",
   "{courses} courses · {lessons} lessons": "{courses} kurs · {lessons} ders",
-  "6–8 minutes for yourself in each lesson.": "Her derste kendine ayıracağın 6–8 dakika.",
   "Content based on {count} scientific publications": "{count} bilimsel yayına dayanan içerik",
   "Continue the course you started": "Başladığın kursa devam et",
   "Where you left off": "Kaldığın yerden",
@@ -6271,6 +6270,10 @@ const dict: Record<string, string> = {
   "Business": "İş",
   "~1 day": "~1 gün",
   "{count} scientific publications were reviewed before the lessons were written, alongside official health guidance. Findings were adapted into original daily exercises. ODA courses themselves have not been clinically tested; they are for education and personal practice.": "Dersler yazılmadan önce {count} bilimsel yayın ve resmî sağlık rehberleri incelendi. Bulgular özgün günlük alıştırmalara uyarlandı. ODA kurslarının kendisi klinik olarak sınanmadı; eğitim ve kişisel çalışma içindir.",
-  "Source": "Kaynak"
+  "Source": "Kaynak",
+  "5–9 minutes for yourself in each lesson.": "Her derste kendine ayıracağın 5–9 dakika.",
+  "Technique": "Teknik",
+  "What research says": "Araştırmalar ne diyor",
+  "Technique from a book or teacher": "Kitaptan ya da öğretmenden teknik"
 };
 export default dict;
