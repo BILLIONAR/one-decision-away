@@ -55,5 +55,41 @@ export function CourseArtwork({ courseId, className = '' }: { courseId: string; 
       <path d="M48 42H79M48 51H68M48 60H74" stroke={ink} strokeWidth="1.8" strokeLinecap="round" />
       <path d="M110 42H127M119 33V50" stroke={red} strokeWidth="1.8" strokeLinecap="round" />
     </>}
+    {courseId === 'procrastination' && <>
+      <rect x="30" y="58" width="62" height="70" rx="6" fill="var(--accent-soft)" stroke={ink} strokeWidth="2" />
+      <path d="M30 81H92M30 104H92M61 58V128" stroke={ink} strokeWidth="1.6" strokeDasharray="3 5" />
+      <rect x="112" y="98" width="30" height="30" rx="5" fill="var(--brand-burgundy-soft)" stroke={red} strokeWidth="2" />
+      <path d="M92 113H106M100 107L107 113L100 119" stroke={red} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="150" cy="50" r="22" fill={paper} stroke={ink} strokeWidth="2" />
+      <path d="M150 37V50L159 56" stroke={ink} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M158 128H176M40 136H176" stroke={ink} strokeWidth="2" strokeLinecap="round" />
+      <circle cx="127" cy="84" r="5" fill={red} />
+    </>}
+    {courseId === 'focus' && <>
+      <circle cx="92" cy="84" r="46" fill={paper} stroke={ink} strokeWidth="2" />
+      <circle cx="92" cy="84" r="30" fill="var(--accent-soft)" stroke={ink} strokeWidth="1.8" />
+      <circle cx="92" cy="84" r="13" fill={paper} stroke={ink} strokeWidth="1.8" />
+      <circle cx="92" cy="84" r="5" fill={red} />
+      <path d="M150 34C150 26 156 21 162 21C168 21 174 26 174 34V46L178 52H146L150 46Z" fill="var(--brand-burgundy-soft)" stroke={red} strokeWidth="1.8" strokeLinejoin="round" />
+      <path d="M143 57L181 20" stroke={red} strokeWidth="2.2" strokeLinecap="round" />
+      <rect x="140" y="98" width="34" height="34" rx="6" fill={ink} opacity=".9" transform="rotate(8 157 115)" />
+      <path d="M36 136H170" stroke={ink} strokeWidth="2" strokeLinecap="round" />
+    </>}
+    {courseId === 'sleep' && <>
+      <path d="M118 30C101 34 90 50 92 68C94 88 111 102 131 101C141 100 150 96 156 89C136 91 118 76 116 57C115 47 117 38 118 30Z" fill="var(--accent-soft)" stroke={ink} strokeWidth="2" strokeLinejoin="round" />
+      <path d="M150 34H164L150 48H164M168 18H177L168 27H177" stroke={red} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M28 128V104H172V128M28 116H172" stroke={ink} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <rect x="38" y="90" width="38" height="14" rx="7" fill={paper} stroke={ink} strokeWidth="1.8" />
+      <path d="M80 104C94 94 128 94 164 104" stroke={red} strokeWidth="2" strokeLinecap="round" />
+      <circle cx="58" cy="44" r="3" fill={red} /><circle cx="76" cy="28" r="2" fill={ink} />
+    </>}
+    {courseId === 'calm' && <>
+      <path d="M24 92C42 92 44 62 62 62C80 62 82 108 100 108C118 108 120 56 138 56C156 56 158 92 176 92" stroke={ink} strokeWidth="2.5" strokeLinecap="round" fill="none" />
+      <path d="M24 108C44 108 50 124 70 124C90 124 96 112 116 112C136 112 146 122 176 122" stroke={red} strokeWidth="2" strokeLinecap="round" strokeDasharray="3 6" fill="none" />
+      <circle cx="138" cy="56" r="10" fill="var(--brand-burgundy-soft)" stroke={red} strokeWidth="2" />
+      <path d="M58 44C58 30 70 22 82 24C82 38 72 46 58 44Z" fill="var(--accent-soft)" stroke={ink} strokeWidth="1.8" strokeLinejoin="round" />
+      <path d="M58 44L74 30" stroke={ink} strokeWidth="1.4" strokeLinecap="round" />
+      <path d="M36 138H168" stroke={ink} strokeWidth="2" strokeLinecap="round" />
+    </>}
   </svg>;
 }

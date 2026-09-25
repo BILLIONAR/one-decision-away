@@ -1,7 +1,7 @@
 import type { Locale } from './index';
 
 const en = {
-  courses: 'Guided courses', courseHint: 'Confidence, ADHD, motivation, faith and manifesting through action.', quantum: 'Quantum & energy', sahaba: 'Companions', self: 'Self & existence',
+  courses: 'Guided courses', courseHint: 'Procrastination, focus, sleep, stress, confidence and more. Step by step.', quantum: 'Quantum & energy', sahaba: 'Companions', self: 'Self & existence',
   background: 'Background delivery', backgroundEnable: 'Enable delivery when the app is closed', backgroundOn: 'Background delivery is connected', backgroundSetup: 'The push service is not connected yet. Open-app reminders are available.', backgroundSignIn: 'Sign in to your cloud account to enable background delivery.',
   coach: 'AI coach', inspiration: 'Words to return to', subtitle: 'Pause. Find your courage. Take one step.',
   collection: '600 sourced perspectives on faith, courage, science and life.',
@@ -31,7 +31,7 @@ const en = {
 };
 
 const tr: typeof en = {
-  courses: 'Yönlendirmeli kurslar', courseHint: 'Özgüven, ADHD, motivasyon, inanç ve manifest. Adım adım, kendi hızında.', quantum: 'Kuantum ve enerji', sahaba: 'Sahabeler', self: 'Ego ve varoluş',
+  courses: 'Yönlendirmeli kurslar', courseHint: 'Erteleme, odak, uyku, stres, özgüven ve dahası. Adım adım, kendi hızında.', quantum: 'Kuantum ve enerji', sahaba: 'Sahabeler', self: 'Ego ve varoluş',
   background: 'Arka plan bildirimleri', backgroundEnable: 'Uygulama kapalıyken de bildirim al', backgroundOn: 'Arka plan gönderimi bağlı', backgroundSetup: 'Gönderim servisi henüz bağlı değil. Uygulama açıkken hatırlatmalar kullanılabilir.', backgroundSignIn: 'Arka plan bildirimleri için bulut hesabına giriş yap.',
   coach: 'AI Koç', inspiration: 'İyi gelen sözler', subtitle: 'Dur. Cesaretini hatırla. Bir adım at.',
   collection: 'İnanç, cesaret, bilim ve hayat üzerine 600 kaynaklı düşünce.',
@@ -61,7 +61,7 @@ const tr: typeof en = {
 };
 
 const es: typeof en = {
-  courses: 'Cursos guiados', courseHint: 'Confianza, TDAH, motivación, fe y metas con acción.', quantum: 'Cuántica y energía', sahaba: 'Compañeros', self: 'Yo y existencia',
+  courses: 'Cursos guiados', courseHint: 'Procrastinación, enfoque, sueño, estrés, confianza y más. Paso a paso.', quantum: 'Cuántica y energía', sahaba: 'Compañeros', self: 'Yo y existencia',
   background: 'Notificaciones en segundo plano', backgroundEnable: 'Recibir con la aplicación cerrada', backgroundOn: 'Envío en segundo plano conectado', backgroundSetup: 'El servicio push aún no está conectado. Los recordatorios funcionan con la aplicación abierta.', backgroundSignIn: 'Inicia sesión en la nube para activar el envío en segundo plano.',
   coach: 'Coach IA', inspiration: 'Palabras para volver', subtitle: 'Haz una pausa. Encuentra valor. Da un paso.',
   collection: '600 perspectivas con fuentes sobre fe, valor, ciencia y vida.',

@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight, Check, ChevronRight, Clock3, ExternalLink, LockK
 import { COURSES, COURSE_SOURCES, type GuidedCourse } from '../data/courses';
 import { canCompleteLesson, completeLesson, getLessonProgress, nextLessonIndex, readCourseProgress, saveCourseProgress, updateLessonProgress } from '../services/courseProgress';
 import { CourseArtwork } from '../components/CourseArtwork';
+import { CourseVisual } from '../components/CourseVisual';
 import { useLocale, useT } from '../i18n';
 import '../styles/courses.css';
 
@@ -99,7 +100,7 @@ export const Courses: React.FC = () => {
     </section>
     <div className="oda-course-storage">{storageNote}</div>
     <section ref={researchRef} id="course-research" tabIndex={-1} aria-labelledby="course-research-title" className="oda-course-research">
-      <div className="oda-course-research-intro"><p className="oda-course-eyebrow mb-2">{t("If you're curious")}</p><h2 id="course-research-title" className="oda-display">{t('What are these lessons based on?')}</h2><p className="text-sm text-[var(--fg-muted)] leading-relaxed mt-3 mb-5">{t('Six scientific publications were reviewed before the lessons were written. Research findings were adapted into original daily exercises. ODA courses themselves have not been clinically tested; they are for education and personal practice.')}</p></div>
+      <div className="oda-course-research-intro"><p className="oda-course-eyebrow mb-2">{t("If you're curious")}</p><h2 id="course-research-title" className="oda-display">{t('What are these lessons based on?')}</h2><p className="text-sm text-[var(--fg-muted)] leading-relaxed mt-3 mb-5">{t('{count} scientific publications were reviewed before the lessons were written, alongside official health guidance. Findings were adapted into original daily exercises. ODA courses themselves have not been clinically tested; they are for education and personal practice.', { count: researchSources.length })}</p></div>
       {researchSources.map(source => <details key={source.id} lang={content} className="py-2"><summary className="min-h-11 py-3 cursor-pointer text-sm font-medium">{source.title}</summary><p className="text-sm leading-relaxed text-[var(--fg-muted)]">{source.finding}</p><p className="text-xs leading-relaxed mt-2 text-[var(--fg-muted)]">{source.limitation}</p><a href={source.url} target="_blank" rel="noopener noreferrer" className="oda-course-research-link" lang={locale}>{t('Read the publication')}<ExternalLink size={12} aria-hidden="true" /></a></details>)}
     </section>
   </div>;
@@ -129,6 +130,7 @@ export const Courses: React.FC = () => {
     <section className="oda-course-stage" aria-labelledby="course-understand-title">
       <h2 id="course-understand-title" className="oda-course-stage-title"><span className="oda-course-stage-number" aria-hidden="true">01</span><span className="oda-display">{t('Understand')}</span></h2>
       <div lang={content} className="oda-course-reading">{lesson.reading.map(paragraph => <p key={paragraph}>{paragraph}</p>)}</div>
+      {lesson.visual && <CourseVisual visual={lesson.visual} lang={content} sourceLabel={t('Source')} />}
     </section>
 
     <section className="oda-course-stage" aria-labelledby="course-practice-title">

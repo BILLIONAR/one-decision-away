@@ -6269,6 +6269,8 @@ const dict: Record<string, string> = {
   "Education": "Eğitim",
   "Health & Wellness": "Sağlık ve Zindelik",
   "Business": "İş",
-  "~1 day": "~1 gün"
+  "~1 day": "~1 gün",
+  "{count} scientific publications were reviewed before the lessons were written, alongside official health guidance. Findings were adapted into original daily exercises. ODA courses themselves have not been clinically tested; they are for education and personal practice.": "Dersler yazılmadan önce {count} bilimsel yayın ve resmî sağlık rehberleri incelendi. Bulgular özgün günlük alıştırmalara uyarlandı. ODA kurslarının kendisi klinik olarak sınanmadı; eğitim ve kişisel çalışma içindir.",
+  "Source": "Kaynak"
 };
 export default dict;

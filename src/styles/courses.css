@@ -95,3 +95,44 @@
   .oda-course-row-arrow { transition: none; }
   .oda-course-row:hover .oda-course-row-arrow { transform: none; }
 }
+
+/* Lesson visuals (table, comparison, steps, verified-number bars) */
+.oda-course-visual { margin-top: 1.5rem; padding: 1.1rem 1.1rem 1rem; border: 1px solid var(--border); border-radius: 16px; background: var(--bg-elevated); }
+.oda-course-visual-title { font-size: .95rem; font-weight: 650; line-height: 1.4; color: var(--fg); margin-bottom: .85rem; }
+.oda-course-visual-note { margin-top: .85rem; font-size: .76rem; line-height: 1.6; color: var(--fg-muted); }
+.oda-course-visual-source { margin-top: .35rem; font-size: .72rem; line-height: 1.5; color: var(--fg-muted); }
+.oda-course-visual-source a { text-decoration: underline; text-underline-offset: 3px; color: var(--accent); }
+.oda-course-table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); }
+.oda-course-table-wrap:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.oda-course-table { width: 100%; border-collapse: collapse; font-size: .8rem; line-height: 1.45; }
+.oda-course-table th, .oda-course-table td { padding: .6rem .7rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--border); }
+.oda-course-table thead th { background: var(--bg-muted); font-size: .72rem; font-weight: 650; color: var(--fg-muted); white-space: nowrap; }
+.oda-course-table tbody th { font-weight: 600; color: var(--fg); }
+.oda-course-table tbody tr:last-child th, .oda-course-table tbody tr:last-child td { border-bottom: 0; }
+.oda-course-compare { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+.oda-course-compare-col { padding: .8rem; border-radius: 12px; background: var(--bg-muted); }
+.oda-course-compare-col[data-tone="accent"] { background: var(--accent-soft); }
+.oda-course-compare-label { font-size: .72rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: .45rem; }
+.oda-course-compare-col[data-tone="accent"] .oda-course-compare-label { color: var(--accent); }
+.oda-course-compare ul { display: grid; gap: .45rem; font-size: .8rem; line-height: 1.45; }
+.oda-course-compare li { padding-left: .8rem; position: relative; }
+.oda-course-compare li::before { content: ''; position: absolute; left: 0; top: .5em; width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: .45; }
+.oda-course-compare-col[data-tone="accent"] li::before { background: var(--accent); opacity: 1; }
+.oda-course-steps-flow { display: grid; gap: .2rem; }
+.oda-course-steps-flow li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: .7rem; }
+.oda-course-step-dot { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: var(--on-accent); font-size: .75rem; font-weight: 700; }
+.oda-course-step-label { font-size: .84rem; font-weight: 650; line-height: 1.4; padding-top: .2rem; }
+.oda-course-step-text { font-size: .8rem; line-height: 1.55; color: var(--fg-muted); margin-top: .1rem; }
+.oda-course-step-arrow { color: var(--border-strong); margin: .35rem 0 .15rem; }
+.oda-course-bars { display: grid; gap: .7rem; }
+.oda-course-bars li { display: grid; grid-template-columns: minmax(0, 9rem) minmax(0, 1fr) auto; align-items: center; gap: .6rem; font-size: .78rem; }
+.oda-course-bar-label { line-height: 1.35; color: var(--fg); }
+.oda-course-bar-track { height: 10px; border-radius: 999px; background: var(--bg-muted); overflow: hidden; }
+.oda-course-bar-fill { display: block; height: 100%; border-radius: inherit; background: var(--accent); }
+.oda-course-bars li:nth-child(even) .oda-course-bar-fill { background: var(--brand-burgundy); }
+.oda-course-bar-value { font-weight: 650; font-variant-numeric: tabular-nums; white-space: nowrap; }
+@media (max-width: 420px) {
+  .oda-course-compare { grid-template-columns: 1fr; }
+  .oda-course-bars li { grid-template-columns: 1fr auto; }
+  .oda-course-bar-track { grid-column: 1 / -1; grid-row: 2; }
+}

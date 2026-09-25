@@ -6269,6 +6269,8 @@ const dict: Record<string, string> = {
   "Education": "Educación",
   "Health & Wellness": "Salud y bienestar",
   "Business": "Negocio",
-  "~1 day": "~1 día"
+  "~1 day": "~1 día",
+  "{count} scientific publications were reviewed before the lessons were written, alongside official health guidance. Findings were adapted into original daily exercises. ODA courses themselves have not been clinically tested; they are for education and personal practice.": "Antes de escribir las lecciones se revisaron {count} publicaciones científicas y guías sanitarias oficiales. Los hallazgos se adaptaron a ejercicios diarios originales. Los cursos de ODA no se han probado clínicamente; son para educación y práctica personal.",
+  "Source": "Fuente"
 };
 export default dict;

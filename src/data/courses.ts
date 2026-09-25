@@ -1,15 +1,32 @@
+import { EXISTING_VISUALS } from './courseContent/existingVisuals';
+import * as procrastination from './courseContent/procrastination';
+import * as focus from './courseContent/focus';
+import * as sleep from './courseContent/sleep';
+import * as calm from './courseContent/calm';
+
 export interface CourseSource {
   id: string; title: string; url: string; type: 'research' | 'guidance' | 'religious'; finding: string; limitation: string;
 }
+/**
+ * One visual per lesson, rendered between the reading and the practice.
+ * Numeric charts ("bars") must quote verified numbers from a cited source.
+ */
+export type LessonVisual =
+  | { kind: 'table'; title: string; columns: string[]; rows: string[][]; note?: string }
+  | { kind: 'compare'; title: string; left: { label: string; items: string[] }; right: { label: string; items: string[] }; note?: string }
+  | { kind: 'steps'; title: string; steps: { label: string; text: string }[]; note?: string }
+  | { kind: 'bars'; title: string; bars: { label: string; value: number; display: string }[]; note: string; sourceId: string };
+
 export interface CourseLesson {
   id: string; title: string; minutes: number; goal: string; reading: string[]; practice: string[];
   reflection: string; question: string; options: string[]; correct: number; feedback: string; takeaway: string; sources: string[];
+  visual?: LessonVisual;
 }
 export interface GuidedCourse {
   id: string; title: string; subtitle: string; description: string; scope: string; outcome: string; lessons: CourseLesson[];
 }
 
-export const COURSE_SOURCES: CourseSource[] = [
+const BASE_SOURCES: CourseSource[] = [
   { id: 'mcii', title: 'Wang, Wang & Gai · 2021 · Hedefe ulaşma meta-analizi', url: 'https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.565202/full', type: 'research', finding: '21 çalışma, 15.907 katılımcı: hedefi gerçek engelle karşılaştırma ve eğer/o zaman planı birlikte küçük–orta ortalama etki gösterdi (g=0,336).', limitation: 'Yayın yanlılığı olası; sonuçlar kişiye ve koşula göre değişir. Bu ODA kursunun etkililiği sınanmadı.' },
   { id: 'adhd-cbt', title: 'Safren ve ark. · 2010 · Yetişkin ADHD randomize çalışması', url: 'https://jamanetwork.com/journals/jama/fullarticle/186469', type: 'research', finding: 'İlaç kullanan ve belirtileri süren 86 yetişkinde, uzmanların yürüttüğü 12 seanslık BDT aktif karşılaştırmadan daha iyi sonuç verdi.', limitation: 'Bu kısa eğitim, araştırmadaki terapi değildir. İlaç kullanmayan kişilere veya çocuklara aynı sonuç çıkarılamaz; takipteki ek tedaviler yorumu sınırlar.' },
   { id: 'self-compassion', title: 'Han & Kim · 2023 · Öz şefkat meta-analizi', url: 'https://pubmed.ncbi.nlm.nih.gov/37362192/', type: 'research', finding: '56 randomize çalışmada öz şefkat müdahaleleri kısa vadede stres, kaygı ve depresif belirtilerde küçük–orta ortalama etkiler gösterdi.', limitation: 'Genel yanlılık riski yüksek; aktif karşılaştırma ve çevrim içi uygulama verileri daha sınırlı. İncelenen yayın özeti bu alıştırmanın tedavi etkisini kanıtlamaz.' },
@@ -22,7 +39,7 @@ export const COURSE_SOURCES: CourseSource[] = [
   { id: 'hadith-intention', title: 'Sahîh-i Buhârî · 1 · Niyet hadisi', url: 'https://sunnah.com/bukhari:1', type: 'religious', finding: 'Hz. Ömer’in rivayet ettiği, Peygamber’in niyetle ilgili hadisi.', limitation: 'Hz. Ömer burada ravidir. Dersin güncel örnekleri hadisin sözleri değil, ODA eğitim uyarlamasıdır.' },
 ];
 
-export const COURSES: GuidedCourse[] = [
+const BASE_COURSES: GuidedCourse[] = [
   {
     id: 'confidence', title: 'Özgüven', subtitle: 'Korksan da bir adım.',
     description: 'İçindeki eleştirmeni fark et, güvenli bir deneme seç ve kendi emeğine dayanarak ilerle.',
@@ -189,4 +206,24 @@ export const COURSES: GuidedCourse[] = [
         feedback: 'Planı gerçekle karşılaştırmak yeni bilgi sağlar. Hiçbir kurs sonucu garanti etmez; kendi payını ve dış koşulları birlikte değerlendirebilirsin.', takeaway: 'Hayaline emek ver; gerçeğin öğrettiğine de yer aç.', sources: ['monitoring', 'mcii'] },
     ],
   },
+];
+
+// --- Added 25 Sep 2026: four new courses and a visual for every lesson (see docs/COURSE_EVIDENCE.md). ---
+
+export const COURSE_SOURCES: CourseSource[] = [
+  ...BASE_SOURCES, ...procrastination.SOURCES, ...focus.SOURCES, ...sleep.SOURCES, ...calm.SOURCES,
+];
+
+const withVisuals = (course: GuidedCourse): GuidedCourse => ({
+  ...course,
+  lessons: course.lessons.map(lesson => ({ ...lesson, visual: lesson.visual ?? EXISTING_VISUALS[lesson.id] })),
+});
+
+/** Procrastination leads (the app's core problem); the original five keep their IDs and progress. */
+export const COURSES: GuidedCourse[] = [
+  procrastination.COURSE,
+  ...BASE_COURSES.map(withVisuals),
+  focus.COURSE,
+  sleep.COURSE,
+  calm.COURSE,
 ];
