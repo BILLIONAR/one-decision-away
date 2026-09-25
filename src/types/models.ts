@@ -217,7 +217,10 @@ export type FocusSoundTrack =
   | 'theta_meditation'
   | 'tibetan_bowls'
   | 'solfeggio_396hz'
-  | 'solfeggio_639hz';
+  | 'solfeggio_639hz'
+  | 'pink_noise'
+  | 'delta_sleep'
+  | 'breath_pacer';
 
 export interface ActiveFocusSession {
   id: string;

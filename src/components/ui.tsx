@@ -72,7 +72,7 @@ export const Card: React.FC<CardProps> = ({
   ...props
 }) => {
   const variantStyles = {
-    elevated: 'bg-[var(--bg-muted)]',
+    elevated: 'bg-[var(--bg-elevated)] border border-[var(--border)] shadow-[var(--shadow-md)]',
     flat: 'bg-[var(--bg-muted)]',
     subtle: 'bg-[var(--bg-muted)]',
     bordered: 'bg-[var(--bg)] border border-[var(--border)]',
@@ -87,7 +87,7 @@ export const Card: React.FC<CardProps> = ({
 
   return (
     <div
-      className={`rounded-[var(--radius-md)] ${variantStyles[variant]} ${paddingStyles[padding]} ${className}`}
+      className={`${variant === 'elevated' ? 'rounded-[var(--radius-lg)]' : 'rounded-[var(--radius-md)]'} ${variantStyles[variant]} ${paddingStyles[padding]} ${className}`}
       {...props}
     >
       {children}
@@ -274,13 +274,13 @@ export const Stat: React.FC<StatProps> = ({
   className = '',
 }) => {
   return (
-    <div className={`p-4 rounded-[var(--radius-md)] bg-[var(--bg-muted)] ${className}`}>
+    <div className={`p-4 rounded-[var(--radius-lg)] bg-[var(--bg-elevated)] border border-[var(--border)] shadow-[var(--shadow-sm)] ${className}`}>
       <div className="flex items-center justify-between gap-2 mb-1">
         <span className="text-[13px] text-[var(--fg-muted)] truncate">{label}</span>
         {Icon && <Icon className="w-[18px] h-[18px] text-[var(--fg-subtle)] shrink-0" strokeWidth={1.8} />}
         {badge && <Badge variant="sage">{badge}</Badge>}
       </div>
-      <div className="text-[22px] font-semibold text-[var(--fg)] tracking-tight">{value}</div>
+      <div className="oda-numeral text-[26px] text-[var(--fg)]">{value}</div>
       {subtext && <p className="text-[12px] text-[var(--fg-subtle)] mt-1">{subtext}</p>}
     </div>
   );
@@ -452,7 +452,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
     <div className={`mb-6 ${className}`}>
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <h1 className="text-[28px] font-semibold tracking-tight text-[var(--fg)]">{title}</h1>
+          <h1 className="oda-display text-[30px] sm:text-[36px] leading-tight tracking-tight text-[var(--fg)]">{title}</h1>
           {subtitle && <p className="text-[15px] text-[var(--fg-muted)] mt-1 leading-relaxed">{subtitle}</p>}
         </div>
         {action && <div className="flex items-center gap-2 shrink-0">{action}</div>}

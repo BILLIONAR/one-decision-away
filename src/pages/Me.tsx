@@ -8,21 +8,16 @@ import { evidenceSummary } from '../services/momentum';
 import {
   ChevronRight,
   UserRound,
-  Wallet,
-  Landmark,
-  PieChart,
-  Target,
-  CalendarRange,
-  TrendingUp,
-  Gauge,
   Bell,
-  SunMoon,
   Sparkles,
   AudioLines,
   LucideIcon,
   GraduationCap,
   CheckCircle2,
+  Waves,
+  LayoutGrid,
 } from 'lucide-react';
+import { EvidenceTree } from '../components/momentum/EvidenceTree';
 
 interface MenuRow {
   icon: LucideIcon;
@@ -73,15 +68,22 @@ export const Me: React.FC = () => {
   const initial = displayName.charAt(0).toUpperCase();
   const role = data.futureSelf?.title?.trim();
 
-  // Few, clear choices first; every other tool still one tap away under "More tools".
+  // Few, clear choices; every secondary tool lives on one Tools page.
   const groups: { title: string; rows: MenuRow[] }[] = [
     {
       title: t('Your practice'),
       rows: [
         { icon: CheckCircle2, label: t('Your evidence'), hint: t('Every decision you kept'), route: '/app/evidence' },
-        { icon: UserRound, label: c.coach, hint: c.talk, route: '/app/coach' },
         { icon: GraduationCap, label: c.courses, hint: c.courseHint, route: '/app/courses' },
+        { icon: Waves, label: t('Sound Room'), hint: t('Sound for calm, sleep, focus and breathing'), route: '/app/sound' },
         { icon: AudioLines, label: t('Focus & meditations'), hint: t('Guided sessions and sound waves'), route: '/app/focus' },
+        { icon: UserRound, label: c.coach, hint: c.talk, route: '/app/coach' },
+      ],
+    },
+    {
+      title: t('Go deeper'),
+      rows: [
+        { icon: LayoutGrid, label: t('Tools'), hint: t('Future self, missions, wallet, budget and more'), route: '/app/tools' },
       ],
     },
     {
@@ -92,70 +94,52 @@ export const Me: React.FC = () => {
       ],
     },
   ];
-  const moreTools: MenuRow[] = [
-    { icon: UserRound, label: t('Future self'), hint: t('Roles, standards, letters'), route: '/app/future-self' },
-    { icon: SunMoon, label: t('Two futures'), route: '/app/two-futures' },
-    { icon: Target, label: t('Missions'), route: '/app/missions' },
-    { icon: CalendarRange, label: t('Seasons'), route: '/app/seasons' },
-    { icon: TrendingUp, label: t('Progress'), route: '/app/progress' },
-    { icon: Gauge, label: t('Life score'), route: '/app/score' },
-    { icon: Wallet, label: t('Wallet & savings'), hint: t('D$ ledger and real-money bridge'), route: '/app/bank' },
-    { icon: Landmark, label: t('Reality bridge'), route: '/app/bridge' },
-    { icon: PieChart, label: t('Budget'), route: '/app/budget' },
-  ];
   const evidence = evidenceSummary(data.missions);
 
   const feedbackHref = `mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent('One Decision Away feedback')}`;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-center gap-4">
-        <div
-          className="w-14 h-14 rounded-full bg-[var(--fg)] text-[var(--bg)] flex items-center justify-center text-[22px] font-semibold shrink-0"
-          aria-hidden="true"
-        >
-          {initial}
+      <section className="oda-surface p-5 sm:p-6 space-y-5">
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 rounded-full bg-[var(--forest)] text-[var(--on-forest)] flex items-center justify-center text-[22px] oda-numeral shrink-0" aria-hidden="true">
+            {initial}
+          </div>
+          <div className="min-w-0 flex-1">
+            <h1 className="oda-display text-[28px] tracking-tight text-[var(--fg)] leading-tight truncate">{displayName}</h1>
+            <p className="text-[14px] text-[var(--fg-muted)] mt-0.5 truncate">
+              {role ? t('Day {n} · {role}', { n: stats.dayNumber, role: t(role) }) : t('Day {n}', { n: stats.dayNumber })}
+            </p>
+          </div>
+          <button type="button" onClick={() => setActiveRoute('/app/evidence')} className="shrink-0 -my-2" aria-label={t('Your evidence tree: {n} leaves', { n: evidence.total })}>
+            <EvidenceTree count={evidence.total} className="w-20 h-[70px]" label={t('Your evidence tree: {n} leaves', { n: evidence.total })} />
+          </button>
         </div>
-        <div className="min-w-0">
-          <h1 className="text-[24px] font-semibold tracking-tight text-[var(--fg)] leading-tight truncate">
-            {displayName}
-          </h1>
-          <p className="text-[14px] text-[var(--fg-muted)] mt-0.5 truncate">
-            {role
-              ? t('Day {n} · {role}', { n: stats.dayNumber, role: t(role) })
-              : t('Day {n}', { n: stats.dayNumber })}
-          </p>
-        </div>
-      </div>
-
-      {/* Stats */}
-      <button type="button" onClick={() => setActiveRoute('/app/evidence')} className="w-full grid grid-cols-3 gap-3 text-left">
-        <StatTile value={String(evidence.total)} label={t('Kept decisions')} accent />
-        <StatTile value={`${evidence.last7}/7`} label={t('This week')} />
-        <StatTile value={stats.earned >= 10000 ? `${(stats.earned / 1000).toFixed(1)}k` : stats.earned.toLocaleString()} label={t('D$ earned')} />
-      </button>
+        <div className="oda-rule" />
+        <button type="button" onClick={() => setActiveRoute('/app/evidence')} className="w-full grid grid-cols-3 gap-3 text-left">
+          <StatTile value={String(evidence.total)} label={t('Kept decisions')} accent />
+          <StatTile value={`${evidence.last7}/7`} label={t('This week')} />
+          <StatTile value={stats.earned >= 10000 ? `${(stats.earned / 1000).toFixed(1)}k` : stats.earned.toLocaleString()} label={t('D$ earned')} />
+        </button>
+      </section>
 
       {/* Menu groups */}
       {groups.map((group) => (
-        <section key={group.title} className="space-y-2">
-          <h2 className="text-[15px] font-semibold text-[var(--fg)] px-1">{group.title}</h2>
-          <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] overflow-hidden">
+        <section key={group.title} className="space-y-3">
+          <h2 className="oda-kicker text-[var(--fg-muted)] px-1">{group.title}</h2>
+          <div className="oda-surface overflow-hidden">
             {group.rows.map((row, idx) => (
               <button
                 key={`${row.route}-${row.label}`}
                 type="button"
                 onClick={() => setActiveRoute(row.route)}
-                className={`w-full h-14 px-4 flex items-center gap-3 text-left cursor-pointer transition-colors hover:bg-[var(--bg-inset)] ${
-                  idx > 0 ? 'border-t border-[var(--border)]' : ''
-                }`}
+                className={`w-full min-h-[64px] px-4 py-2 flex items-center gap-3.5 text-left cursor-pointer transition-colors hover:bg-[var(--bg-muted)] ${idx > 0 ? 'border-t border-[var(--border)]' : ''}`}
               >
-                <row.icon className="w-5 h-5 text-[var(--accent)] shrink-0" strokeWidth={1.8} />
+                <span className="oda-icon-chip w-9 h-9 shrink-0"><row.icon className="w-[18px] h-[18px]" strokeWidth={1.8} /></span>
                 <span className="flex-1 min-w-0">
-                  <span className="block text-[15px] text-[var(--fg)] truncate">{row.label}</span>
-                  {row.hint && (
-                    <span className="block text-[12px] text-[var(--fg-subtle)] truncate">{row.hint}</span>
-                  )}
+                  <span className="block text-[15px] font-medium text-[var(--fg)] truncate">{row.label}</span>
+                  {row.hint && <span className="block text-[12.5px] text-[var(--fg-muted)] truncate">{row.hint}</span>}
                 </span>
                 <ChevronRight className="w-5 h-5 text-[var(--fg-subtle)] shrink-0" strokeWidth={1.8} />
               </button>
@@ -163,29 +147,6 @@ export const Me: React.FC = () => {
           </div>
         </section>
       ))}
-
-      <details className="oda-more-tools group bg-[var(--bg-muted)] rounded-[var(--radius-md)] overflow-hidden">
-        <summary className="h-14 px-4 flex items-center gap-3 cursor-pointer list-none text-[15px] font-semibold text-[var(--fg)]">
-          <span className="flex-1">{t('More tools')}</span>
-          <span className="text-[12px] font-normal text-[var(--fg-subtle)]">{moreTools.length}</span>
-          <ChevronRight className="w-5 h-5 text-[var(--fg-subtle)] shrink-0 transition-transform group-open:rotate-90" strokeWidth={1.8} />
-        </summary>
-        {moreTools.map((row) => (
-          <button
-            key={row.route}
-            type="button"
-            onClick={() => setActiveRoute(row.route)}
-            className="w-full h-14 px-4 flex items-center gap-3 text-left cursor-pointer transition-colors hover:bg-[var(--bg-inset)] border-t border-[var(--border)]"
-          >
-            <row.icon className="w-5 h-5 text-[var(--accent)] shrink-0" strokeWidth={1.8} />
-            <span className="flex-1 min-w-0">
-              <span className="block text-[15px] text-[var(--fg)] truncate">{row.label}</span>
-              {row.hint && <span className="block text-[12px] text-[var(--fg-subtle)] truncate">{row.hint}</span>}
-            </span>
-            <ChevronRight className="w-5 h-5 text-[var(--fg-subtle)] shrink-0" strokeWidth={1.8} />
-          </button>
-        ))}
-      </details>
 
       {/* Footer */}
       <div className="pt-2 pb-4 text-center space-y-1">
@@ -204,14 +165,8 @@ export const Me: React.FC = () => {
 };
 
 const StatTile: React.FC<{ value: string; label: string; accent?: boolean }> = ({ value, label, accent }) => (
-  <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-4 min-w-0">
-    <div
-      className={`text-[20px] font-semibold tracking-tight leading-tight truncate ${
-        accent ? 'text-[var(--accent)]' : 'text-[var(--fg)]'
-      }`}
-    >
-      {value}
-    </div>
-    <div className="text-[12px] text-[var(--fg-muted)] mt-1 leading-tight">{label}</div>
+  <div className="min-w-0">
+    <div className={`oda-numeral text-[28px] leading-none truncate ${accent ? 'text-[var(--accent)]' : 'text-[var(--fg)]'}`}>{value}</div>
+    <div className="text-[12px] text-[var(--fg-muted)] mt-1.5 leading-tight">{label}</div>
   </div>
 );

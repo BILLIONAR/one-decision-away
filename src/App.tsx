@@ -9,6 +9,8 @@ import { Onboarding } from './components/Onboarding';
 const Evidence = lazy(() => import('./pages/Evidence').then((m) => ({ default: m.Evidence })));
 const Dreams = lazy(() => import('./pages/Dreams').then((m) => ({ default: m.Dreams })));
 const Me = lazy(() => import('./pages/Me').then((m) => ({ default: m.Me })));
+const Tools = lazy(() => import('./pages/Tools').then((m) => ({ default: m.Tools })));
+const SoundRoom = lazy(() => import('./pages/SoundRoom').then((m) => ({ default: m.SoundRoom })));
 const Missions = lazy(() => import('./pages/Missions').then((m) => ({ default: m.Missions })));
 const Progress = lazy(() => import('./pages/Progress').then((m) => ({ default: m.Progress })));
 const TwoFutures = lazy(() => import('./pages/TwoFutures').then((m) => ({ default: m.TwoFutures })));
@@ -114,6 +116,10 @@ const AppRouter: React.FC = () => {
         return <Focus />;
       case '/app/notebook':
         return <Notebook />;
+      case '/app/tools':
+        return <Tools />;
+      case '/app/sound':
+        return <SoundRoom />;
       default:
         return <Today />;
     }

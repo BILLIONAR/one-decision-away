@@ -7,9 +7,9 @@
   --fg-subtle: #687267;
   --ink-faint: #687267;
   --bg-elevated: #FFFDF8;
-  --bg-muted: #EDEFE5;
-  --bg-inset: #E4E8DC;
-  --border: #DADFD2;
+  --bg-muted: #EFEDE4;
+  --bg-inset: #E7E4D9;
+  --border: #E2DED2;
   --border-strong: #A3B09F;
   --accent: #234F3E;
   --on-accent: #FFFDF8;
@@ -44,9 +44,13 @@
   --radius-lg: 20px;
   --radius-xl: 24px;
   --radius-full: 9999px;
-  --shadow-sm: none;
-  --shadow-md: 0 2px 5px rgb(32 54 46 / 4%);
-  --shadow-lg: 0 12px 28px rgb(32 54 46 / 8%);
+  --shadow-sm: 0 1px 2px rgb(32 54 46 / 5%);
+  --shadow-md: 0 1px 2px rgb(32 54 46 / 4%), 0 8px 24px -12px rgb(32 54 46 / 14%);
+  --shadow-lg: 0 2px 6px rgb(32 54 46 / 5%), 0 24px 48px -20px rgb(32 54 46 / 22%);
+  /* A restrained brass for small premium details (rules, numerals, badges). */
+  --gold: #9C7A45;
+  --gold-soft: #F3EBDD;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 :root[data-theme="dark"], html.dark {
@@ -82,7 +86,9 @@
   --money-soft: #283E2F;
   --future-building: #ACC9A3;
   --future-allowing: #6B806C;
-  --shadow-sm: none;
-  --shadow-md: 0 2px 5px rgb(0 0 0 / 12%);
-  --shadow-lg: 0 12px 28px rgb(0 0 0 / 25%);
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 20%);
+  --shadow-md: 0 1px 2px rgb(0 0 0 / 18%), 0 10px 28px -14px rgb(0 0 0 / 45%);
+  --shadow-lg: 0 2px 6px rgb(0 0 0 / 22%), 0 28px 56px -24px rgb(0 0 0 / 60%);
+  --gold: #D6B77E;
+  --gold-soft: #3A3226;
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { AudioLines, Check, ChevronDown, ChevronRight, Plus, MessageCircle, GraduationCap, Timer, Share2, Route } from 'lucide-react';
+import { AudioLines, Check, ChevronDown, ChevronRight, Plus, MessageCircle, GraduationCap, Timer, Share2, Route, Waves } from 'lucide-react';
 import { useApp } from '../store/useApp';
 import { getDailyQuote } from '../data/dailyQuotes';
 import { Modal } from '../components/ui';
@@ -402,6 +402,9 @@ export const Today: React.FC = () => {
         <h2 id="today-discover" className="text-sm font-semibold">{d.discover}</h2>
         <button type="button" onClick={() => setActiveRoute('/app/courses')} className="oda-discovery-link w-full flex items-center gap-4 text-left py-5 border-y border-[var(--border)]">
           <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--brand-burgundy-soft)] text-[var(--brand-burgundy)]"><GraduationCap size={24} strokeWidth={1.5} /></span><span><span className="block text-base font-semibold">{c.courses}</span><span className="block text-xs leading-relaxed text-[var(--fg-muted)] mt-1">{c.courseHint}</span></span><ChevronRight size={18} className="ml-auto shrink-0" />
+        </button>
+        <button type="button" onClick={() => setActiveRoute('/app/sound')} className="oda-discovery-link w-full flex items-center gap-4 text-left py-4 border-b border-[var(--border)]">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--gold-soft)] text-[var(--gold)]"><Waves size={22} strokeWidth={1.6} /></span><span><span className="block text-base font-semibold">{t('Sound Room')}</span><span className="block text-xs leading-relaxed text-[var(--fg-muted)] mt-1">{t('Sound for calm, sleep, focus and breathing')}</span></span><ChevronRight size={18} className="ml-auto shrink-0" />
         </button>
         <button type="button" onClick={() => setActiveRoute('/app/coach')} className="oda-discovery-link w-full flex items-center gap-4 text-left py-4 border-b border-[var(--border)]">
           <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] text-[var(--accent)]"><MessageCircle size={22} strokeWidth={1.6} /></span><span className="text-base font-semibold">{c.talk}</span><ChevronRight size={18} className="ml-auto shrink-0" />

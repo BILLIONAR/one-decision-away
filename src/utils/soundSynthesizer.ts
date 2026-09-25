@@ -8,6 +8,13 @@ import { FocusSoundTrack } from '../types/models';
  * and interactive meditation bells directly in the browser.
  */
 
+/** Seconds of the swell (inhale) and fall (exhale) of the `breath_pacer` track: ≈5.5 breaths a minute. */
+export const BREATH_PACER_INHALE_SECONDS = 5.5;
+export const BREATH_PACER_EXHALE_SECONDS = 5.5;
+
+/** Master gain is never ramped to exactly 0 (exponential/linear ramps misbehave there). */
+const SILENT_GAIN = 0.0001;
+
 class SoundSynthesizer {
   private ctx: AudioContext | null = null;
   private currentTrack: FocusSoundTrack = 'silence';
@@ -15,9 +22,59 @@ class SoundSynthesizer {
   private activeNodes: (AudioNode | number)[] = [];
   private volume: number = 0.5;
   private isMuted: boolean = false;
+  private listeners = new Set<() => void>();
+  /** Wall-clock ms when the current track's first cycle begins (used to sync visuals, e.g. the breath circle). */
+  private trackStartedAt: number | null = null;
+  /** A pending or running fade-out, in AudioContext time. */
+  private fadePlan: { startAt: number; duration: number } | null = null;
+  private fadeStopTimer: number | null = null;
 
   public getCurrentTrack(): FocusSoundTrack {
     return this.currentTrack;
+  }
+
+  /**
+   * Subscribe to track changes (start, stop, end of a fade-out). Shaped for
+   * React's useSyncExternalStore: `useSyncExternalStore(soundSynthesizer.subscribe, soundSynthesizer.getCurrentTrack)`.
+   */
+  public subscribe = (listener: () => void): (() => void) => {
+    this.listeners.add(listener);
+    return () => {
+      this.listeners.delete(listener);
+    };
+  };
+
+  /** Stable bound getter for useSyncExternalStore. */
+  public getTrackSnapshot = (): FocusSoundTrack => this.currentTrack;
+
+  private emit() {
+    this.listeners.forEach((listener) => {
+      try {
+        listener();
+      } catch {
+        // A broken listener must never stop the audio engine.
+      }
+    });
+  }
+
+  public getVolume(): number {
+    return this.volume;
+  }
+
+  /** Wall-clock time (ms) the current track started its first cycle, or null when silent. */
+  public getTrackStartedAt(): number | null {
+    return this.currentTrack === 'silence' ? null : this.trackStartedAt;
+  }
+
+  /** True once a fade-out has actually begun (not merely been scheduled). */
+  public isFadingOut(): boolean {
+    if (!this.fadePlan || !this.ctx) return false;
+    return this.ctx.currentTime >= this.fadePlan.startAt;
+  }
+
+  /** True while a fade-out is scheduled or running. */
+  public hasFadeOutScheduled(): boolean {
+    return this.fadePlan !== null;
   }
 
   public isPlaying(): boolean {
@@ -50,11 +107,100 @@ class SoundSynthesizer {
   public setVolume(vol: number) {
     this.volume = Math.max(0, Math.min(1, vol));
     if (this.gainNode && this.ctx) {
-      this.gainNode.gain.setTargetAtTime(this.volume * 0.4, this.ctx.currentTime, 0.05);
+      this.applyGainPlan();
     }
   }
 
+  /**
+   * Re-applies the master gain automation: the current volume, then (if one is
+   * planned) the fade-out. Keeps a scheduled sleep fade intact when the volume
+   * changes, and never undoes a fade that is already running.
+   */
+  private applyGainPlan() {
+    if (!this.gainNode || !this.ctx) return;
+    const gain = this.gainNode.gain;
+    const now = this.ctx.currentTime;
+    const target = Math.max(SILENT_GAIN, this.volume * 0.4);
+    const plan = this.fadePlan;
+    if (plan && now >= plan.startAt) return; // already fading: let it finish
+    gain.cancelScheduledValues(now);
+    gain.setValueAtTime(Math.max(SILENT_GAIN, gain.value), now);
+    gain.setTargetAtTime(target, now, 0.05);
+    if (plan) {
+      gain.setValueAtTime(target, plan.startAt);
+      gain.linearRampToValueAtTime(SILENT_GAIN, plan.startAt + plan.duration);
+    }
+  }
+
+  private clearFadePlan() {
+    this.fadePlan = null;
+    if (this.fadeStopTimer !== null) {
+      clearTimeout(this.fadeStopTimer);
+      this.fadeStopTimer = null;
+    }
+  }
+
+  /**
+   * Fades the ambient track out over `seconds` and then stops it. `delaySeconds`
+   * lets a timer schedule the fade on the audio clock ahead of time, so it still
+   * happens if the page's timers are throttled in the background.
+   */
+  public fadeOutAndStop(seconds: number = 1, delaySeconds: number = 0) {
+    if (this.currentTrack === 'silence' || !this.gainNode || !this.ctx) {
+      this.stopAmbient();
+      return;
+    }
+    const duration = Math.max(0.05, seconds);
+    const delay = Math.max(0, delaySeconds);
+    const now = this.ctx.currentTime;
+    if (this.fadePlan && now >= this.fadePlan.startAt) {
+      // Already fading: only ever shorten the fade, never extend it.
+      const currentEnd = this.fadePlan.startAt + this.fadePlan.duration;
+      if (now + delay + duration >= currentEnd) return;
+      const gain = this.gainNode.gain;
+      gain.cancelScheduledValues(now);
+      gain.setValueAtTime(Math.max(SILENT_GAIN, gain.value), now);
+    }
+    this.clearFadePlan();
+    this.fadePlan = { startAt: now + delay, duration };
+    this.applyGainPlanForFade();
+    const track = this.currentTrack;
+    this.fadeStopTimer = window.setTimeout(() => {
+      this.fadeStopTimer = null;
+      if (this.currentTrack === track) this.stopAmbient();
+    }, (delay + duration) * 1000 + 60);
+  }
+
+  /** Like applyGainPlan, but also (re)starts a fade that begins now. */
+  private applyGainPlanForFade() {
+    if (!this.gainNode || !this.ctx || !this.fadePlan) return;
+    const gain = this.gainNode.gain;
+    const now = this.ctx.currentTime;
+    const { startAt, duration } = this.fadePlan;
+    gain.cancelScheduledValues(now);
+    gain.setValueAtTime(Math.max(SILENT_GAIN, gain.value), now);
+    if (startAt > now) {
+      gain.setTargetAtTime(Math.max(SILENT_GAIN, this.volume * 0.4), now, 0.05);
+      gain.setValueAtTime(Math.max(SILENT_GAIN, this.volume * 0.4), startAt);
+    }
+    gain.linearRampToValueAtTime(SILENT_GAIN, startAt + duration);
+  }
+
+  /** Cancels a scheduled or running fade-out and brings the volume back (e.g. the timer was changed). */
+  public cancelFadeOut() {
+    if (!this.fadePlan) return;
+    this.clearFadePlan();
+    this.applyGainPlan();
+  }
+
   public stopAmbient() {
+    this.stopAmbientSilently();
+    this.emit();
+  }
+
+  private stopAmbientSilently() {
+    this.clearFadePlan();
+    this.trackStartedAt = null;
     if (this.activeNodes.length > 0) {
       this.activeNodes.forEach((node) => {
         if (typeof node === 'number') {
@@ -83,21 +229,81 @@ class SoundSynthesizer {
     this.currentTrack = 'silence';
   }
 
-  public playAmbient(track: FocusSoundTrack) {
-    this.stopAmbient();
-    if (track === 'silence') return;
+  /**
+   * Starts an ambient track. Call only from a user gesture (browsers block
+   * audio that starts on its own). `fadeInSeconds` eases the sound in; the
+   * default 0 keeps the original instant start used by the Focus page.
+   */
+  public playAmbient(track: FocusSoundTrack, options: { fadeInSeconds?: number } = {}) {
+    this.stopAmbientSilently();
+    if (track === 'silence') {
+      this.emit();
+      return;
+    }
 
     this.initContext();
-    if (!this.ctx) return;
+    if (!this.ctx) {
+      this.emit();
+      return;
+    }
 
     const ctx = this.ctx;
     this.currentTrack = track;
+    this.trackStartedAt = Date.now();
 
     // Master track gain
     const masterGain = ctx.createGain();
-    masterGain.gain.setValueAtTime(this.volume * 0.4, ctx.currentTime);
+    const fadeIn = Math.max(0, options.fadeInSeconds ?? 0);
+    if (fadeIn > 0) {
+      masterGain.gain.setValueAtTime(SILENT_GAIN, ctx.currentTime);
+      masterGain.gain.linearRampToValueAtTime(Math.max(SILENT_GAIN, this.volume * 0.4), ctx.currentTime + fadeIn);
+    } else {
+      masterGain.gain.setValueAtTime(this.volume * 0.4, ctx.currentTime);
+    }
     masterGain.connect(ctx.destination);
     this.gainNode = masterGain;
+    this.buildTrack(track, ctx, masterGain);
+    this.emit();
+  }
+
+  /** Brown-noise buffer (mono), the same recipe the original tracks use. */
+  private createBrownNoiseBuffer(ctx: AudioContext, seconds: number, gainCompensation: number): AudioBuffer {
+    const bufferSize = Math.floor(seconds * ctx.sampleRate);
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const output = buffer.getChannelData(0);
+    let lastOut = 0.0;
+    for (let i = 0; i < bufferSize; i++) {
+      const white = Math.random() * 2 - 1;
+      output[i] = (lastOut + 0.02 * white) / 1.02;
+      lastOut = output[i];
+      output[i] *= gainCompensation;
+    }
+    return buffer;
+  }
+
+  /** Stereo pink noise (Paul Kellet's filter), each channel independent for a wide, soft image. */
+  private createPinkNoiseBuffer(ctx: AudioContext, seconds: number): AudioBuffer {
+    const bufferSize = Math.floor(seconds * ctx.sampleRate);
+    const buffer = ctx.createBuffer(2, bufferSize, ctx.sampleRate);
+    for (let channel = 0; channel < 2; channel++) {
+      const output = buffer.getChannelData(channel);
+      let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        b0 = 0.99886 * b0 + white * 0.0555179;
+        b1 = 0.99332 * b1 + white * 0.0750759;
+        b2 = 0.969 * b2 + white * 0.153852;
+        b3 = 0.8665 * b3 + white * 0.3104856;
+        b4 = 0.55 * b4 + white * 0.5329522;
+        b5 = -0.7616 * b5 - white * 0.016898;
+        output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.11;
+        b6 = white * 0.115926;
+      }
+    }
+    return buffer;
+  }
+
+  private buildTrack(track: FocusSoundTrack, ctx: AudioContext, masterGain: GainNode) {
 
     if (track === 'binaural') {
       // 10Hz Alpha wave difference for calm focused state (Left 216Hz, Right 226Hz)
@@ -793,6 +999,153 @@ class SoundSynthesizer {
       }, 300);
 
       this.activeNodes.push(bowlInterval);
+    } else if (track === 'pink_noise') {
+      /**
+       * Pink noise — equal energy per octave, softer and less hissy than white noise.
+       * Gently low-passed so it sits comfortably for long listening.
+       */
+      const source = ctx.createBufferSource();
+      source.buffer = this.createPinkNoiseBuffer(ctx, 8);
+      source.loop = true;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(4200, ctx.currentTime);
+
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.7, ctx.currentTime);
+
+      source.connect(filter);
+      filter.connect(gain);
+      gain.connect(masterGain);
+      source.start();
+      this.activeNodes.push(source, filter, gain);
+    } else if (track === 'delta_sleep') {
+      /**
+       * Delta binaural — 100 Hz (L) & 102 Hz (R): a 2 Hz difference on a low carrier,
+       * very soft, over a warm brown-noise bed. Needs headphones for the beat.
+       */
+      const merger = ctx.createChannelMerger(2);
+
+      const oscL = ctx.createOscillator();
+      oscL.type = 'sine';
+      oscL.frequency.setValueAtTime(100, ctx.currentTime);
+      const oscR = ctx.createOscillator();
+      oscR.type = 'sine';
+      oscR.frequency.setValueAtTime(102, ctx.currentTime);
+
+      const gainL = ctx.createGain();
+      gainL.gain.setValueAtTime(0.2, ctx.currentTime);
+      const gainR = ctx.createGain();
+      gainR.gain.setValueAtTime(0.2, ctx.currentTime);
+
+      oscL.connect(gainL);
+      gainL.connect(merger, 0, 0);
+      oscR.connect(gainR);
+      gainR.connect(merger, 0, 1);
+
+      const toneFilter = ctx.createBiquadFilter();
+      toneFilter.type = 'lowpass';
+      toneFilter.frequency.setValueAtTime(260, ctx.currentTime);
+      merger.connect(toneFilter);
+      toneFilter.connect(masterGain);
+
+      const bed = ctx.createBufferSource();
+      bed.buffer = this.createBrownNoiseBuffer(ctx, 6, 3.0);
+      bed.loop = true;
+      const bedFilter = ctx.createBiquadFilter();
+      bedFilter.type = 'lowpass';
+      bedFilter.frequency.setValueAtTime(180, ctx.currentTime);
+      const bedGain = ctx.createGain();
+      bedGain.gain.setValueAtTime(0.32, ctx.currentTime);
+      bed.connect(bedFilter);
+      bedFilter.connect(bedGain);
+      bedGain.connect(masterGain);
+
+      oscL.start();
+      oscR.start();
+      bed.start();
+      this.activeNodes.push(oscL, oscR, gainL, gainR, merger, toneFilter, bed, bedFilter, bedGain);
+    } else if (track === 'breath_pacer') {
+      /**
+       * Breath pacer — a soft tone (G3 + fifth) and a breath-like air layer that
+       * swell for 5.5 s (inhale) and fall for 5.5 s (exhale): ≈5.5 breaths/min,
+       * the pace used in resonance-breathing practice. Cycles are scheduled on
+       * the audio clock a little ahead so they stay steady; the page reads
+       * getTrackStartedAt() to keep its circle in step.
+       */
+      const inhale = BREATH_PACER_INHALE_SECONDS;
+      const exhale = BREATH_PACER_EXHALE_SECONDS;
+      const cycle = inhale + exhale;
+      const lead = 0.08;
+      const t0 = ctx.currentTime + lead;
+      this.trackStartedAt = Date.now() + lead * 1000;
+
+      const swell = ctx.createGain();
+      swell.gain.setValueAtTime(0.03, ctx.currentTime);
+
+      const tone = ctx.createOscillator();
+      tone.type = 'sine';
+      tone.frequency.setValueAtTime(196, ctx.currentTime);
+      const fifth = ctx.createOscillator();
+      fifth.type = 'sine';
+      fifth.frequency.setValueAtTime(294, ctx.currentTime);
+      const toneGain = ctx.createGain();
+      toneGain.gain.setValueAtTime(0.5, ctx.currentTime);
+      const fifthGain = ctx.createGain();
+      fifthGain.gain.setValueAtTime(0.14, ctx.currentTime);
+      tone.connect(toneGain);
+      fifth.connect(fifthGain);
+      toneGain.connect(swell);
+      fifthGain.connect(swell);
+
+      const air = ctx.createBufferSource();
+      air.buffer = this.createPinkNoiseBuffer(ctx, 4);
+      air.loop = true;
+      const airFilter = ctx.createBiquadFilter();
+      airFilter.type = 'bandpass';
+      airFilter.frequency.setValueAtTime(700, ctx.currentTime);
+      airFilter.Q.setValueAtTime(0.7, ctx.currentTime);
+      const airGain = ctx.createGain();
+      airGain.gain.setValueAtTime(0.35, ctx.currentTime);
+      air.connect(airFilter);
+      airFilter.connect(airGain);
+      airGain.connect(swell);
+
+      const warmth = ctx.createBiquadFilter();
+      warmth.type = 'lowpass';
+      warmth.frequency.setValueAtTime(900, ctx.currentTime);
+      swell.connect(warmth);
+      warmth.connect(masterGain);
+
+      tone.start();
+      fifth.start();
+      air.start();
+      this.activeNodes.push(tone, fifth, toneGain, fifthGain, air, airFilter, airGain, swell, warmth);
+
+      const low = 0.03;
+      const high = 0.3;
+      let scheduledCycles = 0;
+      const scheduleAhead = () => {
+        if (!this.ctx || this.currentTrack !== 'breath_pacer') return;
+        // Keep ~two cycles queued on the audio clock.
+        while (t0 + scheduledCycles * cycle < this.ctx.currentTime + cycle * 2) {
+          const start = t0 + scheduledCycles * cycle;
+          swell.gain.setValueAtTime(low, start);
+          swell.gain.linearRampToValueAtTime(high, start + inhale);
+          swell.gain.linearRampToValueAtTime(low, start + cycle);
+          tone.frequency.setValueAtTime(196, start);
+          tone.frequency.linearRampToValueAtTime(207.65, start + inhale);
+          tone.frequency.linearRampToValueAtTime(196, start + cycle);
+          airFilter.frequency.setValueAtTime(600, start);
+          airFilter.frequency.linearRampToValueAtTime(1100, start + inhale);
+          airFilter.frequency.linearRampToValueAtTime(600, start + cycle);
+          scheduledCycles++;
+        }
+      };
+      scheduleAhead();
+      const breathInterval = window.setInterval(scheduleAhead, 2000);
+      this.activeNodes.push(breathInterval);
     }
   }
 
