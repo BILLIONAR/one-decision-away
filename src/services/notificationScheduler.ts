@@ -130,8 +130,8 @@ class NotificationScheduler {
     const title = t(NUDGE_TITLES[slot]);
     const opts: NotificationOptions = {
       body,
-      icon: publicAssetPath('brand/v3/oda-app-v3-192.png'),
-      badge: publicAssetPath('brand/v3/oda-app-v3-192.png'),
+      icon: publicAssetPath('brand/oda-app-c4-v1-192.png'),
+      badge: publicAssetPath('brand/oda-app-c4-v1-192.png'),
       tag: `oda-nudge-${slot}`,
       data: { url: appRouteHref('/app') },
     };
