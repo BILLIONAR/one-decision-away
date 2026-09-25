@@ -94,6 +94,16 @@ export async function getCoachAvailability(): Promise<CoachAvailability> {
   }
 }
 
+const VOICE_NOTE = 'Sound like ODA: a warm friend who believes in the person. No guilt, no pressure, no streak threats, no fake urgency.';
+let coachFocus: string | null = null;
+/** Who the member said they want to become at sign-up (English label), or null. */
+export function setCoachFocus(focus: string | null) { coachFocus = focus?.trim().slice(0, 120) || null; }
+
+function systemPrompt(): string {
+  const focus = coachFocus ? ` At sign-up the person said who they want to become: "${coachFocus}". Keep it in mind when suggesting a small action, but follow what they write now.` : '';
+  return `${SYSTEM_PROMPT}\n${VOICE_NOTE}${focus}`;
+}
+
 /** Keep recent complete turns within the model's 4096-token context budget. */
 export function prepareCoachMessages(messages: readonly CoachMessage[]): PromptMessage[] {
   const clean: CoachMessage[] = [];
@@ -115,7 +125,7 @@ export function prepareCoachMessages(messages: readonly CoachMessage[]): PromptM
   while (recent.length > 1 && (size > MAX_HISTORY_CHARACTERS || recent[0].role !== 'user')) {
     size -= recent.shift()!.content.length;
   }
-  return [{ role: 'system', content: SYSTEM_PROMPT }, ...recent];
+  return [{ role: 'system', content: systemPrompt() }, ...recent];
 }
 
 function visibleReply(raw: string): string {

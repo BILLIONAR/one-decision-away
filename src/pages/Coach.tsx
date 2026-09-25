@@ -2,7 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ArrowUp, Check, Download, MessageCircle, Mic, MicOff, RotateCcw, Square, Volume2 } from 'lucide-react';
 import { useLocale, getSpeechLang } from '../i18n';
 import { companionCopy } from '../i18n/companion';
-import { createAICoach, getCoachAvailability, MAX_COACH_MESSAGE_LENGTH, type CoachMessage } from '../services/aiCoach';
+import { createAICoach, getCoachAvailability, setCoachFocus, MAX_COACH_MESSAGE_LENGTH, type CoachMessage } from '../services/aiCoach';
+import { INTENTS } from '../data/starterDecisions';
+import { useApp } from '../store/useApp';
 
 interface Recognition {
   lang: string; continuous: boolean; interimResults: boolean;
@@ -16,6 +18,8 @@ export const Coach: React.FC = () => {
   const [locale] = useLocale();
   const c = companionCopy(locale);
   const [engine] = useState(() => createAICoach());
+  const intent = useApp().data?.profile.intent;
+  useEffect(() => { setCoachFocus(INTENTS.find(item => item.key === intent)?.label ?? null); }, [intent]);
   const [availability, setAvailability] = useState<{ supported: boolean; reason?: string } | null>(null);
   const [phase, setPhase] = useState<'idle' | 'loading' | 'ready' | 'replying'>('idle');
   const [progress, setProgress] = useState(0);

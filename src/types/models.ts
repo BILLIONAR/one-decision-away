@@ -30,6 +30,14 @@ export interface Profile {
   simpleModeOff?: boolean;
   /** Answer to the day-14 question "Did you start something you had been putting off?" */
   twoWeekCheckIn?: { answer: 'yes' | 'a-little' | 'not-yet'; note?: string; at: string };
+  /** Who the member wants to become, asked once at sign-up (see data/starterDecisions). */
+  intent?: 'finish' | 'calm' | 'confidence' | 'focus' | 'energy' | 'start';
+  /** 'smart': at most two reminders a day, timed from when decisions are usually kept. */
+  nudgeMode?: 'smart' | 'custom';
+  /** When ODA offered reminders after a kept decision (asked once; "not now" also counts). */
+  reminderAskedAt?: string;
+  /** Tomorrow's decision, written the evening before; shown as a suggestion on that day. */
+  nextDecisionDraft?: { text: string; forDay: string };
 }
 
 /** Mental contrasting for the daily decision: feeling → obstacle → if-then plan. */

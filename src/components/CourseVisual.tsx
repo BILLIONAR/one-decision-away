@@ -70,7 +70,7 @@ const Bars: React.FC<{ visual: Of<'bars'>; sourceLabel: string }> = ({ visual, s
         ))}
       </ul>
       <p className="oda-course-visual-note">{visual.note}</p>
-      {source && <p className="oda-course-visual-source">{sourceLabel}: <a href={source.url} target="_blank" rel="noopener noreferrer">{source.title}</a></p>}
+      {source && <p className="oda-course-visual-source">{sourceLabel}: {source.title}</p>}
     </>
   );
 };

@@ -16,7 +16,6 @@ import { BackupReminder } from '../components/BackupReminder';
 import { SEED_MARKET_ITEMS } from '../data/seed';
 import {
   computeLedgerBalance,
-  calculateOneDecisionStreakData,
   estimateDailyEarningPace,
   daysToAfford,
   ECONOMY_CONSTANTS,
@@ -29,7 +28,9 @@ import { DecisionPlanModal } from '../components/momentum/DecisionPlanModal';
 import { TwoMinuteStart } from '../components/momentum/TwoMinuteStart';
 import { MomentumCard, EvidenceStrip, SimpleModeNote, TwoWeekCheckIn, WeeklyReviewCard, WeeklyFocusNote } from '../components/momentum/TodayMomentum';
 import { shareDecision } from '../components/momentum/shareDecision';
-import { isSimpleMode, keptDecisions, twoWeekCheckInDue, weeklyFocus, weeklyReviewDue } from '../services/momentum';
+import { decisionChain, isSimpleMode, keptDecisions, localDayKey, twoWeekCheckInDue, weeklyFocus, weeklyReviewDue } from '../services/momentum';
+import { EasyDecisionChips, KeptMomentCard } from '../components/momentum/FirstSteps';
+import { easyDecisions } from '../data/starterDecisions';
 
 const RITUALS_KEY = 'oda_rituals_open';
 
@@ -109,7 +110,6 @@ export const Today: React.FC = () => {
     (m) => m.isOneDecision && (m.scheduledFor === todayStr || m.status === 'active')
   );
   const decisionDone = todayOneDecision?.status === 'completed';
-  const decisionStreak = calculateOneDecisionStreakData(data);
   const decisionCompletion = todayOneDecision
     ? data.completions.find((c) => c.missionId === todayOneDecision.id)
     : undefined;
@@ -159,6 +159,17 @@ export const Today: React.FC = () => {
   const reviewWeek = weeklyReviewDue(data);
   const focusChange = weeklyFocus(data);
   const keptCount = keptDecisions(data.missions).length;
+  const chain = decisionChain(data.missions);
+  const draftForToday = data.profile.nextDecisionDraft?.forDay === localDayKey() ? data.profile.nextDecisionDraft.text : null;
+  const pickSuggestion = (title: string) => {
+    setNewDecisionTitle(title);
+    document.getElementById('today-decision-input')?.focus();
+  };
+  const quickSetDecision = async (title: string) => {
+    if (isSaving) return;
+    setIsSaving(true);
+    try { await setOneDecision(title); } finally { setIsSaving(false); }
+  };
   const decisionPlan = todayOneDecision?.plan;
 
   const handleShare = async () => {
@@ -194,6 +205,7 @@ export const Today: React.FC = () => {
         hasDecision={Boolean(todayOneDecision)}
         onMakeSmaller={() => setPlan({ open: true, smaller: true })}
         onChoose={() => document.getElementById('today-decision-input')?.focus()}
+        onPickEasy={(title) => void quickSetDecision(title)}
       />
 
       {/* 2. One decision */}
@@ -208,8 +220,10 @@ export const Today: React.FC = () => {
         </svg>
         <div className="flex items-center justify-between gap-3">
           <span className="oda-kicker opacity-90">{t("Today's one decision")}</span>
-          {decisionStreak.currentStreak > 0 && (
-            <span className="text-[13px] opacity-70">{decisionStreak.currentStreak === 1 ? t('1 day') : t('{n} days', { n: decisionStreak.currentStreak })}</span>
+          {chain.days > 0 && (
+            <span className="text-[13px] opacity-70" title={t('Your chain: one missed day a week is forgiven, two in a row start a new chain.')}>
+              {chain.days === 1 ? t('1 day') : t('{n} days', { n: chain.days })}{chain.graceUsed ? ` · ${t('flex day used')}` : ''}
+            </span>
           )}
         </div>
 
@@ -285,10 +299,16 @@ export const Today: React.FC = () => {
             >
               {t('Set decision')}
             </button>
+            {!newDecisionTitle.trim() && (
+              draftForToday
+                ? <EasyDecisionChips tone="dark" options={[draftForToday]} onPick={pickSuggestion} label={t('You chose this last night')} />
+                : <EasyDecisionChips tone="dark" options={easyDecisions(data.profile.intent)} onPick={pickSuggestion} label={t('Or start with something easy')} />
+            )}
           </form>
         )}
       </section>
 
+      {decisionDone && <KeptMomentCard />}
       {focusChange && <WeeklyFocusNote change={focusChange} />}
       <EvidenceStrip />
       {reviewWeek && <WeeklyReviewCard weekKey={reviewWeek} />}

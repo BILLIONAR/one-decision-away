@@ -3,8 +3,10 @@ import { ChevronRight, X } from 'lucide-react';
 import { useApp } from '../../store/useApp';
 import { useT } from '../../i18n';
 import { FEEDBACK_EMAIL } from '../../data/contact';
+import { EasyDecisionChips } from './FirstSteps';
+import { COMEBACK_DECISIONS } from '../../data/starterDecisions';
 import {
-  comebackState, evidenceSummary, freshStart, localDayKey, usageStats,
+  decisionChain, comebackState, evidenceSummary, freshStart, localDayKey, usageStats,
   type CheckInAnswer, SIMPLE_MODE_KEPT, keptInWeek,
 } from '../../services/momentum';
 
@@ -15,7 +17,7 @@ function readDismissed() { try { return localStorage.getItem(DISMISS_KEY); } cat
  * A kind return after a lapse, or a fresh-start nudge on a new week/month.
  * Shows at most one card, only while today's decision is still open.
  */
-export const MomentumCard: React.FC<{ decisionOpen: boolean; hasDecision: boolean; onMakeSmaller: () => void; onChoose: () => void }> = ({ decisionOpen, hasDecision, onMakeSmaller, onChoose }) => {
+export const MomentumCard: React.FC<{ decisionOpen: boolean; hasDecision: boolean; onMakeSmaller: () => void; onChoose: () => void; onPickEasy?: (title: string) => void }> = ({ decisionOpen, hasDecision, onMakeSmaller, onChoose, onPickEasy }) => {
   const t = useT();
   const { data } = useApp();
   const today = localDayKey();
@@ -35,12 +37,17 @@ export const MomentumCard: React.FC<{ decisionOpen: boolean; hasDecision: boolea
     : t('New beginnings make change easier to start. What do you want this period to be about? Begin with today’s decision.');
 
   const dismiss = () => { setDismissed(true); try { localStorage.setItem(DISMISS_KEY, today); } catch { /* per-device only */ } };
+  const chainSafe = comeback?.kind === 'missed-once' && decisionChain(data.missions).atRisk;
 
   return (
     <section aria-label={title} className="relative rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--bg-elevated)] p-5 pr-12 space-y-2">
       <button type="button" onClick={dismiss} aria-label={t('Dismiss')} className="absolute top-2 right-2 w-10 h-10 flex items-center justify-center rounded-full text-[var(--fg-muted)] hover:bg-[var(--bg-muted)]"><X size={18} /></button>
       <h2 className="text-[16px] font-semibold text-[var(--fg)]">{title}</h2>
       <p className="text-[14px] leading-relaxed text-[var(--fg-muted)]">{body}</p>
+      {chainSafe && <p className="text-[13px] font-medium text-[var(--accent)]">{t('Your chain is safe: this week’s flex day covered yesterday.')}</p>}
+      {comeback && !hasDecision && onPickEasy && (
+        <div className="pt-1"><EasyDecisionChips options={COMEBACK_DECISIONS} onPick={onPickEasy} label={t('The easiest way back in, one tap:')} /></div>
+      )}
       <button type="button" onClick={hasDecision ? onMakeSmaller : onChoose} className="inline-flex items-center gap-1 min-h-11 text-[14px] font-semibold text-[var(--accent)]">
         {hasDecision ? t('Make it smaller') : t('Choose today’s decision')}<ChevronRight size={16} />
       </button>

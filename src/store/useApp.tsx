@@ -58,6 +58,7 @@ import { soundSynthesizer } from '../utils/soundSynthesizer';
 import { voiceGuide } from '../utils/voiceGuide';
 import { getGuidedMeditation } from '../data/guidedMeditations';
 import { t, getLocale, setLocale, isLocale, hasStoredLocale, ensureLocaleLoaded, type Locale } from '../i18n';
+import { usualReminderTime } from '../services/momentum';
 
 export interface AppContextType {
   data: UserData | null;
@@ -114,7 +115,7 @@ export interface AppContextType {
   updateDecision: (missionId: string, patch: Partial<Pick<Mission, 'plan' | 'startedAt' | 'title'>>) => Promise<void>;
   saveDreamPlan: (itemId: string, plan: Omit<DreamPlan, 'updatedAt'>, makeTodaysDecision?: boolean) => Promise<void>;
   /** Quiet profile flags for simple mode and the day-14 check-in. */
-  updateMomentumProfile: (patch: Pick<Partial<Profile>, 'simpleModeOff' | 'twoWeekCheckIn'>) => Promise<void>;
+  updateMomentumProfile: (patch: Pick<Partial<Profile>, 'simpleModeOff' | 'twoWeekCheckIn' | 'intent' | 'nudgeMode' | 'reminderAskedAt' | 'nextDecisionDraft' | 'nudgesEnabled' | 'nudgeTimes'>) => Promise<void>;
   saveWeeklyReview: (review: Omit<WeeklyReview, 'createdAt'>) => Promise<void>;
   addCustomDream: (
     item: Omit<MarketItem, 'id' | 'createdAt' | 'isCustom'>,
@@ -236,6 +237,7 @@ export interface AppContextType {
       firstRealStep?: string;
     };
     decision: string;
+    intent?: Profile['intent'];
   }) => Promise<void>;
 }
 
@@ -379,12 +381,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // would otherwise query the push server after nearly every tap.
   const nudgesEnabled = data?.profile.nudgesEnabled === true;
   const nudgeTimesKey = data ? JSON.stringify(normaliseNudgeTimes(data.profile.nudgeTimes)) : '';
+  const nudgeSmart = data?.profile.nudgeMode === 'smart';
+  const nudgeFollowUp = data ? usualReminderTime(data.missions) : null;
   useEffect(() => {
     if (!nudgeTimesKey) return;
     let active = true;
     const times = JSON.parse(nudgeTimesKey) as ReturnType<typeof normaliseNudgeTimes>;
     const configure = () => {
-      if (active) notificationScheduler.configure({ enabled: nudgesEnabled, times });
+      if (active) notificationScheduler.configure({ enabled: nudgesEnabled, times, smart: nudgeSmart ? { followUp: nudgeFollowUp } : undefined });
     };
     const refresh = async () => {
       await getPushStatus();
@@ -407,7 +411,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       active = false; unsubscribe(); window.removeEventListener('oda:push-status', configure);
       notificationScheduler.configure({ enabled: false, times });
     };
-  }, [nudgesEnabled, nudgeTimesKey]);
+  }, [nudgesEnabled, nudgeTimesKey, nudgeSmart, nudgeFollowUp]);
 
   // Local reminders point at today's actual decision instead of another quote.
   const todayDecisionForNudges = data?.missions.find(
@@ -1071,7 +1075,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   );
 
   const updateMomentumProfile = useCallback(
-    async (patch: Pick<Partial<Profile>, 'simpleModeOff' | 'twoWeekCheckIn'>) => {
+    async (patch: Pick<Partial<Profile>, 'simpleModeOff' | 'twoWeekCheckIn' | 'intent' | 'nudgeMode' | 'reminderAskedAt' | 'nextDecisionDraft' | 'nudgesEnabled' | 'nudgeTimes'>) => {
       if (!data) return;
       const updated: UserData = { ...data, profile: { ...data.profile, ...patch } };
       await repository.save(updated);
@@ -2465,6 +2469,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         firstRealStep?: string;
       };
       decision: string;
+      intent?: Profile['intent'];
     }) => {
       if (!data) return;
       const nowIso = new Date().toISOString();
@@ -2529,6 +2534,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           locale: params.locale,
           onboardingStep: 'completed',
           lastOpenedAt: nowIso,
+          ...(params.intent ? { intent: params.intent } : {}),
         },
         customMarketItems,
         inVisionItemIds,

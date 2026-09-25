@@ -139,3 +139,56 @@ export function weeklyFocus(data: Pick<UserData, 'weeklyReviews'>, now = new Dat
   const gap = daysBetween(new Date(y, m - 1, d, 12), now);
   return gap >= 1 && gap <= 7 ? latest.change.trim() : null;
 }
+
+export type DecisionChain = {
+  /** Kept-decision days in the current chain (grace days are not counted as kept). */
+  days: number;
+  /** A single missed day inside the last seven days was forgiven. */
+  graceUsed: boolean;
+  /** Yesterday was the forgiven day and today is still open: "never miss twice". */
+  atRisk: boolean;
+};
+
+/**
+ * A forgiving chain: one missed day per rolling week does not break it, two
+ * missed days in a row do. Mirrors "never miss twice" and Lally et al.
+ * (2010), where missing one opportunity did not derail habit formation.
+ * Today only counts once it is kept; an open today never breaks the chain.
+ */
+export function decisionChain(missions: Mission[], now = new Date()): DecisionChain {
+  const keptDays = new Set(keptDecisions(missions).map(e => e.dayKey));
+  if (!keptDays.size) return { days: 0, graceUsed: false, atRisk: false };
+  const earliest = [...keptDays].sort()[0];
+  const day = (offset: number) => localDayKey(new Date(now.getFullYear(), now.getMonth(), now.getDate() - offset));
+  const keptToday = keptDays.has(day(0));
+  const misses: number[] = [];
+  let days = 0;
+  for (let i = keptToday ? 0 : 1; i < 3660; i++) {
+    const key = day(i);
+    if (key < earliest) break;
+    if (keptDays.has(key)) { days++; continue; }
+    const previous = misses[misses.length - 1];
+    if (previous !== undefined && i - previous < 7) break;
+    misses.push(i);
+  }
+  // A chain that has not reached a kept day yet (misses only) is no chain.
+  if (!days) return { days: 0, graceUsed: false, atRisk: false };
+  const graceUsed = misses.some(offset => offset <= 7 && day(offset) > earliest);
+  const atRisk = !keptToday && misses[0] === 1;
+  return { days, graceUsed, atRisk };
+}
+
+/**
+ * The member's usual time for keeping a decision, minus 30 minutes, as a
+ * reminder time ("HH:MM"). Needs at least three kept decisions; clamped to
+ * 07:00–22:00 and rounded to five minutes. Median, so one late night doesn't
+ * move it.
+ */
+export function usualReminderTime(missions: Mission[]): string | null {
+  const minutes = keptDecisions(missions).slice(0, 14).map(e => { const d = new Date(e.completedAt); return d.getHours() * 60 + d.getMinutes(); }).sort((a, b) => a - b);
+  if (minutes.length < 3) return null;
+  const mid = Math.floor(minutes.length / 2);
+  const median = minutes.length % 2 ? minutes[mid] : Math.round((minutes[mid - 1] + minutes[mid]) / 2);
+  const target = Math.min(22 * 60, Math.max(7 * 60, Math.round((median - 30) / 5) * 5));
+  return `${String(Math.floor(target / 60)).padStart(2, '0')}:${String(target % 60).padStart(2, '0')}`;
+}

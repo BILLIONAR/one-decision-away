@@ -7,6 +7,7 @@ import { appRouteHref, publicAssetPath } from '../utils/routing';
 import { NudgeSlot, NUDGE_SLOTS, DEFAULT_NUDGE_TIMES, NUDGE_TITLES, getNudgeLine, normaliseNudgeTimes } from '../data/dailyNudges';
 import { t } from '../i18n';
 import { isPushActive } from './pushNotifications';
+import { voiceLine } from '../data/odaVoice';
 
 const FIRED_KEY = 'oda_nudges_fired';
 const CATCH_UP_MINUTES = 90;
@@ -14,6 +15,13 @@ const CATCH_UP_MINUTES = 90;
 export interface NudgePrefs {
   enabled: boolean;
   times: Record<NudgeSlot, string>; // HH:MM local
+  /**
+   * Smart mode: at most two reminders a day, and only when useful — a morning
+   * nudge to choose (skipped once a decision exists) and one follow-through
+   * about 30 minutes before the member usually keeps their decision (skipped
+   * once it is kept). Mirrors Duolingo's behaviour-timed, capped reminders.
+   */
+  smart?: { followUp: string | null };
 }
 
 /** Slots where an open decision is worth more than a quote: nudge action, not inspiration. */
@@ -57,16 +65,27 @@ class NotificationScheduler {
     const { title, done } = this.decision;
     if (done) return undefined;
     if (title && FOLLOW_THROUGH_SLOTS.includes(slot)) {
-      return t('Your decision is still open: “{title}”. Two minutes is enough to start.', { title: t(title) });
+      return t(voiceLine('followThrough'), { title: t(title) });
     }
-    if (!title && CHOOSE_SLOTS.includes(slot)) {
-      return t('You haven’t chosen today’s decision yet. What one small thing would make today count?');
+    if (!title && (CHOOSE_SLOTS.includes(slot) || (this.prefs.smart && slot === 'morning'))) {
+      return t(voiceLine('choose'));
     }
     return undefined;
   }
 
+  /** Which slots fire today and when; smart mode keeps two and drops the ones with nothing to say. */
+  private schedule(): [NudgeSlot, string][] {
+    const times = this.prefs.times;
+    if (!this.prefs.smart) return NUDGE_SLOTS.map(slot => [slot, times[slot] || DEFAULT_NUDGE_TIMES[slot]]);
+    const { title, done } = this.decision;
+    const plan: [NudgeSlot, string][] = [];
+    if (!title) plan.push(['morning', times.morning || DEFAULT_NUDGE_TIMES.morning]);
+    if (!done) plan.push(['evening', this.prefs.smart.followUp || times.evening || DEFAULT_NUDGE_TIMES.evening]);
+    return plan;
+  }
+
   public configure(prefs: NudgePrefs) {
-    this.prefs = { enabled: prefs.enabled, times: normaliseNudgeTimes(prefs.times) };
+    this.prefs = { enabled: prefs.enabled, times: normaliseNudgeTimes(prefs.times), smart: prefs.smart };
     this.start();
   }
 
@@ -106,9 +125,9 @@ class NotificationScheduler {
     const now = new Date();
     const minutesNow = now.getHours() * 60 + now.getMinutes();
     const fired = this.firedToday();
-    NUDGE_SLOTS.forEach((slot) => {
+    this.schedule().forEach(([slot, time]) => {
       if (fired.has(slot)) return;
-      const [h, m] = (this.prefs.times[slot] || DEFAULT_NUDGE_TIMES[slot]).split(':').map((n) => parseInt(n, 10));
+      const [h, m] = time.split(':').map((n) => parseInt(n, 10));
       const slotMinutes = h * 60 + m;
       // fire at the exact minute, or catch up if the app was opened shortly after
       if (minutesNow >= slotMinutes && minutesNow - slotMinutes <= CATCH_UP_MINUTES) {
