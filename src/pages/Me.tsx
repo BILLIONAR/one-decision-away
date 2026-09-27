@@ -16,8 +16,10 @@ import {
   CheckCircle2,
   Waves,
   LayoutGrid,
+  CloudUpload,
 } from 'lucide-react';
 import { EvidenceTree } from '../components/momentum/EvidenceTree';
+import { useCloudState } from '../services/useCloudState';
 
 interface MenuRow {
   icon: LucideIcon;
@@ -31,6 +33,7 @@ const APP_VERSION = '2.0';
 export const Me: React.FC = () => {
   const { data, setActiveRoute } = useApp();
   const t = useT();
+  const cloud = useCloudState();
   const [locale] = useLocale();
   const c = companionCopy(locale);
 
@@ -89,6 +92,7 @@ export const Me: React.FC = () => {
     {
       title: t('App'),
       rows: [
+        ...(cloud.configured ? [{ icon: CloudUpload, label: t('Account'), hint: cloud.session?.user.email || t('Sign in to back up and sync'), route: '/app/account' }] : []),
         { icon: Bell, label: t('Settings'), hint: t('Reminders, language, backup, appearance'), route: '/app/settings' },
         { icon: Sparkles, label: t('Pro plan'), route: '/app/upgrade' },
       ],
@@ -116,6 +120,13 @@ export const Me: React.FC = () => {
             <EvidenceTree count={evidence.total} className="w-20 h-[70px]" label={t('Your evidence tree: {n} leaves', { n: evidence.total })} />
           </button>
         </div>
+        {cloud.configured && !cloud.session && (
+          <button type="button" onClick={() => setActiveRoute('/app/account')} className="w-full flex items-center gap-3 rounded-[var(--radius-md)] bg-[var(--accent-soft)] px-4 py-3 text-left">
+            <CloudUpload size={18} className="text-[var(--accent)] shrink-0" />
+            <span className="flex-1 min-w-0 text-[14px] leading-snug"><span className="font-semibold text-[var(--accent)]">{t('Sign in')}</span> <span className="text-[var(--fg-muted)]">{t('so your proof is backed up and on every device.')}</span></span>
+            <ChevronRight size={18} className="text-[var(--accent)] shrink-0" />
+          </button>
+        )}
         <div className="oda-rule" />
         <button type="button" onClick={() => setActiveRoute('/app/evidence')} className="w-full grid grid-cols-3 gap-3 text-left">
           <StatTile value={String(evidence.total)} label={t('Kept decisions')} accent />

@@ -42,6 +42,7 @@ const SECONDARY_ROUTE_PARENT: Record<string, string> = {
   '/app/upgrade': '/app/me',
   '/app/settings': '/app/me',
   '/app/tools': '/app/me',
+  '/app/account': '/app/me',
   '/app/sound': '/app/me',
 };
 

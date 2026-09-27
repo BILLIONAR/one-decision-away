@@ -10,6 +10,7 @@ const Evidence = lazy(() => import('./pages/Evidence').then((m) => ({ default: m
 const Dreams = lazy(() => import('./pages/Dreams').then((m) => ({ default: m.Dreams })));
 const Me = lazy(() => import('./pages/Me').then((m) => ({ default: m.Me })));
 const Tools = lazy(() => import('./pages/Tools').then((m) => ({ default: m.Tools })));
+const Account = lazy(() => import('./pages/Account').then((m) => ({ default: m.Account })));
 const SoundRoom = lazy(() => import('./pages/SoundRoom').then((m) => ({ default: m.SoundRoom })));
 const Missions = lazy(() => import('./pages/Missions').then((m) => ({ default: m.Missions })));
 const Progress = lazy(() => import('./pages/Progress').then((m) => ({ default: m.Progress })));
@@ -118,6 +119,8 @@ const AppRouter: React.FC = () => {
         return <Notebook />;
       case '/app/tools':
         return <Tools />;
+      case '/app/account':
+        return <Account />;
       case '/app/sound':
         return <SoundRoom />;
       default:
