@@ -138,7 +138,7 @@ export const Coach: React.FC = () => {
     <div className="space-y-6 pb-2">
       <header className="space-y-3">
         <div className="flex items-center gap-2 text-[12px] font-medium text-[var(--accent)]"><MessageCircle size={16} /> ODA / {c.coach}</div>
-        <h1 className="text-[30px] sm:text-[36px] font-semibold tracking-tight leading-[1.12]">{c.coachHeading}</h1>
+        <h1 className="text-[30px] sm:text-[36px] oda-display leading-[1.12]">{c.coachHeading}</h1>
         <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed max-w-xl">{c.coachIntro}</p>
       </header>
 
@@ -168,7 +168,7 @@ export const Coach: React.FC = () => {
         </div>
       ) : <div ref={log} role="log" aria-label={c.live} aria-live="off" tabIndex={0} onScroll={() => { const el = log.current; if (el) followOutput.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80; }} className="max-h-[52vh] min-h-40 overflow-y-auto space-y-5 pr-2 overscroll-contain">
         {messages.map((message, index) => <article key={index} className={message.role === 'user' ? 'ml-8 p-4 bg-[var(--bg-muted)] rounded-[var(--radius-md)]' : 'mr-4 pl-4 border-l-2 border-[var(--accent)]'}>
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--fg-muted)] mb-2">{message.role === 'user' ? c.you : c.name}</p>
+          <p className="text-[12px] font-semibold text-[var(--fg-muted)] mb-2">{message.role === 'user' ? c.you : c.name}</p>
           <p className="text-[15px] leading-relaxed whitespace-pre-wrap break-words">{message.content || c.thinking}</p>
         </article>)}
       </div>}

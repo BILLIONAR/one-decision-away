@@ -86,7 +86,7 @@ export const ArchiveDreamModal: React.FC<ArchiveDreamModalProps> = ({
     >
       <form onSubmit={handleConfirm} className="space-y-6">
         {/* Item summary */}
-        <div className="flex items-center gap-4 p-4 rounded-[var(--radius-md)] bg-[var(--bg-muted)]">
+        <div className="flex items-center gap-4 p-4 rounded-[var(--radius-lg)] oda-card">
           <div className="w-14 h-14 rounded-[var(--radius-sm)] overflow-hidden shrink-0 bg-[var(--bg-inset)]">
             <DreamArt
               type={item.illustrationKey}
@@ -107,7 +107,7 @@ export const ArchiveDreamModal: React.FC<ArchiveDreamModalProps> = ({
         {/* Reason */}
         <div className="space-y-2">
           <span className="block text-[13px] font-medium text-[var(--fg-muted)]">{t('Reason')}</span>
-          <div className="rounded-[var(--radius-md)] bg-[var(--bg-muted)] overflow-hidden">
+          <div className="rounded-[var(--radius-lg)] oda-card overflow-hidden">
             {reasonOptions.map((opt, idx) => {
               const isSelected = reason === opt.value;
               return (

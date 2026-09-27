@@ -35,7 +35,7 @@ export const TwoFutures: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight text-[var(--fg)]">{t('Two futures')}</h1>
+        <h1 className="oda-display text-[32px] leading-tight text-[var(--fg)]">{t('Two futures')}</h1>
         <p className="text-sm text-[var(--fg-muted)] mt-1">
           {t('The life you are building, and the one you get if nothing changes.')}
         </p>
@@ -59,7 +59,7 @@ export const TwoFutures: React.FC = () => {
         </button>
       </div>
 
-      <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-3">
+      <div className="oda-card rounded-[var(--radius-lg)] p-5 space-y-3">
         <div className="flex items-center justify-between text-sm">
           <span className="font-medium text-[var(--fg)]">{t('{n}% of decisions building', { n: buildingPct })}</span>
           <span className="text-[var(--fg-muted)]">
@@ -82,7 +82,7 @@ export const TwoFutures: React.FC = () => {
 
       <div className="space-y-3">
         <h2 className="text-[15px] font-semibold text-[var(--fg)]">{t('If nothing changes')}</h2>
-        <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-4">
+        <div className="oda-card rounded-[var(--radius-lg)] p-5 space-y-4">
           {isEditing ? (
             <div className="space-y-1.5">
               <label htmlFor="edit-anti-vision" className="block text-sm text-[var(--fg-muted)]">
@@ -118,7 +118,7 @@ export const TwoFutures: React.FC = () => {
 
       <div className="space-y-3">
         <h2 className="text-[15px] font-semibold text-[var(--fg)]">{t('What you are building')}</h2>
-        <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-4">
+        <div className="oda-card rounded-[var(--radius-lg)] p-5 space-y-4">
           {isEditing ? (
             <div className="space-y-1.5">
               <label htmlFor="edit-vision" className="block text-sm text-[var(--fg-muted)]">

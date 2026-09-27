@@ -28,7 +28,7 @@ export const Seasons: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight text-[var(--fg)]">{t('Seasons')}</h1>
+        <h1 className="oda-display text-[32px] leading-tight text-[var(--fg)]">{t('Seasons')}</h1>
         <p className="text-sm text-[var(--fg-muted)] mt-1">{t('Thirty days on one theme.')}</p>
       </div>
 
@@ -59,7 +59,7 @@ export const Seasons: React.FC = () => {
         })}
       </div>
 
-      <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-4">
+      <div className="oda-card rounded-[var(--radius-lg)] p-5 space-y-4">
         <div>
           <h2 className="text-xl font-semibold tracking-tight text-[var(--fg)]">{t(currentSeason.title)}</h2>
           <p className="text-sm text-[var(--fg-muted)] mt-1">{t(currentSeason.theme || currentSeason.description)}</p>

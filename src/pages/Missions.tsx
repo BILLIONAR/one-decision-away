@@ -56,7 +56,7 @@ export const Missions: React.FC = () => {
     <div className="space-y-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-[var(--fg)]">{t('Missions')}</h1>
+          <h1 className="oda-display text-[32px] leading-tight text-[var(--fg)]">{t('Missions')}</h1>
           <p className="text-sm text-[var(--fg-muted)] mt-1">{t('Small tasks that move your dream forward.')}</p>
         </div>
         <button
@@ -178,7 +178,7 @@ export const Missions: React.FC = () => {
           })}
         </div>
       ) : (
-        <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 text-center">
+        <div className="oda-card rounded-[var(--radius-lg)] p-5 text-center">
           <p className="text-[15px] font-semibold text-[var(--fg)]">{t('No missions here')}</p>
           <p className="text-sm text-[var(--fg-muted)] mt-1">
             {activeTab === 'Done'

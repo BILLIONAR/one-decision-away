@@ -165,7 +165,7 @@ export const CompleteMissionModal: React.FC<CompleteMissionModalProps> = ({
         </div>
 
         {method === 'timer' && (
-          <div className="p-5 bg-[var(--bg-muted)] rounded-[var(--radius-md)] text-center space-y-4">
+          <div className="p-5 oda-card rounded-[var(--radius-lg)] text-center space-y-4">
             <div className="text-4xl font-semibold tracking-tight text-[var(--fg)] tabular-nums">{formatTime(timerSeconds)}</div>
             <div className="flex items-center justify-center gap-2">
               {!isTimerRunning ? (

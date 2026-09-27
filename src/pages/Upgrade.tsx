@@ -30,7 +30,7 @@ export const Upgrade: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight text-[var(--fg)]">{t('Pro')}</h1>
+        <h1 className="oda-display text-[32px] leading-tight text-[var(--fg)]">{t('Pro')}</h1>
         <p className="text-sm text-[var(--fg-muted)] mt-1">{t('One plan. Cancel any time.')}</p>
       </div>
 
@@ -56,7 +56,7 @@ export const Upgrade: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-4">
+        <div className="oda-card rounded-[var(--radius-lg)] p-5 space-y-4">
           <div>
             <div className="text-[15px] font-semibold text-[var(--fg)]">{t('Free')}</div>
             <div className="text-2xl font-semibold tracking-tight text-[var(--fg)] mt-1">$0</div>
@@ -71,7 +71,7 @@ export const Upgrade: React.FC = () => {
           </ul>
         </div>
 
-        <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-4">
+        <div className="oda-card rounded-[var(--radius-lg)] p-5 space-y-4">
           <div>
             <div className="text-[15px] font-semibold text-[var(--fg)]">{t('Pro')}</div>
             <div className="text-2xl font-semibold tracking-tight text-[var(--fg)] mt-1">

@@ -6497,6 +6497,9 @@ const dict: Record<string, string> = {
   "You can keep using ODA without an account; nothing changes.": "Puedes seguir usando ODA sin cuenta; nada cambia.",
   "Sign in to back up and sync": "Inicia sesión para respaldar y sincronizar",
   "Sign in": "Iniciar sesión",
-  "so your proof is backed up and on every device.": "para que tus pruebas tengan copia y estén en cada dispositivo."
+  "so your proof is backed up and on every device.": "para que tus pruebas tengan copia y estén en cada dispositivo.",
+  "Automatic": "Automático",
+  "I did it": "Lo hice",
+  "Kept today": "Cumplido hoy"
 };
 export default dict;

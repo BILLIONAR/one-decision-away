@@ -328,7 +328,7 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
 
   if (!data || !data.microHabits || data.microHabits.length === 0) {
     return (
-      <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-2">
+      <div className="oda-card rounded-[var(--radius-lg)] p-5 space-y-2">
         <h3 className="text-[15px] font-semibold text-[var(--fg)]">{t('Weekly Micro-Habit Trends')}</h3>
         <p className="text-[13px] text-[var(--fg-muted)]">
           {t('No micro-habits found. Create your first 5-minute habit on the Home page to start tracking weekly category trends.')}
@@ -367,7 +367,7 @@ export const WeeklyMicroHabitsSummary: React.FC = () => {
     }`;
 
   return (
-    <div id="weekly-micro-habits-trends-view" className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-6">
+    <div id="weekly-micro-habits-trends-view" className="oda-card rounded-[var(--radius-lg)] p-5 space-y-6">
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div>

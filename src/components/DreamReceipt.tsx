@@ -43,7 +43,7 @@ export const DreamReceiptModal: React.FC<DreamReceiptModalProps> = ({
     const ACCENT = '#1F5F3F';
     const LINE = '#C9C9C6';
     const TILE = '#F3F3F1';
-    const FONT = "'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif";
+    const FONT = "'Hanken Grotesk Variable', -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', sans-serif";
     const PAD = 96;
 
     ctx.fillStyle = BG;
@@ -229,7 +229,7 @@ export const DreamReceiptModal: React.FC<DreamReceiptModalProps> = ({
         <canvas ref={canvasRef} className="hidden" />
 
         {dataUrl && (
-          <div className="rounded-[var(--radius-md)] overflow-hidden bg-[var(--bg-muted)] flex justify-center p-3">
+          <div className="rounded-[var(--radius-lg)] overflow-hidden oda-card flex justify-center p-3">
             <img src={dataUrl} alt={t('Receipt')} className="max-h-[460px] object-contain rounded-[var(--radius-sm)]" />
           </div>
         )}

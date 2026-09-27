@@ -145,14 +145,14 @@ export const Me: React.FC = () => {
                 key={`${row.route}-${row.label}`}
                 type="button"
                 onClick={() => setActiveRoute(row.route)}
-                className={`w-full min-h-[64px] px-4 py-2 flex items-center gap-3.5 text-left cursor-pointer transition-colors hover:bg-[var(--bg-muted)] ${idx > 0 ? 'border-t border-[var(--border)]' : ''}`}
+                className={`w-full min-h-[60px] px-4 py-2 flex items-center gap-4 text-left cursor-pointer transition-colors hover:bg-[var(--bg-muted)] ${idx > 0 ? 'border-t border-[var(--border)]' : ''}`}
               >
-                <span className="oda-icon-chip w-9 h-9 shrink-0"><row.icon className="w-[18px] h-[18px]" strokeWidth={1.8} /></span>
+                <row.icon className="w-5 h-5 shrink-0 text-[var(--fg-muted)]" strokeWidth={1.6} aria-hidden="true" />
                 <span className="flex-1 min-w-0">
                   <span className="block text-[15px] font-medium text-[var(--fg)] truncate">{row.label}</span>
                   {row.hint && <span className="block text-[12.5px] text-[var(--fg-muted)] truncate">{row.hint}</span>}
                 </span>
-                <ChevronRight className="w-5 h-5 text-[var(--fg-subtle)] shrink-0" strokeWidth={1.8} />
+                <ChevronRight className="w-[18px] h-[18px] text-[var(--fg-subtle)] shrink-0" strokeWidth={1.6} />
               </button>
             ))}
           </div>

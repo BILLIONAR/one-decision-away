@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckCircle2, CloudUpload, LockKeyhole, LogOut, Mail, RefreshCw, Smartphone } from 'lucide-react';
+import { CheckCircle2, LogOut, Mail, RefreshCw } from 'lucide-react';
 import { useApp } from '../store/useApp';
 import { useT, formatDate } from '../i18n';
 import { cloudSync } from '../services/cloudSync';
@@ -123,16 +123,15 @@ export const Account: React.FC = () => {
         )}
       </section>
 
-      <section className="grid gap-3 sm:grid-cols-3" aria-label={t('Why sign in')}>
+      <section className="space-y-4" aria-label={t('Why sign in')}>
         {[
-          { icon: CloudUpload, title: t('Backed up'), body: t('A lost or reset phone no longer means lost progress.') },
-          { icon: Smartphone, title: t('On every device'), body: t('The same decisions and notes on your phone and laptop.') },
-          { icon: LockKeyhole, title: t('Only yours'), body: t('Your data can be read only with your account.') },
-        ].map(item => (
-          <div key={item.title} className="oda-surface p-5 space-y-2">
-            <span className="oda-icon-chip w-9 h-9"><item.icon size={17} /></span>
-            <p className="text-[15px] font-semibold">{item.title}</p>
-            <p className="text-[13px] leading-relaxed text-[var(--fg-muted)]">{item.body}</p>
+          { title: t('Backed up'), body: t('A lost or reset phone no longer means lost progress.') },
+          { title: t('On every device'), body: t('The same decisions and notes on your phone and laptop.') },
+          { title: t('Only yours'), body: t('Your data can be read only with your account.') },
+        ].map((item, i) => (
+          <div key={item.title} className={`flex gap-4 px-1 ${i ? 'pt-4 border-t border-[var(--border)]' : ''}`}>
+            <span className="oda-numeral text-[20px] leading-6 text-[var(--fg-subtle)] w-5 shrink-0">{i + 1}</span>
+            <p className="text-[14.5px] leading-relaxed text-[var(--fg-muted)]"><span className="font-semibold text-[var(--fg)]">{item.title}.</span> {item.body}</p>
           </div>
         ))}
       </section>

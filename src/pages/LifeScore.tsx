@@ -60,7 +60,7 @@ export const LifeScore: React.FC = () => {
     <div className="space-y-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-[var(--fg)]">{t('Life score')}</h1>
+          <h1 className="oda-display text-[32px] leading-tight text-[var(--fg)]">{t('Life score')}</h1>
           <p className="text-sm text-[var(--fg-muted)] mt-1">{t('Eight areas, rated by you.')}</p>
         </div>
         {!isAssessing ? (
@@ -77,7 +77,7 @@ export const LifeScore: React.FC = () => {
       </div>
 
       {latestScore && !isAssessing ? (
-        <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-5">
+        <div className="oda-card rounded-[var(--radius-lg)] p-5 space-y-5">
           <div className="flex items-center gap-5">
             <div className="relative w-28 h-28 shrink-0 flex items-center justify-center">
               <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">

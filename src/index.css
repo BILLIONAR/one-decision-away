@@ -1,8 +1,14 @@
-@import "@fontsource-variable/fraunces/opsz.css";
-@import "@fontsource-variable/geist";
-@import "@fontsource-variable/geist-mono";
+@import "@fontsource-variable/newsreader/opsz.css";
+@import "@fontsource-variable/newsreader/opsz-italic.css";
+@import "@fontsource-variable/hanken-grotesk";
 @import "tailwindcss";
 @import "./styles/tokens.css";
+
+/* Newsreader and SF are already spaced for display; keep tracking gentle. */
+@theme {
+  --tracking-tighter: -0.015em;
+  --tracking-tight: -0.01em;
+}
 
 @layer base {
   * {
@@ -12,23 +18,28 @@
     background-color: var(--bg);
     color: var(--fg);
     font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-kerning: normal;
   }
+  /* Sans headings stay quiet: weight does the work, not tight tracking. */
   h1, h2, h3, .font-display {
     font-family: var(--font-display);
     font-weight: 600;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.008em;
     font-style: normal;
   }
-  /* Page titles use the warm editorial serif (Fraunces, calm optical size). */
+  /* Page titles are set in Newsreader, a text face made for long reading. */
   h1 {
     font-family: var(--font-editorial);
-    font-weight: 500;
-    letter-spacing: -0.015em;
-    font-variation-settings: 'opsz' 36;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    font-optical-sizing: auto;
   }
-  /* Paper system: no italic display type, no letter-spaced micro labels */
-  .font-display.italic, h1.italic, h2.italic, h3.italic { font-style: normal; }
+  p { text-wrap: pretty; }
   button, input, select, textarea { font-family: inherit; }
   code, kbd, samp, pre, .font-mono {
     font-family: var(--font-mono);
@@ -192,16 +203,20 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 /* Editorial type is reserved for key titles and reflective passages. */
 .oda-display {
   font-family: var(--font-editorial);
-  font-weight: 430;
-  letter-spacing: -0.015em;
-  font-variation-settings: 'opsz' 36;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  font-optical-sizing: auto;
   text-wrap: balance;
 }
+/* Small labels read like a line in a book, not a shouted tag. */
 .oda-kicker {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
+  font-family: var(--font-editorial);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.35;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
 }
 .oda-nav-active { position: relative; }
 .oda-nav-active::before {
@@ -213,22 +228,91 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   border-radius: 2px;
   background: var(--brand-burgundy);
 }
+/* Today's decision: a page from a good notebook. Paper, a folio line,
+   the decision set in a book face with a hanging quote, one clear action. */
 .oda-decision {
-  background: var(--forest);
-  color: var(--on-forest);
-  border-radius: 20px 20px 48px 20px;
+  position: relative;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 22px 22px 18px;
+  box-shadow: 0 1px 0 rgb(28 32 29 / 3%), 0 18px 40px -28px rgb(28 32 29 / 28%);
 }
-.oda-decision-door { color: var(--on-forest); opacity: 0.07; }
-.oda-decision > :not(.oda-decision-door) { position: relative; }
-.oda-decision input { color: var(--on-forest); border-color: #708E7B; }
-.oda-decision input::placeholder { color: #C2CDBF; opacity: 1; }
-.oda-decision input:focus { border-color: var(--on-forest); }
-.oda-decision .oda-decision-action { background: #F7F4EC; color: #173E35; }
-.oda-decision .oda-decision-secondary { background: transparent; color: var(--on-forest); border: 1px solid #708E7B; }
-.oda-decision .oda-decision-secondary:hover { border-color: var(--on-forest); }
-.oda-decision .oda-decision-link { min-height: 44px; font-size: 14px; font-weight: 600; color: #C2CDBF; }
-.oda-decision .oda-decision-link:hover { color: var(--on-forest); }
-.oda-decision .oda-decision-plan { background: rgba(247, 244, 236, 0.08); border-left: 2px solid #C2CDBF; border-radius: 4px 12px 12px 4px; color: var(--on-forest); }
+@media (min-width: 640px) { .oda-decision { padding: 30px 32px 22px; } }
+.oda-decision-folio {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  padding-bottom: 12px; border-bottom: 1px solid var(--border);
+  color: var(--fg-muted);
+}
+.oda-decision-chain { font-size: 13px; font-feature-settings: 'tnum' 1; color: var(--fg-muted); }
+.oda-decision-text {
+  position: relative;
+  margin: 22px 0 24px;
+  padding-left: 0.5em;
+  font-family: var(--font-editorial);
+  font-optical-sizing: auto;
+  font-size: clamp(28px, 7.4vw, 36px);
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+.oda-decision-quote {
+  position: absolute; left: -0.08em; top: -0.02em;
+  color: var(--brand-burgundy);
+}
+.oda-decision-text.is-kept { color: var(--fg-muted); }
+.oda-decision-plan {
+  display: block; width: 100%; text-align: left;
+  margin: -6px 0 22px; padding: 2px 0 2px 14px;
+  border-left: 2px solid var(--brand-burgundy);
+}
+.oda-decision-actions { display: grid; gap: 4px; }
+.oda-decision-action {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 50px; border-radius: 12px;
+  background: var(--forest); color: var(--on-forest);
+  font-size: 15.5px; font-weight: 600;
+}
+.oda-decision-action:hover { background: color-mix(in srgb, var(--forest) 88%, black); }
+:root[data-theme="dark"] .oda-decision-action, html.dark .oda-decision-action { background: var(--accent); color: var(--on-accent); }
+.oda-decision-done {
+  display: flex; align-items: center; gap: 12px;
+  min-height: 50px; padding: 0 4px;
+  font-size: 15.5px; font-weight: 500; color: var(--fg);
+}
+.oda-decision-box {
+  width: 22px; height: 22px; border-radius: 999px; flex-shrink: 0;
+  border: 1.5px solid var(--border-strong);
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+.oda-decision-done:hover .oda-decision-box { border-color: var(--accent); background: var(--accent-soft); }
+.oda-decision-reward { margin-left: auto; font-size: 13px; color: var(--fg-muted); font-feature-settings: 'tnum' 1; }
+.oda-decision-foot {
+  display: flex; flex-wrap: wrap; gap: 4px 20px;
+  margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border);
+}
+.oda-decision-link {
+  min-height: 44px; font-size: 14px; color: var(--fg-muted);
+  text-decoration: underline; text-decoration-color: var(--border-strong);
+  text-underline-offset: 4px; text-decoration-thickness: 1px;
+}
+.oda-decision-link:hover { color: var(--fg); text-decoration-color: currentColor; }
+.oda-decision-kept { display: flex; gap: 12px; align-items: flex-start; padding-top: 14px; border-top: 1px solid var(--border); }
+.oda-decision-seal {
+  width: 26px; height: 26px; border-radius: 999px; flex-shrink: 0; margin-top: 1px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--forest); color: var(--on-forest);
+}
+.oda-decision-input {
+  width: 100%; height: 56px; margin-top: 10px;
+  background: transparent; border: 0; border-bottom: 1px solid var(--border-strong);
+  font-family: var(--font-editorial); font-size: 24px; color: var(--fg);
+  outline: none; border-radius: 0;
+}
+.oda-decision-input::placeholder { color: var(--fg-subtle); opacity: 1; }
+.oda-decision-input:focus { border-bottom-color: var(--accent); }
 .oda-quote { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 .oda-quote-mark { font-family: var(--font-editorial); color: var(--brand-burgundy); line-height: 1; }
 .oda-discovery-link { transition: background-color 160ms ease; }
@@ -251,15 +335,17 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   box-shadow: var(--shadow-md);
 }
 button.oda-surface, a.oda-surface { transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out), border-color 200ms ease; }
-button.oda-surface:hover, a.oda-surface:hover { border-color: var(--border-strong); box-shadow: var(--shadow-lg); transform: translateY(-1px); }
+button.oda-surface:hover, a.oda-surface:hover { border-color: var(--border-strong); }
+/* Icons sit in the text colour, without a coloured disc behind them. */
 .oda-icon-chip {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 40px; height: 40px; border-radius: 999px;
-  background: var(--accent-soft); color: var(--accent);
+  width: 24px; height: 24px; background: none; color: var(--fg-muted);
 }
-.oda-rule { height: 1px; background: linear-gradient(90deg, var(--gold), transparent); opacity: .55; }
-.oda-numeral { font-family: var(--font-editorial); font-variation-settings: 'opsz' 48; font-weight: 420; letter-spacing: -0.02em; font-feature-settings: 'lnum' 1, 'tnum' 1; }
+.oda-rule { height: 1px; background: var(--border); }
+.oda-numeral { font-family: var(--font-editorial); font-optical-sizing: auto; font-weight: 400; letter-spacing: -0.01em; font-feature-settings: 'lnum' 1, 'tnum' 1; }
 @media (prefers-reduced-motion: no-preference) {
   .oda-page-enter { animation: oda-page-in 360ms var(--ease-out) both; }
 }
 @keyframes oda-page-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.oda-card { background: var(--bg-elevated); border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+.oda-card .oda-card { box-shadow: none; }

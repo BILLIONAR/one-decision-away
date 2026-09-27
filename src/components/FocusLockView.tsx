@@ -255,7 +255,7 @@ export const FocusLockView: React.FC = () => {
               <p className={`text-sm ${INK_MUTED}`}>
                 {isGuided ? t(INTENT_LABELS[guidedMeditation!.intent]) : linkedMission?.isOneDecision ? t("Today's one decision") : t('Deep work')}
               </p>
-              <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight leading-tight">{missionTitle}</h1>
+              <h1 className="text-2xl sm:text-3xl oda-display leading-tight">{missionTitle}</h1>
             </div>
 
             <div className="relative w-64 h-64 sm:w-72 sm:h-72 mx-auto flex items-center justify-center">

@@ -128,17 +128,17 @@ export const ArchivedMarketHistory: React.FC<ArchivedMarketHistoryProps> = ({ on
     <div className="space-y-6">
       {/* Overview */}
       <div className="grid grid-cols-3 gap-3">
-        <div className="p-4 rounded-[var(--radius-md)] bg-[var(--bg-muted)]">
+        <div className="p-4 rounded-[var(--radius-lg)] oda-card">
           <div className="text-[13px] text-[var(--fg-muted)]">{t('Archived')}</div>
           <div className="text-[22px] font-semibold tracking-tight text-[var(--fg)] mt-1">{totalArchivedCount}</div>
         </div>
-        <div className="p-4 rounded-[var(--radius-md)] bg-[var(--bg-muted)]">
+        <div className="p-4 rounded-[var(--radius-lg)] oda-card">
           <div className="text-[13px] text-[var(--fg-muted)]">{t('Value')}</div>
           <div className="text-[22px] font-semibold tracking-tight text-[var(--fg)] mt-1 truncate">
             ${totalArchivedUsd.toLocaleString()}
           </div>
         </div>
-        <div className="p-4 rounded-[var(--radius-md)] bg-[var(--bg-muted)]">
+        <div className="p-4 rounded-[var(--radius-lg)] oda-card">
           <div className="text-[13px] text-[var(--fg-muted)]">{t('Done')}</div>
           <div className="text-[22px] font-semibold tracking-tight text-[var(--accent)] mt-1">
             {completedCount}
@@ -196,7 +196,7 @@ export const ArchivedMarketHistory: React.FC<ArchivedMarketHistoryProps> = ({ on
           onAction={archivedEntries.length === 0 && onExploreMore ? onExploreMore : undefined}
         />
       ) : (
-        <div className="rounded-[var(--radius-md)] bg-[var(--bg-muted)] overflow-hidden">
+        <div className="rounded-[var(--radius-lg)] oda-card overflow-hidden">
           {filteredEntries.map((entry, idx) => {
             const { item, reason, note, archivedAt, wasOwned, recordId } = entry;
             const dateStr = new Date(archivedAt).toLocaleDateString(undefined, {

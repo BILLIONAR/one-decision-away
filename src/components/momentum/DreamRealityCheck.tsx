@@ -45,7 +45,7 @@ export const DreamRealityCheck: React.FC<{ item: MarketItem; onDecisionSet?: () 
   };
 
   return (
-    <section aria-labelledby={`reality-${item.id}`} className="rounded-[var(--radius-md)] bg-[var(--bg-muted)] p-4 space-y-3">
+    <section aria-labelledby={`reality-${item.id}`} className="rounded-[var(--radius-lg)] oda-card p-4 space-y-3">
       <div>
         <h3 id={`reality-${item.id}`} className="text-[15px] font-semibold text-[var(--fg)]">{t('Make it real')}</h3>
         <p className="text-[13px] leading-relaxed text-[var(--fg-muted)]">{t('Picturing a dream feels good, but on its own it can drain the energy to act. Name what’s in the way, then take one small step.')}</p>

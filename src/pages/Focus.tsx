@@ -8,7 +8,7 @@ export const Focus: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-[28px] font-semibold tracking-tight text-[var(--fg)]">{t('Focus')}</h1>
+        <h1 className="oda-display text-[32px] leading-tight text-[var(--fg)]">{t('Focus')}</h1>
         <p className="text-[15px] text-[var(--fg-muted)] mt-1">
           {t('Guided meditations, sound waves and a focus timer.')}
         </p>

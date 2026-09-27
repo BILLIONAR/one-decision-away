@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  ArrowUpRight, CalendarRange, Gauge, Landmark, PieChart, Target, TrendingUp, UserRound, Wallet, SunMoon, type LucideIcon,
+  ChevronRight, CalendarRange, Gauge, Landmark, PieChart, Target, TrendingUp, UserRound, Wallet, SunMoon, type LucideIcon,
 } from 'lucide-react';
 import { useApp } from '../store/useApp';
 import { useT, N_ } from '../i18n';
@@ -53,22 +53,19 @@ export const Tools: React.FC = () => {
       </header>
       {GROUPS.map(group => (
         <section key={group.title} className="space-y-4" aria-labelledby={`tools-${group.title}`}>
-          <div className="space-y-1">
+          <div className="space-y-1 px-1">
             <h2 id={`tools-${group.title}`} className="oda-display text-[22px] leading-snug">{t(group.title)}</h2>
             <p className="text-[14px] text-[var(--fg-muted)]">{t(group.intro)}</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {group.tools.map(tool => (
-              <button key={tool.route} type="button" onClick={() => setActiveRoute(tool.route)} className="oda-surface group text-left p-4 sm:p-5 flex sm:flex-col items-center sm:items-stretch gap-3.5 sm:gap-3 sm:min-h-[148px]">
-                <span className="flex items-center justify-between shrink-0">
-                  <span className="oda-icon-chip"><tool.icon size={19} strokeWidth={1.8} /></span>
-                  <ArrowUpRight size={17} className="hidden sm:block text-[var(--fg-subtle)] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
+          <div className="oda-surface overflow-hidden">
+            {group.tools.map((tool, idx) => (
+              <button key={tool.route} type="button" onClick={() => setActiveRoute(tool.route)} className={`w-full min-h-[68px] px-4 sm:px-5 py-3 flex items-center gap-4 text-left transition-colors hover:bg-[var(--bg-muted)] ${idx > 0 ? 'border-t border-[var(--border)]' : ''}`}>
+                <tool.icon size={20} strokeWidth={1.6} className="shrink-0 text-[var(--fg-muted)]" aria-hidden="true" />
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[16px] font-medium text-[var(--fg)]">{t(tool.label)}</span>
+                  <span className="block text-[13.5px] leading-snug text-[var(--fg-muted)] mt-0.5">{t(tool.hint)}</span>
                 </span>
-                <span className="min-w-0 flex-1 space-y-1">
-                  <span className="block text-[16px] font-semibold text-[var(--fg)]">{t(tool.label)}</span>
-                  <span className="block text-[13px] leading-relaxed text-[var(--fg-muted)]">{t(tool.hint)}</span>
-                </span>
-                <ArrowUpRight size={17} className="sm:hidden shrink-0 text-[var(--fg-subtle)]" aria-hidden="true" />
+                <ChevronRight size={18} strokeWidth={1.6} className="shrink-0 text-[var(--fg-subtle)]" aria-hidden="true" />
               </button>
             ))}
           </div>

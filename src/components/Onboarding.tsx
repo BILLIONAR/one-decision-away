@@ -124,7 +124,7 @@ export const Onboarding: React.FC = () => {
         {step === 1 && (
           <section key="step-1" className="space-y-6 onboarding-step">
             <div className="space-y-2">
-              <h1 className="text-[32px] sm:text-[36px] font-semibold tracking-tight leading-tight">
+              <h1 className="text-[32px] sm:text-[36px] oda-display leading-tight">
                 {t('What should we call you?')}
               </h1>
               <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed">
@@ -195,10 +195,10 @@ export const Onboarding: React.FC = () => {
             </div>
             <div className="space-y-2">
               <p className="text-[13px] font-semibold text-[var(--accent)]">{t('Try it in 20 seconds')}</p>
-              <h1 className="text-[32px] sm:text-[36px] font-semibold tracking-tight leading-tight">{t('One decision. A small start. Proof.')}</h1>
+              <h1 className="text-[32px] sm:text-[36px] oda-display leading-tight">{t('One decision. A small start. Proof.')}</h1>
               <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed">{t('This is how every day in ODA works. Try one round before we set anything up.')}</p>
             </div>
-            <div className="rounded-[var(--radius-md)] bg-[var(--bg-muted)] p-5 space-y-4" aria-live="polite">
+            <div className="rounded-[var(--radius-lg)] oda-card p-5 space-y-4" aria-live="polite">
               {demo === 'pick' && (
                 <EasyDecisionChips options={easyDecisions(null)} onPick={(title) => { setDemoChoice(title); setDemo('start'); }} label={t('1. Pick a decision for today:')} />
               )}
@@ -236,7 +236,7 @@ export const Onboarding: React.FC = () => {
         {step === 2 && (
           <section key="step-2" className="space-y-6 onboarding-step">
             <div className="space-y-2">
-              <h1 className="text-[32px] sm:text-[36px] font-semibold tracking-tight leading-tight">{t('Who do you want to become?')}</h1>
+              <h1 className="text-[32px] sm:text-[36px] oda-display leading-tight">{t('Who do you want to become?')}</h1>
               <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed">{t('Pick the one that feels closest. We’ll suggest where to start.')}</p>
             </div>
             <div className="grid gap-2" role="radiogroup" aria-label={t('Who do you want to become?')}>
@@ -261,7 +261,7 @@ export const Onboarding: React.FC = () => {
         {step === 3 && (
           <section key="step-3" className="space-y-6 onboarding-step">
             <div className="space-y-2">
-              <h1 className="text-[32px] sm:text-[36px] font-semibold tracking-tight leading-tight">
+              <h1 className="text-[32px] sm:text-[36px] oda-display leading-tight">
                 {t('Pick one dream to start with.')}
               </h1>
               <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed">
@@ -331,7 +331,7 @@ export const Onboarding: React.FC = () => {
         {step === 4 && (
           <section key="step-4" className="space-y-6 onboarding-step">
             <div className="space-y-2">
-              <h1 className="text-[32px] sm:text-[36px] font-semibold tracking-tight leading-tight">
+              <h1 className="text-[32px] sm:text-[36px] oda-display leading-tight">
                 {t('What is your one decision for today?')}
               </h1>
               <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed">
@@ -359,7 +359,7 @@ export const Onboarding: React.FC = () => {
               )}
             </div>
 
-            <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 text-[14px] text-[var(--fg-muted)] leading-relaxed">
+            <div className="oda-card rounded-[var(--radius-lg)] p-5 text-[14px] text-[var(--fg-muted)] leading-relaxed">
               {t('Welcome gift: D$ {amount} lands in your wallet when you finish.', {
                 amount: ECONOMY_CONSTANTS.WELCOME_GRANT.toLocaleString(),
               })}

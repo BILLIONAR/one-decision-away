@@ -78,7 +78,7 @@ export const MorningVision: React.FC = () => {
       </button>
       <div className="absolute inset-x-0 bottom-0 p-6 sm:p-14 max-w-3xl">
         <div className="text-[15px] text-white/70">{name ? t('Good morning, {name}', { name }) : t('Good morning')}</div>
-        <h1 className="text-[32px] sm:text-5xl font-semibold tracking-tight leading-tight mt-1">{t(pick.name)}</h1>
+        <h1 className="text-[32px] sm:text-5xl oda-display leading-tight mt-1">{t(pick.name)}</h1>
         {pick.why && <p className="text-[16px] sm:text-xl text-white/80 mt-2">{t(pick.why)}</p>}
         <p className="text-[15px] text-white/70 mt-4">
           {days === 0

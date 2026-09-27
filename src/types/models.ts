@@ -13,7 +13,7 @@ export interface Profile {
   isPro?: boolean;
   onboardingStep: OnboardingStep;
   locale: Locale;
-  theme: 'light' | 'dark';
+  theme: 'light' | 'dark' | 'system';
   soundMuted?: boolean;
   focusTabBlinkEnabled?: boolean;
   focusScreenPulseEnabled?: boolean;

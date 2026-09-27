@@ -40,7 +40,7 @@ export const BackupReminder: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-5 bg-[var(--bg-muted)] rounded-[var(--radius-md)]">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-5 oda-card rounded-[var(--radius-lg)]">
       <p className="text-[14px] text-[var(--fg-muted)] leading-relaxed">
         <span className="text-[var(--fg)] font-medium">{t('Your data lives only in this browser.')}</span>{' '}
         {last ? t('Last backup was {n} days ago.', { n: daysSince }) : t('You have never made a backup.')}{' '}

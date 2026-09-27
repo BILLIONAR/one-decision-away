@@ -1,9 +1,9 @@
 .oda-courses { --course-gap: 2rem; color: var(--fg); }
 .oda-courses button, .oda-courses summary, .oda-courses a { -webkit-tap-highlight-color: transparent; }
 .oda-courses button:focus-visible, .oda-courses summary:focus-visible, .oda-courses a:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
-.oda-course-eyebrow { font-size: .7rem; line-height: 1.5; font-weight: 650; letter-spacing: .11em; text-transform: uppercase; color: var(--accent); }
+.oda-course-eyebrow { font-family: var(--font-editorial); font-style: italic; font-size: .95rem; line-height: 1.4; font-weight: 400; color: var(--accent); }
 .oda-course-intro { display: grid; gap: 1.75rem; padding-block: .5rem 2rem; border-bottom: 1px solid var(--border); }
-.oda-course-title { font-size: clamp(2.5rem, 6vw, 4.25rem); line-height: 1.04; letter-spacing: -.045em; margin-block: .85rem 1rem; max-width: 12ch; }
+.oda-course-title { font-size: clamp(2.5rem, 6vw, 4.25rem); line-height: 1.04; letter-spacing: -0.012em; margin-block: .85rem 1rem; max-width: 12ch; }
 .oda-course-intro-copy { max-width: 43ch; font-size: .94rem; line-height: 1.75; color: var(--fg-muted); }
 .oda-course-method { align-self: end; padding: 1.25rem; border-left: 2px solid var(--brand-burgundy); background: var(--bg-muted); }
 .oda-course-method .oda-course-method-path { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; margin-top: 0; font-size: .9rem; font-weight: 650; color: var(--accent); }
@@ -23,7 +23,7 @@
 .oda-course-art { display: block; width: 100%; height: auto; overflow: visible; }
 .oda-course-row-number { position: absolute; top: .45rem; left: .5rem; padding: .1rem .35rem; border-radius: 999px; font-size: .6rem; font-weight: 650; color: #fff; background: rgb(20 20 20 / .45); backdrop-filter: blur(4px); }
 .oda-course-row-content { display: block; min-width: 0; }
-.oda-course-row-title { display: block; font-size: 1.4rem; line-height: 1.25; letter-spacing: -.02em; font-weight: 600; }
+.oda-course-row-title { display: block; font-size: 1.4rem; line-height: 1.25; letter-spacing: -0.012em; font-weight: 600; }
 .oda-course-row-subtitle { display: block; margin-top: .35rem; font-size: .86rem; color: var(--accent); font-weight: 550; }
 .oda-course-row-description { display: block; max-width: 61ch; margin-top: .5rem; font-size: .84rem; line-height: 1.65; color: var(--fg-muted); }
 .oda-course-row-meta { display: flex; align-items: center; flex-wrap: wrap; gap: .4rem 1rem; margin-top: .75rem; font-size: .7rem; color: var(--fg-muted); }
@@ -42,7 +42,7 @@
 .oda-course-lesson-header { display: flex; gap: 1.25rem; align-items: center; }
 .oda-course-lesson-header-copy { flex: 1; min-width: 0; }
 .oda-course-lesson-header .oda-course-art { width: 124px; flex: none; }
-.oda-course-lesson-title { margin-block: .6rem .8rem; font-size: clamp(2rem, 4.5vw, 3rem); line-height: 1.12; letter-spacing: -.035em; }
+.oda-course-lesson-title { margin-block: .6rem .8rem; font-size: clamp(2rem, 4.5vw, 3rem); line-height: 1.12; letter-spacing: -0.012em; }
 .oda-course-steps { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: .5rem; }
 .oda-course-step { display: flex; justify-content: center; align-items: center; gap: .4rem; min-height: 44px; border: 1px solid var(--border); border-radius: 9px; font-size: .82rem; background: var(--bg-elevated); color: var(--fg-muted); cursor: pointer; }
 .oda-course-step[data-completed="true"] { background: var(--accent-soft); color: var(--accent); }
@@ -112,7 +112,7 @@
 .oda-course-compare { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
 .oda-course-compare-col { padding: .8rem; border-radius: 12px; background: var(--bg-muted); }
 .oda-course-compare-col[data-tone="accent"] { background: var(--accent-soft); }
-.oda-course-compare-label { font-size: .72rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: .45rem; }
+.oda-course-compare-label { font-size: .8rem; font-weight: 600; color: var(--fg-muted); margin-bottom: .45rem; }
 .oda-course-compare-col[data-tone="accent"] .oda-course-compare-label { color: var(--accent); }
 .oda-course-compare ul { display: grid; gap: .45rem; font-size: .8rem; line-height: 1.45; }
 .oda-course-compare li { padding-left: .8rem; position: relative; }
@@ -149,8 +149,8 @@
 
 /* Technique card: a named method, step by step, with an honest evidence note. */
 .oda-course-technique { margin-top: 1.25rem; padding: 1.2rem 1.2rem 1.1rem; border-radius: 16px; background: var(--accent-soft); border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent); }
-.oda-course-technique-kicker { font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
-.oda-course-technique-name { margin-top: .35rem; font-size: 1.3rem; line-height: 1.25; letter-spacing: -.02em; }
+.oda-course-technique-kicker { font-family: var(--font-editorial); font-style: italic; font-size: .95rem; font-weight: 400; color: var(--accent); }
+.oda-course-technique-name { margin-top: .35rem; font-size: 1.3rem; line-height: 1.25; letter-spacing: -0.012em; }
 .oda-course-technique-origin { margin-top: .3rem; font-size: .76rem; color: var(--fg-muted); font-style: italic; }
 .oda-course-technique-steps { margin-top: .9rem; display: grid; gap: .55rem; list-style: none; padding: 0; }
 .oda-course-technique-steps li { display: grid; grid-template-columns: 1.6rem minmax(0, 1fr); gap: .6rem; align-items: start; }

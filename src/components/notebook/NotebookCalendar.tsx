@@ -17,7 +17,7 @@ export const NotebookCalendar: React.FC<{
   const keyFor = (day: number) => `${month.getFullYear()}-${String(month.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
   const monthLabel = new Intl.DateTimeFormat(getSpeechLang(), { month: 'long', year: 'numeric' }).format(month);
   const navBtn = 'w-11 h-11 rounded-[var(--radius-sm)] flex items-center justify-center text-[var(--fg-muted)] hover:text-[var(--fg)] cursor-pointer';
-  return <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-3 space-y-2">
+  return <div className="oda-card rounded-[var(--radius-lg)] p-3 space-y-2">
     <div className="flex items-center justify-between gap-2">
       <button type="button" className={navBtn} aria-label={t('Previous month')} onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1, 12))}><ChevronLeft className="w-5 h-5" strokeWidth={1.8} /></button>
       <span className="text-sm font-semibold capitalize" aria-live="polite">{monthLabel}</span>

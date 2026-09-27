@@ -53,11 +53,11 @@ export const Bank: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight text-[var(--fg)]">{t('Bank')}</h1>
+        <h1 className="oda-display text-[32px] leading-tight text-[var(--fg)]">{t('Bank')}</h1>
         <p className="text-sm text-[var(--fg-muted)] mt-1">{t('What you have earned and spent.')}</p>
       </div>
 
-      <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5">
+      <div className="oda-card rounded-[var(--radius-lg)] p-5">
         <div className="text-xs text-[var(--fg-muted)]">{t('Balance')}</div>
         <div className="text-3xl font-semibold tracking-tight text-[var(--accent)] mt-1">
           D$ {balance.toLocaleString()}
@@ -133,7 +133,7 @@ export const Bank: React.FC = () => {
             })}
           </div>
         ) : (
-          <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5">
+          <div className="oda-card rounded-[var(--radius-lg)] p-5">
             <p className="text-sm text-[var(--fg-muted)]">{t('Nothing here yet.')}</p>
           </div>
         )}

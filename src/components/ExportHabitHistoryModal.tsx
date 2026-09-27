@@ -120,7 +120,7 @@ export const ExportHabitHistoryModal: React.FC<ExportHabitHistoryModalProps> = (
         {/* Format */}
         <div className="space-y-2">
           <span className="block text-[13px] font-medium text-[var(--fg-muted)]">{t('Format')}</span>
-          <div className="rounded-[var(--radius-md)] bg-[var(--bg-muted)] overflow-hidden">
+          <div className="rounded-[var(--radius-lg)] oda-card overflow-hidden">
             {formatOptions.map((opt, idx) => {
               const selected = exportType === opt.id;
               return (

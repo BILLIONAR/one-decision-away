@@ -316,7 +316,7 @@ export const QuickDreamJournalModal: React.FC<QuickDreamJournalModalProps> = ({
                 </div>
               </div>
             ) : photoDataUrl ? (
-              <div className="relative w-full h-44 rounded-[var(--radius-md)] overflow-hidden bg-[var(--bg-muted)]">
+              <div className="relative w-full h-44 rounded-[var(--radius-lg)] overflow-hidden oda-card">
                 <img
                   src={photoDataUrl}
                   alt={t('Attached photo')}

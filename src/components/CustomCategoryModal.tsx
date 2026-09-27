@@ -250,7 +250,7 @@ export const CustomCategoryModal: React.FC<CustomCategoryModalProps> = ({
               {t('Play sound')}
             </button>
           </div>
-          <div className="min-h-[56px] px-4 py-3 rounded-[var(--radius-md)] bg-[var(--bg-muted)] flex items-center gap-3">
+          <div className="min-h-[56px] px-4 py-3 rounded-[var(--radius-lg)] oda-card flex items-center gap-3">
             <MicroHabitCheckbox
               checked={previewChecked}
               onToggle={() => {

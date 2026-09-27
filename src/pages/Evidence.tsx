@@ -37,7 +37,7 @@ export const Evidence: React.FC = () => {
         </p>
       </header>
 
-      <figure className="rounded-[var(--radius-md)] bg-[var(--bg-muted)] px-4 pt-4 pb-3 flex flex-col items-center">
+      <figure className="rounded-[var(--radius-lg)] oda-card px-4 pt-4 pb-3 flex flex-col items-center">
         <EvidenceTree count={kept.length} className="w-full max-w-[320px] h-auto" label={t('Your evidence tree: {n} leaves', { n: kept.length })} />
         <figcaption className="text-[13px] text-center leading-relaxed text-[var(--fg-muted)] max-w-[40ch]">
           {kept.length === 0 ? t('Your tree grows one leaf for every decision you keep.')
@@ -53,7 +53,7 @@ export const Evidence: React.FC = () => {
           { value: s.days, label: t('Days with a kept decision') },
           { value: `${s.last7}/7`, label: t('This week') },
         ].map(item => (
-          <div key={item.label} className="rounded-[var(--radius-md)] bg-[var(--bg-muted)] p-4">
+          <div key={item.label} className="rounded-[var(--radius-lg)] oda-card p-4">
             <p className="text-[24px] font-semibold text-[var(--accent)] tabular-nums">{item.value}</p>
             <p className="text-[12px] leading-snug text-[var(--fg-muted)]">{item.label}</p>
           </div>
@@ -76,7 +76,7 @@ export const Evidence: React.FC = () => {
           <h2 id="reviews-title" className="text-[16px] font-semibold text-[var(--fg)]">{t('Weekly look-backs')}</h2>
           <ul className="space-y-3">
             {[...(data.weeklyReviews ?? [])].sort((a, b) => b.weekKey.localeCompare(a.weekKey)).slice(0, 12).map(review => (
-              <li key={review.weekKey} className="rounded-[var(--radius-md)] bg-[var(--bg-muted)] p-4 space-y-1.5 text-[14px]">
+              <li key={review.weekKey} className="rounded-[var(--radius-lg)] oda-card p-4 space-y-1.5 text-[14px]">
                 <p className="text-[12px] font-semibold text-[var(--fg-muted)]">
                   {t('Week ending {date} · {n}/7 days', { date: formatDate(`${review.weekKey}T12:00:00`, { day: 'numeric', month: 'long' }), n: review.kept })}
                 </p>

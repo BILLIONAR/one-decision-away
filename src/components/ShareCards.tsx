@@ -26,7 +26,7 @@ const CARD = {
   accent: '#1F5F3F',
   line: '#C9C9C6',
   tile: '#F3F3F1',
-  font: "'Geist', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+  font: "'Hanken Grotesk Variable', -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', sans-serif",
 };
 
 function useShare(kind: Kind) {
@@ -70,7 +70,7 @@ function useShare(kind: Kind) {
 }
 
 const CardFrame: React.FC<{ innerRef: React.RefObject<HTMLDivElement | null>; children: React.ReactNode }> = ({ innerRef, children }) => (
-  <div className="overflow-auto max-h-[70vh] rounded-[var(--radius-md)] bg-[var(--bg-muted)] p-3">
+  <div className="overflow-auto max-h-[70vh] rounded-[var(--radius-lg)] oda-card p-3">
     <div className="mx-auto" style={{ width: 540 }}>
       <div
         ref={innerRef}

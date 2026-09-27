@@ -277,7 +277,7 @@ export const Last7DaysSummary: React.FC = () => {
     }`;
 
   return (
-    <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-6">
+    <div className="oda-card rounded-[var(--radius-lg)] p-5 space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
         <div>

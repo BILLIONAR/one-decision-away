@@ -56,7 +56,7 @@ const DreamCard: React.FC<DreamCardProps> = ({
 }) => {
   const [imgFailed, setImgFailed] = useState(false);
   return (
-    <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] overflow-hidden flex flex-col">
+    <div className="oda-card rounded-[var(--radius-lg)] overflow-hidden flex flex-col">
       <button type="button" onClick={onClick} className="text-left w-full cursor-pointer">
         <div className="aspect-[4/3] w-full overflow-hidden bg-[var(--bg-muted)]">
           {imageUrl && !imgFailed ? (
@@ -253,7 +253,7 @@ export const Dreams: React.FC = () => {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-[28px] font-semibold tracking-tight text-[var(--fg)]">{t('Dreams')}</h1>
+        <h1 className="oda-display text-[32px] leading-tight text-[var(--fg)]">{t('Dreams')}</h1>
         <button
           type="button"
           onClick={() => setActiveRoute('/app/bank')}
@@ -286,7 +286,7 @@ export const Dreams: React.FC = () => {
       {activeTab === 'mine' && (
         <div className="space-y-6">
           {mineItems.length === 0 ? (
-            <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-3">
+            <div className="oda-card rounded-[var(--radius-lg)] p-5 space-y-3">
               <p className="text-[15px] font-semibold text-[var(--fg)]">{t('No dreams yet')}</p>
               <p className="text-[14px] text-[var(--fg-muted)]">{t('Pick one from Explore or add your own.')}</p>
               <button type="button" className={secondaryBtn} onClick={() => setTab('explore')}>
@@ -417,7 +417,7 @@ export const Dreams: React.FC = () => {
           <section className="space-y-3">
             {showStartHere && <h2 className="text-[15px] font-semibold text-[var(--fg)]">{t('All dreams')}</h2>}
             {filteredExplore.length === 0 ? (
-              <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-3">
+              <div className="oda-card rounded-[var(--radius-lg)] p-5 space-y-3">
                 <p className="text-[14px] text-[var(--fg-muted)]">{t('Nothing matches. Try another filter.')}</p>
                 <button
                   type="button"
@@ -469,7 +469,7 @@ export const Dreams: React.FC = () => {
       {activeTab === 'owned' && (
         <div className="space-y-6">
           {purchases.length === 0 ? (
-            <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-3">
+            <div className="oda-card rounded-[var(--radius-lg)] p-5 space-y-3">
               <p className="text-[15px] font-semibold text-[var(--fg)]">{t('Nothing owned yet')}</p>
               <p className="text-[14px] text-[var(--fg-muted)]">{t('Earn Dream Dollars from decisions, then buy your first dream.')}</p>
               <button type="button" className={secondaryBtn} onClick={() => setTab('explore')}>
@@ -483,7 +483,7 @@ export const Dreams: React.FC = () => {
                 return (
                   <div
                     key={p.id}
-                    className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-3 flex items-center gap-3"
+                    className="oda-card rounded-[var(--radius-lg)] p-3 flex items-center gap-3"
                   >
                     <div className="w-16 h-12 rounded-[8px] overflow-hidden shrink-0">
                       <DreamArt type={item.illustrationKey} imageUrl={item.customImageUrl} alt={t(item.name)} className="w-full h-full" />

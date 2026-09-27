@@ -59,6 +59,7 @@ import { voiceGuide } from '../utils/voiceGuide';
 import { getGuidedMeditation } from '../data/guidedMeditations';
 import { t, getLocale, setLocale, isLocale, hasStoredLocale, ensureLocaleLoaded, type Locale } from '../i18n';
 import { usualReminderTime } from '../services/momentum';
+import { applyTheme, resolveTheme, watchSystemTheme, type ThemePref } from '../utils/theme';
 
 export interface AppContextType {
   data: UserData | null;
@@ -201,7 +202,7 @@ export interface AppContextType {
   joinSeason: (season: Season) => Promise<void>;
   updateProfile: (profile: Partial<Profile>) => Promise<void>;
   toggleTheme: () => Promise<void>;
-  setTheme: (theme: 'light' | 'dark') => Promise<void>;
+  setTheme: (theme: ThemePref) => Promise<void>;
   toggleSoundMute: () => Promise<void>;
   setSoundMuted: (muted: boolean) => Promise<void>;
   toggleFocusTabBlink: () => Promise<void>;
@@ -2095,15 +2096,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     [data, showToast]
   );
 
-  // Synchronize document theme attribute and classes with current profile theme
+  // Apply the theme preference (light, dark or follow the phone) and keep the status bar in step.
   useEffect(() => {
-    const theme = data?.profile?.theme || 'light';
-    document.documentElement.setAttribute('data-theme', theme);
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    const pref = data?.profile?.theme || 'light';
+    applyTheme(pref);
+    return watchSystemTheme(pref);
   }, [data?.profile?.theme]);
 
   // Synchronize soundSynthesizer mute state with current profile preference
@@ -2115,14 +2112,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const updateProfile = useCallback(
     async (profileData: Partial<Profile>) => {
       if (!data) return;
-      if (profileData.theme) {
-        document.documentElement.setAttribute('data-theme', profileData.theme);
-        if (profileData.theme === 'dark') {
-          document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
-        }
-      }
+      if (profileData.theme) applyTheme(profileData.theme);
       if (profileData.soundMuted !== undefined) {
         soundSynthesizer.setMuted(profileData.soundMuted);
       }
@@ -2250,16 +2240,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const toggleTheme = useCallback(async () => {
     if (!data) return;
-    const currentTheme = data.profile.theme || 'light';
+    const currentTheme = resolveTheme(data.profile.theme || 'light');
     const newTheme: 'light' | 'dark' = currentTheme === 'dark' ? 'light' : 'dark';
     soundSynthesizer.playTapChime();
-
-    document.documentElement.setAttribute('data-theme', newTheme);
-    if (newTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    applyTheme(newTheme);
 
     const updated: UserData = {
       ...data,
@@ -2279,17 +2263,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [data, showToast]);
 
   const setTheme = useCallback(
-    async (newTheme: 'light' | 'dark') => {
+    async (newTheme: ThemePref) => {
       if (!data) return;
       if (data.profile.theme === newTheme) return;
       soundSynthesizer.playTapChime();
-
-      document.documentElement.setAttribute('data-theme', newTheme);
-      if (newTheme === 'dark') {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
+      applyTheme(newTheme);
 
       const updated: UserData = {
         ...data,
@@ -2300,14 +2278,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       };
       await repository.save(updated);
       setData(updated);
-      showToast(
-        newTheme === 'dark'
-          ? t('🌙 Switched to Midnight Dark theme')
-          : t('☀️ Switched to Editorial Light theme'),
-        'info'
-      );
     },
-    [data, showToast]
+    [data]
   );
 
   const upgradeToPro = useCallback(async () => {

@@ -82,7 +82,7 @@ export const PublicTwoFutures: React.FC = () => {
     const MUTED = '#6F6F6C';
     const ACCENT = '#1F5F3F';
     const LINE = '#C9C9C6';
-    const FONT = 'Geist, system-ui, sans-serif';
+    const FONT = "'Hanken Grotesk Variable', -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', sans-serif";
 
     ctx.fillStyle = '#FFFFFF';
     ctx.fillRect(0, 0, w, h);
@@ -233,7 +233,7 @@ export const PublicTwoFutures: React.FC = () => {
         {step === 0 && (
           <div className="space-y-6">
             <div className="space-y-2">
-              <h1 className="text-3xl font-semibold tracking-tight text-[var(--fg)]">{t('Two futures')}</h1>
+              <h1 className="oda-display text-[34px] leading-tight text-[var(--fg)]">{t('Two futures')}</h1>
               <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed">
                 {t('Discipline does not come from willpower. It comes from looking at the cost of changing nothing, and naming the life you want instead.')}
               </p>
@@ -362,7 +362,7 @@ export const PublicTwoFutures: React.FC = () => {
             </div>
 
             {cardImage && (
-              <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-3 flex justify-center">
+              <div className="oda-card rounded-[var(--radius-lg)] p-3 flex justify-center">
                 <img
                   src={cardImage}
                   alt={t('Two futures')}
@@ -392,7 +392,7 @@ export const PublicTwoFutures: React.FC = () => {
               </button>
             </div>
 
-            <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-3">
+            <div className="oda-card rounded-[var(--radius-lg)] p-5 space-y-3">
               <h3 className="text-lg font-semibold tracking-tight text-[var(--fg)]">{t('Keep going')}</h3>
               <p className="text-sm text-[var(--fg-muted)] leading-relaxed">
                 {t('Save this and continue into the app to set your one decision for today.')}

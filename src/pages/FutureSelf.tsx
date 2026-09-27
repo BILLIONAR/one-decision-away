@@ -96,7 +96,7 @@ export const FutureSelf: React.FC = () => {
     <div className="space-y-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-[var(--fg)]">{t('Future self')}</h1>
+          <h1 className="oda-display text-[32px] leading-tight text-[var(--fg)]">{t('Future self')}</h1>
           <p className="text-sm text-[var(--fg-muted)] mt-1">{t('Who you are becoming, and what you leave behind.')}</p>
         </div>
         {!isEditing ? (
@@ -120,7 +120,7 @@ export const FutureSelf: React.FC = () => {
         )}
       </div>
 
-      <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-3">
+      <div className="oda-card rounded-[var(--radius-lg)] p-5 space-y-3">
         {isEditing ? (
           <div className="space-y-4">
             <div className="space-y-1.5">
@@ -153,7 +153,7 @@ export const FutureSelf: React.FC = () => {
 
       <div className="space-y-3">
         <h2 className="text-[15px] font-semibold text-[var(--fg)]">{t('Standards')}</h2>
-        <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-4">
+        <div className="oda-card rounded-[var(--radius-lg)] p-5 space-y-4">
           {isEditing ? (
             <>
               <LinesField id="core-values" label={t('Values, one per line')} value={coreValuesText} onChange={setCoreValuesText} />
@@ -176,7 +176,7 @@ export const FutureSelf: React.FC = () => {
 
       <div className="space-y-3">
         <h2 className="text-[15px] font-semibold text-[var(--fg)]">{t('Old self')}</h2>
-        <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-4">
+        <div className="oda-card rounded-[var(--radius-lg)] p-5 space-y-4">
           {isEditing ? (
             <>
               <LinesField id="old-behaviors" label={t('Behaviours to leave behind, one per line')} value={oldBehaviorsText} onChange={setOldBehaviorsText} />

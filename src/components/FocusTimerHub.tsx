@@ -277,7 +277,7 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
     'h-11 px-4 inline-flex items-center justify-center gap-2 rounded-[var(--radius-sm)] bg-[var(--fg)] text-[var(--bg)] text-sm font-semibold cursor-pointer shrink-0';
 
   return (
-    <div id="focus-timer-hub" className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-5">
+    <div id="focus-timer-hub" className="oda-card rounded-[var(--radius-lg)] p-5 space-y-5">
       <div className="flex items-start justify-between gap-3">
         <div>
           <h2 className="text-[15px] font-semibold text-[var(--fg)]">{t('Focus')}</h2>

@@ -71,13 +71,13 @@ export const Progress: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight text-[var(--fg)]">{t('Progress')}</h1>
+        <h1 className="oda-display text-[32px] leading-tight text-[var(--fg)]">{t('Progress')}</h1>
         <p className="text-sm text-[var(--fg-muted)] mt-1">{t('Where your days are going.')}</p>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
         {stats.map((s) => (
-          <div key={s.label} className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-4">
+          <div key={s.label} className="oda-card rounded-[var(--radius-lg)] p-4">
             <div className="text-xs text-[var(--fg-muted)]">{s.label}</div>
             <div className="text-xl font-semibold tracking-tight text-[var(--fg)] mt-1">{s.value}</div>
             <div className="text-xs text-[var(--fg-subtle)] mt-0.5">{s.sub}</div>
@@ -96,7 +96,7 @@ export const Progress: React.FC = () => {
 
       <div className="space-y-3">
         <h2 className="text-[15px] font-semibold text-[var(--fg)]">{t('Direction')}</h2>
-        <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-3">
+        <div className="oda-card rounded-[var(--radius-lg)] p-5 space-y-3">
           <div className="flex items-center justify-between text-sm">
             <span className="text-[var(--fg)]">{t('{n}% building', { n: buildingVotePct })}</span>
             <span className="text-[var(--fg-muted)]">
@@ -120,7 +120,7 @@ export const Progress: React.FC = () => {
 
       <div className="space-y-3">
         <h2 className="text-[15px] font-semibold text-[var(--fg)]">{t('Areas')}</h2>
-        <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-4">
+        <div className="oda-card rounded-[var(--radius-lg)] p-5 space-y-4">
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
               <div className="text-xs text-[var(--fg-muted)]">{t('Most active')}</div>
@@ -184,7 +184,7 @@ export const Progress: React.FC = () => {
             })}
           </div>
         ) : (
-          <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5">
+          <div className="oda-card rounded-[var(--radius-lg)] p-5">
             <p className="text-sm text-[var(--fg-muted)]">
               {t('No bridges yet. Buy a dream to set up a savings plan.')}
             </p>

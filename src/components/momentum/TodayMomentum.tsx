@@ -211,7 +211,7 @@ export const WeeklyReviewCard: React.FC<{ weekKey: string }> = ({ weekKey }) => 
 export const WeeklyFocusNote: React.FC<{ change: string }> = ({ change }) => {
   const t = useT();
   return (
-    <p className="rounded-[var(--radius-md)] border-l-2 border-[var(--brand-burgundy)] bg-[var(--bg-muted)] px-4 py-3 text-[14px] leading-relaxed text-[var(--fg)]">
+    <p className="rounded-[var(--radius-lg)] border-l-2 border-[var(--brand-burgundy)] oda-card px-4 py-3 text-[14px] leading-relaxed text-[var(--fg)]">
       <span className="block text-[12px] font-semibold text-[var(--fg-muted)]">{t('This week’s one change')}</span>
       {change}
     </p>

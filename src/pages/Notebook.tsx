@@ -36,11 +36,11 @@ export const Notebook: React.FC = () => {
   const tabs = [{ id: 'journal' as const, label: t('Journal') }, { id: 'manifest' as const, label: t('Practices') }];
   return <div className="space-y-6 text-[var(--fg)]">
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight text-[var(--fg)]">{t('Notebook')}</h1>
+      <h1 className="oda-display text-[32px] leading-tight text-[var(--fg)]">{t('Notebook')}</h1>
       <p className="text-sm text-[var(--fg-muted)] mt-1">{t('Write your days. Give your future a voice.')}</p>
     </div>
 
-    <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] px-4 min-h-[56px] py-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-sm">
+    <div className="oda-card rounded-[var(--radius-lg)] px-4 min-h-[56px] py-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-sm">
       <div className="flex flex-wrap gap-x-4 gap-y-1">
         <span className="text-[var(--fg)]">{t('{n} day streak', { n: stats.currentStreak })}</span>
         <span className="text-[var(--fg-muted)]">{t('{n} days written', { n: stats.totalWritingDays })}</span>

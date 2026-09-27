@@ -53,7 +53,7 @@ export const Bridge: React.FC = () => {
     <div className="space-y-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-[var(--fg)]">{t('Bridges')}</h1>
+          <h1 className="oda-display text-[32px] leading-tight text-[var(--fg)]">{t('Bridges')}</h1>
           <p className="text-sm text-[var(--fg-muted)] mt-1">{t('Real savings plans for the dreams you bought.')}</p>
         </div>
         <button type="button" onClick={() => setActiveRoute('/app/dreams')} className={`${secondaryBtn} shrink-0`}>
@@ -69,7 +69,7 @@ export const Bridge: React.FC = () => {
             const pct = Math.min(100, Math.max(0, bridge.realProgressPct));
 
             return (
-              <div key={bridge.id} className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-4">
+              <div key={bridge.id} className="oda-card rounded-[var(--radius-lg)] p-5 space-y-4">
                 <div className="flex items-start justify-between gap-3">
                   <h3 className="text-lg font-semibold tracking-tight text-[var(--fg)]">
                     {t(purchase?.itemSnapshot.name || 'Dream')}
@@ -123,7 +123,7 @@ export const Bridge: React.FC = () => {
           })}
         </div>
       ) : (
-        <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 text-center">
+        <div className="oda-card rounded-[var(--radius-lg)] p-5 text-center">
           <p className="text-[15px] font-semibold text-[var(--fg)]">{t('No bridges yet')}</p>
           <p className="text-sm text-[var(--fg-muted)] mt-1">
             {t('Buy a dream, then open it in My life to build a savings plan.')}

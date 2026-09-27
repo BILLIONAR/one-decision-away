@@ -2,7 +2,7 @@ import { publicAssetPath } from '../utils/routing';
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../store/useApp';
 import { Input, Modal } from '../components/ui';
-import { Download, Trash2, Sun, Moon, Shuffle, Bell, Activity, Music, Check } from 'lucide-react';
+import { Download, Trash2, Sun, Moon, SunMoon, Shuffle, Bell, Activity, Music } from 'lucide-react';
 import { getWisdomForSeason, getDailyWisdomInsight, SeasonalWisdom } from '../data/wisdom';
 import { soundSynthesizer } from '../utils/soundSynthesizer';
 import { NaturalVoiceSettings } from '../components/NaturalVoiceSettings';
@@ -21,7 +21,7 @@ const Section: React.FC<{ id: string; title: string; children: React.ReactNode }
 );
 
 const CardBox: React.FC<{ className?: string; children: React.ReactNode }> = ({ className = '', children }) => (
-  <div className={`bg-[var(--bg-muted)] rounded-[var(--radius-md)] ${className}`}>{children}</div>
+  <div className={`oda-card rounded-[var(--radius-lg)] ${className}`}>{children}</div>
 );
 
 const Switch: React.FC<{ checked: boolean; onChange: () => void; label: string }> = ({ checked, onChange, label }) => (
@@ -123,7 +123,7 @@ export const Settings: React.FC = () => {
   const [displayName, setDisplayName] = useState(data?.profile.displayName || '');
   const [email, setEmail] = useState(data?.profile.email || '');
   const [reminderTime, setReminderTime] = useState(data?.profile.reminderTime || '09:00');
-  const [currentTheme, setCurrentThemeState] = useState<'light' | 'dark'>(data?.profile.theme || 'light');
+  const [currentTheme, setCurrentThemeState] = useState<'light' | 'dark' | 'system'>(data?.profile.theme || 'light');
   const [soundMuted, setSoundMutedState] = useState<boolean>(data?.profile.soundMuted ?? false);
   const [dailyWisdomEnabled, setDailyWisdomEnabled] = useState<boolean>(data?.profile.dailyWisdomEnabled ?? true);
   const [dailyWisdomTime, setDailyWisdomTime] = useState<string>(data?.profile.dailyWisdomTime || '08:30');
@@ -168,7 +168,7 @@ export const Settings: React.FC = () => {
   const currentWisdom: SeasonalWisdom =
     seasonalWisdomPool[wisdomIndex % seasonalWisdomPool.length] || getDailyWisdomInsight(activeSeason?.id, wisdomIndex);
 
-  const handleSelectTheme = async (selectedTheme: 'light' | 'dark') => {
+  const handleSelectTheme = async (selectedTheme: 'light' | 'dark' | 'system') => {
     setCurrentThemeState(selectedTheme);
     await setTheme(selectedTheme);
   };
@@ -266,7 +266,8 @@ export const Settings: React.FC = () => {
     setIsResetConfirmOpen(false);
   };
 
-  const themeOptions: { key: 'light' | 'dark'; label: string; icon: typeof Sun }[] = [
+  const themeOptions: { key: 'light' | 'dark' | 'system'; label: string; icon: typeof Sun }[] = [
+    { key: 'system', label: t('Automatic'), icon: SunMoon },
     { key: 'light', label: t('Light'), icon: Sun },
     { key: 'dark', label: t('Dark'), icon: Moon },
   ];
@@ -279,7 +280,7 @@ export const Settings: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-[24px] font-semibold tracking-tight text-[var(--fg)]">{t('Settings')}</h1>
+      <h1 className="oda-display text-[32px] leading-tight text-[var(--fg)]">{t('Settings')}</h1>
 
       <form onSubmit={handleSaveProfile} className="space-y-6">
         {/* Profile */}
@@ -325,7 +326,7 @@ export const Settings: React.FC = () => {
         {/* Appearance */}
         <Section id="appearance" title={t('Appearance')}>
           <CardBox className="p-2">
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-3 gap-2">
               {themeOptions.map((opt) => {
                 const active = currentTheme === opt.key;
                 return (
@@ -334,15 +335,14 @@ export const Settings: React.FC = () => {
                     type="button"
                     onClick={() => handleSelectTheme(opt.key)}
                     aria-pressed={active}
-                    className={`h-12 rounded-[var(--radius-sm)] flex items-center justify-center gap-2 text-[15px] cursor-pointer transition-colors ${
+                    className={`h-11 min-w-0 px-2 rounded-[var(--radius-sm)] flex items-center justify-center gap-1.5 text-[14px] cursor-pointer transition-colors ${
                       active
                         ? 'bg-[var(--fg)] text-[var(--bg)] font-semibold'
                         : 'text-[var(--fg)] hover:bg-[var(--bg-inset)]'
                     }`}
                   >
-                    <opt.icon className="w-[18px] h-[18px]" strokeWidth={1.8} />
-                    <span>{opt.label}</span>
-                    {active && <Check className="w-4 h-4" strokeWidth={2} />}
+                    <opt.icon className="w-4 h-4 shrink-0" strokeWidth={1.8} aria-hidden="true" />
+                    <span className="truncate">{opt.label}</span>
                   </button>
                 );
               })}

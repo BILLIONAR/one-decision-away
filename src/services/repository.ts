@@ -67,7 +67,7 @@ export function getInitialDemoState(): UserData {
       displayName: '',
       onboardingStep: 'welcome',
       locale: getLocale(),
-      theme: 'light',
+      theme: 'system',
       soundMuted: false,
       focusTabBlinkEnabled: true,
       focusScreenPulseEnabled: true,

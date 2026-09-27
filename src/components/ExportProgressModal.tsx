@@ -160,7 +160,7 @@ export const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
         </div>
 
         {/* Preview */}
-        <div className="rounded-[var(--radius-md)] bg-[var(--bg-muted)] min-h-[220px] max-h-[50vh] flex items-center justify-center p-3 overflow-hidden">
+        <div className="rounded-[var(--radius-lg)] oda-card min-h-[220px] max-h-[50vh] flex items-center justify-center p-3 overflow-hidden">
           {isGenerating ? (
             <div className="flex flex-col items-center gap-3 text-center p-6">
               <div className="w-6 h-6 border-2 border-[var(--fg)] border-t-transparent rounded-full animate-spin" />

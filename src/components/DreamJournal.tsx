@@ -377,7 +377,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
         </div>
 
         {(showAdvancedFilters || datePreset === 'custom') && (
-          <div className="space-y-4 p-4 rounded-[var(--radius-md)] bg-[var(--bg-muted)]">
+          <div className="space-y-4 p-4 rounded-[var(--radius-lg)] oda-card">
             {/* Date */}
             <div className="space-y-2">
               <span className="block text-[13px] font-medium text-[var(--fg-muted)]">{t('Date')}</span>
@@ -473,7 +473,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
 
       {/* Entries */}
       {displayedEntries.length > 0 ? (
-        <div className="rounded-[var(--radius-md)] bg-[var(--bg-muted)] overflow-hidden">
+        <div className="rounded-[var(--radius-lg)] oda-card overflow-hidden">
           {displayedEntries.map((entry, idx) => {
             const moodInfo = entry.mood ? MOOD_CONFIG[entry.mood] : MOOD_CONFIG.focused;
             const formattedDate = new Date(entry.createdAt).toLocaleDateString(undefined, {
@@ -556,7 +556,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
       >
         {selectedPhotoModal && selectedPhotoModal.photoDataUrl && (
           <div className="space-y-4">
-            <div className="w-full max-h-[70vh] rounded-[var(--radius-md)] overflow-hidden bg-[var(--bg-muted)] flex items-center justify-center">
+            <div className="w-full max-h-[70vh] rounded-[var(--radius-lg)] overflow-hidden oda-card flex items-center justify-center">
               <img
                 src={selectedPhotoModal.photoDataUrl}
                 alt={selectedPhotoModal.title}
@@ -669,7 +669,7 @@ export const DreamJournal: React.FC<{ limit?: number; showHeaderAction?: boolean
                 </div>
               </div>
             ) : photoDataUrl ? (
-              <div className="w-full h-56 rounded-[var(--radius-md)] overflow-hidden relative bg-[var(--bg-muted)]">
+              <div className="w-full h-56 rounded-[var(--radius-lg)] overflow-hidden relative oda-card">
                 <img
                   src={photoDataUrl}
                   alt={t('Attached photo')}

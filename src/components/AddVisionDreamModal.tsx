@@ -416,7 +416,7 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
                   </div>
                 </div>
               ) : imageUrl ? (
-                <div className="w-full h-52 rounded-[var(--radius-md)] overflow-hidden relative bg-[var(--bg-muted)]">
+                <div className="w-full h-52 rounded-[var(--radius-lg)] overflow-hidden relative oda-card">
                   <img
                     src={imageUrl}
                     alt={t('Captured photo')}
@@ -442,7 +442,7 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
                   </div>
                 </div>
               ) : (
-                <div className="p-6 rounded-[var(--radius-md)] bg-[var(--bg-muted)] text-center space-y-3">
+                <div className="p-6 rounded-[var(--radius-lg)] oda-card text-center space-y-3">
                   <Camera className="w-6 h-6 text-[var(--fg-subtle)] mx-auto" strokeWidth={1.8} />
                   <p className="text-[14px] text-[var(--fg-muted)] max-w-sm mx-auto leading-relaxed">
                     {t('Spotted a car, a home, a desk or a watch you love? Capture it on the spot.')}
@@ -471,7 +471,7 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
                 />
               </Field>
               {imageUrl && (
-                <div className="w-full h-44 rounded-[var(--radius-md)] overflow-hidden bg-[var(--bg-muted)]">
+                <div className="w-full h-44 rounded-[var(--radius-lg)] overflow-hidden oda-card">
                   <img
                     src={imageUrl}
                     alt={t('Web preview')}
@@ -500,7 +500,7 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
                 className="hidden"
               />
               {imageUrl ? (
-                <div className="w-full h-44 rounded-[var(--radius-md)] overflow-hidden relative bg-[var(--bg-muted)]">
+                <div className="w-full h-44 rounded-[var(--radius-lg)] overflow-hidden relative oda-card">
                   <img
                     src={imageUrl}
                     alt={t('Uploaded image')}
@@ -542,7 +542,7 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
           )}
 
           {activeTab === 'preset' && (
-            <div className="rounded-[var(--radius-md)] bg-[var(--bg-muted)] overflow-hidden max-h-72 overflow-y-auto">
+            <div className="rounded-[var(--radius-lg)] oda-card overflow-hidden max-h-72 overflow-y-auto">
               {INSPIRATION_PRESETS.map((preset, idx) => (
                 <button
                   key={idx}
@@ -633,7 +633,7 @@ export const AddVisionDreamModal: React.FC<AddVisionDreamModalProps> = ({
           {/* Pin to Vision Board */}
           <label
             htmlFor="pin-vision-check"
-            className="min-h-[56px] px-4 py-3 bg-[var(--bg-muted)] rounded-[var(--radius-md)] flex items-center justify-between gap-3 cursor-pointer"
+            className="min-h-[56px] px-4 py-3 oda-card rounded-[var(--radius-lg)] flex items-center justify-between gap-3 cursor-pointer"
           >
             <div className="min-w-0">
               <div className="text-[15px] font-medium text-[var(--fg)]">{t('Pin to Vision Board')}</div>

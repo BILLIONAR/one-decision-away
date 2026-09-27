@@ -52,11 +52,11 @@ export const Budget: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight text-[var(--fg)]">{t('Budget')}</h1>
+        <h1 className="oda-display text-[32px] leading-tight text-[var(--fg)]">{t('Budget')}</h1>
         <p className="text-sm text-[var(--fg-muted)] mt-1">{t('How you want your effort spread across life.')}</p>
       </div>
 
-      <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-4">
+      <div className="oda-card rounded-[var(--radius-lg)] p-5 space-y-4">
         <div className="flex items-end justify-between gap-4">
           <div>
             <div className="text-xs text-[var(--fg-muted)]">{t('Allocated')}</div>
@@ -130,7 +130,7 @@ export const Budget: React.FC = () => {
       <button
         type="button"
         onClick={openQuickJournal}
-        className="w-full min-h-[52px] px-4 rounded-[var(--radius-md)] bg-[var(--bg-muted)] flex justify-between items-center text-sm text-[var(--fg)]"
+        className="w-full min-h-[52px] px-4 rounded-[var(--radius-lg)] oda-card flex justify-between items-center text-sm text-[var(--fg)]"
         title={t('Open quick journal ({shortcut})', { shortcut: isMac ? '⌘K' : 'Ctrl+K' })}
       >
         <span className="font-medium">{t('Quick journal')}</span>

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { AudioLines, Check, ChevronDown, ChevronRight, Plus, MessageCircle, GraduationCap, Timer, Share2, Route, Waves } from 'lucide-react';
+import { AudioLines, Check, ChevronDown, ChevronRight, Plus, MessageCircle, GraduationCap, Timer, Waves } from 'lucide-react';
 import { useApp } from '../store/useApp';
 import { getDailyQuote } from '../data/dailyQuotes';
 import { Modal } from '../components/ui';
@@ -208,20 +208,12 @@ export const Today: React.FC = () => {
         onPickEasy={(title) => void quickSetDecision(title)}
       />
 
-      {/* 2. One decision */}
-      <section
-        id="set-one-decision"
-        className="oda-decision relative overflow-hidden p-6 sm:p-8 space-y-5"
-      >
-        {/* Brand motif: a faint open doorway behind today's decision. */}
-        <svg aria-hidden="true" viewBox="0 0 100 100" className="oda-decision-door pointer-events-none absolute -right-6 -top-4 w-40 h-40 sm:w-48 sm:h-48">
-          <path d="M49 84 V31.5 C57 32.5 63 37 65.5 44 V84 Z" fill="currentColor" opacity="0.5" />
-          <path d="M30 84 V46 A20 20 0 0 1 70 46 V84" stroke="currentColor" strokeWidth="5" strokeLinecap="round" fill="none" />
-        </svg>
-        <div className="flex items-center justify-between gap-3">
-          <span className="oda-kicker opacity-90">{t("Today's one decision")}</span>
+      {/* 2. One decision: set like a page in a notebook, not a banner. */}
+      <section id="set-one-decision" className="oda-decision" aria-labelledby="today-decision-label">
+        <div className="oda-decision-folio">
+          <span id="today-decision-label" className="oda-kicker">{t("Today's one decision")}</span>
           {chain.days > 0 && (
-            <span className="text-[13px] opacity-70" title={t('Your chain: one missed day a week is forgiven, two in a row start a new chain.')}>
+            <span className="oda-decision-chain" title={t('Your chain: one missed day a week is forgiven, two in a row start a new chain.')}>
               {chain.days === 1 ? t('1 day') : t('{n} days', { n: chain.days })}{chain.graceUsed ? ` · ${t('flex day used')}` : ''}
             </span>
           )}
@@ -229,59 +221,54 @@ export const Today: React.FC = () => {
 
         {todayOneDecision ? (
           <>
-            <p className="oda-display text-[30px] sm:text-[34px] leading-snug break-words">{t(todayOneDecision.title)}</p>
+            <p className={`oda-decision-text ${decisionDone ? 'is-kept' : ''}`}>
+              <span className="oda-decision-quote" aria-hidden="true">“</span>{t(todayOneDecision.title)}
+            </p>
             {decisionPlan?.ifThen && !decisionDone && (
-              <button type="button" onClick={() => setPlan({ open: true })} className="oda-decision-plan w-full text-left px-4 py-3 space-y-0.5">
-                <span className="block text-[13px] font-semibold opacity-75">
+              <button type="button" onClick={() => setPlan({ open: true })} className="oda-decision-plan">
+                <span className="block text-[13px] text-[var(--fg-muted)]">
                   {decisionPlan.obstacle ? t('If {obstacle}', { obstacle: decisionPlan.obstacle }) : t('If it gets hard')}
                 </span>
-                <span className="block text-[15px] leading-snug">{t('then I will {plan}', { plan: decisionPlan.ifThen })}</span>
+                <span className="block text-[15px] leading-snug text-[var(--fg)]">{t('then I will {plan}', { plan: decisionPlan.ifThen })}</span>
               </button>
             )}
             {decisionDone ? (
-              <div className="space-y-1.5">
-                <div className="flex items-center gap-2.5 text-[15px] opacity-80">
-                  <span className="w-6 h-6 rounded-full bg-[var(--bg)] text-[var(--fg)] flex items-center justify-center">
-                    <Check size={14} strokeWidth={2.2} />
-                  </span>
-                  <span>{t('Done for today · +D$ {amount}', { amount: earnedAmount.toLocaleString() })}</span>
+              <div className="oda-decision-kept">
+                <span className="oda-decision-seal" aria-hidden="true"><Check size={15} strokeWidth={2.4} /></span>
+                <div className="min-w-0">
+                  <p className="text-[15px] font-semibold text-[var(--fg)]">{t('Kept today')} <span className="font-normal text-[var(--fg-muted)]">· +D$ {earnedAmount.toLocaleString()}</span></p>
+                  <p className="text-[14px] text-[var(--fg-muted)]">{t('That’s proof #{n} that you keep your word.', { n: keptCount })}</p>
                 </div>
-                <p className="text-[14px] opacity-75">{t('That’s proof #{n} that you keep your word.', { n: keptCount })}</p>
               </div>
             ) : (
-              <div className="space-y-2">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setStartOpen(true)}
-                    className="oda-decision-action w-full h-12 rounded-[var(--radius-sm)] font-semibold text-[15px] inline-flex items-center justify-center gap-2"
-                  >
-                    <Timer size={18} strokeWidth={2} />
+              <>
+                <div className="oda-decision-actions">
+                  <button type="button" onClick={() => setStartOpen(true)} className="oda-decision-action">
+                    <Timer size={17} strokeWidth={1.9} aria-hidden="true" />
                     {t('Start · just 2 minutes')}
                   </button>
                   <button
                     type="button"
                     onClick={() => setCompletingMission(todayOneDecision)}
-                    className="oda-decision-secondary w-full h-12 rounded-[var(--radius-sm)] font-semibold text-[15px]"
+                    aria-label={t('Done · +D$ {amount}', { amount: ECONOMY_CONSTANTS.ONE_DECISION_REWARD.toLocaleString() })}
+                    className="oda-decision-done"
                   >
-                    {t('Done · +D$ {amount}', { amount: ECONOMY_CONSTANTS.ONE_DECISION_REWARD.toLocaleString() })}
+                    <span className="oda-decision-box" aria-hidden="true" />
+                    <span>{t('I did it')}</span>
+                    <span className="oda-decision-reward">+D$ {ECONOMY_CONSTANTS.ONE_DECISION_REWARD.toLocaleString()}</span>
                   </button>
                 </div>
-                <div className="flex flex-wrap gap-x-5">
+                <div className="oda-decision-foot">
                   {!decisionPlan?.ifThen && (
-                    <button type="button" onClick={() => setPlan({ open: true })} className="oda-decision-link inline-flex items-center gap-1.5">
-                      <Route size={15} />{t('Plan for obstacles · 30 sec')}
-                    </button>
+                    <button type="button" onClick={() => setPlan({ open: true })} className="oda-decision-link">{t('Plan for obstacles · 30 sec')}</button>
                   )}
-                  <button type="button" onClick={() => void handleShare()} className="oda-decision-link inline-flex items-center gap-1.5">
-                    <Share2 size={15} />{t('Tell one person')}
-                  </button>
+                  <button type="button" onClick={() => void handleShare()} className="oda-decision-link">{t('Tell one person')}</button>
                 </div>
-              </div>
+              </>
             )}
           </>
         ) : (
-          <form onSubmit={handleSetDecision} className="space-y-3">
+          <form onSubmit={handleSetDecision} className="space-y-4">
             <label htmlFor="today-decision-input" className="sr-only">
               {t('What is the one decision that would make today meaningful?')}
             </label>
@@ -290,19 +277,15 @@ export const Today: React.FC = () => {
               value={newDecisionTitle}
               onChange={(e) => setNewDecisionTitle(e.target.value)}
               placeholder={t('What would make today count?')}
-              className="w-full h-12 px-4 rounded-[var(--radius-sm)] bg-transparent border border-[var(--bg)]/30 text-[var(--bg)] placeholder:text-[var(--bg)]/50 text-[16px] outline-none focus:border-[var(--bg)]/70"
+              className="oda-decision-input"
             />
-            <button
-              type="submit"
-              disabled={!newDecisionTitle.trim() || isSaving}
-              className="oda-decision-action w-full h-12 rounded-[var(--radius-sm)] font-semibold text-[15px] disabled:opacity-40"
-            >
+            <button type="submit" disabled={!newDecisionTitle.trim() || isSaving} className="oda-decision-action w-full disabled:opacity-40">
               {t('Set decision')}
             </button>
             {!newDecisionTitle.trim() && (
               draftForToday
-                ? <EasyDecisionChips tone="dark" options={[draftForToday]} onPick={pickSuggestion} label={t('You chose this last night')} />
-                : <EasyDecisionChips tone="dark" options={easyDecisions(data.profile.intent)} onPick={pickSuggestion} label={t('Or start with something easy')} />
+                ? <EasyDecisionChips options={[draftForToday]} onPick={pickSuggestion} label={t('You chose this last night')} />
+                : <EasyDecisionChips options={easyDecisions(data.profile.intent)} onPick={pickSuggestion} label={t('Or start with something easy')} />
             )}
           </form>
         )}
@@ -416,7 +399,7 @@ export const Today: React.FC = () => {
         <button
           type="button"
           onClick={() => setActiveRoute('/app/dreams')}
-          className="w-full bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 flex items-center gap-4 text-left"
+          className="w-full oda-card rounded-[var(--radius-lg)] p-5 flex items-center gap-4 text-left"
         >
           <div className="w-16 h-16 shrink-0 rounded-[var(--radius-sm)] overflow-hidden">
             <DreamArt type={targetItem.illustrationKey} imageUrl={targetItem.customImageUrl} alt={t(targetItem.name)} />
@@ -442,7 +425,7 @@ export const Today: React.FC = () => {
         <button
           type="button"
           onClick={() => setActiveRoute('/app/dreams')}
-          className="w-full bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 flex items-center justify-between gap-4 text-left"
+          className="w-full oda-card rounded-[var(--radius-lg)] p-5 flex items-center justify-between gap-4 text-left"
         >
           <span className="text-[15px] font-semibold text-[var(--fg)]">{t('Pick your first dream')}</span>
           <ChevronRight size={18} strokeWidth={1.8} className="shrink-0 text-[var(--fg-subtle)]" />
@@ -453,7 +436,7 @@ export const Today: React.FC = () => {
       <button
         type="button"
         onClick={() => setActiveRoute('/app/focus')}
-        className="w-full bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 flex items-center gap-4 text-left cursor-pointer hover:bg-[var(--bg-inset)] transition-colors"
+        className="w-full oda-card rounded-[var(--radius-lg)] p-5 flex items-center gap-4 text-left cursor-pointer hover:bg-[var(--bg-inset)] transition-colors"
       >
         <span className="w-11 h-11 rounded-full bg-[var(--accent-soft)] flex items-center justify-center shrink-0">
           <AudioLines size={20} strokeWidth={1.8} className="text-[var(--accent)]" />
