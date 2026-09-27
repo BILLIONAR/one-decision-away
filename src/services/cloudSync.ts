@@ -166,12 +166,38 @@ class CloudSync {
     return { ok: true, message: t('Magic link sent — check your inbox and open it on this device.') };
   }
 
+  /** Signs in with the 6-digit code from the same email (the iPhone app cannot open web links). */
+  public async verifyEmailCode(email: string, code: string): Promise<{ ok: boolean; message?: string }> {
+    const client = await this.getClient();
+    if (!client) return { ok: false, message: t('Cloud sync is not configured.') };
+    const { error } = await client.auth.verifyOtp({ email: email.trim(), token: code.trim(), type: 'email' });
+    if (error) return { ok: false, message: t('That code didn’t work. Check it or send a new email.') };
+    return { ok: true };
+  }
+
   public async signOut() {
     const client = await this.getClient();
     if (!client) return;
     await client.auth.signOut();
     this.session = null;
     this.emit();
+  }
+
+  /**
+   * Permanently deletes the signed-in account and its cloud data through the
+   * delete-account edge function, then signs out. Data on this device stays.
+   */
+  public async deleteAccount(): Promise<{ ok: boolean; message?: string }> {
+    const client = await this.getClient();
+    if (!client || !this.session) return { ok: false, message: t('You are not signed in.') };
+    if (this.pushTimer) window.clearTimeout(this.pushTimer);
+    this.pushTimer = null;
+    const { error } = await client.functions.invoke('delete-account', { method: 'POST' });
+    if (error) return { ok: false, message: t('We couldn’t delete your account. Check your connection and try again.') };
+    try { await client.auth.signOut({ scope: 'local' }); } catch { /* the user no longer exists */ }
+    this.session = null;
+    this.emit();
+    return { ok: true };
   }
 
   /** Debounced push after local saves. */

@@ -1,3 +1,4 @@
+import { haptic, isNative } from '../services/native';
 import { disablePush, getPushStatus, isPushActive } from '../services/pushNotifications';
 import { normaliseNudgeTimes } from '../data/dailyNudges';
 import React, { useContext, useEffect, useState, useCallback } from 'react';
@@ -272,7 +273,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [activeRoute, setActiveRouteState] = useState<string>(() => {
-    return readAppRoute(window.location);
+    const route = readAppRoute(window.location);
+    // The iPhone app opens straight into ODA; the marketing page is for the web.
+    return isNative() && route === '/' ? '/app' : route;
   });
   const [toast, setToast] = useState<{ message: string; type?: 'success' | 'info' | 'error' } | null>(null);
   const [activeFocusSession, setActiveFocusSession] = useState<ActiveFocusSession | null>(null);
@@ -691,6 +694,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const result = await repository.completeMission(params);
         setData(result.data);
         showToast(result.message, result.rewardAmount > 0 ? 'success' : 'info');
+        void haptic('success');
 
         // Trigger celebratory confetti animation
         if (result.rewardAmount >= 400) {
@@ -1492,6 +1496,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (!habit) return;
 
       const isCompletedToday = habit.completedDates.includes(todayStr);
+      void haptic(isCompletedToday ? 'select' : 'tap');
       let updatedDates: string[];
       let updatedStreak = habit.streakCount;
       let newTransactions = [...data.transactions];

@@ -1,5 +1,8 @@
 import React, { useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { Headphones, Info, Pause, Play, Timer, Volume1, Volume2, Wind } from 'lucide-react';
+import { Headphones, Info, LockKeyhole, Pause, Play, Timer, Volume1, Volume2, Wind } from 'lucide-react';
+import { useApp } from '../store/useApp';
+import { usePro } from '../services/purchases';
+import { isSoundLocked } from '../services/entitlements';
 import { useT } from '../i18n';
 import {
   SOUND_ROOM_HERO, SOUND_ROOM_SECTIONS, soundForTrack, unsplashUrl,
@@ -77,8 +80,9 @@ const SoundPhotoImg: React.FC<{ photo: SoundPhoto; width: number; height: number
   );
 };
 
-const SoundCard: React.FC<{ sound: SoundRoomSound; sectionId: SoundRoomSectionId; playing: boolean }> = ({ sound, sectionId, playing }) => {
+const SoundCard: React.FC<{ sound: SoundRoomSound; sectionId: SoundRoomSectionId; playing: boolean; locked?: boolean }> = ({ sound, sectionId, playing, locked }) => {
   const t = useT();
+  const { setActiveRoute } = useApp();
   const nameId = useId();
   const descriptionId = useId();
   return (
@@ -89,13 +93,14 @@ const SoundCard: React.FC<{ sound: SoundRoomSound; sectionId: SoundRoomSectionId
         aria-pressed={playing}
         aria-labelledby={nameId}
         aria-describedby={descriptionId}
-        onClick={() => soundRoomPlayer.toggle(sound.track, { sleep: sectionId === 'sleep' })}
+        onClick={() => (locked ? setActiveRoute('/app/upgrade') : soundRoomPlayer.toggle(sound.track, { sleep: sectionId === 'sleep' }))}
       >
         <span className="oda-sound-card-media">
           <SoundPhotoImg photo={sound.photo} width={560} height={400} sizes="(max-width: 559px) 92vw, 340px" />
           <span className="oda-sound-card-play" aria-hidden="true">
-            {playing ? <Pause size={18} strokeWidth={2.2} /> : <Play size={18} strokeWidth={2.2} />}
+            {locked ? <LockKeyhole size={16} strokeWidth={2} /> : playing ? <Pause size={18} strokeWidth={2.2} /> : <Play size={18} strokeWidth={2.2} />}
           </span>
+          {locked && <span className="oda-sound-card-pro">Pro</span>}
           {playing && <span className="oda-sound-card-live" aria-hidden="true"><i /><i /><i /></span>}
         </span>
         <span className="oda-sound-card-body">
@@ -272,6 +277,7 @@ const PlayerBar: React.FC = () => {
 export const SoundRoom: React.FC = () => {
   const t = useT();
   const player = usePlayer();
+  const pro = usePro();
   const [tab, setTab] = useState<SoundRoomSectionId>(readTab);
   const tabRefs = useRef<Partial<Record<SoundRoomSectionId, HTMLButtonElement | null>>>({});
   const baseId = useId();
@@ -353,8 +359,8 @@ export const SoundRoom: React.FC = () => {
           <BreathePanel sound={section.sounds[0]} soundPlaying={isPlaying('breath_pacer')} />
         ) : (
           <ul className="oda-sound-grid">
-            {section.sounds.map((sound) => (
-              <SoundCard key={`${section.id}-${sound.track}`} sound={sound} sectionId={section.id} playing={isPlaying(sound.track)} />
+            {section.sounds.map((sound, i) => (
+              <SoundCard key={`${section.id}-${sound.track}`} sound={sound} sectionId={section.id} playing={isPlaying(sound.track)} locked={isSoundLocked(i, { gating: pro.gating, pro: pro.isPro })} />
             ))}
           </ul>
         )}
@@ -378,8 +384,8 @@ export const SoundRoom: React.FC = () => {
           </p>
         </aside>
         <ul className="oda-sound-grid">
-          {FREQUENCIES.sounds.map((sound) => (
-            <SoundCard key={`frequencies-${sound.track}`} sound={sound} sectionId="frequencies" playing={isPlaying(sound.track)} />
+          {FREQUENCIES.sounds.map((sound, i) => (
+            <SoundCard key={`frequencies-${sound.track}`} sound={sound} sectionId="frequencies" playing={isPlaying(sound.track)} locked={isSoundLocked(i, { gating: pro.gating, pro: pro.isPro })} />
           ))}
         </ul>
       </section>

@@ -5,7 +5,9 @@
  */
 export type ThemePref = 'light' | 'dark' | 'system';
 export const THEME_KEY = 'oda_theme';
-const BAR = { light: '#F7F4EC', dark: '#141E19' } as const;
+import { syncStatusBar } from '../services/native';
+
+const BAR = { light: '#F6F4EE', dark: '#121513' } as const;
 
 const media = () => (typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null);
 
@@ -22,6 +24,7 @@ export function applyTheme(pref: ThemePref | undefined | null): 'light' | 'dark'
   root.style.colorScheme = resolved;
   document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.setAttribute('content', BAR[resolved]));
   try { localStorage.setItem(THEME_KEY, pref ?? 'light'); } catch { /* private mode */ }
+  void syncStatusBar(resolved);
   return resolved;
 }
 

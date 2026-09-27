@@ -4,6 +4,9 @@
 @import "tailwindcss";
 @import "./styles/tokens.css";
 
+/* `dark:` follows the app theme (html.dark), not only the phone setting. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* Newsreader and SF are already spaced for display; keep tracking gentle. */
 @theme {
   --tracking-tighter: -0.015em;

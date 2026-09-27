@@ -91,7 +91,7 @@ export const Onboarding: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] font-sans flex flex-col">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] font-sans flex flex-col pt-safe">
       {/* Top bar */}
       <header className="px-4 sm:px-6 h-20 flex items-center justify-between max-w-lg w-full mx-auto">
         <div className="flex items-center gap-2 min-w-0">

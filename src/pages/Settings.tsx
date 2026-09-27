@@ -2,7 +2,8 @@ import { publicAssetPath } from '../utils/routing';
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../store/useApp';
 import { Input, Modal } from '../components/ui';
-import { Download, Trash2, Sun, Moon, SunMoon, Shuffle, Bell, Activity, Music } from 'lucide-react';
+import { Download, Trash2, Sun, Moon, SunMoon, Shuffle, Bell, Activity, Music, ChevronRight } from 'lucide-react';
+import { LEGAL_COMPANY } from '../data/legal';
 import { getWisdomForSeason, getDailyWisdomInsight, SeasonalWisdom } from '../data/wisdom';
 import { soundSynthesizer } from '../utils/soundSynthesizer';
 import { NaturalVoiceSettings } from '../components/NaturalVoiceSettings';
@@ -117,6 +118,7 @@ export const Settings: React.FC = () => {
     showToast,
     simulateFocusTimerAlert,
     isSimulatingFocusAlert,
+    setActiveRoute,
   } = useApp();
   const t = useT();
 
@@ -496,8 +498,24 @@ export const Settings: React.FC = () => {
         <div className="px-1 space-y-2 text-[12px] text-[var(--fg-subtle)] leading-relaxed">
           <p>{t('Dream Dollars (D$) are a simulation. They have no monetary value and cannot be exchanged or withdrawn.')}</p>
           <p>{t('Dream purchases are visual anchors. Real acquisition happens through your own action, as modelled in the Reality bridge.')}</p>
-          <p>{t('Designed by Yahya. Your answers and reflections are never sold or shared.')}</p>
+          <p>{t('Your answers and reflections are never sold or shared.')}</p>
         </div>
+      </Section>
+
+      {/* About and legal */}
+      <Section id="about" title={t('About')}>
+        <CardBox className="overflow-hidden">
+          {[
+            { label: t('Privacy policy'), route: '/privacy' },
+            { label: t('Terms of use'), route: '/terms' },
+          ].map((row, i) => (
+            <button key={row.route} type="button" onClick={() => setActiveRoute(row.route)} className={`w-full min-h-[52px] px-5 flex items-center justify-between text-left text-[15px] hover:bg-[var(--bg-muted)] ${i ? 'border-t border-[var(--border)]' : ''}`}>
+              {row.label}
+              <ChevronRight className="w-[18px] h-[18px] text-[var(--fg-subtle)]" strokeWidth={1.6} aria-hidden="true" />
+            </button>
+          ))}
+        </CardBox>
+        <p className="px-1 text-[12px] text-[var(--fg-subtle)]">{t('© {year} {company} · One Decision Away', { year: new Date().getFullYear(), company: LEGAL_COMPANY })}</p>
       </Section>
 
       {/* Daily wisdom preview */}

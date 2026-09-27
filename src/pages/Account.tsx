@@ -7,6 +7,8 @@ import { useCloudState } from '../services/useCloudState';
 import { disablePush } from '../services/pushNotifications';
 import { keptDecisions } from '../services/momentum';
 import { EvidenceTree } from '../components/momentum/EvidenceTree';
+import { Modal } from '../components/ui';
+import { isNative } from '../services/native';
 
 /**
  * Optional membership. ODA works fully without an account (everything stays
@@ -15,12 +17,16 @@ import { EvidenceTree } from '../components/momentum/EvidenceTree';
  */
 export const Account: React.FC = () => {
   const t = useT();
-  const { data, syncFromCloud, showToast } = useApp();
+  const { data, syncFromCloud, showToast, setActiveRoute } = useApp();
   const cloud = useCloudState();
   const [email, setEmail] = useState('');
   const [sending, setSending] = useState(false);
   const [sentTo, setSentTo] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [code, setCode] = useState('');
+  const [verifying, setVerifying] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   if (!data) return null;
   const kept = keptDecisions(data.missions).length;
 
@@ -32,6 +38,15 @@ export const Account: React.FC = () => {
     const res = await cloudSync.signInWithEmail(value);
     setSending(false);
     if (res.ok) setSentTo(value); else setError(res.message);
+  };
+
+  const verify = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!sentTo || verifying || !/^\d{6,8}$/.test(code.trim())) { setError(t('Enter the code from the email.')); return; }
+    setVerifying(true); setError(null);
+    const res = await cloudSync.verifyEmailCode(sentTo, code);
+    setVerifying(false);
+    if (!res.ok) setError(res.message ?? null);
   };
 
   const syncNow = async () => {
@@ -46,6 +61,16 @@ export const Account: React.FC = () => {
     try { await disablePush(); } catch { /* signing out must never be blocked by notifications */ }
     await cloudSync.signOut();
     showToast(t('Signed out. Your data stays on this device.'), 'success');
+  };
+
+  const deleteAccount = async () => {
+    if (deleting) return;
+    setDeleting(true);
+    try { await disablePush(); } catch { /* deletion must not wait on notifications */ }
+    const res = await cloudSync.deleteAccount();
+    setDeleting(false);
+    setConfirmDelete(false);
+    showToast(res.ok ? t('Your account and cloud backup are deleted. What is on this device stays until you reset it in Settings.') : (res.message ?? t('We couldn’t delete your account. Check your connection and try again.')), res.ok ? 'success' : 'error');
   };
 
   const header = (
@@ -94,6 +119,20 @@ export const Account: React.FC = () => {
             <button type="button" onClick={() => void signOut()} className="h-11 px-4 rounded-[var(--radius-sm)] border border-[var(--border-strong)] text-[14px] font-medium inline-flex items-center gap-2"><LogOut size={16} />{t('Sign out')}</button>
           </div>
         </section>
+        <section className="px-1 space-y-2">
+          <h2 className="text-[15px] font-semibold">{t('Delete account')}</h2>
+          <p className="text-[14px] leading-relaxed text-[var(--fg-muted)]">{t('Permanently deletes your account and everything backed up in the cloud. What is on this device stays until you reset it in Settings.')}</p>
+          <button type="button" onClick={() => setConfirmDelete(true)} className="min-h-11 text-[14px] font-medium text-[var(--danger)] underline underline-offset-4">{t('Delete my account')}</button>
+        </section>
+        <Modal isOpen={confirmDelete} onClose={() => !deleting && setConfirmDelete(false)} title={t('Delete your account?')} subtitle={cloud.session.user.email ?? undefined}>
+          <div className="space-y-4">
+            <p className="text-[15px] leading-relaxed">{t('Your account and your cloud backup will be deleted for good. This cannot be undone.')}</p>
+            <div className="flex flex-wrap justify-end gap-2">
+              <button type="button" onClick={() => setConfirmDelete(false)} disabled={deleting} className="h-11 px-4 rounded-[var(--radius-sm)] border border-[var(--border-strong)] text-[14px] font-medium">{t('Cancel')}</button>
+              <button type="button" onClick={() => void deleteAccount()} disabled={deleting} className="h-11 px-4 rounded-[var(--radius-sm)] bg-[var(--danger)] text-white text-[14px] font-semibold disabled:opacity-60">{deleting ? t('Deleting…') : t('Delete my account')}</button>
+            </div>
+          </div>
+        </Modal>
       </div>
     );
   }
@@ -109,8 +148,14 @@ export const Account: React.FC = () => {
         {sentTo ? (
           <div className="rounded-[var(--radius-md)] bg-[var(--accent-soft)] p-4 space-y-1" role="status">
             <p className="flex items-center gap-2 text-[15px] font-semibold text-[var(--accent)]"><Mail size={17} />{t('Check your inbox')}</p>
-            <p className="text-[14px] leading-relaxed">{t('We sent a sign-in link to {email}. Open it on this device; it signs you in and brings you back here.', { email: sentTo })}</p>
-            <button type="button" onClick={() => setSentTo(null)} className="min-h-10 text-[13px] font-medium text-[var(--fg-muted)] underline underline-offset-4">{t('Use a different email')}</button>
+            <p className="text-[14px] leading-relaxed">{isNative() ? t('We sent a sign-in code to {email}. Enter it below.', { email: sentTo }) : t('We sent a sign-in link to {email}. Open it on this device; it signs you in and brings you back here.', { email: sentTo })}</p>
+            <form onSubmit={verify} className="flex gap-2 pt-2" noValidate>
+              <label htmlFor="account-code" className="sr-only">{t('Code from the email')}</label>
+              <input id="account-code" inputMode="numeric" autoComplete="one-time-code" maxLength={8} value={code} onChange={e => { setCode(e.target.value.replace(/\D/g, '')); setError(null); }} placeholder={t('Code from the email')} className="flex-1 min-w-0 h-11 px-3 rounded-[var(--radius-sm)] bg-[var(--bg-elevated)] border border-[var(--border)] text-[16px] tracking-[0.2em] outline-none focus:border-[var(--accent)]" />
+              <button type="submit" disabled={verifying} className="h-11 px-4 rounded-[var(--radius-sm)] bg-[var(--accent)] text-[var(--on-accent)] text-[14px] font-semibold disabled:opacity-50">{verifying ? t('Checking…') : t('Sign in')}</button>
+            </form>
+            {error && <p role="alert" className="text-[13px] text-[var(--danger)]">{error}</p>}
+            <button type="button" onClick={() => { setSentTo(null); setCode(''); }} className="min-h-10 text-[13px] font-medium text-[var(--fg-muted)] underline underline-offset-4">{t('Use a different email')}</button>
           </div>
         ) : (
           <form onSubmit={send} className="space-y-3" noValidate>
@@ -119,6 +164,7 @@ export const Account: React.FC = () => {
             {error && <p id="account-error" role="alert" className="text-[13px] text-[var(--danger)]">{error}</p>}
             <button type="submit" disabled={sending} className="w-full h-12 rounded-[var(--radius-sm)] bg-[var(--accent)] text-[var(--on-accent)] text-[15px] font-semibold disabled:opacity-50">{sending ? t('Sending…') : t('Email me a sign-in link')}</button>
             <p className="text-[12px] text-center text-[var(--fg-muted)]">{t('New here? The same link creates your account.')}</p>
+            <p className="text-[12px] text-center text-[var(--fg-muted)]">{t('By signing in you accept the')} <button type="button" onClick={() => setActiveRoute('/terms')} className="underline underline-offset-2">{t('Terms of use')}</button> · <button type="button" onClick={() => setActiveRoute('/privacy')} className="underline underline-offset-2">{t('Privacy policy')}</button></p>
           </form>
         )}
       </section>

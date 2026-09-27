@@ -3,6 +3,7 @@ import { AppProvider, useApp } from './store/useApp';
 import { AppShell } from './layout/AppShell';
 import { Landing } from './pages/Landing';
 import { useT } from './i18n';
+const Legal = lazy(() => import('./pages/Legal').then((m) => ({ default: m.Legal })));
 const PublicTwoFutures = lazy(() => import('./pages/PublicTwoFutures').then((m) => ({ default: m.PublicTwoFutures })));
 import { Today } from './pages/Today';
 import { Onboarding } from './components/Onboarding';
@@ -56,6 +57,14 @@ const AppRouter: React.FC = () => {
   // Public Routes
   if (activeRoute === '/') {
     return <Landing />;
+  }
+
+  if (activeRoute === '/privacy' || activeRoute === '/terms') {
+    return (
+      <Suspense fallback={<RouteFallback />}>
+        <Legal kind={activeRoute === '/privacy' ? 'privacy' : 'terms'} />
+      </Suspense>
+    );
   }
 
   if (activeRoute === '/two-futures') {

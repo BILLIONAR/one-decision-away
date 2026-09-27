@@ -8,6 +8,8 @@ import { NudgeSlot, NUDGE_SLOTS, DEFAULT_NUDGE_TIMES, NUDGE_TITLES, getNudgeLine
 import { t } from '../i18n';
 import { isPushActive } from './pushNotifications';
 import { voiceLine } from '../data/odaVoice';
+import { isNative } from './native';
+import { nativePermission, planReminders, replaceNativeReminders, requestNativePermission, type NativePermission } from './nativeNotifications';
 
 const FIRED_KEY = 'oda_nudges_fired';
 const CATCH_UP_MINUTES = 90;
@@ -33,6 +35,13 @@ class NotificationScheduler {
   private decision: { title: string | null; done: boolean } = { title: null, done: false };
   private prefs: NudgePrefs = { enabled: false, times: { ...DEFAULT_NUDGE_TIMES } };
   private onVisible = () => { if (document.visibilityState === 'visible') this.tick(); };
+  /** iPhone app: cached permission and a debounced reschedule of the week ahead. */
+  private nativePerm: NativePermission = 'default';
+  private nativeTimer: number | null = null;
+
+  constructor() {
+    if (isNative()) void nativePermission().then(p => { this.nativePerm = p; this.queueNativeSync(); });
+  }
 
   private todayKey(): string {
     const date = new Date();
@@ -40,14 +49,21 @@ class NotificationScheduler {
   }
 
   public isSupported(): boolean {
+    if (isNative()) return true;
     return typeof window !== 'undefined' && 'Notification' in window;
   }
 
   public permission(): NotificationPermission | 'unsupported' {
+    if (isNative()) return this.nativePerm;
     return this.isSupported() ? Notification.permission : 'unsupported';
   }
 
   public async requestPermission(): Promise<NotificationPermission | 'unsupported'> {
+    if (isNative()) {
+      this.nativePerm = await requestNativePermission();
+      this.queueNativeSync();
+      return this.nativePerm;
+    }
     if (!this.isSupported()) return 'unsupported';
     try {
       return await Notification.requestPermission();
@@ -58,7 +74,37 @@ class NotificationScheduler {
 
   /** Today's One Decision, so reminders can point at the actual next step. */
   public setDecision(title: string | null, done: boolean) {
+    const changed = this.decision.title !== title || this.decision.done !== done;
     this.decision = { title, done };
+    if (changed) this.queueNativeSync();
+  }
+
+  private queueNativeSync() {
+    if (!isNative()) return;
+    if (this.nativeTimer) window.clearTimeout(this.nativeTimer);
+    this.nativeTimer = window.setTimeout(() => { this.nativeTimer = null; void this.syncNative(); }, 400);
+  }
+
+  /** Today follows the live decision; the next six days use the plain plan. */
+  private async syncNative() {
+    if (!this.prefs.enabled || this.nativePerm !== 'granted') { await replaceNativeReminders([]); return; }
+    const today = this.schedule();
+    const later: [NudgeSlot, string][] = this.prefs.smart
+      ? [['morning', this.prefs.times.morning || DEFAULT_NUDGE_TIMES.morning], ['evening', this.prefs.smart.followUp || this.prefs.times.evening || DEFAULT_NUDGE_TIMES.evening]]
+      : NUDGE_SLOTS.map(slot => [slot, this.prefs.times[slot] || DEFAULT_NUDGE_TIMES[slot]]);
+    const reminders = planReminders({
+      now: new Date(),
+      days: 7,
+      slotsFor: day => (day === 0 ? today : later),
+      slotIndex: slot => NUDGE_SLOTS.indexOf(slot),
+      textFor: (slot, day) => ({
+        title: t(NUDGE_TITLES[slot]),
+        body: day === 0
+          ? (this.actionLine(slot) || t(getNudgeLine(slot)))
+          : (this.prefs.smart && slot === 'morning' ? t(voiceLine('choose')) : t(getNudgeLine(slot, new Date(Date.now() + day * 86_400_000)))),
+      }),
+    });
+    await replaceNativeReminders(reminders);
   }
 
   private actionLine(slot: NudgeSlot): string | undefined {
@@ -92,6 +138,7 @@ class NotificationScheduler {
   private start() {
     if (this.timer) window.clearInterval(this.timer);
     this.timer = null;
+    if (isNative()) { this.queueNativeSync(); return; }
     document.removeEventListener('visibilitychange', this.onVisible);
     if (!this.prefs.enabled || !this.isSupported()) return;
     this.tick();

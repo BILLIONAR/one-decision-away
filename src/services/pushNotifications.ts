@@ -1,3 +1,4 @@
+import { isNative } from './native';
 import { cloudSync } from './cloudSync';
 import { t } from '../i18n';
 import { getAppBase, publicAssetPath } from '../utils/routing';
@@ -37,7 +38,8 @@ export function isPushActive(): boolean {
 }
 
 function initialStatus(): PushStatus {
-  const supported = globalThis.isSecureContext && 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+  // The iPhone app uses on-device reminders (nativeNotifications.ts), never web push.
+  const supported = !isNative() && globalThis.isSecureContext && 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
   const configured = Boolean(cloudSync.getConfig() && /^[A-Za-z0-9_-]{87,88}$/.test(publicKey()));
   const signedIn = Boolean(cloudSync.getState().session);
   return {

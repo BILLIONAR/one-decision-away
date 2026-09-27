@@ -5,6 +5,7 @@ import { Logo, LogoLockup } from '../components/Logo';
 import { LanguagePicker } from '../components/LanguagePicker';
 import { useLocale } from '../i18n';
 import { landingCopy } from '../data/landingCopy';
+import { LEGAL_COMPANY, PRIVACY, TERMS } from '../data/legal';
 import '../styles/landing.css';
 
 /** Original diagram: a direction, a small ascent, and a path to return to. */
@@ -100,7 +101,7 @@ export const Landing: React.FC = () => {
         </section>
       </main>
 
-      <footer className="oda-landing-shell oda-landing-footer"><div className="oda-landing-footer-brand"><Logo className="w-5 h-5" /><span>{c.footer}</span></div><p>{c.footerNote}</p></footer>
+      <footer className="oda-landing-shell oda-landing-footer"><div className="oda-landing-footer-brand"><Logo className="w-5 h-5" /><span>{c.footer}</span></div><p>{c.footerNote}</p><p className="oda-landing-legal"><button type="button" onClick={() => setActiveRoute('/privacy')}>{PRIVACY[locale].title}</button><button type="button" onClick={() => setActiveRoute('/terms')}>{TERMS[locale].title}</button><span>© {new Date().getFullYear()} {LEGAL_COMPANY}</span></p></footer>
     </div>
   );
 };
