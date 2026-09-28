@@ -161,3 +161,19 @@
 .oda-course-technique-evidence p:last-child { margin-top: .25rem; font-size: .8rem; line-height: 1.6; color: var(--fg-muted); }
 
 .oda-course-suggested { display: inline-block; margin-top: .35rem; padding: .15rem .55rem; border-radius: 999px; font-size: .68rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); }
+
+/* Go deeper, examples and cycle diagrams (Sep 2026) */
+.oda-course-deeper { margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 1.5rem; }
+.oda-course-deeper-section h3 { font-size: 1.35rem; line-height: 1.25; font-weight: 400; margin-bottom: .6rem; }
+.oda-course-deeper-section .oda-course-visual { margin-top: 1rem; }
+.oda-course-example { margin-top: 1.5rem; padding: 1.1rem 1.25rem; border-radius: var(--radius-md); background: var(--tint-sand); color: var(--fg); }
+.oda-course-example-title { font-weight: 600; margin: .35rem 0 .35rem; }
+.oda-course-example-text { line-height: 1.7; color: var(--fg); opacity: .92; }
+.oda-course-cycle { display: grid; gap: 1rem; align-items: center; }
+@media (min-width: 640px) { .oda-course-cycle { grid-template-columns: 220px 1fr; } }
+.oda-course-cycle-ring { width: 100%; max-width: 220px; margin: 0 auto; color: var(--ink-sage); }
+.oda-course-cycle-dot { fill: var(--primary-grad, var(--accent)); fill: var(--ink-sage); }
+.oda-course-cycle-num { fill: var(--bg-elevated); font-size: 14px; font-weight: 700; font-family: var(--font-sans); }
+.oda-course-cycle-center { fill: var(--fg-muted); font-size: 13px; font-family: var(--font-editorial); font-style: italic; }
+.oda-course-cycle-list { display: flex; flex-direction: column; gap: .75rem; list-style: none; padding: 0; margin: 0; }
+.oda-course-cycle-list li { display: flex; gap: .75rem; align-items: flex-start; }

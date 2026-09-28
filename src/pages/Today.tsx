@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight, AudioLines, Check, ChevronDown, ChevronRight, Leaf, Plus, MessageCircle, GraduationCap, Route, Share2, Waves } from 'lucide-react';
 import { ProgressRing } from '../components/ProgressRing';
-import { COURSES } from '../data/courses';
+import { coursesFor } from '../data/courses';
 import { courseForIntent } from '../data/starterDecisions';
 import { useApp } from '../store/useApp';
 import { getDailyQuote } from '../data/dailyQuotes';
@@ -164,7 +164,7 @@ export const Today: React.FC = () => {
   const keptCount = keptDecisions(data.missions).length;
   const chain = decisionChain(data.missions);
   const week = evidenceSummary(data.missions);
-  const suggestedCourse = COURSES.find(c => c.id === courseForIntent(data.profile.intent));
+  const suggestedCourse = coursesFor(locale).find(c => c.id === courseForIntent(data.profile.intent));
   const draftForToday = data.profile.nextDecisionDraft?.forDay === localDayKey() ? data.profile.nextDecisionDraft.text : null;
   const pickSuggestion = (title: string) => {
     setNewDecisionTitle(title);

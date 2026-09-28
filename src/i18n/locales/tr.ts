@@ -6576,6 +6576,8 @@ const dict: Record<string, string> = {
   "With the coach": "Koçla",
   "Calm, focus, sleep": "Sakinlik, odak, uyku",
   "Guided courses": "Rehberli kurslar",
-  "A short lesson": "Kısa bir ders"
+  "A short lesson": "Kısa bir ders",
+  "An example": "Bir örnek",
+  "Some courses are not yet available in your language; they open in the language they were written in.": "Bazı kurslar henüz Türkçe değil; yazıldıkları dilde açılır."
 };
 export default dict;

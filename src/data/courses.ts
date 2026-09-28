@@ -1,4 +1,5 @@
 import { EXISTING_VISUALS } from './courseContent/existingVisuals';
+import { EN_COURSES, EN_SOURCES } from './courseContent/en';
 import * as procrastination from './courseContent/procrastination';
 import * as focus from './courseContent/focus';
 import * as sleep from './courseContent/sleep';
@@ -21,7 +22,15 @@ export type LessonVisual =
   | { kind: 'table'; title: string; columns: string[]; rows: string[][]; note?: string }
   | { kind: 'compare'; title: string; left: { label: string; items: string[] }; right: { label: string; items: string[] }; note?: string }
   | { kind: 'steps'; title: string; steps: { label: string; text: string }[]; note?: string }
-  | { kind: 'bars'; title: string; bars: { label: string; value: number; display: string }[]; note: string; sourceId: string };
+  | { kind: 'bars'; title: string; bars: { label: string; value: number; display: string }[]; note: string; sourceId: string }
+  /** A loop drawn as a circle of 3–6 nodes (habit loop, thought–feeling–action cycle). */
+  | { kind: 'cycle'; title: string; nodes: { label: string; text: string }[]; center?: string; note?: string };
+
+/** A deeper section under the core reading: a heading, 1–4 paragraphs and optionally its own visual. */
+export interface LessonSection { heading: string; paragraphs: string[]; visual?: LessonVisual }
+/** A short illustrative story (always an invented person, named as an example) showing the idea in daily life. */
+export interface LessonExample { title: string; text: string }
+
 
 /**
  * A named technique from a well-known teacher or author, retold in ODA's own
@@ -40,11 +49,18 @@ export interface CourseLesson {
   visual?: LessonVisual;
   technique?: LessonTechnique;
   photo?: CoursePhoto;
+  /** "Go deeper": longer explanation after the core reading (2–4 sections). */
+  deeper?: LessonSection[];
+  example?: LessonExample;
 }
 export interface GuidedCourse {
   id: string; title: string; subtitle: string; description: string; scope: string; outcome: string; lessons: CourseLesson[];
   photo?: CoursePhoto;
+  /** Language the content is written in. */
+  lang?: ContentLocale;
 }
+
+export type ContentLocale = 'en' | 'tr';
 
 const BASE_SOURCES: CourseSource[] = [
   { id: 'mcii', title: 'Wang, Wang & Gai · 2021 · Hedefe ulaşma meta-analizi', url: 'https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.565202/full', type: 'research', finding: '21 çalışma, 15.907 katılımcı: hedefi gerçek engelle karşılaştırma ve eğer/o zaman planı birlikte küçük–orta ortalama etki gösterdi (g=0,336).', limitation: 'Yayın yanlılığı olası; sonuçlar kişiye ve koşula göre değişir. Bu ODA kursunun etkililiği sınanmadı.' },
@@ -254,7 +270,7 @@ const withExtras = (course: GuidedCourse): GuidedCourse => ({
  * the app's core problem. Stored progress is keyed by course and lesson IDs,
  * so order can change freely.
  */
-export const COURSES: GuidedCourse[] = [
+const TR_COURSES: GuidedCourse[] = [
   turningDay.COURSE,
   procrastination.COURSE,
   ...BASE_COURSES,
@@ -263,4 +279,39 @@ export const COURSES: GuidedCourse[] = [
   calm.COURSE,
   meditation.COURSE,
   suggestion.COURSE,
-].map(withExtras);
+].map(course => withExtras({ ...course, lang: 'tr' as const }));
+
+const TR_SOURCES = COURSE_SOURCES;
+
+/**
+ * Course editions (Sep 2026). English is the primary content language from now
+ * on; Turkish editions exist for the original twelve courses and are being
+ * extended. A reader sees their language when an edition exists, otherwise the
+ * other one. Lesson IDs are identical across editions, so stored progress and
+ * Pro locks do not depend on the language.
+ */
+const ORDER = ['turning-day', 'procrastination', 'confidence', 'adhd', 'motivation', 'faith', 'manifest', 'focus', 'sleep', 'calm', 'meditation', 'suggestion', 'identity', 'state', 'optimism', 'meaning', 'stoic', 'compassion'];
+const byId = (list: GuidedCourse[]) => new Map(list.map(course => [course.id, course]));
+const TR_BY_ID = byId(TR_COURSES);
+const EN_BY_ID = byId(EN_COURSES.map(course => withExtras({ ...course, lang: 'en' as const })));
+const ordered = (pick: (id: string) => GuidedCourse | undefined) => [
+  ...ORDER.map(pick).filter((course): course is GuidedCourse => Boolean(course)),
+  ...[...new Set([...TR_BY_ID.keys(), ...EN_BY_ID.keys()])].filter(id => !ORDER.includes(id)).map(pick).filter((course): course is GuidedCourse => Boolean(course)),
+];
+
+export function coursesFor(locale: string): GuidedCourse[] {
+  return locale === 'tr' ? ordered(id => TR_BY_ID.get(id) ?? EN_BY_ID.get(id)) : ordered(id => EN_BY_ID.get(id) ?? TR_BY_ID.get(id));
+}
+
+/** Every course once (Turkish edition when it exists): the structure used for progress and counts. */
+export const COURSES: GuidedCourse[] = ordered(id => TR_BY_ID.get(id) ?? EN_BY_ID.get(id));
+export const EN_EDITION: GuidedCourse[] = [...EN_BY_ID.values()];
+
+export function sourcesFor(locale: string): CourseSource[] {
+  const first = locale === 'tr' ? TR_SOURCES : EN_SOURCES;
+  const second = locale === 'tr' ? EN_SOURCES : TR_SOURCES;
+  const seen = new Set(first.map(source => source.id));
+  return [...first, ...second.filter(source => !seen.has(source.id))];
+}
+export { EN_SOURCES };
+
