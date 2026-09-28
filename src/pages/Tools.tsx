@@ -60,7 +60,7 @@ export const Tools: React.FC = () => {
           <div className="oda-surface overflow-hidden">
             {group.tools.map((tool, idx) => (
               <button key={tool.route} type="button" onClick={() => setActiveRoute(tool.route)} className={`w-full min-h-[68px] px-4 sm:px-5 py-3 flex items-center gap-4 text-left transition-colors hover:bg-[var(--bg-muted)] ${idx > 0 ? 'border-t border-[var(--border)]' : ''}`}>
-                <tool.icon size={20} strokeWidth={1.6} className="shrink-0 text-[var(--fg-muted)]" aria-hidden="true" />
+                <span className={`oda-tile-icon shrink-0 ${["oda-tint-sage", "oda-tint-sand", "oda-tint-blue"][idx % 3]}`}><tool.icon size={18} strokeWidth={1.9} aria-hidden="true" /></span>
                 <span className="min-w-0 flex-1">
                   <span className="block text-[16px] font-medium text-[var(--fg)]">{t(tool.label)}</span>
                   <span className="block text-[13.5px] leading-snug text-[var(--fg-muted)] mt-0.5">{t(tool.hint)}</span>

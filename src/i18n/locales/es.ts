@@ -6564,6 +6564,18 @@ const dict: Record<string, string> = {
   "Enter the code from the email.": "Escribe el código del correo.",
   "We sent a sign-in code to {email}. Enter it below.": "Enviamos un código de acceso a {email}. Escríbelo abajo.",
   "Code from the email": "Código del correo",
-  "Checking…": "Comprobando…"
+  "Checking…": "Comprobando…",
+  "this week": "esta semana",
+  "Did it? Tap the check · +D$ {amount}": "¿Lo hiciste? Toca la marca · +D$ {amount}",
+  "Write it in a few words…": "Escríbelo en pocas palabras…",
+  "Quick actions": "Acciones rápidas",
+  "Plan for obstacles": "Plan ante obstáculos",
+  "30 seconds": "30 segundos",
+  "A promise said out loud holds": "Una promesa dicha en voz alta se sostiene",
+  "Think it through": "Piénsalo con calma",
+  "With the coach": "Con el coach",
+  "Calm, focus, sleep": "Calma, foco, sueño",
+  "Guided courses": "Cursos guiados",
+  "A short lesson": "Una lección corta"
 };
 export default dict;

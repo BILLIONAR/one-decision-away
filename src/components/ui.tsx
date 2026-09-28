@@ -23,7 +23,7 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const base =
-    'inline-flex items-center justify-center font-semibold font-sans rounded-[var(--radius-sm)] transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-strong)] disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap cursor-pointer select-none';
+    'inline-flex items-center justify-center font-semibold font-sans rounded-full transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-strong)] disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap cursor-pointer select-none';
 
   const sizeClasses = {
     sm: 'h-11 px-4 text-[14px] gap-2',
@@ -32,10 +32,10 @@ export const Button: React.FC<ButtonProps> = ({
   };
 
   const variantClasses = {
-    primary: 'bg-[var(--fg)] text-[var(--bg)] hover:opacity-90 active:opacity-80',
+    primary: 'oda-btn-primary active:opacity-90',
     secondary:
       'border border-[var(--border-strong)] bg-transparent text-[var(--fg)] hover:bg-[var(--bg-muted)]',
-    accent: 'bg-[var(--accent)] text-white hover:opacity-90 active:opacity-80',
+    accent: 'bg-[var(--accent)] text-[var(--on-accent)] hover:opacity-90 active:opacity-80',
     outline:
       'border border-[var(--border-strong)] bg-transparent text-[var(--fg)] hover:bg-[var(--bg-muted)]',
     ghost: 'bg-transparent text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-muted)]',

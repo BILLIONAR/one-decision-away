@@ -17,7 +17,7 @@ export const Legal: React.FC<{ kind: 'privacy' | 'terms' }> = ({ kind }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)]">
+    <div className="min-h-screen text-[var(--fg)]">
       <div className="max-w-[680px] mx-auto px-5 sm:px-8 pt-[max(env(safe-area-inset-top),20px)] pb-16">
         <button type="button" onClick={back} className="min-h-11 -ml-2 px-2 inline-flex items-center gap-2 text-[15px] text-[var(--fg-muted)] hover:text-[var(--fg)]">
           <ArrowLeft size={18} strokeWidth={1.8} aria-hidden="true" />{t('Back')}

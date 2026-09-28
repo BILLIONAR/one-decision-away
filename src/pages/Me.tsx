@@ -30,6 +30,8 @@ interface MenuRow {
 
 const APP_VERSION = '2.0';
 
+const TINTS = ['oda-tint-sage', 'oda-tint-sand', 'oda-tint-blue', 'oda-tint-rose'];
+
 export const Me: React.FC = () => {
   const { data, setActiveRoute } = useApp();
   const t = useT();
@@ -107,7 +109,7 @@ export const Me: React.FC = () => {
       {/* Header */}
       <section className="oda-surface p-5 sm:p-6 space-y-5">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-full bg-[var(--forest)] text-[var(--on-forest)] flex items-center justify-center text-[22px] oda-numeral shrink-0" aria-hidden="true">
+          <div className="w-14 h-14 rounded-full oda-btn-primary flex items-center justify-center text-[22px] oda-numeral shrink-0" aria-hidden="true">
             {initial}
           </div>
           <div className="min-w-0 flex-1">
@@ -127,11 +129,10 @@ export const Me: React.FC = () => {
             <ChevronRight size={18} className="text-[var(--accent)] shrink-0" />
           </button>
         )}
-        <div className="oda-rule" />
-        <button type="button" onClick={() => setActiveRoute('/app/evidence')} className="w-full grid grid-cols-3 gap-3 text-left">
-          <StatTile value={String(evidence.total)} label={t('Kept decisions')} accent />
-          <StatTile value={`${evidence.last7}/7`} label={t('This week')} />
-          <StatTile value={stats.earned >= 10000 ? `${(stats.earned / 1000).toFixed(1)}k` : stats.earned.toLocaleString()} label={t('D$ earned')} />
+        <button type="button" onClick={() => setActiveRoute('/app/evidence')} className="w-full grid grid-cols-3 gap-2 text-left">
+          <StatTile value={String(evidence.total)} label={t('Kept decisions')} tint="oda-tint-sage" />
+          <StatTile value={`${evidence.last7}/7`} label={t('This week')} tint="oda-tint-rose" />
+          <StatTile value={stats.earned >= 10000 ? `${(stats.earned / 1000).toFixed(1)}k` : stats.earned.toLocaleString()} label={t('D$ earned')} tint="oda-tint-sand" />
         </button>
       </section>
 
@@ -147,7 +148,7 @@ export const Me: React.FC = () => {
                 onClick={() => setActiveRoute(row.route)}
                 className={`w-full min-h-[60px] px-4 py-2 flex items-center gap-4 text-left cursor-pointer transition-colors hover:bg-[var(--bg-muted)] ${idx > 0 ? 'border-t border-[var(--border)]' : ''}`}
               >
-                <row.icon className="w-5 h-5 shrink-0 text-[var(--fg-muted)]" strokeWidth={1.6} aria-hidden="true" />
+                <span className={`oda-tile-icon shrink-0 ${TINTS[idx % TINTS.length]}`}><row.icon className="w-[18px] h-[18px]" strokeWidth={1.9} aria-hidden="true" /></span>
                 <span className="flex-1 min-w-0">
                   <span className="block text-[15px] font-medium text-[var(--fg)] truncate">{row.label}</span>
                   {row.hint && <span className="block text-[12.5px] text-[var(--fg-muted)] truncate">{row.hint}</span>}
@@ -175,9 +176,9 @@ export const Me: React.FC = () => {
   );
 };
 
-const StatTile: React.FC<{ value: string; label: string; accent?: boolean }> = ({ value, label, accent }) => (
-  <div className="min-w-0">
-    <div className={`oda-numeral text-[28px] leading-none truncate ${accent ? 'text-[var(--accent)]' : 'text-[var(--fg)]'}`}>{value}</div>
-    <div className="text-[12px] text-[var(--fg-muted)] mt-1.5 leading-tight">{label}</div>
+const StatTile: React.FC<{ value: string; label: string; tint: string }> = ({ value, label, tint }) => (
+  <div className={`min-w-0 rounded-[16px] px-3 py-2.5 ${tint}`}>
+    <div className="oda-numeral text-[24px] leading-none truncate">{value}</div>
+    <div className="text-[11.5px] opacity-80 mt-1 leading-tight">{label}</div>
   </div>
 );

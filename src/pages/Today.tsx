@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { AudioLines, Check, ChevronDown, ChevronRight, Plus, MessageCircle, GraduationCap, Timer, Waves } from 'lucide-react';
+import { ArrowRight, AudioLines, Check, ChevronDown, ChevronRight, Leaf, Plus, MessageCircle, GraduationCap, Route, Share2, Waves } from 'lucide-react';
+import { ProgressRing } from '../components/ProgressRing';
+import { COURSES } from '../data/courses';
+import { courseForIntent } from '../data/starterDecisions';
 import { useApp } from '../store/useApp';
 import { getDailyQuote } from '../data/dailyQuotes';
 import { Modal } from '../components/ui';
@@ -28,7 +31,7 @@ import { DecisionPlanModal } from '../components/momentum/DecisionPlanModal';
 import { TwoMinuteStart } from '../components/momentum/TwoMinuteStart';
 import { MomentumCard, EvidenceStrip, SimpleModeNote, TwoWeekCheckIn, WeeklyReviewCard, WeeklyFocusNote } from '../components/momentum/TodayMomentum';
 import { shareDecision } from '../components/momentum/shareDecision';
-import { decisionChain, isSimpleMode, keptDecisions, localDayKey, twoWeekCheckInDue, weeklyFocus, weeklyReviewDue } from '../services/momentum';
+import { decisionChain, evidenceSummary, isSimpleMode, keptDecisions, localDayKey, twoWeekCheckInDue, weeklyFocus, weeklyReviewDue } from '../services/momentum';
 import { EasyDecisionChips, KeptMomentCard } from '../components/momentum/FirstSteps';
 import { easyDecisions } from '../data/starterDecisions';
 
@@ -160,6 +163,8 @@ export const Today: React.FC = () => {
   const focusChange = weeklyFocus(data);
   const keptCount = keptDecisions(data.missions).length;
   const chain = decisionChain(data.missions);
+  const week = evidenceSummary(data.missions);
+  const suggestedCourse = COURSES.find(c => c.id === courseForIntent(data.profile.intent));
   const draftForToday = data.profile.nextDecisionDraft?.forDay === localDayKey() ? data.profile.nextDecisionDraft.text : null;
   const pickSuggestion = (title: string) => {
     setNewDecisionTitle(title);
@@ -208,22 +213,27 @@ export const Today: React.FC = () => {
         onPickEasy={(title) => void quickSetDecision(title)}
       />
 
-      {/* 2. One decision: set like a page in a notebook, not a banner. */}
+      {/* 2. One decision: a soft card with this week's ring, one clear action and a check. */}
       <section id="set-one-decision" className="oda-decision" aria-labelledby="today-decision-label">
-        <div className="oda-decision-folio">
-          <span id="today-decision-label" className="oda-kicker">{t("Today's one decision")}</span>
-          {chain.days > 0 && (
-            <span className="oda-decision-chain" title={t('Your chain: one missed day a week is forgiven, two in a row start a new chain.')}>
-              {chain.days === 1 ? t('1 day') : t('{n} days', { n: chain.days })}{chain.graceUsed ? ` · ${t('flex day used')}` : ''}
-            </span>
-          )}
+        <div className="flex items-center gap-4">
+          <ProgressRing value={week.last7} max={7} label={t('This week: {n} of 7 days', { n: week.last7 })} caption={t('this week')} />
+          <div className="min-w-0 flex-1 space-y-1">
+            <p className="flex items-baseline justify-between gap-2">
+              <span id="today-decision-label" className="oda-kicker text-[var(--brand-burgundy)]">{t("Today's one decision")}</span>
+              {chain.days > 0 && (
+                <span className="text-[12px] text-[var(--fg-muted)] whitespace-nowrap" title={t('Your chain: one missed day a week is forgiven, two in a row start a new chain.')}>
+                  {chain.days === 1 ? t('1 day') : t('{n} days', { n: chain.days })}
+                </span>
+              )}
+            </p>
+            {todayOneDecision
+              ? <p className={`oda-decision-text ${decisionDone ? 'is-kept' : ''}`}>{t(todayOneDecision.title)}</p>
+              : <p className="oda-decision-text text-[var(--fg-muted)]">{t('What would make today count?')}</p>}
+          </div>
         </div>
 
         {todayOneDecision ? (
           <>
-            <p className={`oda-decision-text ${decisionDone ? 'is-kept' : ''}`}>
-              <span className="oda-decision-quote" aria-hidden="true">“</span>{t(todayOneDecision.title)}
-            </p>
             {decisionPlan?.ifThen && !decisionDone && (
               <button type="button" onClick={() => setPlan({ open: true })} className="oda-decision-plan">
                 <span className="block text-[13px] text-[var(--fg-muted)]">
@@ -241,11 +251,11 @@ export const Today: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <>
-                <div className="oda-decision-actions">
-                  <button type="button" onClick={() => setStartOpen(true)} className="oda-decision-action">
-                    <Timer size={17} strokeWidth={1.9} aria-hidden="true" />
-                    {t('Start · just 2 minutes')}
+              <div className="space-y-2">
+                <div className="flex gap-2">
+                  <button type="button" onClick={() => setStartOpen(true)} className="oda-decision-action oda-btn-primary">
+                    <span>{t('Start · just 2 minutes')}</span>
+                    <span className="oda-decision-action-arrow" aria-hidden="true"><ArrowRight size={18} strokeWidth={2} /></span>
                   </button>
                   <button
                     type="button"
@@ -253,22 +263,15 @@ export const Today: React.FC = () => {
                     aria-label={t('Done · +D$ {amount}', { amount: ECONOMY_CONSTANTS.ONE_DECISION_REWARD.toLocaleString() })}
                     className="oda-decision-done"
                   >
-                    <span className="oda-decision-box" aria-hidden="true" />
-                    <span>{t('I did it')}</span>
-                    <span className="oda-decision-reward">+D$ {ECONOMY_CONSTANTS.ONE_DECISION_REWARD.toLocaleString()}</span>
+                    <Check size={22} strokeWidth={2.2} aria-hidden="true" />
                   </button>
                 </div>
-                <div className="oda-decision-foot">
-                  {!decisionPlan?.ifThen && (
-                    <button type="button" onClick={() => setPlan({ open: true })} className="oda-decision-link">{t('Plan for obstacles · 30 sec')}</button>
-                  )}
-                  <button type="button" onClick={() => void handleShare()} className="oda-decision-link">{t('Tell one person')}</button>
-                </div>
-              </>
+                <p className="text-[12.5px] text-[var(--fg-muted)] px-1">{t('Did it? Tap the check · +D$ {amount}', { amount: ECONOMY_CONSTANTS.ONE_DECISION_REWARD.toLocaleString() })}</p>
+              </div>
             )}
           </>
         ) : (
-          <form onSubmit={handleSetDecision} className="space-y-4">
+          <form onSubmit={handleSetDecision} className="space-y-3">
             <label htmlFor="today-decision-input" className="sr-only">
               {t('What is the one decision that would make today meaningful?')}
             </label>
@@ -276,10 +279,10 @@ export const Today: React.FC = () => {
               id="today-decision-input"
               value={newDecisionTitle}
               onChange={(e) => setNewDecisionTitle(e.target.value)}
-              placeholder={t('What would make today count?')}
+              placeholder={t('Write it in a few words…')}
               className="oda-decision-input"
             />
-            <button type="submit" disabled={!newDecisionTitle.trim() || isSaving} className="oda-decision-action w-full disabled:opacity-40">
+            <button type="submit" disabled={!newDecisionTitle.trim() || isSaving} className="oda-decision-action oda-btn-primary w-full justify-center disabled:opacity-40">
               {t('Set decision')}
             </button>
             {!newDecisionTitle.trim() && (
@@ -290,6 +293,40 @@ export const Today: React.FC = () => {
           </form>
         )}
       </section>
+
+      {/* Quick actions: four tinted tiles */}
+      <nav aria-label={t('Quick actions')} className="grid grid-cols-2 gap-2.5">
+        {todayOneDecision && !decisionDone && !decisionPlan?.ifThen ? (
+          <button type="button" onClick={() => setPlan({ open: true })} className="oda-tile">
+            <span className="oda-tile-icon oda-tint-sage"><Route size={18} strokeWidth={1.9} aria-hidden="true" /></span>
+            <span><span className="block text-[14px] font-semibold">{t('Plan for obstacles')}</span><span className="block text-[12px] text-[var(--fg-muted)]">{t('30 seconds')}</span></span>
+          </button>
+        ) : (
+          <button type="button" onClick={() => setActiveRoute('/app/evidence')} className="oda-tile">
+            <span className="oda-tile-icon oda-tint-sage"><Leaf size={18} strokeWidth={1.9} aria-hidden="true" /></span>
+            <span><span className="block text-[14px] font-semibold">{t('Your evidence')}</span><span className="block text-[12px] text-[var(--fg-muted)]">{t('{n} kept promises', { n: keptCount })}</span></span>
+          </button>
+        )}
+        {todayOneDecision ? (
+          <button type="button" onClick={() => void handleShare()} className="oda-tile">
+            <span className="oda-tile-icon oda-tint-rose"><Share2 size={18} strokeWidth={1.9} aria-hidden="true" /></span>
+            <span><span className="block text-[14px] font-semibold">{t('Tell one person')}</span><span className="block text-[12px] text-[var(--fg-muted)]">{t('A promise said out loud holds')}</span></span>
+          </button>
+        ) : (
+          <button type="button" onClick={() => setActiveRoute('/app/coach')} className="oda-tile">
+            <span className="oda-tile-icon oda-tint-rose"><MessageCircle size={18} strokeWidth={1.9} aria-hidden="true" /></span>
+            <span><span className="block text-[14px] font-semibold">{t('Think it through')}</span><span className="block text-[12px] text-[var(--fg-muted)]">{t('With the coach')}</span></span>
+          </button>
+        )}
+        <button type="button" onClick={() => setActiveRoute('/app/sound')} className="oda-tile">
+          <span className="oda-tile-icon oda-tint-blue"><Waves size={18} strokeWidth={1.9} aria-hidden="true" /></span>
+          <span><span className="block text-[14px] font-semibold">{t('Sound Room')}</span><span className="block text-[12px] text-[var(--fg-muted)]">{t('Calm, focus, sleep')}</span></span>
+        </button>
+        <button type="button" onClick={() => setActiveRoute('/app/courses')} className="oda-tile">
+          <span className="oda-tile-icon oda-tint-sand"><GraduationCap size={18} strokeWidth={1.9} aria-hidden="true" /></span>
+          <span><span className="block text-[14px] font-semibold">{suggestedCourse ? suggestedCourse.title : t('Guided courses')}</span><span className="block text-[12px] text-[var(--fg-muted)]">{t('A short lesson')}</span></span>
+        </button>
+      </nav>
 
       {decisionDone && <KeptMomentCard />}
       {focusChange && <WeeklyFocusNote change={focusChange} />}
@@ -383,12 +420,6 @@ export const Today: React.FC = () => {
       {simple ? <SimpleModeNote /> : <>
       <section aria-labelledby="today-discover" className="space-y-3">
         <h2 id="today-discover" className="text-sm font-semibold">{d.discover}</h2>
-        <button type="button" onClick={() => setActiveRoute('/app/courses')} className="oda-discovery-link w-full flex items-center gap-4 text-left py-5 border-y border-[var(--border)]">
-          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--brand-burgundy-soft)] text-[var(--brand-burgundy)]"><GraduationCap size={24} strokeWidth={1.5} /></span><span><span className="block text-base font-semibold">{c.courses}</span><span className="block text-xs leading-relaxed text-[var(--fg-muted)] mt-1">{c.courseHint}</span></span><ChevronRight size={18} className="ml-auto shrink-0" />
-        </button>
-        <button type="button" onClick={() => setActiveRoute('/app/sound')} className="oda-discovery-link w-full flex items-center gap-4 text-left py-4 border-b border-[var(--border)]">
-          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--gold-soft)] text-[var(--gold)]"><Waves size={22} strokeWidth={1.6} /></span><span><span className="block text-base font-semibold">{t('Sound Room')}</span><span className="block text-xs leading-relaxed text-[var(--fg-muted)] mt-1">{t('Sound for calm, sleep, focus and breathing')}</span></span><ChevronRight size={18} className="ml-auto shrink-0" />
-        </button>
         <button type="button" onClick={() => setActiveRoute('/app/coach')} className="oda-discovery-link w-full flex items-center gap-4 text-left py-4 border-b border-[var(--border)]">
           <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] text-[var(--accent)]"><MessageCircle size={22} strokeWidth={1.6} /></span><span className="text-base font-semibold">{c.talk}</span><ChevronRight size={18} className="ml-auto shrink-0" />
         </button>

@@ -18,7 +18,6 @@
     border-color: var(--border);
   }
   body {
-    background-color: var(--bg);
     color: var(--fg);
     font-family: var(--font-sans);
     font-size: 16px;
@@ -231,91 +230,70 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   border-radius: 2px;
   background: var(--brand-burgundy);
 }
-/* Today's decision: a page from a good notebook. Paper, a folio line,
-   the decision set in a book face with a hanging quote, one clear action. */
+/* Today's decision: a soft clay card with this week's ring, a pill action and a check. */
 .oda-decision {
   position: relative;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 22px 22px 18px;
-  box-shadow: 0 1px 0 rgb(28 32 29 / 3%), 0 18px 40px -28px rgb(28 32 29 / 28%);
+  display: flex; flex-direction: column; gap: 16px;
+  padding: 18px;
+  border-radius: 28px;
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--surface-shadow);
 }
-@media (min-width: 640px) { .oda-decision { padding: 30px 32px 22px; } }
-.oda-decision-folio {
-  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
-  padding-bottom: 12px; border-bottom: 1px solid var(--border);
-  color: var(--fg-muted);
-}
-.oda-decision-chain { font-size: 13px; font-feature-settings: 'tnum' 1; color: var(--fg-muted); }
+@media (min-width: 640px) { .oda-decision { padding: 24px; } }
 .oda-decision-text {
-  position: relative;
-  margin: 22px 0 24px;
-  padding-left: 0.5em;
   font-family: var(--font-editorial);
   font-optical-sizing: auto;
-  font-size: clamp(28px, 7.4vw, 36px);
+  font-size: clamp(21px, 5.8vw, 28px);
   line-height: 1.18;
   letter-spacing: -0.01em;
   color: var(--fg);
   overflow-wrap: anywhere;
-  text-wrap: balance;
-}
-.oda-decision-quote {
-  position: absolute; left: -0.08em; top: -0.02em;
-  color: var(--brand-burgundy);
 }
 .oda-decision-text.is-kept { color: var(--fg-muted); }
 .oda-decision-plan {
   display: block; width: 100%; text-align: left;
-  margin: -6px 0 22px; padding: 2px 0 2px 14px;
-  border-left: 2px solid var(--brand-burgundy);
+  padding: 10px 14px; border-radius: 16px;
+  background: var(--tint-rose);
 }
-.oda-decision-actions { display: grid; gap: 4px; }
 .oda-decision-action {
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  height: 50px; border-radius: 12px;
-  background: var(--forest); color: var(--on-forest);
-  font-size: 15.5px; font-weight: 600;
+  flex: 1 1 auto;
+  display: inline-flex; align-items: center; justify-content: space-between; gap: 10px;
+  height: 52px; padding: 0 6px 0 20px; border-radius: 26px;
+  font-size: 15px; font-weight: 600;
 }
-.oda-decision-action:hover { background: color-mix(in srgb, var(--forest) 88%, black); }
-:root[data-theme="dark"] .oda-decision-action, html.dark .oda-decision-action { background: var(--accent); color: var(--on-accent); }
+.oda-decision-action.justify-center { justify-content: center; padding: 0 20px; }
+.oda-decision-action-arrow {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: rgb(255 255 255 / 16%);
+}
+:root[data-theme="dark"] .oda-decision-action-arrow, html.dark .oda-decision-action-arrow { background: rgb(26 22 17 / 14%); }
 .oda-decision-done {
-  display: flex; align-items: center; gap: 12px;
-  min-height: 50px; padding: 0 4px;
-  font-size: 15.5px; font-weight: 500; color: var(--fg);
+  width: 52px; height: 52px; flex-shrink: 0; border-radius: 26px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--tint-sage); color: var(--ink-sage);
+  border: 1px solid var(--surface-border);
 }
-.oda-decision-box {
-  width: 22px; height: 22px; border-radius: 999px; flex-shrink: 0;
-  border: 1.5px solid var(--border-strong);
-  transition: border-color 160ms ease, background-color 160ms ease;
-}
-.oda-decision-done:hover .oda-decision-box { border-color: var(--accent); background: var(--accent-soft); }
-.oda-decision-reward { margin-left: auto; font-size: 13px; color: var(--fg-muted); font-feature-settings: 'tnum' 1; }
-.oda-decision-foot {
-  display: flex; flex-wrap: wrap; gap: 4px 20px;
-  margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border);
-}
-.oda-decision-link {
-  min-height: 44px; font-size: 14px; color: var(--fg-muted);
-  text-decoration: underline; text-decoration-color: var(--border-strong);
-  text-underline-offset: 4px; text-decoration-thickness: 1px;
-}
-.oda-decision-link:hover { color: var(--fg); text-decoration-color: currentColor; }
+.oda-decision-done:hover { filter: brightness(0.97); }
 .oda-decision-kept { display: flex; gap: 12px; align-items: flex-start; padding-top: 14px; border-top: 1px solid var(--border); }
 .oda-decision-seal {
   width: 26px; height: 26px; border-radius: 999px; flex-shrink: 0; margin-top: 1px;
   display: inline-flex; align-items: center; justify-content: center;
-  background: var(--forest); color: var(--on-forest);
+  background: var(--primary-grad); color: var(--on-primary);
 }
 .oda-decision-input {
-  width: 100%; height: 56px; margin-top: 10px;
-  background: transparent; border: 0; border-bottom: 1px solid var(--border-strong);
-  font-family: var(--font-editorial); font-size: 24px; color: var(--fg);
-  outline: none; border-radius: 0;
+  width: 100%; height: 54px; padding: 0 16px; box-sizing: border-box;
+  background: var(--bg-muted); border: 1px solid transparent; border-radius: 16px;
+  font-family: var(--font-editorial); font-size: 20px; color: var(--fg);
+  outline: none;
 }
 .oda-decision-input::placeholder { color: var(--fg-subtle); opacity: 1; }
-.oda-decision-input:focus { border-bottom-color: var(--accent); }
+.oda-decision-input:focus { border-color: var(--ink-sage); background: var(--bg-elevated); }
+@media (prefers-reduced-motion: no-preference) {
+  .oda-ring-arc { animation: oda-ring-in 900ms var(--ease-out) both; }
+}
+@keyframes oda-ring-in { from { stroke-dasharray: 0 999; } }
 .oda-quote { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 .oda-quote-mark { font-family: var(--font-editorial); color: var(--brand-burgundy); line-height: 1; }
 .oda-discovery-link { transition: background-color 160ms ease; }
@@ -332,10 +310,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 /* ---- Premium surfaces (Sep 2026) ---- */
 .oda-surface {
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--surface-shadow);
 }
 button.oda-surface, a.oda-surface { transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out), border-color 200ms ease; }
 button.oda-surface:hover, a.oda-surface:hover { border-color: var(--border-strong); }
@@ -350,5 +328,57 @@ button.oda-surface:hover, a.oda-surface:hover { border-color: var(--border-stron
   .oda-page-enter { animation: oda-page-in 360ms var(--ease-out) both; }
 }
 @keyframes oda-page-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-.oda-card { background: var(--bg-elevated); border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+.oda-card { background: var(--surface); border: 1px solid var(--surface-border); box-shadow: var(--surface-shadow); }
 .oda-card .oda-card { box-shadow: none; }
+
+/* ---- Soft depth (light) and night bronze (dark), Sep 2026 ---- */
+.oda-glass-bar {
+  background: var(--glass);
+  border-bottom: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: blur(22px) saturate(1.7);
+  backdrop-filter: blur(22px) saturate(1.7);
+}
+/* Floating glass capsule, in the spirit of iOS 26 tab bars. */
+.oda-tabbar {
+  position: fixed; z-index: 30;
+  left: 16px; right: 16px;
+  bottom: max(14px, env(safe-area-inset-bottom, 0px));
+  height: 66px; padding: 6px; box-sizing: border-box;
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+  border-radius: 33px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  -webkit-backdrop-filter: blur(22px) saturate(1.7);
+  backdrop-filter: blur(22px) saturate(1.7);
+}
+.oda-tab {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  border-radius: 27px; font-size: 10.5px; font-weight: 500; color: var(--fg-subtle);
+  cursor: pointer; transition: background-color 200ms var(--ease-out), color 160ms ease;
+}
+.oda-tab[aria-current="page"] { background: var(--nav-active); color: var(--ink-sage); font-weight: 600; }
+.oda-btn-primary {
+  background: var(--primary-grad); color: var(--on-primary);
+  box-shadow: var(--primary-glow);
+}
+.oda-btn-primary:hover { filter: brightness(1.06); }
+.oda-tile {
+  display: flex; flex-direction: column; justify-content: space-between; gap: 10px;
+  min-height: 92px; padding: 14px; box-sizing: border-box; text-align: left;
+  border-radius: 22px; background: var(--surface); border: 1px solid var(--surface-border); box-shadow: var(--surface-shadow);
+  transition: transform 200ms var(--ease-out);
+}
+.oda-tile:active { transform: scale(0.98); }
+.oda-tile-icon { width: 34px; height: 34px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; }
+.oda-tint-sage { background: var(--tint-sage); color: var(--ink-sage); }
+.oda-tint-rose { background: var(--tint-rose); color: var(--ink-rose); }
+.oda-tint-blue { background: var(--tint-blue); color: var(--ink-blue); }
+.oda-tint-sand { background: var(--tint-sand); color: var(--ink-sand); }
+
+/* The page ground sits on a fixed layer: iOS ignores background-attachment: fixed. */
+html { background-color: var(--bg); }
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: var(--page-bg);
+}

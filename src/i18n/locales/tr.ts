@@ -6564,6 +6564,18 @@ const dict: Record<string, string> = {
   "Enter the code from the email.": "E-postadaki kodu gir.",
   "We sent a sign-in code to {email}. Enter it below.": "{email} adresine bir giriş kodu gönderdik. Aşağıya yaz.",
   "Code from the email": "E-postadaki kod",
-  "Checking…": "Kontrol ediliyor…"
+  "Checking…": "Kontrol ediliyor…",
+  "this week": "bu hafta",
+  "Did it? Tap the check · +D$ {amount}": "Yaptın mı? Onay işaretine dokun · +D$ {amount}",
+  "Write it in a few words…": "Birkaç kelimeyle yaz…",
+  "Quick actions": "Hızlı işlemler",
+  "Plan for obstacles": "Engellere plan",
+  "30 seconds": "30 saniye",
+  "A promise said out loud holds": "Söylenen söz daha sağlam",
+  "Think it through": "Birlikte düşünelim",
+  "With the coach": "Koçla",
+  "Calm, focus, sleep": "Sakinlik, odak, uyku",
+  "Guided courses": "Rehberli kurslar",
+  "A short lesson": "Kısa bir ders"
 };
 export default dict;

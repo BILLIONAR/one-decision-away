@@ -1,19 +1,19 @@
 :root {
   /* ODA: quiet paper, warm ink, forest green used sparingly; burgundy only for the brand mark and small moments. */
-  --bg: #F6F4EE;
+  --bg: #F4F0E8;
   --ink: #1C201D;
   --fg: #1C201D;
   --fg-muted: #62645D;
   --fg-subtle: #6B6D65;
   --ink-faint: #6B6D65;
-  --bg-elevated: #FFFEFB;
-  --bg-muted: #EEECE5;
+  --bg-elevated: #FFFFFF;
+  --bg-muted: #EFEBE3;
   --bg-inset: #E6E3DA;
-  --border: #E3DFD5;
+  --border: #E7E2D8;
   --border-strong: #B4B0A4;
   --accent: #234F3E;
   --on-accent: #FFFDF8;
-  --accent-soft: #E7ECE3;
+  --accent-soft: #E1ECE4;
   --brand-burgundy: #843D4B;
   --brand-burgundy-soft: #F1E2E2;
   --on-burgundy: #FFFDF8;
@@ -39,36 +39,56 @@
   /* Native SF Pro on Apple devices (the iOS app), Hanken Grotesk elsewhere. */
   --font-sans: -apple-system, BlinkMacSystemFont, 'Hanken Grotesk Variable', 'Segoe UI', Roboto, sans-serif;
   --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
-  --radius-xs: 6px;
-  --radius-sm: 10px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
+  --radius-xs: 8px;
+  --radius-sm: 14px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+  --radius-xl: 28px;
   --radius-full: 9999px;
-  --shadow-sm: 0 1px 0 rgb(28 32 29 / 3%);
-  --shadow-md: 0 1px 2px rgb(28 32 29 / 4%);
-  --shadow-lg: 0 1px 2px rgb(28 32 29 / 5%), 0 16px 36px -20px rgb(28 32 29 / 20%);
+  --shadow-sm: 0 1px 2px rgb(35 79 62 / 5%);
+  --shadow-md: 0 22px 44px -26px rgb(35 79 62 / 32%), 0 2px 6px rgb(35 79 62 / 5%), inset 0 1px 0 #FFFFFF;
+  --shadow-lg: 0 30px 60px -30px rgb(35 79 62 / 40%), 0 4px 10px rgb(35 79 62 / 6%), inset 0 1px 0 #FFFFFF;
   /* A restrained brass for small premium details (rules, numerals, badges). */
   --gold: #9C7A45;
   --gold-soft: #F3EBDD;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Soft depth (light): a sage-to-peach ground, clay cards, tinted tiles. */
+  --page-bg: linear-gradient(165deg, #DDEBE2 0%, #F4F0E8 46%, #F6E2D6 100%);
+  --surface: rgba(255, 255, 255, 0.86);
+  --surface-border: rgba(255, 255, 255, 0.95);
+  --surface-shadow: 0 22px 44px -26px rgb(35 79 62 / 32%), 0 2px 6px rgb(35 79 62 / 5%), inset 0 1px 0 #FFFFFF;
+  --glass: rgba(255, 255, 255, 0.74);
+  --glass-border: rgba(255, 255, 255, 0.85);
+  --glass-shadow: 0 18px 40px -18px rgb(20 24 22 / 28%), inset 0 1px 0 rgb(255 255 255 / 90%);
+  --nav-active: rgba(35, 79, 62, 0.10);
+  --primary-grad: linear-gradient(135deg, #2D6450, #173E35);
+  --on-primary: #F6F4EE;
+  --primary-glow: 0 12px 24px -12px rgb(23 62 53 / 70%), inset 0 1px 0 rgb(255 255 255 / 18%);
+  --ring-a: #6FA283;
+  --ring-b: #234F3E;
+  --ring-track: #E3ECE5;
+  /* Tinted tiles: sage, rosewood, dusty blue, warm beige. */
+  --tint-sage: #E1ECE4;   --ink-sage: #234F3E;
+  --tint-rose: #F4E1E1;   --ink-rose: #843D4B;
+  --tint-blue: #E1E8EF;   --ink-blue: #4D6479;
+  --tint-sand: #F1E7D7;   --ink-sand: #8A6A3E;
 }
 
 :root[data-theme="dark"], html.dark {
-  --bg: #121513;
-  --ink: #ECEBE5;
-  --fg: #ECEBE5;
-  --fg-muted: #AAACA3;
-  --fg-subtle: #9FA197;
-  --ink-faint: #9FA197;
-  --bg-elevated: #1A1E1B;
-  --bg-muted: #232824;
-  --bg-inset: #0D100E;
-  --border: #2F3530;
-  --border-strong: #585F58;
-  --accent: #A9C4A1;
-  --on-accent: #172B20;
-  --accent-soft: #223027;
+  --bg: #0F0E0C;
+  --ink: #EDE6DA;
+  --fg: #EDE6DA;
+  --fg-muted: #A39A8C;
+  --fg-subtle: #978E80;
+  --ink-faint: #978E80;
+  --bg-elevated: #1E1B18;
+  --bg-muted: #26221D;
+  --bg-inset: #0B0A09;
+  --border: #332C24;
+  --border-strong: #5A4E3E;
+  --accent: #D6B77E;
+  --on-accent: #1A1611;
+  --accent-soft: #2B251C;
   --brand-burgundy: #E4A4AC;
   --logo-ink: #DCE7D8;
   --logo-accent: #E4A4AC;
@@ -76,8 +96,8 @@
   --on-burgundy: #3D1722;
   --color-coral: #E4A4AC;
   --color-sage: #ACC9A3;
-  --color-slate: #ECEBE5;
-  --color-sand: #AAACA3;
+  --color-slate: #EDE6DA;
+  --color-sand: #A39A8C;
   --color-navy: #ACC9A3;
   --success: #ACC9A3;
   --success-soft: #223027;
@@ -86,12 +106,31 @@
   --money: #ACC9A3;
   --money-soft: #223027;
   --future-building: #ACC9A3;
-  --future-allowing: #585F58;
-  --shadow-sm: 0 1px 2px rgb(0 0 0 / 20%);
-  --shadow-md: 0 1px 2px rgb(0 0 0 / 18%), 0 10px 28px -14px rgb(0 0 0 / 45%);
-  --shadow-lg: 0 2px 6px rgb(0 0 0 / 22%), 0 28px 56px -24px rgb(0 0 0 / 60%);
-  --forest: #1A3128;
-  --on-forest: #ECEBE5;
+  --future-allowing: #5A4E3E;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 30%);
+  --shadow-md: 0 24px 48px -28px rgb(0 0 0 / 90%), inset 0 1px 0 rgb(255 236 200 / 5%);
+  --shadow-lg: 0 30px 60px -28px rgb(0 0 0 / 95%), inset 0 1px 0 rgb(255 236 200 / 6%);
+  --forest: #2A241C;
+  --on-forest: #EDE6DA;
   --gold: #D6B77E;
-  --gold-soft: #3A3226;
+  --gold-soft: #2B251C;
+  /* Night and bronze (dark). */
+  --page-bg: radial-gradient(120% 70% at 80% 0%, #2A241D 0%, #15130F 55%, #0F0E0C 100%);
+  --surface: linear-gradient(180deg, rgb(40 36 31 / 92%), rgb(28 25 22 / 92%));
+  --surface-border: rgba(214, 183, 126, 0.14);
+  --surface-shadow: 0 24px 48px -28px rgb(0 0 0 / 90%), inset 0 1px 0 rgb(255 236 200 / 5%);
+  --glass: rgba(30, 27, 23, 0.8);
+  --glass-border: rgba(214, 183, 126, 0.18);
+  --glass-shadow: 0 18px 40px -18px rgb(0 0 0 / 70%), inset 0 1px 0 rgb(255 255 255 / 6%);
+  --nav-active: rgba(214, 183, 126, 0.14);
+  --primary-grad: linear-gradient(135deg, #E9C98F, #B08A52);
+  --on-primary: #1A1611;
+  --primary-glow: 0 14px 28px -14px rgb(214 183 126 / 60%), inset 0 1px 0 rgb(255 255 255 / 35%);
+  --ring-a: #E9C98F;
+  --ring-b: #9C7A45;
+  --ring-track: rgba(237, 230, 218, 0.08);
+  --tint-sage: rgba(214, 183, 126, 0.12); --ink-sage: #D6B77E;
+  --tint-rose: rgba(228, 164, 172, 0.12); --ink-rose: #E4A4AC;
+  --tint-blue: rgba(160, 182, 204, 0.12); --ink-blue: #A9BCCF;
+  --tint-sand: rgba(214, 183, 126, 0.12); --ink-sand: #E9C98F;
 }

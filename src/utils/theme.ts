@@ -7,7 +7,7 @@ export type ThemePref = 'light' | 'dark' | 'system';
 export const THEME_KEY = 'oda_theme';
 import { syncStatusBar } from '../services/native';
 
-const BAR = { light: '#F6F4EE', dark: '#121513' } as const;
+const BAR = { light: '#DDEBE2', dark: '#1E1A15' } as const;
 
 const media = () => (typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null);
 

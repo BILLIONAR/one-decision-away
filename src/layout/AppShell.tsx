@@ -77,7 +77,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   const handleNav = (path: string) => setActiveRoute(path);
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] flex flex-col md:flex-row">
+    <div className="min-h-screen text-[var(--fg)] flex flex-col md:flex-row">
       <a href="#oda-main" onClick={(event) => { event.preventDefault(); document.getElementById('oda-main')?.focus(); }} className="sr-only focus:not-sr-only focus:fixed focus:z-50 focus:top-3 focus:left-3 focus:p-3 focus:bg-[var(--bg-elevated)]">{c.skip}</a>
       {/* Toast */}
       {toast && (
@@ -158,7 +158,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
 
       {/* Mobile top bar: only on secondary pages, gives a way back */}
       {isSecondary && (
-        <header className="md:hidden sticky top-0 z-30 bg-[var(--bg)]/95 backdrop-blur border-b border-[var(--border)] pt-safe">
+        <header className="md:hidden sticky top-0 z-30 oda-glass-bar pt-safe">
           <div className="h-14 px-2 flex items-center">
             <button
               type="button"
@@ -174,37 +174,28 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
       )}
 
       {/* Content */}
-      <main id="oda-main" tabIndex={-1} className="outline-none flex-1 min-w-0 overflow-y-auto pb-28 md:pb-12 min-h-screen">
+      <main id="oda-main" tabIndex={-1} className="outline-none flex-1 min-w-0 overflow-y-auto pb-36 md:pb-12 min-h-screen">
         <div key={activeRoute} className={`oda-page-enter ${activeRoute === '/app/courses' || activeRoute === '/app/tools' ? 'max-w-[1040px]' : 'max-w-[760px]'} mx-auto px-5 sm:px-8 ${isSecondary ? 'pt-6' : 'pt-[calc(env(safe-area-inset-top,0px)+1.5rem)]'} md:pt-12`}>{children}</div>
       </main>
 
       {/* Mobile bottom tabs */}
-      <nav
-        className="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--bg)]/95 backdrop-blur-md border-t border-[var(--border)] z-30 pb-safe"
-        aria-label={t('Main')}
-      >
-        <div className="grid grid-cols-5 h-16">
-          {PRIMARY_TABS.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTabPath === item.path;
-            return (
-              <button
-                key={item.path}
-                type="button"
-                onClick={() => handleNav(item.path)}
-                aria-current={isActive ? 'page' : undefined}
-                className={`flex flex-col items-center justify-center gap-0.5 text-[11px] transition-colors cursor-pointer ${
-                  isActive ? 'text-[var(--fg)] font-semibold' : 'text-[var(--fg-subtle)] font-medium'
-                }`}
-              >
-                <span className="flex items-center justify-center w-14 h-8">
-                  <Icon className="w-[21px] h-[21px]" strokeWidth={isActive ? 2.2 : 1.8} />
-                </span>
-                <span>{labels[item.key]}</span>
-              </button>
-            );
-          })}
-        </div>
+      <nav className="md:hidden oda-tabbar" aria-label={t('Main')}>
+        {PRIMARY_TABS.map((item) => {
+          const Icon = item.icon;
+          const isActive = activeTabPath === item.path;
+          return (
+            <button
+              key={item.path}
+              type="button"
+              onClick={() => handleNav(item.path)}
+              aria-current={isActive ? 'page' : undefined}
+              className="oda-tab"
+            >
+              <Icon className="w-[21px] h-[21px]" strokeWidth={isActive ? 2.1 : 1.7} aria-hidden="true" />
+              <span>{labels[item.key]}</span>
+            </button>
+          );
+        })}
       </nav>
 
       {isFocusLocked && <FocusLockView />}
