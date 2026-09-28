@@ -1,11 +1,11 @@
 /* One Decision Away — each deployment owns its own offline shell and caches. */
 const BASE = new URL(self.registration.scope);
 const CACHE_PREFIX = `oda:${encodeURIComponent(BASE.pathname)}:`;
-const SHELL_CACHE = `${CACHE_PREFIX}v3`;
+const SHELL_CACHE = `${CACHE_PREFIX}v4`;
 const MEDIA_CACHE = `${SHELL_CACHE}:media`;
 const INDEX_URL = new URL('index.html', BASE).href;
 const MANIFEST_URL = new URL('manifest.webmanifest', BASE).href;
-const SHELL = ['', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-192-maskable.png', 'icon-512-maskable.png', 'apple-touch-icon.png', 'brand/oda-c4.png', 'brand/oda-app-c4-v1-192.png', 'brand/oda-app-c4-v1-512.png', 'brand/oda-app-c4-v1-maskable-192.png', 'brand/oda-app-c4-v1-maskable-512.png', 'brand/oda-apple-c4-v1-180.png', 'brand/oda-favicon-c4-v1-32.png'].map(path => new URL(path, BASE).href);
+const SHELL = ['', 'index.html', 'theme-init.js', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-192-maskable.png', 'icon-512-maskable.png', 'apple-touch-icon.png', 'brand/oda-c4.png', 'brand/oda-app-c4-v1-192.png', 'brand/oda-app-c4-v1-512.png', 'brand/oda-app-c4-v1-maskable-192.png', 'brand/oda-app-c4-v1-maskable-512.png', 'brand/oda-apple-c4-v1-180.png', 'brand/oda-favicon-c4-v1-32.png'].map(path => new URL(path, BASE).href);
 const inScope = url => url.origin === BASE.origin && url.pathname.startsWith(BASE.pathname);
 
 self.addEventListener('install', event => {
