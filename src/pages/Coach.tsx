@@ -1,11 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowUp, Check, Download, MessageCircle, Mic, MicOff, RotateCcw, Square, Volume2 } from 'lucide-react';
+import { ArrowUp, Check, Cloud, Download, MessageCircle, Mic, MicOff, RotateCcw, Square, Volume2 } from 'lucide-react';
 import { useLocale, useT, getSpeechLang } from '../i18n';
 import { CoachTools } from '../components/coach/CoachTools';
 import { companionCopy } from '../i18n/companion';
 import { createAICoach, getCoachAvailability, setCoachFocus, MAX_COACH_MESSAGE_LENGTH, type CoachMessage } from '../services/aiCoach';
 import { INTENTS } from '../data/starterDecisions';
 import { useApp } from '../store/useApp';
+import { useCloudState } from '../services/useCloudState';
+import {
+  CloudCoachError, buildCoachContext, getCloudCoachStatus, readContextConsent, sendToCloudCoach, writeContextConsent,
+  type CloudTier,
+} from '../services/cloudCoach';
 
 interface Recognition {
   lang: string; continuous: boolean; interimResults: boolean;
@@ -20,10 +25,24 @@ export const Coach: React.FC = () => {
   const c = companionCopy(locale);
   const t = useT();
   const [engine] = useState(() => createAICoach());
-  const intent = useApp().data?.profile.intent;
+  const { data, setActiveRoute } = useApp();
+  const intent = data?.profile.intent;
+  const cloud = useCloudState();
+  const cloudReady = cloud.configured && !!cloud.session;
+  const cloudUserId = cloud.session?.user.id;
+  const [cloudStatus, setCloudStatus] = useState<{ remaining: number; limit: number; tier: CloudTier } | null>(null);
+  const [cloudChecked, setCloudChecked] = useState(false);
+  const [useDevice, setUseDevice] = useState(false);
+  const [cloudBusy, setCloudBusy] = useState(false);
+  const [shareContext, setShareContext] = useState(readContextConsent);
+  const cloudChecking = cloudReady && !cloudChecked;
+  const cloudActive = cloudReady && !!cloudStatus && !useDevice;
+  const outOfMessages = cloudActive && cloudStatus.remaining <= 0;
   useEffect(() => { setCoachFocus(INTENTS.find(item => item.key === intent)?.label ?? null); }, [intent]);
   const [availability, setAvailability] = useState<{ supported: boolean; reason?: string } | null>(null);
   const [phase, setPhase] = useState<'idle' | 'loading' | 'ready' | 'replying'>('idle');
+  const inputReady = cloudActive ? !cloudBusy && !outOfMessages : phase === 'ready';
+  const replying = cloudActive ? cloudBusy : phase === 'replying';
   const [progress, setProgress] = useState(0);
   const [messages, setMessages] = useState<CoachMessage[]>([]);
   const [draft, setDraft] = useState('');
@@ -55,6 +74,17 @@ export const Coach: React.FC = () => {
   }, [engine, speechSupported]);
 
   useEffect(() => {
+    setCloudStatus(null);
+    setCloudChecked(false);
+    if (!cloudReady) return;
+    const abort = new AbortController();
+    getCloudCoachStatus('en', abort.signal)
+      .then(result => { setCloudStatus({ remaining: result.remaining, limit: result.limit, tier: result.tier }); setCloudChecked(true); })
+      .catch(err => { if ((err as Error).name !== 'AbortError') setCloudChecked(true); }); // not deployed or offline: the on-device coach stays
+    return () => abort.abort();
+  }, [cloudReady, cloudUserId]);
+
+  useEffect(() => {
     if (followOutput.current && log.current) log.current.scrollTop = log.current.scrollHeight;
   }, [messages]);
 
@@ -74,13 +104,52 @@ export const Coach: React.FC = () => {
     } finally { busy.current = false; }
   }
 
+  function speak(answer: string) {
+    if (!readAloudRef.current || !speechSupported || !answer.trim()) return;
+    const utterance = new SpeechSynthesisUtterance(answer);
+    utterance.lang = getSpeechLang(locale); utterance.rate = 0.95;
+    const voices = window.speechSynthesis.getVoices().filter(v => v.lang.startsWith(locale));
+    utterance.voice = voices.find(v => v.localService) || voices[0] || null;
+    window.speechSynthesis.speak(utterance);
+  }
+
+  async function sendCloud(content: string) {
+    busy.current = true; setCloudBusy(true);
+    const before = messages.filter(m => m.content.trim());
+    const history: CoachMessage[] = [...before, { role: 'user', content }];
+    setDraft(''); setError(''); followOutput.current = true;
+    setMessages([...history, { role: 'assistant', content: '' }]);
+    const abort = new AbortController(); controller.current = abort;
+    try {
+      const context = shareContext && cloudStatus?.tier === 'coach' ? buildCoachContext(data, t) : null;
+      const result = await sendToCloudCoach(history, locale, context, abort.signal);
+      if (!mounted.current || abort.signal.aborted) return;
+      setCloudStatus({ remaining: result.remaining, limit: result.limit, tier: result.tier });
+      const answer = result.reply?.trim() ?? '';
+      if (!answer) { setMessages(before); setDraft(content); setError(c.emptyReply); return; }
+      setMessages([...history, { role: 'assistant', content: answer }]);
+      speak(answer);
+    } catch (err) {
+      if (!mounted.current || (err as Error).name === 'AbortError') return;
+      setMessages(before); setDraft(content);
+      if (err instanceof CloudCoachError) {
+        if (err.kind === 'quota' && err.info) setCloudStatus({ remaining: 0, limit: err.info.limit, tier: err.info.tier });
+        else setError(err.message);
+      } else setError(t('The cloud coach could not answer just now. This message was not counted. Please try again in a moment.'));
+    } finally {
+      busy.current = false;
+      if (mounted.current) { setCloudBusy(false); textarea.current?.focus(); }
+    }
+  }
+
   async function send(event: React.FormEvent) {
     event.preventDefault();
     const content = draft.trim();
-    if (!content || content.length > MAX_COACH_MESSAGE_LENGTH || busy.current || phase !== 'ready') return;
-    busy.current = true;
+    if (!content || content.length > MAX_COACH_MESSAGE_LENGTH || busy.current || !inputReady) return;
     recognition.current?.stop();
     if (speechSupported) window.speechSynthesis.cancel();
+    if (cloudActive) { await sendCloud(content); return; }
+    busy.current = true;
     const history: CoachMessage[] = [...messages.filter(m => m.content.trim()), { role: 'user', content }];
     setDraft(''); setError(''); setPhase('replying'); followOutput.current = true;
     setMessages([...history, { role: 'assistant', content: '' }]);
@@ -91,13 +160,7 @@ export const Coach: React.FC = () => {
       }, abort.signal);
       if (mounted.current && !abort.signal.aborted) {
         if (!answer.trim()) setError(c.emptyReply);
-        if (readAloudRef.current && speechSupported && answer.trim()) {
-          const utterance = new SpeechSynthesisUtterance(answer);
-          utterance.lang = getSpeechLang(locale); utterance.rate = 0.95;
-          const voices = window.speechSynthesis.getVoices().filter(v => v.lang.startsWith(locale));
-          utterance.voice = voices.find(v => v.localService) || voices[0] || null;
-          window.speechSynthesis.speak(utterance);
-        }
+        speak(answer);
       }
     } catch (err) {
       if (mounted.current && (err as Error).name !== 'AbortError') setError((err as Error).message);
@@ -125,12 +188,22 @@ export const Coach: React.FC = () => {
     try { input.start(); setListening(true); setError(''); } catch { setError(c.microphoneError); }
   }
 
+  function chooseEngine(device: boolean) {
+    if (busy.current) return;
+    recognition.current?.abort();
+    if (speechSupported) window.speechSynthesis.cancel();
+    setMessages([]); setDraft(''); setError(''); setUseDevice(device);
+  }
+
+  function toggleShareContext(on: boolean) { setShareContext(on); writeContextConsent(on); }
+
   async function resetConversation() {
     if (busy.current) return;
     busy.current = true;
     recognition.current?.abort();
     if (speechSupported) window.speechSynthesis.cancel();
     setMessages([]); setDraft(''); setError('');
+    if (cloudActive) { busy.current = false; return; }
     try { await engine.reset(); textarea.current?.focus(); }
     catch (err) { setError((err as Error).message); setPhase('idle'); }
     finally { busy.current = false; }
@@ -146,7 +219,37 @@ export const Coach: React.FC = () => {
 
       <CoachTools />
 
-      {phase === 'idle' || phase === 'loading' ? (
+      {!cloudReady && cloud.configured && (
+        <section aria-labelledby="cloud-coach-heading" className="oda-card rounded-[22px] p-5 space-y-3">
+          <div className="flex items-center gap-2"><span className="oda-tile-icon oda-tint-blue" aria-hidden="true"><Cloud size={18} strokeWidth={1.8} /></span><h2 id="cloud-coach-heading" className="oda-kicker text-[var(--fg)]">{t('Use the cloud coach')}</h2></div>
+          <p className="text-sm text-[var(--fg-muted)] leading-relaxed">{t('The cloud coach answers with a more capable AI and needs a free account, so we can count your monthly messages. The offline tools above and the on-device coach below stay available without one.')}</p>
+          <button type="button" onClick={() => setActiveRoute('/app/account')} className="oda-btn-primary min-h-12 px-5 rounded-full inline-flex items-center text-sm font-semibold">{t('Open account')}</button>
+        </section>
+      )}
+
+      {cloudReady && cloudStatus && useDevice && (
+        <section className="oda-card rounded-[22px] p-5 space-y-3">
+          <p className="text-sm text-[var(--fg-muted)] leading-relaxed">{t('You are using the on-device coach.')}</p>
+          <button type="button" onClick={() => chooseEngine(false)} className="min-h-11 px-4 rounded-full inline-flex items-center gap-2 text-sm font-medium border border-[var(--border)] hover:border-[var(--accent)] transition-colors"><Cloud size={16} strokeWidth={1.8} />{t('Use the cloud coach')}</button>
+        </section>
+      )}
+
+      {cloudChecking ? (
+        <p role="status" className="text-sm text-[var(--fg-muted)]">{t('Checking the cloud coach')}</p>
+      ) : cloudActive ? (
+        <section aria-label={t('Cloud coach')} className="space-y-3">
+          <div className="flex justify-between items-center gap-3 text-xs">
+            <span role="status" className="inline-flex gap-2 items-center text-[var(--fg-muted)]"><Cloud size={15} strokeWidth={1.8} />{replying ? c.thinking : t('{n} of {total} messages left this month', { n: cloudStatus.remaining, total: cloudStatus.limit })}</span>
+            <button onClick={resetConversation} disabled={replying || messages.length === 0} className="inline-flex gap-2 items-center min-h-11 text-[var(--fg-muted)] disabled:opacity-40"><RotateCcw size={14} />{c.reset}</button>
+          </div>
+          {cloudStatus.tier === 'coach' && (
+            <label className="flex items-start gap-3 min-h-11 text-[13px] leading-snug">
+              <input type="checkbox" checked={shareContext} onChange={event => toggleShareContext(event.target.checked)} className="accent-[var(--accent)] mt-0.5 w-5 h-5 shrink-0" />
+              <span>{t('Let the coach read today’s decision and recent notebook lines')}</span>
+            </label>
+          )}
+        </section>
+      ) : phase === 'idle' || phase === 'loading' ? (
         <section className="p-5 sm:p-6 rounded-[var(--radius-lg)] bg-[var(--accent-soft)] border border-[var(--border)] space-y-4">
           <p className="text-[13px] font-semibold text-[var(--accent)]">{c.local}</p>
           <p className="text-sm leading-relaxed">{c.download}</p>
@@ -189,19 +292,37 @@ export const Coach: React.FC = () => {
 
       {error && <div role="alert" className="p-3 bg-[var(--danger-soft)] text-[var(--danger)] rounded-[var(--radius-sm)] text-sm leading-relaxed">{error}</div>}
 
-      <form onSubmit={send} className="space-y-3">
+      {outOfMessages && (
+        <section aria-labelledby="cloud-out-heading" className="oda-card rounded-[22px] p-5 space-y-3">
+          <h2 id="cloud-out-heading" className="oda-kicker text-[var(--fg)]">{t('That is all for this month')}</h2>
+          <p className="text-sm text-[var(--fg-muted)] leading-relaxed">{cloudStatus.tier === 'coach'
+            ? t('You have used this month’s cloud coach messages. They start again next month. The offline tools and the on-device coach are still here.')
+            : t('You have used this month’s cloud coach messages. They start again next month, or a higher level gives you more. The offline tools and the on-device coach are still here.')}</p>
+          <div className="flex flex-wrap gap-2">
+            {cloudStatus.tier !== 'coach' && <button type="button" onClick={() => setActiveRoute('/app/upgrade')} className="oda-btn-primary min-h-12 px-5 rounded-full inline-flex items-center text-sm font-semibold">{t('See the levels')}</button>}
+            <button type="button" onClick={() => chooseEngine(true)} className="min-h-12 px-5 rounded-full inline-flex items-center text-sm font-medium border border-[var(--border)] hover:border-[var(--accent)] transition-colors">{t('Use the on-device coach')}</button>
+          </div>
+        </section>
+      )}
+
+      <form onSubmit={send} className={outOfMessages ? 'hidden' : 'space-y-3'}>
         <div className="border border-[var(--border-strong)] focus-within:border-[var(--accent)] rounded-[var(--radius-md)] p-3 bg-[var(--bg-elevated)]">
           <label htmlFor="coach-message" className="sr-only">{c.placeholder}</label>
-          <textarea ref={textarea} id="coach-message" value={draft} onChange={event => setDraft(event.target.value)} maxLength={MAX_COACH_MESSAGE_LENGTH} rows={3} placeholder={c.placeholder} className="w-full resize-y min-h-20 max-h-60 bg-transparent text-[15px] leading-relaxed outline-none" onKeyDown={event => { if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); if (phase === 'ready') event.currentTarget.form?.requestSubmit(); } }} />
+          <textarea ref={textarea} id="coach-message" value={draft} onChange={event => setDraft(event.target.value)} maxLength={MAX_COACH_MESSAGE_LENGTH} rows={3} placeholder={c.placeholder} className="w-full resize-y min-h-20 max-h-60 bg-transparent text-[15px] leading-relaxed outline-none" onKeyDown={event => { if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); if (inputReady) event.currentTarget.form?.requestSubmit(); } }} />
           <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-3"><button type="button" onClick={toggleMicrophone} disabled={!SpeechInput || phase === 'replying'} aria-pressed={listening} aria-label={listening ? c.stopListening : c.listen} className="w-11 h-11 flex items-center justify-center rounded-full bg-[var(--bg-muted)] disabled:opacity-35">{listening ? <MicOff size={19} className="text-[var(--danger)]" /> : <Mic size={19} />}</button><span className="text-[11px] text-[var(--fg-subtle)]">{draft.length}/{MAX_COACH_MESSAGE_LENGTH}</span></div>
-            {phase === 'replying' ? <button type="button" onClick={() => { controller.current?.abort(); engine.cancel(); }} aria-label={c.stop} className="w-11 h-11 bg-[var(--fg)] text-[var(--bg)] flex items-center justify-center rounded-full"><Square size={17} /></button> : <button type="submit" disabled={phase !== 'ready' || !draft.trim()} aria-label={c.send} className="w-11 h-11 bg-[var(--accent)] text-white disabled:opacity-35 flex items-center justify-center rounded-full"><ArrowUp size={20} /></button>}
+            <div className="flex items-center gap-3"><button type="button" onClick={toggleMicrophone} disabled={!SpeechInput || replying} aria-pressed={listening} aria-label={listening ? c.stopListening : c.listen} className="w-11 h-11 flex items-center justify-center rounded-full bg-[var(--bg-muted)] disabled:opacity-35">{listening ? <MicOff size={19} className="text-[var(--danger)]" /> : <Mic size={19} />}</button><span className="text-[11px] text-[var(--fg-subtle)]">{draft.length}/{MAX_COACH_MESSAGE_LENGTH}</span></div>
+            {replying ? <button type="button" onClick={() => { controller.current?.abort(); if (cloudActive) { busy.current = false; setCloudBusy(false); setMessages(current => current.filter(m => m.content.trim())); } else engine.cancel(); }} aria-label={c.stop} className="w-11 h-11 bg-[var(--fg)] text-[var(--bg)] flex items-center justify-center rounded-full"><Square size={17} /></button> : <button type="submit" disabled={!inputReady || !draft.trim()} aria-label={c.send} className="w-11 h-11 bg-[var(--accent)] text-white disabled:opacity-35 flex items-center justify-center rounded-full"><ArrowUp size={20} /></button>}
           </div>
         </div>
-        {phase === 'idle' && <p className="text-xs text-[var(--fg-muted)]">{c.notLoaded}</p>}
+        {!cloudActive && phase === 'idle' && <p className="text-xs text-[var(--fg-muted)]">{c.notLoaded}</p>}
         {speechSupported && <label className="inline-flex items-center gap-2 text-xs min-h-9"><input type="checkbox" checked={readAloud} onChange={event => { setReadAloud(event.target.checked); if (!event.target.checked) window.speechSynthesis.cancel(); }} className="accent-[var(--accent)]" /><Volume2 size={14} />{c.speak}</label>}
         <p className="text-[11px] text-[var(--fg-muted)] leading-relaxed">{SpeechInput ? c.voiceNote : c.noVoice}</p>
-        <p className="text-[11px] text-[var(--fg-muted)]"><strong>{c.local}</strong> · {c.limit}</p>
+        {cloudActive ? (
+          <div className="space-y-2">
+            <p className="text-[11px] text-[var(--fg-muted)] leading-relaxed">{t('Cloud coach messages are sent to our server and to OpenAI to write the reply. They are not stored by ODA. The coach is an AI, not a therapist. If you are in danger, call your local emergency number (112 in Türkiye, 911 in the US).')}</p>
+            <button type="button" onClick={() => chooseEngine(true)} className="text-[12px] underline underline-offset-4 min-h-11 text-[var(--fg-muted)]">{t('Use the on-device coach')}</button>
+          </div>
+        ) : <p className="text-[11px] text-[var(--fg-muted)]"><strong>{c.local}</strong> · {c.limit}</p>}
       </form>
     </div>
   );

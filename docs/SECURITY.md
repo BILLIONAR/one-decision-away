@@ -13,6 +13,7 @@ Amaç: saldırıyı pahalı ve zahmetli kılmak, bir şey olursa zararı küçü
 | Hesap silme uç noktasının kötüye kullanılması | Oturum anahtarı zorunlu, kişi yalnızca kendini silebilir; tarayıcıdan yalnızca ODA'nın kendi adresleri çağırabilir (CORS) | `supabase/functions/delete-account` |
 | Bildirim sunucusu | Gizli anahtar sabit zamanlı karşılaştırılır, uç noktalar beyaz listede | `supabase/functions/send-nudges` |
 | Gizli anahtarın koda karışması | Kodda `service_role`, özel anahtar, canlı ödeme anahtarı olamaz (test) | `tests/security.test.ts` |
+| Bulut koçunun kötüye kullanımı, anahtar sızıntısı | Yapay zekâ anahtarı yalnızca Supabase fonksiyon gizli ayarında; uygulamada yok (test). Oturum anahtarı zorunlu, yalnızca ODA'nın kendi adresleri çağırabilir (CORS), aylık mesaj sınırı tek SQL ifadesiyle atomik uygulanır, sayaç tabloları yalnızca okunabilir (satır düzeyi güvenlik), mesaj metni hiçbir yerde saklanmaz ya da günlüğe yazılmaz | `supabase/functions/coach-chat`, `supabase/schema.sql`, `tests/coach-chat-logic.test.ts`, `tests/schema-rls.test.ts` |
 | Pro'yu kandırma | Pro durumu cihazda saklanmaz; her açılışta Apple/RevenueCat'ten doğrulanır | `src/services/purchases.ts` |
 | Paket açıkları | `npm audit`: 0 açık; Dependabot her hafta paketleri ve CI adımlarını günceller; CI adımları sabit sürüme (SHA) kilitli | `.github/dependabot.yml`, `.github/workflows` |
 | iPhone uygulamasının kurcalanması | Yayın sürümünde Web Inspector kapalı; web görünümü yalnızca uygulamanın kendisini açar, başka her bağlantı Safari'de; Apple'ın imzası ve App Store taraması; yalnızca HTTPS (ATS) | `capacitor.config.ts` |
@@ -28,6 +29,10 @@ Not: Web'de çalışan her uygulamanın kodu tarayıcıya iner; küçültme okum
 - *Email*: OTP süresi 10 dakika (600 sn). "Secure email change" açık.
 - *Attack Protection*: CAPTCHA (Cloudflare Turnstile) açılabilir; açılırsa bana söyle, giriş formuna eklerim.
 
+**Supabase → Edge Functions → Secrets (bulut koçu):**
+- `OPENAI_API_KEY`: OpenAI'da yalnızca bu iş için, kısıtlı izinli ve aylık harcama üst sınırı konmuş bir anahtar. Uygulamaya, GitHub'a ya da sohbete asla yazılmaz.
+- `REVENUECAT_SECRET_KEY`: RevenueCat'in **gizli** (secret, `sk_…`) API anahtarı; herkese açık iOS anahtarıyla (`appl_…`) karıştırma. Yalnızca bu gizli ayarda durur. Kurulum ayrıntısı: `docs/AI_COACH.md`.
+
 **Supabase → Project Settings → API:** `service_role` anahtarı yalnızca Supabase fonksiyonlarının gizli ayarlarında durur. Uygulamaya, GitHub'a ya da sohbete asla yazılmaz.
 
 **GitHub → Settings:**
@@ -35,4 +40,4 @@ Not: Web'de çalışan her uygulamanın kodu tarayıcıya iner; küçültme okum
 - *Branches*: `main` için "Require status checks" (derleme ve testler geçmeden yayın olmasın).
 - Hesabında iki adımlı doğrulama (2FA) açık olsun.
 
-**Apple / RevenueCat:** iki hesapta da iki adımlı doğrulama. RevenueCat'te yalnızca herkese açık iOS anahtarı (`appl_…`) uygulamaya girer.
+**Apple / RevenueCat:** iki hesapta da iki adımlı doğrulama. RevenueCat'te yalnızca herkese açık iOS anahtarı (`appl_…`) uygulamaya girer; gizli anahtar yalnızca Supabase fonksiyon gizli ayarında durur.

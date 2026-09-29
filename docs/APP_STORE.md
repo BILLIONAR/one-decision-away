@@ -16,8 +16,9 @@ Yayıncı: **YAHYA** · Uygulama adı: **ODA – One Decision Away** · Paket ki
 | Uygulama içi hesap silme (Kural 5.1.1(v)) | Hesap sayfası → "Hesabımı sil"; `supabase/functions/delete-account` | Tüm tablolar `on delete cascade`, bulut verisi hesapla birlikte silinir. |
 | E-postadaki 6 haneli kodla giriş | Hesap sayfası | iPhone uygulaması web bağlantısı açamadığı için kod girişi eklendi. |
 | Gizlilik politikası ve kullanım koşulları (TR/EN/ES) | Uygulamada `/privacy`, `/terms`; statik: `public/legal/privacy.html`, `public/legal/terms.html` | Yayındaki adresler aşağıda. `src/data/legal.ts` değişince `npm run legal`. |
-| ODA Pro ödeme katmanı (RevenueCat) | `src/services/purchases.ts`, `src/pages/Upgrade.tsx` | Fiyatlar App Store'dan gelir; deneme zaman çizelgesi, geri yükleme ve Apple yenileme metni ekranda. Web'de satış yok, her şey açık. |
-| Pro kilitleri (yalnızca iPhone'da ve satın alma açıkken) | `src/services/entitlements.ts` | Ücretsiz: günlük karar, kanıt ağacı, defter, koç, yedekleme, Dönüm Noktası Günü kursunun tamamı, her kursun ilk 2 dersi, Ses Odası'nda her kategorinin ilk 2 sesi. |
+| ODA abonelik seviyeleri: Essentials, Pro, Pro Coach (RevenueCat) | `src/services/purchases.ts`, `src/pages/Upgrade.tsx` | Fiyatlar App Store'dan gelir; aylık/yıllık seçici, üç seviye kartı, karşılaştırma tablosu, deneme zaman çizelgesi (yalnızca Pro yıllık), geri yükleme ve Apple yenileme metni ekranda. Web'de satış yok, her şey açık. |
+| Seviye kilitleri (yalnızca iPhone'da ve satın alma açıkken) | `src/services/entitlements.ts` | Ücretsiz: günlük karar, kanıt ağacı, defter, yedekleme, Dönüm Noktası Günü kursunun tamamı, her kursun ilk 2 dersi, Ses Odası'nda her kategorinin ilk 2 sesi, ayda 30 koç mesajı. Essentials: 6 temel kurs (erteleme, odak, uyku, stres ve sakinlik, özgüven, motivasyon) tamamen + Ses Odası'nın tamamı + ayda 150 mesaj. Pro: 18 kursun tamamı + ayda 600 mesaj. Pro Coach: ayda 3000 mesaj (adil kullanım), haftalık kişisel plan, izinle defter ve kararları okuyan koç, sesli yanıt. |
+| Bulut yapay zekâ koçu (hesap gerekir, seviyeye göre aylık mesaj sınırı) | `supabase/functions/coach-chat`, `src/services/cloudCoach.ts`, `src/pages/Coach.tsx` | Mesajlar sunucumuz üzerinden OpenAI'a gider, saklanmaz; yalnızca aylık sayaç tutulur. Kriz kelimelerinde model çağrılmadan güvenli mesaj gösterilir. Kurulum: `docs/AI_COACH.md`. |
 
 Gizlilik ve koşullar adresleri (App Store Connect'e bunlar girilir):
 
@@ -29,16 +30,25 @@ Gizlilik ve koşullar adresleri (App Store Connect'e bunlar girilir):
 1. **Apple Developer Program** üyeliği (yıllık 99 $). Şirket (YAHYA) adına açılacaksa D-U-N-S numarası gerekir; bireysel hesapla da başlanabilir, satıcı adı o zaman kişi adı görünür.
 2. **Mac'te Xcode**: App Store'dan Xcode'u kur, sonra Terminal'de bir kez `sudo xcodebuild -license accept` çalıştır (şifreyi senin girmen gerekiyor).
 3. **App Store Connect'te uygulamayı oluştur**: Uygulamalar → + → Yeni Uygulama. Platform iOS, ad "ODA – One Decision Away", birincil dil Türkçe, bundle ID `com.yahya.onedecisionaway` (Certificates, Identifiers & Profiles'ta önce bu kimliği oluştur).
-4. **Abonelikleri oluştur** (App Store Connect → uygulama → Abonelikler):
-   - Abonelik grubu: `ODA Pro`
-   - `oda_pro_annual` · 1 yıl · önerilen 49,99 $ · tanıtım teklifi: 1 hafta ücretsiz
-   - `oda_pro_monthly` · 1 ay · önerilen 6,99 $
-   - Fiyatlar öneri; istediğin gibi değiştir, uygulama App Store fiyatını otomatik gösterir.
-5. **RevenueCat** hesabı (ücretsiz başlar): yeni proje → iOS uygulaması (bundle ID yukarıdaki) → App Store Connect'ten In-App Purchase anahtarını bağla → Entitlement kimliği tam olarak `pro` → Offering `default`, içine Annual paketine `oda_pro_annual`, Monthly paketine `oda_pro_monthly`. Sonra **Public iOS SDK key**'i (`appl_` ile başlar) bana gönder ya da `.env` dosyasına `VITE_REVENUECAT_IOS_KEY` olarak yaz. Bu anahtar herkese açık türdendir; gizli anahtarları asla sohbete yapıştırma.
+4. **Abonelikleri oluştur** (App Store Connect → uygulama → Abonelikler). Tek abonelik grubu: `ODA`. Grup içi seviye sırası (1 en yüksek): **coach = 1, pro = 2, essentials = 3**; böylece seviyeler arası geçiş yükseltme/düşürme olur, ikinci abonelik açılmaz.
+
+   | Seviye | Ürün kimliği | Süre | Önerilen fiyat |
+   | --- | --- | --- | --- |
+   | Essentials | `oda_essentials_monthly` | 1 ay | 3,99 $ |
+   | Essentials | `oda_essentials_annual` | 1 yıl | 29,99 $ |
+   | Pro | `oda_pro_monthly` | 1 ay | 7,99 $ |
+   | Pro | `oda_pro_annual` | 1 yıl | 49,99 $ · tanıtım teklifi: 1 hafta ücretsiz |
+   | Pro Coach | `oda_coach_monthly` | 1 ay | 14,99 $ |
+   | Pro Coach | `oda_coach_annual` | 1 yıl | 99,99 $ |
+
+   - Görünen ad ve açıklamalar (TR/EN/ES, sınır 30 ve 45 karakter): `store/subscriptions.json`.
+   - Fiyatlar öneri; istediğin gibi değiştir, uygulama App Store fiyatını otomatik gösterir. "Yüzde x tasarruf" rozeti gerçek fiyatlardan hesaplanır.
+5. **RevenueCat** hesabı (ücretsiz başlar): yeni proje → iOS uygulaması (bundle ID yukarıdaki) → App Store Connect'ten In-App Purchase anahtarını bağla → üç Entitlement, kimlikleri tam olarak `essentials`, `pro`, `coach` (her biri kendi iki ürününe bağlı; uygulama en yüksek etkin olanı seçer: coach > pro > essentials) → Offering `default`, içine altı ürünün hepsini ekle (paketleri ürün kimliğiyle bulur; eksik ürün "Fiyat App Store'da gösterilir" olarak görünür). Sonra **Public iOS SDK key**'i (`appl_` ile başlar) bana gönder ya da `.env` dosyasına `VITE_REVENUECAT_IOS_KEY` olarak yaz. Bu anahtar herkese açık türdendir; gizli anahtarları asla sohbete yapıştırma.
 6. **Supabase** (hesap ve yedekleme için):
    - SQL: `supabase/schema.sql` (ve istersen `push-notifications.sql`).
    - Authentication → Email Templates → "Magic Link" şablonuna `{{ .Token }}` satırını ekle ("Giriş kodun: {{ .Token }}"). iPhone'da giriş bu kodla yapılır.
    - Hesap silme fonksiyonu: `supabase functions deploy delete-account` (JWT doğrulaması açık kalsın).
+   - Bulut koçu fonksiyonu: `supabase functions deploy coach-chat` (JWT doğrulaması açık kalsın) ve iki gizli anahtar (`OPENAI_API_KEY`, `REVENUECAT_SECRET_KEY`). Adımlar: `docs/AI_COACH.md`. Bunlar olmadan uygulama çalışır; bulut koçu görünmez, cihaz içi koç kalır.
    - Project URL ve anon key'i GitHub → Settings → Variables'a `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` olarak ekle.
 7. **Derle ve yükle** (Mac'te, proje klasöründe):
    ```
@@ -74,12 +84,12 @@ Gizlilik ve koşullar adresleri (App Store Connect'e bunlar girilir):
 > • Defter, hayaller ve üç küçük alışkanlık
 > • Rehberli kurslar: erteleme, odak, uyku, stres, özgüven, meditasyon, telkin ve daha fazlası
 > • Ses Odası: sakinlik, uyku, odak ve nefes için sesler
-> • Cihazında çalışan yapay zekâ koçu: yazdıkların cihazından çıkmaz
+> • Cihazında çalışan yapay zekâ koçu: yazdıkların cihazından çıkmaz. Hesap açarsan isteğe bağlı bulut koçu da var
 > • Akıllı hatırlatmalar: günde en fazla iki, gerçekten işe yarayınca
 >
 > Reklam yok, izleme yok. Hesap açmak isteğe bağlı; açarsan kanıtların yedeklenir ve her cihazda seninle olur.
 >
-> ODA Pro ile bütün kurslar ve Ses Odası'nın tamamı açılır. Günlük karar, kanıt ağacı, defter, koç ve yedekleme her zaman ücretsiz.
+> ODA Essentials altı temel kursu ve Ses Odası'nın tamamını açar; ODA Pro bütün kursları; ODA Pro Coach ayrıca haftalık kişisel plan ve izninle defterini okuyan bir koç ekler. Günlük karar, kanıt ağacı, defter ve yedekleme her zaman ücretsiz.
 >
 > ODA tıbbi ya da psikolojik tavsiye vermez ve tedavinin yerine geçmez.
 >
@@ -92,11 +102,11 @@ Gizlilik ve koşullar adresleri (App Store Connect'e bunlar girilir):
 >
 > Each morning, write today's one decision. Keep it small enough to start in two minutes. Mark it when it's done. Every promise you keep grows a leaf on your evidence tree: motivation usually follows action, and ODA shows you that every day.
 >
-> Inside: today's one decision with a 30-second obstacle plan, the evidence tree and a weekly look-back, a notebook, dreams and three small habits, guided courses (procrastination, focus, sleep, stress, confidence, meditation and more), a Sound Room for calm, sleep, focus and breath, an AI coach that runs on your device, and smart reminders (at most two a day).
+> Inside: today's one decision with a 30-second obstacle plan, the evidence tree and a weekly look-back, a notebook, dreams and three small habits, guided courses (procrastination, focus, sleep, stress, confidence, meditation and more), a Sound Room for calm, sleep, focus and breath, an AI coach that runs on your device (plus an optional cloud coach with an account), and smart reminders (at most two a day).
 >
 > No ads, no tracking. An account is optional; with one, your proof is backed up and follows you to every device.
 >
-> ODA Pro opens every course and the whole Sound Room. Today's decision, the evidence tree, the notebook, the coach and backup stay free.
+> ODA Essentials opens six core courses and the whole Sound Room; ODA Pro opens every course; ODA Pro Coach adds a weekly personal plan and a coach that reads your journal with your consent. Today's decision, the evidence tree, the notebook and backup stay free.
 >
 > ODA does not give medical or psychological advice and is not a substitute for treatment.
 
@@ -109,15 +119,17 @@ Gizlilik ve koşullar adresleri (App Store Connect'e bunlar girilir):
 | Veri türü | Kullanıcıya bağlı mı | Amaç | İzleme |
 | --- | --- | --- | --- |
 | İletişim bilgisi → E-posta adresi | Evet | Uygulama işlevselliği | Hayır |
-| Kullanıcı içeriği → Diğer kullanıcı içeriği (kararlar, notlar) | Evet | Uygulama işlevselliği | Hayır |
+| Kullanıcı içeriği → Diğer kullanıcı içeriği (kararlar, notlar; bulut koçuna yazılan mesajlar) | Evet | Uygulama işlevselliği | Hayır |
 | Satın almalar → Satın alma geçmişi | Evet | Uygulama işlevselliği | Hayır |
 | Tanımlayıcılar → Kullanıcı kimliği | Evet | Uygulama işlevselliği | Hayır |
 
 Reklam, analiz, konum, sağlık verisi yok; izleme (tracking) yok.
 
+**Bulut koçu notu:** Kullanıcı içeriği satırı, bulut koçuna yazılan mesajlar için de geçerlidir (yalnızca hesap açan ve koçu kullanan kişiler). Mesajlar yanıt üretmek için sunucumuz üzerinden OpenAI'a gönderilir; ODA bunları saklamaz, yalnızca aylık mesaj sayacını tutar; OpenAI'ın API veri politikası kapsamında modelleri eğitmek için kullanılmaz. Amaç yalnızca **Uygulama işlevselliği**; reklam, izleme veya üçüncü tarafla pazarlama paylaşımı yoktur, dolayısıyla **İzleme: Hayır**. Apple'ın "toplanan veri" tanımına karşı temkinli davranıp bu satırı işaretli bırakıyoruz. Pro Coach'taki "bugünün kararını ve defter satırlarını oku" seçeneği kapalı gelir; kullanıcı açarsa aynı kategoriye girer.
+
 ## İnceleme notu (App Review Information → Notes)
 
-> ODA works fully without an account; no sign-in is needed to review it. Accounts are optional and use a one-time email code; accounts can be deleted in-app (Me → Account → Delete my account). ODA Pro is an auto-renewable subscription (group "ODA Pro"); the paywall is at Me → ODA Pro and includes Restore Purchases, the trial timeline and links to the Terms and Privacy Policy. The AI coach runs entirely on the device and downloads a language model (about 1.1 GB) only when the user starts it. The Sound Room makes no health claims and shows this in the app.
+> ODA works fully without an account; no sign-in is needed to review it. Accounts are optional and use a one-time email code; accounts can be deleted in-app (Me → Account → Delete my account). ODA offers three auto-renewable subscription levels (Essentials, Pro, Pro Coach) in one subscription group "ODA"; the paywall is at Me → Pro plan and includes Restore Purchases, the trial timeline and links to the Terms and Privacy Policy. The Coach tab has two parts. The on-device coach runs entirely on the device and downloads a language model (about 1.1 GB) only when the user starts it. The optional cloud coach uses a cloud AI (OpenAI, through our own server): it needs a signed-in account, has a monthly message limit per subscription level, and is not needed to review the app; the on-device coach and the offline exercises work without it. Messages are sent to our server and to OpenAI only to write the reply and are not stored by us; the app says so next to the message box. The coach presents itself as an AI, not a therapist. Crisis handling: if a message mentions self-harm, suicide, abuse or immediate danger (English, Turkish, Spanish), the server does not call the AI but returns a fixed, caring message that points to local emergency services (112 in Türkiye and Europe, 911 and 988 in the US), and the AI's own instructions also require it to stop coaching and point to emergency help in that case. The Sound Room makes no health claims and shows this in the app.
 
 ## Ekran görüntüleri
 

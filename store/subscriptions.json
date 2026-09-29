@@ -1,73 +1,206 @@
 {
   "_note": "Subscription copy for App Store Connect. Limits: display name <= 30, description <= 45 (characters). asc subscription-localization import format not verified; this is a project-specific file.",
   "group": {
-    "referenceName": "ODA Pro",
+    "referenceName": "ODA",
+    "_levels": "Apple subscription levels inside the group (1 = highest): coach=1, pro=2, essentials=3, so moving between levels is an upgrade or downgrade, not a second subscription.",
     "localizations": {
       "en-US": {
-        "name": "ODA Pro"
+        "name": "ODA"
       },
       "tr": {
-        "name": "ODA Pro"
+        "name": "ODA"
       },
       "es-ES": {
-        "name": "ODA Pro"
+        "name": "ODA"
       },
       "es-MX": {
-        "name": "ODA Pro"
+        "name": "ODA"
       }
+    }
+  },
+  "levels": {
+    "coach": {
+      "groupLevel": 1,
+      "aiCoachMessagesPerMonth": 3000
+    },
+    "pro": {
+      "groupLevel": 2,
+      "aiCoachMessagesPerMonth": 600
+    },
+    "essentials": {
+      "groupLevel": 3,
+      "aiCoachMessagesPerMonth": 150
     }
   },
   "subscriptions": [
     {
-      "productId": "oda_pro_annual",
-      "referenceName": "ODA Pro Annual",
-      "duration": "ONE_YEAR",
-      "suggestedPriceUSD": 49.99,
-      "introOffer": {
-        "type": "FREE_TRIAL",
-        "duration": "ONE_WEEK"
-      },
+      "productId": "oda_essentials_monthly",
+      "referenceName": "ODA Essentials Monthly",
+      "level": "essentials",
+      "groupLevel": 3,
+      "duration": "ONE_MONTH",
+      "suggestedPriceUSD": 3.99,
+      "introOffer": null,
+      "revenueCatEntitlement": "essentials",
       "localizations": {
         "en-US": {
-          "name": "ODA Pro – Yearly",
-          "description": "Every course and the whole Sound Room"
+          "name": "ODA Essentials – Monthly",
+          "description": "Six core courses, Sound Room, 150 messages"
         },
         "tr": {
-          "name": "ODA Pro – Yıllık",
-          "description": "Tüm kurslar ve Ses Odası’nın tamamı"
+          "name": "ODA Essentials – Aylık",
+          "description": "Altı temel kurs, Ses Odası, 150 mesaj"
         },
         "es-ES": {
-          "name": "ODA Pro – Anual",
-          "description": "Todos los cursos y toda la Sala de sonido"
+          "name": "ODA Essentials – Mensual",
+          "description": "6 cursos base, Sala de sonido, 150 mensajes"
         },
         "es-MX": {
-          "name": "ODA Pro – Anual",
-          "description": "Todos los cursos y toda la Sala de sonido"
+          "name": "ODA Essentials – Mensual",
+          "description": "6 cursos base, Sala de sonido, 150 mensajes"
+        }
+      }
+    },
+    {
+      "productId": "oda_essentials_annual",
+      "referenceName": "ODA Essentials Annual",
+      "level": "essentials",
+      "groupLevel": 3,
+      "duration": "ONE_YEAR",
+      "suggestedPriceUSD": 29.99,
+      "introOffer": null,
+      "revenueCatEntitlement": "essentials",
+      "localizations": {
+        "en-US": {
+          "name": "ODA Essentials – Yearly",
+          "description": "Six core courses, Sound Room, 150 messages"
+        },
+        "tr": {
+          "name": "ODA Essentials – Yıllık",
+          "description": "Altı temel kurs, Ses Odası, 150 mesaj"
+        },
+        "es-ES": {
+          "name": "ODA Essentials – Anual",
+          "description": "6 cursos base, Sala de sonido, 150 mensajes"
+        },
+        "es-MX": {
+          "name": "ODA Essentials – Anual",
+          "description": "6 cursos base, Sala de sonido, 150 mensajes"
         }
       }
     },
     {
       "productId": "oda_pro_monthly",
       "referenceName": "ODA Pro Monthly",
+      "level": "pro",
+      "groupLevel": 2,
       "duration": "ONE_MONTH",
-      "suggestedPriceUSD": 6.99,
+      "suggestedPriceUSD": 7.99,
       "introOffer": null,
+      "revenueCatEntitlement": "pro",
       "localizations": {
         "en-US": {
           "name": "ODA Pro – Monthly",
-          "description": "Every course and the whole Sound Room"
+          "description": "All 18 courses, Sound Room, 600 messages"
         },
         "tr": {
           "name": "ODA Pro – Aylık",
-          "description": "Tüm kurslar ve Ses Odası’nın tamamı"
+          "description": "18 kursun tamamı, Ses Odası, 600 mesaj"
         },
         "es-ES": {
           "name": "ODA Pro – Mensual",
-          "description": "Todos los cursos y toda la Sala de sonido"
+          "description": "Los 18 cursos, Sala de sonido, 600 mensajes"
         },
         "es-MX": {
           "name": "ODA Pro – Mensual",
-          "description": "Todos los cursos y toda la Sala de sonido"
+          "description": "Los 18 cursos, Sala de sonido, 600 mensajes"
+        }
+      }
+    },
+    {
+      "productId": "oda_pro_annual",
+      "referenceName": "ODA Pro Annual",
+      "level": "pro",
+      "groupLevel": 2,
+      "duration": "ONE_YEAR",
+      "suggestedPriceUSD": 49.99,
+      "introOffer": {
+        "type": "FREE_TRIAL",
+        "duration": "ONE_WEEK"
+      },
+      "revenueCatEntitlement": "pro",
+      "localizations": {
+        "en-US": {
+          "name": "ODA Pro – Yearly",
+          "description": "All 18 courses, Sound Room, 600 messages"
+        },
+        "tr": {
+          "name": "ODA Pro – Yıllık",
+          "description": "18 kursun tamamı, Ses Odası, 600 mesaj"
+        },
+        "es-ES": {
+          "name": "ODA Pro – Anual",
+          "description": "Los 18 cursos, Sala de sonido, 600 mensajes"
+        },
+        "es-MX": {
+          "name": "ODA Pro – Anual",
+          "description": "Los 18 cursos, Sala de sonido, 600 mensajes"
+        }
+      }
+    },
+    {
+      "productId": "oda_coach_monthly",
+      "referenceName": "ODA Pro Coach Monthly",
+      "level": "coach",
+      "groupLevel": 1,
+      "duration": "ONE_MONTH",
+      "suggestedPriceUSD": 14.99,
+      "introOffer": null,
+      "revenueCatEntitlement": "coach",
+      "localizations": {
+        "en-US": {
+          "name": "ODA Pro Coach – Monthly",
+          "description": "Everything in Pro plus a weekly personal plan"
+        },
+        "tr": {
+          "name": "ODA Pro Coach – Aylık",
+          "description": "Pro’nun tümü ve haftalık kişisel plan"
+        },
+        "es-ES": {
+          "name": "ODA Pro Coach – Mensual",
+          "description": "Todo Pro y un plan personal semanal"
+        },
+        "es-MX": {
+          "name": "ODA Pro Coach – Mensual",
+          "description": "Todo Pro y un plan personal semanal"
+        }
+      }
+    },
+    {
+      "productId": "oda_coach_annual",
+      "referenceName": "ODA Pro Coach Annual",
+      "level": "coach",
+      "groupLevel": 1,
+      "duration": "ONE_YEAR",
+      "suggestedPriceUSD": 99.99,
+      "introOffer": null,
+      "revenueCatEntitlement": "coach",
+      "localizations": {
+        "en-US": {
+          "name": "ODA Pro Coach – Yearly",
+          "description": "Everything in Pro plus a weekly personal plan"
+        },
+        "tr": {
+          "name": "ODA Pro Coach – Yıllık",
+          "description": "Pro’nun tümü ve haftalık kişisel plan"
+        },
+        "es-ES": {
+          "name": "ODA Pro Coach – Anual",
+          "description": "Todo Pro y un plan personal semanal"
+        },
+        "es-MX": {
+          "name": "ODA Pro Coach – Anual",
+          "description": "Todo Pro y un plan personal semanal"
         }
       }
     }

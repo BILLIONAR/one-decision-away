@@ -71,8 +71,25 @@ try {
     }
   };
   check('group', s.group?.localizations);
+  if (s.group?.referenceName !== 'ODA') err(`subscriptions.json: group referenceName must be "ODA", got "${s.group?.referenceName}"`);
   const ids = (s.subscriptions ?? []).map((x) => x.productId).sort().join(',');
-  if (ids !== 'oda_pro_annual,oda_pro_monthly') err(`subscriptions.json: expected oda_pro_annual and oda_pro_monthly, got "${ids}"`);
+  const expectedIds = ['coach', 'pro', 'essentials'].flatMap((l) => [`oda_${l}_annual`, `oda_${l}_monthly`]).sort().join(',');
+  if (ids !== expectedIds) err(`subscriptions.json: expected ${expectedIds}, got "${ids}"`);
+  // Apple subscription group levels (1 = highest) so moves between levels are up/downgrades.
+  const GROUP_LEVEL = { coach: 1, pro: 2, essentials: 3 };
+  const DURATION = { monthly: 'ONE_MONTH', annual: 'ONE_YEAR' };
+  const PRICE = { oda_essentials_monthly: 3.99, oda_essentials_annual: 29.99, oda_pro_monthly: 7.99, oda_pro_annual: 49.99, oda_coach_monthly: 14.99, oda_coach_annual: 99.99 };
+  for (const x of s.subscriptions ?? []) {
+    const m = /^oda_(essentials|pro|coach)_(monthly|annual)$/.exec(x.productId ?? '');
+    if (!m) continue;
+    if (x.level !== m[1]) err(`subscriptions.json ${x.productId}: level must be ${m[1]}`);
+    if (x.groupLevel !== GROUP_LEVEL[m[1]]) err(`subscriptions.json ${x.productId}: groupLevel must be ${GROUP_LEVEL[m[1]]}`);
+    if (x.duration !== DURATION[m[2]]) err(`subscriptions.json ${x.productId}: duration must be ${DURATION[m[2]]}`);
+    if (x.suggestedPriceUSD !== PRICE[x.productId]) err(`subscriptions.json ${x.productId}: suggested price must be ${PRICE[x.productId]}`);
+    if (x.revenueCatEntitlement !== m[1]) err(`subscriptions.json ${x.productId}: revenueCatEntitlement must be ${m[1]}`);
+    const trial = x.productId === 'oda_pro_annual';
+    if (trial ? x.introOffer?.type !== 'FREE_TRIAL' || x.introOffer?.duration !== 'ONE_WEEK' : x.introOffer != null) err(`subscriptions.json ${x.productId}: ${trial ? 'needs a 1-week free trial' : 'must have no intro offer'}`);
+  }
   for (const x of s.subscriptions ?? []) check(x.productId, x.localizations);
 } catch (e) { err(`subscriptions.json: ${e.message}`); }
 
@@ -82,4 +99,4 @@ if (errors.length) {
   console.error(`\nstore metadata check FAILED: ${errors.length} error(s)`);
   process.exit(1);
 }
-console.log(`store metadata OK (${LOCALES.length} locales, 2 subscriptions${warnings.length ? `, ${warnings.length} warning(s)` : ''}${strict ? ', strict' : ''})`);
+console.log(`store metadata OK (${LOCALES.length} locales, 6 subscriptions${warnings.length ? `, ${warnings.length} warning(s)` : ''}${strict ? ', strict' : ''})`);

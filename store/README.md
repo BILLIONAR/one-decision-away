@@ -11,7 +11,7 @@ store/
   metadata/{en-US,tr,es-ES,es-MX}/
     name.txt  subtitle.txt  keywords.txt  promotional_text.txt  description.txt
     release_notes.txt  privacy_url.txt  marketing_url.txt  support_url.txt
-  subscriptions.json      display names + descriptions (EN/TR/ES) for oda_pro_annual / oda_pro_monthly
+  subscriptions.json      group "ODA", levels, 6 products (prices, trial, RevenueCat entitlement) + display names and descriptions (EN/TR/ES)
   screenshots/README.md   expected screenshot layout (images are kept outside the repo)
 ```
 
@@ -23,7 +23,7 @@ Limits (enforced by the checker): name 30, subtitle 30, keywords 100 **bytes**, 
 
 1. Replace the `TODO` in every `metadata/*/support_url.txt` with a real public support URL. No email address is committed here on purpose.
 2. `node scripts/check-store-metadata.mjs --strict` must pass (without `--strict`, the support URL TODO is only a warning).
-3. Create the app in App Store Connect (bundle ID `com.yahya.onedecisionaway`), the subscription group `ODA Pro`, and both subscriptions.
+3. Create the app in App Store Connect (bundle ID `com.yahya.onedecisionaway`), the subscription group `ODA` and its six subscriptions (see "Subscription levels" below).
 
 ## Upload with asc
 
@@ -62,6 +62,19 @@ asc screenshots upload --version-localization "VERSION_LOCALIZATION_ID" --path .
 `VERSION_LOCALIZATION_ID` is a resource ID, not the locale code; repeat per locale.
 
 Subscriptions: **no asc command verified.** `store/subscriptions.json` holds the copy; either enter it in App Store Connect by hand or check `asc subscriptions localizations --help`.
-Suggested prices (from `docs/APP_STORE.md`): yearly 49.99 USD with a 1-week free trial, monthly 6.99 USD.
+Suggested prices: see the table below.
 
 Also enter by hand: category (Health & Fitness, secondary Lifestyle), age rating 4+, the App Privacy answers and the review notes in `docs/APP_STORE.md`.
+
+## Subscription levels
+
+One subscription group, **ODA**. Apple group levels (1 = highest) so moving between levels is an upgrade or downgrade of one subscription: **coach = 1, pro = 2, essentials = 3**. RevenueCat entitlements are `essentials`, `pro` and `coach`; the app resolves the highest active one. Product IDs are the RevenueCat identifiers the paywall looks for; a missing product simply shows "Price shown by the App Store".
+
+| Level | Courses | Sound Room | AI coach messages / month | Monthly | Annual |
+| --- | --- | --- | --- | --- | --- |
+| Free | Turning Day in full, first 2 lessons of every other course | first 2 sounds per category | 30 | – | – |
+| Essentials | procrastination, focus, sleep, calm, confidence, motivation in full (+ Turning Day); first 2 lessons of the rest | full | 150 | `oda_essentials_monthly` 3.99 USD | `oda_essentials_annual` 29.99 USD |
+| Pro | all 18 courses | full | 600 | `oda_pro_monthly` 7.99 USD | `oda_pro_annual` 49.99 USD, 1-week free trial |
+| Pro Coach | all | full | 3000 (fair use), weekly personal plan, coach reads journal and decisions (with consent), voice replies | `oda_coach_monthly` 14.99 USD | `oda_coach_annual` 99.99 USD |
+
+Display names (max 30) are `ODA <Level> – Monthly|Yearly` (TR: Aylık/Yıllık, ES: Mensual/Anual); descriptions (max 45) are in `subscriptions.json`. The checker validates the group, IDs, levels, prices, trial and lengths. Source of truth in code: `src/services/entitlements.ts`.

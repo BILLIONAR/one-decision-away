@@ -8,7 +8,7 @@ import { useLocale, useT } from '../i18n';
 import { useApp } from '../store/useApp';
 import { courseForIntent } from '../data/starterDecisions';
 import { usePro } from '../services/purchases';
-import { isLessonLocked } from '../services/entitlements';
+import { courseUnlockTier, isLessonLocked } from '../services/entitlements';
 import '../styles/courses.css';
 
 const SELECTION_KEY = 'oda_course_selection_v1';
@@ -117,7 +117,7 @@ export const Courses: React.FC = () => {
   </div>;
 
   const lesson = course.lessons[index];
-  const locked = isLessonLocked(course.id, index, { gating: pro.gating, pro: pro.isPro });
+  const locked = isLessonLocked(course.id, index, { gating: pro.gating, tier: pro.tier });
   const progress = getLessonProgress(state, lesson);
   const completed = countCompleted(course);
   const eligible = canCompleteLesson(progress, lesson);
@@ -139,10 +139,10 @@ export const Courses: React.FC = () => {
     <p lang={content} className="text-xs leading-relaxed text-[var(--fg-muted)]">{course.scope}</p>
     <section className="oda-course-goal"><p className="text-xs font-semibold text-[var(--accent)]">{t("This lesson's small goal")}</p><p lang={content}>{lesson.goal}</p></section>
     {locked ? <section className="oda-card rounded-[var(--radius-lg)] p-6 space-y-3" aria-labelledby="course-pro-title">
-      <p className="oda-kicker text-[var(--brand-burgundy)]">ODA Pro</p>
-      <h2 id="course-pro-title" className="oda-display text-[26px] leading-snug">{t('The rest of this course is part of ODA Pro.')}</h2>
+      <p className="oda-kicker text-[var(--brand-burgundy)]">{courseUnlockTier(course.id) === 'essentials' ? 'ODA Essentials' : 'ODA Pro'}</p>
+      <h2 id="course-pro-title" className="oda-display text-[26px] leading-snug">{courseUnlockTier(course.id) === 'essentials' ? t('The rest of this course opens with ODA Essentials.') : t('The rest of this course opens with ODA Pro.')}</h2>
       <p className="text-[15px] leading-relaxed text-[var(--fg-muted)]">{t('The first two lessons of every course are free, and so is the whole Turning Point Day.')}</p>
-      <button type="button" onClick={() => setActiveRoute('/app/upgrade')} className="oda-course-primary">{t('See ODA Pro')}<ArrowRight size={16} aria-hidden="true" /></button>
+      <button type="button" onClick={() => setActiveRoute('/app/upgrade')} className="oda-course-primary">{t('See the levels')}<ArrowRight size={16} aria-hidden="true" /></button>
     </section> : <>
 
     <section className="oda-course-stage" aria-labelledby="course-understand-title">

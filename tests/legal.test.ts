@@ -21,7 +21,7 @@ test('every language has the same sections and names the company', () => {
 
 test('privacy policy covers what App Review checks', () => {
   const text = JSON.stringify(PRIVACY.en).toLowerCase();
-  for (const phrase of ['delete my account', 'revenuecat', 'supabase', 'no tracking', 'children']) assert.ok(text.includes(phrase), phrase);
+  for (const phrase of ['delete my account', 'revenuecat', 'supabase', 'no tracking', 'children', 'openai', 'api data policy', 'does not store your messages']) assert.ok(text.includes(phrase), phrase);
   const terms = JSON.stringify(TERMS.en).toLowerCase();
   for (const phrase of ['renew automatically', '24 hours', 'no monetary value', 'not a substitute for treatment']) assert.ok(terms.includes(phrase), phrase);
 });

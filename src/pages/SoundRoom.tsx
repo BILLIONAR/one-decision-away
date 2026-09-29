@@ -360,7 +360,7 @@ export const SoundRoom: React.FC = () => {
         ) : (
           <ul className="oda-sound-grid">
             {section.sounds.map((sound, i) => (
-              <SoundCard key={`${section.id}-${sound.track}`} sound={sound} sectionId={section.id} playing={isPlaying(sound.track)} locked={isSoundLocked(i, { gating: pro.gating, pro: pro.isPro })} />
+              <SoundCard key={`${section.id}-${sound.track}`} sound={sound} sectionId={section.id} playing={isPlaying(sound.track)} locked={isSoundLocked(i, { gating: pro.gating, tier: pro.tier })} />
             ))}
           </ul>
         )}
@@ -385,7 +385,7 @@ export const SoundRoom: React.FC = () => {
         </aside>
         <ul className="oda-sound-grid">
           {FREQUENCIES.sounds.map((sound, i) => (
-            <SoundCard key={`frequencies-${sound.track}`} sound={sound} sectionId="frequencies" playing={isPlaying(sound.track)} locked={isSoundLocked(i, { gating: pro.gating, pro: pro.isPro })} />
+            <SoundCard key={`frequencies-${sound.track}`} sound={sound} sectionId="frequencies" playing={isPlaying(sound.track)} locked={isSoundLocked(i, { gating: pro.gating, tier: pro.tier })} />
           ))}
         </ul>
       </section>

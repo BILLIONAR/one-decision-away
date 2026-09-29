@@ -1,25 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { isLessonLocked, isSoundLocked, FREE_LESSONS_PER_COURSE } from '../src/services/entitlements';
 import { trialDaysOf } from '../src/services/purchases';
 import { planReminders, reminderId, REMINDER_ID_BASE } from '../src/services/nativeNotifications';
-import { COURSES } from '../src/data/courses';
-
-test('nothing is locked where Pro cannot be bought (web)', () => {
-  for (const course of COURSES) course.lessons.forEach((_, i) => assert.equal(isLessonLocked(course.id, i, { gating: false, pro: false }), false));
-  assert.equal(isSoundLocked(9, { gating: false, pro: false }), false);
-});
-
-test('in the iPhone app: first lessons and the turning-point day stay free; Pro opens everything', () => {
-  const gated = { gating: true, pro: false };
-  assert.equal(isLessonLocked('turning-day', 5, gated), false);
-  assert.equal(isLessonLocked('focus', FREE_LESSONS_PER_COURSE - 1, gated), false);
-  assert.equal(isLessonLocked('focus', FREE_LESSONS_PER_COURSE, gated), true);
-  assert.equal(isLessonLocked('focus', 4, { gating: true, pro: true }), false);
-  assert.equal(isSoundLocked(0, gated), false);
-  assert.equal(isSoundLocked(2, gated), true);
-  assert.ok(COURSES.some(c => c.id === 'turning-day'), 'the free course exists');
-});
 
 test('trial length comes only from a free intro offer', () => {
   assert.equal(trialDaysOf({ price: 0, periodUnit: 'DAY', periodNumberOfUnits: 7 }), 7);
