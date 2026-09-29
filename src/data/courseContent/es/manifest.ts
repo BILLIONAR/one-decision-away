@@ -1,0 +1,238 @@
+import type { CourseSource, GuidedCourse } from '../../courses';
+
+/**
+ * Edición en español de "Manifest" (Manifestar), traducida de ../en/manifest.ts.
+ * Mismos ids de lecciones, orden, minutos, fotos y posiciones de respuesta.
+ */
+export const SOURCES: CourseSource[] = [
+  { id: 'manifest-positive-fantasies', title: 'Kappes & Oettingen · 2011 · Las fantasías positivas sobre futuros idealizados restan energía', url: 'https://www.sciencedirect.com/science/article/abs/pii/S002210311100031X', type: 'research',
+    finding: 'Cuatro experimentos. Las fantasías positivas sobre un futuro idealizado, inducidas de forma experimental, produjeron menos energía (medida con indicadores fisiológicos y conductuales) que las fantasías que ponían en cuestión el futuro deseado, las fantasías negativas o las neutras. La caída de energía fue mayor cuando la fantasía se refería a una necesidad más urgente. Los autores concluyen que la baja energía es una de las razones por las que las fantasías positivas espontáneas predicen peores logros.',
+    limitation: 'Experimentos de laboratorio con muestras pequeñas. No demuestran que soñar sea siempre dañino, solo que una fantasía idealizada, sin obstáculo y sin plan, puede reducir la energía para actuar. Solo se leyó el resumen.' },
+  { id: 'manifest-belief-study', title: 'Dixon, Hornsey & Hartley · Personality and Social Psychology Bulletin · La psicología de la creencia en la manifestación (resumen de la Universidad de Queensland, 2023)', url: 'https://news.uq.edu.au/2023-09-20-manifesting-your-way-bankruptcy', type: 'research',
+    finding: 'Tres estudios con 1,023 participantes. Cerca de un tercio respaldaba las creencias sobre la manifestación. Quienes creían informaron una mayor percepción de su propio éxito y aspiraciones más altas, pero también se sentían más atraídos por inversiones arriesgadas, era más probable que hubieran pasado por una bancarrota y que tuvieran expectativas poco realistas de enriquecerse rápido. Los investigadores no encontraron ninguna evidencia objetiva de que manifestar funcione.',
+    limitation: 'Investigación por encuestas, que muestra asociaciones, no causas. Se leyó el resumen de noticias de la universidad, no el artículo completo, así que no se revisaron los detalles de las mediciones.' },
+  { id: 'manifest-murphy', title: 'Joseph Murphy · The Power of Your Subconscious Mind (1963; edición de Tarcher, 2008)', url: 'https://www.penguinrandomhouse.com/books/296695/the-power-of-your-subconscious-mind-by-joseph-murphy-phd-dd/', type: 'technique',
+    finding: 'Murphy enseña que el estado de somnolencia justo antes de dormir es el momento más abierto a la sugestión. Propone reducir un deseo a una frase breve, repetirla con calma como una canción de cuna, imaginar una escena corta como si el resultado estuviera ocurriendo ahora (por ejemplo, un amigo que te felicita) y terminar la escena con un sentimiento de gratitud. La editorial describe la idea central del libro como creer sin reservas e imaginar el resultado para que los obstáculos internos se disuelvan.',
+    limitation: 'Se leyó la página de la editorial. Ensayar y tener una intención clara antes de dormir puede ayudarte a prepararte. Las afirmaciones del libro de que la mente subconsciente trae riqueza, éxito o curación física no tienen respaldo en la investigación, y nadie debería cambiar un tratamiento médico por esta razón.' },
+];
+
+export const COURSE: GuidedCourse = {
+  id: 'manifest', title: 'Manifestar', subtitle: 'De la intención a la acción.',
+  description: 'Aclara lo que quieres, ensaya el camino en tu mente, enfrenta el obstáculo real y planifica tu primer paso.',
+  scope: 'Aquí, manifestar significa la práctica de la intención, la preparación y la acción. El curso no afirma que los pensamientos dirijan los acontecimientos mediante efectos cuánticos, que el universo te entregue aquello en lo que te concentras, ni que cualquier deseo esté destinado a cumplirse. No es asesoría financiera, médica ni psicológica.',
+  outcome: 'Una meta, un breve ensayo mental, una respuesta a tu principal obstáculo y una fecha para revisar cómo te fue.',
+  photo: { id: '1676782778930-11b311ec5134', alt: 'Camino de tierra que sube por una colina cubierta de pasto hacia montañas lejanas' },
+  lessons: [
+    { id: 'manifest-1', title: 'Convierte tu deseo en una conducta', minutes: 6,
+      goal: 'Separar el resultado que quieres del trabajo que puedes hacer hoy.',
+      reading: [
+        '“Quiero un mejor trabajo” es un deseo sobre un resultado. “Esta semana voy a reescribir la primera sección de mi currículum” es una meta sobre tu propia conducta. No puedes controlar las decisiones de otras personas: si un empleador te devuelve la llamada, si un cliente dice que sí. Sí puedes elegir la parte que preparas tú. Este es el núcleo práctico de lo que la gente llama manifestar. Una intención clara dirige tu atención y tu esfuerzo hacia algo concreto, y cuanto más clara es la conducta, más fácil resulta notar oportunidades y empezar.',
+        'En este curso hay lugar para soñar. Junto al sueño pondremos tus condiciones, tus recursos y tu esfuerzo. Lo que no haremos es explicar una oportunidad perdida diciendo que no pensaste con la suficiente positividad. La manifestación popular suele prometer que el universo entrega todo aquello en lo que te concentras, pero ninguna investigación muestra que los pensamientos actúen como una fuerza física sobre los acontecimientos. En cierto modo, eso es una buena noticia: el resultado nunca fue una prueba de tu pureza interior, y el siguiente paso sigue siendo tuyo para elegir.',
+      ],
+      practice: ['Escribe o piensa en un deseo que te importe, en una sola frase.', 'Elige una conducta bajo tu control que te acerque a ese deseo.', 'Describe la conducta con una pequeña línea de meta, por ejemplo “tres líneas de un borrador”.'],
+      reflection: '¿Cuál es la versión de tu deseo convertida en conducta para hoy?', question: '¿Cuál de estas es una conducta que puedes elegir directamente?', options: ['Que el empleador me elija sin duda alguna.', 'Editar tres líneas de mi currículum mañana.', 'Que absolutamente nada salga mal.'], correct: 1,
+      feedback: 'No puedes garantizar las decisiones de otras personas. Sí puedes hacer concreta tu propia preparación.', takeaway: 'Dale a tu intención una tarea que realmente puedas tocar.', sources: ['mcii', 'manifest-belief-study'],
+      visual: { kind: 'compare', title: 'Del deseo a la conducta',
+        left: { label: 'Deseo sobre un resultado', items: ['Quiero un mejor trabajo.', 'Que el empleador me elija sin duda alguna', 'Que absolutamente nada salga mal'] },
+        right: { label: 'Meta sobre una conducta', items: ['Reescribir esta semana la primera sección de mi currículum', 'Escribir mañana un borrador de tres líneas'] },
+        note: 'No puedes garantizar las decisiones de otras personas; sí puedes hacer concreta tu propia preparación.' },
+      deeper: [
+        { heading: 'Lo que se sostiene y lo que no', paragraphs: [
+          'Los libros y videos sobre manifestación suelen mezclar dos cosas muy distintas. Una es un conjunto de hábitos comunes y útiles: decidir con claridad lo que quieres, imaginarlo, mantenerlo a la vista y actuar. La otra es una historia sobre cómo funciona el mundo, a menudo llamada ley de la atracción: que lo semejante atrae a lo semejante, que tus pensamientos envían una señal, que el universo acomoda los hechos para que coincidan con ella y, a veces, que la física cuántica lo demuestra todo.',
+          'Puedes quedarte con la primera parte y dejar de lado la segunda sin perder nada de lo que funciona. Los físicos no describen así el mundo, y ningún estudio ha mostrado que pensar en dinero, en una pareja o en un trabajo haga que lleguen por sí solos. Los hábitos, en cambio, coinciden con métodos que sí se han puesto a prueba: metas claras, ensayo mental, planificar los obstáculos y llevar un registro del progreso. Sobre eso se construye este curso.',
+        ],
+          visual: { kind: 'compare', title: 'El núcleo que funciona y las afirmaciones que conviene dejar de lado',
+            left: { label: 'Quédate con esto: el núcleo que funciona', items: ['Una intención clara y específica', 'Ensayar los pasos en tu mente', 'Ver el obstáculo y planificar cómo enfrentarlo', 'Actuar y luego revisar con honestidad'] },
+            right: { label: 'Deja de lado esto: sin evidencia', items: ['Los pensamientos como un imán que atrae los acontecimientos', '“El universo entrega” aquello en lo que te concentras', 'La física cuántica remodelando tu realidad', 'Un tropiezo como prueba de pensamiento negativo'] },
+            note: 'Dejar de lado la columna de la derecha no significa renunciar a la esperanza. Significa que tu esperanza recibe un plan.' } },
+        { heading: 'Lo que encontró la investigación sobre las creencias en la manifestación', paragraphs: [
+          'Investigadores de la Universidad de Queensland estudiaron a personas que creen en la manifestación. En tres estudios con 1,023 participantes, cerca de un tercio respaldaba las creencias sobre manifestar. Esas personas se sentían más exitosas y apuntaban más alto, lo cual suena alentador. Pero también se sentían más atraídas por inversiones arriesgadas, era más probable que hubieran pasado por una bancarrota y que esperaran hacerse ricas rápido. Los investigadores no encontraron ninguna evidencia objetiva de que manifestar funcione.',
+          'Eran encuestas, así que muestran un vínculo, no una causa. Aun así, el patrón encaja con el resto de este curso. El deseo no es el problema. El riesgo aparece cuando una fuerte sensación de certeza reemplaza el verificar los hechos, pedir consejo y dar pasos pequeños que se puedan poner a prueba. Una meta de conducta te mantiene en contacto con la realidad.',
+        ] },
+      ],
+      example: { title: 'Daniel, 31 años, supervisor de turno en un almacén', text: 'Daniel quería pasar a un puesto de planificación logística. Durante meses tuvo como fondo de pantalla la imagen de un escritorio de oficina y se decía que el trabajo indicado lo encontraría a él. El domingo probó el ejercicio. Deseo: “un trabajo de planificación”. Conducta: “Para el jueves, reescribir las tres primeras líneas de mi currículum para que mencionen los horarios de turnos que ya elaboro”. Lo hizo el miércoles después de cenar, en unos veinte minutos. Una línea seguía sonando torpe y nadie llamó esa semana. Pero ahora tenía una página que podía enviar, y el siguiente paso, encontrar dos ofertas de empleo para comparar, era evidente. El fondo de pantalla se quedó. Solo que ahora tenía una tarea atada a él.' },
+      photo: { id: '1768055104910-8c8d213835fb', alt: 'Mano escribiendo una lista de tareas en un cuaderno' } },
+
+    { id: 'manifest-2', title: 'Mira el camino, no solo el resultado', minutes: 7,
+      goal: 'Hacer un breve ensayo mental de tu primer movimiento.',
+      reading: [
+        'Tómate un momento para pensar qué significaría para ti llegar al resultado que quieres. Luego trae la escena de vuelta a hoy: dónde estás sentado, qué archivo estás abriendo, qué escribes en la primera línea. Imaginar la meta le da al deseo algo de calidez. Imaginar el primer movimiento le da un lugar donde empezar. Ambas cosas tienen valor, pero la segunda es la que te dice qué hacer a continuación. Es un ejercicio de preparación, una especie de ensayo general antes de la función real.',
+        'No hace falta cerrar los ojos. Si no te llegan imágenes nítidas, basta con describirte los pasos con palabras; mucha gente piensa más en frases que en imágenes. El ensayo no reemplaza el intento real. Existe para ayudarte a elegir el detalle que pondrá en marcha el intento: el lápiz que debe estar sobre el escritorio, el correo que vas a abrir, la primera frase que vas a decir. Cuando termine el ensayo, haz una cosa real de las que te mostró.',
+      ],
+      practice: ['Nombra una diferencia que quieras que tu meta haga en tu vida.', 'Ordena tus dos primeros movimientos, en imágenes o en palabras.', 'Después del ensayo, haz de verdad un paso de preparación.'],
+      reflection: '¿Qué preparación que te faltaba notaste durante el ensayo?', question: '¿Qué significa el ensayo mental en este curso?', options: ['Un ejercicio que te prepara para la acción real.', 'Controlar con seguridad los hechos externos con tus pensamientos.', 'Dejar de necesitar intentarlo.'], correct: 0,
+      feedback: 'El ensayo es preparación. No reemplaza la acción ni las condiciones externas, y el efecto independiente de este ejercicio por sí solo no se ha demostrado.', takeaway: 'Después del sueño, mira el primer movimiento.', sources: ['mcii', 'manifest-murphy', 'identity-cole', 'identity-toth', 'identity-dispenza-habit'],
+      visual: { kind: 'steps', title: 'Ensayar desde el resultado hasta el primer movimiento',
+        steps: [
+          { label: 'Significado', text: '¿Qué significaría para ti llegar al resultado?' },
+          { label: 'Lugar', text: '¿Dónde estás sentado hoy?' },
+          { label: 'Herramienta', text: '¿Qué archivo estás abriendo?' },
+          { label: 'Primera línea', text: '¿Qué escribes en la primera línea?' },
+          { label: 'Paso real', text: 'Después del ensayo, haz de verdad una preparación.' },
+        ],
+        note: 'Si no te llegan imágenes, basta con describir los pasos con palabras. El ensayo no reemplaza el intento real.' },
+      deeper: [
+        { heading: 'Lo que dice la investigación sobre el ensayo mental', paragraphs: [
+          'Un metaanálisis de 2021 reunió 94 estudios aleatorizados sobre simulación mental, es decir, imaginar de forma deliberada una acción o un hecho futuro. En conjunto, modificó la conducta posterior en una magnitud media. El tipo de imagen importaba. Imaginarte realizando la acción, sobre todo haciéndola bien, funcionó mejor. Imaginar solo el resultado deseado tuvo un efecto pequeño. Imaginar solo los pasos del proceso no fue confiable, aunque esa estimación se apoya en apenas cinco efectos, y los ocho estudios que combinaban un resultado con el proceso mostraron un efecto mayor.',
+          'Una revisión aparte sobre la práctica mental en habilidades y deporte encontró un beneficio pequeño pero real, y halló que la práctica física superaba a la práctica mental sola. Así que el resumen honesto es: verte haciendo la cosa ayuda un poco o moderadamente; hacer la cosa ayuda más.',
+        ],
+          visual: { kind: 'bars', title: 'Simulación mental y conducta posterior (efecto promedio, g de Hedges)',
+            bars: [
+              { label: 'Ensayarte a ti mismo rindiendo bien', value: 0.67, display: 'g = 0.67' },
+              { label: 'Ensayo estándar del desempeño', value: 0.48, display: 'g = 0.48' },
+              { label: 'Imaginar el resultado deseado', value: 0.23, display: 'g = 0.23' },
+              { label: 'Imaginar solo los pasos del proceso (5 efectos)', value: 0.17, display: 'g = 0.17' },
+            ],
+            note: 'De Cole et al. (2021), 94 estudios aleatorizados. Alrededor de 0.2 es pequeño y 0.5 es medio. La mayoría de los participantes eran estudiantes, algunos tipos se apoyan en pocos estudios y la estimación de solo proceso no fue estadísticamente confiable.',
+            sourceId: 'identity-cole' } },
+        { heading: 'Cómo lo hacen Joseph Murphy y el Dr. Joe Dispenza', paragraphs: [
+          'Dos maestros muy conocidos construyen sus métodos en torno al ensayo. Joseph Murphy, en The Power of Your Subconscious Mind, recomienda los minutos de somnolencia antes de dormir: reduce tu deseo a una frase breve, repítela con calma, imagina una escena corta como si el resultado ya estuviera ocurriendo y termina con un sentimiento de gratitud. El Dr. Joe Dispenza, en Breaking the Habit of Being Yourself, usa una meditación matutina en la que ensayas con detalle cómo piensa, actúa y se siente tu nuevo yo.',
+          'Ambos contienen un núcleo útil, y ambos van mucho más allá de la evidencia. Murphy escribe que el subconsciente puede traer riqueza y sanación; Dispenza vincula su práctica con un campo cuántico y con cambiar tus genes. Puedes quedarte con el ensayo y dejar el resto con suavidad.',
+        ],
+          visual: { kind: 'table', title: 'Dos métodos de ensayo, clasificados con honestidad', columns: ['Maestro', 'Qué haces', 'Quédate con', 'Deja de lado'],
+            rows: [
+              ['Joseph Murphy', 'Frase breve y una escena terminada antes de dormir', 'Una intención tranquila y clara; ensayar una escena', 'Que el subconsciente atraiga dinero o sanación'],
+              ['Dr. Joe Dispenza', 'Meditación matutina ensayando el nuevo yo', 'Ensayar cómo actuarás y responderás', 'Afirmaciones sobre el campo cuántico y el cambio de genes'],
+              ['Este curso', 'Primero el resultado, luego el primer movimiento concreto', 'Verte dando el paso', 'Tratar la imagen como un reemplazo de la acción'],
+            ],
+            note: 'Una paráfrasis de cada método, no una descripción completa. Ninguno de los dos métodos se ha puesto a prueba como un todo en ensayos controlados.' } },
+      ],
+      example: { title: 'Priya, 27 años, enfermera pediátrica', text: 'Priya quería postularse a un programa de formación de especialista y con frecuencia imaginaba el día en que llevaría la nueva insignia. Se sentía bien, pero no cambiaba nada. Una noche, acostada, probó una escena distinta. Después de la insignia, se imaginó la mañana siguiente: la mesa de su cocina después del desayuno, la laptop abierta, el portal de postulación en la pantalla, el recuadro que dice “carta de motivación”. Se dio cuenta de que no sabía su contraseña y de que la carta necesitaba una primera frase. Por la mañana restableció la contraseña, escribió una frase provisoria sobre por qué eligió la enfermería infantil y cerró la laptop después de diez minutos. La insignia aún estaba a meses de distancia. La postulación, en cambio, por fin había empezado.' },
+      technique: { name: 'La escena antes de dormir, con un primer paso', origin: 'Joseph Murphy · The Power of Your Subconscious Mind (1963)',
+        steps: [
+          'En la cama, cuando empieces a sentir sueño, reduce tu deseo a una frase breve que puedas creer.',
+          'Repite la frase despacio unas cuantas veces, con calma, sin forzarla.',
+          'Imagina una escena corta como si el resultado ya hubiera ocurrido, por ejemplo alguien que aprecias felicitándote.',
+          'Aporte de ODA: repasa el primer paso concreto para mañana, dónde estarás y qué abrirás o dirás.',
+          'Termina con un momento de gratitud por lo que ya va bien y deja que llegue el sueño.',
+        ],
+        evidence: 'Ensayarte haciendo una tarea tiene un respaldo de pequeño a moderado en la investigación; imaginar solo el resultado terminado tiene un efecto pequeño, por eso esta versión agrega el primer paso. No hay evidencia de que la mente subconsciente atraiga dinero, éxito o sanación. Esto no sustituye un tratamiento médico ni psicológico.',
+        sourceId: 'manifest-murphy' },
+      photo: { id: '1517363898874-737b62a7db91', alt: 'Persona sentada en silencio junto a una ventana, con luz cálida' } },
+
+    { id: 'manifest-3', title: 'Conoce el obstáculo real', minutes: 8,
+      goal: 'Nombrar con claridad un obstáculo entre lo que quieres y dónde estás ahora.',
+      reading: [
+        'Después de pensar en el futuro que quieres, mira dónde estás ahora: quizá dudas al empezar, quizá el plan es demasiado grande, quizá no logras conseguir la información que necesitas. La psicóloga Gabriele Oettingen llama a este paso contraste mental: sostener lado a lado el futuro deseado y la realidad presente. Puede resultar menos agradable que soñar a secas, y eso es parte de por qué funciona. Cuanto más concreto es el obstáculo, más clara puede ser tu respuesta.',
+        'No todos los obstáculos están dentro de ti. El tiempo, el dinero, el cuidado de otras personas y el acceso a recursos son condiciones reales. No trates un obstáculo fuera de tu control como un defecto de tu carácter, ni como una señal de que no creíste con suficiente fuerza. Quizá necesites cambiar el tamaño de la meta, su momento o el apoyo que la rodea. Ver el obstáculo con honestidad no es pesimismo; es lo que convierte un deseo en algo en lo que puedes trabajar.',
+      ],
+      practice: ['Nombra el obstáculo más cercano que se interpone entre tú y tu meta.', 'Separa la parte del obstáculo sobre la que puedes influir de la parte que necesita apoyo o tiempo.', 'Si no se puede hacer ahora mismo, haz la meta más pequeña o pásala a un momento adecuado.'],
+      reflection: 'Al mirar tu obstáculo de manera más realista, ¿qué cambió en tu plan?', question: 'Cuando las condiciones externas se interponen…', options: ['Debo suponer que es porque no creí lo suficiente.', 'Debo ignorar las condiciones.', 'Puedo replantear el apoyo, el momento o el tamaño de la meta.'], correct: 2,
+      feedback: 'Un plan realista tiene en cuenta las condiciones externas. Los resultados no los deciden solo tus pensamientos.', takeaway: 'Ver el obstáculo con honestidad le da una dirección a tu plan.', sources: ['mcii', 'oettingen-woop-method', 'manifest-positive-fantasies'],
+      visual: { kind: 'table', title: 'Clasificar el obstáculo con honestidad', columns: ['Obstáculo', 'Tipo', 'Posible respuesta'],
+        rows: [
+          ['Dudar al empezar', 'Interno', 'Hacer el paso más pequeño'],
+          ['El plan es demasiado grande', 'Plan', 'Reducir el tamaño de la meta'],
+          ['No poder acceder a la información que necesitas', 'Acceso', 'Pedir apoyo'],
+          ['Tiempo, dinero, cuidado de otras personas', 'Condición externa', 'Cambiar el momento o el tamaño'],
+        ],
+        note: 'Las condiciones externas son reales, no defectos de tu carácter. Los resultados no los deciden solo tus pensamientos.' },
+      deeper: [
+        { heading: 'Por qué un ensueño agradable puede agotarte', paragraphs: [
+          'Investigaciones anteriores del grupo de Oettingen habían encontrado que las personas que se entregaban de manera espontánea a fantasías color de rosa sobre el futuro tendían a lograr menos. Para probar por qué, Heather Barry Kappes y Gabriele Oettingen realizaron cuatro experimentos en los que pedían a las personas imaginar un futuro idealizado. En comparación con las fantasías que cuestionaban ese futuro, las negativas o las neutras, las fantasías positivas dejaban a las personas con menos energía, medida tanto en el cuerpo como en la conducta. La caída era mayor cuando la necesidad se sentía más urgente.',
+          'Una forma de entenderlo: una imagen idealizada te deja saborear la llegada sin el viaje, así que el cuerpo se relaja como si el trabajo ya estuviera hecho. Esto no significa que soñar sea malo. Significa que un sueño funciona mejor como punto de partida que como destino.',
+        ],
+          visual: { kind: 'cycle', title: 'El círculo de la fantasía', center: 'Solo soñar',
+            nodes: [
+              { label: 'Imagen idealizada', text: 'Imaginas el resultado terminado, sin obstáculos.' },
+              { label: 'Se siente como llegar', text: 'La mente lo disfruta como si ya fuera real.' },
+              { label: 'La energía baja', text: 'Menos urgencia por actuar; el cuerpo se relaja.' },
+              { label: 'Poca acción', text: 'El día pasa sin un paso concreto.' },
+              { label: 'El deseo sigue lejos', text: 'La brecha duele, así que vuelves al sueño.' },
+            ],
+            note: 'Una imagen simplificada basada en Kappes & Oettingen (2011). La salida del círculo no es dejar de soñar, sino añadir el obstáculo y un plan.' } },
+        { heading: 'Primero sueña, luego mira: cómo funciona WOOP', paragraphs: [
+          'Oettingen convirtió el contraste mental en un método de cuatro pasos llamado WOOP: Wish (deseo), Outcome (resultado), Obstacle (obstáculo), Plan. Empiezas por la parte agradable, nombrando el deseo e imaginando el mejor resultado, y solo entonces te vuelves hacia el principal obstáculo interno, como un hábito, un sentimiento o una creencia. El último paso, el plan, llega en la próxima lección.',
+          'Un metaanálisis de 2021 con 21 estudios y 15,907 participantes encontró que el contraste mental combinado con planes si-entonces tenía un efecto promedio de pequeño a medio en el logro de metas. Es un efecto real, no una garantía. WOOP también te da información útil cuando no encaja: si miras el obstáculo con honestidad y el deseo ya no se siente factible, esa es una señal para reformularlo, no un fracaso.',
+        ] },
+      ],
+      example: { title: 'Lena, 38 años, profesora de secundaria', text: 'Lena quería terminar un curso en línea de habilidades con datos. Su ensueño habitual era el certificado y un nuevo puesto en la oficina del distrito. Esta vez usó WOOP. Deseo: terminar el módulo tres este mes. Resultado: sentirse capaz con las hojas de cálculo en el trabajo. Luego, el obstáculo. El verdadero no era la pereza: después de calificar y acostar a sus dos hijos eran las 9:30 de la noche, estaba agotada y agarraba el teléfono. Parte de eso era una condición externa que no podía cambiar. Así que cambió el plan: cuarenta y cinco minutos los sábados por la mañana mientras su pareja llevaba a los niños al parque. Terminó una lección ese primer sábado, menos de lo que esperaba, pero más que en las tres semanas anteriores.' },
+      technique: { name: 'WOOP', origin: 'Gabriele Oettingen · Rethinking Positive Thinking (2014)',
+        steps: [
+          'Wish (deseo): nombra, en pocas palabras, un deseo que te importe y que sea desafiante pero factible.',
+          'Outcome (resultado): imagina el mejor resultado de cumplirlo y déjate sentirlo un momento.',
+          'Obstacle (obstáculo): pregúntate qué hay dentro de ti, un hábito, un sentimiento o un pensamiento, que más se interpone, e imagínalo con claridad.',
+          'Plan: escribe una frase con la forma “Si [obstáculo], entonces haré [acción]”.',
+        ],
+        evidence: 'La investigación sobre el contraste mental con planes si-entonces muestra efectos promedio de pequeños a medios en el logro de metas. Los resultados varían según la persona y la situación, y el sitio oficial de WOOP pertenece a los desarrolladores del método y no es una evaluación independiente.',
+        sourceId: 'oettingen-woop-method' },
+      photo: { id: '1767134063671-322e6faf9206', alt: 'Árbol caído atravesado en un sendero de bosque frondoso' } },
+
+    { id: 'manifest-4', title: 'Si esto pasa, entonces haré…', minutes: 7,
+      goal: 'Vincular una pequeña respuesta con una señal de obstáculo.',
+      reading: [
+        'Ahora convierte en un plan el obstáculo que elegiste en la lección anterior. Por ejemplo: “Si abro el archivo y no sé por dónde empezar, entonces solo escribiré el título”. Elige una respuesta que tenga un disparador claro y que sea pequeña y realizable. La parte del “si” nombra el momento, una hora, un lugar o una sensación que puedes reconocer. La parte del “entonces” nombra lo que harás en ese momento. Decidir de antemano significa que no tienes que depender de la fuerza de voluntad ni de la memoria cuando el momento llegue.',
+        'Si quieres usar afirmaciones, mantenlas realistas: en lugar de “lograré todo”, prueba con “puedo intentar el primer borrador”. Una frase así es útil no porque dirija el universo, sino porque te recuerda la conducta que elegiste. Las declaraciones grandiosas pueden sentirse bien un momento y luego chocar con un día difícil. Una frase creíble atada a una pequeña acción tiene más probabilidades de seguir en pie cuando el obstáculo realmente aparezca.',
+      ],
+      practice: ['Describe una señal de obstáculo con la forma “Si …”.', 'En la parte del “entonces …”, escribe una sola conducta pequeña.', 'Comprueba que el plan se ajusta al tiempo y a las herramientas que tienes, y ensáyalo una vez.'],
+      reflection: '¿Cuál es tu frase si-entonces?', question: '¿Qué plan se puede probar de verdad?', options: ['Todo se arreglará solo.', 'Si me atasco al abrir el archivo, primero escribiré el título.', 'Si envío buena energía, todos los obstáculos desaparecerán.'], correct: 1,
+      feedback: 'La segunda opción vincula una situación específica con una conducta observable. El enfoque estudiado en la investigación se parece a este tipo de planificación de la acción.', takeaway: 'Ata tu deseo a una forma de empezar.', sources: ['mcii', 'if-then-plans'],
+      visual: { kind: 'steps', title: 'Deseo → resultado → obstáculo → plan',
+        steps: [
+          { label: 'Deseo', text: '¿Qué quieres? Por ejemplo, el primer borrador de mi currículum.' },
+          { label: 'Resultado', text: '¿Qué cambiaría para ti cuando esté hecho?' },
+          { label: 'Obstáculo', text: '“Cuando abro el archivo, no sé por dónde empezar”.' },
+          { label: 'Plan', text: '“Si me atasco, entonces solo escribiré el título”.' },
+        ],
+        note: 'Si usas una afirmación, que sea realista: “Puedo intentar el primer borrador”. Su valor está en recordarte la conducta que elegiste.' },
+      deeper: [
+        { heading: 'Por qué funcionan los planes si-entonces', paragraphs: [
+          'Los psicólogos llaman a estos planes intenciones de implementación. Peter Gollwitzer y Paschal Sheeran reunieron 94 pruebas independientes y encontraron que los planes que dicen de antemano cuándo, dónde y cómo actuarás tenían un efecto promedio de medio a grande en el logro de metas. Análisis más recientes que corrigen el sesgo de publicación pueden situar el efecto real más abajo, pero la dirección es consistente.',
+          'La razón probable es sencilla. Cuando vinculas una situación con una respuesta de antemano, la propia situación se convierte en el recordatorio. Ya no necesitas decidir en el momento, cuando estás cansado o inquieto y la opción más fácil es ponerte a deslizar la pantalla. El plan ya decidió por ti.',
+        ],
+          visual: { kind: 'compare', title: 'Intenciones vagas y planes utilizables',
+            left: { label: 'Vago', items: ['Trabajaré en eso esta semana.', 'Intentaré ser más disciplinado.', 'Me mantendré positivo pase lo que pase.'] },
+            right: { label: 'Si-entonces', items: ['Si son las 8 p. m. del martes, entonces abro el archivo en la mesa de la cocina.', 'Si busco mi teléfono, entonces lo dejo en la otra habitación por 15 minutos.', 'Si me siento desanimado, entonces escribo una cosa que sí funcionó.'] },
+            note: 'Un buen “si” es algo que notarás; un buen “entonces” es lo bastante pequeño como para hacerlo incluso en un mal día.' } },
+        { heading: 'Errores comunes', paragraphs: [
+          'El más común es una señal vaga: “si tengo tiempo” rara vez llega. Ata el plan a una hora del reloj, a un lugar o a un momento que ya conoces, como terminar el almuerzo. El segundo es una respuesta demasiado grande: “entonces escribiré el capítulo entero” invita a la misma evasión de antes. El tercero es hacer demasiados planes a la vez. Uno o dos planes que realmente uses valen más que una página de reglas.',
+          'Si un plan no se activa, trátalo como información, no como un veredicto sobre ti. Quizá la señal estaba oculta, o la acción seguía siendo demasiado grande. Ajusta una parte y vuelve a intentarlo.',
+        ] },
+      ],
+      example: { title: 'Tomás, 35 años, diseñador gráfico freelance', text: 'Tomás llevaba un año “manifestando” un sitio web de portafolio. Podía imaginarlo con claridad, pero cada vez que abría el creador de sitios, la página en blanco lo llevaba a cambiar al correo. Así que escribió dos planes en una nota adhesiva junto a su pantalla. “Si abro el creador y me siento atascado, entonces solo escribiré el título de la página y los nombres de dos proyectos”. Y: “Si son las 9 a. m. del martes y no he empezado, entonces pondré un temporizador de diez minutos”. El martes se activó el segundo plan a las 9:05. Escribió el título y tres nombres de proyectos, y se detuvo a los doce minutos. Todavía no era un sitio web, pero por primera vez era más que una imagen en su cabeza.' },
+      photo: { id: '1591462391971-9ffc57b382b9', alt: 'Notas adhesivas de colores y bolígrafos' } },
+
+    { id: 'manifest-5', title: 'Intenta, mira, elige de nuevo', minutes: 8,
+      goal: 'Revisar tu plan en la vida real y elegir tu siguiente paso.',
+      reading: [
+        'A medida que avanzas hacia una meta, mirar atrás lo que hiciste puede ayudarte a ver qué parte del plan está funcionando. Anota no solo el resultado, sino también la conducta que intentaste, las condiciones que encontraste y lo que aprendiste. Basta con una nota breve: “Escribí diez minutos el martes; los niños estaban en casa; empezar por el título ayudó”. Tras unas semanas, notas como estas muestran patrones que la memoria sola tiende a difuminar, y te dan algo concreto que ajustar.',
+        'Si el resultado que querías no llega, no tienes que explicarlo con malos pensamientos, poca energía o falta de fe. A veces hace falta otro camino, más apoyo u otra meta. Cambiar de rumbo no es rendirte contigo mismo; es usar lo que la realidad te ha enseñado. Ningún curso puede garantizar un resultado. Lo que sí puedes hacer es sopesar juntas tu propia parte y las condiciones externas, y luego elegir el siguiente paso con la mirada más clara.',
+      ],
+      practice: ['Haz tu primer pequeño intento, o fija exactamente cuándo lo harás.', 'Pon una fecha razonable para revisar el resultado y usa las preguntas “¿Qué intenté y qué aprendí?”.', 'Elige lo que mejor encaje: continuar, hacerlo más pequeño, buscar apoyo o cambiar la meta.'],
+      reflection: '¿En qué día, y mirando qué información, revisarás tu plan?', question: 'Cuando el resultado que querías no llega, ¿cuál es la revisión más útil?', options: ['Mis pensamientos no fueron lo bastante fuertes.', 'Mirar las conductas que intenté y las condiciones, y luego tomar la siguiente decisión.', 'Mantener la misma expectativa sin mirar la realidad.'], correct: 1,
+      feedback: 'Comparar el plan con la realidad te da información nueva. Ningún curso garantiza un resultado; puedes sopesar juntas tu propia parte y las condiciones externas.', takeaway: 'Pon esfuerzo en tu sueño y deja espacio para lo que la realidad te enseña.', sources: ['monitoring', 'mcii', 'manifest-belief-study'],
+      visual: { kind: 'bars', title: 'Seguimiento del progreso: efecto promedio',
+        bars: [{ label: 'Harkin et al. 2016 · 138 estudios', value: 0.4, display: 'd = 0.40' }],
+        note: 'El efecto promedio en el logro de metas de las intervenciones que aumentaron el seguimiento del progreso; se reunieron metas y métodos diferentes. No promete un efecto ni un resultado para este ejercicio por sí solo.',
+        sourceId: 'monitoring' },
+      deeper: [
+        { heading: 'Qué registrar y por qué ayuda escribirlo', paragraphs: [
+          'Un metaanálisis de 138 experimentos con casi 20,000 personas encontró que las intervenciones que llevaban a las personas a monitorear su progreso les ayudaban a alcanzar sus metas, con un efecto promedio de pequeño a moderado. El beneficio era mayor cuando el progreso se registraba de forma física, en papel o en una aplicación, y cuando se informaba a otra persona. No tienes que compartir tus notas, pero una línea rápida por escrito parece funcionar mejor que una vaga sensación de cómo van las cosas.',
+          'Registra sobre todo lo que controlas: ¿diste el paso, cuándo y en qué condiciones? El resultado también importa, pero los resultados suelen ir rezagados respecto del esfuerzo y dependen de otras personas. Si solo registras el resultado, un mes lento puede parecer un fracaso aunque tu conducta haya sido constante.',
+        ],
+          visual: { kind: 'cycle', title: 'El ciclo de revisión', center: 'Día de revisión',
+            nodes: [
+              { label: 'Intentar', text: 'Da el pequeño paso que planeaste.' },
+              { label: 'Anotar', text: 'Escribe una línea: qué hiciste, cuándo y en qué condiciones.' },
+              { label: 'Mirar', text: 'En tu día de revisión, lee las notas en conjunto.' },
+              { label: 'Aprender', text: '¿Qué ayudó? ¿Qué se interpuso?' },
+              { label: 'Elegir de nuevo', text: 'Mantener, reducir, buscar apoyo o cambiar la meta.' },
+            ],
+            note: 'El ciclo convierte cada intento, incluso los que no funcionaron, en información para el siguiente.' } },
+        { heading: 'Cuando el resultado no llega', paragraphs: [
+          'La manifestación popular tiene aquí un costo oculto. Si los pensamientos crean la realidad, entonces un resultado que no llega debe significar que tus pensamientos estaban equivocados, así que la única respuesta es creer con más fuerza. Eso puede dejar a la gente estancada y, a veces, la empuja hacia apuestas arriesgadas. La investigación por encuestas sobre personas que creen con fuerza en la manifestación encontró justamente este vínculo con las inversiones arriesgadas y la bancarrota, aunque no puede mostrar la causa.',
+          'Una pregunta más amable y más útil es: ¿qué dice la evidencia de mis propios intentos? A veces la respuesta es seguir adelante, porque el esfuerzo y los resultados simplemente van desfasados por ahora. A veces es cambiar el plan, pedir ayuda o soltar una meta. Cada una es una decisión legítima.',
+        ],
+          visual: { kind: 'table', title: 'Cómo leer tu revisión', columns: ['Lo que ves', 'Una siguiente decisión razonable'],
+            rows: [
+              ['Diste los pasos; el resultado es lento', 'Continuar y fijar la fecha de la próxima revisión'],
+              ['Rara vez diste el paso', 'Hacerlo más pequeño o cambiar la señal del “si”'],
+              ['Una condición externa te bloqueaba una y otra vez', 'Cambiar el momento o pedir apoyo'],
+              ['La meta ya no te importa', 'Soltarla o elegir un deseo nuevo'],
+            ],
+            note: 'Ninguna de estas decisiones es un fracaso; cada una es una decisión basada en lo que realmente pasó.' } },
+      ],
+      example: { title: 'Aisha, 45 años, tiene una pequeña pastelería en casa', text: 'Aisha quería diez pedidos semanales regulares para el final del trimestre. Durante seis semanas publicó fotos todos los lunes y repartió muestras en dos cafés del barrio, anotando una línea en un cuaderno cada vez. En su día de revisión leyó las notas. Tenía nueve publicaciones y seis días de muestras, y cuatro pedidos regulares, no diez. En lugar de decidir que no había creído lo suficiente, miró con más detalle. Tres de los cuatro clientes regulares venían del mismo café, donde había conversado con los clientes en persona. Así que decidió quitar dos de las publicaciones cada mes y dedicar ese tiempo a un segundo café. La fecha de la meta se movió un mes, y eso se sintió como una decisión y no como una derrota.' },
+      photo: { id: '1762920738995-f393efe82205', alt: 'Poste de madera con flechas que señalan varias direcciones en un bosque' } },
+  ],
+};

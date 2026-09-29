@@ -1,6 +1,7 @@
 import { EXISTING_VISUALS } from './courseContent/existingVisuals';
 import { EN_COURSES, EN_SOURCES } from './courseContent/en';
 import { TR_EXTRA_COURSES, TR_EXTRA_SOURCES } from './courseContent/tr';
+import { ES_COURSES, ES_SOURCES } from './courseContent/es';
 import { TR_LESSON_EXTRAS, TR_EXTRA_DEEPER_SOURCES } from './courseContent/tr/deeper';
 import * as procrastination from './courseContent/procrastination';
 import * as focus from './courseContent/focus';
@@ -62,7 +63,7 @@ export interface GuidedCourse {
   lang?: ContentLocale;
 }
 
-export type ContentLocale = 'en' | 'tr';
+export type ContentLocale = 'en' | 'tr' | 'es';
 
 const BASE_SOURCES: CourseSource[] = [
   { id: 'mcii', title: 'Wang, Wang & Gai · 2021 · Hedefe ulaşma meta-analizi', url: 'https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.565202/full', type: 'research', finding: '21 çalışma, 15.907 katılımcı: hedefi gerçek engelle karşılaştırma ve eğer/o zaman planı birlikte küçük–orta ortalama etki gösterdi (g=0,336).', limitation: 'Yayın yanlılığı olası; sonuçlar kişiye ve koşula göre değişir. Bu ODA kursunun etkililiği sınanmadı.' },
@@ -305,24 +306,28 @@ const ORDER = ['turning-day', 'procrastination', 'confidence', 'adhd', 'motivati
 const byId = (list: GuidedCourse[]) => new Map(list.map(course => [course.id, course]));
 const TR_BY_ID = byId(TR_COURSES);
 const EN_BY_ID = byId(EN_COURSES.map(course => withExtras({ ...course, lang: 'en' as const })));
+const ES_BY_ID = byId(ES_COURSES.map(course => withExtras({ ...course, lang: 'es' as const })));
 const ordered = (pick: (id: string) => GuidedCourse | undefined) => [
   ...ORDER.map(pick).filter((course): course is GuidedCourse => Boolean(course)),
   ...[...new Set([...TR_BY_ID.keys(), ...EN_BY_ID.keys()])].filter(id => !ORDER.includes(id)).map(pick).filter((course): course is GuidedCourse => Boolean(course)),
 ];
 
 export function coursesFor(locale: string): GuidedCourse[] {
-  return locale === 'tr' ? ordered(id => TR_BY_ID.get(id) ?? EN_BY_ID.get(id)) : ordered(id => EN_BY_ID.get(id) ?? TR_BY_ID.get(id));
+  if (locale === 'tr') return ordered(id => TR_BY_ID.get(id) ?? EN_BY_ID.get(id));
+  if (locale === 'es') return ordered(id => ES_BY_ID.get(id) ?? EN_BY_ID.get(id) ?? TR_BY_ID.get(id));
+  return ordered(id => EN_BY_ID.get(id) ?? TR_BY_ID.get(id));
 }
 
 /** Every course once (Turkish edition when it exists): the structure used for progress and counts. */
 export const COURSES: GuidedCourse[] = ordered(id => TR_BY_ID.get(id) ?? EN_BY_ID.get(id));
 export const EN_EDITION: GuidedCourse[] = [...EN_BY_ID.values()];
+export const ES_EDITION: GuidedCourse[] = [...ES_BY_ID.values()];
+export { ES_SOURCES };
 
 export function sourcesFor(locale: string): CourseSource[] {
-  const first = locale === 'tr' ? TR_SOURCES : EN_SOURCES;
-  const second = locale === 'tr' ? EN_SOURCES : TR_SOURCES;
-  const seen = new Set(first.map(source => source.id));
-  return [...first, ...second.filter(source => !seen.has(source.id))];
+  const chain = locale === 'tr' ? [TR_SOURCES, EN_SOURCES] : locale === 'es' ? [ES_SOURCES, EN_SOURCES, TR_SOURCES] : [EN_SOURCES, TR_SOURCES];
+  const seen = new Set<string>();
+  return chain.flat().filter(source => (seen.has(source.id) ? false : (seen.add(source.id), true)));
 }
 export { EN_SOURCES };
 
