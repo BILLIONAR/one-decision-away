@@ -173,7 +173,7 @@ export const COURSE: GuidedCourse = {
         ],
         evidence: 'A single bout of aerobic exercise raised energetic, positive feelings with a moderate average effect that lasted around half an hour. Facial expressions have a small, variable effect, and expansive postures changed feelings of power but not hormones or risk taking in a large replication.',
         sourceId: 'state-robbins-triad' },
-      photo: { id: '1692933216024-8de20c41321a', alt: 'A woman walking along a path through a lush green field' } },
+      photo: { id: '1692933216024-8de20c41321a', alt: 'A woman walking along a boardwalk through green plants' } },
 
     { id: 'state-3', title: 'Calm in two breaths', minutes: 8,
       goal: 'Learn cyclic sighing and practice it for five minutes, stopping at once if you feel dizzy.',
@@ -294,7 +294,7 @@ export const COURSE: GuidedCourse = {
         ],
         evidence: 'No study has tested Robbins’s question sets directly. Research on attention shows that where you put it changes feelings: moving attention away from the upsetting side of a situation helped a little on average, while dwelling on the emotion made things slightly worse.',
         sourceId: 'state-robbins-questions' },
-      photo: { id: '1543379232-77ee894c85dd', alt: 'A woman standing on a ridge looking out over mountains' } },
+      photo: { id: '1543379232-77ee894c85dd', alt: 'A woman in a knit hat facing the low sun' } },
 
     { id: 'state-5', title: 'Words and meaning', minutes: 9,
       goal: 'Name what you feel in a word or two, then try one alternative meaning for the situation.',

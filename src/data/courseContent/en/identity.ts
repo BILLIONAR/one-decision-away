@@ -216,7 +216,7 @@ export const COURSE: GuidedCourse = {
         ],
         evidence: 'Reviewing a pattern and rehearsing a different response overlaps with mental rehearsal and emotion labeling, which have modest research support. Dispenza’s explanations involving a quantum field, genes and healing are not supported by science.',
         sourceId: 'identity-dispenza-change' },
-      photo: { id: '1762126242240-cafa01fb1351', alt: 'A woman sitting in a chair, looking out of a rainy window' } },
+      photo: { id: '1762126242240-cafa01fb1351', alt: 'A person in an armchair looking out of a rainy window' } },
 
     { id: 'identity-3', title: 'Catch the autopilot', minutes: 8,
       goal: 'Interrupt your old self at least once in the middle of an ordinary day.',
@@ -425,7 +425,7 @@ export const COURSE: GuidedCourse = {
         ],
         evidence: 'Mentally rehearsing specific actions has small-to-medium research support, especially when real practice follows. The books’ claims about a quantum field, gene expression, healing illness and mystical states are not supported by scientific evidence; do not use this practice in place of medical care.',
         sourceId: 'identity-dispenza-habit' },
-      photo: { id: '1600618528240-fb9fc964b853', alt: 'A woman sitting quietly on a wooden dock by the water' } },
+      photo: { id: '1600618528240-fb9fc964b853', alt: 'A woman meditating on a wooden deck at sunset' } },
 
     { id: 'identity-6', title: 'Cues and environment', minutes: 9,
       goal: 'Set up your surroundings and three if-then plans so that your new self becomes the easy default.',
