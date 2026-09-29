@@ -1,5 +1,6 @@
 import { EXISTING_VISUALS } from './courseContent/existingVisuals';
 import { EN_COURSES, EN_SOURCES } from './courseContent/en';
+import { TR_EXTRA_COURSES, TR_EXTRA_SOURCES } from './courseContent/tr';
 import * as procrastination from './courseContent/procrastination';
 import * as focus from './courseContent/focus';
 import * as sleep from './courseContent/sleep';
@@ -279,9 +280,10 @@ const TR_COURSES: GuidedCourse[] = [
   calm.COURSE,
   meditation.COURSE,
   suggestion.COURSE,
+  ...TR_EXTRA_COURSES,
 ].map(course => withExtras({ ...course, lang: 'tr' as const }));
 
-const TR_SOURCES = COURSE_SOURCES;
+const TR_SOURCES = [...COURSE_SOURCES, ...TR_EXTRA_SOURCES];
 
 /**
  * Course editions (Sep 2026). English is the primary content language from now
