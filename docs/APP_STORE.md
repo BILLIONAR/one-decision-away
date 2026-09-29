@@ -2,7 +2,7 @@
 
 Bu belge iki kısımdır: depoda **hazır olanlar** ve yayına çıkmak için **Ümit'in yapması gerekenler**. En altta App Store Connect'e yapıştırılacak metinler var.
 
-Yayıncı: **YAHYA** · Uygulama adı: **ODA – One Decision Away** · Paket kimliği (bundle ID): `com.yahya.onedecisionaway`
+Satıcı: **bireysel Apple Developer hesabı** (mağazada kişi adı görünür) · Uygulama adı: **ODA – One Decision Away** · Paket kimliği (bundle ID): `com.yahya.onedecisionaway`
 
 ## Depoda hazır olanlar
 
@@ -27,7 +27,7 @@ Gizlilik ve koşullar adresleri (App Store Connect'e bunlar girilir):
 
 ## Ümit'in yapması gerekenler (sırasıyla)
 
-1. **Apple Developer Program** üyeliği (yıllık 99 $). Şirket (YAHYA) adına açılacaksa D-U-N-S numarası gerekir; bireysel hesapla da başlanabilir, satıcı adı o zaman kişi adı görünür.
+1. **Apple Developer Program** üyeliği (yıllık 99 $). Hesap **bireysel** açıldı: satıcı adı kişi adı olarak görünür. "YAHYA" adının satıcı adı olması için ileride kayıtlı bir şirket ve D-U-N-S numarası gerekir (hesap türü sonradan değiştirilebilir).
 2. **Mac'te Xcode**: App Store'dan Xcode'u kur, sonra Terminal'de bir kez `sudo xcodebuild -license accept` çalıştır (şifreyi senin girmen gerekiyor).
 3. **App Store Connect'te uygulamayı oluştur**: Uygulamalar → + → Yeni Uygulama. Platform iOS, ad "ODA – One Decision Away", birincil dil Türkçe, bundle ID `com.yahya.onedecisionaway` (Certificates, Identifiers & Profiles'ta önce bu kimliği oluştur).
 4. **Abonelikleri oluştur** (App Store Connect → uygulama → Abonelikler). Tek abonelik grubu: `ODA`. Grup içi seviye sırası (1 en yüksek): **coach = 1, pro = 2, essentials = 3**; böylece seviyeler arası geçiş yükseltme/düşürme olur, ikinci abonelik açılmaz.

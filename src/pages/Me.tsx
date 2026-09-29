@@ -21,6 +21,7 @@ import {
 import { EvidenceTree } from '../components/momentum/EvidenceTree';
 import { YourMonth, InsightLine, Milestones } from '../components/me/MyProgress';
 import { useCloudState } from '../services/useCloudState';
+import { usePro } from '../services/purchases';
 
 interface MenuRow {
   icon: LucideIcon;
@@ -37,6 +38,8 @@ export const Me: React.FC = () => {
   const { data, setActiveRoute } = useApp();
   const t = useT();
   const cloud = useCloudState();
+  const plan = usePro();
+  const planName = plan.tier === 'essentials' ? t('Essentials') : plan.tier === 'pro' ? t('Pro') : plan.tier === 'coach' ? t('Pro Coach') : t('Free');
   const [locale] = useLocale();
   const c = companionCopy(locale);
 
@@ -97,7 +100,7 @@ export const Me: React.FC = () => {
       rows: [
         ...(cloud.configured ? [{ icon: CloudUpload, label: t('Account'), hint: cloud.session?.user.email || t('Sign in to back up and sync'), route: '/app/account' }] : []),
         { icon: Bell, label: t('Settings'), hint: t('Reminders, language, backup, appearance'), route: '/app/settings' },
-        { icon: Sparkles, label: t('Pro plan'), route: '/app/upgrade' },
+        { icon: Sparkles, label: t('Plan'), hint: planName, route: '/app/upgrade' },
       ],
     },
   ];
