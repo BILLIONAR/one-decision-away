@@ -122,3 +122,5 @@ Reklam, analiz, konum, sağlık verisi yok; izleme (tracking) yok.
 ## Ekran görüntüleri
 
 Zorunlu boyut: 6,9" iPhone (1320 × 2868 dikey). Tasarımlar Design tuvalinde ("ODA iOS tasarımı", App Store görseli 1 ve 2); TestFlight'taki gerçek ekranlardan da alınabilir.
+
+**Hazır görseller (29 Eyl 2026):** Masaüstünde `one-decision-away/app-store-screenshots.zip` — EN, TR, ES için 6'şar görsel, 1290 × 2796 (6,9" yuvasına yüklenir). Sıra: 1 Günde tek karar, 2 Kurslar, 3 Ders görseli, 4 Kanıt ağacı, 5 Ses Odası, 6 Koyu tema. Yeniden üretmek için `scripts/store-screenshots.mjs`.
