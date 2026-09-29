@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowUp, Check, Download, MessageCircle, Mic, MicOff, RotateCcw, Square, Volume2 } from 'lucide-react';
-import { useLocale, getSpeechLang } from '../i18n';
+import { useLocale, useT, getSpeechLang } from '../i18n';
+import { CoachTools } from '../components/coach/CoachTools';
 import { companionCopy } from '../i18n/companion';
 import { createAICoach, getCoachAvailability, setCoachFocus, MAX_COACH_MESSAGE_LENGTH, type CoachMessage } from '../services/aiCoach';
 import { INTENTS } from '../data/starterDecisions';
@@ -17,6 +18,7 @@ type VoiceWindow = Window & { SpeechRecognition?: new () => Recognition; webkitS
 export const Coach: React.FC = () => {
   const [locale] = useLocale();
   const c = companionCopy(locale);
+  const t = useT();
   const [engine] = useState(() => createAICoach());
   const intent = useApp().data?.profile.intent;
   useEffect(() => { setCoachFocus(INTENTS.find(item => item.key === intent)?.label ?? null); }, [intent]);
@@ -142,6 +144,8 @@ export const Coach: React.FC = () => {
         <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed max-w-xl">{c.coachIntro}</p>
       </header>
 
+      <CoachTools />
+
       {phase === 'idle' || phase === 'loading' ? (
         <section className="p-5 sm:p-6 rounded-[var(--radius-lg)] bg-[var(--accent-soft)] border border-[var(--border)] space-y-4">
           <p className="text-[13px] font-semibold text-[var(--accent)]">{c.local}</p>
@@ -163,9 +167,19 @@ export const Coach: React.FC = () => {
       )}
 
       {messages.length === 0 ? (
-        <div className="space-y-2">
-          {[c.fearPrompt, c.overwhelmedPrompt, c.faithPrompt].map(prompt => <button key={prompt} type="button" onClick={() => { setDraft(prompt); textarea.current?.focus(); }} className="block w-full text-left px-4 py-3 text-sm leading-relaxed border border-[var(--border)] rounded-[var(--radius-sm)] hover:border-[var(--accent)] transition-colors">{prompt}</button>)}
-        </div>
+        <section aria-labelledby="coach-starters-heading" className="space-y-3">
+          <h2 id="coach-starters-heading" className="oda-kicker text-[var(--fg-muted)]">{t('Conversation starters')}</h2>
+          {[
+            { label: t('Fear'), prompts: [c.fearPrompt, t('I keep putting this off because it has to be perfect.')] },
+            { label: t('Overwhelm'), prompts: [c.overwhelmedPrompt, t('I have too many things on my plate and cannot tell which one matters.')] },
+            { label: t('Hope and motivation'), prompts: [c.faithPrompt, t('I lost my momentum. Help me restart gently.')] },
+          ].map(group => <div key={group.label} role="group" aria-label={group.label} className="space-y-1.5">
+            <p className="text-[12px] font-medium text-[var(--fg-muted)]">{group.label}</p>
+            <div className="flex flex-wrap gap-2">
+              {group.prompts.map(prompt => <button key={prompt} type="button" onClick={() => { setDraft(prompt); textarea.current?.focus(); }} className="min-h-11 px-4 py-2 text-left text-[13px] leading-snug border border-[var(--border)] rounded-[18px] hover:border-[var(--accent)] transition-colors max-w-full">{prompt}</button>)}
+            </div>
+          </div>)}
+        </section>
       ) : <div ref={log} role="log" aria-label={c.live} aria-live="off" tabIndex={0} onScroll={() => { const el = log.current; if (el) followOutput.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80; }} className="max-h-[52vh] min-h-40 overflow-y-auto space-y-5 pr-2 overscroll-contain">
         {messages.map((message, index) => <article key={index} className={message.role === 'user' ? 'ml-8 p-4 bg-[var(--bg-muted)] rounded-[var(--radius-md)]' : 'mr-4 pl-4 border-l-2 border-[var(--accent)]'}>
           <p className="text-[12px] font-semibold text-[var(--fg-muted)] mb-2">{message.role === 'user' ? c.you : c.name}</p>

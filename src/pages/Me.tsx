@@ -19,6 +19,7 @@ import {
   CloudUpload,
 } from 'lucide-react';
 import { EvidenceTree } from '../components/momentum/EvidenceTree';
+import { YourMonth, InsightLine, Milestones } from '../components/me/MyProgress';
 import { useCloudState } from '../services/useCloudState';
 
 interface MenuRow {
@@ -135,6 +136,11 @@ export const Me: React.FC = () => {
           <StatTile value={stats.earned >= 10000 ? `${(stats.earned / 1000).toFixed(1)}k` : stats.earned.toLocaleString()} label={t('D$ earned')} tint="oda-tint-sand" />
         </button>
       </section>
+
+      {/* Progress: month heatmap, insight, milestones */}
+      <YourMonth data={data} />
+      <InsightLine data={data} />
+      <Milestones data={data} />
 
       {/* Menu groups */}
       {groups.map((group) => (

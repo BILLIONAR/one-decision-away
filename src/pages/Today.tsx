@@ -11,6 +11,8 @@ import { DreamArt } from '../components/DreamArt';
 import { DailyMicroHabits } from '../components/DailyMicroHabits';
 import { MeditateNowWidget } from '../components/MeditateNowWidget';
 import { DailyCheckIn } from '../components/DailyCheckIn';
+import { ArrivalCheckIn } from '../components/today/ArrivalCheckIn';
+import { EveningLine } from '../components/today/EveningLine';
 import { DailyAffirmationWidget } from '../components/DailyAffirmationWidget';
 import { DailyDeepQuestion } from '../components/DailyDeepQuestion';
 import { EveningDriftCheck } from '../components/TwoFuturesPulseWidgets';
@@ -294,6 +296,15 @@ export const Today: React.FC = () => {
         )}
       </section>
 
+      <ArrivalCheckIn
+        decisionState={!todayOneDecision ? 'none' : decisionDone ? 'done' : 'open'}
+        onTwoMinute={() => setStartOpen(true)}
+        onChooseDecision={() => document.getElementById('today-decision-input')?.focus()}
+        onSoundRoom={() => setActiveRoute('/app/sound')}
+        onCourse={() => setActiveRoute('/app/courses')}
+        courseTitle={suggestedCourse?.title}
+      />
+
       {/* Quick actions: four tinted tiles */}
       <nav aria-label={t('Quick actions')} className="grid grid-cols-2 gap-2.5">
         {todayOneDecision && !decisionDone && !decisionPlan?.ifThen ? (
@@ -329,6 +340,7 @@ export const Today: React.FC = () => {
       </nav>
 
       {decisionDone && <KeptMomentCard />}
+      <EveningLine hasDecision={Boolean(todayOneDecision)} />
       {focusChange && <WeeklyFocusNote change={focusChange} />}
       <EvidenceStrip />
       {reviewWeek && <WeeklyReviewCard weekKey={reviewWeek} />}

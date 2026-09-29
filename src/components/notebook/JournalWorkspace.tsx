@@ -5,6 +5,7 @@ import { N_, useT } from '../../i18n';
 import { getNotebookEntries, type NotebookDisplayEntry } from '../../services/notebook';
 import type { DreamJournalEntry, NotebookMood } from '../../types/models';
 import { NotebookCalendar } from './NotebookCalendar';
+import { TodaysPrompt } from './TodaysPrompt';
 import { ActionNotice, dateLabel, quietButton, smallLabel, cardCls, NButton, NField, NInput, NSelect, NTextarea, useNotebookAction, useSessionDraft } from './shared';
 
 const MOODS = [
@@ -74,6 +75,12 @@ export const JournalWorkspace: React.FC<{ today: string }> = ({ today }) => {
     setBaseline(`${shownTitle}\u0000${shownContent}\u0000${entry.mood || ''}`); setValidation(false); setNotice(null);
     document.getElementById('notebook-journal-title')?.scrollIntoView({ behavior: 'auto', block: 'center' });
   };
+  const usePrompt = (prompt: string) => {
+    // A prompt starts a new entry; never overwrite the title of one being edited.
+    if (editing) { if (!canReplace()) return; reset(); setNotice(null); }
+    setTitle(prompt);
+    document.getElementById('notebook-journal-content')?.focus();
+  };
   const save = async (event: React.FormEvent) => {
     event.preventDefault();
     if (editingRef && !editing) { setNotice({ error: true, message: t('This notebook record no longer exists.') }); return; }
@@ -94,6 +101,7 @@ export const JournalWorkspace: React.FC<{ today: string }> = ({ today }) => {
   };
 
   return <div className="space-y-6">
+    <TodaysPrompt today={today} onUse={usePrompt} />
     <div className={cardCls}>
       <div className="p-5 flex items-start justify-between gap-3">
         <div><p className={smallLabel}>{editing ? dateLabel(editing.dateKey) : dateLabel(today)}</p><h2 className="text-lg font-semibold tracking-tight text-[var(--fg)] mt-0.5">{editing ? t('Edit entry') : t('Today')}</h2></div>

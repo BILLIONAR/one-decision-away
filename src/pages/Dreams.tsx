@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Search, Plus, Check, Receipt } from 'lucide-react';
+import { Search, Plus, Check, Receipt, Images } from 'lucide-react';
 import { useApp } from '../store/useApp';
 import { Modal } from '../components/ui';
 import { DreamRealityCheck } from '../components/momentum/DreamRealityCheck';
@@ -89,6 +89,76 @@ const DreamCard: React.FC<DreamCardProps> = ({
   );
 };
 
+/* ---------- Vision board ---------- */
+
+interface VisionTile {
+  id: string;
+  name: string;
+  imageUrl?: string;
+  illustrationKey: string;
+  item?: MarketItem;
+}
+
+/** Aspect ratios chosen so two columns of six balance out. */
+const VISION_ASPECTS = ['aspect-[4/5]', 'aspect-square', 'aspect-[3/4]', 'aspect-square', 'aspect-[4/5]', 'aspect-[3/4]'];
+
+const VisionBoard: React.FC<{
+  tiles: VisionTile[];
+  onOpen: (tile: VisionTile) => void;
+  onExplore: () => void;
+}> = ({ tiles, onOpen, onExplore }) => {
+  const t = useT();
+  if (tiles.length === 0) {
+    return (
+      <section className="oda-card rounded-[var(--radius-lg)] p-5 space-y-3" aria-labelledby="vision-board-title">
+        <div className="flex items-center gap-3">
+          <span className="oda-tile-icon oda-tint-sage shrink-0" aria-hidden="true">
+            <Images className="w-[18px] h-[18px]" strokeWidth={ICON_STROKE} />
+          </span>
+          <h2 id="vision-board-title" className="text-[15px] font-semibold text-[var(--fg)]">{t('Your vision board')}</h2>
+        </div>
+        <p className="text-[14px] text-[var(--fg-muted)]">
+          {t('Add a dream from Explore and it will appear here as a picture. Seeing what you are working toward makes it easier to keep going.')}
+        </p>
+        <button
+          type="button"
+          onClick={onExplore}
+          className="h-12 w-full rounded-[var(--radius-sm)] border border-[var(--border-strong)] bg-transparent text-[var(--fg)] font-semibold text-[15px] cursor-pointer"
+        >
+          {t('Explore dreams')}
+        </button>
+      </section>
+    );
+  }
+  return (
+    <section className="space-y-3" aria-labelledby="vision-board-title">
+      <h2 id="vision-board-title" className="oda-kicker text-[var(--fg-muted)] px-1">{t('Your vision board')}</h2>
+      <ul className="columns-2 min-[560px]:columns-3 gap-2 [&>li]:mb-2">
+        {tiles.map((tile, i) => (
+          <li key={tile.id} className="break-inside-avoid">
+            <button
+              type="button"
+              onClick={() => onOpen(tile)}
+              aria-label={tile.name}
+              className={`relative block w-full ${tiles.length === 1 ? 'aspect-[16/10]' : VISION_ASPECTS[i % VISION_ASPECTS.length]} rounded-[var(--radius-md)] overflow-hidden bg-[var(--bg-muted)] cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`}
+            >
+              <DreamArt
+                type={tile.illustrationKey}
+                imageUrl={tile.imageUrl ? cardImageUrl(tile.imageUrl) : undefined}
+                alt=""
+                className="absolute inset-0 w-full h-full"
+              />
+              <span className="absolute inset-x-0 bottom-0 px-2.5 pb-2 pt-8 text-left text-[12.5px] font-medium leading-tight text-white line-clamp-2 bg-gradient-to-t from-black/60 to-transparent">
+                {tile.name}
+              </span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+};
+
 /* ---------- Page ---------- */
 
 export const Dreams: React.FC = () => {
@@ -144,6 +214,24 @@ export const Dreams: React.FC = () => {
       return 0;
     });
   }, [allItems, visionIds, archivedIds, ownedIds]);
+
+  // Vision board: dreams in Mine first, then owned dreams that have a photo. Max 6.
+  const visionTiles = useMemo<VisionTile[]>(() => {
+    const seen = new Set<string>();
+    const tiles: VisionTile[] = [];
+    mineItems.forEach((item) => {
+      seen.add(item.id);
+      tiles.push({ id: item.id, name: t(item.name), imageUrl: item.customImageUrl, illustrationKey: item.illustrationKey, item });
+    });
+    (data?.purchases || []).forEach((p) => {
+      const snap = p.itemSnapshot;
+      if (!snap?.customImageUrl || seen.has(snap.id)) return;
+      seen.add(snap.id);
+      tiles.push({ id: snap.id, name: t(snap.name), imageUrl: snap.customImageUrl, illustrationKey: snap.illustrationKey });
+    });
+    // Photos first so the collage leads with pictures; stable within each group.
+    return [...tiles.filter((x) => x.imageUrl), ...tiles.filter((x) => !x.imageUrl)].slice(0, 6);
+  }, [mineItems, data, t]);
 
   const focusId = visionIds.find((id) => !archivedIds.has(id) && !ownedIds.has(id)) || mineItems[0]?.id;
 
@@ -285,7 +373,12 @@ export const Dreams: React.FC = () => {
       {/* Mine */}
       {activeTab === 'mine' && (
         <div className="space-y-6">
-          {mineItems.length === 0 ? (
+          <VisionBoard
+            tiles={visionTiles}
+            onOpen={(tile) => (tile.item ? setDetailItem(tile.item) : setTab('owned'))}
+            onExplore={() => setTab('explore')}
+          />
+          {mineItems.length === 0 && visionTiles.length === 0 ? null : mineItems.length === 0 ? (
             <div className="oda-card rounded-[var(--radius-lg)] p-5 space-y-3">
               <p className="text-[15px] font-semibold text-[var(--fg)]">{t('No dreams yet')}</p>
               <p className="text-[14px] text-[var(--fg-muted)]">{t('Pick one from Explore or add your own.')}</p>
