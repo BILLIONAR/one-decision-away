@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight, AudioLines, Check, ChevronDown, ChevronRight, Leaf, Plus, MessageCircle, GraduationCap, Route, Share2, Waves } from 'lucide-react';
 import { ProgressRing } from '../components/ProgressRing';
-import { coursesFor } from '../data/courses';
+import { courseCatalogFor } from '../data/courseCatalog';
 import { courseForIntent } from '../data/starterDecisions';
 import { useApp } from '../store/useApp';
 import { getDailyQuote } from '../data/dailyQuotes';
@@ -12,7 +12,12 @@ import { DailyMicroHabits } from '../components/DailyMicroHabits';
 import { MeditateNowWidget } from '../components/MeditateNowWidget';
 import { DailyCheckIn } from '../components/DailyCheckIn';
 import { ArrivalCheckIn } from '../components/today/ArrivalCheckIn';
-import { EveningLine } from '../components/today/EveningLine';
+import { DailyPractice, DailyReflection } from '../components/today/DailyPractice';
+import { WeeklyOutcomeReview } from '../components/today/WeeklyOutcomeReview';
+import { CourseNextStep } from '../components/today/CourseNextStep';
+import { availableReviewWeek, todayDecision } from '../services/dailyLoop';
+import { dailyLoopCopy } from '../i18n/dailyLoop';
+import '../styles/dailyLoop.css';
 import { DailyAffirmationWidget } from '../components/DailyAffirmationWidget';
 import { DailyDeepQuestion } from '../components/DailyDeepQuestion';
 import { EveningDriftCheck } from '../components/TwoFuturesPulseWidgets';
@@ -31,9 +36,9 @@ import { designCopy } from '../i18n/design';
 import { companionCopy } from '../i18n/companion';
 import { DecisionPlanModal } from '../components/momentum/DecisionPlanModal';
 import { TwoMinuteStart } from '../components/momentum/TwoMinuteStart';
-import { MomentumCard, EvidenceStrip, SimpleModeNote, TwoWeekCheckIn, WeeklyReviewCard, WeeklyFocusNote } from '../components/momentum/TodayMomentum';
+import { MomentumCard, EvidenceStrip, SimpleModeNote, TwoWeekCheckIn } from '../components/momentum/TodayMomentum';
 import { shareDecision } from '../components/momentum/shareDecision';
-import { decisionChain, evidenceSummary, isSimpleMode, keptDecisions, localDayKey, twoWeekCheckInDue, weeklyFocus, weeklyReviewDue } from '../services/momentum';
+import { decisionChain, evidenceSummary, isSimpleMode, keptDecisions, localDayKey, twoWeekCheckInDue } from '../services/momentum';
 import { EasyDecisionChips, KeptMomentCard } from '../components/momentum/FirstSteps';
 import { easyDecisions } from '../data/starterDecisions';
 
@@ -61,10 +66,20 @@ export const Today: React.FC = () => {
   const [locale] = useLocale();
   const c = companionCopy(locale);
   const d = designCopy(locale);
+  const loop = dailyLoopCopy(locale);
 
   const [completingMission, setCompletingMission] = useState<Mission | null>(null);
   const [newDecisionTitle, setNewDecisionTitle] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const [decisionError, setDecisionError] = useState(false);
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const update = () => setNow(new Date());
+    const timer = window.setInterval(update, 60_000);
+    window.addEventListener('focus', update);
+    document.addEventListener('visibilitychange', update);
+    return () => { window.clearInterval(timer); window.removeEventListener('focus', update); document.removeEventListener('visibilitychange', update); };
+  }, []);
   const [ritualsOpen, setRitualsOpen] = useState<boolean>(readRitualsOpen);
   const [habitsModalOpen, setHabitsModalOpen] = useState(false);
   const [plan, setPlan] = useState<{ open: boolean; justSet?: boolean; smaller?: boolean }>({ open: false });
@@ -90,8 +105,7 @@ export const Today: React.FC = () => {
   if (!data) return null;
 
   const balance = computeLedgerBalance(data.transactions);
-  const todayStr = new Date().toISOString().slice(0, 10);
-  const now = new Date();
+  const todayStr = localDayKey(now);
   const hour = now.getHours();
   const name = (data.profile?.displayName || '').trim();
 
@@ -110,10 +124,7 @@ export const Today: React.FC = () => {
 
   const dateLine = formatDate(now, { weekday: 'long', day: 'numeric', month: 'long' });
 
-  // One decision (same selection rule as Home.tsx)
-  const todayOneDecision = data.missions.find(
-    (m) => m.isOneDecision && (m.scheduledFor === todayStr || m.status === 'active')
-  );
+  const todayOneDecision = todayDecision(data.missions, now);
   const decisionDone = todayOneDecision?.status === 'completed';
   const decisionCompletion = todayOneDecision
     ? data.completions.find((c) => c.missionId === todayOneDecision.id)
@@ -127,11 +138,14 @@ export const Today: React.FC = () => {
     const title = newDecisionTitle.trim();
     if (!title || isSaving) return;
     setIsSaving(true);
+    setDecisionError(false);
     try {
       await setOneDecision(title);
       setNewDecisionTitle('');
       // Right after choosing is the best moment to plan for the obstacle.
       setPlan({ open: true, justSet: true });
+    } catch {
+      setDecisionError(true);
     } finally {
       setIsSaving(false);
     }
@@ -161,12 +175,11 @@ export const Today: React.FC = () => {
   const quote = getDailyQuote();
   const simple = isSimpleMode(data);
   const checkInDue = !simple && twoWeekCheckInDue(data);
-  const reviewWeek = weeklyReviewDue(data);
-  const focusChange = weeklyFocus(data);
+  const reviewWeek = availableReviewWeek(now);
   const keptCount = keptDecisions(data.missions).length;
   const chain = decisionChain(data.missions);
   const week = evidenceSummary(data.missions);
-  const suggestedCourse = coursesFor(locale).find(c => c.id === courseForIntent(data.profile.intent));
+  const suggestedCourse = courseCatalogFor(locale).find(c => c.id === courseForIntent(data.profile.intent));
   const draftForToday = data.profile.nextDecisionDraft?.forDay === localDayKey() ? data.profile.nextDecisionDraft.text : null;
   const pickSuggestion = (title: string) => {
     setNewDecisionTitle(title);
@@ -175,7 +188,8 @@ export const Today: React.FC = () => {
   const quickSetDecision = async (title: string) => {
     if (isSaving) return;
     setIsSaving(true);
-    try { await setOneDecision(title); } finally { setIsSaving(false); }
+    setDecisionError(false);
+    try { await setOneDecision(title); } catch { setDecisionError(true); } finally { setIsSaving(false); }
   };
   const decisionPlan = todayOneDecision?.plan;
 
@@ -207,6 +221,8 @@ export const Today: React.FC = () => {
         </button>
       </header>
 
+      <DailyPractice mission={todayOneDecision} dayKey={todayStr} />
+
       <MomentumCard
         decisionOpen={!decisionDone}
         hasDecision={Boolean(todayOneDecision)}
@@ -218,10 +234,10 @@ export const Today: React.FC = () => {
       {/* 2. One decision: a soft card with this week's ring, one clear action and a check. */}
       <section id="set-one-decision" className="oda-decision" aria-labelledby="today-decision-label">
         <div className="flex items-center gap-4">
-          <ProgressRing value={week.last7} max={7} label={t('This week: {n} of 7 days', { n: week.last7 })} caption={t('this week')} />
+          <ProgressRing value={week.last7} max={7} label={`${week.last7} / 7 · ${loop.last7}`} caption={loop.last7} />
           <div className="min-w-0 flex-1 space-y-1">
             <p className="flex items-baseline justify-between gap-2">
-              <span id="today-decision-label" className="oda-kicker text-[var(--brand-burgundy)]">{t("Today's one decision")}</span>
+              <span id="today-decision-label" className="oda-kicker text-[var(--brand-burgundy)]">{todayOneDecision?.status === 'active' && todayOneDecision.scheduledFor && todayOneDecision.scheduledFor < todayStr ? loop.carry : t("Today's one decision")}</span>
               {chain.days > 0 && (
                 <span className="text-[12px] text-[var(--fg-muted)] whitespace-nowrap" title={t('Your chain: one missed day a week is forgiven, two in a row start a new chain.')}>
                   {chain.days === 1 ? t('1 day') : t('{n} days', { n: chain.days })}
@@ -280,7 +296,8 @@ export const Today: React.FC = () => {
             <input
               id="today-decision-input"
               value={newDecisionTitle}
-              onChange={(e) => setNewDecisionTitle(e.target.value)}
+              onChange={(e) => { setNewDecisionTitle(e.target.value); setDecisionError(false); }}
+              maxLength={160}
               placeholder={t('Write it in a few words…')}
               className="oda-decision-input"
             />
@@ -295,6 +312,7 @@ export const Today: React.FC = () => {
           </form>
         )}
       </section>
+      {decisionError && <p role="alert" className="oda-loop-error">{loop.saveError}</p>}
 
       <ArrivalCheckIn
         decisionState={!todayOneDecision ? 'none' : decisionDone ? 'done' : 'open'}
@@ -340,11 +358,11 @@ export const Today: React.FC = () => {
       </nav>
 
       {decisionDone && <KeptMomentCard />}
-      <EveningLine hasDecision={Boolean(todayOneDecision)} />
-      {focusChange && <WeeklyFocusNote change={focusChange} />}
+      <DailyReflection key={todayStr} mission={todayOneDecision} dayKey={todayStr} />
+      <CourseNextStep />
+      <WeeklyOutcomeReview key={reviewWeek} weekKey={reviewWeek} />
       <EvidenceStrip />
-      {reviewWeek && <WeeklyReviewCard weekKey={reviewWeek} />}
-      {checkInDue && !reviewWeek && <TwoWeekCheckIn />}
+      {checkInDue && <TwoWeekCheckIn />}
 
       {/* 3. Three small habits */}
       <section className="bg-[var(--bg-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] p-5">
