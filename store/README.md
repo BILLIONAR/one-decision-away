@@ -2,6 +2,8 @@
 
 Everything App Store Connect needs as text, per locale, plus subscription copy. Source of truth for claims: `docs/APP_STORE.md`, `src/pages/Upgrade.tsx`, `src/services/entitlements.ts`.
 
+Primary store language for the international **ODA / ONE DECISION AWAY** audience is **English (U.S.), `en-US`**. Retain Turkish (`tr`) and Spanish (`es-ES`, `es-MX`) localizations. This repository's metadata directories, validation locale list and `asc metadata init --locale en-US` example do not set the app record's primary language. Set it in App Store Connect; no app-level Fastlane/ASC primary-locale configuration is tracked here. For an existing published app, follow [Apple's requirements for changing the primary language](https://developer.apple.com/help/app-store-connect/manage-app-information/localize-app-information/). No live store setting was changed by this documentation update.
+
 ## Layout
 
 Fastlane `deliver` layout: `store/metadata/<locale>/<field>.txt`, one field per file.

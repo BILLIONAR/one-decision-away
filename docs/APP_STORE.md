@@ -4,6 +4,8 @@ Bu belge iki kısımdır: depoda **hazır olanlar** ve yayına çıkmak için **
 
 Satıcı: **bireysel Apple Developer hesabı** (mağazada kişi adı görünür) · Uygulama adı: **ODA – One Decision Away** · Paket kimliği (bundle ID): `com.yahya.onedecisionaway`
 
+Uluslararası ODA / ONE DECISION AWAY için mağazanın birincil dili **English (U.S.) / `en-US`** olarak seçilir; Türkçe ve İspanyolca yerelleştirmeleri korunur. Bu belge sonraki App Store dağıtımı içindir. Buluttaki mobil web doğrulaması ve isteğe bağlı daha sonraki Mac/iPhone kontrolleri [ayrı teslim belgesinde](CLOUD_MOBILE_VALIDATION.md) açıklanır.
+
 ## Depoda hazır olanlar
 
 | Konu | Nerede | Not |
@@ -30,7 +32,7 @@ Gizlilik ve koşullar adresleri (App Store Connect'e bunlar girilir):
 
 1. **Apple Developer Program** üyeliği (yıllık 99 $). Hesap **bireysel** açıldı: satıcı adı kişi adı olarak görünür. "YAHYA" adının satıcı adı olması için ileride kayıtlı bir şirket ve D-U-N-S numarası gerekir (hesap türü sonradan değiştirilebilir).
 2. **Mac'te Xcode**: App Store'dan Xcode'u kur, sonra Terminal'de bir kez `sudo xcodebuild -license accept` çalıştır (şifreyi senin girmen gerekiyor).
-3. **App Store Connect'te uygulamayı oluştur**: Uygulamalar → + → Yeni Uygulama. Platform iOS, ad "ODA – One Decision Away", birincil dil Türkçe, bundle ID `com.yahya.onedecisionaway` (Certificates, Identifiers & Profiles'ta önce bu kimliği oluştur).
+3. **App Store Connect'te uygulamayı oluştur**: Uygulamalar → + → Yeni Uygulama. Platform iOS, ad "ODA – One Decision Away", birincil dil **English (U.S.) / `en-US`**, bundle ID `com.yahya.onedecisionaway` (Certificates, Identifiers & Profiles'ta önce bu kimliği oluştur). `tr`, `es-ES` ve `es-MX` metadata dosyaları ek yerelleştirmeler olarak kalır. Depodaki dosya sırası App Store Connect'in birincil dilini değiştirmez; bu seçim uygulama kaydında yapılır. Mevcut bir mağaza kaydının birincil dili değiştirilecekse Apple'ın [yerelleştirme ve dil değiştirme gereksinimlerini](https://developer.apple.com/help/app-store-connect/manage-app-information/localize-app-information/) izle; bu geliştirme canlı mağaza ayarını değiştirdiği iddiasında bulunmaz.
 4. **Abonelikleri oluştur** (App Store Connect → uygulama → Abonelikler). Tek abonelik grubu: `ODA`. Grup içi seviye sırası (1 en yüksek): **coach = 1, pro = 2, essentials = 3**; böylece seviyeler arası geçiş yükseltme/düşürme olur, ikinci abonelik açılmaz.
 
    | Seviye | Ürün kimliği | Süre | Önerilen fiyat |
