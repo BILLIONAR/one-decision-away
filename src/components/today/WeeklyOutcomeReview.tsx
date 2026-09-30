@@ -43,6 +43,7 @@ export const WeeklyOutcomeReview: React.FC<{ weekKey: string }> = ({ weekKey }) 
     saving.current = true; setBusy(true); setError('');
     try {
       await saveWeeklyReview({ weekKey, kept: evidence.keptDays, helped: fields.helped.trim() || undefined, blocked: fields.blocked.trim() || undefined, change: fields.change.trim() || undefined });
+      writeNotebookDraft(draftKey, null);
       setSaved(true); close();
     } catch { setError(c.saveError); }
     finally { saving.current = false; setBusy(false); }
@@ -54,7 +55,7 @@ export const WeeklyOutcomeReview: React.FC<{ weekKey: string }> = ({ weekKey }) 
     ].map(item => <div key={item.label}><dt>{item.label}</dt><dd>{item.value}<span aria-hidden="true"> / 7</span></dd></div>)}</dl>
     {existing?.change && !open && <p className="oda-weekly-adjustment"><span>{c.weekAdjustment}</span>{existing.change}</p>}
     {saved && <p role="status" className="oda-loop-notice"><Check size={15} aria-hidden="true" />{c.reviewSaved}</p>}
-    {!open ? <button ref={trigger} type="button" className="oda-loop-link" onClick={() => { setOpen(true); requestAnimationFrame(() => firstField.current?.focus()); }} aria-expanded={false} aria-controls="weekly-outcome-form">{existing ? c.reviewEdit : c.reviewOpen}<ArrowRight size={15} aria-hidden="true" /></button> : <form id="weekly-outcome-form" className="oda-loop-form" onSubmit={submit} aria-busy={busy}>
+    {!open ? <button ref={trigger} type="button" className="oda-loop-link" onClick={() => { setFields(readFields()); setOpen(true); requestAnimationFrame(() => firstField.current?.focus()); }} aria-expanded={false} aria-controls="weekly-outcome-form">{existing ? c.reviewEdit : c.reviewOpen}<ArrowRight size={15} aria-hidden="true" /></button> : <form id="weekly-outcome-form" className="oda-loop-form" onSubmit={submit} aria-busy={busy}>
       <div className="oda-weekly-evidence"><p>{c.weeklyEvidence}</p>{evidence.decisions.length ? <ul>{evidence.decisions.slice(0, 7).map(mission => <li key={mission.id}><Check size={14} aria-hidden="true" /><span>{t(mission.title)}</span></li>)}</ul> : <p className="oda-loop-help">{c.nothingKept}</p>}</div>
       {([{ key: 'helped', label: c.helped, placeholder: c.helpedPlaceholder }, { key: 'blocked', label: c.blocked, placeholder: c.blockedPlaceholder }, { key: 'change', label: c.change, placeholder: c.changePlaceholder }] as const).map(field => <div key={field.key}><label htmlFor={`weekly-outcome-${field.key}`}>{field.label}</label><textarea ref={field.key === 'helped' ? firstField : undefined} id={`weekly-outcome-${field.key}`} value={fields[field.key]} onChange={event => update(field.key, event.target.value)} placeholder={field.placeholder} maxLength={400} rows={2} disabled={busy} /></div>)}
       {error && <p role="alert" className="oda-loop-error">{error}</p>}

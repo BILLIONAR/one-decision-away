@@ -54,7 +54,7 @@ export const DailyReflection: React.FC<{ mission?: Mission; dayKey: string }> = 
   useEffect(() => { setText(readText()); setNotice(false); setError(false); }, [draftKey, resetVersion, entry?.id]);
   if (!data || (!mission && !entry)) return null;
 
-  const edit = () => { setOpen(true); requestAnimationFrame(() => input.current?.focus()); };
+  const edit = () => { setText(readText()); setOpen(true); requestAnimationFrame(() => input.current?.focus()); };
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!text.trim() || saving.current) return;
@@ -63,7 +63,7 @@ export const DailyReflection: React.FC<{ mission?: Mission; dayKey: string }> = 
     setError(false);
     try {
       await saveNotebookEntry({ id: entry?.id, kind: 'journal', title: entry?.title || c.reflectionTitle, content: text.trim(), promptId: DAILY_REFLECTION_PROMPT, mood: entry?.mood });
-      writeNotebookDraft(draftKey, text.trim());
+      writeNotebookDraft(draftKey, null);
       setNotice(true);
       close();
     } catch { setError(true); }
