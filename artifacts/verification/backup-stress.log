@@ -1,0 +1,20 @@
+
+> oda-one-decision-away@1.0.0 qa:backup
+> node --import tsx scripts/qa-backup.mjs
+
+PASS validated restore review is mobile accessible and traps keyboard focus before changing data
+PASS cancelling a file restore leaves the entire saved record intact
+PASS downloaded JSON includes current course reflections, completion, plans and practice logs
+PASS confirmed modern restore and course work survive a full reload
+PASS restoring an older backup preserves course work already on the device
+PASS malformed backups are rejected before review or any personal-data write
+PASS quota failure leaves the previous personal record and course work intact
+PASS cross-tab course saves are included in an export from an already-open Settings screen
+PASS a real cross-tab Web Lock preserves both a delayed notebook write and the queued course mutation
+PASS manual cloud cancellation neither uploads local data nor marks a sync; retry reviews and restores successfully
+PASS desktop backup controls render without browser exceptions
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice
