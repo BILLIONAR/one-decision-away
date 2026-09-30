@@ -1,9 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, ArrowRight, Check, ChevronRight, Clock3, LockKeyhole } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, ChevronRight, Clock3, LockKeyhole, Search, RotateCcw } from 'lucide-react';
 import { COURSES, coursesFor, sourcesFor, type GuidedCourse } from '../data/courses';
-import { canCompleteLesson, completeLesson, getLessonProgress, nextLessonIndex, readCourseProgress, saveCourseProgress, updateLessonProgress } from '../services/courseProgress';
+import { canCompleteLesson, completeLesson, getLessonProgress, mutateCourseProgress, nextLessonIndex, readCourseProgress, subscribeCourseProgress, updateLessonProgress } from '../services/courseProgress';
+import { createCourseProgressDraft } from '../services/courseProgressDraft';
 import { CourseVisual } from '../components/CourseVisual';
 import { CoursePhoto, TechniqueCard } from '../components/CoursePhoto';
+import { CoursePracticeStudio } from '../components/CoursePracticeStudio';
+import { categoryForCourse, courseLearningCopy, type CourseCategory } from '../data/courseLearningCopy';
+import { getCourseExperiment, isCourseReviewDue } from '../services/courseLearning';
 import { useLocale, useT } from '../i18n';
 import { useApp } from '../store/useApp';
 import { courseForIntent } from '../data/starterDecisions';
@@ -19,34 +23,45 @@ function readSelection() {
 export const Courses: React.FC = () => {
   const [locale] = useLocale();
   const t = useT();
+  const copy = courseLearningCopy(locale);
   const courses = coursesFor(locale);
   const langOf = (item?: GuidedCourse) => (item?.lang && item.lang !== locale ? item.lang : undefined);
   const [state, setState] = useState(readCourseProgress);
+  const [query, setQuery] = useState('');
+  const [category, setCategory] = useState<CourseCategory>('all');
   const { data: appData, setActiveRoute } = useApp();
   const suggestedId = courseForIntent(appData?.profile.intent);
   const pro = usePro();
   const ordered = suggestedId ? [...courses].sort((a, b) => Number(b.id === suggestedId) - Number(a.id === suggestedId)) : courses;
+  const visibleCourses = ordered.filter(item => (category === 'all' || categoryForCourse(item.id) === category) && `${item.title} ${item.subtitle} ${item.description}`.toLocaleLowerCase(locale).includes(query.trim().toLocaleLowerCase(locale)));
   const [selected, setSelected] = useState<string | null>(readSelection);
   const [lastVisited, setLastVisited] = useState<string | null>(selected);
   const course = courses.find(item => item.id === selected);
   const content = langOf(course);
   const [index, setIndex] = useState(() => course ? Math.min(nextLessonIndex(state, course), course.lessons.length - 1) : 0);
   const [storageError, setStorageError] = useState(false);
+  const draftRef = useRef<ReturnType<typeof createCourseProgressDraft> | null>(null);
+  if (!draftRef.current) draftRef.current = createCourseProgressDraft(state, mutateCourseProgress, setState, saved => setStorageError(!saved));
   const [notice, setNotice] = useState('');
   const titleRef = useRef<HTMLHeadingElement>(null);
   const researchRef = useRef<HTMLElement>(null);
+  const bibliographyRef = useRef<HTMLDetailsElement>(null);
   const didMount = useRef(false);
+  useEffect(() => subscribeCourseProgress(() => {
+    draftRef.current!.receive(readCourseProgress());
+  }), []);
   useEffect(() => {
     if (didMount.current) { titleRef.current?.focus(); titleRef.current?.scrollIntoView({ block: 'start' }); }
     didMount.current = true;
   }, [selected, index]);
+  useEffect(() => {
+    if (!course) return;
+    const availableIndex = Math.min(nextLessonIndex(state, course), course.lessons.length - 1);
+    if (index > availableIndex) setIndex(availableIndex);
+  }, [state, course, index]);
 
-  // Another tab may have saved progress since this page rendered; merge onto the latest stored copy.
-  const commit = (update: (current: typeof state) => typeof state) => {
-    const next = update(readCourseProgress());
-    setState(next);
-    setStorageError(!saveCourseProgress(next));
-  };
+  // Each updater is replayed onto the latest stored copy under the shared data lock.
+  const commit = (update: (current: typeof state) => typeof state) => draftRef.current!.update(update);
   const open = (item?: GuidedCourse) => {
     setSelected(item?.id ?? null);
     if (item) setLastVisited(item.id);
@@ -61,9 +76,10 @@ export const Courses: React.FC = () => {
   });
   const inProgress = courses.filter(item => started(item) && countCompleted(item) < item.lessons.length);
   const resumeCourse = inProgress.find(item => item.id === lastVisited) ?? inProgress[0];
+  const reviewCourse = courses.find(item => isCourseReviewDue(getCourseExperiment(state.experiments, item.id)));
   const researchSources = sourcesFor(locale).filter(source => source.type === 'research');
   const languageNote = courses.some(item => item.lang && item.lang !== locale) && <p lang={locale} className="text-xs text-[var(--fg-muted)] mt-3">{t('Some courses are not yet available in your language; they open in the language they were written in.')}</p>;
-  const storageNote = <p className={`text-xs leading-relaxed ${storageError ? 'text-[var(--brand-burgundy)]' : 'text-[var(--fg-muted)]'}`} role={storageError ? 'alert' : undefined}>{storageError ? t("This browser can't save your progress right now. If you close the page, changes from this session may be lost.") : t('Your progress and optional notes are stored in this browser. They are not sent to the cloud and will be lost if browser data is cleared. On a shared device, you may prefer not to leave personal notes.')}</p>;
+  const storageNote = <div className="oda-course-save-note"><p className={`text-xs leading-relaxed ${storageError ? 'text-[var(--brand-burgundy)]' : 'text-[var(--fg-muted)]'}`} role={storageError ? 'alert' : undefined}>{storageError ? t("This browser can't save your progress right now. If you close the page, changes from this session may be lost.") : copy.privacy}</p>{storageError && <button type="button" onClick={() => { void draftRef.current!.retry(); }}>{copy.retrySave}</button>}</div>;
 
   if (!course) return <div className="oda-courses">
     <header className="oda-course-intro">
@@ -75,8 +91,8 @@ export const Courses: React.FC = () => {
       </div>
       <div className="oda-course-method">
         <p className="oda-course-method-path"><span>{t('Understand')}</span><ArrowRight size={13} aria-hidden="true" /><span>{t('Try')}</span><ArrowRight size={13} aria-hidden="true" /><span>{t('Reinforce')}</span></p>
-        <p>{t('{courses} courses · {lessons} lessons', { courses: courses.length, lessons: courses.reduce((sum, item) => sum + item.lessons.length, 0) })}<br />{t('5–9 minutes for yourself in each lesson.')}</p>
-        <button type="button" onClick={() => { researchRef.current?.scrollIntoView({ block: 'start' }); researchRef.current?.focus(); }} className="oda-course-research-link">{t('Content based on {count} scientific publications', { count: researchSources.length })}<ArrowRight size={13} aria-hidden="true" /></button>
+        <p>{t('{courses} courses · {lessons} lessons', { courses: courses.length, lessons: courses.reduce((sum, item) => sum + item.lessons.length, 0) })}<br />{copy.studioIntro}</p>
+        <button type="button" onClick={() => { if (bibliographyRef.current) bibliographyRef.current.open = true; researchRef.current?.scrollIntoView({ block: 'start' }); researchRef.current?.focus(); }} className="oda-course-research-link">{t('Content based on {count} scientific publications', { count: researchSources.length })}<ArrowRight size={13} aria-hidden="true" /></button>
       </div>
     </header>
 
@@ -90,9 +106,13 @@ export const Courses: React.FC = () => {
       <button type="button" onClick={() => open(resumeCourse)} className="oda-course-primary shrink-0">{t('Continue')}<ArrowRight size={16} aria-hidden="true" /></button>
     </section>}
 
+    {reviewCourse && <section className="oda-course-review-ready" aria-labelledby="course-return-title"><RotateCcw size={22} aria-hidden="true" /><div><p className="oda-course-eyebrow">{copy.returnTitle}</p><h2 id="course-return-title" className="oda-display">{reviewCourse.title}</h2><p>{copy.returnBody}</p></div><button type="button" onClick={() => open(reviewCourse)} className="oda-course-primary">{copy.openReview}<ArrowRight size={16} aria-hidden="true" /></button></section>}
+
     <section aria-labelledby="course-list-title">
       <div className="oda-course-section-heading"><h2 id="course-list-title" className="oda-display">{resumeCourse ? t('Explore the other paths too') : t('Which topic feels close to you today?')}</h2><p>{t('Pick a topic. Start with one small step.')}</p></div>
-      <div className="oda-course-list">{ordered.map((item, i) => {
+      <div className="oda-course-discovery"><label htmlFor="course-search" className="oda-course-search"><Search size={18} aria-hidden="true" /><span className="sr-only">{copy.search}</span><input id="course-search" type="search" value={query} placeholder={copy.searchPlaceholder} onChange={event => setQuery(event.target.value)} /></label><div role="group" aria-label={copy.all} className="oda-course-filters">{(['all', 'courage', 'attention', 'perspective'] as const).map(value => <button type="button" key={value} aria-pressed={category === value} onClick={() => setCategory(value)}>{copy[value]}</button>)}</div><p role="status" className="oda-course-results">{visibleCourses.length} {copy.pathsFound}</p></div>
+      {!visibleCourses.length && <div className="oda-course-empty"><p>{copy.noResults}</p><button type="button" className="oda-course-primary" onClick={() => { setQuery(''); setCategory('all'); }}>{copy.clearSearch}</button></div>}
+      <div className="oda-course-list">{visibleCourses.map((item, i) => {
         const completed = countCompleted(item);
         const hasStarted = started(item);
         return <button key={item.id} type="button" onClick={() => open(item)} className="oda-course-row">
@@ -102,6 +122,7 @@ export const Courses: React.FC = () => {
             {item.id === suggestedId && <span className="oda-course-suggested">{t('Suggested for you')}</span>}
             <span lang={langOf(item)} className="oda-course-row-subtitle">{item.subtitle}</span>
             <span lang={langOf(item)} className="oda-course-row-description">{item.description}</span>
+            <span className="oda-course-row-outcome"><span>{copy.courseOutcome}</span><span lang={langOf(item)}>{item.outcome}</span></span>
             <span className="oda-course-row-meta"><span>{t('{lessons} lessons · {minutes} min', { lessons: item.lessons.length, minutes: item.lessons.reduce((sum, lesson) => sum + lesson.minutes, 0) })}</span><span className="oda-course-row-state">{completed === item.lessons.length ? t('Completed · review again') : hasStarted ? t('{done}/{total} completed · continue', { done: completed, total: item.lessons.length }) : t('Start course')}</span></span>
             {completed > 0 && <span role="progressbar" aria-label={t('{title} progress', { title: item.title })} aria-valuenow={completed} aria-valuemin={0} aria-valuemax={item.lessons.length} className="oda-course-progress"><span className="oda-course-progress-fill" style={{ width: `${completed / item.lessons.length * 100}%` }} /></span>}
           </span>
@@ -112,7 +133,7 @@ export const Courses: React.FC = () => {
     <div className="oda-course-storage">{storageNote}</div>
     <section ref={researchRef} id="course-research" tabIndex={-1} aria-labelledby="course-research-title" className="oda-course-research">
       <div className="oda-course-research-intro"><p className="oda-course-eyebrow mb-2">{t("If you're curious")}</p><h2 id="course-research-title" className="oda-display">{t('What are these lessons based on?')}</h2><p className="text-sm text-[var(--fg-muted)] leading-relaxed mt-3 mb-5">{t('{count} scientific publications were reviewed before the lessons were written, alongside official health guidance. Findings were adapted into original daily exercises. ODA courses themselves have not been clinically tested; they are for education and personal practice.', { count: researchSources.length })}</p></div>
-      {researchSources.map(source => <details key={source.id} className="py-2"><summary className="min-h-11 py-3 cursor-pointer text-sm font-medium">{source.title}</summary><p className="text-sm leading-relaxed text-[var(--fg-muted)]">{source.finding}</p><p className="text-xs leading-relaxed mt-2 text-[var(--fg-muted)]">{source.limitation}</p></details>)}
+      <details ref={bibliographyRef} className="oda-course-bibliography"><summary>{copy.bibliography} <span>({researchSources.length})</span></summary><div>{researchSources.map(source => <details key={source.id} className="py-2"><summary className="min-h-11 py-3 cursor-pointer text-sm font-medium">{source.title}</summary><p className="text-sm leading-relaxed text-[var(--fg-muted)]">{source.finding}</p><p className="text-xs leading-relaxed mt-2 text-[var(--fg-muted)]">{source.limitation}</p><a href={source.url} target="_blank" rel="noopener noreferrer" className="oda-course-source-link">{t('Source')}<ArrowRight size={13} aria-hidden="true" /></a></details>)}</div></details>
     </section>
   </div>;
 
@@ -136,8 +157,14 @@ export const Courses: React.FC = () => {
       const unlocked = i === 0 || getLessonProgress(state, course.lessons[i - 1]).completed;
       return <button key={item.id} type="button" disabled={!unlocked} data-completed={done} aria-current={i === index ? 'step' : undefined} aria-label={done ? t('Lesson {number}: {title}, completed', { number: i + 1, title: item.title }) : !unlocked ? t('Lesson {number}: {title}, complete the previous lesson first', { number: i + 1, title: item.title }) : t('Lesson {number}: {title}', { number: i + 1, title: item.title })} onClick={() => { setIndex(i); setNotice(''); }} className="oda-course-step">{done ? <Check size={15} aria-hidden="true" /> : !unlocked ? <LockKeyhole size={12} aria-hidden="true" /> : null}{i + 1}</button>;
     })}</nav>
+    <details className="oda-course-map"><summary>{copy.courseMap}<span>{completed}/{course.lessons.length}</span></summary><p>{copy.lessonMap}</p><ol>{course.lessons.map((item, i) => {
+      const done = getLessonProgress(state, item).completed;
+      const unlocked = i === 0 || getLessonProgress(state, course.lessons[i - 1]).completed;
+      return <li key={item.id}><button type="button" disabled={!unlocked} aria-current={i === index ? 'step' : undefined} onClick={() => { setIndex(i); setNotice(''); }}><span className="oda-course-map-number" aria-hidden="true">{done ? <Check size={16} /> : i + 1}</span><span lang={content}>{item.title}</span><span>{item.minutes} min</span>{!unlocked && <LockKeyhole size={13} aria-hidden="true" />}</button></li>;
+    })}</ol></details>
     <p lang={content} className="text-xs leading-relaxed text-[var(--fg-muted)]">{course.scope}</p>
     <section className="oda-course-goal"><p className="text-xs font-semibold text-[var(--accent)]">{t("This lesson's small goal")}</p><p lang={content}>{lesson.goal}</p></section>
+    <CoursePracticeStudio key={course.id} course={course} locale={locale} experiments={state.experiments} completed={completed} onUpdate={update => commit(current => ({ ...current, experiments: update(current.experiments) }))} />
     {locked ? <section className="oda-card rounded-[var(--radius-lg)] p-6 space-y-3" aria-labelledby="course-pro-title">
       <p className="oda-kicker text-[var(--brand-burgundy)]">{courseUnlockTier(course.id) === 'essentials' ? 'ODA Essentials' : 'ODA Pro'}</p>
       <h2 id="course-pro-title" className="oda-display text-[26px] leading-snug">{courseUnlockTier(course.id) === 'essentials' ? t('The rest of this course opens with ODA Essentials.') : t('The rest of this course opens with ODA Pro.')}</h2>
@@ -181,8 +208,8 @@ export const Courses: React.FC = () => {
 
     <fieldset aria-describedby="lesson-question" className="oda-course-quiz space-y-3"><legend className="oda-course-stage-title pr-3"><span className="oda-course-stage-number" aria-hidden="true">03</span><span className="oda-display">{t('Reinforce')}</span></legend><p className="text-xs text-[var(--fg-muted)]">{t('A quick check')}</p><p id="lesson-question" lang={content} className="text-base leading-relaxed pb-1">{lesson.question}</p>{lesson.options.map((option, i) => <label key={option} className="oda-course-option" data-selected={progress.answer === i}><input type="radio" name={`answer-${lesson.id}`} checked={progress.answer === i} disabled={progress.completed} onChange={() => patch({ answer: i })} /><span lang={content}>{option}</span></label>)}{progress.answer !== null && <div role="status" className={`text-sm leading-relaxed p-4 border-l-2 ${answerCorrect ? 'border-[var(--accent)]' : 'border-[var(--brand-burgundy)]'}`}><p className="font-semibold mb-1">{answerCorrect ? t('Yes, this approach fits the goal of the lesson.') : t("Let's think about it once more.")}</p><span lang={content}>{lesson.feedback}</span>{!answerCorrect && <p className="mt-2 text-xs">{t('You can go back to the explanation and choose another answer.')}</p>}</div>}</fieldset>
 
-    <details className="border-y border-[var(--border)] py-2"><summary className="min-h-11 py-3 text-sm font-semibold cursor-pointer">{t('Sources and limits of this lesson')}</summary><div className="space-y-4 py-3">{lesson.sources.map(id => sourcesFor(locale).find(source => source.id === id)!).map(source => <article key={source.id}><p className="text-[11px] uppercase tracking-wide text-[var(--accent)]">{source.type === 'research' ? t('Scientific publication') : source.type === 'religious' ? t('Religious source') : source.type === 'technique' ? t('Technique from a book or teacher') : t('Official health guidance')}</p><p className="text-sm font-medium mt-1 mb-1">{source.title}</p><p className="text-xs leading-relaxed text-[var(--fg-muted)]">{source.finding}</p><p className="text-xs leading-relaxed text-[var(--fg-muted)] mt-2">{source.limitation}</p></article>)}</div></details>
-    {progress.completed ? <section className="oda-course-finish space-y-3"><p className="flex items-center gap-2 text-sm font-semibold text-[var(--accent)]"><Check size={18} aria-hidden="true" />{completed === course.lessons.length ? t('Course completed') : t('Lesson completed')}</p><p lang={content} className="oda-display text-2xl leading-relaxed">{lesson.takeaway}</p>{completed === course.lessons.length && <p className="text-sm text-[var(--fg-muted)] leading-relaxed">{t('What you take with you: {outcome} You can reread the lessons whenever you like.', { outcome: course.outcome })}</p>}<button type="button" onClick={index < course.lessons.length - 1 ? goNext : () => open()} className="oda-course-primary">{index < course.lessons.length - 1 ? t('Go to the next lesson') : t('Back to courses')}<ArrowRight size={16} aria-hidden="true" /></button></section> : <div className="space-y-3"><p className="text-xs text-[var(--fg-muted)] leading-relaxed">{t('To complete the lesson, check the three practice steps and choose the right answer to the question. A personal note is optional.')}</p><button type="button" disabled={!eligible} onClick={() => { commit(current => completeLesson(current, course, index)); setNotice(t("Lesson completed. When you're ready, you can move to the next step.")); }} className="oda-course-primary w-full">{t('Complete lesson')}<Check size={16} aria-hidden="true" /></button></div>}
+    <details className="border-y border-[var(--border)] py-2"><summary className="min-h-11 py-3 text-sm font-semibold cursor-pointer">{t('Sources and limits of this lesson')}</summary><div className="space-y-4 py-3">{lesson.sources.map(id => sourcesFor(locale).find(source => source.id === id)!).map(source => <article key={source.id}><p className="text-[11px] uppercase tracking-wide text-[var(--accent)]">{source.type === 'research' ? t('Scientific publication') : source.type === 'religious' ? t('Religious source') : source.type === 'technique' ? t('Technique from a book or teacher') : t('Official health guidance')}</p><p className="text-sm font-medium mt-1 mb-1">{source.title}</p><p className="text-xs leading-relaxed text-[var(--fg-muted)]">{source.finding}</p><p className="text-xs leading-relaxed text-[var(--fg-muted)] mt-2">{source.limitation}</p><a href={source.url} target="_blank" rel="noopener noreferrer" className="oda-course-source-link">{t('Source')}<ArrowRight size={13} aria-hidden="true" /></a></article>)}</div></details>
+    {progress.completed ? <section className="oda-course-finish space-y-3"><p className="flex items-center gap-2 text-sm font-semibold text-[var(--accent)]"><Check size={18} aria-hidden="true" />{completed === course.lessons.length ? t('Course completed') : t('Lesson completed')}</p><p lang={content} className="oda-display text-2xl leading-relaxed">{lesson.takeaway}</p>{completed === course.lessons.length && <p className="text-sm text-[var(--fg-muted)] leading-relaxed">{t('What you take with you: {outcome} You can reread the lessons whenever you like.', { outcome: course.outcome })}</p>}<button type="button" onClick={index < course.lessons.length - 1 ? goNext : () => open()} className="oda-course-primary">{index < course.lessons.length - 1 ? t('Go to the next lesson') : t('Back to courses')}<ArrowRight size={16} aria-hidden="true" /></button></section> : <div className="space-y-3"><p className="text-xs text-[var(--fg-muted)] leading-relaxed">{t('To complete the lesson, check the three practice steps and choose the right answer to the question. A personal note is optional.')}</p><button type="button" disabled={!eligible} onClick={async () => { const saved = await commit(current => completeLesson(current, course, index)); setNotice(saved ? t("Lesson completed. When you're ready, you can move to the next step.") : copy.savingFailed); }} className="oda-course-primary w-full">{t('Complete lesson')}<Check size={16} aria-hidden="true" /></button></div>}
     <p role="status" className="text-xs text-[var(--accent)]">{notice}</p>{storageNote}
     </>}
   </div>;

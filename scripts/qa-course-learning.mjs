@@ -1,0 +1,187 @@
+/** Run against a dev/preview server: node --import tsx scripts/qa-course-learning.mjs */
+import assert from 'node:assert/strict';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { chromium } from 'playwright';
+import AxeBuilder from '@axe-core/playwright';
+import { getInitialDemoState } from '../src/services/repository.ts';
+import { coursesFor } from '../src/data/courses.ts';
+import { courseLearningCopy } from '../src/data/courseLearningCopy.ts';
+import { practiceGuideFor } from '../src/data/coursePracticeContent.ts';
+
+const base = process.env.ODA_QA_URL || 'http://localhost:3000';
+const out = process.env.ODA_COURSE_QA_OUT || 'artifacts/learning';
+const key = 'one_decision_away_app_data_v1';
+mkdirSync(out, { recursive: true });
+const report = { base, at: new Date().toISOString(), checks: [], accessibility: [], screenshots: [], errors: [] };
+const browser = await chromium.launch({ executablePath: process.env.ODA_CHROMIUM || '/usr/bin/chromium', args: ['--no-sandbox'] });
+const pass = name => { report.checks.push(name); console.log(`PASS ${name}`); };
+const screenshot = async (page, name, fullPage = true) => {
+  await page.screenshot({ path: `${out}/${name}.png`, fullPage });
+  report.screenshots.push(`${name}.png`);
+};
+const ready = async page => {
+  await page.locator('h1').first().waitFor();
+  await page.evaluate(() => document.fonts.ready);
+  for (let i = 0; i < 3; i++) {
+    if (!await page.getByRole('dialog').count()) break;
+    await page.keyboard.press('Escape');
+  }
+};
+const layout = async (page, name) => {
+  const sizes = await page.evaluate(() => [document.documentElement.clientWidth, document.documentElement.scrollWidth]);
+  assert.ok(sizes[1] <= sizes[0] + 1, `${name}: horizontal overflow ${sizes}`);
+  const results = await new AxeBuilder({ page }).include('.oda-courses').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+  const violations = results.violations.map(item => ({ id: item.id, impact: item.impact, targets: item.nodes.map(node => node.target) }));
+  report.accessibility.push({ name, violations });
+  assert.equal(violations.filter(item => ['serious', 'critical'].includes(item.impact)).length, 0, JSON.stringify(violations));
+  pass(`${name}: no horizontal overflow or serious/critical axe findings`);
+};
+
+let activePage;
+try {
+  for (const locale of ['en', 'tr', 'es']) {
+    const copy = courseLearningCopy(locale);
+    const seed = getInitialDemoState();
+    seed.profile = { ...seed.profile, displayName: 'Course QA', locale, onboardingStep: 'completed', theme: 'light', intent: 'finish', simpleModeOff: true, firstOpenedAt: '2026-08-01T00:00:00.000Z', createdAt: '2026-08-01T00:00:00.000Z' };
+    const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce', timezoneId: 'Europe/Istanbul', serviceWorkers: 'block' });
+    await context.addInitScript(({ key, seed, locale }) => {
+      if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify(seed));
+      localStorage.setItem('oda_locale', locale);
+    }, { key, seed, locale });
+    const page = await context.newPage(); activePage = page;
+    page.on('pageerror', error => report.errors.push(`${locale}: ${error.message}`));
+    await page.goto(`${base}/app/courses`); await ready(page);
+    assert.equal(await page.locator('.oda-course-row').count(), 18);
+    await layout(page, `${locale} catalog mobile`);
+    if (locale === 'en') { await screenshot(page, 'catalog-mobile'); await screenshot(page, 'catalog-mobile-top', false); }
+    await page.getByRole('button', { name: copy.attention, exact: true }).click();
+    assert.equal(await page.locator('.oda-course-row').count(), 6);
+    await page.getByRole('button', { name: copy.all, exact: true }).click();
+    const course = coursesFor(locale).find(item => item.id === 'procrastination');
+    await page.locator('#course-search').fill(course.title);
+    assert.equal(await page.locator('.oda-course-row').count(), 1);
+    await page.locator('.oda-course-row').click();
+    await page.locator('.oda-course-lesson-title').waitFor();
+    const studio = page.locator('#course-practice-studio');
+    assert.equal(await studio.evaluate(el => el.open), false);
+    await studio.locator('summary').first().focus(); await page.keyboard.press('Enter');
+    assert.equal(await studio.evaluate(el => el.open), true);
+    pass(`${locale}: course filters/search and keyboard workbook opening`);
+    await page.locator('#practice-procrastination-cue').fill('After my morning tea');
+    await page.getByRole('button', { name: copy.useExample, exact: true }).click();
+    assert.equal(await page.locator('#practice-procrastination-cue').inputValue(), 'After my morning tea');
+    assert.equal(await page.locator('#practice-procrastination-action').inputValue(), practiceGuideFor('procrastination', locale).action);
+    pass(`${locale}: example starter preserves the reader's existing field`);
+    await page.locator('#practice-procrastination-action').fill('Write one sentence');
+    await page.locator('#practice-procrastination-fallback').fill('Write a title');
+    await page.locator('#practice-procrastination-evidence').fill('A title or sentence exists');
+    await page.locator('#practice-procrastination-outcome').selectOption('adapted');
+    await page.locator('#practice-procrastination-note').fill('I made it smaller and wrote a title.');
+    await page.getByRole('button', { name: copy.addAttempt, exact: true }).click();
+    assert.equal(await page.locator('.oda-practice-journal li').count(), 1);
+    await page.locator('#course-reflection').fill('A small visible start helped.');
+    await page.locator('.oda-course-practice input').first().check();
+    await page.reload(); await ready(page);
+    assert.equal(await page.locator('#course-reflection').inputValue(), 'A small visible start helped.');
+    assert.equal(await page.locator('.oda-course-practice input').first().isChecked(), true);
+    await page.locator('#course-practice-studio summary').first().click();
+    assert.equal(await page.locator('#practice-procrastination-action').inputValue(), 'Write one sentence');
+    assert.equal(await page.locator('.oda-practice-journal li').count(), 1);
+    pass(`${locale}: plan, entry, reflection and partial practice survive reload`);
+    await page.locator('#practice-procrastination-recall').fill('Make the first move visible');
+    await page.locator('#practice-procrastination-next').fill('Leave my notes beside the draft');
+    await page.getByRole('button', { name: copy.saveReview, exact: true }).click();
+    const saved = await page.evaluate(key => JSON.parse(localStorage.getItem(key)).courseProgress, key);
+    assert.ok(saved.experiments.procrastination.review.reviewedOn);
+    assert.equal(saved.experiments.procrastination.review.nextAction, 'Leave my notes beside the draft');
+    const downloadPromise = page.waitForEvent('download');
+    await page.getByRole('button', { name: copy.export, exact: true }).click();
+    const download = await downloadPromise;
+    assert.match(download.suggestedFilename(), /^oda-procrastination-practice-\d{4}-\d{2}-\d{2}\.txt$/);
+    pass(`${locale}: review and portable notes download`);
+    await layout(page, `${locale} open workbook mobile`);
+    if (locale === 'en') {
+      await screenshot(page, 'workbook-mobile');
+      await page.locator('#practice-procrastination-plan').evaluate(el => el.scrollIntoView({ block: 'start' }));
+      await screenshot(page, 'workbook-mobile-plan', false);
+      // Quota/blocked storage simulation is isolated to this disposable browser context.
+      await page.evaluate(key => {
+        window.odaOriginalSetItem = Storage.prototype.setItem;
+        Storage.prototype.setItem = function(storageKey, value) {
+          if (storageKey === key) throw new DOMException('QA storage blocked', 'QuotaExceededError');
+          return window.odaOriginalSetItem.call(this, storageKey, value);
+        };
+      }, key);
+      await page.locator('#practice-procrastination-action').fill('Unsaved action survives');
+      await page.locator('#practice-procrastination-fallback').fill('Unsaved fallback survives');
+      assert.equal(await page.locator('#practice-procrastination-action').inputValue(), 'Unsaved action survives');
+      await page.evaluate(() => { Storage.prototype.setItem = window.odaOriginalSetItem; });
+      await page.getByRole('button', { name: copy.retrySave, exact: true }).click();
+      await page.waitForFunction(key => JSON.parse(localStorage.getItem(key)).courseProgress?.experiments?.procrastination?.action === 'Unsaved action survives', key);
+      const recovered = await page.evaluate(key => JSON.parse(localStorage.getItem(key)).courseProgress, key);
+      assert.equal(recovered.experiments.procrastination.action, 'Unsaved action survives');
+      assert.equal(recovered.experiments.procrastination.fallback, 'Unsaved fallback survives');
+      pass('blocked storage retains multiple edits and retry saves the whole draft');
+      await page.setViewportSize({ width: 320, height: 740 });
+      await layout(page, 'open workbook 320px');
+      await screenshot(page, 'workbook-320px');
+      await page.setViewportSize({ width: 1280, height: 960 });
+      await layout(page, 'open workbook desktop');
+      await screenshot(page, 'workbook-desktop');
+      for (const box of await page.locator('.oda-course-practice input').all()) await box.check();
+      await page.locator(`input[name="answer-${course.lessons[0].id}"]`).nth(course.lessons[0].correct).check();
+      await page.getByRole('button', { name: 'Complete lesson', exact: true }).click();
+      await page.getByRole('button', { name: 'Go to the next lesson', exact: true }).click();
+      assert.equal(await page.locator('.oda-course-step[aria-current="step"]').innerText(), '2');
+      assert.equal(await page.locator('#practice-procrastination-action').inputValue(), 'Unsaved action survives');
+      pass('sequential lesson completion preserves course practice work');
+      await page.getByRole('button', { name: 'All courses', exact: true }).click();
+      await page.locator('#course-search').fill('');
+      await layout(page, 'catalog desktop'); await screenshot(page, 'catalog-desktop');
+      await page.evaluate(() => window.scrollTo(0, 0)); await screenshot(page, 'catalog-desktop-top', false);
+      await page.locator('#course-search').fill('no-matching-course-qa');
+      assert.equal(await page.locator('.oda-course-row').count(), 0);
+      await page.getByRole('button', { name: copy.clearSearch, exact: true }).click();
+      assert.equal(await page.locator('.oda-course-row').count(), 18);
+      const bibliography = page.locator('.oda-course-bibliography');
+      assert.equal(await bibliography.evaluate(el => el.open), false);
+      await page.locator('.oda-course-research-link').click();
+      assert.equal(await bibliography.evaluate(el => el.open), true);
+      pass('empty search recovery and research jump disclose the bibliography');
+      await page.evaluate(() => localStorage.setItem('oda_course_selection_v1', 'focus'));
+      await page.goto(`${base}/app/courses`); await ready(page);
+      assert.equal(await page.locator('.oda-course-lesson-title').textContent(), coursesFor('en').find(item => item.id === 'focus').lessons[0].title);
+      pass('landing/Today selection contract opens the intended course for an onboarded user');
+      await page.getByRole('button', { name: 'All courses', exact: true }).click();
+      await page.route('https://images.unsplash.com/**', route => route.abort());
+      await page.reload(); await ready(page);
+      await page.locator('.oda-course-row').first().scrollIntoViewIfNeeded();
+      await page.locator('.oda-course-row .oda-course-photo-fallback').first().waitFor();
+      assert.ok(await page.locator('.oda-course-row').first().locator('.oda-course-art').isVisible());
+      pass('blocked photographs fall back to the original ODA artwork');
+      await page.evaluate(key => {
+        const stored = JSON.parse(localStorage.getItem(key));
+        stored.profile.theme = 'dark'; localStorage.setItem(key, JSON.stringify(stored));
+      }, key);
+      await page.reload(); await ready(page);
+      await layout(page, 'catalog dark');
+      await screenshot(page, 'catalog-dark-top', false);
+      await page.locator('#course-search').fill(course.title);
+      await page.locator('.oda-course-row').click();
+      await page.locator('#course-practice-studio summary').first().click();
+      await layout(page, 'open workbook dark');
+      await page.locator('#practice-procrastination-plan').evaluate(el => el.scrollIntoView({ block: 'start' }));
+      await screenshot(page, 'workbook-dark-plan', false);
+    }
+    await context.close();
+  }
+  assert.deepEqual(report.errors, []);
+  report.status = 'passed';
+} catch (error) {
+  report.status = 'failed'; report.failure = String(error.stack || error);
+  if (activePage && !activePage.isClosed()) await screenshot(activePage, 'failure');
+  throw error;
+} finally {
+  writeFileSync(`${out}/course-browser-report.json`, JSON.stringify(report, null, 2));
+  await browser.close();
+}

@@ -14,13 +14,18 @@ const unsplash = (id: string, width: number, height: number) =>
 export const CoursePhoto: React.FC<{
   photo?: Photo; courseId: string; variant: 'thumb' | 'hero'; lang?: string; eager?: boolean;
 }> = ({ photo, courseId, variant, lang, eager }) => {
-  const [failed, setFailed] = useState(false);
+  const imageKey = `${photo?.id ?? ''}:${variant}`;
+  const [failedKey, setFailedKey] = useState('');
+  const [loadedKey, setLoadedKey] = useState('');
+  const failed = failedKey === imageKey;
+  const loaded = loadedKey === imageKey;
   // A lesson reads fine without its photo; only the list keeps an illustration in its place.
   if ((!photo || failed) && variant === 'hero') return null;
   if (!photo || failed) return <span className={`oda-course-photo oda-course-photo-${variant} oda-course-photo-fallback`}><CourseArtwork courseId={courseId} /></span>;
   const [w, h] = variant === 'thumb' ? [264, 264] : [900, 506];
   return (
-    <span className={`oda-course-photo oda-course-photo-${variant}`}>
+    <span className={`oda-course-photo oda-course-photo-${variant}`} data-loaded={loaded}>
+      {!loaded && <span className="oda-course-photo-placeholder" aria-hidden="true"><CourseArtwork courseId={courseId} /></span>}
       <img
         src={unsplash(photo.id, w, h)}
         srcSet={variant === 'thumb'
@@ -34,7 +39,8 @@ export const CoursePhoto: React.FC<{
         loading={eager ? 'eager' : 'lazy'}
         decoding="async"
         referrerPolicy="no-referrer"
-        onError={() => setFailed(true)}
+        onLoad={() => setLoadedKey(imageKey)}
+        onError={() => setFailedKey(imageKey)}
       />
     </span>
   );
