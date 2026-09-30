@@ -26,9 +26,11 @@ VITE_BASE_PATH=/one-decision-away/ npx vite build --outDir /tmp/oda-project-buil
 VITE_BASE_PATH=/ VITE_TARGET=ios npx vite build --outDir /tmp/oda-ios-web-build
 ```
 
-Final `check`: **171 core tests and 19 notebook tests passed**, plus translation validation, locale behavior and device-only voice assertions. The routing check also reran 11 tests already included in the core suite; those are not additional unique tests. The production build passed. Strict store metadata passed for **four locales and six subscriptions**. Project-folder and iOS-target **web** builds passed; the latter is not an Xcode or device build.
+Final `check`: **190 core tests and 19 notebook tests passed (209 distinct tests)**, plus translation validation, locale behavior and device-only voice assertions. The routing check also reran 11 tests already included in the core suite; those are not additional unique tests. The production build passed. Strict store metadata passed for **four locales and six subscriptions**. Project-folder and iOS-target **web** builds passed; the latter is not an Xcode or device build.
 
-The lightweight course catalog generator has parity checks against all three complete course editions. New regressions cover onboarding drafts, duplicate daily completion, backup validation, atomic course/notebook writes, failed-save replay and standalone support cache isolation.
+The lightweight course catalog generator has parity checks against all three complete course editions. New regressions cover onboarding drafts, duplicate daily completion, backup validation, atomic course/notebook writes, failed-save replay and standalone support cache isolation. The final independent review added four native-baseline tests and fifteen cloud-scope tests.
+
+**Correction to the earlier count:** the reported 199 incorrectly included ten routing tests already present in the core suite. That interim run had 170 core plus 19 notebook tests: 189 distinct tests. The standalone-support cache regression then produced 171 plus 19 = 190 at commit `693a0ba`. The final four native and fifteen cloud regressions produce 190 core plus 19 notebook = **209 distinct tests**. The 11 routing/service-worker reruns are included in the core count, not added again; voice and locale assertion scripts are reported separately without an invented test count.
 
 ## Real browser verification
 
@@ -45,8 +47,8 @@ ODA_QA_URL=http://localhost:4173 npm run qa:modals
 For white-box backup stress checks, run a fresh development server with HMR disabled. This prevents test-time module imports from triggering a development reload of the pending restore dialog. Cloud calls are simulated locally; no Supabase credentials or requests are used.
 
 ```sh
-DISABLE_HMR=true npm run dev -- --port 3017
-ODA_QA_URL=http://localhost:3017 npm run qa:backup
+DISABLE_HMR=true npm run dev -- --port 3021
+ODA_QA_URL=http://localhost:3021 npm run qa:backup
 ```
 
 For offline/project checks, keep the root preview running and serve the project build separately:
@@ -56,7 +58,11 @@ VITE_BASE_PATH=/one-decision-away/ npx vite preview --outDir /tmp/oda-project-bu
 npm run qa:platform
 ```
 
-The six final browser suites passed **116 named checks**: combined flow 39, courses 28, landing 16, backup stress 11, offline/project 9, and modal compatibility 13. They use disposable contexts and synthetic personal records. They cover mobile widths **320/390 px**, desktop **1280/1440 px**, light/dark themes, reduced motion, EN/TR/ES, keyboard focus containment and return, local midnight in `Europe/Istanbul`, interrupted setup and course work, repeated completion, file downloads, malformed/cancelled/confirmed restore, storage quota failure, concurrent tab writes, and independent recovery support. Modal checks also simulate missing dialog/inert APIs; they do not emulate an entire old browser engine. Tested axe scans have no serious or critical findings; this is not a full accessibility certification or a VoiceOver test.
+The six final browser suites passed **118 named checks**: combined flow 39, courses 28, landing 16, backup stress 13, offline/project 9, and modal compatibility 13. They use disposable contexts and synthetic personal records. They cover mobile widths **320/390 px**, desktop **1280/1440 px**, light/dark themes, reduced motion, EN/TR/ES, keyboard focus containment and return, local midnight in `Europe/Istanbul`, interrupted setup and course work, repeated completion, file downloads, malformed/cancelled/confirmed restore, storage quota failure, concurrent tab writes, and independent recovery support. Modal checks also simulate missing dialog/inert APIs; they do not emulate an entire old browser engine. Tested axe scans have no serious or critical findings; this is not a full accessibility certification or a VoiceOver test.
+
+Independent review examined data-write/restore ordering, account/project isolation, course practice semantics, modal behavior and recovery. It reproduced and repaired a delayed cloud response/fallback race: reads and restores now remain bound to their original account, project and saved local record, with a final check inside the shared write lock. Delayed uploads and status updates also retain their original scope. Actual UI tests cover switching connection while a read or restore review is open. Course planning/attempt logs remain separate from lesson eligibility, and learner-owned workbooks remain available outside paid lesson gating. No further confirmed high-impact blocker was found in the reviewed areas. See `docs/FINAL_REVIEW_2026-09-30.md`.
+
+The app minimum is now **iOS 16.4** in all four Xcode project/app configurations, matching Tailwind 4’s Safari baseline. The generated Swift wrapper uses Capacitor’s sync-stable major-version floor 16; vendor SDK floors remain compatible. Four configuration regressions verify the target, generated package, dependency minima and metadata overrides. This is source/configuration verification, not an Xcode build or device compatibility result.
 
 Machine-readable reports and the actual screenshots are under `artifacts/qa`, `artifacts/learning`, `artifacts/landing`, `artifacts/backup-qa`, `artifacts/platform`, `artifacts/modal-fallback` and `artifacts/native-readiness`. Final command logs are under `artifacts/verification`.
 

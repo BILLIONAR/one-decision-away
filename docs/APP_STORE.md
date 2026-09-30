@@ -8,7 +8,7 @@ Satıcı: **bireysel Apple Developer hesabı** (mağazada kişi adı görünür)
 
 | Konu | Nerede | Not |
 | --- | --- | --- |
-| iOS uygulama kabuğu (Capacitor 8, Swift Package Manager; CocoaPods gerekmez) | `ios/`, `capacitor.config.ts` | Sadece iPhone, dikey ekran. Ekran üstü/altı güvenli alanlar hesaba katıldı. |
+| iOS uygulama kabuğu (Capacitor 8, Swift Package Manager; CocoaPods gerekmez) | `ios/`, `capacitor.config.ts` | iOS 16.4 ve üzeri; sadece iPhone, dikey ekran. Ekran üstü/altı güvenli alanlar hesaba katıldı. |
 | Uygulama ikonu (1024 px, opak) ve açılış ekranı | `ios/App/App/Assets.xcassets` | C4 logosundan üretildi, logo değiştirilmedi. |
 | Cihazda hatırlatmalar | `src/services/nativeNotifications.ts` | Uygulama kapalıyken de çalışır; 7 gün önceden planlanır, karar tutulunca bugünün hatırlatması kalkar. |
 | Titreşim (haptic) | `src/services/native.ts` | Karar tutulunca başarı titreşimi, alışkanlık işaretlenince hafif dokunuş. |
@@ -158,6 +158,14 @@ Teknik dayanak: [Capacitor 8 foreground olayları](https://capacitorjs.com/docs/
 
 ### Tarayıcı ve iOS sürüm sınırı
 
-Depodaki Xcode projesinin dağıtım hedefi hâlâ iOS 15.0'dır; bu ayar, web arayüzünün iOS 15'te uyumlu veya test edilmiş olduğunu göstermez. Uygulama Tailwind CSS 4 kullanır. [Tailwind'in resmî uyumluluk belgesi](https://tailwindcss.com/docs/compatibility), temel tarayıcı sınırlarını Safari 16.4, Chrome 111 ve Firefox 128 olarak belirtir. Daha eski iOS/WebView sürümlerinde görünüm ve CSS özellikleri için garanti verilmez. Mağaza sürümünden önce desteklenecek en eski iOS sürümünü bu sınırla birlikte belirle; ilgili cihazda tam akışı kontrol et. Bu geliştirmede dağıtım hedefi değiştirilmedi.
+ODA'nın iOS uygulama alt sınırı **iOS 16.4** olarak belirlendi. Xcode projesinin ve App hedefinin Debug/Release yapılandırmalarındaki dört `IPHONEOS_DEPLOYMENT_TARGET` alanı 16.4'tür. Uygulama Tailwind CSS 4 kullanır. [Tailwind'in resmî uyumluluk belgesi](https://tailwindcss.com/docs/compatibility), temel tarayıcı sınırlarını Safari 16.4, Chrome 111 ve Firefox 128 olarak belirtir. Bu karar, uygulamanın CSS sınırının altındaki iOS sürümlerine kurulmasını önler; eski tarayıcılar için CSS uyumluluğu iddiası değildir. Mağaza sürümünden önce iOS 16.4 ve güncel iOS üzerinde gerçek cihaz akışlarını ayrıca doğrula. Yerel veriler ve ortak Modal yedeği bu ayarla değişmez.
+
+**SDK/kütüphane alt sınırı ile uygulama alt sınırı farklıdır.** [Capacitor 8'in SDK alt sınırı iOS 15.0'dır ve Xcode 26.0+ ister](https://capacitorjs.com/docs/updating/8-0). Kurulu Capacitor eklentileri ve RevenueCat Swift paketleri iOS 15 kütüphane sınırını korur. Capacitor 8.5.2 CLI, App projesindeki hedefin yalnızca ana sürümünü okuyarak `CapApp-SPM/Package.swift` dosyasını `.iOS(.v16)` ile üretir; bu üretilmiş kütüphane sınırı 16.0'dır, kurulan uygulamanın sınırı yine 16.4'tür. [Swift Package Manager](https://docs.swift.org/package-manager/PackageDescription/PackageDescription.html#supportedplatform), bağımlılık sürüm sınırlarının tüketen paket sınırından yüksek olmamasını ister. Daha düşük kütüphane sınırları uygulamanın kurulum sınırını düşürmez. Üçüncü taraf paketleri veya CLI kaynaklarını değiştirme; `cap sync ios` sonrasında aşağıdaki yerel kontrolü tekrar çalıştır:
+
+```sh
+node --import tsx --test tests/native-baseline.test.ts
+```
+
+Bu kontrol tüm proje/uygulama yapılandırmalarını, Capacitor'ın ürettiği ana sürümü, kurulu yerel paketlerin sınırlarını ve olası plist/xcconfig geçersiz kılmalarını denetler; `npm run check` içine de dahildir. Yapılandırma denetimi Xcode derlemesi veya cihaz testi yerine geçmez.
 
 [WebKit, yerel `dialog` desteğini Safari/iOS 15.4'te ekledi](https://webkit.org/blog/12445/new-webkit-features-in-safari-15-4/). Ortak Modal, `showModal` veya `close` API'si olmadığında erişilebilir bir HTML katmanına geçer; klavye odağını içeride tutar, arka planı yardımcı teknolojilerden gizler ve kapanınca önceki odağı/kaydırmayı geri getirir. `scripts/qa-modal-fallback.mjs`, derlenmiş web önizlemesinde bu API'leri devre dışı bırakarak açma/kapatma, tekrar açma, Tab/Shift+Tab, Escape, arka plana tıklama, veri koruma ve axe kontrollerini tekrarlar. Bu test, eski Safari'nin CSS motorunu veya gerçek iPhone'u taklit etmez ve iOS 15 uyumluluğu iddiası değildir.

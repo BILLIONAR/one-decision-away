@@ -81,6 +81,13 @@ try {
     assert.equal(await page.locator('.oda-practice-journal li').count(), 1);
     await page.locator('#course-reflection').fill('A small visible start helped.');
     await page.locator('.oda-course-practice input').first().check();
+    await page.waitForFunction(({ key, lessonId }) => {
+      const progress = JSON.parse(localStorage.getItem(key))?.courseProgress;
+      const experiment = progress?.experiments?.procrastination;
+      const lesson = progress?.lessons?.[lessonId];
+      return lesson?.checked?.[0] === true && lesson?.reflection === 'A small visible start helped.'
+        && experiment?.action === 'Write one sentence' && experiment?.attempts?.length === 1;
+    }, { key, lessonId: course.lessons[0].id }, { timeout: 5000 });
     await page.reload(); await ready(page);
     assert.equal(await page.locator('#course-reflection').inputValue(), 'A small visible start helped.');
     assert.equal(await page.locator('.oda-course-practice input').first().isChecked(), true);
@@ -90,9 +97,20 @@ try {
     pass(`${locale}: plan, entry, reflection and partial practice survive reload`);
     await page.locator('#practice-procrastination-recall').fill('Make the first move visible');
     await page.locator('#practice-procrastination-next').fill('Leave my notes beside the draft');
+    const expectedReviewedOn = await page.evaluate(() => {
+      const today = new Date();
+      return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    });
     await page.getByRole('button', { name: copy.saveReview, exact: true }).click();
+    // A click finishes before the async shared data lock commits. Assert the
+    // persisted effect, not the timing of the optimistic UI update.
+    await page.waitForFunction(({ key, expectedReviewedOn }) => {
+      const review = JSON.parse(localStorage.getItem(key))?.courseProgress?.experiments?.procrastination?.review;
+      return review?.reviewedOn === expectedReviewedOn && review?.nextAction === 'Leave my notes beside the draft';
+    }, { key, expectedReviewedOn }, { timeout: 5000 });
+    await page.getByText(copy.reviewSaved, { exact: true }).waitFor({ timeout: 5000 });
     const saved = await page.evaluate(key => JSON.parse(localStorage.getItem(key)).courseProgress, key);
-    assert.ok(saved.experiments.procrastination.review.reviewedOn);
+    assert.equal(saved.experiments.procrastination.review.reviewedOn, expectedReviewedOn);
     assert.equal(saved.experiments.procrastination.review.nextAction, 'Leave my notes beside the draft');
     const downloadPromise = page.waitForEvent('download');
     await page.getByRole('button', { name: copy.export, exact: true }).click();

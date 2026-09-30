@@ -21,7 +21,7 @@ export interface DataRepository {
   readonly mode: 'demo' | 'server';
   load(): Promise<UserData>;
   save(data: UserData): Promise<void>;
-  replaceAll(data: UserData): Promise<void>;
+  replaceAll(data: UserData, canReplace?: () => boolean): Promise<boolean>;
   clear(): Promise<void>;
   mutateNotebook(action: NotebookAction): Promise<NotebookUpdateResult>;
   completeMission(params: {
@@ -231,13 +231,17 @@ export class LocalDemoRepository implements DataRepository {
   }
 
   /** Replaces the whole local dataset (used by Restore from backup and cloud pull). */
-  async replaceAll(data: UserData): Promise<void> {
-    await queueDataWrite(async () => {
+  async replaceAll(data: UserData, canReplace?: () => boolean): Promise<boolean> {
+    return queueDataWrite(() => {
+      // Optional cloud restore identity must be checked after acquiring the lock,
+      // before validation or any write. It can expire while queued or under review.
+      if (canReplace && !canReplace()) return false;
       const restored = prepareBackupRestore(data);
       // Course work is part of the same JSON document: validation and quota
       // failures leave every previous record intact, with no partial side-store writes.
       localStorage.setItem(STORAGE_KEY, JSON.stringify(restored));
       notifyCourseProgressChanged();
+      return true;
     });
   }
 

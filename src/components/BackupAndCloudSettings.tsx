@@ -57,9 +57,14 @@ export const BackupAndCloudSettings: React.FC = () => {
 
   const handleSyncNow = async () => {
     if (!data) return;
+    const current = cloudSync.currentOperationGuard();
     const pulled = await syncFromCloud();
     if (!pulled) {
+      // A late read must never turn into uploading the previous account's record
+      // to whichever account/project is connected now.
+      if (!current()) { showToast(copy.cloudChanged, 'info'); return; }
       const ok = await cloudSync.push(data);
+      if (!current()) { showToast(copy.cloudChanged, 'info'); return; }
       showToast(ok ? t('Backed up to cloud.') : t('Cloud backup failed — check your connection.'), ok ? 'success' : 'error');
     }
   };

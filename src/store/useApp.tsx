@@ -63,6 +63,7 @@ import { t, getLocale, setLocale, isLocale, hasStoredLocale, ensureLocaleLoaded,
 import { localDayKey, usualReminderTime } from '../services/momentum';
 import { applyTheme, resolveTheme, watchSystemTheme, type ThemePref } from '../utils/theme';
 import { BackupRestoreReview } from '../components/BackupRestoreReview';
+import { backupCopy } from '../data/backupCopy';
 
 export interface AppContextType {
   data: UserData | null;
@@ -653,10 +654,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         await cloudSync.init();
         const remote = options?.skipCloudPull ? null : await cloudSync.pullIfNewer(loaded);
         if (remote) {
-          await repository.replaceAll(remote);
-          cloudSync.markRemoteApplied(remote);
-          loaded = await repository.load();
+          if (await repository.replaceAll(remote, () => cloudSync.canApplyRemote(remote))) cloudSync.markRemoteApplied(remote);
         }
+        // A remote request can overlap a newer local save; render the latest record.
+        loaded = await repository.load();
       } catch {
         /* cloud is optional */
       }
@@ -2420,7 +2421,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (remote) {
         const accepted = await new Promise<boolean>(resolve => setCloudRestoreReview({ record: remote, resolve }));
         if (!accepted) return true;
-        await repository.replaceAll(remote);
+        if (!await repository.replaceAll(remote, () => cloudSync.canApplyRemote(remote))) {
+          showToast(backupCopy(getLocale()).cloudChanged, 'info');
+          return true;
+        }
         cloudSync.markRemoteApplied(remote);
         await refreshData();
         showToast(t('Synced from cloud.'), 'success');

@@ -33,7 +33,7 @@ Manual file and cloud replacements show a review with source and record counts,
 with controls to cancel, download the current backup, or replace the record.
 Cancelled cloud previews neither mark a successful sync nor trigger the caller's
 fallback upload. Last-sync time changes only after an accepted local commit.
-Startup automatic cloud synchronization retains its previous behavior.
+Startup cloud synchronization still checks for a newer snapshot. Every remote read captures its account, project, client revision, restore barrier and saved local document. A late response or open review cannot replace the record after any of those change; `replaceAll(remote, canReplace)` rechecks inside the shared write lock. Manual fallback uploads and delayed automatic uploads stay bound to their original operation. Stale upload responses cannot mark or emit another account’s sync status. These guards preserve newer local writing and prevent a response from one connection being accepted by another. The sync model still replaces complete documents; it is not field-level multi-device conflict resolution.
 
 Explicit local imports establish the cloud-restore barrier before the local
 commit. Offline or failed uploads keep that account/project-scoped barrier so an

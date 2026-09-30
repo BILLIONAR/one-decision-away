@@ -70,4 +70,6 @@ Cloud sync and closed-app push delivery require a configured Supabase project an
 
 This is a review build. Web access remains open; native subscription levels are gated only when the existing RevenueCat configuration is enabled. Store products, cloud services and real-device behavior require their own configuration and validation. Changing hosting addresses does not move users' browser-local records automatically—use JSON export/import.
 
+The iOS app is configured for **iOS 16.4 or newer**, matching Tailwind 4's Safari baseline. Project and app Debug/Release targets enforce this minimum; the Capacitor-generated Swift wrapper and vendor packages retain compatible library floors. `tests/native-baseline.test.ts` prevents a lower app target or conflicting native metadata from returning. Xcode compilation and iPhone compatibility remain untested in the Linux workspace; see [native readiness and prerequisites](docs/APP_STORE.md#tarayıcı-ve-ios-sürüm-sınırı).
+
 See [verification notes](docs/notebook-i18n-verification.md) for completed checks and their scope.

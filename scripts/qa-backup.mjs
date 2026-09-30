@@ -185,6 +185,60 @@ try {
   assert.deepEqual((await saved()).courseProgress, cloudRecord.courseProgress);
   check('manual cloud cancellation neither uploads local data nor marks a sync; retry reviews and restores successfully');
 
+  const beforeScopeRace = await saved();
+  const staleAccountRecord = structuredClone(beforeScopeRace);
+  staleAccountRecord.profile.displayName = 'Stale account A response';
+  const changedMessage = 'Your account or saved record changed during review. Your current data was kept. Sync again to review the latest backup.';
+  await page.evaluate(async remote => {
+    const loadedModule = performance.getEntriesByType('resource').filter(item => item.name.includes('/src/services/cloudSync.ts')).at(-1);
+    const { cloudSync } = await import(loadedModule?.name ?? '/src/services/cloudSync.ts');
+    window.odaCloudForRace = cloudSync;
+    window.odaCloudUploads = 0;
+    localStorage.removeItem('oda_cloud_last_sync');
+    Object.assign(cloudSync, {
+      config: { url: 'https://scope-a.example', anonKey: 'public-test-only' }, session: { user: { id: 'scope-a', email: 'a@example.test' } },
+      client: { from: () => ({ upsert: async () => { window.odaCloudUploads++; return { error: null }; }, select: () => ({ eq: () => ({ maybeSingle: async () => ({ data: { data: remote, updated_at: '2030-01-01T00:00:00Z' }, error: null }) }) }) }) },
+    });
+    cloudSync.emit();
+  }, staleAccountRecord);
+  await page.getByRole('button', { name: 'Sync now', exact: true }).click();
+  await review().waitFor();
+  await page.evaluate(() => {
+    Object.assign(window.odaCloudForRace, { config: { url: 'https://scope-b.example', anonKey: 'public-test-only' }, session: { user: { id: 'scope-b', email: 'b@example.test' } } });
+    window.odaCloudForRace.emit();
+  });
+  await confirm();
+  await page.getByText(changedMessage, { exact: true }).waitFor();
+  assert.deepEqual(await saved(), beforeScopeRace);
+  assert.equal(await page.evaluate(() => window.odaCloudUploads), 0);
+  assert.equal(await page.evaluate(() => localStorage.getItem('oda_cloud_last_sync')), null);
+  check('changing account/project during an open cloud review keeps local data and does not mark or upload the stale record');
+
+  await page.evaluate(remote => {
+    const cloudSync = window.odaCloudForRace;
+    window.odaRaceReadStarted = false;
+    Object.assign(cloudSync, {
+      config: { url: 'https://scope-a.example', anonKey: 'public-test-only' }, session: { user: { id: 'scope-a', email: 'a@example.test' } },
+      client: { from: () => ({ upsert: async () => { window.odaCloudUploads++; return { error: null }; }, select: () => ({ eq: () => ({ maybeSingle: () => {
+        window.odaRaceReadStarted = true;
+        return new Promise(resolve => { window.odaResolveRaceRead = () => resolve({ data: { data: remote, updated_at: '2030-01-01T00:00:00Z' }, error: null }); });
+      } }) }) }) },
+    });
+    cloudSync.emit();
+  }, staleAccountRecord);
+  await page.getByRole('button', { name: 'Sync now', exact: true }).click();
+  await page.waitForFunction(() => window.odaRaceReadStarted === true);
+  await page.evaluate(() => {
+    Object.assign(window.odaCloudForRace, { config: { url: 'https://scope-b.example', anonKey: 'public-test-only' }, session: { user: { id: 'scope-b', email: 'b@example.test' } } });
+    window.odaCloudForRace.emit(); window.odaResolveRaceRead();
+  });
+  await page.waitForTimeout(250);
+  assert.equal(await review().count(), 0);
+  assert.deepEqual(await saved(), beforeScopeRace);
+  assert.equal(await page.evaluate(() => window.odaCloudUploads), 0);
+  assert.equal(await page.evaluate(() => localStorage.getItem('oda_cloud_last_sync')), null);
+  check('manual sync with a late previous-account SELECT does not fall back to uploading local data into the new account');
+
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.getByRole('heading', { name: 'Backup and sync', exact: true }).scrollIntoViewIfNeeded();
   await page.screenshot({ path: `${OUT}/settings-backup-desktop.png` });
