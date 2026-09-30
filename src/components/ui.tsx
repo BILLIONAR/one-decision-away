@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useId, useRef } from 'react';
 import { LucideIcon, X } from 'lucide-react';
 import { useT } from '../i18n';
 
@@ -296,6 +296,44 @@ export interface ModalProps {
   maxWidth?: 'sm' | 'md' | 'lg' | 'xl';
 }
 
+const modalFocusables = (root: HTMLElement) => Array.from(root.querySelectorAll<HTMLElement>(
+  'button:not(:disabled), a[href], input:not(:disabled), textarea:not(:disabled), select:not(:disabled), [tabindex]'
+)).filter(element => element.tabIndex >= 0 && element.getClientRects().length > 0);
+
+// Older WebViews need the same background and scroll isolation as a native dialog.
+// Counts keep nested fallback dialogs from undoing each other's isolation.
+const fallbackBackground = new Map<HTMLElement, { count: number; inert: boolean; hidden: string | null }>();
+let fallbackScrollLocks = 0;
+let fallbackBodyOverflow = '';
+function isolateFallbackDialog(root: HTMLElement): () => void {
+  const hidden: HTMLElement[] = [];
+  for (let child: HTMLElement = root; child.parentElement; child = child.parentElement) {
+    for (const sibling of Array.from(child.parentElement.children)) {
+      if (sibling === child || !(sibling instanceof HTMLElement)) continue;
+      const prior = fallbackBackground.get(sibling) ?? { count: 0, inert: sibling.inert, hidden: sibling.getAttribute('aria-hidden') };
+      prior.count += 1;
+      fallbackBackground.set(sibling, prior);
+      sibling.inert = true;
+      sibling.setAttribute('aria-hidden', 'true');
+      hidden.push(sibling);
+    }
+    if (child.parentElement === document.body) break;
+  }
+  if (fallbackScrollLocks++ === 0) fallbackBodyOverflow = document.body.style.overflow;
+  document.body.style.overflow = 'hidden';
+  return () => {
+    for (const sibling of hidden) {
+      const prior = fallbackBackground.get(sibling);
+      if (!prior || --prior.count > 0) continue;
+      sibling.inert = prior.inert;
+      if (prior.hidden === null) sibling.removeAttribute('aria-hidden');
+      else sibling.setAttribute('aria-hidden', prior.hidden);
+      fallbackBackground.delete(sibling);
+    }
+    if (--fallbackScrollLocks === 0) document.body.style.overflow = fallbackBodyOverflow;
+  };
+}
+
 export const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
@@ -305,6 +343,48 @@ export const Modal: React.FC<ModalProps> = ({
   maxWidth = 'md',
 }) => {
   const t = useT();
+  const dialogRef = useRef<HTMLElement>(null);
+  const focusBeforeOpening = useRef<HTMLElement | null>(null);
+  const nativeDialog = typeof window !== 'undefined' && typeof window.HTMLDialogElement !== 'undefined'
+    && typeof window.HTMLDialogElement.prototype.showModal === 'function'
+    && typeof window.HTMLDialogElement.prototype.close === 'function';
+  const DialogRoot = nativeDialog ? 'dialog' : 'div';
+  // Capture before a child's autoFocus runs during the DOM commit.
+  if (isOpen && !dialogRef.current && typeof document !== 'undefined') {
+    focusBeforeOpening.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  }
+  const closeRef = useRef(onClose);
+  closeRef.current = onClose;
+  const titleId = useId();
+  const subtitleId = useId();
+  useEffect(() => {
+    const root = dialogRef.current;
+    if (!root || !isOpen) return;
+    const returnTarget = focusBeforeOpening.current;
+    let release = () => {};
+    const keepFocus = (event: FocusEvent) => {
+      if (event.target instanceof Node && !root.contains(event.target)) (modalFocusables(root)[0] ?? root).focus();
+    };
+    if (nativeDialog) {
+      const dialog = root as HTMLDialogElement;
+      if (!dialog.open) dialog.showModal();
+    } else {
+      // Move focus before hiding the previous focus target from assistive technology.
+      (root.contains(document.activeElement) ? document.activeElement as HTMLElement : modalFocusables(root)[0] ?? root).focus();
+      release = isolateFallbackDialog(root);
+      document.addEventListener('focusin', keepFocus);
+    }
+    return () => {
+      if (nativeDialog) {
+        const dialog = root as HTMLDialogElement;
+        if (dialog.open) dialog.close();
+      } else {
+        document.removeEventListener('focusin', keepFocus);
+        release();
+      }
+      if (returnTarget?.isConnected) returnTarget.focus();
+    };
+  }, [isOpen, nativeDialog]);
   if (!isOpen) return null;
 
   const maxWidthStyles = {
@@ -315,24 +395,40 @@ export const Modal: React.FC<ModalProps> = ({
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-6 bg-black/40 animate-in fade-in duration-200"
-      onClick={onClose}
+    <DialogRoot
+      ref={element => { dialogRef.current = element; }}
+      role={nativeDialog ? undefined : 'dialog'}
+      aria-modal={nativeDialog ? undefined : true}
+      tabIndex={-1}
+      aria-labelledby={titleId}
+      aria-describedby={subtitle ? subtitleId : undefined}
+      className={`oda-modal ${nativeDialog ? '' : 'oda-modal-fallback'} fixed inset-0 m-0 w-full max-w-none h-full max-h-none z-50 items-end sm:items-center justify-center sm:p-6`}
+      onCancel={(event) => { event.preventDefault(); closeRef.current(); }}
+      onClick={(event) => { if (event.target === event.currentTarget) closeRef.current(); }}
+      onKeyDown={(event) => {
+        if (!nativeDialog && event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closeRef.current(); return; }
+        if (event.key !== 'Tab') return;
+        const focusable = modalFocusables(event.currentTarget);
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (!first) { event.preventDefault(); return; }
+        if (event.shiftKey && (document.activeElement === first || document.activeElement === event.currentTarget)) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      }}
     >
       <div
         className={`relative w-full ${maxWidthStyles[maxWidth]} bg-[var(--bg-elevated)] rounded-t-2xl sm:rounded-[var(--radius-lg)] shadow-[var(--shadow-lg)] overflow-hidden max-h-[92vh] sm:max-h-[85vh] flex flex-col`}
         onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
       >
         <div className="flex items-start justify-between gap-4 px-5 pt-5 pb-3 sm:px-6 sm:pt-6">
           <div className="min-w-0">
-            <h3 className="text-[20px] font-semibold tracking-tight text-[var(--fg)] leading-tight">{title}</h3>
-            {subtitle && <p className="text-[14px] text-[var(--fg-muted)] mt-1 leading-relaxed">{subtitle}</p>}
+            <h3 id={titleId} className="text-[20px] font-semibold tracking-tight text-[var(--fg)] leading-tight">{title}</h3>
+            {subtitle && <p id={subtitleId} className="text-[14px] text-[var(--fg-muted)] mt-1 leading-relaxed">{subtitle}</p>}
           </div>
           <button
+            type="button"
             onClick={onClose}
-            className="w-9 h-9 -mr-2 -mt-1 rounded-full flex items-center justify-center text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-muted)] transition-colors cursor-pointer shrink-0"
+            className="w-11 h-11 -mr-2 -mt-1 rounded-full flex items-center justify-center text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-muted)] transition-colors cursor-pointer shrink-0"
             aria-label={t('Close')}
           >
             <X className="w-5 h-5" strokeWidth={1.8} />
@@ -340,7 +436,7 @@ export const Modal: React.FC<ModalProps> = ({
         </div>
         <div className="px-5 pb-6 sm:px-6 overflow-y-auto">{children}</div>
       </div>
-    </div>
+    </DialogRoot>
   );
 };
 

@@ -9,6 +9,7 @@ import { computeLedgerBalance, evaluateMissionReward, ECONOMY_CONSTANTS } from '
 import { checkAndApplyDailyMicroHabitRollover } from './microHabitsService';
 import { cloudSync } from './cloudSync';
 import { getLocale, N_, t } from '../i18n';
+import { firstRunCopy } from '../i18n/firstRun';
 import { applyNotebookAction, normalizeNotebook, preserveNotebookWrites } from './notebook';
 import type { NotebookAction, NotebookUpdateResult } from './notebook';
 import { EMPTY_PROGRESS, normalizeCourseProgress, readCourseProgress, notifyCourseProgressChanged } from './courseProgress';
@@ -277,6 +278,12 @@ export class LocalDemoRepository implements DataRepository {
       const mission = data.missions.find((m) => m.id === params.missionId);
       if (!mission) {
         throw new Error(t('Mission not found'));
+      }
+
+      // A repeated submission of the same daily decision must not add evidence,
+      // minutes, or another reward. Ordinary repeatable quests retain their rules.
+      if (mission.isOneDecision && mission.status === 'completed') {
+        return { data, rewardAmount: 0, message: firstRunCopy(getLocale()).alreadyKept };
       }
 
       // Ledger limits keep their existing UTC day contract; personal decision

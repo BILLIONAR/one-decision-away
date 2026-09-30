@@ -85,22 +85,18 @@ export const Today: React.FC = () => {
   const [plan, setPlan] = useState<{ open: boolean; justSet?: boolean; smaller?: boolean }>({ open: false });
   const [startOpen, setStartOpen] = useState(false);
 
-  // A new member's first decision comes from onboarding: offer the 30-second plan once.
-  const mountedAt = useRef(new Date().toISOString());
-  const firstPlanCandidate = data?.missions.find(
-    // Decisions chosen on this page already open the plan themselves.
-    (m) => m.isOneDecision && m.status === 'active' && !m.plan && m.createdAt < mountedAt.current
-  );
+  // The offer is consumed only when it opens, so interrupted navigation can retry.
+  const selectedDecision = data ? todayDecision(data.missions, now) : undefined;
+  const firstPlanCandidate = selectedDecision?.status === 'active' && !selectedDecision.plan ? selectedDecision : undefined;
   const firstWeek = data ? isSimpleMode(data) : false;
   useEffect(() => {
     if (!firstPlanCandidate || !firstWeek) return;
-    try {
-      if (localStorage.getItem('oda_plan_prompted') === firstPlanCandidate.id) return;
-      localStorage.setItem('oda_plan_prompted', firstPlanCandidate.id);
-    } catch { return; }
-    const timer = window.setTimeout(() => setPlan({ open: true, justSet: true }), 700);
+    const markOpened = () => { try { localStorage.setItem('oda_plan_prompted', firstPlanCandidate.id); } catch { /* The offer can still open without storage. */ } };
+    if (plan.open) { markOpened(); return; }
+    try { if (localStorage.getItem('oda_plan_prompted') === firstPlanCandidate.id) return; } catch { /* Optional reminder memory. */ }
+    const timer = window.setTimeout(() => { markOpened(); setPlan({ open: true, justSet: true }); }, 700);
     return () => window.clearTimeout(timer);
-  }, [firstPlanCandidate?.id, firstWeek]);
+  }, [firstPlanCandidate?.id, firstWeek, plan.open]);
 
   if (!data) return null;
 

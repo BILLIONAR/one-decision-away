@@ -12,7 +12,7 @@ Satıcı: **bireysel Apple Developer hesabı** (mağazada kişi adı görünür)
 | Uygulama ikonu (1024 px, opak) ve açılış ekranı | `ios/App/App/Assets.xcassets` | C4 logosundan üretildi, logo değiştirilmedi. |
 | Cihazda hatırlatmalar | `src/services/nativeNotifications.ts` | Uygulama kapalıyken de çalışır; 7 gün önceden planlanır, karar tutulunca bugünün hatırlatması kalkar. |
 | Titreşim (haptic) | `src/services/native.ts` | Karar tutulunca başarı titreşimi, alışkanlık işaretlenince hafif dokunuş. |
-| Destek sayfası (TR/EN/ES) | Uygulamada `/support`; statik: `public/support.html` | Hesap gerekmez; iletişim, yedekleme, kurs, bildirim, abonelik ve hesap yardımı. İçerik: `src/data/support.ts`; üretim: `npx tsx scripts/build-support.ts`. |
+| Destek sayfası (TR/EN/ES) | Uygulamada `/app/support`; statik: `public/support.html` | Hesap gerekmez; iletişim, yedekleme, kurs, bildirim, abonelik ve hesap yardımı. İçerik: `src/data/support.ts`; üretim: `npx tsx scripts/build-support.ts`. |
 | Durum çubuğu temaya uyar | `src/utils/theme.ts` | |
 | Uygulama içi hesap silme (Kural 5.1.1(v)) | Hesap sayfası → "Hesabımı sil"; `supabase/functions/delete-account` | Tüm tablolar `on delete cascade`, bulut verisi hesapla birlikte silinir. |
 | E-postadaki 6 haneli kodla giriş | Hesap sayfası | iPhone uygulaması web bağlantısı açamadığı için kod girişi eklendi. |
@@ -155,3 +155,9 @@ Linux bulut ortamı Xcode, gerçek iPhone, TestFlight veya App Store incelemesin
 - Apple sandbox hesabıyla satın alma, geri yükleme, iptal/yenileme ve seviye değişiklikleri; isteğe bağlı bulut hesabıyla giriş kodu ve hesap silme.
 
 Teknik dayanak: [Capacitor 8 foreground olayları](https://capacitorjs.com/docs/apis/app), [durum çubuğu metin stilleri](https://capacitorjs.com/docs/apis/status-bar). Swift arka plan değişikliği ve cihaz davranışları burada derlenmiş veya cihazda doğrulanmış olarak sunulmaz.
+
+### Tarayıcı ve iOS sürüm sınırı
+
+Depodaki Xcode projesinin dağıtım hedefi hâlâ iOS 15.0'dır; bu ayar, web arayüzünün iOS 15'te uyumlu veya test edilmiş olduğunu göstermez. Uygulama Tailwind CSS 4 kullanır. [Tailwind'in resmî uyumluluk belgesi](https://tailwindcss.com/docs/compatibility), temel tarayıcı sınırlarını Safari 16.4, Chrome 111 ve Firefox 128 olarak belirtir. Daha eski iOS/WebView sürümlerinde görünüm ve CSS özellikleri için garanti verilmez. Mağaza sürümünden önce desteklenecek en eski iOS sürümünü bu sınırla birlikte belirle; ilgili cihazda tam akışı kontrol et. Bu geliştirmede dağıtım hedefi değiştirilmedi.
+
+[WebKit, yerel `dialog` desteğini Safari/iOS 15.4'te ekledi](https://webkit.org/blog/12445/new-webkit-features-in-safari-15-4/). Ortak Modal, `showModal` veya `close` API'si olmadığında erişilebilir bir HTML katmanına geçer; klavye odağını içeride tutar, arka planı yardımcı teknolojilerden gizler ve kapanınca önceki odağı/kaydırmayı geri getirir. `scripts/qa-modal-fallback.mjs`, derlenmiş web önizlemesinde bu API'leri devre dışı bırakarak açma/kapatma, tekrar açma, Tab/Shift+Tab, Escape, arka plana tıklama, veri koruma ve axe kontrollerini tekrarlar. Bu test, eski Safari'nin CSS motorunu veya gerçek iPhone'u taklit etmez ve iOS 15 uyumluluğu iddiası değildir.

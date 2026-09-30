@@ -3,9 +3,11 @@ import { AppProvider, useApp } from './store/useApp';
 import { AppShell } from './layout/AppShell';
 import { Landing } from './pages/Landing';
 import { useT } from './i18n';
+import { AppErrorBoundary } from './components/AppErrorBoundary';
 const Legal = lazy(() => import('./pages/Legal').then((m) => ({ default: m.Legal })));
+const Support = lazy(() => import('./pages/Support').then((m) => ({ default: m.Support })));
 const PublicTwoFutures = lazy(() => import('./pages/PublicTwoFutures').then((m) => ({ default: m.PublicTwoFutures })));
-import { Today } from './pages/Today';
+const Today = lazy(() => import('./pages/Today').then(m => ({ default: m.Today })));
 import { Onboarding } from './components/Onboarding';
 const Evidence = lazy(() => import('./pages/Evidence').then((m) => ({ default: m.Evidence })));
 const Dreams = lazy(() => import('./pages/Dreams').then((m) => ({ default: m.Dreams })));
@@ -40,7 +42,7 @@ const RouteFallback: React.FC = () => {
 };
 
 const AppRouter: React.FC = () => {
-  const { activeRoute, isLoading, data } = useApp();
+  const { activeRoute, isLoading, data, error } = useApp();
   const t = useT();
 
   if (isLoading) {
@@ -59,6 +61,10 @@ const AppRouter: React.FC = () => {
     return <Landing />;
   }
 
+  if (activeRoute === '/support' || activeRoute === '/app/support') {
+    return <Suspense fallback={<RouteFallback />}><Support /></Suspense>;
+  }
+
   if (activeRoute === '/privacy' || activeRoute === '/terms') {
     return (
       <Suspense fallback={<RouteFallback />}>
@@ -75,7 +81,9 @@ const AppRouter: React.FC = () => {
     );
   }
 
-  // First run: 3-step onboarding replaces the shell until completed
+  if (!data && error) throw new Error('ODA could not read its saved record.');
+
+  // First run: guided setup replaces the shell until completed.
   if (data && data.profile.onboardingStep !== 'completed') {
     return <Onboarding />;
   }
@@ -146,8 +154,8 @@ const AppRouter: React.FC = () => {
 
 export default function App() {
   return (
-    <AppProvider>
+    <AppErrorBoundary><AppProvider>
       <AppRouter />
-    </AppProvider>
+    </AppProvider></AppErrorBoundary>
   );
 }

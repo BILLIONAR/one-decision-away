@@ -1,5 +1,5 @@
 {
-  "name": "react-example",
+  "name": "oda-one-decision-away",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -10,7 +10,17 @@
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
     "build:ios": "VITE_BASE_PATH=/ VITE_TARGET=ios vite build && cap sync ios",
-    "legal": "tsx scripts/build-legal.ts"
+    "legal": "tsx scripts/build-legal.ts",
+    "test": "node --import tsx --test tests/*.test.ts supabase/functions/send-nudges/core.test.ts supabase/functions/send-nudges/push-worker.test.ts",
+    "test:browser": "node --import tsx scripts/qa-browser.mjs",
+    "catalog": "node --import tsx scripts/build-course-catalog.ts",
+    "check": "npm run lint && node scripts/validate-i18n.mjs && node --import tsx scripts/test-i18n.ts && node --import tsx scripts/test-notebook.ts && node --import tsx scripts/test-notebook-voice.ts && node --import tsx scripts/test-routing.ts && npm test && npm run build",
+    "qa:landing": "node scripts/qa-landing.mjs",
+    "qa:courses": "node --import tsx scripts/qa-course-learning.mjs",
+    "qa:backup": "node --import tsx scripts/qa-backup.mjs",
+    "support": "node --import tsx scripts/build-support.ts",
+    "qa:platform": "node --import tsx scripts/qa-platform.mjs",
+    "qa:modals": "node --import tsx scripts/qa-modal-fallback.mjs"
   },
   "dependencies": {
     "@capacitor/app": "^8.1.1",
@@ -42,6 +52,7 @@
     "vite": "^6.2.3"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@capacitor/cli": "^8.5.2",
     "@electric-sql/pglite": "^0.5.8",
     "@types/canvas-confetti": "^1.9.0",
@@ -51,6 +62,7 @@
     "@types/react-dom": "^19.3.0",
     "autoprefixer": "^10.4.21",
     "esbuild": "^0.25.0",
+    "playwright": "^1.63.0",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",

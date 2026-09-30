@@ -382,3 +382,38 @@ body::before {
   content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
   background: var(--page-bg);
 }
+
+/* The architecture stays quiet around the work: ink navigation, paper content. */
+.oda-sidebar {
+  --bg-elevated: #173E35;
+  --bg-muted: #214C40;
+  --bg-inset: #12332A;
+  --bg: #173E35;
+  --fg: #F7F3EA;
+  --fg-muted: #D3DDD0;
+  --fg-subtle: #C0D0BF;
+  --accent: #F7F3EA;
+  --accent-soft: #2D5547;
+  --border: #36584A;
+  --brand-burgundy: #E6ABB6;
+  color: var(--fg);
+}
+.oda-sidebar .oda-brand-mark { filter: brightness(2.6) saturate(.65); }
+.oda-sidebar button:focus-visible { outline-color: #F7F3EA; }
+.oda-sidebar .oda-nav-active::before { background: #F7F3EA; width: 2px; }
+.oda-tabbar { background: var(--bg-elevated); border-color: var(--border); }
+@media (min-width: 768px) { .oda-tabbar { display: none; } }
+.oda-onboarding h1:focus { outline: none; }
+.oda-onboarding main { max-width: 540px; }
+.oda-onboarding header { max-width: 540px; }
+.oda-onboarding .onboarding-step { padding-bottom: env(safe-area-inset-bottom, 0px); }
+/* Focus targets remain visible above the mobile navigation and keyboard. */
+html { scroll-padding-top: 5rem; scroll-padding-bottom: 7rem; }
+input, textarea, select, button, a { scroll-margin-block: 5rem; }
+.oda-modal { border: 0; padding: 0; background: transparent; color: var(--fg); }
+.oda-modal[open] { display: flex; }
+.oda-modal::backdrop { background: rgb(9 26 19 / 48%); }
+.oda-modal-fallback { display: flex; background: rgb(9 26 19 / 48%); }
+@media (prefers-reduced-transparency: reduce) {
+  .oda-tabbar, .oda-glass-bar { background: var(--bg-elevated); backdrop-filter: none; }
+}

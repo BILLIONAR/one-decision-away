@@ -3,6 +3,7 @@ import { Mission, MissionDifficulty, MissionType, MissionArea } from '../types/m
 import { Play, Pause, Square, X } from 'lucide-react';
 import { getBaseReward } from '../services/economy';
 import { useT } from '../i18n';
+import { Modal } from './ui';
 
 const primaryBtn =
   'h-11 px-4 inline-flex items-center justify-center gap-2 rounded-[var(--radius-sm)] bg-[var(--fg)] text-[var(--bg)] text-sm font-semibold cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed';
@@ -20,32 +21,7 @@ const Sheet: React.FC<{ isOpen: boolean; onClose: () => void; title: string; sub
   subtitle,
   children,
 }) => {
-  const t = useT();
-  if (!isOpen) return null;
-  return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/40 overflow-y-auto" onClick={onClose}>
-      <div
-        className="w-full max-w-lg bg-[var(--bg)] rounded-[var(--radius-lg)] p-5 space-y-5 my-auto max-h-[92vh] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h3 className="text-lg font-semibold tracking-tight text-[var(--fg)]">{title}</h3>
-            {subtitle && <p className="text-sm text-[var(--fg-muted)] mt-0.5 break-words">{subtitle}</p>}
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label={t('Close')}
-            className="w-11 h-11 -mr-2 -mt-2 shrink-0 flex items-center justify-center text-[var(--fg-muted)] cursor-pointer"
-          >
-            <X className="w-5 h-5" strokeWidth={1.8} />
-          </button>
-        </div>
-        {children}
-      </div>
-    </div>
-  );
+  return <Modal isOpen={isOpen} onClose={onClose} title={title} subtitle={subtitle} maxWidth="lg"><div className="space-y-5">{children}</div></Modal>;
 };
 
 interface CompleteMissionModalProps {

@@ -1,11 +1,11 @@
 /* One Decision Away — each deployment owns its own offline shell and caches. */
 const BASE = new URL(self.registration.scope);
 const CACHE_PREFIX = `oda:${encodeURIComponent(BASE.pathname)}:`;
-const SHELL_CACHE = `${CACHE_PREFIX}v4`;
+const SHELL_CACHE = `${CACHE_PREFIX}v5`;
 const MEDIA_CACHE = `${SHELL_CACHE}:media`;
 const INDEX_URL = new URL('index.html', BASE).href;
 const MANIFEST_URL = new URL('manifest.webmanifest', BASE).href;
-const SHELL = ['', 'index.html', 'theme-init.js', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-192-maskable.png', 'icon-512-maskable.png', 'apple-touch-icon.png', 'brand/oda-c4.png', 'brand/oda-app-c4-v1-192.png', 'brand/oda-app-c4-v1-512.png', 'brand/oda-app-c4-v1-maskable-192.png', 'brand/oda-app-c4-v1-maskable-512.png', 'brand/oda-apple-c4-v1-180.png', 'brand/oda-favicon-c4-v1-32.png'].map(path => new URL(path, BASE).href);
+const SHELL = ['', 'index.html', 'support.html', 'theme-init.js', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-192-maskable.png', 'icon-512-maskable.png', 'apple-touch-icon.png', 'brand/oda-c4.png', 'brand/oda-app-c4-v1-192.png', 'brand/oda-app-c4-v1-512.png', 'brand/oda-app-c4-v1-maskable-192.png', 'brand/oda-app-c4-v1-maskable-512.png', 'brand/oda-apple-c4-v1-180.png', 'brand/oda-favicon-c4-v1-32.png'].map(path => new URL(path, BASE).href);
 const inScope = url => url.origin === BASE.origin && url.pathname.startsWith(BASE.pathname);
 
 self.addEventListener('install', event => {
@@ -32,15 +32,17 @@ self.addEventListener('fetch', event => {
   if (request.mode === 'navigate' && inScope(url)) {
     event.respondWith((async () => {
       const cache = await caches.open(SHELL_CACHE);
+      // Standalone support/legal documents must never replace the app shell.
+      const documentUrl = url.pathname.endsWith('.html') && url.href !== INDEX_URL ? url.href : INDEX_URL;
       try {
         const response = await fetch(request);
         if (response.ok && response.headers.get('content-type')?.includes('text/html')) {
-          await cache.put(INDEX_URL, response.clone());
+          await cache.put(documentUrl, response.clone());
           return response;
         }
-        return (await cache.match(INDEX_URL)) || response;
+        return (await cache.match(documentUrl)) || response;
       } catch {
-        return (await cache.match(INDEX_URL)) || Response.error();
+        return (await cache.match(documentUrl)) || Response.error();
       }
     })());
     return;

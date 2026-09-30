@@ -1,12 +1,13 @@
 import React from 'react';
 import { useApp } from '../store/useApp';
-import { Sun, Star, BookOpen, User, X, ArrowLeft, MessageCircle, GraduationCap, AudioLines } from 'lucide-react';
+import { Sun, Star, BookOpen, User, X, ArrowLeft, MessageCircle, GraduationCap, AudioLines, Leaf, Settings, CircleHelp } from 'lucide-react';
 import { computeLedgerBalance } from '../services/economy';
 import { FocusLockView } from '../components/FocusLockView';
 import { QuickDreamJournalModal } from '../components/QuickDreamJournalModal';
 import { useT, useLocale } from '../i18n';
 import { companionCopy } from '../i18n/companion';
 import { designCopy } from '../i18n/design';
+import { firstRunCopy } from '../i18n/firstRun';
 import { LogoLockup } from '../components/Logo';
 
 interface AppShellProps {
@@ -104,14 +105,14 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
       )}
 
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex flex-col w-56 bg-[var(--bg-elevated)] border-r border-[var(--border)] shrink-0 h-screen overflow-y-auto sticky top-0 p-5 gap-7">
+      <aside className="oda-sidebar hidden md:flex flex-col w-60 bg-[var(--bg-elevated)] border-r border-[var(--border)] shrink-0 h-screen overflow-y-auto sticky top-0 p-5 gap-7">
         <button
           type="button"
           onClick={() => handleNav('/app')}
           className="flex items-center gap-2.5 cursor-pointer text-left"
           aria-label={t('One Decision Away')}
         >
-          <LogoLockup className="w-16 h-24" />
+          <LogoLockup className="w-12 h-18" /><span className="text-[11px] leading-relaxed tracking-[0.16em] font-medium">ONE DECISION<br />AWAY</span>
         </button>
 
         <nav className="flex flex-col gap-1" aria-label={t('Main')}>
@@ -139,7 +140,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
 
         <nav className="flex flex-col gap-1 border-t border-[var(--border)] pt-5" aria-label={c.learn}>
           <p className="oda-kicker text-[var(--fg-muted)] px-3 mb-2">{c.learn}</p>
-          {[{ path: '/app/courses', label: c.courses, icon: GraduationCap }, { path: '/app/sound', label: t('Sound Room'), icon: AudioLines }].map(item => {
+          {[{ path: '/app/courses', label: c.courses, icon: GraduationCap }, { path: '/app/evidence', label: t('Your evidence'), icon: Leaf }, { path: '/app/sound', label: t('Sound Room'), icon: AudioLines }].map(item => {
             const Icon = item.icon;
             const active = activeRoute === item.path;
             return <button key={item.path} type="button" onClick={() => handleNav(item.path)} aria-current={active ? 'page' : undefined} className={`flex items-center gap-3 px-3 min-h-11 rounded-[var(--radius-sm)] text-sm text-left ${active ? 'oda-nav-active bg-[var(--accent-soft)] text-[var(--accent)] font-semibold' : 'text-[var(--fg-muted)] hover:bg-[var(--bg-muted)]'}`}><Icon size={18} strokeWidth={1.8} />{item.label}</button>;
@@ -154,6 +155,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           <span className="text-[12px] text-[var(--fg-muted)]">{t('Balance')}</span>
           <span className="text-[20px] font-semibold text-[var(--accent)] tracking-tight">D$ {balance.toLocaleString()}</span>
         </button>
+        <div className="flex gap-2 border-t border-[var(--border)] pt-3"><button type="button" onClick={() => handleNav('/app/settings')} className="min-h-11 flex flex-1 items-center justify-center gap-2 text-xs rounded-[var(--radius-sm)] hover:bg-[var(--bg-muted)]" aria-label={t('Settings')}><Settings size={16} />{t('Settings')}</button><button type="button" onClick={() => handleNav('/app/support')} aria-label={firstRunCopy(locale).help} className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-[var(--bg-muted)]"><CircleHelp size={18} /></button></div>
       </aside>
 
       {/* Mobile top bar: only on secondary pages, gives a way back */}

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowLeft, Check } from 'lucide-react';
 import { LogoLockup } from './Logo';
 import { useApp } from '../store/useApp';
@@ -7,6 +7,8 @@ import { EXPLORE_DREAM_ITEMS, type ExploreDreamItem } from '../data/exploreDream
 import { ECONOMY_CONSTANTS } from '../services/economy';
 import { INTENTS, easyDecisions, type Intent } from '../data/starterDecisions';
 import { EasyDecisionChips } from './momentum/FirstSteps';
+import { readOnboardingDraft, writeOnboardingDraft, clearOnboardingDraft } from '../services/onboardingDraft';
+import { firstRunCopy } from '../i18n/firstRun';
 import { EvidenceTree } from './momentum/EvidenceTree';
 
 const ONBOARDING_LOCALES: Locale[] = ['en', 'tr', 'es'];
@@ -31,14 +33,30 @@ export const Onboarding: React.FC = () => {
   const { completeOnboarding, showToast } = useApp();
   const [locale, setLocale] = useLocale();
 
-  const [step, setStep] = useState<Step>(0);
-  const [intent, setIntent] = useState<Intent | null>(null);
+  const [savedDraft] = useState(readOnboardingDraft);
+  const [resumed, setResumed] = useState(Boolean(savedDraft));
+  const mainRef = useRef<HTMLElement>(null);
+  const c = firstRunCopy(locale);
+  const [step, setStep] = useState<Step>(savedDraft?.step ?? 0);
+  const [intent, setIntent] = useState<Intent | null>(savedDraft?.intent ?? null);
   const [demo, setDemo] = useState<'pick' | 'start' | 'running' | 'keep' | 'proof'>('pick');
   const [demoChoice, setDemoChoice] = useState('');
-  const [name, setName] = useState('');
-  const [dreamId, setDreamId] = useState<string | null>(null);
-  const [decision, setDecision] = useState('');
+  const [name, setName] = useState(savedDraft?.name ?? '');
+  const [dreamId, setDreamId] = useState<string | null>(savedDraft?.dreamId ?? null);
+  const [decision, setDecision] = useState(savedDraft?.decision ?? '');
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => { writeOnboardingDraft({ step, name, intent, dreamId, decision }); }, [step, name, intent, dreamId, decision]);
+  useEffect(() => {
+    if (demo !== 'running') return;
+    const timer = window.setTimeout(() => setDemo('keep'), 2600);
+    return () => window.clearTimeout(timer);
+  }, [demo]);
+  useEffect(() => { mainRef.current?.querySelector<HTMLElement>('h1')?.focus(); }, [step]);
+
+  const restart = () => {
+    clearOnboardingDraft(); setResumed(false); setName(''); setIntent(null); setDreamId(null); setDecision(''); setDemo('pick'); setStep(0);
+  };
 
   const starterDreams = useMemo<ExploreDreamItem[]>(
     () =>
@@ -53,6 +71,17 @@ export const Onboarding: React.FC = () => {
   const chooseLanguage = (code: Locale) => {
     setLocale(code);
     void ensureLocaleLoaded(code);
+  };
+
+  const radioKeys = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const keys = ['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', 'Home', 'End'];
+    if (!keys.includes(event.key)) return;
+    const buttons = Array.from(event.currentTarget.querySelectorAll<HTMLButtonElement>('[role=radio]'));
+    const index = buttons.indexOf(document.activeElement as HTMLButtonElement);
+    if (index < 0) return;
+    event.preventDefault();
+    const next = event.key === 'Home' ? 0 : event.key === 'End' ? buttons.length - 1 : (index + (['ArrowLeft', 'ArrowUp'].includes(event.key) ? -1 : 1) + buttons.length) % buttons.length;
+    buttons[next]?.focus(); buttons[next]?.click();
   };
 
   const go = (next: Step) => {
@@ -84,6 +113,7 @@ export const Onboarding: React.FC = () => {
         decision,
         intent: intent ?? undefined,
       });
+      clearOnboardingDraft();
     } catch (e) {
       showToast(e instanceof Error ? e.message : t('Something went wrong. Please try again.'), 'error');
       setSaving(false);
@@ -91,13 +121,13 @@ export const Onboarding: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen text-[var(--fg)] font-sans flex flex-col pt-safe">
+    <div className="oda-onboarding min-h-screen text-[var(--fg)] font-sans flex flex-col pt-safe">
       {/* Top bar */}
       <header className="px-4 sm:px-6 h-20 flex items-center justify-between max-w-lg w-full mx-auto">
         <div className="flex items-center gap-2 min-w-0">
           <LogoLockup className="w-10 h-14 shrink-0" title="ODA" />
         </div>
-        {step > 0 && <div className="flex items-center gap-1.5" aria-label={t('Step {current} of {total}', { current: step, total: 4 })}>
+        {step > 0 && <div className="flex items-center gap-1.5" role="progressbar" aria-valuemin={1} aria-valuemax={4} aria-valuenow={step} aria-label={t('Step {current} of {total}', { current: step, total: 4 })}>
           {[1, 2, 3, 4].map((n) => (
             <span
               key={n}
@@ -109,8 +139,9 @@ export const Onboarding: React.FC = () => {
         </div>}
       </header>
 
-      <main className="flex-1 w-full max-w-lg mx-auto px-4 sm:px-6 pb-10 pt-6 sm:pt-12 flex flex-col">
-        {step > 1 && (
+      <main ref={mainRef} className="flex-1 w-full max-w-lg mx-auto px-4 sm:px-6 pb-10 pt-6 sm:pt-12 flex flex-col">
+        {resumed && <div className="mb-6 p-4 rounded-[var(--radius-sm)] border border-[var(--border)] text-sm"><p>{c.resumed}</p><button type="button" onClick={restart} className="min-h-11 text-[var(--accent)] underline underline-offset-4">{c.restart}</button></div>}
+        {step > 0 && (
           <button
             type="button"
             onClick={() => go((step - 1) as Step)}
@@ -124,7 +155,7 @@ export const Onboarding: React.FC = () => {
         {step === 1 && (
           <section key="step-1" className="space-y-6 onboarding-step">
             <div className="space-y-2">
-              <h1 className="text-[32px] sm:text-[36px] oda-display leading-tight">
+              <h1 tabIndex={-1} className="text-[32px] sm:text-[36px] oda-display leading-tight">
                 {t('What should we call you?')}
               </h1>
               <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed">
@@ -140,6 +171,7 @@ export const Onboarding: React.FC = () => {
                 id="onboarding-name"
                 type="text"
                 autoComplete="given-name"
+                maxLength={80}
                 autoFocus
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -188,14 +220,14 @@ export const Onboarding: React.FC = () => {
             <div className="flex flex-wrap gap-2" aria-label={t('Language')}>
               {languages.map((l) => (
                 <button key={l.code} type="button" onClick={() => chooseLanguage(l.code)} aria-pressed={l.code === locale}
-                  className={`h-9 px-3 rounded-full text-[13px] font-medium cursor-pointer ${l.code === locale ? 'bg-[var(--fg)] text-[var(--bg)]' : 'bg-[var(--bg-muted)] text-[var(--fg)]'}`}>
+                  className={`h-11 px-3 rounded-full text-[13px] font-medium cursor-pointer ${l.code === locale ? 'bg-[var(--fg)] text-[var(--bg)]' : 'bg-[var(--bg-muted)] text-[var(--fg)]'}`}>
                   {l.nativeName}
                 </button>
               ))}
             </div>
             <div className="space-y-2">
               <p className="text-[13px] font-semibold text-[var(--accent)]">{t('Try it in 20 seconds')}</p>
-              <h1 className="text-[32px] sm:text-[36px] oda-display leading-tight">{t('One decision. A small start. Proof.')}</h1>
+              <h1 tabIndex={-1} className="text-[32px] sm:text-[36px] oda-display leading-tight">{t('One decision. A small start. Proof.')}</h1>
               <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed">{t('This is how every day in ODA works. Try one round before we set anything up.')}</p>
             </div>
             <div className="rounded-[var(--radius-lg)] oda-card p-5 space-y-4" aria-live="polite">
@@ -204,7 +236,7 @@ export const Onboarding: React.FC = () => {
               )}
               {demo !== 'pick' && <p className="text-[18px] font-semibold leading-snug">{t(demoChoice)}</p>}
               {demo === 'start' && (
-                <button type="button" onClick={() => { setDemo('running'); window.setTimeout(() => setDemo('keep'), 2600); }} className={primaryButton}>
+                <button type="button" onClick={() => { setDemo('running'); }} className={primaryButton}>
                   {t('2. Start · just 2 minutes')}
                 </button>
               )}
@@ -236,14 +268,14 @@ export const Onboarding: React.FC = () => {
         {step === 2 && (
           <section key="step-2" className="space-y-6 onboarding-step">
             <div className="space-y-2">
-              <h1 className="text-[32px] sm:text-[36px] oda-display leading-tight">{t('Who do you want to become?')}</h1>
+              <h1 tabIndex={-1} className="text-[32px] sm:text-[36px] oda-display leading-tight">{t('Who do you want to become?')}</h1>
               <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed">{t('Pick the one that feels closest. We’ll suggest where to start.')}</p>
             </div>
-            <div className="grid gap-2" role="radiogroup" aria-label={t('Who do you want to become?')}>
+            <div className="grid gap-2" role="radiogroup" onKeyDown={radioKeys} aria-label={t('Who do you want to become?')}>
               {INTENTS.map((item) => {
                 const selected = item.key === intent;
                 return (
-                  <button key={item.key} type="button" role="radio" aria-checked={selected} onClick={() => setIntent(selected ? null : item.key)}
+                  <button key={item.key} type="button" role="radio" aria-checked={selected} onClick={() => setIntent(item.key)} tabIndex={selected || (!intent && item === INTENTS[0]) ? 0 : -1}
                     className={`min-h-12 px-4 py-3 rounded-[var(--radius-sm)] text-left text-[15px] font-medium flex items-center justify-between gap-3 cursor-pointer transition-colors ${selected ? 'bg-[var(--accent-soft)] ring-2 ring-[var(--accent)]' : 'bg-[var(--bg-muted)] hover:bg-[var(--border)]'}`}>
                     <span>{t(item.label)}</span>
                     {selected && <Check size={18} className="text-[var(--accent)] shrink-0" />}
@@ -261,15 +293,15 @@ export const Onboarding: React.FC = () => {
         {step === 3 && (
           <section key="step-3" className="space-y-6 onboarding-step">
             <div className="space-y-2">
-              <h1 className="text-[32px] sm:text-[36px] oda-display leading-tight">
+              <h1 tabIndex={-1} className="text-[32px] sm:text-[36px] oda-display leading-tight">
                 {t('Pick one dream to start with.')}
               </h1>
               <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed">
-                {t('Every decision you keep earns Dream Dollars, and Dream Dollars buy your dreams.')}
+                {c.dreamHelp}
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3" role="radiogroup" aria-label={t('Starter dreams')}>
+            <div className="grid grid-cols-2 gap-3" role="radiogroup" onKeyDown={radioKeys} aria-label={t('Starter dreams')}>
               {starterDreams.map((d) => {
                 const selected = d.id === dreamId;
                 return (
@@ -278,7 +310,8 @@ export const Onboarding: React.FC = () => {
                     type="button"
                     role="radio"
                     aria-checked={selected}
-                    onClick={() => setDreamId(selected ? null : d.id)}
+                    onClick={() => setDreamId(d.id)}
+                    tabIndex={selected || (!dreamId && d === starterDreams[0]) ? 0 : -1}
                     className={`relative text-left rounded-[var(--radius-md)] overflow-hidden bg-[var(--bg-muted)] transition-shadow cursor-pointer ${
                       selected ? 'ring-2 ring-[var(--accent)]' : 'ring-0'
                     }`}
@@ -331,11 +364,11 @@ export const Onboarding: React.FC = () => {
         {step === 4 && (
           <section key="step-4" className="space-y-6 onboarding-step">
             <div className="space-y-2">
-              <h1 className="text-[32px] sm:text-[36px] oda-display leading-tight">
+              <h1 tabIndex={-1} className="text-[32px] sm:text-[36px] oda-display leading-tight">
                 {t('What is your one decision for today?')}
               </h1>
               <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed">
-                {t('One thing you will do today, no matter what. Keep it small enough to finish.')}
+                {c.gentleDecision}
               </p>
             </div>
 
@@ -347,6 +380,7 @@ export const Onboarding: React.FC = () => {
                 id="onboarding-decision"
                 autoFocus
                 rows={3}
+                maxLength={500}
                 value={decision}
                 onChange={(e) => setDecision(e.target.value)}
                 placeholder={t('Today I will…')}

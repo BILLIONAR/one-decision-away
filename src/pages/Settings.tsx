@@ -522,7 +522,7 @@ export const Settings: React.FC = () => {
       <Section id="about" title={t('About')}>
         <CardBox className="overflow-hidden">
           {[
-            { label: SUPPORT[locale].contact, route: '/support' },
+            { label: SUPPORT[locale].contact, route: '/app/support' },
             { label: t('Privacy policy'), route: '/privacy' },
             { label: t('Terms of use'), route: '/terms' },
           ].map((row, i) => (

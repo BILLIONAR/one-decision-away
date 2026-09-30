@@ -1,4 +1,4 @@
-/** Backup data-preservation checks against the cloud workspace's running Vite server. */
+/** White-box backup checks: start Vite with DISABLE_HMR=true. Production restore flows are in qa-browser.mjs. */
 import assert from 'node:assert/strict';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { chromium } from 'playwright';
@@ -8,7 +8,7 @@ const BASE = process.env.ODA_QA_URL || 'http://localhost:3000';
 const OUT = process.env.ODA_BACKUP_QA_OUT || 'artifacts/backup-qa';
 const APP_KEY = 'one_decision_away_app_data_v1';
 mkdirSync(OUT, { recursive: true });
-const report = { at: new Date().toISOString(), checks: [], screenshots: [], errors: [], accessibility: [] };
+const report = { base: BASE, at: new Date().toISOString(), checks: [], screenshots: [], errors: [], accessibility: [] };
 const browser = await chromium.launch({ executablePath: process.env.ODA_CHROMIUM || '/usr/bin/chromium', args: ['--no-sandbox'] });
 const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce', serviceWorkers: 'block' });
 const page = await context.newPage();
@@ -23,6 +23,8 @@ const confirm = async () => {
 };
 
 try {
+  const moduleResponse = await page.request.get(`${BASE}/src/services/repository.ts`);
+  assert.match(moduleResponse.headers()['content-type'] || '', /javascript/, 'qa:backup requires the development server (DISABLE_HMR=true npm run dev); use test:browser for production restore checks');
   await page.goto(`${BASE}/`);
   await page.waitForFunction(() => !!localStorage.getItem('one_decision_away_app_data_v1'));
   const initial = await page.evaluate(async () => {
@@ -189,7 +191,9 @@ try {
   report.screenshots.push('settings-backup-desktop.png');
   assert.equal(report.errors.length, 0, report.errors.join('\n'));
   check('desktop backup controls render without browser exceptions');
+  report.status = 'passed';
 } catch (error) {
+  report.status = 'failed';
   report.failure = error.message;
   await page.screenshot({ path: `${OUT}/failure.png`, fullPage: true }).catch(() => undefined);
   throw error;
