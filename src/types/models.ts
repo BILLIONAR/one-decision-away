@@ -1,4 +1,5 @@
 import type { Locale } from '../i18n';
+import type { CourseProgress } from '../services/courseProgress';
 /**
  * One Decision Away — Domain Models & Type Definitions
  * by AurelyStudio
@@ -602,6 +603,8 @@ export interface UserData {
   archivedMarketRecords?: ArchivedMarketRecord[];
   dreamJournal?: DreamJournalEntry[];
   notebook?: NotebookData;
+  /** Includes saved lesson reflections and real-world practice experiments. */
+  courseProgress?: CourseProgress;
   microHabits?: MicroHabit[];
   customHabitCategories?: CustomHabitCategory[];
   dailyPrimaryGoals?: DailyPrimaryGoal[];

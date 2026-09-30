@@ -11,6 +11,10 @@ import { cloudSync } from './cloudSync';
 import { getLocale, N_, t } from '../i18n';
 import { applyNotebookAction, normalizeNotebook, preserveNotebookWrites } from './notebook';
 import type { NotebookAction, NotebookUpdateResult } from './notebook';
+import { EMPTY_PROGRESS, normalizeCourseProgress, readCourseProgress, notifyCourseProgressChanged } from './courseProgress';
+import { prepareBackupRestore } from './backup';
+import { APP_DATA_STORAGE_KEY } from './storageKeys';
+import { queueDataWrite } from './dataWrites';
 
 export interface DataRepository {
   readonly mode: 'demo' | 'server';
@@ -31,18 +35,7 @@ export interface DataRepository {
   updateRealityBridgeSavings(bridgeId: string, addedAmount: number, note?: string): Promise<{ data: UserData; bridge: RealityBridge }>;
 }
 
-const STORAGE_KEY = 'one_decision_away_app_data_v1';
-
-// Shared by repository instances; Web Locks also serialize notebook writes across tabs.
-let dataWriteQueue: Promise<unknown> = Promise.resolve();
-function queueDataWrite<T>(operation: () => Promise<T>): Promise<T> {
-  const run = () => typeof navigator !== 'undefined' && navigator.locks
-    ? navigator.locks.request('oda-data-writes', operation)
-    : operation();
-  const result = dataWriteQueue.then(run, run);
-  dataWriteQueue = result.then(() => undefined, () => undefined);
-  return result;
-}
+const STORAGE_KEY = APP_DATA_STORAGE_KEY;
 
 export function getInitialDemoState(): UserData {
   const now = new Date().toISOString();
@@ -130,6 +123,7 @@ export function getInitialDemoState(): UserData {
     archivedMarketRecords: [],
     dreamJournal: [],
     notebook: normalizeNotebook(),
+    courseProgress: normalizeCourseProgress(EMPTY_PROGRESS),
     microHabits: getFreshMicroHabits(),
     customHabitCategories: SEED_CUSTOM_CATEGORIES,
     checkIns: [],
@@ -170,6 +164,8 @@ export class LocalDemoRepository implements DataRepository {
         if (!parsed.archivedMarketRecords) parsed.archivedMarketRecords = [];
         if (!parsed.dreamJournal) parsed.dreamJournal = [];
         parsed.notebook = normalizeNotebook(parsed.notebook);
+        parsed.courseProgress = Object.prototype.hasOwnProperty.call(parsed, 'courseProgress')
+          ? normalizeCourseProgress(parsed.courseProgress) : readCourseProgress();
         if (!parsed.microHabits) {
           parsed.microHabits = getFreshMicroHabits();
         } else {
@@ -218,6 +214,11 @@ export class LocalDemoRepository implements DataRepository {
       const stored = raw ? JSON.parse(raw) as UserData : null;
       saved = preserveNotebookWrites(data, stored);
       saved.notebook = normalizeNotebook(saved.notebook);
+      // A course can be saved after this caller loaded its personal-data snapshot.
+      // Prefer the freshly read course work so another feature cannot roll it back.
+      saved.courseProgress = stored && Object.prototype.hasOwnProperty.call(stored, 'courseProgress')
+        ? normalizeCourseProgress(stored.courseProgress)
+        : normalizeCourseProgress(data.courseProgress ?? readCourseProgress());
       localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
     } catch (e) {
       throw new Error(t('Your changes could not be saved. Free some device storage and try again.'), { cause: e });
@@ -231,8 +232,11 @@ export class LocalDemoRepository implements DataRepository {
   /** Replaces the whole local dataset (used by Restore from backup and cloud pull). */
   async replaceAll(data: UserData): Promise<void> {
     await queueDataWrite(async () => {
-      const restored = { ...data, notebook: normalizeNotebook(data.notebook) };
+      const restored = prepareBackupRestore(data);
+      // Course work is part of the same JSON document: validation and quota
+      // failures leave every previous record intact, with no partial side-store writes.
       localStorage.setItem(STORAGE_KEY, JSON.stringify(restored));
+      notifyCourseProgressChanged();
     });
   }
 
@@ -245,6 +249,8 @@ export class LocalDemoRepository implements DataRepository {
     const raw = localStorage.getItem(STORAGE_KEY);
     const current: UserData = raw ? JSON.parse(raw) : getInitialDemoState();
     current.notebook = normalizeNotebook(current.notebook);
+    current.courseProgress = Object.prototype.hasOwnProperty.call(current, 'courseProgress')
+      ? normalizeCourseProgress(current.courseProgress) : readCourseProgress();
     return current;
   }
 
@@ -273,6 +279,8 @@ export class LocalDemoRepository implements DataRepository {
         throw new Error(t('Mission not found'));
       }
 
+      // Ledger limits keep their existing UTC day contract; personal decision
+      // scheduling and evidence use the user's local calendar separately.
       const todayStr = new Date().toISOString().slice(0, 10);
       const todayTransactions = data.transactions.filter((t) => t.dayKey === todayStr);
       const todayPaidQuestsCount = data.completions.filter(

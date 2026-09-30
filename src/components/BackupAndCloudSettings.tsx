@@ -4,15 +4,23 @@ import { useApp } from '../store/useApp';
 import { Card, Button, Field, Input } from './ui';
 import { Download, Upload, LogOut, RefreshCw, Mail } from 'lucide-react';
 import { cloudSync, CloudState } from '../services/cloudSync';
-import { useT } from '../i18n';
+import { useLocale, useT } from '../i18n';
+import { backupCopy } from '../data/backupCopy';
+import { BackupRestoreReview } from './BackupRestoreReview';
+import { prepareBackupRestore, InvalidBackupError } from '../services/backup';
+import type { UserData } from '../types/models';
 
 export const BackupAndCloudSettings: React.FC = () => {
   const t = useT();
+  const [locale] = useLocale();
+  const copy = backupCopy(locale);
   const { exportDataJson, importDataJson, syncFromCloud, data, showToast } = useApp();
   const fileRef = useRef<HTMLInputElement>(null);
   const [cloud, setCloud] = useState<CloudState>(cloudSync.getState());
   const [email, setEmail] = useState('');
   const [sending, setSending] = useState(false);
+  const [restoring, setRestoring] = useState(false);
+  const [candidate, setCandidate] = useState<{ file: File; record: UserData } | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
   const [showSetup, setShowSetup] = useState(false);
   const cfg = cloudSync.getConfig();
@@ -75,11 +83,16 @@ export const BackupAndCloudSettings: React.FC = () => {
         )}
       </p>
 
+      <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-muted)] p-3 text-[13px] text-[var(--fg-muted)] leading-relaxed space-y-1.5">
+        <p>{copy.includes}</p>
+        <p>{copy.restore}</p>
+      </div>
+
       <div className="flex flex-wrap gap-2">
-        <Button variant="primary" size="sm" icon={Download} onClick={exportDataJson}>
+        <Button variant="primary" size="sm" icon={Download} onClick={exportDataJson} disabled={restoring}>
           {t('Download backup')}
         </Button>
-        <Button variant="secondary" size="sm" icon={Upload} onClick={() => fileRef.current?.click()}>
+        <Button variant="secondary" size="sm" icon={Upload} onClick={() => fileRef.current?.click()} disabled={restoring}>
           {t('Restore')}
         </Button>
         <input
@@ -87,13 +100,34 @@ export const BackupAndCloudSettings: React.FC = () => {
           type="file"
           accept="application/json,.json"
           className="hidden"
-          onChange={(e) => {
+          disabled={restoring}
+          onChange={async (e) => {
             const f = e.target.files?.[0];
-            if (f) importDataJson(f);
             e.currentTarget.value = '';
+            if (!f || restoring) return;
+            setRestoring(true);
+            try {
+              const record = prepareBackupRestore(JSON.parse(await f.text()));
+              setCandidate({ file: f, record });
+            } catch (error) {
+              showToast(t(error instanceof InvalidBackupError ? 'That file is not a One Decision Away backup.' : 'Could not read the backup file.'), 'error');
+            } finally { setRestoring(false); }
           }}
         />
       </div>
+      {restoring && <p role="status" className="text-[13px] text-[var(--fg-muted)]">{copy.restoring}</p>}
+      <BackupRestoreReview
+        record={candidate?.record ?? null}
+        filename={candidate?.file.name}
+        busy={restoring}
+        onCancel={() => setCandidate(null)}
+        onBackup={exportDataJson}
+        onConfirm={() => {
+          if (!candidate || restoring) return;
+          setRestoring(true);
+          void importDataJson(candidate.file).finally(() => { setRestoring(false); setCandidate(null); });
+        }}
+      />
 
       <div className="pt-4 border-t border-[var(--border)] space-y-3">
         <h4 className="text-[15px] font-semibold text-[var(--fg)]">{t('Cloud sync (optional)')}</h4>

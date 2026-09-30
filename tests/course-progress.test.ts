@@ -146,23 +146,23 @@ test('caller-supplied lesson and course objects cannot change the answer or bypa
   assert.deepEqual(completeLesson(state, { ...course, id: 'unknown' }, 0), state);
 });
 
-function withStorage(descriptor: PropertyDescriptor, run: () => void): void {
+async function withStorage(descriptor: PropertyDescriptor, run: () => void | Promise<void>): Promise<void> {
   const previous = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');
   Object.defineProperty(globalThis, 'localStorage', { configurable: true, ...descriptor });
-  try { run(); } finally {
+  try { await run(); } finally {
     if (previous) Object.defineProperty(globalThis, 'localStorage', previous);
     else Reflect.deleteProperty(globalThis, 'localStorage');
   }
 }
 
-test('saving and reloading preserve a completed lesson and an unfinished draft', () => {
+test('saving and reloading preserve a completed lesson and an unfinished draft', async () => {
   const entries = new Map<string, string>();
-  withStorage({ value: { getItem: (key: string) => entries.get(key) ?? null, setItem: (key: string, value: string) => entries.set(key, value) } }, () => {
+  await withStorage({ value: { getItem: (key: string) => entries.get(key) ?? null, setItem: (key: string, value: string) => entries.set(key, value) } }, async () => {
     assert.deepEqual(readCourseProgress(), EMPTY_PROGRESS);
     let state = updateLessonProgress(EMPTY_PROGRESS, first, ready(first));
     state = completeLesson(state, course, 0);
     state = updateLessonProgress(state, second, { reflection: 'Yarın sürdüreceğim.', checked: second.practice.map((_, i) => i === 0) });
-    assert.equal(saveCourseProgress(state), true);
+    assert.equal(await saveCourseProgress(state), true);
     assert.ok(entries.has(COURSE_PROGRESS_STORAGE_KEY));
     assert.deepEqual(readCourseProgress(), state);
     assert.deepEqual(parseCourseProgress(JSON.stringify(readCourseProgress())), state);
@@ -170,13 +170,13 @@ test('saving and reloading preserve a completed lesson and an unfinished draft',
   });
 });
 
-test('blocked storage and quota failures are reported without throwing', () => {
-  withStorage({ get: () => { throw new Error('Storage blocked'); } }, () => {
+test('blocked storage and quota failures are reported without throwing', async () => {
+  await withStorage({ get: () => { throw new Error('Storage blocked'); } }, async () => {
     assert.deepEqual(readCourseProgress(), EMPTY_PROGRESS);
-    assert.equal(saveCourseProgress(EMPTY_PROGRESS), false);
+    assert.equal(await saveCourseProgress(EMPTY_PROGRESS), false);
   });
-  withStorage({ value: { getItem: () => '{invalid', setItem: () => { throw new Error('QuotaExceededError'); } } }, () => {
+  await withStorage({ value: { getItem: () => '{invalid', setItem: () => { throw new Error('QuotaExceededError'); } } }, async () => {
     assert.deepEqual(readCourseProgress(), EMPTY_PROGRESS);
-    assert.equal(saveCourseProgress(EMPTY_PROGRESS), false);
+    assert.equal(await saveCourseProgress(EMPTY_PROGRESS), false);
   });
 });

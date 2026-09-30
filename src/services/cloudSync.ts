@@ -7,6 +7,7 @@ import { getAppBase } from '../utils/routing';
 import type { SupabaseClient, Session } from '@supabase/supabase-js';
 import { UserData } from '../types/models';
 import { t } from '../i18n';
+import { createBackupSnapshot, prepareBackupRestore } from './backup';
 
 const CFG_KEY = 'oda_cloud_cfg';
 const LAST_SYNC_KEY = 'oda_cloud_last_sync';
@@ -38,6 +39,7 @@ class CloudSync {
   private error: string | null = null;
   private initialized = false;
   private pushQueue: Promise<boolean> = Promise.resolve(false);
+  private pendingPulls = new WeakMap<UserData, { updatedAt: string; userId: string; projectUrl: string }>();
 
   constructor() {
     this.config = this.readConfig();
@@ -208,6 +210,7 @@ class CloudSync {
   }
 
   public async push(data: UserData): Promise<boolean> {
+    const snapshot = createBackupSnapshot(data);
     // Capture account and restore identity now: an older queued upload cannot clear a newer import.
     const userId = this.session?.user.id;
     const projectUrl = this.config?.url;
@@ -215,7 +218,7 @@ class CloudSync {
     const restoreToken = localStorage.getItem(restoreScope);
     const run = async () => {
       if (!userId || this.session?.user.id !== userId || this.config?.url !== projectUrl) return false;
-      return this.pushSnapshot(data, userId, restoreScope, restoreToken);
+      return this.pushSnapshot(snapshot, userId, restoreScope, restoreToken);
     };
     const result = this.pushQueue.then(run, run);
     this.pushQueue = result;
@@ -250,6 +253,7 @@ class CloudSync {
     if (localStorage.getItem(this.restoreScope())) return null;
     const client = await this.getClient();
     if (!client || !this.session) return null;
+    this.error = null;
     try {
       const { data, error } = await client.from(TABLE).select('data, updated_at').eq('user_id', this.session.user.id).maybeSingle();
       if (error) throw error;
@@ -260,8 +264,9 @@ class CloudSync {
       const remoteTs = new Date(data.updated_at).getTime();
       const localTs = local ? new Date(localStorage.getItem(LAST_SYNC_KEY) || local.profile.lastOpenedAt || 0).getTime() : 0;
       if (!local || remoteTs > localTs + 2000) {
-        localStorage.setItem(LAST_SYNC_KEY, data.updated_at);
-        return remote;
+        const restored = prepareBackupRestore(remote);
+        this.pendingPulls.set(restored, { updatedAt: data.updated_at, userId: this.session.user.id, projectUrl: this.config!.url });
+        return restored;
       }
       return null;
     } catch (e) {
@@ -269,6 +274,15 @@ class CloudSync {
       this.emit();
       return null;
     }
+  }
+
+  /** A preview or cancelled restore is not a sync; record the timestamp only after the local commit. */
+  public markRemoteApplied(data: UserData): void {
+    const pending = this.pendingPulls.get(data);
+    if (!pending || pending.userId !== this.session?.user.id || pending.projectUrl !== this.config?.url) return;
+    try { localStorage.setItem(LAST_SYNC_KEY, pending.updatedAt); } catch { /* The personal record is already committed. */ }
+    this.pendingPulls.delete(data);
+    this.emit();
   }
 }
 

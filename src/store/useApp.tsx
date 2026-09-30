@@ -1,7 +1,7 @@
 import { haptic, isNative } from '../services/native';
 import { disablePush, getPushStatus, isPushActive } from '../services/pushNotifications';
 import { normaliseNudgeTimes } from '../data/dailyNudges';
-import React, { useContext, useEffect, useState, useCallback } from 'react';
+import React, { useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { appRouteHref, normalizeAppRoute, readAppRoute } from '../utils/routing';
 import { AppContext } from './AppContext';
 import {
@@ -42,7 +42,8 @@ import {
 } from '../types/models';
 import type { NotebookAction } from '../services/notebook';
 import { clearNotebookDrafts } from '../services/notebookDrafts';
-import { COURSE_PROGRESS_STORAGE_KEY } from '../services/courseProgress';
+import { COURSE_PROGRESS_STORAGE_KEY, subscribeCourseProgress } from '../services/courseProgress';
+import { createBackupSnapshot, prepareBackupRestore, InvalidBackupError } from '../services/backup';
 import { createRepository, DataRepository } from '../services/repository';
 import { cloudSync } from '../services/cloudSync';
 import { notificationScheduler } from '../services/notificationScheduler';
@@ -59,8 +60,9 @@ import { soundSynthesizer } from '../utils/soundSynthesizer';
 import { voiceGuide } from '../utils/voiceGuide';
 import { getGuidedMeditation } from '../data/guidedMeditations';
 import { t, getLocale, setLocale, isLocale, hasStoredLocale, ensureLocaleLoaded, type Locale } from '../i18n';
-import { usualReminderTime } from '../services/momentum';
+import { localDayKey, usualReminderTime } from '../services/momentum';
 import { applyTheme, resolveTheme, watchSystemTheme, type ThemePref } from '../utils/theme';
+import { BackupRestoreReview } from '../components/BackupRestoreReview';
 
 export interface AppContextType {
   data: UserData | null;
@@ -217,7 +219,7 @@ export interface AppContextType {
   resetAllData: () => Promise<void>;
   exportDataJson: () => void;
   importDataJson: (file: File) => Promise<void>;
-  /** Pull newest data from cloud (if signed in) and reload */
+  /** Review newest cloud data. True also means cancellation was handled; do not fall back to an upload. */
   syncFromCloud: () => Promise<boolean>;
   /**
    * First-run finish: saves name + locale, marks onboarding completed, pins the
@@ -248,7 +250,7 @@ const repository: DataRepository = createRepository();
 
 /** Adds today's One Decision, archiving any unfinished one (pure). */
 function withOneDecision(data: UserData, title: string, goalId?: string, estimatedMinutes = 45): UserData {
-  const todayStr = new Date().toISOString().slice(0, 10);
+  const todayStr = localDayKey();
   const difficulty = estimatedMinutes < 45 ? 'easy' : estimatedMinutes < 120 ? 'medium' : 'hard';
   const missions = data.missions.map((m) => (m.isOneDecision && m.status === 'active' ? { ...m, status: 'archived' as const } : m));
   const decision: Mission = {
@@ -283,6 +285,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isQuickJournalOpen, setIsQuickJournalOpen] = useState<boolean>(false);
   const [isSimulatingFocusAlert, setIsSimulatingFocusAlert] = useState<boolean>(false);
   const [lastRolloverSummary, setLastRolloverSummary] = useState<DailyMicroHabitRolloverSummary | null>(null);
+  const [cloudRestoreReview, setCloudRestoreReview] = useState<{ record: UserData; resolve: (accepted: boolean) => void } | null>(null);
+  const cloudReviewActive = useRef(false);
+
+  useEffect(() => subscribeCourseProgress(() => {
+    // Courses save directly into the personal record. Keep other surfaces and
+    // optional debounced cloud sync aligned with that latest saved snapshot.
+    void repository.load().then(latest => {
+      setData(latest);
+      cloudSync.schedulePush(latest);
+    }).catch(() => undefined);
+  }), []);
 
   const showToast = useCallback((message: string, type: 'success' | 'info' | 'error' = 'success') => {
     setToast({ message, type });
@@ -641,6 +654,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const remote = options?.skipCloudPull ? null : await cloudSync.pullIfNewer(loaded);
         if (remote) {
           await repository.replaceAll(remote);
+          cloudSync.markRemoteApplied(remote);
           loaded = await repository.load();
         }
       } catch {
@@ -2379,55 +2393,73 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     async (file: File) => {
       try {
         const text = await file.text();
-        const parsed = JSON.parse(text) as UserData;
-        if (!parsed || !parsed.profile || !Array.isArray(parsed.transactions)) {
-          showToast(t('That file is not a One Decision Away backup.'), 'error');
-          return;
-        }
-        await repository.replaceAll(parsed);
+        const parsed = prepareBackupRestore(JSON.parse(text));
+        // Establish the cloud barrier before committing the local replacement.
+        // If marker storage is blocked, the old record remains untouched.
         cloudSync.markLocalRestore();
+        await repository.replaceAll(parsed);
         await refreshData({ skipCloudPull: true });
         clearNotebookDrafts();
         // Await the optional upload. A failed/offline upload retains the local-restore
         // marker, so a reload cannot silently pull the previous cloud copy over it.
         if (cloudSync.isSignedIn()) await cloudSync.push(await repository.load());
         showToast(t('Backup restored. Welcome back.'), 'success');
-      } catch {
-        showToast(t('Could not read the backup file.'), 'error');
+      } catch (error) {
+        showToast(t(error instanceof InvalidBackupError ? 'That file is not a One Decision Away backup.' : 'Could not read the backup file.'), 'error');
       }
     },
     [refreshData, showToast]
   );
 
   const syncFromCloud = useCallback(async () => {
-    const remote = await cloudSync.pullIfNewer(data);
-    if (remote) {
-      await repository.replaceAll(remote);
-      await refreshData();
-      showToast(t('Synced from cloud.'), 'success');
-      return true;
+    // Repeated presses cannot create unresolved review promises or trigger an upload.
+    if (cloudReviewActive.current) return true;
+    cloudReviewActive.current = true;
+    try {
+      const remote = await cloudSync.pullIfNewer(data);
+      if (remote) {
+        const accepted = await new Promise<boolean>(resolve => setCloudRestoreReview({ record: remote, resolve }));
+        if (!accepted) return true;
+        await repository.replaceAll(remote);
+        cloudSync.markRemoteApplied(remote);
+        await refreshData();
+        showToast(t('Synced from cloud.'), 'success');
+        return true;
+      }
+      if (cloudSync.getState().error) {
+        showToast(t('Cloud backup failed — check your connection.'), 'error');
+        return true;
+      }
+    } catch {
+      showToast(t('Cloud backup failed — check your connection.'), 'error');
+    } finally {
+      cloudReviewActive.current = false;
     }
     return false;
   }, [data, refreshData, showToast]);
 
-  const exportDataJson = useCallback(() => {
+  const exportDataJson = useCallback(async () => {
     if (!data) return;
     try {
-      localStorage.setItem('oda_last_backup', new Date().toISOString());
+      const latest = await repository.load();
+      const jsonStr = JSON.stringify(createBackupSnapshot(latest), null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      try {
+        a.href = url;
+        a.download = `one-decision-away-backup-${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.appendChild(a);
+        a.click();
+      } finally {
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+      try { localStorage.setItem('oda_last_backup', new Date().toISOString()); } catch { /* The download can succeed even when storage is full. */ }
+      showToast(t('Data exported to JSON file.'), 'success');
     } catch {
-      /* ignore */
+      showToast(t('Something went wrong. Please try again.'), 'error');
     }
-    const jsonStr = JSON.stringify(data, null, 2);
-    const blob = new Blob([jsonStr], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `one-decision-away-backup-${new Date().toISOString().slice(0, 10)}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    showToast(t('Data exported to JSON file.'), 'success');
   }, [data, showToast]);
 
   const completeOnboarding = useCallback(
@@ -2450,7 +2482,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }) => {
       if (!data) return;
       const nowIso = new Date().toISOString();
-      const todayStr = nowIso.slice(0, 10);
+      const todayStr = localDayKey(nowIso);
 
       // 1. Dream → custom market item pinned first in the Vision Board (same shape as pinExploreDream)
       let customMarketItems = data.customMarketItems || [];
@@ -2624,7 +2656,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     completeOnboarding,
   };
 
-  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+  return <AppContext.Provider value={value}>
+    {children}
+    <BackupRestoreReview
+      record={cloudRestoreReview?.record ?? null}
+      onBackup={exportDataJson}
+      onCancel={() => { cloudRestoreReview?.resolve(false); setCloudRestoreReview(null); }}
+      onConfirm={() => { cloudRestoreReview?.resolve(true); setCloudRestoreReview(null); }}
+    />
+  </AppContext.Provider>;
 };
 
 export function useApp() {

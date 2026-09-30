@@ -1,0 +1,48 @@
+import type { Locale } from '../i18n';
+
+const COPY = {
+  en: {
+    includes: 'Your backup includes decisions, habits, notebook entries, course progress, lesson reflections, and practice plans and logs.',
+    restore: 'Restore replaces this device’s saved record. Older backups that do not include courses keep your current course work.',
+    restoring: 'Restoring your saved record…',
+    reviewTitle: 'Review the record to restore',
+    replace: 'This will replace your saved record on this device. Download your current backup first if you want to keep a copy.',
+    cloud: 'Newer cloud backup',
+    decisions: 'Decisions',
+    notebookEntries: 'Writing records',
+    courseLessons: 'Completed lessons',
+    courseNotes: 'Lesson reflections',
+    practiceRecords: 'Practice logs',
+    confirm: 'Replace saved record',
+  },
+  tr: {
+    includes: 'Yedeğin; kararlarını, alışkanlıklarını, defter kayıtlarını, kurs ilerlemeni, ders notlarını, pratik planlarını ve kayıtlarını içerir.',
+    restore: 'Geri yükleme, bu cihazdaki kayıtların yerini alır. Kursları içermeyen eski yedekler, mevcut kurs çalışmalarını korur.',
+    restoring: 'Kayıtların geri yükleniyor…',
+    reviewTitle: 'Geri yüklenecek kayıtları incele',
+    replace: 'Bu işlem, bu cihazdaki kayıtlarının yerini alacak. Mevcut kayıtlarını saklamak istersen önce bir yedek indir.',
+    cloud: 'Daha yeni bulut yedeği',
+    decisions: 'Kararlar',
+    notebookEntries: 'Yazı kayıtları',
+    courseLessons: 'Tamamlanan dersler',
+    courseNotes: 'Ders notları',
+    practiceRecords: 'Pratik kayıtları',
+    confirm: 'Kayıtları değiştir',
+  },
+  es: {
+    includes: 'Tu copia incluye decisiones, hábitos, notas del cuaderno, progreso de los cursos, reflexiones, planes de práctica y registros.',
+    restore: 'Restaurar reemplaza los datos guardados en este dispositivo. Las copias antiguas que no incluyen cursos conservan tu trabajo actual en ellos.',
+    restoring: 'Restaurando tus datos…',
+    reviewTitle: 'Revisa los datos que vas a restaurar',
+    replace: 'Esto reemplazará los datos guardados en este dispositivo. Descarga primero una copia de tus datos actuales si quieres conservarlos.',
+    cloud: 'Copia más reciente en la nube',
+    decisions: 'Decisiones',
+    notebookEntries: 'Registros escritos',
+    courseLessons: 'Lecciones completadas',
+    courseNotes: 'Reflexiones de lecciones',
+    practiceRecords: 'Registros de práctica',
+    confirm: 'Reemplazar datos guardados',
+  },
+} satisfies Record<Locale, Record<string, string>>;
+
+export const backupCopy = (locale: Locale) => COPY[locale];
