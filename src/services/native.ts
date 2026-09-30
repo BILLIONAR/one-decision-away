@@ -7,6 +7,21 @@ import { Capacitor } from '@capacitor/core';
 export const isNative = (): boolean => Capacitor.isNativePlatform();
 export const nativePlatform = (): string => Capacitor.getPlatform();
 
+/** Only a foreground transition should refresh permissions, dates and reminders. */
+export function watchNativeResume(onResume: () => void): () => void {
+  if (!isNative()) return () => undefined;
+  let disposed = false;
+  let remove: (() => Promise<void>) | undefined;
+  void import('@capacitor/app').then(async ({ App }) => {
+    const handle = await App.addListener('appStateChange', ({ isActive }) => {
+      if (isActive && !disposed) onResume();
+    });
+    if (disposed) await handle.remove();
+    else remove = () => handle.remove();
+  }).catch(() => { /* The browser build and older shells remain usable. */ });
+  return () => { disposed = true; void remove?.().catch(() => {}); };
+}
+
 type HapticKind = 'tap' | 'select' | 'success' | 'warning';
 
 /** Light, meaningful haptics: a tap for choices, a success pulse for kept decisions. */
@@ -34,9 +49,13 @@ export async function syncStatusBar(theme: 'light' | 'dark'): Promise<void> {
 export async function nativeReady(): Promise<void> {
   if (!isNative()) return;
   document.documentElement.classList.add('oda-native');
+  // Waiting for window.load can keep the splash over an otherwise usable app
+  // while a remote image or font is slow. Give React a chance to paint instead.
+  await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
   try {
     const { SplashScreen } = await import('@capacitor/splash-screen');
-    await SplashScreen.hide({ fadeOutDuration: 250 });
+    const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    await SplashScreen.hide({ fadeOutDuration: reducedMotion ? 0 : 250 });
   } catch { /* no splash plugin */ }
 }
 

@@ -10,7 +10,11 @@ import { NaturalVoiceSettings } from '../components/NaturalVoiceSettings';
 import { BackupAndCloudSettings } from '../components/BackupAndCloudSettings';
 import { DailyNudgesSettings } from '../components/DailyNudgesSettings';
 import { LanguagePicker } from '../components/LanguagePicker';
-import { useT } from '../i18n';
+import { useLocale, useT } from '../i18n';
+import { SUPPORT } from '../data/support';
+import { nativeCopy } from '../i18n/native';
+import { isNative } from '../services/native';
+import { nativePermission, requestNativePermission, showNativeReminderPreview } from '../services/nativeNotifications';
 
 /* ----------------------------- Local primitives ----------------------------- */
 
@@ -121,6 +125,7 @@ export const Settings: React.FC = () => {
     setActiveRoute,
   } = useApp();
   const t = useT();
+  const [locale] = useLocale();
 
   const [displayName, setDisplayName] = useState(data?.profile.displayName || '');
   const [email, setEmail] = useState(data?.profile.email || '');
@@ -141,7 +146,9 @@ export const Settings: React.FC = () => {
   const [, setNotificationStatus] = useState<string>('default');
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && 'Notification' in window) {
+    if (isNative()) {
+      void nativePermission().then(setNotificationStatus);
+    } else if (typeof window !== 'undefined' && 'Notification' in window) {
       setNotificationStatus(Notification.permission);
     }
   }, []);
@@ -239,7 +246,16 @@ export const Settings: React.FC = () => {
       });
     };
 
-    if (typeof window !== 'undefined' && 'Notification' in window) {
+    if (isNative()) {
+      const permission = await nativePermission();
+      const allowed = permission === 'default' ? await requestNativePermission() : permission;
+      if (allowed === 'granted') {
+        await showNativeReminderPreview({
+          title: t('Daily wisdom: {theme}', { theme: t(currentWisdom.theme) }),
+          body: t('"{quote}" — {author}', { quote: t(currentWisdom.quote), author: t(currentWisdom.author) }),
+        });
+      }
+    } else if (typeof window !== 'undefined' && 'Notification' in window) {
       try {
         if (Notification.permission === 'granted') {
           fire();
@@ -254,7 +270,7 @@ export const Settings: React.FC = () => {
     }
 
     setIsPreviewModalOpen(true);
-    showToast(t('Daily wisdom preview sent for {time}.', { time: dailyWisdomTime }), 'info');
+    showToast(nativeCopy(locale).preview, 'info');
   };
 
   const handleConfirmExport = () => {
@@ -506,6 +522,7 @@ export const Settings: React.FC = () => {
       <Section id="about" title={t('About')}>
         <CardBox className="overflow-hidden">
           {[
+            { label: SUPPORT[locale].contact, route: '/support' },
             { label: t('Privacy policy'), route: '/privacy' },
             { label: t('Terms of use'), route: '/terms' },
           ].map((row, i) => (

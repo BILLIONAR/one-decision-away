@@ -8,8 +8,8 @@ import { NudgeSlot, NUDGE_SLOTS, DEFAULT_NUDGE_TIMES, NUDGE_TITLES, getNudgeLine
 import { t } from '../i18n';
 import { isPushActive } from './pushNotifications';
 import { voiceLine } from '../data/odaVoice';
-import { isNative } from './native';
-import { nativePermission, planReminders, replaceNativeReminders, requestNativePermission, type NativePermission } from './nativeNotifications';
+import { isNative, watchNativeResume } from './native';
+import { nativePermission, planReminders, replaceNativeReminders, requestNativePermission, showNativeReminderPreview, type NativePermission } from './nativeNotifications';
 
 const FIRED_KEY = 'oda_nudges_fired';
 const CATCH_UP_MINUTES = 90;
@@ -40,7 +40,18 @@ class NotificationScheduler {
   private nativeTimer: number | null = null;
 
   constructor() {
-    if (isNative()) void nativePermission().then(p => { this.nativePerm = p; this.queueNativeSync(); });
+    if (isNative()) {
+      void this.refreshNativePermission();
+      // Returning from Settings may change notification permission; reopening
+      // after a few days also needs a new seven-day schedule.
+      const stopResume = watchNativeResume(() => { void this.refreshNativePermission(); });
+      if (import.meta.hot) import.meta.hot.dispose(stopResume);
+    }
+  }
+
+  private async refreshNativePermission() {
+    this.nativePerm = await nativePermission();
+    this.queueNativeSync();
   }
 
   private todayKey(): string {
@@ -191,6 +202,13 @@ class NotificationScheduler {
   }
 
   public async show(slot: NudgeSlot, customBody?: string) {
+    // The preview uses the native plugin, never the browser-only Notification
+    // global (which may not exist inside WKWebView).
+    if (isNative()) {
+      if (this.nativePerm !== 'granted') return;
+      await showNativeReminderPreview({ title: t(NUDGE_TITLES[slot]), body: customBody || this.actionLine(slot) || t(getNudgeLine(slot)) });
+      return;
+    }
     if (!this.isSupported() || Notification.permission !== 'granted') return;
     const body = customBody || this.actionLine(slot) || t(getNudgeLine(slot));
     const title = t(NUDGE_TITLES[slot]);

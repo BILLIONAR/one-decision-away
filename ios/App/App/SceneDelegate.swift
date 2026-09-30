@@ -8,6 +8,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = scene as? UIWindowScene else { return }
 
         window = UIWindow(windowScene: windowScene)
+        // Match the web app's warm ivory while the bundled first screen loads.
+        window?.backgroundColor = UIColor(red: 247.0 / 255.0, green: 243.0 / 255.0, blue: 234.0 / 255.0, alpha: 1)
         window?.rootViewController = CAPBridgeViewController()
         window?.makeKeyAndVisible()
 

@@ -10,11 +10,18 @@ createRoot(document.getElementById('root')!).render(
   </StrictMode>,
 );
 
-import { isNative, nativeReady } from './services/native';
+import { isNative, nativeReady, syncStatusBar, watchNativeResume } from './services/native';
 
 // Progressive Web App only: the iPhone app ships its files inside the app.
 if (isNative()) {
-  window.addEventListener('load', () => { void nativeReady(); });
+  void nativeReady();
+  const stopNativeResume = watchNativeResume(() => {
+    // Existing day-rollover and notebook listeners can also respond to a native
+    // foreground transition, where a browser focus event is not guaranteed.
+    window.dispatchEvent(new Event('focus'));
+    void syncStatusBar(document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
+  });
+  if (import.meta.hot) import.meta.hot.dispose(stopNativeResume);
   // Pro purchases (RevenueCat) follow the signed-in ODA account across phones.
   void import('./services/purchases').then(async ({ purchases }) => {
     await purchases.init();

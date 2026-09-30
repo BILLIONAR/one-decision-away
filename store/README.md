@@ -21,7 +21,7 @@ Limits (enforced by the checker): name 30, subtitle 30, keywords 100 **bytes**, 
 
 ## Before uploading
 
-1. Replace the `TODO` in every `metadata/*/support_url.txt` with a real public support URL. No email address is committed here on purpose.
+1. Publish the committed `public/support.html` with the next web release, then open `https://billionar.github.io/one-decision-away/support.html` without signing in and verify the contact email and all three languages. Every `support_url.txt` now points to this artifact; this development task did not publish it. The contact address comes from the existing `src/data/contact.ts`. Regenerate support content with `npx tsx scripts/build-support.ts`.
 2. `node scripts/check-store-metadata.mjs --strict` must pass (without `--strict`, the support URL TODO is only a warning).
 3. Create the app in App Store Connect (bundle ID `com.yahya.onedecisionaway`), the subscription group `ODA` and its six subscriptions (see "Subscription levels" below).
 

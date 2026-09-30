@@ -12,6 +12,7 @@ Satıcı: **bireysel Apple Developer hesabı** (mağazada kişi adı görünür)
 | Uygulama ikonu (1024 px, opak) ve açılış ekranı | `ios/App/App/Assets.xcassets` | C4 logosundan üretildi, logo değiştirilmedi. |
 | Cihazda hatırlatmalar | `src/services/nativeNotifications.ts` | Uygulama kapalıyken de çalışır; 7 gün önceden planlanır, karar tutulunca bugünün hatırlatması kalkar. |
 | Titreşim (haptic) | `src/services/native.ts` | Karar tutulunca başarı titreşimi, alışkanlık işaretlenince hafif dokunuş. |
+| Destek sayfası (TR/EN/ES) | Uygulamada `/support`; statik: `public/support.html` | Hesap gerekmez; iletişim, yedekleme, kurs, bildirim, abonelik ve hesap yardımı. İçerik: `src/data/support.ts`; üretim: `npx tsx scripts/build-support.ts`. |
 | Durum çubuğu temaya uyar | `src/utils/theme.ts` | |
 | Uygulama içi hesap silme (Kural 5.1.1(v)) | Hesap sayfası → "Hesabımı sil"; `supabase/functions/delete-account` | Tüm tablolar `on delete cascade`, bulut verisi hesapla birlikte silinir. |
 | E-postadaki 6 haneli kodla giriş | Hesap sayfası | iPhone uygulaması web bağlantısı açamadığı için kod girişi eklendi. |
@@ -110,7 +111,7 @@ Gizlilik ve koşullar adresleri (App Store Connect'e bunlar girilir):
 >
 > ODA does not give medical or psychological advice and is not a substitute for treatment.
 
-**Destek adresi:** https://billionar.github.io/one-decision-away/ · **İletişim:** ufrldk13@gmail.com
+**Destek adresi:** https://billionar.github.io/one-decision-away/support.html · **İletişim:** ufrldk13@gmail.com
 
 ## Uygulama gizlilik etiketi (App Privacy)
 
@@ -136,3 +137,21 @@ Reklam, analiz, konum, sağlık verisi yok; izleme (tracking) yok.
 Zorunlu boyut: 6,9" iPhone (1320 × 2868 dikey). Tasarımlar Design tuvalinde ("ODA iOS tasarımı", App Store görseli 1 ve 2); TestFlight'taki gerçek ekranlardan da alınabilir.
 
 **Hazır görseller (29 Eyl 2026):** Masaüstünde `one-decision-away/app-store-screenshots.zip` — EN, TR, ES için 6'şar görsel, 1290 × 2796 (6,9" yuvasına yüklenir). Sıra: 1 Günde tek karar, 2 Kurslar, 3 Ders görseli, 4 Kanıt ağacı, 5 Ses Odası, 6 Koyu tema. Yeniden üretmek için `scripts/store-screenshots.mjs`.
+
+
+## Bulutta doğrulanan hazırlık ve cihazda kalan kontroller
+
+30 Eylül 2026 geliştirmesi: web görünümü, Capacitor kabuğu, Swift pencere arka planı ve açılış ekranı arka planı sıcak fildişi `#F7F3EA` ile hizalandı. Orijinal ODA ikonları ve açılış görseli korundu. Açılış görselinin kapanması uzak resim veya yazı tipi indirmesini beklemez; azaltılmış hareket tercihinde geçişsiz kapanır. Uygulama ön plana döndüğünde günlük tarih kontrolleri ve bildirim izni yenilenir, sonraki yedi günün hatırlatmaları yeniden planlanır. Üst üste gelen plan değişiklikleri sırayla uygulanır; en yeni karar durumu son durumda kalır. Bildirim önizlemesi günlük planın kimliklerini kullanmaz.
+
+Statik destek sayfası ve dört mağaza dilinin destek URL alanları depoda hazırdır. Bu geliştirme sırasında yayın, dağıtım veya mağazaya yükleme yapılmadı. **Mağazaya yüklemeden önce** `support.html` dosyasını normal web sürümünle yayınla ve `https://billionar.github.io/one-decision-away/support.html` adresini gizli pencerede açarak iletişim bağlantısını ve üç dili kontrol et. Yalnızca yerel dosyanın bulunması, URL'nin canlı olduğunu kanıtlamaz. Apple'ın [destek URL gereksinimi](https://developer.apple.com/help/app-store-connect/reference/app-information/platform-version-information/), kullanıcıların gerçek iletişim bilgisine ulaşmasını ister.
+
+Linux bulut ortamı Xcode, gerçek iPhone, TestFlight veya App Store incelemesinin yerini tutmaz. Bir Mac ve gerçek cihazda ayrıca şunları kontrol et:
+
+- Soğuk açılışta açılış ekranı kapanıyor; çentik ve ana ekran göstergesi içerik veya düğmeleri örtmüyor. Büyük metin ve VoiceOver ile günlük karar, kurs ve destek akışları okunabiliyor.
+- Bir karar yazarken uygulamayı arka plana alıp geri dön; kaydedilen veri ve egzersiz taslağı kalıyor. Gece yarısından sonra geri dönünce günlük tarih yenileniyor.
+- Bildirim iznini iPhone Ayarlar'dan kapatıp aç; ODA'ya dönüşte durum güncelleniyor. Test bildirimini dene; kararını tutunca günün kalan hatırlatmaları kalkıyor. Odak/Zamanlanmış Özet etkisini hesaba kat.
+- Uygulamayı birkaç gün sonra aç; cihazdaki sonraki yedi günlük plan yenileniyor. Uygulama yedi günden uzun süre hiç açılmazsa yeni hatırlatmalar otomatik üretilmez.
+- JSON yedeğini Dosyalar'a dışa aktar, başka bir temiz cihazda geri yükle; kurs ve karar ilerlemesini karşılaştır. Çevrimdışı yeniden açılışı dene.
+- Apple sandbox hesabıyla satın alma, geri yükleme, iptal/yenileme ve seviye değişiklikleri; isteğe bağlı bulut hesabıyla giriş kodu ve hesap silme.
+
+Teknik dayanak: [Capacitor 8 foreground olayları](https://capacitorjs.com/docs/apis/app), [durum çubuğu metin stilleri](https://capacitorjs.com/docs/apis/status-bar). Swift arka plan değişikliği ve cihaz davranışları burada derlenmiş veya cihazda doğrulanmış olarak sunulmaz.

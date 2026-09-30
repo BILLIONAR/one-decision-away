@@ -9,12 +9,12 @@ const config: CapacitorConfig = {
   appId: 'com.yahya.onedecisionaway',
   appName: 'ODA',
   webDir: 'dist',
-  backgroundColor: '#F4F0E8',
+  backgroundColor: '#F7F3EA',
   // The web view may only show the app itself; every other link opens in Safari.
   server: { allowNavigation: [] },
   ios: {
     contentInset: 'never',
-    backgroundColor: '#F6F4EE',
+    backgroundColor: '#F7F3EA',
     scheme: 'ODA',
     limitsNavigationsToAppBoundDomains: false,
     // Safari Web Inspector cannot attach to release builds.
@@ -24,7 +24,7 @@ const config: CapacitorConfig = {
     SplashScreen: {
       launchAutoHide: false,
       launchShowDuration: 3000,
-      backgroundColor: '#F6F4EE',
+      backgroundColor: '#F7F3EA',
       showSpinner: false,
     },
     LocalNotifications: {
