@@ -18,115 +18,115 @@ TAP version 13
 # Subtest: old backups normalize without copying or losing any legacy Dream Journal field
 ok 1 - old backups normalize without copying or losing any legacy Dream Journal field
   ---
-  duration_ms: 2.079412
+  duration_ms: 1.939463
   type: 'test'
   ...
 # Subtest: new writing of every kind including affirmation earns 25 once; intention alone does not
 ok 2 - new writing of every kind including affirmation earns 25 once; intention alone does not
   ---
-  duration_ms: 2.255613
+  duration_ms: 2.230024
   type: 'test'
   ...
 # Subtest: edit, no-op, delete and recreate preserve immutable once-per-day reward claims
 ok 3 - edit, no-op, delete and recreate preserve immutable once-per-day reward claims
   ---
-  duration_ms: 0.54699
+  duration_ms: 0.449506
   type: 'test'
   ...
 # Subtest: local writing day and existing UTC reward ceiling are separate and cap-safe
 ok 4 - local writing day and existing UTC reward ceiling are separate and cap-safe
   ---
-  duration_ms: 0.513111
+  duration_ms: 0.426853
   type: 'test'
   ...
 # Subtest: 369 only counts matching written intentions, allows partial saves and retains archived histories
 ok 5 - 369 only counts matching written intentions, allows partial saves and retains archived histories
   ---
-  duration_ms: 3.802997
+  duration_ms: 2.913657
   type: 'test'
   ...
 # Subtest: 369 derives a real 33-day streak and preserves the achieved target after a gap
 ok 6 - 369 derives a real 33-day streak and preserves the achieved target after a gap
   ---
-  duration_ms: 1.485632
+  duration_ms: 7.58676
   type: 'test'
   ...
 # Subtest: 369 matches Turkish dotted/dotless uppercase pairs without stripping meaningful accents
 ok 7 - 369 matches Turkish dotted/dotless uppercase pairs without stripping meaningful accents
   ---
-  duration_ms: 0.482165
+  duration_ms: 0.605186
   type: 'test'
   ...
 # Subtest: calendar streaks use local days across DST, not elapsed 24-hour periods
 ok 8 - calendar streaks use local days across DST, not elapsed 24-hour periods
   ---
-  duration_ms: 0.525799
+  duration_ms: 0.537016
   type: 'test'
   ...
 # Subtest: validation rejects blank entries, future dates, past creation and excess slots without altering input
 ok 9 - validation rejects blank entries, future dates, past creation and excess slots without altering input
   ---
-  duration_ms: 0.893485
+  duration_ms: 0.565598
   type: 'test'
   ...
 # Subtest: legacy edits preserve photos, links and original date; unified JSON roundtrip is lossless
 ok 10 - legacy edits preserve photos, links and original date; unified JSON roundtrip is lossless
   ---
-  duration_ms: 9.555773
+  duration_ms: 16.132148
   type: 'test'
   ...
 # Subtest: real repository serializes concurrent writes, protects from stale saves, and honors explicit restore
 ok 11 - real repository serializes concurrent writes, protects from stale saves, and honors explicit restore
   ---
-  duration_ms: 9.652696
+  duration_ms: 12.985923
   type: 'test'
   ...
 # Subtest: stale whole-document saves do not resurrect deleted legacy entries or lose new ones
 ok 12 - stale whole-document saves do not resurrect deleted legacy entries or lose new ones
   ---
-  duration_ms: 1.021384
+  duration_ms: 1.998762
   type: 'test'
   ...
 # Subtest: Notebook rebases after a delayed load against a concurrent profile and ledger save
 ok 13 - Notebook rebases after a delayed load against a concurrent profile and ledger save
   ---
-  duration_ms: 0.752065
+  duration_ms: 2.527434
   type: 'test'
   ...
 # Subtest: concurrent mission and Notebook reward evaluation share the same 2500 ceiling
 ok 14 - concurrent mission and Notebook reward evaluation share the same 2500 ceiling
   ---
-  duration_ms: 9.842879
+  duration_ms: 7.928015
   type: 'test'
   ...
 # Subtest: failed storage saves reject, do not push cloud or claim rewards, and queue recovers
 ok 15 - failed storage saves reject, do not push cloud or claim rewards, and queue recovers
   ---
-  duration_ms: 0.943909
+  duration_ms: 0.988985
   type: 'test'
   ...
 # Subtest: unreadable saved JSON is preserved, never silently replaced with seed data
 ok 16 - unreadable saved JSON is preserved, never silently replaced with seed data
   ---
-  duration_ms: 0.166437
+  duration_ms: 0.190462
   type: 'test'
   ...
 # Subtest: explicit local restore blocks older cloud data across failed uploads and is account/project scoped
 ok 17 - explicit local restore blocks older cloud data across failed uploads and is account/project scoped
   ---
-  duration_ms: 3.028438
+  duration_ms: 3.256904
   type: 'test'
   ...
 # Subtest: an old in-flight cloud upload cannot overwrite a newer restored snapshot or clear its marker
 ok 18 - an old in-flight cloud upload cannot overwrite a newer restored snapshot or clear its marker
   ---
-  duration_ms: 0.95164
+  duration_ms: 1.005049
   type: 'test'
   ...
 # Subtest: a signed-out import binds to the first later connection and stays isolated from other accounts
 ok 19 - a signed-out import binds to the first later connection and stays isolated from other accounts
   ---
-  duration_ms: 1.160059
+  duration_ms: 1.80205
   type: 'test'
   ...
 1..19
@@ -137,73 +137,73 @@ ok 19 - a signed-out import binds to the first later connection and stays isolat
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 87.398362
+# duration_ms 141.809226
 Notebook voice uses device speech only, preserves preferences and handles unavailable speech.
 TAP version 13
 # Subtest: root hosting retains history paths, including direct reloads
 ok 1 - root hosting retains history paths, including direct reloads
   ---
-  duration_ms: 1.445262
+  duration_ms: 25.727644
   type: 'test'
   ...
 # Subtest: project hosting keeps every navigation on the same static document
 ok 2 - project hosting keeps every navigation on the same static document
   ---
-  duration_ms: 0.439201
+  duration_ms: 0.612157
   type: 'test'
   ...
 # Subtest: landing URLs and non-route fragments do not become unknown routes
 ok 3 - landing URLs and non-route fragments do not become unknown routes
   ---
-  duration_ms: 0.221608
+  duration_ms: 0.265904
   type: 'test'
   ...
 # Subtest: back/forward hash entries resolve to canonical route IDs
 ok 4 - back/forward hash entries resolve to canonical route IDs
   ---
-  duration_ms: 0.182661
+  duration_ms: 0.197963
   type: 'test'
   ...
 # Subtest: icons and service worker URLs stay under their deployment base
 ok 5 - icons and service worker URLs stay under their deployment base
   ---
-  duration_ms: 0.254787
+  duration_ms: 0.220797
   type: 'test'
   ...
 # Subtest: service worker precaches only its project directory
 ok 6 - service worker precaches only its project directory
   ---
-  duration_ms: 30.817584
+  duration_ms: 95.345988
   type: 'test'
   ...
 # Subtest: standalone support remains available offline without replacing the application shell
 ok 7 - standalone support remains available offline without replacing the application shell
   ---
-  duration_ms: 23.981853
+  duration_ms: 23.263524
   type: 'test'
   ...
 # Subtest: activation preserves sibling apps and this version media cache
 ok 8 - activation preserves sibling apps and this version media cache
   ---
-  duration_ms: 5.264022
+  duration_ms: 2.171227
   type: 'test'
   ...
 # Subtest: notification defaults and legacy targets open the project hash route
 ok 9 - notification defaults and legacy targets open the project hash route
   ---
-  duration_ms: 4.385379
+  duration_ms: 9.237685
   type: 'test'
   ...
 # Subtest: installed app metadata refreshes instead of retaining the cached identity
 ok 10 - installed app metadata refreshes instead of retaining the cached identity
   ---
-  duration_ms: 3.233072
+  duration_ms: 2.758857
   type: 'test'
   ...
 # Subtest: installed app metadata remains available offline
 ok 11 - installed app metadata remains available offline
   ---
-  duration_ms: 1.729464
+  duration_ms: 10.869031
   type: 'test'
   ...
 1..11
@@ -214,7 +214,7 @@ ok 11 - installed app metadata remains available offline
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 92.287368
+# duration_ms 248.018937
 
 > oda-one-decision-away@1.0.0 test
 > node --import tsx --test tests/*.test.ts supabase/functions/send-nudges/core.test.ts supabase/functions/send-nudges/push-worker.test.ts
@@ -223,67 +223,67 @@ TAP version 13
 # Subtest: 600 scheduled selections are unique across 100 local calendar days and repeat only in the next cycle
 ok 1 - 600 scheduled selections are unique across 100 local calendar days and repeat only in the next cycle
   ---
-  duration_ms: 2.772933
+  duration_ms: 15.758169
   type: 'test'
   ...
 # Subtest: calendar-day index is independent of server timezone, DST boundaries and midnight UTC
 ok 2 - calendar-day index is independent of server timezone, DST boundaries and midnight UTC
   ---
-  duration_ms: 0.277381
+  duration_ms: 0.377429
   type: 'test'
   ...
 # Subtest: sender blocks private-network endpoints, embedded credentials, lookalike hosts and unexpected ports
 ok 3 - sender blocks private-network endpoints, embedded credentials, lookalike hosts and unexpected ports
   ---
-  duration_ms: 0.280686
+  duration_ms: 0.348456
   type: 'test'
   ...
 # Subtest: payload identifies adaptation/translation and routes stay valid for root and project hosting
 ok 4 - payload identifies adaptation/translation and routes stay valid for root and project hosting
   ---
-  duration_ms: 31.627429
+  duration_ms: 1.96371
   type: 'test'
   ...
 # Subtest: cron authenticator requires a substantial matching secret
 ok 5 - cron authenticator requires a substantial matching secret
   ---
-  duration_ms: 39.417071
+  duration_ms: 14.005402
   type: 'test'
   ...
 # Subtest: push event displays the real server payload without an open client
 ok 6 - push event displays the real server payload without an open client
   ---
-  duration_ms: 14.865247
+  duration_ms: 2.019843
   type: 'test'
   ...
 # Subtest: unexpected push fields cannot become arbitrary notification options
 ok 7 - unexpected push fields cannot become arbitrary notification options
   ---
-  duration_ms: 0.72105
+  duration_ms: 1.575605
   type: 'test'
   ...
 # Subtest: does not load a runtime before explicit initialization and blocks unsupported devices
 ok 8 - does not load a runtime before explicit initialization and blocks unsupported devices
   ---
-  duration_ms: 18.334793
+  duration_ms: 1.813948
   type: 'test'
   ...
 # Subtest: context retains the latest user turn, merges interrupted turns, and ignores injected roles
 ok 9 - context retains the latest user turn, merges interrupted turns, and ignores injected roles
   ---
-  duration_ms: 0.537457
+  duration_ms: 0.49915
   type: 'test'
   ...
 # Subtest: streams accumulated visible content and disables reasoning output
 ok 10 - streams accumulated visible content and disables reasoning output
   ---
-  duration_ms: 1.736035
+  duration_ms: 3.705009
   type: 'test'
   ...
 # Subtest: aborting initialization disposes the downloading runtime and allows retry
 ok 11 - aborting initialization disposes the downloading runtime and allows retry
   ---
-  duration_ms: 25.82353
+  duration_ms: 7.415748
   type: 'test'
   ...
 # [ODA Coach] Generation failed: Error: GPU device lost: out of memory
@@ -296,974 +296,1088 @@ ok 11 - aborting initialization disposes the downloading runtime and allows retr
 # Subtest: cancellation drains generation, suppresses late text, and releases the next request
 ok 12 - cancellation drains generation, suppresses late text, and releases the next request
   ---
-  duration_ms: 2.487659
+  duration_ms: 2.572532
   type: 'test'
   ...
 # Subtest: generation failures are actionable, never become a canned coach reply, and require restart
 ok 13 - generation failures are actionable, never become a canned coach reply, and require restart
   ---
-  duration_ms: 43.876165
+  duration_ms: 3.232189
   type: 'test'
   ...
 # Subtest: unload cancels an active operation, releases memory and supports a fresh initialization
 ok 14 - unload cancels an active operation, releases memory and supports a fresh initialization
   ---
-  duration_ms: 9.243179
+  duration_ms: 13.955458
   type: 'test'
   ...
 # Subtest: restore safety: weekly review text cannot be an object
 ok 15 - restore safety: weekly review text cannot be an object
   ---
-  duration_ms: 12.002732
+  duration_ms: 2.821701
   type: 'test'
   ...
 # Subtest: restore safety: life score records need sortable timestamps
 ok 16 - restore safety: life score records need sortable timestamps
   ---
-  duration_ms: 0.732006
+  duration_ms: 1.459713
   type: 'test'
   ...
 # Subtest: restore safety: bridge records need their rendered amounts
 ok 17 - restore safety: bridge records need their rendered amounts
   ---
-  duration_ms: 0.547773
+  duration_ms: 0.570586
   type: 'test'
   ...
 # Subtest: restore safety: a pinned dream name cannot be a React object child
 ok 18 - restore safety: a pinned dream name cannot be a React object child
   ---
-  duration_ms: 0.874787
+  duration_ms: 0.557456
   type: 'test'
   ...
-# (node:21711) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# (node:26403) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
 # Subtest: legacy course storage migrates into the personal record without changing other data
 ok 19 - legacy course storage migrates into the personal record without changing other data
   ---
-  duration_ms: 4.080172
+  duration_ms: 4.71743
   type: 'test'
   ...
 # Subtest: course edits, completion, experiment plans and logs roundtrip through JSON backup
 ok 20 - course edits, completion, experiment plans and logs roundtrip through JSON backup
   ---
-  duration_ms: 2.282595
+  duration_ms: 2.547184
   type: 'test'
   ...
 # Subtest: a stale save from another feature retains newer lesson notes and practice logs
 ok 21 - a stale save from another feature retains newer lesson notes and practice logs
   ---
-  duration_ms: 1.049927
+  duration_ms: 1.638498
   type: 'test'
   ...
 # Subtest: a legacy backup keeps local courses; an explicit empty course backup clears them
 ok 22 - a legacy backup keeps local courses; an explicit empty course backup clears them
   ---
-  duration_ms: 1.34212
+  duration_ms: 1.59255
   type: 'test'
   ...
 # Subtest: validation rejects malformed personal, notebook and course data before any storage write
 ok 23 - validation rejects malformed personal, notebook and course data before any storage write
   ---
-  duration_ms: 7.062344
+  duration_ms: 4.414561
   type: 'test'
   ...
 # Subtest: quota failures keep the entire previous record and legacy key intact, and a retry succeeds
 ok 24 - quota failures keep the entire previous record and legacy key intact, and a retry succeeds
   ---
-  duration_ms: 1.156155
+  duration_ms: 1.296371
   type: 'test'
   ...
 # Subtest: unreadable main data is never replaced by a course-only save
 ok 25 - unreadable main data is never replaced by a course-only save
   ---
-  duration_ms: 0.33031
+  duration_ms: 8.654614
   type: 'test'
   ...
 # Subtest: lesson edits and re-completion retain the real-world experiment history
 ok 26 - lesson edits and re-completion retain the real-world experiment history
   ---
-  duration_ms: 0.338322
+  duration_ms: 0.617054
   type: 'test'
   ...
 # Subtest: course mutations wait for the shared write lock and rebase onto a concurrent notebook commit
 ok 27 - course mutations wait for the shared write lock and rebase onto a concurrent notebook commit
   ---
-  duration_ms: 0.726858
+  duration_ms: 1.121421
   type: 'test'
   ...
 # Subtest: ledger and notebook rewards retain one UTC ceiling when the local decision day differs
 ok 28 - ledger and notebook rewards retain one UTC ceiling when the local decision day differs
   ---
-  duration_ms: 20.188162
+  duration_ms: 21.317305
   type: 'test'
   ...
 # Subtest: cloud upload captures current courses and invalid cloud backups leave local storage untouched
 ok 29 - cloud upload captures current courses and invalid cloud backups leave local storage untouched
   ---
-  duration_ms: 1.514356
+  duration_ms: 2.116035
   type: 'test'
   ...
 # Subtest: cloud previews do not change last-sync or local data until the reviewed record is committed
 ok 30 - cloud previews do not change last-sync or local data until the reviewed record is committed
   ---
-  duration_ms: 1.458603
+  duration_ms: 1.685107
   type: 'test'
   ...
 # Subtest: client and server agree on the message limits
 ok 31 - client and server agree on the message limits
   ---
-  duration_ms: 19.637655
+  duration_ms: 0.754198
   type: 'test'
   ...
 # Subtest: the request keeps the last 12 messages, trims each to 1500 characters and drops empty ones
 ok 32 - the request keeps the last 12 messages, trims each to 1500 characters and drops empty ones
   ---
-  duration_ms: 0.299624
+  duration_ms: 0.292293
   type: 'test'
   ...
 # Subtest: context is sent only when there is something to send, and is trimmed
 ok 33 - context is sent only when there is something to send, and is trimmed
   ---
-  duration_ms: 0.161659
+  duration_ms: 0.157033
   type: 'test'
   ...
 # Subtest: responses map to a result or a typed error
 ok 34 - responses map to a result or a typed error
   ---
-  duration_ms: 0.77522
+  duration_ms: 0.807046
   type: 'test'
   ...
 # Subtest: the shared context holds only today, the last kept decisions and short journal lines
 ok 35 - the shared context holds only today, the last kept decisions and short journal lines
   ---
-  duration_ms: 9.415905
+  duration_ms: 8.04515
+  type: 'test'
+  ...
+# Subtest: a pending cloud SELECT cannot replace data after account switch
+ok 36 - a pending cloud SELECT cannot replace data after account switch
+  ---
+  duration_ms: 7.013102
+  type: 'test'
+  ...
+# Subtest: a pending cloud SELECT cannot replace data after project switch
+ok 37 - a pending cloud SELECT cannot replace data after project switch
+  ---
+  duration_ms: 0.777903
+  type: 'test'
+  ...
+# Subtest: a pending cloud SELECT cannot replace data after logout and reauthentication as the same account
+ok 38 - a pending cloud SELECT cannot replace data after logout and reauthentication as the same account
+  ---
+  duration_ms: 0.812213
+  type: 'test'
+  ...
+# Subtest: a pending cloud SELECT cannot replace data after an explicit local import barrier
+ok 39 - a pending cloud SELECT cannot replace data after an explicit local import barrier
+  ---
+  duration_ms: 0.981864
+  type: 'test'
+  ...
+# Subtest: a pending cloud SELECT cannot replace data after newer saved personal writing
+ok 40 - a pending cloud SELECT cannot replace data after newer saved personal writing
+  ---
+  duration_ms: 1.165496
+  type: 'test'
+  ...
+# Subtest: a reviewed cloud restore is checked inside the write lock after account switch
+ok 41 - a reviewed cloud restore is checked inside the write lock after account switch
+  ---
+  duration_ms: 4.33924
+  type: 'test'
+  ...
+# Subtest: a reviewed cloud restore is checked inside the write lock after project switch
+ok 42 - a reviewed cloud restore is checked inside the write lock after project switch
+  ---
+  duration_ms: 2.01133
+  type: 'test'
+  ...
+# Subtest: a reviewed cloud restore is checked inside the write lock after logout and reauthentication as the same account
+ok 43 - a reviewed cloud restore is checked inside the write lock after logout and reauthentication as the same account
+  ---
+  duration_ms: 0.814376
+  type: 'test'
+  ...
+# Subtest: a reviewed cloud restore is checked inside the write lock after an explicit local import barrier
+ok 44 - a reviewed cloud restore is checked inside the write lock after an explicit local import barrier
+  ---
+  duration_ms: 1.074241
+  type: 'test'
+  ...
+# Subtest: a reviewed cloud restore is checked inside the write lock after newer saved personal writing
+ok 45 - a reviewed cloud restore is checked inside the write lock after newer saved personal writing
+  ---
+  duration_ms: 1.136864
+  type: 'test'
+  ...
+# Subtest: an unchanged reviewed cloud record commits once and records its scoped sync
+ok 46 - an unchanged reviewed cloud record commits once and records its scoped sync
+  ---
+  duration_ms: 0.999491
+  type: 'test'
+  ...
+# Subtest: manual sync cannot fall back to uploading a captured previous-account snapshot
+ok 47 - manual sync cannot fall back to uploading a captured previous-account snapshot
+  ---
+  duration_ms: 0.565688
+  type: 'test'
+  ...
+# Subtest: a delayed automatic backup remains bound to its original account
+ok 48 - a delayed automatic backup remains bound to its original account
+  ---
+  duration_ms: 0.500682
+  type: 'test'
+  ...
+# Subtest: an old upload success cannot mark or emit the new cloud scope
+ok 49 - an old upload success cannot mark or emit the new cloud scope
+  ---
+  duration_ms: 0.922907
+  type: 'test'
+  ...
+# Subtest: an old upload failure cannot mark or emit the new cloud scope
+ok 50 - an old upload failure cannot mark or emit the new cloud scope
+  ---
+  duration_ms: 0.44595
   type: 'test'
   ...
 # Subtest: levels and monthly limits match the plan
-ok 36 - levels and monthly limits match the plan
+ok 51 - levels and monthly limits match the plan
   ---
-  duration_ms: 1.508427
+  duration_ms: 1.622795
   type: 'test'
   ...
 # Subtest: the highest active RevenueCat entitlement wins; expired ones do not count
-ok 37 - the highest active RevenueCat entitlement wins; expired ones do not count
+ok 52 - the highest active RevenueCat entitlement wins; expired ones do not count
   ---
-  duration_ms: 0.324621
+  duration_ms: 0.379953
   type: 'test'
   ...
 # Subtest: the tier cache is fresh for ten minutes
-ok 38 - the tier cache is fresh for ten minutes
+ok 53 - the tier cache is fresh for ten minutes
   ---
-  duration_ms: 0.182972
+  duration_ms: 0.284611
   type: 'test'
   ...
 # Subtest: requests are validated, trimmed and may be empty for a status check
-ok 39 - requests are validated, trimmed and may be empty for a status check
+ok 54 - requests are validated, trimmed and may be empty for a status check
   ---
-  duration_ms: 11.189706
+  duration_ms: 0.547392
   type: 'test'
   ...
 # Subtest: crisis words in English, Turkish and Spanish are caught; everyday worry is not
-ok 40 - crisis words in English, Turkish and Spanish are caught; everyday worry is not
+ok 55 - crisis words in English, Turkish and Spanish are caught; everyday worry is not
   ---
-  duration_ms: 2.564033
+  duration_ms: 4.382764
   type: 'test'
   ...
 # Subtest: the prompt sets the persona, safety rules and reply language; context reaches only the coach level
-ok 41 - the prompt sets the persona, safety rules and reply language; context reaches only the coach level
+ok 56 - the prompt sets the persona, safety rules and reply language; context reaches only the coach level
   ---
-  duration_ms: 0.231914
+  duration_ms: 0.290019
   type: 'test'
   ...
 # Subtest: the function keeps secrets and message text out of code and logs
-ok 42 - the function keeps secrets and message text out of code and logs
+ok 57 - the function keeps secrets and message text out of code and logs
   ---
-  duration_ms: 0.386623
+  duration_ms: 0.537897
   type: 'test'
   ...
 # Subtest: no AI provider secret is referenced from the app bundle code
-ok 43 - no AI provider secret is referenced from the app bundle code
+ok 58 - no AI provider secret is referenced from the app bundle code
   ---
-  duration_ms: 90.816996
+  duration_ms: 26.615065
   type: 'test'
   ...
 # Subtest: lightweight course previews and restore metadata match each real edition
-ok 44 - lightweight course previews and restore metadata match each real edition
+ok 59 - lightweight course previews and restore metadata match each real edition
   ---
-  duration_ms: 3.572107
+  duration_ms: 2.305486
   type: 'test'
   ...
 # Subtest: English editions keep every course and lesson ID of the Turkish edition
-ok 45 - English editions keep every course and lesson ID of the Turkish edition
+ok 60 - English editions keep every course and lesson ID of the Turkish edition
   ---
-  duration_ms: 0.983559
+  duration_ms: 1.449008
   type: 'test'
   ...
 # Subtest: every English lesson goes deeper and tells an example story
-ok 46 - every English lesson goes deeper and tells an example story
+ok 61 - every English lesson goes deeper and tells an example story
   ---
-  duration_ms: 5.196698
+  duration_ms: 3.095327
   type: 'test'
   ...
 # Subtest: every course and lesson has a real, distinct photo with alt text
-ok 47 - every course and lesson has a real, distinct photo with alt text
+ok 62 - every course and lesson has a real, distinct photo with alt text
   ---
-  duration_ms: 1.70578
+  duration_ms: 0.734228
   type: 'test'
   ...
 # Subtest: technique cards name their origin, give doable steps and say honestly what the evidence supports
-ok 48 - technique cards name their origin, give doable steps and say honestly what the evidence supports
+ok 63 - technique cards name their origin, give doable steps and say honestly what the evidence supports
   ---
-  duration_ms: 2.701296
+  duration_ms: 2.417482
   type: 'test'
   ...
 # Subtest: every course states its purpose, scope and outcome, with usable lesson durations
-ok 49 - every course states its purpose, scope and outcome, with usable lesson durations
+ok 64 - every course states its purpose, scope and outcome, with usable lesson durations
   ---
-  duration_ms: 0.642242
+  duration_ms: 0.865121
   type: 'test'
   ...
 # Subtest: the bibliography distinguishes research from guidance and includes usable HTTPS references and limitations
-ok 50 - the bibliography distinguishes research from guidance and includes usable HTTPS references and limitations
+ok 65 - the bibliography distinguishes research from guidance and includes usable HTTPS references and limitations
   ---
-  duration_ms: 2.30557
+  duration_ms: 2.363222
   type: 'test'
   ...
 # Subtest: every lesson cites existing sources and every advertised research source is used
-ok 51 - every lesson cites existing sources and every advertised research source is used
+ok 66 - every lesson cites existing sources and every advertised research source is used
   ---
-  duration_ms: 0.418791
+  duration_ms: 0.602662
   type: 'test'
   ...
 # Subtest: each lesson has two reading paragraphs, three distinct practice instructions and reflection support
-ok 52 - each lesson has two reading paragraphs, three distinct practice instructions and reflection support
+ok 67 - each lesson has two reading paragraphs, three distinct practice instructions and reflection support
   ---
-  duration_ms: 9.953818
+  duration_ms: 7.137145
   type: 'test'
   ...
 # Subtest: each lesson offers three distinct answers, one valid correct index and explanatory feedback
-ok 53 - each lesson offers three distinct answers, one valid correct index and explanatory feedback
+ok 68 - each lesson offers three distinct answers, one valid correct index and explanatory feedback
   ---
-  duration_ms: 1.340608
+  duration_ms: 3.991765
   type: 'test'
   ...
 # Subtest: every lesson has one visual; charts quote a source the lesson cites
-ok 54 - every lesson has one visual; charts quote a source the lesson cites
+ok 69 - every lesson has one visual; charts quote a source the lesson cites
   ---
-  duration_ms: 22.610234
+  duration_ms: 1.109353
   type: 'test'
   ...
 # Subtest: Spanish editions mirror the English structure
-ok 55 - Spanish editions mirror the English structure
+ok 70 - Spanish editions mirror the English structure
   ---
-  duration_ms: 2.33285
+  duration_ms: 2.322611
   type: 'test'
   ...
 # Subtest: Spanish source ids are unique
-ok 56 - Spanish source ids are unique
+ok 71 - Spanish source ids are unique
   ---
-  duration_ms: 0.352793
+  duration_ms: 0.324711
   type: 'test'
   ...
 # Subtest: stable course IDs keep their ordered lesson IDs for stored progress
-ok 57 - stable course IDs keep their ordered lesson IDs for stored progress
+ok 72 - stable course IDs keep their ordered lesson IDs for stored progress
   ---
-  duration_ms: 1.036077
+  duration_ms: 1.163935
   type: 'test'
   ...
 # Subtest: every course and lesson has a real, distinct photo with Turkish alt text
-ok 58 - every course and lesson has a real, distinct photo with Turkish alt text
+ok 73 - every course and lesson has a real, distinct photo with Turkish alt text
   ---
-  duration_ms: 1.28764
+  duration_ms: 1.304663
   type: 'test'
   ...
 # Subtest: technique cards name their origin, give doable steps and say honestly what the evidence supports
-ok 59 - technique cards name their origin, give doable steps and say honestly what the evidence supports
+ok 74 - technique cards name their origin, give doable steps and say honestly what the evidence supports
   ---
-  duration_ms: 1.496159
+  duration_ms: 1.088092
   type: 'test'
   ...
 # Subtest: every course states its purpose, scope and outcome, with usable lesson durations
-ok 60 - every course states its purpose, scope and outcome, with usable lesson durations
+ok 75 - every course states its purpose, scope and outcome, with usable lesson durations
   ---
-  duration_ms: 0.504007
+  duration_ms: 0.611836
   type: 'test'
   ...
 # Subtest: the bibliography distinguishes research from guidance and includes usable HTTPS references and limitations
-ok 61 - the bibliography distinguishes research from guidance and includes usable HTTPS references and limitations
+ok 76 - the bibliography distinguishes research from guidance and includes usable HTTPS references and limitations
   ---
-  duration_ms: 1.872217
+  duration_ms: 1.82937
   type: 'test'
   ...
 # Subtest: every lesson cites existing sources and every advertised research source is used
-ok 62 - every lesson cites existing sources and every advertised research source is used
+ok 77 - every lesson cites existing sources and every advertised research source is used
   ---
-  duration_ms: 0.469787
+  duration_ms: 0.763932
   type: 'test'
   ...
 # Subtest: each lesson has two reading paragraphs, three distinct practice instructions and reflection support
-ok 63 - each lesson has two reading paragraphs, three distinct practice instructions and reflection support
+ok 78 - each lesson has two reading paragraphs, three distinct practice instructions and reflection support
   ---
-  duration_ms: 22.589724
+  duration_ms: 6.869889
   type: 'test'
   ...
 # Subtest: each lesson offers three distinct answers, one valid correct index and explanatory feedback
-ok 64 - each lesson offers three distinct answers, one valid correct index and explanatory feedback
+ok 79 - each lesson offers three distinct answers, one valid correct index and explanatory feedback
   ---
-  duration_ms: 5.874984
+  duration_ms: 1.990099
   type: 'test'
   ...
 # Subtest: every lesson has one visual; charts quote a source the lesson cites
-ok 65 - every lesson has one visual; charts quote a source the lesson cites
+ok 80 - every lesson has one visual; charts quote a source the lesson cites
   ---
-  duration_ms: 0.771574
+  duration_ms: 1.103415
   type: 'test'
   ...
 # Subtest: all 18 courses have distinct, actionable guides in every supported language
-ok 66 - all 18 courses have distinct, actionable guides in every supported language
+ok 81 - all 18 courses have distinct, actionable guides in every supported language
   ---
-  duration_ms: 3.365501
+  duration_ms: 1.442308
   type: 'test'
   ...
 # Subtest: studio is optional and initially collapsed; completed courses open their transfer practice
-ok 67 - studio is optional and initially collapsed; completed courses open their transfer practice
+ok 82 - studio is optional and initially collapsed; completed courses open their transfer practice
   ---
-  duration_ms: 63.096771
+  duration_ms: 33.093205
   type: 'test'
   ...
 # Subtest: new plans preserve optionality and keep an independent copy of private fields
-ok 68 - new plans preserve optionality and keep an independent copy of private fields
+ok 83 - new plans preserve optionality and keep an independent copy of private fields
   ---
-  duration_ms: 0.824813
+  duration_ms: 0.639658
   type: 'test'
   ...
 # Subtest: untrusted backup data cannot introduce unknown courses, malformed dates, duplicate entries, or oversized notes
-ok 69 - untrusted backup data cannot introduce unknown courses, malformed dates, duplicate entries, or oversized notes
+ok 84 - untrusted backup data cannot introduce unknown courses, malformed dates, duplicate entries, or oversized notes
   ---
-  duration_ms: 1.13255
+  duration_ms: 0.828247
   type: 'test'
   ...
 # Subtest: retrying the same journal entry is idempotent; paused and adapted entries retain honest observations
-ok 70 - retrying the same journal entry is idempotent; paused and adapted entries retain honest observations
+ok 85 - retrying the same journal entry is idempotent; paused and adapted entries retain honest observations
   ---
-  duration_ms: 0.636033
+  duration_ms: 0.424108
   type: 'test'
   ...
 # Subtest: journal keeps the most recent bounded entries and does not mutate input during normalization
-ok 71 - journal keeps the most recent bounded entries and does not mutate input during normalization
+ok 86 - journal keeps the most recent bounded entries and does not mutate input during normalization
   ---
-  duration_ms: 0.885083
+  duration_ms: 0.595813
   type: 'test'
   ...
 # Subtest: calendar validation handles leap days, impossible dates, and week/month/year transitions
-ok 72 - calendar validation handles leap days, impossible dates, and week/month/year transitions
+ok 87 - calendar validation handles leap days, impossible dates, and week/month/year transitions
   ---
-  duration_ms: 0.268629
+  duration_ms: 0.16904
   type: 'test'
   ...
 # Subtest: due review needs a usable plan; completing review sets a fresh revisit without losing reflection
-ok 73 - due review needs a usable plan; completing review sets a fresh revisit without losing reflection
+ok 88 - due review needs a usable plan; completing review sets a fresh revisit without losing reflection
   ---
-  duration_ms: 0.32409
+  duration_ms: 0.255428
   type: 'test'
   ...
 # Subtest: course progress saves and completed lessons keep the plan, journal, and review after an interrupted round trip
-ok 74 - course progress saves and completed lessons keep the plan, journal, and review after an interrupted round trip
+ok 89 - course progress saves and completed lessons keep the plan, journal, and review after an interrupted round trip
   ---
-  duration_ms: 1.609718
+  duration_ms: 1.076315
   type: 'test'
   ...
 # Subtest: a practice plan cannot unlock lessons or manufacture completion
-ok 75 - a practice plan cannot unlock lessons or manufacture completion
+ok 90 - a practice plan cannot unlock lessons or manufacture completion
   ---
-  duration_ms: 0.632478
+  duration_ms: 0.398821
   type: 'test'
   ...
 # Subtest: a localized portable artifact retains ordinary private text without embedding executable HTML
-ok 76 - a localized portable artifact retains ordinary private text without embedding executable HTML
+ok 91 - a localized portable artifact retains ordinary private text without embedding executable HTML
   ---
-  duration_ms: 0.431761
+  duration_ms: 0.276249
   type: 'test'
   ...
 # Subtest: rapid edits remain visible and are replayed in order under serialized persistence
-ok 77 - rapid edits remain visible and are replayed in order under serialized persistence
+ok 92 - rapid edits remain visible and are replayed in order under serialized persistence
   ---
-  duration_ms: 6.490667
+  duration_ms: 6.536735
   type: 'test'
   ...
 # Subtest: failed drafts survive later edits and a retry rebases them over unrelated saved work
-ok 78 - failed drafts survive later edits and a retry rebases them over unrelated saved work
+ok 93 - failed drafts survive later edits and a retry rebases them over unrelated saved work
   ---
-  duration_ms: 0.376759
+  duration_ms: 0.384951
   type: 'test'
   ...
 # Subtest: same-tab save notifications retain newer input while an earlier batch is committing
-ok 79 - same-tab save notifications retain newer input while an earlier batch is committing
+ok 94 - same-tab save notifications retain newer input while an earlier batch is committing
   ---
-  duration_ms: 0.368407
+  duration_ms: 0.378351
   type: 'test'
   ...
 # Subtest: unexpected persistence exceptions preserve private work and allow a later successful save
-ok 80 - unexpected persistence exceptions preserve private work and allow a later successful save
+ok 95 - unexpected persistence exceptions preserve private work and allow a later successful save
   ---
-  duration_ms: 0.413133
+  duration_ms: 0.269069
   type: 'test'
   ...
 # Subtest: retry clicked while a failed write is settling starts a fresh persistence attempt
-ok 81 - retry clicked while a failed write is settling starts a fresh persistence attempt
+ok 96 - retry clicked while a failed write is settling starts a fresh persistence attempt
   ---
-  duration_ms: 0.351561
+  duration_ms: 0.276249
   type: 'test'
   ...
 # Subtest: malformed and unsupported records recover to separate empty states
-ok 82 - malformed and unsupported records recover to separate empty states
+ok 97 - malformed and unsupported records recover to separate empty states
   ---
-  duration_ms: 1.390803
+  duration_ms: 1.689554
   type: 'test'
   ...
 # Subtest: unknown IDs and properties are discarded; checklists are resized with strict booleans
-ok 83 - unknown IDs and properties are discarded; checklists are resized with strict booleans
+ok 98 - unknown IDs and properties are discarded; checklists are resized with strict booleans
   ---
-  duration_ms: 0.487813
+  duration_ms: 0.603975
   type: 'test'
   ...
 # Subtest: negative, fractional, nonnumeric and out-of-range answers do not satisfy a lesson
-ok 84 - negative, fractional, nonnumeric and out-of-range answers do not satisfy a lesson
+ok 99 - negative, fractional, nonnumeric and out-of-range answers do not satisfy a lesson
   ---
-  duration_ms: 0.506922
+  duration_ms: 0.691325
   type: 'test'
   ...
 # Subtest: notes are bounded while their newlines and ordinary content survive
-ok 85 - notes are bounded while their newlines and ordinary content survive
+ok 100 - notes are bounded while their newlines and ordinary content survive
   ---
-  duration_ms: 0.178705
+  duration_ms: 0.179155
   type: 'test'
   ...
 # Subtest: tampered completion cannot bypass the exercise, answer or preceding lessons
-ok 86 - tampered completion cannot bypass the exercise, answer or preceding lessons
+ok 101 - tampered completion cannot bypass the exercise, answer or preceding lessons
   ---
-  duration_ms: 0.207237
+  duration_ms: 0.24284
   type: 'test'
   ...
 # Subtest: valid completed prefixes survive independently for different courses
-ok 87 - valid completed prefixes survive independently for different courses
+ok 102 - valid completed prefixes survive independently for different courses
   ---
-  duration_ms: 0.211945
+  duration_ms: 0.301366
   type: 'test'
   ...
 # Subtest: draft updates are immutable and cannot mark a lesson complete
-ok 88 - draft updates are immutable and cannot mark a lesson complete
+ok 103 - draft updates are immutable and cannot mark a lesson complete
   ---
-  duration_ms: 0.196341
+  duration_ms: 0.267347
   type: 'test'
   ...
 # Subtest: completion follows the real course in order and is idempotent
-ok 89 - completion follows the real course in order and is idempotent
+ok 104 - completion follows the real course in order and is idempotent
   ---
-  duration_ms: 1.147492
+  duration_ms: 1.957561
   type: 'test'
   ...
 # Subtest: editing a completed prerequisite revalidates later lessons without losing drafts
-ok 90 - editing a completed prerequisite revalidates later lessons without losing drafts
+ok 105 - editing a completed prerequisite revalidates later lessons without losing drafts
   ---
-  duration_ms: 0.427714
+  duration_ms: 0.681049
   type: 'test'
   ...
 # Subtest: caller-supplied lesson and course objects cannot change the answer or bypass a course
-ok 91 - caller-supplied lesson and course objects cannot change the answer or bypass a course
+ok 106 - caller-supplied lesson and course objects cannot change the answer or bypass a course
   ---
-  duration_ms: 0.385141
+  duration_ms: 0.556995
   type: 'test'
   ...
 # Subtest: saving and reloading preserve a completed lesson and an unfinished draft
-ok 92 - saving and reloading preserve a completed lesson and an unfinished draft
+ok 107 - saving and reloading preserve a completed lesson and an unfinished draft
   ---
-  duration_ms: 0.813406
+  duration_ms: 1.143194
   type: 'test'
   ...
 # Subtest: blocked storage and quota failures are reported without throwing
-ok 93 - blocked storage and quota failures are reported without throwing
+ok 108 - blocked storage and quota failures are reported without throwing
   ---
-  duration_ms: 0.339974
+  duration_ms: 0.507512
   type: 'test'
   ...
 # Subtest: a decision kept today takes priority over array order and an older active carry-over
-ok 94 - a decision kept today takes priority over array order and an older active carry-over
+ok 109 - a decision kept today takes priority over array order and an older active carry-over
   ---
-  duration_ms: 1.391264
+  duration_ms: 1.786678
   type: 'test'
   ...
 # Subtest: a newly chosen decision after a kept one remains actionable today
-ok 95 - a newly chosen decision after a kept one remains actionable today
+ok 110 - a newly chosen decision after a kept one remains actionable today
   ---
-  duration_ms: 0.201799
+  duration_ms: 0.657765
   type: 'test'
   ...
 # Subtest: yesterday’s completion, archived decisions, invalid timestamps and future plans never masquerade as today
-ok 96 - yesterday’s completion, archived decisions, invalid timestamps and future plans never masquerade as today
+ok 111 - yesterday’s completion, archived decisions, invalid timestamps and future plans never masquerade as today
   ---
-  duration_ms: 0.152246
+  duration_ms: 0.226535
   type: 'test'
   ...
 # Subtest: daily decisions use the local calendar around UTC midnight in both timezone directions
-ok 97 - daily decisions use the local calendar around UTC midnight in both timezone directions
+ok 112 - daily decisions use the local calendar around UTC midnight in both timezone directions
   ---
-  duration_ms: 0.42531
+  duration_ms: 0.635872
   type: 'test'
   ...
 # Subtest: a missed weekly review remains available on Wednesday and follows local Sunday boundaries
-ok 98 - a missed weekly review remains available on Wednesday and follows local Sunday boundaries
+ok 113 - a missed weekly review remains available on Wednesday and follows local Sunday boundaries
   ---
-  duration_ms: 0.146597
+  duration_ms: 0.205725
   type: 'test'
   ...
 # Subtest: weekly evidence counts actual distinct days and bounds entries to the reviewed calendar week
-ok 99 - weekly evidence counts actual distinct days and bounds entries to the reviewed calendar week
+ok 114 - weekly evidence counts actual distinct days and bounds entries to the reviewed calendar week
   ---
-  duration_ms: 7.062254
+  duration_ms: 10.490894
   type: 'test'
   ...
 # Subtest: an unfinished decision can be reviewed without inventing completed progress
-ok 100 - an unfinished decision can be reviewed without inventing completed progress
+ok 115 - an unfinished decision can be reviewed without inventing completed progress
   ---
-  duration_ms: 0.25647
+  duration_ms: 0.349277
   type: 'test'
   ...
 # Subtest: saving and editing a daily reflection preserves other pages, rewards once, and survives JSON backup replacement
-ok 101 - saving and editing a daily reflection preserves other pages, rewards once, and survives JSON backup replacement
+ok 116 - saving and editing a daily reflection preserves other pages, rewards once, and survives JSON backup replacement
   ---
-  duration_ms: 1.2403
+  duration_ms: 1.611018
   type: 'test'
   ...
 # Subtest: course continuation resumes selected work before the suggested course and advances to the actual incomplete lesson
-ok 102 - course continuation resumes selected work before the suggested course and advances to the actual incomplete lesson
+ok 117 - course continuation resumes selected work before the suggested course and advances to the actual incomplete lesson
   ---
-  duration_ms: 14.184588
+  duration_ms: 0.552399
   type: 'test'
   ...
 # Subtest: course continuation recognizes an interrupted first answer of zero and never offers an already completed course
-ok 103 - course continuation recognizes an interrupted first answer of zero and never offers an already completed course
+ok 118 - course continuation recognizes an interrupted first answer of zero and never offers an already completed course
   ---
-  duration_ms: 0.626329
+  duration_ms: 0.533711
   type: 'test'
   ...
 # Subtest: daily loop copy has explicit matching nonempty English, Turkish and Spanish strings
-ok 104 - daily loop copy has explicit matching nonempty English, Turkish and Spanish strings
+ok 119 - daily loop copy has explicit matching nonempty English, Turkish and Spanish strings
   ---
-  duration_ms: 0.298303
+  duration_ms: 0.405351
   type: 'test'
   ...
 # Subtest: concurrent retries of a kept daily decision record evidence and reward exactly once
-ok 105 - concurrent retries of a kept daily decision record evidence and reward exactly once
+ok 120 - concurrent retries of a kept daily decision record evidence and reward exactly once
   ---
-  duration_ms: 23.69256
+  duration_ms: 21.143713
   type: 'test'
   ...
 # Subtest: levels are ordered free < essentials < pro < coach
-ok 106 - levels are ordered free < essentials < pro < coach
+ok 121 - levels are ordered free < essentials < pro < coach
   ---
-  duration_ms: 1.20677
+  duration_ms: 1.270382
   type: 'test'
   ...
 # Subtest: coach message allowances follow the product spec
-ok 107 - coach message allowances follow the product spec
+ok 122 - coach message allowances follow the product spec
   ---
-  duration_ms: 0.170533
+  duration_ms: 0.169111
   type: 'test'
   ...
 # Subtest: essential courses exist, and Turning Day is not one of them (it is free for all)
-ok 108 - essential courses exist, and Turning Day is not one of them (it is free for all)
-  ---
-  duration_ms: 0.195009
-  type: 'test'
-  ...
-# Subtest: nothing is locked where subscriptions cannot be bought (web), at any level
-ok 109 - nothing is locked where subscriptions cannot be bought (web), at any level
-  ---
-  duration_ms: 0.30326
-  type: 'test'
-  ...
-# Subtest: free level: Turning Day in full, first lessons of the rest, first sounds of each category
-ok 110 - free level: Turning Day in full, first lessons of the rest, first sounds of each category
-  ---
-  duration_ms: 0.181169
-  type: 'test'
-  ...
-# Subtest: essentials opens the six core courses and the whole Sound Room, not the rest
-ok 111 - essentials opens the six core courses and the whole Sound Room, not the rest
-  ---
-  duration_ms: 0.209661
-  type: 'test'
-  ...
-# Subtest: pro and coach open every lesson and sound
-ok 112 - pro and coach open every lesson and sound
-  ---
-  duration_ms: 0.287987
-  type: 'test'
-  ...
-# Subtest: six products: two per paid level, ids match the App Store spec
-ok 113 - six products: two per paid level, ids match the App Store spec
-  ---
-  duration_ms: 0.296549
-  type: 'test'
-  ...
-# Subtest: RevenueCat entitlements resolve to the highest active level
-ok 114 - RevenueCat entitlements resolve to the highest active level
-  ---
-  duration_ms: 0.351211
-  type: 'test'
-  ...
-# Subtest: annual saving is computed from real prices only
-ok 115 - annual saving is computed from real prices only
-  ---
-  duration_ms: 0.342018
-  type: 'test'
-  ...
-# Subtest: static legal pages match src/data/legal.ts (run npx tsx scripts/build-legal.ts)
-ok 116 - static legal pages match src/data/legal.ts (run npx tsx scripts/build-legal.ts)
-  ---
-  duration_ms: 1.532893
-  type: 'test'
-  ...
-# Subtest: every language has the same sections and names the company
-ok 117 - every language has the same sections and names the company
-  ---
-  duration_ms: 0.175591
-  type: 'test'
-  ...
-# Subtest: privacy policy covers what App Review checks
-ok 118 - privacy policy covers what App Review checks
-  ---
-  duration_ms: 0.204834
-  type: 'test'
-  ...
-# Subtest: local day keys and day gaps follow the calendar, not UTC
-ok 119 - local day keys and day gaps follow the calendar, not UTC
-  ---
-  duration_ms: 0.949729
-  type: 'test'
-  ...
-# Subtest: evidence lists kept decisions newest first and counts the last seven days
-ok 120 - evidence lists kept decisions newest first and counts the last seven days
-  ---
-  duration_ms: 7.978033
-  type: 'test'
-  ...
-# Subtest: comeback is kind after a lapse and silent otherwise
-ok 121 - comeback is kind after a lapse and silent otherwise
-  ---
-  duration_ms: 0.218655
-  type: 'test'
-  ...
-# Subtest: fresh starts land on the first of the month and on Mondays
-ok 122 - fresh starts land on the first of the month and on Mondays
-  ---
-  duration_ms: 0.151535
-  type: 'test'
-  ...
-# Subtest: simple mode lasts a week or until three kept decisions, and can be switched off
-ok 123 - simple mode lasts a week or until three kept decisions, and can be switched off
-  ---
-  duration_ms: 0.358101
-  type: 'test'
-  ...
-# Subtest: the day-14 question appears once, only for people who used decisions
-ok 124 - the day-14 question appears once, only for people who used decisions
-  ---
-  duration_ms: 0.322728
-  type: 'test'
-  ...
-# Subtest: the weekly look-back is offered on Sunday and Monday, once per week, and its change lasts a week
-ok 125 - the weekly look-back is offered on Sunday and Monday, once per week, and its change lasts a week
-  ---
-  duration_ms: 0.706318
-  type: 'test'
-  ...
-# Subtest: the chain forgives one missed day a week, but not two in a row or two in a week
-ok 126 - the chain forgives one missed day a week, but not two in a row or two in a week
-  ---
-  duration_ms: 0.601062
-  type: 'test'
-  ...
-# Subtest: smart reminders aim 30 minutes before the usual kept time, once there is enough history
-ok 127 - smart reminders aim 30 minutes before the usual kept time, once there is enough history
-  ---
-  duration_ms: 0.565469
-  type: 'test'
-  ...
-# Subtest: every sign-up intent points at a real course and offers three easy decisions
-ok 128 - every sign-up intent points at a real course and offers three easy decisions
-  ---
-  duration_ms: 116.845834
-  type: 'test'
-  ...
-# Subtest: the reminder voice keeps one line per day and never threatens a streak
-ok 129 - the reminder voice keeps one line per day and never threatens a streak
-  ---
-  duration_ms: 1.790156
-  type: 'test'
-  ...
-# Subtest: interrupted setup restores fields without allowing a nameless final step
-ok 130 - interrupted setup restores fields without allowing a nameless final step
-  ---
-  duration_ms: 1.589608
-  type: 'test'
-  ...
-# Subtest: unknown, malformed and oversized setup drafts are safely bounded
-ok 131 - unknown, malformed and oversized setup drafts are safely bounded
-  ---
-  duration_ms: 0.230171
-  type: 'test'
-  ...
-# Subtest: trial length comes only from a free intro offer
-ok 132 - trial length comes only from a free intro offer
-  ---
-  duration_ms: 0.689763
-  type: 'test'
-  ...
-# Subtest: native reminders: a week ahead, past times skipped, stable ids
-ok 133 - native reminders: a week ahead, past times skipped, stable ids
-  ---
-  duration_ms: 3.832554
-  type: 'test'
-  ...
-# Subtest: native planner rejects malformed times and keeps a bounded week inside its namespace
-ok 134 - native planner rejects malformed times and keeps a bounded week inside its namespace
-  ---
-  duration_ms: 0.682883
-  type: 'test'
-  ...
-# Subtest: interrupted native scheduling leaves the newest state and preserves other notifications
-ok 135 - interrupted native scheduling leaves the newest state and preserves other notifications
-  ---
-  duration_ms: 5.001508
-  type: 'test'
-  ...
-# Subtest: a native plugin error does not prevent the next reminder replacement
-ok 136 - a native plugin error does not prevent the next reminder replacement
-  ---
-  duration_ms: 0.425371
-  type: 'test'
-  ...
-# Subtest: preserves the first 300 passages and appends exactly 100 each from faith, science and philosophy in order
-ok 137 - preserves the first 300 passages and appends exactly 100 each from faith, science and philosophy in order
-  ---
-  duration_ms: 1.790966
-  type: 'test'
-  ...
-# Subtest: all 600 sourced passages have unique IDs and bilingual text without recycling legacy lines
-ok 138 - all 600 sourced passages have unique IDs and bilingual text without recycling legacy lines
-  ---
-  duration_ms: 87.989592
-  type: 'test'
-  ...
-# Subtest: six notifications stay distinct for 100 full days, then repeat, and match the server snapshot across a year boundary
-ok 139 - six notifications stay distinct for 100 full days, then repeat, and match the server snapshot across a year boundary
-  ---
-  duration_ms: 10.03934
-  type: 'test'
-  ...
-# Subtest: local day remains stable from morning to evening; six-time migration preserves existing preferences
-ok 140 - local day remains stable from morning to evening; six-time migration preserves existing preferences
-  ---
-  duration_ms: 1.363563
-  type: 'test'
-  ...
-# Subtest: legacy three-reminder profiles keep their evening time and gain six distinct reminders
-ok 141 - legacy three-reminder profiles keep their evening time and gain six distinct reminders
-  ---
-  duration_ms: 0.296289
-  type: 'test'
-  ...
-# Subtest: migration resolves default collisions only in missing slots and reserves later saved slots first
-ok 142 - migration resolves default collisions only in missing slots and reserves later saved slots first
-  ---
-  duration_ms: 0.308678
-  type: 'test'
-  ...
-# Subtest: every thinker passage links to a Gutenberg book whose text is kept in docs/quote-sources
-ok 143 - every thinker passage links to a Gutenberg book whose text is kept in docs/quote-sources
-  ---
-  duration_ms: 14.96795
-  type: 'test'
-  ...
-# Subtest: root hosting retains history paths, including direct reloads
-ok 144 - root hosting retains history paths, including direct reloads
-  ---
-  duration_ms: 2.592175
-  type: 'test'
-  ...
-# Subtest: project hosting keeps every navigation on the same static document
-ok 145 - project hosting keeps every navigation on the same static document
-  ---
-  duration_ms: 0.449707
-  type: 'test'
-  ...
-# Subtest: landing URLs and non-route fragments do not become unknown routes
-ok 146 - landing URLs and non-route fragments do not become unknown routes
-  ---
-  duration_ms: 0.13514
-  type: 'test'
-  ...
-# Subtest: back/forward hash entries resolve to canonical route IDs
-ok 147 - back/forward hash entries resolve to canonical route IDs
-  ---
-  duration_ms: 0.13463
-  type: 'test'
-  ...
-# Subtest: icons and service worker URLs stay under their deployment base
-ok 148 - icons and service worker URLs stay under their deployment base
-  ---
-  duration_ms: 0.191524
-  type: 'test'
-  ...
-# Subtest: each person reads and writes only their own backup; anonymous visitors get nothing
-ok 149 - each person reads and writes only their own backup; anonymous visitors get nothing
-  ---
-  duration_ms: 2002.577416
-  type: 'test'
-  ...
-# Subtest: an oversized backup is refused
-ok 150 - an oversized backup is refused
-  ---
-  duration_ms: 1509.160164
-  type: 'test'
-  ...
-# Subtest: cloud coach counters: people read only their own rows and cannot write or call the increment
-ok 151 - cloud coach counters: people read only their own rows and cannot write or call the increment
-  ---
-  duration_ms: 1386.590084
-  type: 'test'
-  ...
-# Subtest: the monthly increment stops exactly at the limit and a refund gives one back
-ok 152 - the monthly increment stops exactly at the limit and a refund gives one back
-  ---
-  duration_ms: 1328.146442
-  type: 'test'
-  ...
-# Subtest: a strict Content Security Policy ships with the page
-ok 153 - a strict Content Security Policy ships with the page
-  ---
-  duration_ms: 1.302141
-  type: 'test'
-  ...
-# Subtest: index.html has no inline scripts (the CSP forbids them)
-ok 154 - index.html has no inline scripts (the CSP forbids them)
+ok 123 - essential courses exist, and Turning Day is not one of them (it is free for all)
   ---
   duration_ms: 0.20271
   type: 'test'
   ...
-# Subtest: no raw HTML or eval sinks in the app code
-ok 155 - no raw HTML or eval sinks in the app code
+# Subtest: nothing is locked where subscriptions cannot be bought (web), at any level
+ok 124 - nothing is locked where subscriptions cannot be bought (web), at any level
   ---
-  duration_ms: 14.646763
+  duration_ms: 0.412521
+  type: 'test'
+  ...
+# Subtest: free level: Turning Day in full, first lessons of the rest, first sounds of each category
+ok 125 - free level: Turning Day in full, first lessons of the rest, first sounds of each category
+  ---
+  duration_ms: 0.194017
+  type: 'test'
+  ...
+# Subtest: essentials opens the six core courses and the whole Sound Room, not the rest
+ok 126 - essentials opens the six core courses and the whole Sound Room, not the rest
+  ---
+  duration_ms: 0.190943
+  type: 'test'
+  ...
+# Subtest: pro and coach open every lesson and sound
+ok 127 - pro and coach open every lesson and sound
+  ---
+  duration_ms: 0.230662
+  type: 'test'
+  ...
+# Subtest: six products: two per paid level, ids match the App Store spec
+ok 128 - six products: two per paid level, ids match the App Store spec
+  ---
+  duration_ms: 0.643424
+  type: 'test'
+  ...
+# Subtest: RevenueCat entitlements resolve to the highest active level
+ok 129 - RevenueCat entitlements resolve to the highest active level
+  ---
+  duration_ms: 0.443438
+  type: 'test'
+  ...
+# Subtest: annual saving is computed from real prices only
+ok 130 - annual saving is computed from real prices only
+  ---
+  duration_ms: 0.373814
+  type: 'test'
+  ...
+# Subtest: static legal pages match src/data/legal.ts (run npx tsx scripts/build-legal.ts)
+ok 131 - static legal pages match src/data/legal.ts (run npx tsx scripts/build-legal.ts)
+  ---
+  duration_ms: 1.59978
+  type: 'test'
+  ...
+# Subtest: every language has the same sections and names the company
+ok 132 - every language has the same sections and names the company
+  ---
+  duration_ms: 0.245063
+  type: 'test'
+  ...
+# Subtest: privacy policy covers what App Review checks
+ok 133 - privacy policy covers what App Review checks
+  ---
+  duration_ms: 0.29734
+  type: 'test'
+  ...
+# Subtest: local day keys and day gaps follow the calendar, not UTC
+ok 134 - local day keys and day gaps follow the calendar, not UTC
+  ---
+  duration_ms: 1.077887
+  type: 'test'
+  ...
+# Subtest: evidence lists kept decisions newest first and counts the last seven days
+ok 135 - evidence lists kept decisions newest first and counts the last seven days
+  ---
+  duration_ms: 7.754711
+  type: 'test'
+  ...
+# Subtest: comeback is kind after a lapse and silent otherwise
+ok 136 - comeback is kind after a lapse and silent otherwise
+  ---
+  duration_ms: 0.248228
+  type: 'test'
+  ...
+# Subtest: fresh starts land on the first of the month and on Mondays
+ok 137 - fresh starts land on the first of the month and on Mondays
+  ---
+  duration_ms: 0.123202
+  type: 'test'
+  ...
+# Subtest: simple mode lasts a week or until three kept decisions, and can be switched off
+ok 138 - simple mode lasts a week or until three kept decisions, and can be switched off
+  ---
+  duration_ms: 0.27017
+  type: 'test'
+  ...
+# Subtest: the day-14 question appears once, only for people who used decisions
+ok 139 - the day-14 question appears once, only for people who used decisions
+  ---
+  duration_ms: 0.301757
+  type: 'test'
+  ...
+# Subtest: the weekly look-back is offered on Sunday and Monday, once per week, and its change lasts a week
+ok 140 - the weekly look-back is offered on Sunday and Monday, once per week, and its change lasts a week
+  ---
+  duration_ms: 0.658876
+  type: 'test'
+  ...
+# Subtest: the chain forgives one missed day a week, but not two in a row or two in a week
+ok 141 - the chain forgives one missed day a week, but not two in a row or two in a week
+  ---
+  duration_ms: 0.669431
+  type: 'test'
+  ...
+# Subtest: smart reminders aim 30 minutes before the usual kept time, once there is enough history
+ok 142 - smart reminders aim 30 minutes before the usual kept time, once there is enough history
+  ---
+  duration_ms: 0.571867
+  type: 'test'
+  ...
+# Subtest: every sign-up intent points at a real course and offers three easy decisions
+ok 143 - every sign-up intent points at a real course and offers three easy decisions
+  ---
+  duration_ms: 102.438043
+  type: 'test'
+  ...
+# Subtest: the reminder voice keeps one line per day and never threatens a streak
+ok 144 - the reminder voice keeps one line per day and never threatens a streak
+  ---
+  duration_ms: 2.009147
+  type: 'test'
+  ...
+# Subtest: every iOS project and application build configuration enforces the Safari 16.4 baseline
+ok 145 - every iOS project and application build configuration enforces the Safari 16.4 baseline
+  ---
+  duration_ms: 1.03245
+  type: 'test'
+  ...
+# Subtest: Capacitor sync keeps a compatible generated Swift package floor without lowering the app minimum
+ok 146 - Capacitor sync keeps a compatible generated Swift package floor without lowering the app minimum
+  ---
+  duration_ms: 176.1683
+  type: 'test'
+  ...
+# Subtest: installed native dependency library floors are compatible with the Swift wrapper and app
+ok 147 - installed native dependency library floors are compatible with the Swift wrapper and app
+  ---
+  duration_ms: 0.53954
+  type: 'test'
+  ...
+# Subtest: native metadata cannot override the application minimum with an older target
+ok 148 - native metadata cannot override the application minimum with an older target
+  ---
+  duration_ms: 0.986341
+  type: 'test'
+  ...
+# Subtest: interrupted setup restores fields without allowing a nameless final step
+ok 149 - interrupted setup restores fields without allowing a nameless final step
+  ---
+  duration_ms: 1.103786
+  type: 'test'
+  ...
+# Subtest: unknown, malformed and oversized setup drafts are safely bounded
+ok 150 - unknown, malformed and oversized setup drafts are safely bounded
+  ---
+  duration_ms: 0.167468
+  type: 'test'
+  ...
+# Subtest: trial length comes only from a free intro offer
+ok 151 - trial length comes only from a free intro offer
+  ---
+  duration_ms: 0.692847
+  type: 'test'
+  ...
+# Subtest: native reminders: a week ahead, past times skipped, stable ids
+ok 152 - native reminders: a week ahead, past times skipped, stable ids
+  ---
+  duration_ms: 1.270943
+  type: 'test'
+  ...
+# Subtest: native planner rejects malformed times and keeps a bounded week inside its namespace
+ok 153 - native planner rejects malformed times and keeps a bounded week inside its namespace
+  ---
+  duration_ms: 0.907725
+  type: 'test'
+  ...
+# Subtest: interrupted native scheduling leaves the newest state and preserves other notifications
+ok 154 - interrupted native scheduling leaves the newest state and preserves other notifications
+  ---
+  duration_ms: 8.179679
+  type: 'test'
+  ...
+# Subtest: a native plugin error does not prevent the next reminder replacement
+ok 155 - a native plugin error does not prevent the next reminder replacement
+  ---
+  duration_ms: 0.535563
+  type: 'test'
+  ...
+# Subtest: preserves the first 300 passages and appends exactly 100 each from faith, science and philosophy in order
+ok 156 - preserves the first 300 passages and appends exactly 100 each from faith, science and philosophy in order
+  ---
+  duration_ms: 1.701191
+  type: 'test'
+  ...
+# Subtest: all 600 sourced passages have unique IDs and bilingual text without recycling legacy lines
+ok 157 - all 600 sourced passages have unique IDs and bilingual text without recycling legacy lines
+  ---
+  duration_ms: 52.140197
+  type: 'test'
+  ...
+# Subtest: six notifications stay distinct for 100 full days, then repeat, and match the server snapshot across a year boundary
+ok 158 - six notifications stay distinct for 100 full days, then repeat, and match the server snapshot across a year boundary
+  ---
+  duration_ms: 9.604251
+  type: 'test'
+  ...
+# Subtest: local day remains stable from morning to evening; six-time migration preserves existing preferences
+ok 159 - local day remains stable from morning to evening; six-time migration preserves existing preferences
+  ---
+  duration_ms: 1.259406
+  type: 'test'
+  ...
+# Subtest: legacy three-reminder profiles keep their evening time and gain six distinct reminders
+ok 160 - legacy three-reminder profiles keep their evening time and gain six distinct reminders
+  ---
+  duration_ms: 0.298823
+  type: 'test'
+  ...
+# Subtest: migration resolves default collisions only in missing slots and reserves later saved slots first
+ok 161 - migration resolves default collisions only in missing slots and reserves later saved slots first
+  ---
+  duration_ms: 0.371801
+  type: 'test'
+  ...
+# Subtest: every thinker passage links to a Gutenberg book whose text is kept in docs/quote-sources
+ok 162 - every thinker passage links to a Gutenberg book whose text is kept in docs/quote-sources
+  ---
+  duration_ms: 13.711115
+  type: 'test'
+  ...
+# Subtest: root hosting retains history paths, including direct reloads
+ok 163 - root hosting retains history paths, including direct reloads
+  ---
+  duration_ms: 1.144546
+  type: 'test'
+  ...
+# Subtest: project hosting keeps every navigation on the same static document
+ok 164 - project hosting keeps every navigation on the same static document
+  ---
+  duration_ms: 0.60747
+  type: 'test'
+  ...
+# Subtest: landing URLs and non-route fragments do not become unknown routes
+ok 165 - landing URLs and non-route fragments do not become unknown routes
+  ---
+  duration_ms: 0.172726
+  type: 'test'
+  ...
+# Subtest: back/forward hash entries resolve to canonical route IDs
+ok 166 - back/forward hash entries resolve to canonical route IDs
+  ---
+  duration_ms: 0.17548
+  type: 'test'
+  ...
+# Subtest: icons and service worker URLs stay under their deployment base
+ok 167 - icons and service worker URLs stay under their deployment base
+  ---
+  duration_ms: 0.234017
+  type: 'test'
+  ...
+# Subtest: each person reads and writes only their own backup; anonymous visitors get nothing
+ok 168 - each person reads and writes only their own backup; anonymous visitors get nothing
+  ---
+  duration_ms: 1753.727728
+  type: 'test'
+  ...
+# Subtest: an oversized backup is refused
+ok 169 - an oversized backup is refused
+  ---
+  duration_ms: 1392.206017
+  type: 'test'
+  ...
+# Subtest: cloud coach counters: people read only their own rows and cannot write or call the increment
+ok 170 - cloud coach counters: people read only their own rows and cannot write or call the increment
+  ---
+  duration_ms: 1355.880128
+  type: 'test'
+  ...
+# Subtest: the monthly increment stops exactly at the limit and a refund gives one back
+ok 171 - the monthly increment stops exactly at the limit and a refund gives one back
+  ---
+  duration_ms: 1391.448367
+  type: 'test'
+  ...
+# Subtest: a strict Content Security Policy ships with the page
+ok 172 - a strict Content Security Policy ships with the page
+  ---
+  duration_ms: 0.823951
+  type: 'test'
+  ...
+# Subtest: index.html has no inline scripts (the CSP forbids them)
+ok 173 - index.html has no inline scripts (the CSP forbids them)
+  ---
+  duration_ms: 0.190162
+  type: 'test'
+  ...
+# Subtest: no raw HTML or eval sinks in the app code
+ok 174 - no raw HTML or eval sinks in the app code
+  ---
+  duration_ms: 12.624396
   type: 'test'
   ...
 # Subtest: links that open a new tab cannot reach back into ODA
-ok 156 - links that open a new tab cannot reach back into ODA
+ok 175 - links that open a new tab cannot reach back into ODA
   ---
-  duration_ms: 5.503853
+  duration_ms: 4.8053
   type: 'test'
   ...
 # Subtest: no secret keys in the shipped code
-ok 157 - no secret keys in the shipped code
+ok 176 - no secret keys in the shipped code
   ---
-  duration_ms: 29.074671
+  duration_ms: 11.213235
   type: 'test'
   ...
 # Subtest: production builds carry no source maps
-ok 158 - production builds carry no source maps
+ok 177 - production builds carry no source maps
   ---
-  duration_ms: 0.253847
+  duration_ms: 0.234567
   type: 'test'
   ...
 # Subtest: service worker precaches only its project directory
-ok 159 - service worker precaches only its project directory
+ok 178 - service worker precaches only its project directory
   ---
-  duration_ms: 24.083069
+  duration_ms: 20.671679
   type: 'test'
   ...
 # Subtest: standalone support remains available offline without replacing the application shell
-ok 160 - standalone support remains available offline without replacing the application shell
+ok 179 - standalone support remains available offline without replacing the application shell
   ---
-  duration_ms: 5.77871
+  duration_ms: 8.02472
   type: 'test'
   ...
 # Subtest: activation preserves sibling apps and this version media cache
-ok 161 - activation preserves sibling apps and this version media cache
+ok 180 - activation preserves sibling apps and this version media cache
   ---
-  duration_ms: 1.731578
+  duration_ms: 1.465841
   type: 'test'
   ...
 # Subtest: notification defaults and legacy targets open the project hash route
-ok 162 - notification defaults and legacy targets open the project hash route
+ok 181 - notification defaults and legacy targets open the project hash route
   ---
-  duration_ms: 0.982407
+  duration_ms: 0.909608
   type: 'test'
   ...
 # Subtest: installed app metadata refreshes instead of retaining the cached identity
-ok 163 - installed app metadata refreshes instead of retaining the cached identity
+ok 182 - installed app metadata refreshes instead of retaining the cached identity
   ---
-  duration_ms: 1.942942
+  duration_ms: 2.434907
   type: 'test'
   ...
 # Subtest: installed app metadata remains available offline
-ok 164 - installed app metadata remains available offline
+ok 183 - installed app metadata remains available offline
   ---
-  duration_ms: 0.893114
+  duration_ms: 7.197705
   type: 'test'
   ...
 # Subtest: breath pacer runs at about 5.5 breaths a minute
-ok 165 - breath pacer runs at about 5.5 breaths a minute
+ok 184 - breath pacer runs at about 5.5 breaths a minute
   ---
-  duration_ms: 0.95112
+  duration_ms: 0.835147
   type: 'test'
   ...
 # Subtest: breathPhase: inhale first, then exhale, then repeats
-ok 166 - breathPhase: inhale first, then exhale, then repeats
+ok 185 - breathPhase: inhale first, then exhale, then repeats
   ---
-  duration_ms: 0.893565
+  duration_ms: 0.797842
   type: 'test'
   ...
 # Subtest: breathPhase is safe with odd input
-ok 167 - breathPhase is safe with odd input
+ok 186 - breathPhase is safe with odd input
   ---
-  duration_ms: 0.150413
+  duration_ms: 0.110724
   type: 'test'
   ...
 # Subtest: formatRemaining
-ok 168 - formatRemaining
+ok 187 - formatRemaining
   ---
-  duration_ms: 0.180928
+  duration_ms: 0.13457
   type: 'test'
   ...
 # Subtest: timer fades: a minute for sleep, short otherwise, never over half the timer
-ok 169 - timer fades: a minute for sleep, short otherwise, never over half the timer
+ok 188 - timer fades: a minute for sleep, short otherwise, never over half the timer
   ---
-  duration_ms: 0.248438
+  duration_ms: 0.184804
   type: 'test'
   ...
 # Subtest: public support is generated from the same localized help as the app
-ok 170 - public support is generated from the same localized help as the app
+ok 189 - public support is generated from the same localized help as the app
   ---
-  duration_ms: 1.667694
+  duration_ms: 2.552943
   type: 'test'
   ...
 # Subtest: each store locale links to the shipped public support artifact
-ok 171 - each store locale links to the shipped public support artifact
+ok 190 - each store locale links to the shipped public support artifact
   ---
-  duration_ms: 0.1957
+  duration_ms: 0.286875
   type: 'test'
   ...
-1..171
-# tests 171
+1..190
+# tests 190
 # suites 0
-# pass 171
+# pass 190
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 10172.956049
+# duration_ms 8393.146044
 npm notice
 npm notice New major version of npm available! 11.9.0 -> 12.2.0
 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
@@ -1300,86 +1414,86 @@ dist/assets/de-FmFgRqLi.js                                            0.03 kB �
 dist/assets/fr-FmFgRqLi.js                                            0.03 kB │ gzip:     0.05 kB
 dist/assets/it-FmFgRqLi.js                                            0.03 kB │ gzip:     0.05 kB
 dist/assets/ru-FmFgRqLi.js                                            0.03 kB │ gzip:     0.05 kB
-dist/assets/web-CRblr0RS.js                                           0.18 kB │ gzip:     0.16 kB
-dist/assets/useCloudState-C7XXZXEc.js                                 0.20 kB │ gzip:     0.18 kB
-dist/assets/chevron-right-3TVFkVrx.js                                 0.30 kB │ gzip:     0.25 kB
-dist/assets/square-D2FspMkG.js                                        0.32 kB │ gzip:     0.26 kB
-dist/assets/arrow-up-right-DK0bbanz.js                                0.34 kB │ gzip:     0.27 kB
-dist/assets/search-Nuh3fxCs.js                                        0.35 kB │ gzip:     0.28 kB
-dist/assets/circle-check-ejuBtma0.js                                  0.35 kB │ gzip:     0.28 kB
-dist/assets/user-round-BtIctri7.js                                    0.36 kB │ gzip:     0.28 kB
-dist/assets/rotate-ccw-DS1sko3p.js                                    0.37 kB │ gzip:     0.29 kB
-dist/assets/index-BfFE3ogb.js                                         0.38 kB │ gzip:     0.27 kB
-dist/assets/mail-C9ri6Il6.js                                          0.39 kB │ gzip:     0.31 kB
-dist/assets/moon-BcO76Kxg.js                                          0.39 kB │ gzip:     0.31 kB
-dist/assets/log-out-BF-vp4om.js                                       0.40 kB │ gzip:     0.29 kB
-dist/assets/headphones-JwoyhY7I.js                                    0.41 kB │ gzip:     0.29 kB
-dist/assets/timer-C7kBnYBi.js                                         0.41 kB │ gzip:     0.29 kB
-dist/assets/wind-CvbBR9p6.js                                          0.42 kB │ gzip:     0.30 kB
-dist/assets/archive-Cx3JUKUy.js                                       0.43 kB │ gzip:     0.31 kB
-dist/assets/route-BfCM8VHj.js                                         0.43 kB │ gzip:     0.31 kB
-dist/assets/lock-keyhole-q6WuBm9e.js                                  0.43 kB │ gzip:     0.33 kB
-dist/assets/index-CrHB2TER.js                                         0.45 kB │ gzip:     0.28 kB
-dist/assets/pencil-DWOOg3lI.js                                        0.45 kB │ gzip:     0.33 kB
-dist/assets/pen-line-B-4Iog-9.js                                      0.45 kB │ gzip:     0.33 kB
-dist/assets/index-COhvVgfn.js                                         0.48 kB │ gzip:     0.29 kB
-dist/assets/refresh-cw-BAlS6V1I.js                                    0.50 kB │ gzip:     0.33 kB
-dist/assets/trash-2-D9rz7y1j.js                                       0.50 kB │ gzip:     0.32 kB
-dist/assets/Focus-qPTTj2u2.js                                         0.53 kB │ gzip:     0.33 kB
-dist/assets/share-2-CYxjhEa5.js                                       0.53 kB │ gzip:     0.34 kB
-dist/assets/shuffle-J4nk19E7.js                                       0.56 kB │ gzip:     0.35 kB
-dist/assets/sun-moon-BrUzHCuu.js                                      0.57 kB │ gzip:     0.38 kB
-dist/assets/waves-BXxM9aLy.js                                         0.60 kB │ gzip:     0.32 kB
-dist/assets/sparkles-BZcwCycR.js                                      0.67 kB │ gzip:     0.39 kB
-dist/assets/calendar-days-Dtf9C_mC.js                                 0.67 kB │ gzip:     0.37 kB
-dist/assets/index-CQNzOazZ.js                                         0.67 kB │ gzip:     0.42 kB
-dist/assets/trending-up-bJqk1olX.js                                   0.69 kB │ gzip:     0.34 kB
-dist/assets/index-6mNy_qYx.js                                         0.72 kB │ gzip:     0.41 kB
-dist/assets/music-DAnKKB4A.js                                         0.75 kB │ gzip:     0.39 kB
-dist/assets/web-3Vq2-KZg.js                                           0.90 kB │ gzip:     0.43 kB
-dist/assets/web-DX40kKbW.js                                           1.06 kB │ gzip:     0.52 kB
-dist/assets/Legal-yK8QS5TZ.js                                         2.00 kB │ gzip:     0.91 kB
-dist/assets/Support-OmUe7CJv.js                                       3.54 kB │ gzip:     1.26 kB
-dist/assets/Seasons-CDy0hJOL.js                                       3.65 kB │ gzip:     1.29 kB
-dist/assets/Budget-CsmY3nRc.js                                        4.45 kB │ gzip:     1.70 kB
-dist/assets/web-CmzZG1F0.js                                           4.65 kB │ gzip:     1.40 kB
-dist/assets/purchases-bE9VPNXx.js                                     4.73 kB │ gzip:     2.16 kB
-dist/assets/Evidence-CGrdGN9B.js                                      5.42 kB │ gzip:     1.98 kB
-dist/assets/Tools-BiITX6as.js                                         5.60 kB │ gzip:     2.18 kB
-dist/assets/Missions-Dan3_kX8.js                                      5.65 kB │ gzip:     2.05 kB
-dist/assets/LifeScore-zOQKz2hZ.js                                     5.72 kB │ gzip:     1.92 kB
-dist/assets/Bridge-Nf8OkOjm.js                                        6.53 kB │ gzip:     1.96 kB
-dist/assets/FutureSelf-DW0QNVZa.js                                    6.86 kB │ gzip:     1.94 kB
-dist/assets/MissionFlows-D1RpFkzd.js                                  8.10 kB │ gzip:     2.50 kB
-dist/assets/index-2jYa_on7.js                                         8.72 kB │ gzip:     3.31 kB
-dist/assets/Account-DeD2-yyy.js                                      10.02 kB │ gzip:     3.15 kB
-dist/assets/web-EZzc816F.js                                          10.19 kB │ gzip:     2.10 kB
-dist/assets/PublicTwoFutures-DDpXUpC7.js                             11.24 kB │ gzip:     3.71 kB
-dist/assets/support-CSPnQAQU.js                                      11.79 kB │ gzip:     4.95 kB
-dist/assets/DreamArt-BjVSsGhK.js                                     12.84 kB │ gzip:     2.50 kB
-dist/assets/FocusTimerHub-BrJKB4Ah.js                                13.62 kB │ gzip:     3.86 kB
-dist/assets/Upgrade-CZs1_s9O.js                                      14.05 kB │ gzip:     4.76 kB
-dist/assets/Me-DI-5Uetv.js                                           16.29 kB │ gzip:     5.65 kB
-dist/assets/TwoFutures-D3iB2Kx7.js                                   19.69 kB │ gzip:     5.43 kB
-dist/assets/SoundRoom-C-jJDCzx.js                                    20.33 kB │ gzip:     7.76 kB
+dist/assets/web-DI40-w2L.js                                           0.18 kB │ gzip:     0.16 kB
+dist/assets/useCloudState-wyRTAjff.js                                 0.20 kB │ gzip:     0.18 kB
+dist/assets/chevron-right-DRzvf1Nh.js                                 0.30 kB │ gzip:     0.25 kB
+dist/assets/square-C7fhgUEH.js                                        0.32 kB │ gzip:     0.26 kB
+dist/assets/arrow-up-right-BE6gfwdv.js                                0.34 kB │ gzip:     0.27 kB
+dist/assets/search-uIb0Sgs7.js                                        0.35 kB │ gzip:     0.28 kB
+dist/assets/circle-check-CcccM5W0.js                                  0.35 kB │ gzip:     0.28 kB
+dist/assets/user-round-C42TmI8H.js                                    0.36 kB │ gzip:     0.29 kB
+dist/assets/rotate-ccw-DZSjTSbn.js                                    0.37 kB │ gzip:     0.29 kB
+dist/assets/index-BAAD-5CJ.js                                         0.38 kB │ gzip:     0.27 kB
+dist/assets/mail-9N_ST2Ox.js                                          0.39 kB │ gzip:     0.31 kB
+dist/assets/moon-1RoGFCnP.js                                          0.39 kB │ gzip:     0.31 kB
+dist/assets/log-out-CMZN6INF.js                                       0.40 kB │ gzip:     0.30 kB
+dist/assets/headphones-BBRmcnYe.js                                    0.41 kB │ gzip:     0.29 kB
+dist/assets/timer-ClaB8m8Q.js                                         0.41 kB │ gzip:     0.29 kB
+dist/assets/wind-F8-fweLs.js                                          0.42 kB │ gzip:     0.30 kB
+dist/assets/archive-5m7yDno8.js                                       0.43 kB │ gzip:     0.32 kB
+dist/assets/route-CuVX581g.js                                         0.43 kB │ gzip:     0.31 kB
+dist/assets/lock-keyhole-siFpNmZG.js                                  0.43 kB │ gzip:     0.33 kB
+dist/assets/index-BNaQ68iO.js                                         0.45 kB │ gzip:     0.28 kB
+dist/assets/pencil-CXkBgAQS.js                                        0.45 kB │ gzip:     0.33 kB
+dist/assets/pen-line-uxYt86IP.js                                      0.45 kB │ gzip:     0.33 kB
+dist/assets/index-CbPEQ36B.js                                         0.48 kB │ gzip:     0.29 kB
+dist/assets/refresh-cw-BjnhS8Xw.js                                    0.50 kB │ gzip:     0.33 kB
+dist/assets/trash-2-BDsDGPbR.js                                       0.50 kB │ gzip:     0.32 kB
+dist/assets/Focus-DT6Djq67.js                                         0.53 kB │ gzip:     0.33 kB
+dist/assets/share-2-B8_j6QPG.js                                       0.53 kB │ gzip:     0.34 kB
+dist/assets/shuffle-pK4-zvXt.js                                       0.56 kB │ gzip:     0.35 kB
+dist/assets/sun-moon-DRQK68eQ.js                                      0.57 kB │ gzip:     0.38 kB
+dist/assets/waves-DMVkOejd.js                                         0.60 kB │ gzip:     0.32 kB
+dist/assets/sparkles-B_5bHoZi.js                                      0.67 kB │ gzip:     0.39 kB
+dist/assets/calendar-days-Bm0a5arg.js                                 0.67 kB │ gzip:     0.37 kB
+dist/assets/index-p-GnF-5U.js                                         0.67 kB │ gzip:     0.42 kB
+dist/assets/trending-up-elegIwVL.js                                   0.69 kB │ gzip:     0.34 kB
+dist/assets/index-BaUwk4BU.js                                         0.72 kB │ gzip:     0.41 kB
+dist/assets/music-B5FdzRMJ.js                                         0.75 kB │ gzip:     0.40 kB
+dist/assets/web-CIar0Who.js                                           0.90 kB │ gzip:     0.43 kB
+dist/assets/web-JOK3ZYpf.js                                           1.06 kB │ gzip:     0.52 kB
+dist/assets/Legal-CeG8q-Mz.js                                         2.00 kB │ gzip:     0.91 kB
+dist/assets/Support-C29-XIML.js                                       3.54 kB │ gzip:     1.26 kB
+dist/assets/Seasons-D6xitwt-.js                                       3.65 kB │ gzip:     1.29 kB
+dist/assets/Budget-DBXdrTj-.js                                        4.45 kB │ gzip:     1.70 kB
+dist/assets/web-Bntm72FQ.js                                           4.65 kB │ gzip:     1.40 kB
+dist/assets/purchases-DNoXmsXr.js                                     4.73 kB │ gzip:     2.16 kB
+dist/assets/Evidence-BXpGHeq2.js                                      5.42 kB │ gzip:     1.98 kB
+dist/assets/Tools-SEo3MBIL.js                                         5.60 kB │ gzip:     2.18 kB
+dist/assets/Missions-CiIIkvcU.js                                      5.65 kB │ gzip:     2.05 kB
+dist/assets/LifeScore-DqJknGyY.js                                     5.72 kB │ gzip:     1.92 kB
+dist/assets/Bridge-sIssYC6q.js                                        6.53 kB │ gzip:     1.96 kB
+dist/assets/FutureSelf-CEFRS-LV.js                                    6.86 kB │ gzip:     1.94 kB
+dist/assets/MissionFlows-BflxE8ZP.js                                  8.10 kB │ gzip:     2.50 kB
+dist/assets/index-B7DWkKtK.js                                         8.72 kB │ gzip:     3.31 kB
+dist/assets/Account-BsLI3_mZ.js                                      10.02 kB │ gzip:     3.16 kB
+dist/assets/web-CS33Sedb.js                                          10.19 kB │ gzip:     2.10 kB
+dist/assets/PublicTwoFutures-C6fu5UW9.js                             11.24 kB │ gzip:     3.71 kB
+dist/assets/support-C8htG7Au.js                                      11.79 kB │ gzip:     4.95 kB
+dist/assets/DreamArt-BaqEuvfE.js                                     12.84 kB │ gzip:     2.51 kB
+dist/assets/FocusTimerHub-m7J9Olw4.js                                13.62 kB │ gzip:     3.86 kB
+dist/assets/Upgrade-CRYPvxUT.js                                      14.05 kB │ gzip:     4.76 kB
+dist/assets/Me-BjmlN0rA.js                                           16.29 kB │ gzip:     5.65 kB
+dist/assets/TwoFutures-B-Rk1Z9u.js                                   19.69 kB │ gzip:     5.43 kB
+dist/assets/SoundRoom-B2NGbdIu.js                                    20.33 kB │ gzip:     7.76 kB
 dist/assets/media-2mgEiOLR.js                                        23.75 kB │ gzip:     9.29 kB
-dist/assets/Bank-DkeCSAC4.js                                         29.85 kB │ gzip:     8.22 kB
-dist/assets/Settings-COK-JV8q.js                                     40.19 kB │ gzip:    12.64 kB
-dist/assets/Coach-KEdJOd8g.js                                        47.44 kB │ gzip:    15.53 kB
-dist/assets/Notebook-BZ20oaOe.js                                     48.78 kB │ gzip:    14.17 kB
-dist/assets/Dreams-DA9eSSoZ.js                                       53.04 kB │ gzip:    14.93 kB
-dist/assets/DailyMicroHabits-CNulkpd1.js                             56.89 kB │ gzip:    14.80 kB
-dist/assets/Progress-D8OWZfoY.js                                     75.84 kB │ gzip:    18.18 kB
-dist/assets/Courses-C69glVoD.js                                     108.90 kB │ gzip:    35.47 kB
+dist/assets/Bank-DXopNFIG.js                                         29.85 kB │ gzip:     8.21 kB
+dist/assets/Settings-OejO3sTh.js                                     40.31 kB │ gzip:    12.68 kB
+dist/assets/Coach-C-0JLXkp.js                                        47.44 kB │ gzip:    15.53 kB
+dist/assets/Notebook-DPd7oBHF.js                                     48.78 kB │ gzip:    14.17 kB
+dist/assets/Dreams-XFGdZM1_.js                                       53.04 kB │ gzip:    14.92 kB
+dist/assets/DailyMicroHabits-CMcwz2dz.js                             56.89 kB │ gzip:    14.80 kB
+dist/assets/Progress-C4i_ELzo.js                                     75.84 kB │ gzip:    18.18 kB
+dist/assets/Courses-CItcldbY.js                                     108.90 kB │ gzip:    35.47 kB
 dist/assets/motion-HNvQpnN_.js                                      128.88 kB │ gzip:    42.38 kB
-dist/assets/Today-BrhJuG-M.js                                       135.09 kB │ gzip:    41.62 kB
+dist/assets/Today-DGR2qnDA.js                                       135.09 kB │ gzip:    41.62 kB
 dist/assets/supabase--wUpN4Ei.js                                    228.14 kB │ gzip:    59.28 kB
 dist/assets/react-5GCfeWye.js                                       229.42 kB │ gzip:    71.53 kB
 dist/assets/genai-DNIGCYRr.js                                       409.93 kB │ gzip:    72.77 kB
 dist/assets/charts-CiESIKeW.js                                      431.59 kB │ gzip:   124.88 kB
 dist/assets/tr-C8BDhSCr.js                                          560.83 kB │ gzip:   219.10 kB
 dist/assets/es-CYCsPQH7.js                                          573.26 kB │ gzip:   217.48 kB
-dist/assets/index-BShrbRQ2.js                                       769.85 kB │ gzip:   255.02 kB
+dist/assets/index-CGYBS3HR.js                                       772.51 kB │ gzip:   255.74 kB
 dist/assets/courses-CKtnra3s.js                                   2,510.75 kB │ gzip:   813.28 kB
 dist/assets/index-BMm9S-UO.js                                     5,959.05 kB │ gzip: 2,123.39 kB
 
@@ -1387,7 +1501,7 @@ dist/assets/index-BMm9S-UO.js                                     5,959.05 kB �
 - Using dynamic import() to code-split the application
 - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
-✓ built in 10.67s
+✓ built in 11.43s
 npm notice
 npm notice New major version of npm available! 11.9.0 -> 12.2.0
 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0

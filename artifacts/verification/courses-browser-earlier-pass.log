@@ -1,14 +1,7 @@
-ODA course browser QA — report-derived final-run evidence
-This file summarizes the canonical successful browser report. It is not a raw console transcript.
-The successful latest command output was displayed in the execution tool but was not saved to a separate console log.
-The earlier raw passing log is preserved as courses-browser-earlier-pass.log.
-Canonical report: artifacts/learning/course-browser-report.json
-Command executed: ODA_QA_URL=http://localhost:4173 npm run qa:courses
-URL: http://localhost:4173
-Report timestamp: 2026-09-30T21:56:01.730Z
-Status: passed
 
-28 recorded passing checks:
+> oda-one-decision-away@1.0.0 qa:courses
+> node --import tsx scripts/qa-course-learning.mjs
+
 PASS en catalog mobile: no horizontal overflow or serious/critical axe findings
 PASS en: course filters/search and keyboard workbook opening
 PASS en: example starter preserves the reader's existing field
@@ -37,21 +30,8 @@ PASS es: example starter preserves the reader's existing field
 PASS es: plan, entry, reflection and partial practice survive reload
 PASS es: review and portable notes download
 PASS es open workbook mobile: no horizontal overflow or serious/critical axe findings
-
-11 recorded axe scans:
-SCAN en catalog mobile: 0 violations; 0 serious/critical findings
-SCAN en open workbook mobile: 0 violations; 0 serious/critical findings
-SCAN open workbook 320px: 0 violations; 0 serious/critical findings
-SCAN open workbook desktop: 0 violations; 0 serious/critical findings
-SCAN catalog desktop: 0 violations; 0 serious/critical findings
-SCAN catalog dark: 0 violations; 0 serious/critical findings
-SCAN open workbook dark: 0 violations; 0 serious/critical findings
-SCAN tr catalog mobile: 0 violations; 0 serious/critical findings
-SCAN tr open workbook mobile: 0 violations; 0 serious/critical findings
-SCAN es catalog mobile: 0 violations; 0 serious/critical findings
-SCAN es open workbook mobile: 0 violations; 0 serious/critical findings
-
-Total axe violations: 0
-Serious/critical axe findings: 0
-Page errors: 0
-No additional browser run was performed to create this summary.
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

@@ -4,7 +4,7 @@
   "baseCommit": "b27d1ea",
   "node": "22.23.3",
   "chromium": "151.0.7922.173",
-  "coreTests": 171,
+  "coreTests": 190,
   "notebookTests": 19,
   "routingRerunTests": 11,
   "routingAlreadyIncludedInCore": true,
@@ -13,18 +13,18 @@
     "project-folder web",
     "iOS-target web only"
   ],
-  "browserChecks": 116,
+  "browserChecks": 118,
   "browserSuites": [
     {
       "path": "artifacts/qa/browser-report.json",
       "checks": 39,
-      "at": "2026-09-30T21:23:17.800Z",
+      "at": "2026-09-30T21:52:17.960Z",
       "status": "passed"
     },
     {
       "path": "artifacts/learning/course-browser-report.json",
       "checks": 28,
-      "at": "2026-09-30T21:23:18.189Z",
+      "at": "2026-09-30T21:56:01.730Z",
       "status": "passed"
     },
     {
@@ -35,14 +35,14 @@
     },
     {
       "path": "artifacts/backup-qa/report.json",
-      "checks": 11,
-      "at": "2026-09-30T21:22:31.355Z",
+      "checks": 13,
+      "at": "2026-09-30T21:50:24.482Z",
       "status": "passed"
     },
     {
       "path": "artifacts/platform/report.json",
       "checks": 9,
-      "at": "2026-09-30T21:23:17.695Z",
+      "at": "2026-09-30T21:52:17.785Z",
       "status": "passed"
     },
     {
@@ -54,5 +54,10 @@
   ],
   "productionSupabase": "not tested; isolated cloud mock only",
   "nativeDevices": "not tested",
-  "deployment": "none"
+  "deployment": "none",
+  "distinctAutomatedTests": 209,
+  "appIosMinimum": "16.4",
+  "countCorrection": "Earlier 199 added routing cases already counted in core. Interim unique total was 189; support cache regression raised it to 190; four native and fifteen cloud scope regressions produce final 209.",
+  "finalReview": "docs/FINAL_REVIEW_2026-09-30.md",
+  "independentCloudScopeReview": "artifacts/cloud-scope-review/report.json"
 }
