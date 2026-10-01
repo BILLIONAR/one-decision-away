@@ -18,6 +18,7 @@ type FakeSource = {
   buffer: unknown;
   onended: (() => void) | null;
   starts: number;
+  gainAtStart: number | null;
   stops: number;
   connect: () => void;
   disconnect: () => void;
@@ -51,10 +52,11 @@ function fixture(t: TestContext, options: {
     }
     createBufferSource() {
       const source: FakeSource = {
-        buffer: null, onended: null, starts: 0, stops: 0,
+        buffer: null, onended: null, starts: 0, gainAtStart: null, stops: 0,
         connect: () => {}, disconnect: () => {},
         start: () => {
           if (options.startError) throw options.startError;
+          source.gainAtStart = this.gain.gain.value;
           source.starts++;
         },
         stop: () => { source.stops++; },
@@ -118,6 +120,61 @@ test('Stop cancels a cue still waiting for synthesis without starting audio', as
   assert.equal(h.voice.isPlaying(), false);
   assert.deepEqual(events, []);
 });
+
+for (const volume of [0, 0.35]) {
+  test(`deferred synthesis starts at the latest requested volume ${volume}`, async t => {
+    const h = fixture(t), pending = deferred<Clip | null>();
+    h.synthesize(() => pending.promise);
+    const result = h.voice.speak('Uncached volume cue', TEST_KEY, 'Kore', 1);
+    assert.equal(h.contexts.length, 0);
+    h.voice.setVolume(volume);
+    pending.resolve(clip());
+    assert.equal(await result, true);
+    assert.equal(h.sources[0].gainAtStart, volume);
+  });
+
+  test(`deferred audio resume starts at the latest requested volume ${volume}`, async t => {
+    const resumeWait = deferred<void>();
+    const h = fixture(t, { state: 'suspended', resumeWait: resumeWait.promise });
+    const result = h.voice.speak('Resume volume cue', TEST_KEY, 'Kore', 1);
+    await h.resumeEntered;
+    h.voice.setVolume(volume);
+    resumeWait.resolve();
+    assert.equal(await result, true);
+    assert.equal(h.sources[0].gainAtStart, volume);
+  });
+
+  test(`deferred Settings preview preserves requested volume ${volume}`, async t => {
+    const h = fixture(t), pending = deferred<Clip | null>();
+    h.synthesize(() => pending.promise);
+    const result = h.voice.test(TEST_KEY, 'Kore');
+    h.voice.setVolume(volume);
+    pending.resolve(clip());
+    assert.equal(await result, true);
+    assert.equal(h.sources[0].gainAtStart, volume);
+  });
+}
+
+for (const action of ['stop', 'pause-resume', 'new-session'] as const) {
+  test(`a volume change during loading preserves ${action} protection`, async t => {
+    const h = fixture(t), oldClip = deferred<Clip | null>();
+    const events: string[] = [];
+    h.synthesize(text => text === 'Old volume cue' ? oldClip.promise : Promise.resolve(clip()));
+    const oldResult = h.voice.speak('Old volume cue', TEST_KEY, 'Kore', 1, () => events.push('old'));
+    h.voice.setVolume(0);
+    if (action === 'pause-resume') { h.voice.pause(); h.voice.resume(); }
+    else h.voice.stop();
+    h.voice.setVolume(0.4);
+    if (action === 'new-session') {
+      assert.equal(await h.voice.speak('New session volume cue', TEST_KEY, 'Kore', 0.4, () => events.push('new')), true);
+    }
+    oldClip.resolve(clip());
+    assert.equal(await oldResult, false);
+    assert.equal(h.sources.length, action === 'new-session' ? 1 : 0);
+    if (action === 'new-session') assert.equal(h.sources[0].gainAtStart, 0.4);
+    assert.deepEqual(events, action === 'new-session' ? ['new'] : []);
+  });
+}
 
 test('a newer cue owns playback when an older synthesis resolves later', async (t) => {
   const h = fixture(t);

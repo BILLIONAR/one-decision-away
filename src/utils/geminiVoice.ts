@@ -28,6 +28,7 @@ export class GeminiVoice {
   private ctx: AudioContext | null = null;
   private currentSource: AudioBufferSourceNode | null = null;
   private gain: GainNode | null = null;
+  private requestedVolume = 1;
   private playbackGeneration = 0;
   private paused = false;
 
@@ -101,6 +102,7 @@ export class GeminiVoice {
     const generation = ++this.playbackGeneration;
     this.stopCurrentSource();
     if (this.paused) return false;
+    this.setVolume(volume);
     const key = this.cacheKey(text, voice);
     if (!this.cache.has(key)) this.cache.set(key, this.synthesize(text, apiKey, voice));
     const clip = await this.cache.get(key)!;
@@ -114,7 +116,7 @@ export class GeminiVoice {
       buffer.copyToChannel(clip.samples, 0);
       const src = ctx.createBufferSource();
       src.buffer = buffer;
-      this.gain!.gain.value = Math.max(0, Math.min(1, volume));
+      this.gain!.gain.value = this.requestedVolume;
       src.connect(this.gain!);
       src.onended = () => {
         if (this.currentSource !== src) return;
@@ -133,7 +135,8 @@ export class GeminiVoice {
   }
 
   public setVolume(volume: number) {
-    if (this.gain) this.gain.gain.value = Math.max(0, Math.min(1, volume));
+    this.requestedVolume = Math.max(0, Math.min(1, volume));
+    if (this.gain) this.gain.gain.value = this.requestedVolume;
   }
 
   public isPlaying(): boolean {
@@ -183,7 +186,7 @@ export class GeminiVoice {
     const clip = await this.synthesize(phrase, apiKey, voice);
     if (!clip || generation !== this.playbackGeneration || this.paused) return false;
     this.cache.set(this.cacheKey(phrase, voice), Promise.resolve(clip));
-    return this.speak(phrase, apiKey, voice, 1);
+    return this.speak(phrase, apiKey, voice, this.requestedVolume);
   }
 }
 

@@ -61,7 +61,6 @@ function fixture(t: TestContext, options: { voices?: SpeechSynthesisVoice[]; pre
       cancelled++;
       if (cancelError) throw new Error('Synthetic device cancellation failure');
       synthesis.speaking = false;
-      synthesis.paused = false;
     },
     speak: (utterance: FakeUtterance) => {
       if (speakError) throw new Error('Synthetic device enqueue failure');
@@ -204,6 +203,61 @@ test('empty or disabled cues leave the device queue empty', t => {
   h.guide.setEnabled(false);
   assert.equal(h.guide.speak('Cue'), false);
   assert.equal(h.spoken.length, 0);
+});
+
+test('nonzero device volume changes apply to the next utterance without pretending to change active speech', t => {
+  const h = fixture(t);
+  h.guide.speak('Current device cue');
+  h.synthesis.speaking = true;
+  h.spoken[0].onstart!();
+  h.guide.setVolume(0.35);
+  assert.equal(h.spoken[0].volume, 1);
+  assert.equal(h.guide.isSpeaking(), true);
+  h.guide.speak('Next device cue');
+  assert.equal(h.spoken[1].volume, 0.35);
+  assert.equal(JSON.parse(h.stored.get('oda_voice_prefs')!).volume, 0.35);
+  assert.equal(h.providerCalls(), 0);
+});
+
+test('zero device volume cancels the owned paused utterance and Resume cannot revive it', t => {
+  const h = fixture(t), events: boolean[] = [];
+  h.guide.onSpeakingChange(value => events.push(value));
+  h.guide.speak('Owned device cue');
+  h.synthesis.speaking = true;
+  const old = h.spoken[0], staleStart = old.onstart!;
+  old.onstart!();
+  h.guide.pause();
+  const cancelledBefore = h.cancelled();
+  h.guide.setVolume(0);
+  assert.equal(h.cancelled(), cancelledBefore + 1);
+  assert.equal(old.onstart, null);
+  assert.equal(old.onend, null);
+  assert.equal(old.onerror, null);
+  h.guide.setVolume(0.4);
+  assert.equal(h.guide.speak('Must remain paused'), false);
+  h.guide.resume();
+  staleStart();
+  assert.equal(h.guide.isSpeaking(), false);
+  assert.equal(h.spoken.length, 1);
+  assert.deepEqual(events, [true, false, false]);
+  assert.equal(h.guide.speak('Next device cue'), true);
+  assert.equal(h.spoken[1].volume, 0.4);
+  assert.equal(h.providerCalls(), 0);
+});
+
+test('Stop while device speech is paused lets a new session resume the device queue', t => {
+  const h = fixture(t);
+  h.guide.speak('Old paused session');
+  h.synthesis.speaking = true;
+  h.guide.pause();
+  h.guide.setVolume(0);
+  assert.equal(h.synthesis.paused, true);
+  h.guide.stop();
+  h.guide.setVolume(0.4);
+  assert.equal(h.guide.speak('New session'), true);
+  assert.equal(h.synthesis.paused, false);
+  assert.equal(h.spoken[1].volume, 0.4);
+  assert.equal(h.providerCalls(), 0);
 });
 
 for (const failure of ['cancel', 'enqueue'] as const) {

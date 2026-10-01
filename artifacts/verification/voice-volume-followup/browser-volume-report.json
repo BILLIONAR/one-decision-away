@@ -1,0 +1,155 @@
+{
+  "at": "2026-10-01T21:12:49.121Z",
+  "sourceHashes": {
+    "src/utils/geminiVoice.ts": "890181dca317a0bdf93cbafd048bec0e94fe2ec2d196305c2daeb014d9a99e69",
+    "src/utils/voiceGuide.ts": "ef5ed81d90283e3a959b3a187e127b0c113ce84e9b62cc8fb873d6fb6e6e81e3"
+  },
+  "checks": [
+    {
+      "engineName": "chromium",
+      "label": "synthesis: 1→0",
+      "requestedVolume": 0,
+      "gainAtStart": 0,
+      "renderedRMS": 0
+    },
+    {
+      "engineName": "chromium",
+      "label": "resume: 1→0",
+      "requestedVolume": 0,
+      "gainAtStart": 0,
+      "renderedRMS": 0
+    },
+    {
+      "engineName": "chromium",
+      "label": "synthesis: 1→0.35",
+      "requestedVolume": 0.35,
+      "gainAtStart": 0.3499999940395355,
+      "renderedRMS": 0.087499998509884
+    },
+    {
+      "engineName": "chromium",
+      "label": "resume: 1→0.35",
+      "requestedVolume": 0.35,
+      "gainAtStart": 0.3499999940395355,
+      "renderedRMS": 0.087499998509884
+    },
+    {
+      "engineName": "chromium",
+      "label": "stop",
+      "sourcesStarted": 0
+    },
+    {
+      "engineName": "chromium",
+      "label": "pause-resume",
+      "sourcesStarted": 0
+    },
+    {
+      "engineName": "chromium",
+      "label": "new-session",
+      "sourcesStarted": 1
+    },
+    {
+      "engineName": "chromium",
+      "label": "VoiceGuide deferred mute",
+      "gainAtStart": 0
+    },
+    {
+      "engineName": "chromium",
+      "label": "Settings preview latest volume",
+      "gainAtStart": 0.3499999940395355
+    },
+    {
+      "engineName": "chromium",
+      "label": "Device nonzero next cue"
+    },
+    {
+      "engineName": "chromium",
+      "label": "Device mute preserves pause"
+    },
+    {
+      "engineName": "chromium",
+      "label": "Device resume cannot revive muted cue"
+    },
+    {
+      "engineName": "chromium",
+      "label": "Device new session resumes queue"
+    },
+    {
+      "engineName": "webkit",
+      "label": "synthesis: 1→0",
+      "requestedVolume": 0,
+      "gainAtStart": 0,
+      "renderedRMS": 0
+    },
+    {
+      "engineName": "webkit",
+      "label": "resume: 1→0",
+      "requestedVolume": 0,
+      "gainAtStart": 0,
+      "renderedRMS": 0
+    },
+    {
+      "engineName": "webkit",
+      "label": "synthesis: 1→0.35",
+      "requestedVolume": 0.35,
+      "gainAtStart": 0.3499999940395355,
+      "renderedRMS": 0.087499998509884
+    },
+    {
+      "engineName": "webkit",
+      "label": "resume: 1→0.35",
+      "requestedVolume": 0.35,
+      "gainAtStart": 0.3499999940395355,
+      "renderedRMS": 0.087499998509884
+    },
+    {
+      "engineName": "webkit",
+      "label": "stop",
+      "sourcesStarted": 0
+    },
+    {
+      "engineName": "webkit",
+      "label": "pause-resume",
+      "sourcesStarted": 0
+    },
+    {
+      "engineName": "webkit",
+      "label": "new-session",
+      "sourcesStarted": 1
+    },
+    {
+      "engineName": "webkit",
+      "label": "VoiceGuide deferred mute",
+      "gainAtStart": 0
+    },
+    {
+      "engineName": "webkit",
+      "label": "Settings preview latest volume",
+      "gainAtStart": 0.3499999940395355
+    },
+    {
+      "engineName": "webkit",
+      "label": "Device nonzero next cue"
+    },
+    {
+      "engineName": "webkit",
+      "label": "Device mute preserves pause"
+    },
+    {
+      "engineName": "webkit",
+      "label": "Device resume cannot revive muted cue"
+    },
+    {
+      "engineName": "webkit",
+      "label": "Device new session resumes queue"
+    }
+  ],
+  "errors": [],
+  "failures": [],
+  "providerCalls": 0,
+  "limits": [
+    "Synthesis is replaced by deferred synthetic PCM; no provider, key, fetch or paid call.",
+    "Real browser OfflineAudioContext nodes render synthetic audio; context suspend/resume timing is controlled by an adapter.",
+    "Device speech uses a spec-conforming mock, not installed voices or a claim of live device-utterance gain control."
+  ]
+}

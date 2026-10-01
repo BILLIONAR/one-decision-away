@@ -17,10 +17,13 @@ The original approved ZIP, `ODA-approved-dashboard-design-assets.zip`, has SHA-2
 
 ## Review evidence
 
-The final `npm run check` passed: 381/381 Node tests, type checking, both 6,823-entry translations with zero missing keys or placeholder differences, the 19-test Notebook suite, 11 routing tests, Notebook speech checks and the project-path build. The suites overlap, so their counts are not added together. The log is `artifacts/verification/premium-checks/npm-check.log`; source hashes and build binding are in `final-receipt.json` alongside it.
+The latest voice-volume follow-up `npm run check` passed: 393/393 Node tests, type checking, both 6,823-entry translations with zero missing keys or placeholder differences, the 19-test Notebook suite, 11 routing tests, Notebook speech checks and the project-path build. The suites overlap, so their counts are not added together. Its log and current source/build receipt are in `artifacts/verification/voice-volume-followup/`. The earlier 381-test receipt in `premium-checks/` belongs to candidate `be33d77274a0a02dc3a4bdc77c36e13f954843f9` and remains historical evidence.
+
+Parent visual, backup and data QA gave GO for that candidate. The follow-up only fixes current voice volume after deferred synthesis/resume/preview and device mute/pause/new-session handling. It passes 64 focused tests and 26 provider-free Chromium/WebKit voice checks. Earlier visual evidence below remains from the reviewed candidate; it was not rerun or relabelled as a new full visual matrix.
 
 | Evidence | Scope |
 | --- | --- |
+| `voice-volume-followup/final-receipt.json` | Latest source/build binding, 393-test aggregate, 64 focused voice tests and 26 browser voice checks; deferred 1→0 and 1→0.35 PCM starts, rendered RMS, cancellation/pause/new-session guards; zero provider calls |
 | `premium-ui/report.json` | 134 passing checks; 126 page/locale/theme/width cases, 133 screenshots; zero failures/runtime errors or serious/critical axe findings; 320/390/1440 and a separate CSS 200% layout-zoom pass |
 | `premium-growth-webkit/growth-browser-report.json` | 28 passing official Linux WebKit checks; all stage thresholds/caps, locale inventory/filtering, progress, repeated navigation, PNG retry and final image failure; zero failures/runtime errors |
 | `premium-backup/final/report.json` | 15 checks/13 cases; first saves, real synthetic JSON export, dismissal and Settings; six EN/TR/ES mobile layouts; zero failures/runtime errors |

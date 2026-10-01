@@ -1,0 +1,196 @@
+✔ Stop cancels a cue still waiting for synthesis without starting audio (2.323729ms)
+✖ deferred synthesis starts at the latest requested volume 0 (4.169213ms)
+✖ deferred audio resume starts at the latest requested volume 0 (0.657946ms)
+✖ deferred Settings preview preserves requested volume 0 (0.575481ms)
+✖ deferred synthesis starts at the latest requested volume 0.35 (0.423611ms)
+✖ deferred audio resume starts at the latest requested volume 0.35 (0.44307ms)
+✖ deferred Settings preview preserves requested volume 0.35 (0.373225ms)
+✔ a volume change during loading preserves stop protection (0.334246ms)
+✔ a volume change during loading preserves pause-resume protection (0.286513ms)
+✔ a volume change during loading preserves new-session protection (0.428128ms)
+✔ a newer cue owns playback when an older synthesis resolves later (0.30378ms)
+✔ Pause then Resume cannot resurrect a cue waiting for synthesis (0.222898ms)
+✔ Stop also cancels a cue waiting for the audio context to resume (0.25752ms)
+✔ a new cue supersedes one waiting for the audio context to resume (0.354968ms)
+✔ Pause and Resume invalidate pending context-resume playback (0.297921ms)
+✔ replacement immediately stops active audio while the new clip is pending (0.313915ms)
+✔ stale source completion cannot clear or end the new cue (0.394447ms)
+✔ Pause and Resume preserve an already-started cue without starting it twice (0.247274ms)
+✔ unavailable synthesis reports failure without creating an audio source (0.203758ms)
+✔ a failed audio context resume reports failure without starting playback (0.200243ms)
+✔ a failed source start reports failure and never announces playback (0.359395ms)
+✔ English narration cache stays the same when UI locale changes (44.052364ms)
+✔ a Settings preview resolving after Stop cannot start playback (0.327917ms)
+✔ a Settings preview resolving after a newer cue cannot interrupt it (0.353836ms)
+✔ guided narration keeps original English text and voice with en UI (3.463935ms)
+✔ guided narration keeps original English text and voice with tr UI (21.533145ms)
+✔ guided narration keeps original English text and voice with es UI (17.608963ms)
+✔ English inventory accepts language tags and rejects names or unrelated prefixes (0.572096ms)
+✔ an explicitly selected English voice wins over a preferred device name (0.463622ms)
+✔ guided speech truthfully reports unavailable with empty inventory (0.324631ms)
+✔ guided speech truthfully reports unavailable with non-English inventory (0.241876ms)
+✔ late English voice installation refreshes availability and unsubscribe removes listeners (0.474098ms)
+✔ Notebook retains verbatim tr text, matching device voice and saved meditation preferences (0.714672ms)
+✔ Notebook retains verbatim es text, matching device voice and saved meditation preferences (0.292633ms)
+✔ Notebook preserves implicit device language when its voice list has not loaded (0.311132ms)
+✔ unsupported device speech does not report available or queued playback (0.533758ms)
+✔ empty or disabled cues leave the device queue empty (0.342429ms)
+✔ nonzero device volume changes apply to the next utterance without pretending to change active speech (0.414047ms)
+✖ zero device volume cancels the owned paused utterance and Resume cannot revive it (4.812708ms)
+✔ device cancel failures produce an honest false result (0.366856ms)
+✔ device enqueue failures produce an honest false result (0.369579ms)
+✔ new cues and Stop detach utterance handlers and ignore captured stale callbacks (0.62058ms)
+✔ pause and resume keep the active browser cue, restore speaking state and reject replay while paused (0.381858ms)
+✔ stop prevents a delayed provider failure from reviving an obsolete English device cue (0.705799ms)
+✔ pause-resume prevents a delayed provider failure from reviving an obsolete English device cue (0.206633ms)
+✔ new-cue prevents a delayed provider failure from reviving an obsolete English device cue (0.494919ms)
+✔ current provider failure falls back to English device speech; a non-English inventory cannot substitute (0.434649ms)
+✔ the optional recorder remains dormant until registration and receives identified current/upcoming cues (0.885671ms)
+✔ registered recorder missing clip uses truthful English device fallback without a provider (0.355168ms)
+✔ registered recorder overlong clip uses truthful English device fallback without a provider (0.400907ms)
+✔ registered recorder wrong language uses truthful English device fallback without a provider (0.253063ms)
+✔ registered recorder missing text hash uses truthful English device fallback without a provider (0.276288ms)
+✔ registered recorder missing checksum uses truthful English device fallback without a provider (0.353475ms)
+✔ registered recorder missing version uses truthful English device fallback without a provider (0.236748ms)
+✔ registered recorder wrong cue identity uses truthful English device fallback without a provider (0.275107ms)
+✔ registered recorder expired cue slot uses truthful English device fallback without a provider (0.292222ms)
+✔ registered recorder unbounded cue slot uses truthful English device fallback without a provider (0.249067ms)
+✔ a recorder hash/source verification failure falls back, and absent English speech reports unavailable (0.33674ms)
+✔ new cues stop clips and stale recorded callbacks/failures cannot change current playback (0.50234ms)
+✔ recorded pause invalidates pending start/fallback even after resume, and Stop invalidates callbacks (0.459165ms)
+✔ current recorded load failure falls back to English and unregistering restores device narration (0.338873ms)
+✔ synchronous recorded verification and playback errors truthfully queue English fallback (0.374507ms)
+✔ a recorded request that already ended cannot later fall back and revive the cue (0.242087ms)
+ℹ tests 63
+ℹ suites 0
+ℹ pass 56
+ℹ fail 7
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 298.005506
+
+✖ failing tests:
+
+test at tests/gemini-voice-lifecycle.test.ts:1:3094
+✖ deferred synthesis starts at the latest requested volume 0 (4.169213ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (/workspace/one-decision-away/tests/gemini-voice-lifecycle.test.ts:133:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/gemini-voice-lifecycle.test.ts:1:3482
+✖ deferred audio resume starts at the latest requested volume 0 (0.657946ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (/workspace/one-decision-away/tests/gemini-voice-lifecycle.test.ts:144:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/gemini-voice-lifecycle.test.ts:1:3881
+✖ deferred Settings preview preserves requested volume 0 (0.575481ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (/workspace/one-decision-away/tests/gemini-voice-lifecycle.test.ts:154:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/gemini-voice-lifecycle.test.ts:1:3094
+✖ deferred synthesis starts at the latest requested volume 0.35 (0.423611ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0.35
+
+      at TestContext.<anonymous> (/workspace/one-decision-away/tests/gemini-voice-lifecycle.test.ts:133:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0.35,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/gemini-voice-lifecycle.test.ts:1:3482
+✖ deferred audio resume starts at the latest requested volume 0.35 (0.44307ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0.35
+
+      at TestContext.<anonymous> (/workspace/one-decision-away/tests/gemini-voice-lifecycle.test.ts:144:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0.35,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/gemini-voice-lifecycle.test.ts:1:3881
+✖ deferred Settings preview preserves requested volume 0.35 (0.373225ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0.35
+
+      at TestContext.<anonymous> (/workspace/one-decision-away/tests/gemini-voice-lifecycle.test.ts:154:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0.35,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/voice-guide.test.ts:1:8789
+✖ zero device volume cancels the owned paused utterance and Resume cannot revive it (4.812708ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 2
+
+      at TestContext.<anonymous> (/workspace/one-decision-away/tests/voice-guide.test.ts:233:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

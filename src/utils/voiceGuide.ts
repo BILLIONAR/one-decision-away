@@ -214,6 +214,7 @@ export class VoiceGuide {
   }
   public async testNaturalVoice(): Promise<boolean> {
     if (!this.geminiApiKey) return false;
+    geminiVoice.setVolume(this.volume);
     return geminiVoice.test(this.geminiApiKey, this.geminiVoiceName);
   }
 
@@ -235,6 +236,12 @@ export class VoiceGuide {
   public setVolume(volume: number) {
     this.volume = Math.max(0, Math.min(1, volume));
     geminiVoice.setVolume(this.volume);
+    // Device engines do not reliably apply live utterance-volume changes.
+    // Zero cancels our current utterance; nonzero applies to the next cue/replay.
+    if (this.volume === 0 && this.currentUtterance) {
+      this.stopBrowser();
+      this.emit(false);
+    }
     this.persist();
   }
 
@@ -368,6 +375,7 @@ export class VoiceGuide {
         this.emit(false);
       };
       this.currentUtterance = utterance;
+      if (!this.paused && window.speechSynthesis.paused) window.speechSynthesis.resume();
       window.speechSynthesis.speak(utterance);
       return true;
     } catch {
