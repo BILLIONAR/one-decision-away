@@ -192,6 +192,6 @@ export const Me: React.FC = () => {
 const StatTile: React.FC<{ value: string; label: string; tint: string }> = ({ value, label, tint }) => (
   <div className={`min-w-0 rounded-[16px] px-3 py-2.5 ${tint}`}>
     <div className="oda-numeral text-[24px] leading-none truncate">{value}</div>
-    <div className="text-[11.5px] opacity-80 mt-1 leading-tight">{label}</div>
+    <div className="text-[12px] leading-[1.45] text-[var(--fg-muted)] mt-1">{label}</div>
   </div>
 );

@@ -87,11 +87,12 @@ try {
     scripts: await page.locator('script[src]').evaluateAll(elements => elements.map(element => element.src)) };
   assert.ok(report.shell.scripts.some(url => url.startsWith(`${BASE}assets/`)));
   const mark = page.locator('.oda-brand-mark').first(); assert.ok(await mark.isVisible());
-  assert.equal(await mark.locator('image').getAttribute('href'), '/one-decision-away/brand/oda-c4.png');
-  const brand = await context.request.get(`${BASE}brand/oda-c4.png`); assert.equal(brand.status(), 200);
+  assert.equal(await mark.getAttribute('data-brand'), 'v5');
+  assert.ok(await mark.locator('path').count() >= 3); assert.equal(await mark.locator('image').count(), 0);
+  const brand = await context.request.get(`${BASE}brand/v5/oda-app-v5-192.png`); assert.equal(brand.status(), 200);
   report.brand = { url: brand.url(), status: brand.status(), sha256: sha256(await brand.body()) };
-  assert.equal(report.brand.sha256, sha256(readFileSync(new URL('../public/brand/oda-c4.png', import.meta.url))));
-  pass('public HTTPS shell starts in English and serves the original C4 image'); await layout('landing'); await screenshot('landing-live-390');
+  assert.equal(report.brand.sha256, sha256(readFileSync(new URL('../public/brand/v5/oda-app-v5-192.png', import.meta.url))));
+  pass('public HTTPS shell starts in English with the original v5 vector identity and matching icon'); await layout('landing'); await screenshot('landing-live-390');
   await navigate('/app'); await page.getByRole('button', { name: 'Skip the demo', exact: true }).tap();
   await page.locator('#onboarding-name').fill('Synthetic Live QA');
   await page.getByRole('button', { name: 'Continue', exact: true }).tap(); await page.getByRole('radio').first().tap();

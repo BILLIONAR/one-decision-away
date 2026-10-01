@@ -60,10 +60,12 @@ export const FocusLockView: React.FC = () => {
   const [bowlRang, setBowlRang] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState<boolean>(voiceGuide.isEnabled());
   const [voiceVolume, setVoiceVolume] = useState<number>(voiceGuide.getVolume());
+  const [voiceSupported, setVoiceSupported] = useState(() => voiceGuide.isAvailable());
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [showSounds, setShowSounds] = useState(false);
 
   useEffect(() => voiceGuide.onSpeakingChange(setIsSpeaking), []);
+  useEffect(() => voiceGuide.onAvailabilityChange(setVoiceSupported), []);
 
   const [completedSummary, setCompletedSummary] = useState('');
   const [resistanceNoticed, setResistanceNoticed] = useState('');
@@ -109,7 +111,6 @@ export const FocusLockView: React.FC = () => {
     guidedMeditation && activeGuidedCueIndex + 1 < guidedMeditation.cues.length
       ? guidedMeditation.cues[activeGuidedCueIndex + 1]
       : null;
-  const voiceSupported = voiceGuide.isAvailable();
 
   const handleToggleVoice = () => {
     const next = !voiceEnabled;
@@ -123,7 +124,10 @@ export const FocusLockView: React.FC = () => {
   };
 
   const handleReplayCue = () => {
-    if (currentCue) voiceGuide.speak(t(currentCue.text));
+    if (currentCue) voiceGuide.speak(currentCue.text, {
+      sessionId: guidedMeditation!.id, cueIndex: activeGuidedCueIndex,
+      maxDurationSeconds: Math.max(0, (nextCue?.atSeconds ?? totalSeconds) - elapsedSeconds),
+    });
   };
 
   const formatTime = (secs: number) => {
@@ -331,7 +335,7 @@ export const FocusLockView: React.FC = () => {
                     <button
                       type="button"
                       onClick={handleReplayCue}
-                      disabled={!currentCue || !voiceEnabled}
+                      disabled={!currentCue || !voiceEnabled || isPaused}
                       className={`${chip(false)} disabled:opacity-40`}
                     >
                       {t('Repeat')}

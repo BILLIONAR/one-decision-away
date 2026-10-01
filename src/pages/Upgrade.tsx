@@ -1,13 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Check, Minus } from 'lucide-react';
 import { useApp } from '../store/useApp';
-import { useT, formatDate, formatNumber } from '../i18n';
+import { useT, useLocale, formatDate, formatNumber } from '../i18n';
+import { purchaseCopy, purchaseFeedback } from '../i18n/purchases';
+import { confirmedTrialDays, type PurchaseResult } from '../services/purchaseStatus';
 import { COURSES } from '../data/courses';
 import {
   MANAGE_SUBSCRIPTIONS_URL, annualSavingPercent, productIdFor, purchases, usePro,
   type PlanId,
 } from '../services/purchases';
-import { AI_MONTHLY_MESSAGES, ESSENTIAL_COURSES, tierRank, type PaidTier } from '../services/entitlements';
+import { AI_MONTHLY_MESSAGES, ESSENTIAL_COURSES, tierAtLeast, tierRank, type PaidTier } from '../services/entitlements';
 import { haptic, openExternal } from '../services/native';
 import { LEGAL_COMPANY } from '../data/legal';
 
@@ -15,18 +17,25 @@ const LEVELS: readonly PaidTier[] = ['essentials', 'pro', 'coach'];
 
 /**
  * ODA levels. An honest paywall: three paid levels that differ by course depth
- * and coach use, a plain comparison, the trial timeline before any charge,
+ * and coach use, a plain comparison, confirmed trial terms,
  * restore and Apple's renewal terms. Prices come from the App Store; nothing
  * here is a demo.
  */
 export const Upgrade: React.FC = () => {
   const t = useT();
+  const [locale] = useLocale();
+  const purchaseLabels = purchaseCopy(locale);
   const { setActiveRoute, showToast } = useApp();
   const sub = usePro();
   const [period, setPeriod] = useState<PlanId>('annual');
   const [chosen, setChosen] = useState<PaidTier>('pro');
   const [busy, setBusy] = useState<'buy' | 'restore' | null>(null);
+  const [purchaseNotice, setPurchaseNotice] = useState<Exclude<PurchaseResult, 'purchased'> | null>(null);
+  const [awaitingTier, setAwaitingTier] = useState<PaidTier | null>(null);
   useEffect(() => { void purchases.init(); }, []);
+  useEffect(() => {
+    if (awaitingTier && tierAtLeast(sub.tier, awaitingTier)) { setPurchaseNotice(null); setAwaitingTier(null); }
+  }, [sub.tier, awaitingTier]);
 
   const levelName = (tier: PaidTier) => (tier === 'essentials' ? t('Essentials') : tier === 'pro' ? t('Pro') : t('Pro Coach'));
   const fullName = (tier: PaidTier) => `ODA ${levelName(tier)}`;
@@ -48,7 +57,7 @@ export const Upgrade: React.FC = () => {
   }, [products]);
 
   const product = products[productIdFor(chosen, period)];
-  const trial = !current && chosen === 'pro' && period === 'annual' ? product?.trialDays ?? null : null;
+  const trial = !current && chosen === 'pro' && period === 'annual' ? confirmedTrialDays(product) : null;
 
   const lessons = COURSES.reduce((n, c) => n + c.lessons.length, 0);
   const benefits: Record<PaidTier, string[]> = {
@@ -78,19 +87,24 @@ export const Upgrade: React.FC = () => {
   };
 
   const buy = async () => {
-    if (busy || !product) return;
+    if (busy || !product || awaitingTier) return;
     setBusy('buy');
     const result = await purchases.purchase(product.id);
     setBusy(null);
-    if (result === 'purchased') { void haptic('success'); showToast(t('Welcome to {level}.', { level: fullName(product.tier) }), 'success'); }
-    else if (result === 'failed') showToast(t('The purchase didn’t go through. You were not charged.'), 'error');
+    if (result === 'purchased') { setPurchaseNotice(null); setAwaitingTier(null); void haptic('success'); showToast(t('Welcome to {level}.', { level: fullName(product.tier) }), 'success'); }
+    else { setPurchaseNotice(result); setAwaitingTier(result === 'pending' || result === 'unconfirmed' ? product.tier : null); showToast(purchaseFeedback(result, locale), result === 'failed' ? 'error' : 'info'); }
   };
   const restore = async () => {
     if (busy) return;
     setBusy('restore');
-    const ok = await purchases.restore();
+    const result = await purchases.restore();
     setBusy(null);
-    showToast(ok ? t('Your ODA subscription was restored.') : t('No active ODA subscription was found for this Apple ID.'), ok ? 'success' : 'info');
+    if (result === 'restored') {
+      if (!awaitingTier || tierAtLeast(purchases.getState().tier, awaitingTier)) { setPurchaseNotice(null); setAwaitingTier(null); }
+      showToast(t('Your ODA subscription was restored.'), 'success');
+    }
+    else if (result === 'not-found') showToast(t('No active ODA subscription was found for this Apple ID.'), 'info');
+    else showToast(purchaseLabels.restoreFailed, 'error');
   };
 
   const legal = (
@@ -160,7 +174,7 @@ export const Upgrade: React.FC = () => {
       : trial ? t('Start {n} days free', { n: trial })
       : current ? (rankDelta > 0 ? t('Upgrade to {level}', { level: levelName(chosen) }) : t('Switch to {level}', { level: levelName(chosen) }))
       : t('Subscribe to {level}', { level: levelName(chosen) });
-    return { label, action: () => void buy(), disabled: busy !== null || !product };
+    return { label, action: () => void buy(), disabled: busy !== null || !product || purchaseNotice === 'pending' || purchaseNotice === 'unconfirmed' };
   })();
 
   return (
@@ -218,18 +232,18 @@ export const Upgrade: React.FC = () => {
           {failed && (
             <section className="oda-card rounded-[var(--radius-lg)] p-5 space-y-1" role="alert">
               <p className="text-[15px] font-semibold">{t('Plans couldn’t load.')}</p>
-              <p className="text-[14px] text-[var(--fg-muted)]">{t('Check your connection and open this page again.')}</p>
+              <p className="text-[14px] text-[var(--fg-muted)]">{purchaseLabels.retryHelp}</p>
+              <button type="button" onClick={() => void purchases.init()} className="min-h-11 text-[14px] font-semibold text-[var(--accent)] underline underline-offset-4">{purchaseLabels.retry}</button>
             </section>
           )}
 
           {trial && (
             <ol aria-label={t('How the free trial works')} className="space-y-2">
               {[
-                [t('Today'), t('All of Pro opens.')],
-                [t('Day {n}', { n: Math.max(1, trial - 2) }), t('We remind you before the trial ends.')],
-                [t('Day {n}', { n: trial }), t('Your subscription starts. Cancel before then if you like.')],
+                [purchaseLabels.trialStart, purchaseLabels.trialStartBody],
+                [t('Day {n}', { n: trial }), purchaseLabels.trialEndBody],
               ].map(([when, what]) => (
-                <li key={when} className="flex gap-3 text-[14px] leading-snug"><span className="w-16 shrink-0 font-[family-name:var(--font-editorial)] italic text-[var(--brand-burgundy)]">{when}</span><span>{what}</span></li>
+                <li key={when} className="flex gap-3 text-[14px] leading-snug"><span className="w-24 shrink-0 break-words font-[family-name:var(--font-editorial)] italic text-[var(--brand-burgundy)]">{when}</span><span>{what}</span></li>
               ))}
             </ol>
           )}
@@ -261,7 +275,7 @@ export const Upgrade: React.FC = () => {
                       <span className="oda-numeral text-[30px] leading-none">{item.price}</span>
                       <span className="text-[14px] text-[var(--fg-muted)]"> {period === 'annual' ? t('/ year') : t('/ month')}</span>
                       {item.perMonth && <span className="block text-[13px] text-[var(--fg-muted)] mt-1">{t('about {price} a month', { price: item.perMonth })}</span>}
-                      {level === 'pro' && period === 'annual' && item.trialDays && !current && <span className="inline-block mt-2 text-[12px] font-semibold text-[var(--accent)] bg-[var(--accent-soft)] px-2 py-1 rounded-full">{t('{n} days free', { n: item.trialDays })}</span>}
+                      {level === 'pro' && period === 'annual' && confirmedTrialDays(item) && !current && <span className="inline-block mt-2 text-[12px] font-semibold text-[var(--accent)] bg-[var(--accent-soft)] px-2 py-1 rounded-full">{t('{n} days free', { n: confirmedTrialDays(item) })}</span>}
                     </>
                   ) : (
                     <span className="text-[14px] text-[var(--fg-muted)]">{t('Price shown by the App Store')}</span>
@@ -301,6 +315,8 @@ export const Upgrade: React.FC = () => {
                 {primary.label}
               </button>
               {current && tierRank(chosen) < tierRank(current) && <p className="text-[13px] leading-relaxed text-[var(--fg-muted)]">{t('A lower level starts at your next renewal. You keep your current level until then.')}</p>}
+              {!current && product?.trialDays && product.trialEligibility !== 'eligible' && <p className="text-[13px] leading-relaxed text-[var(--fg-muted)]">{product.trialEligibility === 'unknown' ? purchaseLabels.unknownTrial : purchaseLabels.ineligibleTrial}</p>}
+              {purchaseNotice && <p role="status" className="text-[13px] leading-relaxed text-[var(--fg-muted)]">{purchaseFeedback(purchaseNotice, locale)}</p>}
               <p className="text-[12px] leading-relaxed text-[var(--fg-muted)]">
                 {trial && product ? t('Free for {n} days, then {price} per {period}. ', { n: trial, price: product.price, period: t('year') }) : ''}
                 {t('Payment is charged to your Apple ID. The subscription renews automatically unless cancelled at least 24 hours before the end of the period; manage or cancel it any time in your Apple ID settings.')}

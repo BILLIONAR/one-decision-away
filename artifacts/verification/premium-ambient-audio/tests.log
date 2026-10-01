@@ -1,0 +1,30 @@
+✔ ambient renders are long independent stereo textures with finite bounded levels (167.336324ms)
+✔ scene identities differ in spectrum and amplitude dynamics (43.904768ms)
+✔ loop overlaps join continuous adjacent noise without a boundary spike (55.636677ms)
+✔ seeds reproduce review samples and produce a new texture when changed (136.137529ms)
+✔ one Sound Room track keeps one title across categories, including intentional noise reuse (0.429561ms)
+✔ breath pacer runs at about 5.5 breaths a minute (0.725067ms)
+✔ breathPhase: inhale first, then exhale, then repeats (0.682754ms)
+✔ breathPhase is safe with odd input (0.134734ms)
+✔ formatRemaining (0.146291ms)
+✔ timer fades: a minute for sleep, short otherwise, never over half the timer (0.139712ms)
+✔ arming a timer retains the independent three-second attack and actual stereo loop (99.076157ms)
+✔ mute and volume respond immediately at the beginning of a timer fade (40.852757ms)
+✔ mute and volume respond immediately at the middle of a timer fade (19.138859ms)
+✔ mute and volume respond immediately at the end of a timer fade (19.710699ms)
+✔ running fades can shorten but do not extend, and timer cancellation preserves user volume (61.079835ms)
+✔ shortening a running fade with a delay cannot restore a louder envelope (108.062535ms)
+✔ browsers without cancelAndHold retain the current level when shortening a fade (54.490357ms)
+✔ track switches release the previous graph and repeated switches/stops bound resources (521.068761ms)
+✔ stop/restart of a tone cancels its initial bowl and recurring callbacks (1.310524ms)
+✔ natural bowl endings disconnect their tails while the current ambient drone continues (0.828565ms)
+✔ Sound Room timer arming, pause/resume and expiry keep player state and start fade intact (61.019913ms)
+✔ external restart of the same track clears the Sound Room countdown and timer selection (60.183387ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1729.691937

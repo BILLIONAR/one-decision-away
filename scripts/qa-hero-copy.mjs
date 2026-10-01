@@ -79,7 +79,9 @@ const inspectHero = page => page.evaluate(() => {
     copy: box(one('.oda-landing-hero-copy')), kicker: box(one('.oda-landing-hero-copy > .oda-landing-kicker')),
     actions: box(one('.oda-landing-hero-actions')), privacy: box(one('.oda-landing-privacy')), preview: box(one('.oda-landing-preview')),
     header: box(one('.oda-landing-nav')), brand: box(one('.oda-landing-brand')), logo: box(one('.oda-landing-brand-mark')),
-    logoImage: one('.oda-landing-brand-mark image').getAttribute('href'), controls,
+    logoBrand: one('.oda-landing-brand-mark').getAttribute('data-brand'),
+    logoPaths: one('.oda-landing-brand-mark').querySelectorAll('path').length,
+    logoImages: one('.oda-landing-brand-mark').querySelectorAll('image').length, controls,
   };
 });
 const hitControl = async locator => {
@@ -152,7 +154,9 @@ try {
       assert.ok(intersectionWidth <= 1 || intersectionHeight <= 1, `${name}: hero copy overlaps daily preview`);
       for (const target of [geometry.brand, geometry.logo, ...geometry.controls.map(item => item.rect)]) assert.ok(target.left >= -1 && target.right <= width + 1 && target.width > 0 && target.height > 0, `${name}: CTA/logo extends beyond horizontal viewport`);
       assert.ok(geometry.logo.top >= geometry.header.top - 1 && geometry.logo.bottom <= geometry.header.bottom + 1, `${name}: logo outside header`);
-      assert.equal(geometry.logoImage, '/one-decision-away/brand/oda-c4.png');
+      assert.equal(geometry.logoBrand, 'v5');
+      assert.ok(geometry.logoPaths >= 3, 'Original v5 vector paths must render');
+      assert.equal(geometry.logoImages, 0, 'The active identity uses native vector paths');
       pass(`${name}: rendered line boxes stay in bounds without clipping, block/preview overlap, or CTA/logo overflow`);
       for (const [suffix, locator] of [['viewport', null], ['hero', page.locator('.oda-landing-hero')]]) {
         const file = `hero-${name}-${suffix}.png`;

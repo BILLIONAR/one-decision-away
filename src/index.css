@@ -21,7 +21,7 @@
     color: var(--fg);
     font-family: var(--font-sans);
     font-size: 16px;
-    line-height: 1.5;
+    line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -206,18 +206,18 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .oda-display {
   font-family: var(--font-editorial);
   font-weight: 400;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
   font-optical-sizing: auto;
   text-wrap: balance;
 }
 /* Small labels read like a line in a book, not a shouted tag. */
 .oda-kicker {
-  font-family: var(--font-editorial);
-  font-style: italic;
-  font-size: 15px;
-  line-height: 1.35;
-  font-weight: 400;
-  letter-spacing: 0;
+  font-family: var(--font-sans);
+  font-style: normal;
+  font-size: 12px;
+  line-height: 1.45;
+  font-weight: 650;
+  letter-spacing: .02em;
   text-transform: none;
 }
 .oda-nav-active { position: relative; }
@@ -294,18 +294,16 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .oda-ring-arc { animation: oda-ring-in 900ms var(--ease-out) both; }
 }
 @keyframes oda-ring-in { from { stroke-dasharray: 0 999; } }
-.oda-quote { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-.oda-quote-mark { font-family: var(--font-editorial); color: var(--brand-burgundy); line-height: 1; }
+.oda-quote { border-left: 2px solid var(--brand-burgundy); padding: 12px 0 12px 16px; }
+.oda-quote-mark { font-family: var(--font-editorial); font-size: 36px; color: var(--brand-burgundy); line-height: 1; }
+.oda-quote blockquote { font-size: clamp(20px, 2vw, 24px); line-height: 1.35; font-weight: 400; font-variation-settings: 'opsz' 48; }
+.oda-quote figcaption { line-height: 1.45; }
 .oda-discovery-link { transition: background-color 160ms ease; }
 .oda-discovery-link:hover { background: var(--bg-muted); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
 
-/* The transparent C4 master keeps its shape; lift its ink on dark surfaces. */
-:root[data-theme="dark"] .oda-brand-mark, html.dark .oda-brand-mark {
-  filter: brightness(2.2) saturate(.7);
-}
 .oda-more-tools summary::-webkit-details-marker { display: none; }
 
 /* ---- Premium surfaces (Sep 2026) ---- */
@@ -333,12 +331,10 @@ button.oda-surface:hover, a.oda-surface:hover { border-color: var(--border-stron
 
 /* ---- Soft depth (light) and night bronze (dark), Sep 2026 ---- */
 .oda-glass-bar {
-  background: var(--glass);
-  border-bottom: 1px solid var(--glass-border);
-  -webkit-backdrop-filter: blur(22px) saturate(1.7);
-  backdrop-filter: blur(22px) saturate(1.7);
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
 }
-/* Floating glass capsule, in the spirit of iOS 26 tab bars. */
+/* Five destinations on solid paper, clear of the safe area. */
 .oda-tabbar {
   position: fixed; z-index: 30;
   left: 16px; right: 16px;
@@ -346,18 +342,17 @@ button.oda-surface:hover, a.oda-surface:hover { border-color: var(--border-stron
   height: 66px; padding: 6px; box-sizing: border-box;
   display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
   border-radius: 33px;
-  background: var(--glass);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  -webkit-backdrop-filter: blur(22px) saturate(1.7);
-  backdrop-filter: blur(22px) saturate(1.7);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  box-shadow: var(--surface-shadow);
 }
 .oda-tab {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
-  border-radius: 27px; font-size: 10.5px; font-weight: 500; color: var(--fg-subtle);
+  border-radius: 27px; font-size: 12px; line-height: 1.2; font-weight: 550; color: var(--fg-subtle);
   cursor: pointer; transition: background-color 200ms var(--ease-out), color 160ms ease;
 }
 .oda-tab[aria-current="page"] { background: var(--nav-active); color: var(--ink-sage); font-weight: 600; }
+.oda-tab > span { max-width: 100%; overflow-wrap: anywhere; }
 .oda-btn-primary {
   background: var(--primary-grad); color: var(--on-primary);
   box-shadow: var(--primary-glow);
@@ -398,9 +393,12 @@ body::before {
   --brand-burgundy: #E6ABB6;
   color: var(--fg);
 }
-.oda-sidebar .oda-brand-mark { filter: brightness(2.6) saturate(.65); }
+.oda-sidebar-brand { width: 192px; min-height: 64px; flex: none; }
+.oda-sidebar-brand > svg { width: 192px; height: 64px; }
+.oda-mobile-brand { width: 84px; height: 32px; flex: none; margin-left: auto; margin-right: 12px; }
 .oda-sidebar button:focus-visible { outline-color: #F7F3EA; }
-.oda-sidebar .oda-nav-active::before { background: #F7F3EA; width: 2px; }
+.oda-sidebar .oda-nav-active { background: #E8EEE7; color: #173E35; }
+.oda-sidebar .oda-nav-active::before { background: #8A3042; width: 2px; }
 .oda-tabbar { background: var(--bg-elevated); border-color: var(--border); }
 @media (min-width: 768px) { .oda-tabbar { display: none; } }
 .oda-onboarding h1:focus { outline: none; }

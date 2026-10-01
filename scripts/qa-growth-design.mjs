@@ -33,6 +33,7 @@ const now = new Date('2026-10-01T12:00:00Z');
 const day = offset => new Date(now.getTime() - offset * 86_400_000).toISOString().slice(0, 10);
 const treeManifest = JSON.parse(readFileSync('public/assets/oda/trees/manifest.json', 'utf8'));
 const coverManifest = JSON.parse(readFileSync('public/assets/oda/course-covers/manifest.json', 'utf8'));
+const deliveryManifest = JSON.parse(readFileSync('public/assets/oda/delivery/manifest.json', 'utf8'));
 const stages = ['seedling', 'sapling', 'young', 'fuller', 'mature', 'flowering'];
 const expectedStage = count => count === 0 ? 0 : count < 10 ? 1 : count < 30 ? 2 : count < 60 ? 3 : count === 60 ? 4 : 5;
 const expectedLeaves = count => Math.min(count, 60);
@@ -70,7 +71,7 @@ const loadCatalogueCovers = async page => {
     assert.equal(await image.count(), 1, 'Every catalogue row uses an original editorial cover');
     const info = await image.evaluate(async image => { await image.decode(); return { src: image.currentSrc, width: image.naturalWidth, height: image.naturalHeight }; });
     const imagePath = new URL(info.src).pathname;
-    assert.ok(imagePath.includes('/assets/oda/course-covers/'), `Unexpected catalogue source: ${imagePath}`);
+    assert.ok(imagePath.includes('/assets/oda/course-covers/') || imagePath.includes('/assets/oda/delivery/course-covers/'), `Unexpected catalogue source: ${imagePath}`);
     assert.ok(info.width > 0 && info.height > 0); coverSources.add(imagePath);
   }
   return coverSources;
@@ -207,6 +208,9 @@ const assertTree = async (page, count, name) => {
   const image = tree.locator('img');
   assert.equal(await image.count(), 1, 'Default tree must display the approved prerendered asset');
   await image.evaluate(async image => image.decode());
+  const selectedSrc = new URL(await image.evaluate(image => image.currentSrc)).pathname;
+  const delivery = deliveryManifest.assets[`assets/oda/trees/${asset.file}`].variants.find(variant => selectedSrc.endsWith(`/${variant.src}`));
+  const selectedAsset = delivery || asset;
   const geometry = await tree.evaluate((element, asset) => {
     const image = element.querySelector('img');
     const parent = element.getBoundingClientRect();
@@ -220,10 +224,11 @@ const assertTree = async (page, count, name) => {
       normalizedVisibleHeightPercent: (visible.bottom - visible.top) / parent.height * 100,
       transform: getComputedStyle(image).transform, transformOrigin: getComputedStyle(image).transformOrigin,
     };
-  }, asset);
+  }, selectedAsset);
   report.treeGeometry.push({ name, count, stage: stages[index], ...geometry });
-  assert.equal(new URL(geometry.src).pathname.split('/').at(-1), asset.file);
-  assert.equal(geometry.naturalWidth, asset.width); assert.equal(geometry.naturalHeight, asset.height);
+  assert.ok(delivery || new URL(geometry.src).pathname.split('/').at(-1) === asset.file, 'Selected image must belong to the approved stage');
+  if (!delivery) { assert.equal(geometry.naturalWidth, asset.width); assert.equal(geometry.naturalHeight, asset.height); }
+  else { assert.ok(geometry.naturalWidth > 0 && geometry.naturalHeight > 0); assert.ok(Math.abs(geometry.naturalWidth / geometry.naturalHeight - selectedAsset.width / selectedAsset.height) < 0.005); }
   assert.ok(geometry.square.width > 0 && Math.abs(geometry.square.width - geometry.square.height) <= 1, 'Tree uses a fixed square canvas');
   assert.ok(Math.abs(geometry.baselinePercent - treeManifest.targetBaselinePercent) <= 0.6, `Root baseline: ${geometry.baselinePercent}%`);
   assert.ok(Math.abs(geometry.normalizedVisibleHeightPercent - asset.normalizedVisibleHeightPercent) <= 0.6, 'Stage height must follow approved asset normalization');
@@ -315,8 +320,20 @@ try {
       });
     }
   }
+  await runCase('Unavailable WebP tree retries the untouched approved PNG', { count: 120 }, async (page, context) => {
+    await context.route('**/assets/oda/delivery/trees/*.webp', route => route.abort());
+    await page.goto(routeUrl('/app')); await ready(page);
+    const tree = page.locator('.oda-evidence-tree').first();
+    await page.waitForFunction(filename => { const image = document.querySelector('.oda-evidence-tree img'); return image?.currentSrc.endsWith(`/${filename}`) && image.complete && image.naturalWidth > 0; }, treeManifest.assets[5].file);
+    await tree.locator('img').evaluate(image => image.decode());
+    assert.ok((await tree.locator('img').evaluate(image => image.currentSrc)).endsWith(`/${treeManifest.assets[5].file}`));
+    assert.equal(await tree.getAttribute('data-kept-count'), '120');
+    assert.equal(await tree.getAttribute('data-image-failed'), 'false');
+  });
+
   await runCase('Unavailable tree image retains accurate evidence and usable fallback', { count: 120 }, async (page, context) => {
     await context.route('**/assets/oda/trees/*.png', route => route.abort());
+    await context.route('**/assets/oda/delivery/trees/*.webp', route => route.abort());
     await page.goto(routeUrl('/app')); await ready(page); await dismiss(page);
     const tree = page.locator('.oda-evidence-tree').first();
     await tree.waitFor({ state: 'visible' });

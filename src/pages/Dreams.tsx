@@ -13,16 +13,17 @@ import { SEED_MARKET_ITEMS } from '../data/seed';
 import { EXPLORE_CATEGORIES, EXPLORE_DREAM_ITEMS, ExploreDreamItem } from '../data/exploreDreams';
 import { computeLedgerBalance, estimateDailyEarningPace, daysToAfford } from '../services/economy';
 import { MarketItem, Purchase } from '../types/models';
-import { useT, N_ } from '../i18n';
+import { useLocale, useT } from '../i18n';
+import { rewardUnlockLabel, rewardsCopy } from '../i18n/rewards';
 
 type Tab = 'mine' | 'explore' | 'owned';
 type BudgetKey = 'all' | 'now' | 'week' | 'month';
 
-const BUDGET_FILTERS: { key: BudgetKey; label: string; maxDays: number }[] = [
-  { key: 'all', label: N_('All'), maxDays: Infinity },
-  { key: 'now', label: N_('Affordable now'), maxDays: 0 },
-  { key: 'week', label: N_('Under 1 week'), maxDays: 7 },
-  { key: 'month', label: N_('Under 1 month'), maxDays: 30 },
+const BUDGET_FILTERS: { key: BudgetKey; maxDays: number }[] = [
+  { key: 'all', maxDays: Infinity },
+  { key: 'now', maxDays: 0 },
+  { key: 'week', maxDays: 7 },
+  { key: 'month', maxDays: 30 },
 ];
 
 const ICON_STROKE = 1.8;
@@ -250,16 +251,16 @@ export const Dreams: React.FC = () => {
   }, [data, visionIds]);
 
   const days = (price: number) => daysToAfford(price, balance, pace.perDay);
-  const daysLabel = (price: number) => {
-    const d = days(price);
-    return d === 0 ? t('Affordable now') : d === 1 ? t('~1 day') : t('~{n} days', { n: d });
-  };
+  const [locale] = useLocale();
+  const rewardCopy = rewardsCopy(locale);
+  const effectiveBudgetKey = pace.isBaseline && (budgetKey === 'week' || budgetKey === 'month') ? 'all' : budgetKey;
+  const daysLabel = (price: number) => rewardUnlockLabel(locale, price, balance, pace);
   const pctFor = (price: number) => Math.min(100, Math.round((balance / Math.max(1, price)) * 100));
 
   const filteredExplore = useMemo(() => {
     const cat = EXPLORE_CATEGORIES.find((c) => c.key === categoryKey);
     const q = query.trim().toLocaleLowerCase();
-    const maxDays = BUDGET_FILTERS.find((b) => b.key === budgetKey)?.maxDays ?? Infinity;
+    const maxDays = BUDGET_FILTERS.find((b) => b.key === effectiveBudgetKey)?.maxDays ?? Infinity;
     return EXPLORE_DREAM_ITEMS.filter((item) => {
       if (cat && cat.category !== 'All' && item.category !== cat.category) return false;
       if (q) {
@@ -270,13 +271,13 @@ export const Dreams: React.FC = () => {
       return true;
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categoryKey, query, budgetKey, balance, pace.perDay, t]);
+  }, [categoryKey, query, effectiveBudgetKey, balance, pace.perDay, t]);
 
   const startHere = useMemo(
     () => [...EXPLORE_DREAM_ITEMS].sort((a, b) => a.dreamDollarPrice - b.dreamDollarPrice).slice(0, 4),
     []
   );
-  const showStartHere = categoryKey === 'all' && !query.trim() && budgetKey === 'all';
+  const showStartHere = categoryKey === 'all' && !query.trim() && effectiveBudgetKey === 'all';
 
   if (!data) return null;
 
@@ -335,7 +336,7 @@ export const Dreams: React.FC = () => {
   const secondaryBtn =
     'h-12 w-full rounded-[var(--radius-sm)] border border-[var(--border-strong)] bg-transparent text-[var(--fg)] font-semibold text-[15px] cursor-pointer';
   const smallBtn =
-    'h-9 w-full rounded-[var(--radius-sm)] text-[13px] font-semibold cursor-pointer flex items-center justify-center gap-1.5';
+    'min-h-11 w-full rounded-[var(--radius-sm)] text-[13px] font-semibold cursor-pointer flex items-center justify-center gap-1.5';
 
   return (
     <div className="space-y-6">
@@ -351,6 +352,10 @@ export const Dreams: React.FC = () => {
           D$ {balance.toLocaleString()}
         </button>
       </div>
+
+      <p className="text-[14px] leading-relaxed text-[var(--fg-muted)] border-l-2 border-[var(--brand-burgundy)] pl-4" data-symbolic-rewards="true">
+        {rewardCopy.explanation}
+      </p>
 
       {/* Tabs */}
       <div className="bg-[var(--bg-muted)] rounded-full p-1 flex">
@@ -435,7 +440,7 @@ export const Dreams: React.FC = () => {
                     key={cat.key}
                     type="button"
                     onClick={() => setCategoryKey(cat.key)}
-                    className={`shrink-0 h-9 px-3.5 rounded-full text-[13px] font-medium cursor-pointer transition-colors ${
+                    className={`shrink-0 h-11 px-3.5 rounded-full text-[13px] font-medium cursor-pointer transition-colors ${
                       active
                         ? 'bg-[var(--fg)] text-[var(--bg)]'
                         : 'bg-[var(--bg-muted)] text-[var(--fg-muted)]'
@@ -448,20 +453,20 @@ export const Dreams: React.FC = () => {
             </div>
 
             <div className="flex gap-2 overflow-x-auto -mx-4 px-4 pb-1 [scrollbar-width:none]">
-              {BUDGET_FILTERS.map((b) => {
-                const active = budgetKey === b.key;
+              {BUDGET_FILTERS.filter(b => !pace.isBaseline || b.key === 'all' || b.key === 'now').map((b) => {
+                const active = effectiveBudgetKey === b.key;
                 return (
                   <button
                     key={b.key}
                     type="button"
                     onClick={() => setBudgetKey(b.key)}
-                    className={`shrink-0 h-9 px-3.5 rounded-full text-[13px] font-medium cursor-pointer border transition-colors ${
+                    className={`shrink-0 h-11 px-3.5 rounded-full text-[13px] font-medium cursor-pointer border transition-colors ${
                       active
                         ? 'border-[var(--accent)] text-[var(--accent)] bg-[var(--accent-soft)]'
                         : 'border-[var(--border)] text-[var(--fg-muted)]'
                     }`}
                   >
-                    {t(b.label)}
+                    {rewardCopy.filters[b.key]}
                   </button>
                 );
               })}
@@ -473,7 +478,7 @@ export const Dreams: React.FC = () => {
               <div>
                 <h2 className="text-[15px] font-semibold text-[var(--fg)]">{t('Start here')}</h2>
                 <p className="text-[13px] text-[var(--fg-muted)]">
-                  {t('Small enough to buy in your first week at ~D$ {pace} a day.', { pace: pace.perDay.toLocaleString() })}
+                  {rewardCopy.startHere}
                 </p>
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -622,7 +627,7 @@ export const Dreams: React.FC = () => {
               />
             </div>
 
-            <div className="flex items-baseline justify-between">
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
               <span className="text-[20px] font-semibold text-[var(--accent)]">D$ {detailItem.dreamDollarPrice.toLocaleString()}</span>
               <span className="text-[13px] text-[var(--fg-muted)]">{daysLabel(detailItem.dreamDollarPrice)}</span>
             </div>
@@ -655,7 +660,7 @@ export const Dreams: React.FC = () => {
                 disabled={balance < detailItem.dreamDollarPrice || isPurchasing}
                 onClick={() => handleBuy(detailItem)}
               >
-                {t('Buy for D$ {price}', { price: detailItem.dreamDollarPrice.toLocaleString() })}
+                {rewardCopy.unlock(detailItem.dreamDollarPrice.toLocaleString())}
               </button>
               {detailItem.id !== focusId && (
                 <button type="button" className={secondaryBtn} onClick={() => handleSetFocus(detailItem)}>

@@ -62,9 +62,9 @@ test('standalone support remains available offline without replacing the applica
 });
 
 test('activation preserves sibling apps and this version media cache', async () => {
-  const app = worker('https://example.github.io/repo/', ['oda:%2Frepo%2F:v1', 'oda:%2Frepo%2F:v2', 'oda:%2Frepo%2F:v2:media', 'oda:%2Frepo%2F:v3', 'oda:%2Frepo%2F:v3:media', 'oda:%2Frepo%2F:v4', 'oda:%2Frepo%2F:v4:media', 'oda:%2Frepo%2F:v5', 'oda:%2Frepo%2F:v5:media', 'oda:%2Fother%2F:v1', 'another-app-cache']);
+  const app = worker('https://example.github.io/repo/', ['oda:%2Frepo%2F:v1', 'oda:%2Frepo%2F:v2', 'oda:%2Frepo%2F:v2:media', 'oda:%2Frepo%2F:v3', 'oda:%2Frepo%2F:v3:media', 'oda:%2Frepo%2F:v4', 'oda:%2Frepo%2F:v4:media', 'oda:%2Frepo%2F:v5', 'oda:%2Frepo%2F:v5:media', 'oda:%2Frepo%2F:v6', 'oda:%2Frepo%2F:v6:media', 'oda:%2Fother%2F:v1', 'another-app-cache']);
   await app.dispatch('activate');
-  assert.deepEqual(app.deleted, ['oda:%2Frepo%2F:v1', 'oda:%2Frepo%2F:v2', 'oda:%2Frepo%2F:v2:media', 'oda:%2Frepo%2F:v3', 'oda:%2Frepo%2F:v3:media', 'oda:%2Frepo%2F:v4', 'oda:%2Frepo%2F:v4:media']);
+  assert.deepEqual(app.deleted, ['oda:%2Frepo%2F:v1', 'oda:%2Frepo%2F:v2', 'oda:%2Frepo%2F:v2:media', 'oda:%2Frepo%2F:v3', 'oda:%2Frepo%2F:v3:media', 'oda:%2Frepo%2F:v4', 'oda:%2Frepo%2F:v4:media', 'oda:%2Frepo%2F:v5', 'oda:%2Frepo%2F:v5:media']);
 });
 
 test('notification defaults and legacy targets open the project hash route', async () => {

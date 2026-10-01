@@ -1,0 +1,50 @@
+{
+  "generatedAt": "2026-10-01T20:31:39.263Z",
+  "browser": "151.0.7922.173",
+  "checks": [
+    {
+      "name": "actual browser attack/timer/mute at beginning",
+      "passed": true,
+      "actualMuteAt": 4,
+      "scheduledAfterMute": true,
+      "earlyRms": 0.0012430094031819865,
+      "settledRms": 0.0347349307713011,
+      "mutedRms": 0,
+      "peak": 0.08694109320640564,
+      "finite": true,
+      "sampleRate": 24000,
+      "channels": 2
+    },
+    {
+      "name": "actual browser attack/timer/mute at middle",
+      "passed": true,
+      "actualMuteAt": 5.002666666666666,
+      "scheduledAfterMute": true,
+      "earlyRms": 0.00107579261815571,
+      "settledRms": 0.03376489611517611,
+      "mutedRms": 0,
+      "peak": 0.0818827822804451,
+      "finite": true,
+      "sampleRate": 24000,
+      "channels": 2
+    },
+    {
+      "name": "actual browser attack/timer/mute at end",
+      "passed": true,
+      "actualMuteAt": 5.952,
+      "scheduledAfterMute": true,
+      "earlyRms": 0.0011025746007620409,
+      "settledRms": 0.03112449204376253,
+      "mutedRms": 0,
+      "peak": 0.07661344110965729,
+      "finite": true,
+      "sampleRate": 24000,
+      "channels": 2
+    }
+  ],
+  "runtimeErrors": [],
+  "limits": [
+    "Offline browser rendering verifies the actual production graph, not a listening assessment or physical-device performance.",
+    "The adapter supplies OfflineAudioContext to the production engine; production continues to use AudioContext."
+  ]
+}

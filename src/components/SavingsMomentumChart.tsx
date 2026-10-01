@@ -1,9 +1,12 @@
 import React, { useMemo, useRef, useState, useEffect } from 'react';
 import * as d3 from 'd3';
-import { WalletTransaction, MarketItem, Goal } from '../types/models';
+import { WalletTransaction, MarketItem, Goal, Mission } from '../types/models';
 import { SEED_MARKET_ITEMS } from '../data/seed';
 import { Select } from './ui';
-import { useT } from '../i18n';
+import { getSpeechLang, useLocale, useT } from '../i18n';
+import { rewardsCopy, rewardUnlockLabel } from '../i18n/rewards';
+import { bankPracticeSummary } from '../services/bankPractice';
+import { estimateDailyEarningPace } from '../services/economy';
 
 /* ----------------------------- Chart palette ----------------------------- */
 const readVar = (name: string, fallback: string): string => {
@@ -35,6 +38,7 @@ const useChartColors = () => {
 
 interface SavingsMomentumChartProps {
   transactions: WalletTransaction[];
+  missions: Mission[];
   inVisionItemIds?: string[];
   customMarketItems?: MarketItem[];
   userGoals?: Goal[];
@@ -62,12 +66,17 @@ interface GoalOption {
 
 export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
   transactions,
+  missions,
   inVisionItemIds = [],
   customMarketItems = [],
   userGoals = [],
   className = '',
 }) => {
   const t = useT();
+  const [locale] = useLocale();
+  const copy = rewardsCopy(locale);
+  const practice = bankPracticeSummary(missions);
+  const earningPace = useMemo(() => estimateDailyEarningPace(transactions), [transactions]);
   const colors = useChartColors();
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -149,13 +158,13 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
   const dataPoints = useMemo<DayPoint[]>(() => {
     const points: DayPoint[] = [];
     const today = new Date();
-    today.setHours(23, 59, 59, 999);
+    today.setUTCHours(12, 0, 0, 0);
 
     // Generate 30 days starting from 29 days ago to today
     const dayKeys: string[] = [];
     for (let i = 29; i >= 0; i--) {
       const d = new Date(today);
-      d.setDate(d.getDate() - i);
+      d.setUTCDate(d.getUTCDate() - i);
       const key = d.toISOString().slice(0, 10);
       dayKeys.push(key);
     }
@@ -175,7 +184,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
     });
 
     dayKeys.forEach((key) => {
-      const d = new Date(key + 'T12:00:00');
+      const d = new Date(key + 'T12:00:00Z');
       const dayTxs = txByDay.get(key) || [];
       const dayEarned = dayTxs.filter((t) => t.amount > 0).reduce((a, t) => a + t.amount, 0);
       const daySpent = dayTxs.filter((t) => t.amount < 0).reduce((a, t) => a + Math.abs(t.amount), 0);
@@ -188,7 +197,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
       points.push({
         date: d,
         dayKey: key,
-        label: d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
+        label: d.toLocaleDateString(getSpeechLang(locale), { month: 'short', day: 'numeric', timeZone: 'UTC' }),
         dayEarned,
         daySpent,
         netDay,
@@ -198,7 +207,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
     });
 
     return points;
-  }, [transactions]);
+  }, [transactions, locale]);
 
   // Handle ResizeObserver for responsive SVG rendering
   useEffect(() => {
@@ -216,31 +225,17 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
 
   // Momentum velocity metrics
   const velocityMetrics = useMemo(() => {
-    if (dataPoints.length === 0) return { dailyAvg: 0, daysLeft: 0, isReached: false, momentumPct: 0 };
+    if (dataPoints.length === 0) return { dailyAvg: 0, progressPct: 0, latestBalance: 0, total30dNet: 0 };
     const latestBalance = dataPoints[dataPoints.length - 1].cumulativeBalance;
-    const startBalance = dataPoints[0].cumulativeBalance;
-    const total30dNet = latestBalance - startBalance;
+    const total30dNet = dataPoints.reduce((total, day) => total + day.netDay, 0);
     const dailyAvg = Math.max(0, Math.round(total30dNet / 30));
 
-    const needed = Math.max(0, activeGoal.targetD$ - latestBalance);
-    const daysLeft = dailyAvg > 0 ? Math.ceil(needed / dailyAvg) : null;
-    const isReached = latestBalance >= activeGoal.targetD$;
     const progressPct = Math.min(100, Math.round((latestBalance / activeGoal.targetD$) * 100));
-
-    // Compare second half velocity vs first half velocity for acceleration index
-    const firstHalfDelta = dataPoints[14].cumulativeBalance - dataPoints[0].cumulativeBalance;
-    const secondHalfDelta = dataPoints[29].cumulativeBalance - dataPoints[15].cumulativeBalance;
-    let momentumStatus: 'accelerating' | 'steady' | 'cooldown' = 'steady';
-    if (secondHalfDelta > firstHalfDelta + 50) momentumStatus = 'accelerating';
-    else if (secondHalfDelta < firstHalfDelta - 50) momentumStatus = 'cooldown';
 
     return {
       dailyAvg,
-      daysLeft,
-      isReached,
       progressPct,
       latestBalance,
-      momentumStatus,
       total30dNet,
     };
   }, [dataPoints, activeGoal]);
@@ -261,7 +256,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
     // X Scale: Time
     const dateExtent = d3.extent(dataPoints, (d: DayPoint) => d.date);
     const xScale = d3
-      .scaleTime()
+      .scaleUtc()
       .domain([dateExtent[0] || new Date(), dateExtent[1] || new Date()])
       .range([0, innerWidth]);
 
@@ -294,7 +289,8 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
     const barWidth = Math.max(2, (innerWidth / dataPoints.length) * 0.45);
     const significantPoints = dataPoints.filter((d: DayPoint) => d.dayEarned > 0 || d.daySpent > 0);
 
-    const isInitial = isInitialMountRef.current;
+    const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+    const isInitial = isInitialMountRef.current && !reducedMotion;
 
     // Build or select persistent chart container
     let g = svg.select<SVGGElement>('g.chart-root');
@@ -377,7 +373,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
     g.attr('transform', `translate(${margin.left},${margin.top})`);
 
     // Define standard transition
-    const trans = svg.transition().duration(isInitial ? 850 : 650).ease(d3.easeCubicInOut);
+    const trans = svg.transition().duration(reducedMotion ? 0 : isInitial ? 850 : 650).ease(d3.easeCubicInOut);
 
     // --- A. Grid Lines ---
     const gridGroup = g.select<SVGGElement>('.grid-lines');
@@ -414,7 +410,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
     const xAxis = d3
       .axisBottom(xScale)
       .ticks(containerWidth > 500 ? 6 : 4)
-      .tickFormat((d) => d3.timeFormat('%b %d')(d as Date))
+      .tickFormat((d) => (d as Date).toLocaleDateString(getSpeechLang(locale), { month: 'short', day: 'numeric', timeZone: 'UTC' }))
       .tickSize(4);
 
     const xAxisGroup = g.select<SVGGElement>('.x-axis-group');
@@ -594,7 +590,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
     const goalGroup = g.select<SVGGElement>('.goal-threshold');
     const goalLine = goalGroup.select<SVGLineElement>('.goal-line');
     const goalLabel = goalGroup.select<SVGTextElement>('.goal-label');
-    const goalText = t('Goal: {name} (D$ {amount})', { name: t(activeGoal.name), amount: activeGoal.targetD$.toLocaleString() });
+    const goalText = `D$ ${activeGoal.targetD$.toLocaleString(getSpeechLang(locale))}`;
 
     if (activeGoal.targetD$ <= yMax) {
       const goalY = yScale(activeGoal.targetD$);
@@ -688,7 +684,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
 
     // Mark initial entrance complete
     isInitialMountRef.current = false;
-  }, [dataPoints, containerWidth, activeGoal, t, colors]);
+  }, [dataPoints, containerWidth, activeGoal, t, colors, locale]);
 
   return (
     <div className={`bg-[var(--bg-muted)] rounded-[var(--radius-md)] p-5 space-y-6 ${className}`}>
@@ -735,7 +731,7 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
             D$ {activeGoal.targetD$.toLocaleString()}
           </div>
           <div className="text-[12px] text-[var(--fg-muted)] mt-2">{t('Goal Target')}</div>
-          <div className="text-[12px] text-[var(--fg-subtle)] mt-0.5 truncate">{t(activeGoal.name)}</div>
+          <div className="text-[12px] leading-[1.45] text-[var(--fg-subtle)] mt-0.5 break-words">{t(activeGoal.name)}</div>
         </div>
 
         <div className="bg-[var(--bg)] rounded-[var(--radius-sm)] p-4">
@@ -749,23 +745,12 @@ export const SavingsMomentumChart: React.FC<SavingsMomentumChartProps> = ({
         </div>
 
         <div className="bg-[var(--bg)] rounded-[var(--radius-sm)] p-4">
-          <div className="text-[22px] font-semibold text-[var(--fg)] leading-none">
-            {velocityMetrics.isReached
-              ? t('Reached')
-              : velocityMetrics.daysLeft !== null
-              ? (velocityMetrics.daysLeft === 1 ? t('~1 day') : t('~{n} days', { n: velocityMetrics.daysLeft }))
-              : t('Action required')}
+          <div className="text-[15px] font-semibold text-[var(--fg)] leading-snug">
+            {rewardUnlockLabel(locale, activeGoal.targetD$, velocityMetrics.latestBalance ?? 0, earningPace)}
           </div>
-          <div className="text-[12px] text-[var(--fg-muted)] mt-2">{t('Est. Completion')}</div>
+          <div className="text-[12px] text-[var(--fg-muted)] mt-2">{copy.currencyEstimate}</div>
           <div className="text-[12px] text-[var(--fg-subtle)] mt-0.5">
-            {t('Trajectory: {status}', {
-              status:
-                velocityMetrics.momentumStatus === 'accelerating'
-                  ? t('accelerating')
-                  : velocityMetrics.momentumStatus === 'cooldown'
-                  ? t('cooldown')
-                  : t('steady'),
-            })}
+            {copy.keptDaysCount(practice.daysLast7)}
           </div>
         </div>
       </div>

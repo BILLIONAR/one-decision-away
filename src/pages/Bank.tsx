@@ -8,13 +8,16 @@ import {
   computeTodayEarnings,
   ECONOMY_CONSTANTS,
 } from '../services/economy';
-import { useT } from '../i18n';
+import { getSpeechLang, useLocale, useT } from '../i18n';
+import { rewardsCopy } from '../i18n/rewards';
 import { DreamDollarChart } from '../components/DreamDollarChart';
 import { SavingsMomentumChart } from '../components/SavingsMomentumChart';
 
 export const Bank: React.FC = () => {
   const { data } = useApp();
   const t = useT();
+  const [locale] = useLocale();
+  const copy = rewardsCopy(locale);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
@@ -34,7 +37,7 @@ export const Bank: React.FC = () => {
       !tx.memo.toLowerCase().includes(searchTerm.toLowerCase()) &&
       !tx.kind.toLowerCase().includes(searchTerm.toLowerCase()) &&
       !t(tx.memo).toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()) &&
-      !t(tx.kind.replace('_', ' ')).toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
+      !copy.kindLabels[tx.kind].toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
     ) {
       return false;
     }
@@ -62,20 +65,21 @@ export const Bank: React.FC = () => {
         <div className="text-3xl font-semibold tracking-tight text-[var(--accent)] mt-1">
           D$ {balance.toLocaleString()}
         </div>
-        <div className="grid grid-cols-3 gap-3 mt-5 pt-4 border-t border-[var(--border)]">
-          {stats.map((s) => (
-            <div key={s.label} className="min-w-0">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-5 pt-4 border-t border-[var(--border)]">
+          {stats.map((s, index) => (
+            <div key={s.label} className={`min-w-0 ${index === 2 ? 'col-span-2 sm:col-span-1' : ''}`}>
               <div className="text-xs text-[var(--fg-muted)]">{s.label}</div>
-              <div className="text-sm font-medium text-[var(--fg)] mt-0.5 truncate">{s.value}</div>
+              <div className="text-sm font-medium text-[var(--fg)] mt-0.5 break-words">{s.value}</div>
             </div>
           ))}
         </div>
       </div>
 
-      <DreamDollarChart transactions={data.transactions} />
+      <DreamDollarChart transactions={data.transactions} missions={data.missions} />
 
       <SavingsMomentumChart
         transactions={data.transactions}
+        missions={data.missions}
         inVisionItemIds={data.inVisionItemIds}
         customMarketItems={data.customMarketItems}
         userGoals={data.goals}
@@ -92,10 +96,11 @@ export const Bank: React.FC = () => {
             placeholder={t('Search')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="flex-1 h-11 px-3 bg-[var(--bg-muted)] text-[var(--fg)] rounded-[var(--radius-sm)] text-sm focus:outline-none placeholder:text-[var(--fg-subtle)]"
+            className="flex-1 min-w-0 h-11 px-3 bg-[var(--bg-muted)] text-[var(--fg)] rounded-[var(--radius-sm)] text-sm focus:outline-none placeholder:text-[var(--fg-subtle)]"
           />
           <select
             id="filter-type"
+            aria-label={t('Activity')}
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
             className="w-32 h-11 px-3 bg-[var(--bg-muted)] text-[var(--fg)] rounded-[var(--radius-sm)] text-sm focus:outline-none"
@@ -122,7 +127,7 @@ export const Bank: React.FC = () => {
                   <div className="flex-1 min-w-0">
                     <div className="font-medium text-[var(--fg)] truncate">{t(tx.memo)}</div>
                     <div className="text-xs text-[var(--fg-subtle)]">
-                      {new Date(tx.createdAt).toLocaleDateString()} · {t(tx.kind.replace('_', ' '))}
+                      {new Date(tx.createdAt).toLocaleDateString(getSpeechLang(locale))} · {copy.kindLabels[tx.kind]}
                     </div>
                   </div>
                   <span className={`font-medium shrink-0 ${isDeposit ? 'text-[var(--accent)]' : 'text-[var(--fg)]'}`}>

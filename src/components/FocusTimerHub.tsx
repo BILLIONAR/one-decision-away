@@ -50,7 +50,8 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
   const [voiceEnabled, setVoiceEnabled] = useState<boolean>(voiceGuide.isEnabled());
   const [voiceSampleId, setVoiceSampleId] = useState<string | null>(null);
   const [section, setSection] = useState<'guided' | 'quick' | 'custom'>('custom');
-  const voiceSupported = voiceGuide.isAvailable();
+  const [voiceSupported, setVoiceSupported] = useState(() => voiceGuide.isAvailable());
+  useEffect(() => voiceGuide.onAvailabilityChange(setVoiceSupported), []);
 
   useEffect(() => {
     return () => {
@@ -251,7 +252,10 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
       setVoiceEnabled(true);
     }
     setVoiceSampleId(meditation.id);
-    voiceGuide.speak(t(meditation.cues[0]?.text || meditation.description));
+    if (!voiceGuide.speak(meditation.cues[0]?.text || meditation.description, {
+      sessionId: meditation.id, cueIndex: 0,
+      maxDurationSeconds: Math.max(0, (meditation.cues[1]?.atSeconds ?? meditation.durationMinutes * 60) - (meditation.cues[0]?.atSeconds ?? 0)),
+    })) setVoiceSampleId(null);
   };
 
   const estimatedReward = selectedMission

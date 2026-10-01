@@ -2,7 +2,7 @@
 .oda-evidence-tree > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 .oda-tree-ground { position: absolute; left: 20%; right: 20%; top: 86%; height: 4%; background: radial-gradient(ellipse, rgb(65 71 40 / 16%), transparent 70%); z-index: -1; }
 .oda-tree-unavailable { position: absolute; inset: 20% 12%; display: grid; place-items: center; text-align: center; font-size: .88rem; color: var(--fg-muted); border: 1px solid var(--border); border-radius: var(--radius-md); }
-.oda-today-headline { font-size: clamp(2rem, 3.9vw, 3.55rem); line-height: 1.08; color: var(--fg); max-width: 24ch; margin-top: .55rem; }
+.oda-today-headline { font-size: clamp(32px, 3.6vw, 54px); line-height: 1.05; font-weight: 400; font-variation-settings: 'opsz' 64; letter-spacing: -.015em; color: var(--fg); max-width: 24ch; margin-top: .55rem; }
 .oda-growth-dashboard { display: grid; gap: 1.75rem; align-items: center; }
 .oda-growth-panel { position: relative; margin: 0; min-width: 0; }
 .oda-growth-heading { position: relative; z-index: 1; }
@@ -13,11 +13,11 @@
 .oda-growth-count { display: inline-flex; align-items: center; gap: .6rem; min-height: 44px; padding: .6rem .95rem; border: 1px solid var(--accent); border-radius: 999px; color: var(--accent); background: var(--bg); font-size: .8rem; }
 .oda-growth-ledger { font-size: .76rem; color: var(--fg-muted); }
 .oda-growth-actions { display: grid; gap: 1.25rem; min-width: 0; }
-.oda-growth-actions .oda-decision { background: var(--bg-elevated); border-color: var(--border); border-radius: 18px; box-shadow: var(--surface-shadow); padding: clamp(1.25rem, 2.5vw, 2rem); }
+.oda-growth-actions .oda-decision { background: var(--bg-elevated); border-color: var(--border); border-top: 2px solid var(--brand-burgundy); border-radius: 18px; box-shadow: var(--surface-shadow); padding: clamp(20px, 2.5vw, 24px); }
 .oda-growth-actions .oda-decision-text { font-family: var(--font-editorial); font-size: clamp(1.55rem, 2.6vw, 2.25rem); font-weight: 400; line-height: 1.2; margin-top: .65rem; }
-.oda-growth-actions .oda-course-next-step { border: 1px solid var(--border); border-radius: 18px; background: var(--bg-elevated); box-shadow: var(--surface-shadow); padding: clamp(1.25rem, 2.5vw, 2rem); }
+.oda-growth-actions .oda-course-next-step { border: 1px solid var(--border); border-radius: 18px; background: var(--bg-muted); padding: clamp(20px, 2.5vw, 24px); }
 .oda-growth-actions .oda-course-next-step .oda-loop-heading { display: block; }
-.oda-growth-actions .oda-course-next-step h2 { font-size: clamp(1.5rem, 2.3vw, 2rem); margin-top: .6rem; line-height: 1.2; }
+.oda-growth-actions .oda-course-next-step h2 { font-size: clamp(28px, 2.3vw, 32px); font-weight: 500; margin-top: .6rem; line-height: 1.15; }
 .oda-growth-actions .oda-course-next-step .oda-kicker { color: var(--brand-burgundy); }
 .oda-growth-actions .oda-course-next-step .oda-loop-heading p:last-child { margin-top: .65rem; font-size: .8rem; }
 .oda-growth-actions .oda-course-next-step .oda-loop-link { margin-top: .8rem; }
@@ -28,7 +28,7 @@
 .oda-growth-week p { font-size: .8rem; color: var(--fg-muted); margin-top: .25rem; }
 .oda-growth-days { display: flex; justify-content: space-between; gap: .35rem; padding: 0; list-style: none; min-width: 0; }
 .oda-growth-days li { display: flex; flex-direction: column; align-items: center; gap: .45rem; min-width: 0; }
-.oda-growth-day-name { font-size: .65rem; color: var(--fg-muted); }
+.oda-growth-day-name { font-size: 12px; color: var(--fg-muted); }
 .oda-growth-day { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid var(--border-strong); border-radius: 50%; }
 .oda-growth-day[data-kept="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
 .oda-growth-evidence-link { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 44px; font-size: .85rem; color: var(--accent); }
@@ -42,7 +42,7 @@
   .oda-growth-dashboard { gap: 1.25rem; }
 }
 @media (max-width: 479px) {
-  .oda-growth-panel .oda-evidence-tree { max-width: 260px; margin: -.25rem auto 0; }
+  .oda-growth-panel .oda-evidence-tree { max-width: 240px; margin: -.25rem auto 0; }
   .oda-growth-caption { margin-top: -4%; }
   .oda-growth-ledger { font-size: .72rem; }
 }

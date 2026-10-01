@@ -8,7 +8,7 @@ import { useT, useLocale } from '../i18n';
 import { companionCopy } from '../i18n/companion';
 import { designCopy } from '../i18n/design';
 import { firstRunCopy } from '../i18n/firstRun';
-import { LogoLockup } from '../components/Logo';
+import { LogoLockup, LogoCompact } from '../components/Logo';
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -105,14 +105,14 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
       )}
 
       {/* Desktop sidebar */}
-      <aside className="oda-sidebar hidden md:flex flex-col w-60 bg-[var(--bg-elevated)] border-r border-[var(--border)] shrink-0 h-screen overflow-y-auto sticky top-0 p-5 gap-7">
+      <aside className="oda-sidebar hidden md:flex flex-col w-60 bg-[var(--bg-elevated)] border-r border-[var(--border)] shrink-0 h-screen overflow-y-auto sticky top-0 p-6 gap-6">
         <button
           type="button"
           onClick={() => handleNav('/app')}
-          className="flex items-center gap-2.5 cursor-pointer text-left"
+          className="oda-sidebar-brand cursor-pointer text-left"
           aria-label={t('One Decision Away')}
         >
-          <LogoLockup className="w-12 h-18" /><span className="text-[11px] leading-relaxed tracking-[0.16em] font-medium">ONE DECISION<br />AWAY</span>
+          <LogoLockup variant="inverted" />
         </button>
 
         <nav className="flex flex-col gap-1" aria-label={t('Main')}>
@@ -125,13 +125,13 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
                 type="button"
                 onClick={() => handleNav(item.path)}
                 aria-current={isActive ? 'page' : undefined}
-                className={`w-full flex items-center gap-3 px-3 h-11 rounded-[var(--radius-sm)] text-[14px] transition-colors cursor-pointer text-left ${
+                className={`w-full flex items-center gap-3 px-3 h-12 rounded-[12px] text-[14px] leading-[1.4] transition-colors cursor-pointer text-left ${
                   isActive
                     ? 'oda-nav-active bg-[var(--accent-soft)] text-[var(--accent)] font-semibold'
                     : 'text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-muted)]'
                 }`}
               >
-                <Icon className="w-[18px] h-[18px] shrink-0" strokeWidth={isActive ? 2.2 : 1.8} />
+              <Icon className="w-5 h-5 shrink-0" strokeWidth={isActive ? 2.2 : 1.8} />
                 <span>{labels[item.key]}</span>
               </button>
             );
@@ -170,14 +170,14 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
               <ArrowLeft className="w-5 h-5" />
               {labels[PRIMARY_TABS.find((p) => p.path === activeTabPath)?.key ?? 'me']}
             </button>
-            <LogoLockup className="w-7 h-10 ml-auto mr-3" />
+            <LogoCompact className="oda-mobile-brand" />
           </div>
         </header>
       )}
 
       {/* Content */}
       <main id="oda-main" tabIndex={-1} className="outline-none flex-1 min-w-0 overflow-y-auto pb-36 md:pb-12 min-h-screen">
-        <div key={activeRoute} className={`oda-page-enter ${activeRoute === '/app' ? 'max-w-[1160px]' : activeRoute === '/app/courses' || activeRoute === '/app/tools' ? 'max-w-[1040px]' : 'max-w-[760px]'} mx-auto px-5 sm:px-8 ${isSecondary ? 'pt-6' : 'pt-[calc(env(safe-area-inset-top,0px)+1.5rem)]'} md:pt-12`}>{children}</div>
+        <div key={activeRoute} className={`oda-page-enter ${activeRoute === '/app' ? 'max-w-[1160px]' : activeRoute === '/app/courses' || activeRoute === '/app/tools' ? 'max-w-[1040px]' : 'max-w-[760px]'} mx-auto px-5 sm:px-8 md:px-10 lg:px-12 ${isSecondary ? 'pt-6' : 'pt-[calc(env(safe-area-inset-top,0px)+1.5rem)]'} md:pt-12`}>{children}</div>
       </main>
 
       {/* Mobile bottom tabs */}

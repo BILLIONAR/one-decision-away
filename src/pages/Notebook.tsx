@@ -55,7 +55,7 @@ export const Notebook: React.FC = () => {
 
 
     <nav aria-label={t('Notebook sections')} className="flex p-1 bg-[var(--bg-muted)] rounded-[var(--radius-sm)]">
-      {tabs.map(({ id, label }) => <button key={id} type="button" aria-pressed={section === id} aria-controls={`notebook-${id}-section`} onClick={() => setSection(id)} className={`flex-1 h-10 rounded-[var(--radius-xs)] text-sm font-medium cursor-pointer transition-colors focus-visible:outline focus-visible:outline-2 ${section === id ? 'bg-[var(--bg)] text-[var(--fg)]' : 'text-[var(--fg-muted)]'}`}>{label}</button>)}
+      {tabs.map(({ id, label }) => <button key={id} type="button" aria-pressed={section === id} aria-controls={`notebook-${id}-section`} onClick={() => setSection(id)} className={`flex-1 h-11 rounded-[var(--radius-xs)] text-sm font-medium cursor-pointer transition-colors focus-visible:outline focus-visible:outline-2 ${section === id ? 'bg-[var(--bg)] text-[var(--fg)]' : 'text-[var(--fg-muted)]'}`}>{label}</button>)}
     </nav>
 
     <section id="notebook-journal-section" hidden={section !== 'journal'} aria-label={t('Journal')}><JournalWorkspace today={today} /></section>

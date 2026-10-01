@@ -221,6 +221,23 @@ export const Today: React.FC = () => {
         </button>
       </header>
 
+      {/* Quote of the day */}
+      <figure className="oda-quote flex gap-3 py-6">
+        <span aria-hidden="true" className="oda-quote-mark text-5xl">“</span>
+        <div className="min-w-0">
+          <p className="oda-kicker text-[var(--fg-muted)] mb-2">{d.quote}</p>
+          <blockquote className="oda-display text-[22px] leading-snug text-[var(--fg)] max-w-[46ch]">
+            {locale === 'tr' && quote.tr ? quote.tr : t(quote.text)}
+          </blockquote>
+          {quote.source && (
+            <figcaption className="mt-1 text-[12px] font-medium text-[var(--fg-muted)]">
+              — {quote.sourceUrl ? <a href={quote.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">{locale === 'tr' && quote.sourceTr ? quote.sourceTr : t(quote.source)}</a> : t(quote.source)}
+              {quote.kind && <span className="block mt-1 font-normal">{quote.kind === 'adaptation' ? c.adaptation : c.translation}</span>}
+            </figcaption>
+          )}
+        </div>
+      </figure>
+
       <div className="oda-growth-dashboard">
         <GrowthTreePanel count={keptCount} onEvidence={() => setActiveRoute('/app/evidence')} />
         <div className="oda-growth-actions">
@@ -309,6 +326,7 @@ export const Today: React.FC = () => {
         </div>
       </div>
       <GrowthWeek summary={week} onEvidence={() => setActiveRoute('/app/evidence')} />
+      <BackupReminder />
 
       <DailyPractice mission={todayOneDecision} dayKey={todayStr} />
 
@@ -436,23 +454,6 @@ export const Today: React.FC = () => {
         )}
       </section>
 
-      {/* Quote of the day */}
-      <figure className="oda-quote flex gap-3 py-6">
-        <span aria-hidden="true" className="oda-quote-mark text-5xl">“</span>
-        <div className="min-w-0">
-          <p className="oda-kicker text-[var(--fg-muted)] mb-2">{d.quote}</p>
-          <blockquote className="oda-display text-[22px] leading-snug text-[var(--fg)] max-w-[46ch]">
-            {locale === 'tr' && quote.tr ? quote.tr : t(quote.text)}
-          </blockquote>
-          {quote.source && (
-            <figcaption className="mt-1 text-[12px] font-medium text-[var(--fg-muted)]">
-              — {quote.sourceUrl ? <a href={quote.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">{locale === 'tr' && quote.sourceTr ? quote.sourceTr : t(quote.source)}</a> : t(quote.source)}
-              {quote.kind && <span className="block mt-1 font-normal">{quote.kind === 'adaptation' ? c.adaptation : c.translation}</span>}
-            </figcaption>
-          )}
-        </div>
-      </figure>
-
       {simple ? <SimpleModeNote /> : <>
       <section aria-labelledby="today-discover" className="space-y-3">
         <h2 id="today-discover" className="text-sm font-semibold">{d.discover}</h2>
@@ -547,7 +548,6 @@ export const Today: React.FC = () => {
             <DailyDeepQuestion />
             <EveningDriftCheck />
             <MorningVision />
-            <BackupReminder />
           </div>
         )}
       </section>

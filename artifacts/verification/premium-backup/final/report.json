@@ -1,0 +1,196 @@
+{
+  "at": "2026-10-01T20:35:00.680Z",
+  "base": "http://127.0.0.1:4182/one-decision-away",
+  "engine": "chromium",
+  "fixtureDate": "2026-10-01T12:00:00.000Z",
+  "scope": "Fresh signed-out browser contexts and synthetic local records; all provider and write requests blocked.",
+  "limits": [
+    "Chromium viewport checks only; no real iPhone, native iOS or WebKit claim.",
+    "No account, cloud synchronization or production user data tested."
+  ],
+  "caseFilter": null,
+  "checks": [
+    "Blank startup seeds show no reminder",
+    "First journal save shows one reminder outside closed rituals in simple mode",
+    "First course reflection qualifies without notebook or decision completions",
+    "First weekly review qualifies with zero kept decisions",
+    "en reminder at 320px has localized copy and no overflow",
+    "en reminder at 390px has localized copy and no overflow",
+    "tr reminder at 320px has localized copy and no overflow",
+    "tr reminder at 390px has localized copy and no overflow",
+    "es reminder at 320px has localized copy and no overflow",
+    "es reminder at 390px has localized copy and no overflow",
+    "Real JSON export contains saved work, writes freshness marker and hides reminder",
+    "Session dismissal survives routes and reload while a new tab remains eligible",
+    "Reminder Cloud sync action reaches working Settings backup controls",
+    "No uncaught runtime errors across exercised backup flows",
+    "Fresh contexts attempt no provider or write requests"
+  ],
+  "cases": [
+    {
+      "name": "Blank startup seeds show no reminder",
+      "status": "passed",
+      "durationMs": 762
+    },
+    {
+      "name": "First journal save shows one reminder outside closed rituals in simple mode",
+      "status": "passed",
+      "durationMs": 1527
+    },
+    {
+      "name": "First course reflection qualifies without notebook or decision completions",
+      "status": "passed",
+      "durationMs": 2357
+    },
+    {
+      "name": "First weekly review qualifies with zero kept decisions",
+      "status": "passed",
+      "durationMs": 1128
+    },
+    {
+      "name": "en reminder at 320px has localized copy and no overflow",
+      "status": "passed",
+      "durationMs": 1993
+    },
+    {
+      "name": "en reminder at 390px has localized copy and no overflow",
+      "status": "passed",
+      "durationMs": 1346
+    },
+    {
+      "name": "tr reminder at 320px has localized copy and no overflow",
+      "status": "passed",
+      "durationMs": 1352
+    },
+    {
+      "name": "tr reminder at 390px has localized copy and no overflow",
+      "status": "passed",
+      "durationMs": 1514
+    },
+    {
+      "name": "es reminder at 320px has localized copy and no overflow",
+      "status": "passed",
+      "durationMs": 1936
+    },
+    {
+      "name": "es reminder at 390px has localized copy and no overflow",
+      "status": "passed",
+      "durationMs": 2036
+    },
+    {
+      "name": "Real JSON export contains saved work, writes freshness marker and hides reminder",
+      "status": "passed",
+      "durationMs": 1940
+    },
+    {
+      "name": "Session dismissal survives routes and reload while a new tab remains eligible",
+      "status": "passed",
+      "durationMs": 3858
+    },
+    {
+      "name": "Reminder Cloud sync action reaches working Settings backup controls",
+      "status": "passed",
+      "durationMs": 1632
+    }
+  ],
+  "failures": [],
+  "errors": [],
+  "blockedRequests": [
+    {
+      "case": "First course reflection qualifies without notebook or decision completions",
+      "method": "GET",
+      "origin": "https://images.unsplash.com",
+      "path": "/photo-1552360708-ebcdf76845ac"
+    }
+  ],
+  "layouts": [
+    {
+      "locale": "en",
+      "width": 320,
+      "viewport": 320,
+      "pageScroll": 320,
+      "panelWidth": 278,
+      "panelScroll": 278
+    },
+    {
+      "locale": "en",
+      "width": 390,
+      "viewport": 390,
+      "pageScroll": 390,
+      "panelWidth": 348,
+      "panelScroll": 348
+    },
+    {
+      "locale": "tr",
+      "width": 320,
+      "viewport": 320,
+      "pageScroll": 320,
+      "panelWidth": 278,
+      "panelScroll": 278
+    },
+    {
+      "locale": "tr",
+      "width": 390,
+      "viewport": 390,
+      "pageScroll": 390,
+      "panelWidth": 348,
+      "panelScroll": 348
+    },
+    {
+      "locale": "es",
+      "width": 320,
+      "viewport": 320,
+      "pageScroll": 320,
+      "panelWidth": 278,
+      "panelScroll": 278
+    },
+    {
+      "locale": "es",
+      "width": 390,
+      "viewport": 390,
+      "pageScroll": 390,
+      "panelWidth": 348,
+      "panelScroll": 348
+    }
+  ],
+  "accessibility": [
+    {
+      "locale": "en",
+      "width": 320,
+      "violations": []
+    },
+    {
+      "locale": "es",
+      "width": 390,
+      "violations": []
+    }
+  ],
+  "screenshots": [
+    "first-journal-reminder.png",
+    "first-weekly-reminder.png",
+    "reminder-en-320.png",
+    "reminder-en-390.png",
+    "reminder-tr-320.png",
+    "reminder-tr-390.png",
+    "reminder-es-320.png",
+    "reminder-es-390.png",
+    "settings-from-reminder.png"
+  ],
+  "sourceFiles": {
+    "src/components/BackupReminder.tsx": "85a4c00db99cbf46ad54b06f001d4f279725de5ca907e7a95f619a381556f0c2",
+    "src/services/backupReminder.ts": "00d88642a5338d0c24ea3b9073ddffbdfdf8c4aa8d3cb3b328468ae830c70dd4",
+    "src/i18n/backupReminder.ts": "2244318e28d68a6959d60f453fafe3fb7415fdcfc00270d61cb08c04836d2cbc",
+    "src/pages/Today.tsx": "dcb5afb78813ffc5a7d7c5c2d44a18bf562f8c6f0ca0a562fcdaba3d7f3ca183"
+  },
+  "browserVersion": "151.0.7922.173",
+  "shell": {
+    "status": 200,
+    "sha256": "2d367f2658042a9bc5044c554a9f6e4ebda792f1a04e3005811add25f44f7e8a",
+    "scripts": [
+      "http://127.0.0.1:4182/one-decision-away/theme-init.js",
+      "http://127.0.0.1:4182/one-decision-away/assets/index-BKwWNaRi.js"
+    ]
+  },
+  "status": "passed",
+  "completedAt": "2026-10-01T20:35:24.790Z"
+}

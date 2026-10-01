@@ -1,0 +1,36 @@
+✔ ambient renders are long independent stereo textures with finite bounded levels (146.571424ms)
+✔ scene identities differ in spectrum and amplitude dynamics (32.756515ms)
+✔ loop overlaps join continuous adjacent noise without a boundary spike (44.282576ms)
+✔ seeds reproduce review samples and produce a new texture when changed (122.352566ms)
+✔ one Sound Room track keeps one title across categories, including intentional noise reuse (0.324752ms)
+✔ Bank chart keeps UTC ledger Today and date labels aligned at New York evening (28.435221ms)
+✔ Bank seven-day earnings window is Sep 25 through Oct 1 for the UTC ledger day (3.568263ms)
+✔ Savings includes the first displayed UTC day in net and pace, excluding opening history (5.082746ms)
+✔ Savings net includes mixed first-day credits, spending and the current UTC day (3.443073ms)
+✔ Bank chart formats ledger dates in selected tr UI locale (25.475021ms)
+✔ Bank chart formats ledger dates in selected es UI locale (25.719981ms)
+✔ breath pacer runs at about 5.5 breaths a minute (0.745569ms)
+✔ breathPhase: inhale first, then exhale, then repeats (0.736916ms)
+✔ breathPhase is safe with odd input (0.13886ms)
+✔ formatRemaining (0.187694ms)
+✔ timer fades: a minute for sleep, short otherwise, never over half the timer (0.137848ms)
+✔ arming a timer retains the independent three-second attack and actual stereo loop (95.791083ms)
+✔ mute and volume respond immediately at the beginning of a timer fade (43.701816ms)
+✔ mute and volume respond immediately at the middle of a timer fade (19.646616ms)
+✔ mute and volume respond immediately at the end of a timer fade (19.212278ms)
+✔ running fades can shorten but do not extend, and timer cancellation preserves user volume (48.043289ms)
+✔ shortening a running fade with a delay cannot restore a louder envelope (170.445942ms)
+✔ browsers without cancelAndHold retain the current level when shortening a fade (41.319589ms)
+✔ track switches release the previous graph and repeated switches/stops bound resources (476.458856ms)
+✔ stop/restart of a tone cancels its initial bowl and recurring callbacks (1.066084ms)
+✔ natural bowl endings disconnect their tails while the current ambient drone continues (0.716646ms)
+✔ Sound Room timer arming, pause/resume and expiry keep player state and start fade intact (74.653348ms)
+✔ external restart of the same track clears the Sound Room countdown and timer selection (90.605511ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1742.536842
