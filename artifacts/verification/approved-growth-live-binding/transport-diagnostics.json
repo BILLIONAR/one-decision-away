@@ -1,0 +1,46 @@
+[
+  {
+    "attempt": "approved-growth-live-design",
+    "status": "failed",
+    "completedChecks": 2,
+    "failurePhase": null,
+    "failure": null,
+    "failureCount": 25,
+    "firstFailure": {
+      "name": "Tree stage and truthful evidence at 0",
+      "error": "page.goto: net::ERR_CERT_AUTHORITY_INVALID at https://billionar.github.io/one-decision-away/#/app\nCall log:\n\u001b[2m  - navigating to \"https://billionar.github.io/one-decision-away/#/app\", waiting until \"load\"\u001b[22m\n\n    at /workspace/one-decision-away/scripts/qa-growth-design.mjs:285:18\n    at runCase (/workspace/one-decision-away/scripts/qa-growth-design.mjs:169:11)\n    at async file:///workspace/one-decision-away/scripts/qa-growth-design.mjs:284:5",
+      "durationMs": 164
+    },
+    "countedAsPassing": false
+  },
+  {
+    "attempt": "approved-growth-live-core",
+    "status": "failed",
+    "completedChecks": 0,
+    "failurePhase": "public English first use",
+    "failure": "apiRequestContext.get: getaddrinfo EAI_AGAIN billionar.github.io\nCall log:\n\u001b[2m  - \u2192 GET https://billionar.github.io/one-decision-away/brand/oda-c4.png\u001b[22m\n\u001b[2m    - user-agent: Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Mobile/15E148 Safari/604.1\u001b[22m\n\u001b[2m    - accept: */*\u001b[22m\n\u001b[2m    - accept-encoding: gzip,deflate,br\u001b[22m\n\n    at /workspace/one-decision-away/scripts/qa-webkit-live.mjs:91:39",
+    "failureCount": 0,
+    "firstFailure": null,
+    "countedAsPassing": false
+  },
+  {
+    "attempt": "approved-growth-live-core-env-proxy",
+    "status": "failed",
+    "completedChecks": 0,
+    "failurePhase": "public English first use",
+    "failure": "apiRequestContext.get: getaddrinfo EAI_AGAIN billionar.github.io\nCall log:\n\u001b[2m  - \u2192 GET https://billionar.github.io/one-decision-away/brand/oda-c4.png\u001b[22m\n\u001b[2m    - user-agent: Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Mobile/15E148 Safari/604.1\u001b[22m\n\u001b[2m    - accept: */*\u001b[22m\n\u001b[2m    - accept-encoding: gzip,deflate,br\u001b[22m\n\n    at /workspace/one-decision-away/scripts/qa-webkit-live.mjs:91:39",
+    "failureCount": 0,
+    "firstFailure": null,
+    "countedAsPassing": false
+  },
+  {
+    "attempt": "approved-growth-live-core-browser",
+    "status": "failed",
+    "completedChecks": 5,
+    "failurePhase": "public English workbook and local exports",
+    "failure": "locator.tap: Error: strict mode violation: locator('#course-practice-studio').locator('summary') resolved to 2 elements:\n    1) <summary>\u2026</summary> aka locator('summary').filter({ hasText: 'One small experimentTry the' })\n    2) <summary>Sources and limits</summary> aka getByText('Sources and limits', { exact: true })\n\nCall log:\n\u001b[2m  - waiting for locator('#course-practice-studio').locator('summary')\u001b[22m\n\n    at openWorkbook (/workspace/one-decision-away/scripts/.qa-webkit-live-browser-transport.mjs:49:92)\n    at async file:///workspace/one-decision-away/scripts/.qa-webkit-live-browser-transport.mjs:122:75",
+    "failureCount": 0,
+    "firstFailure": null,
+    "countedAsPassing": false
+  }
+]
