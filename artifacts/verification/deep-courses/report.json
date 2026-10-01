@@ -1,0 +1,39 @@
+{
+  "base": "http://127.0.0.1:3023",
+  "at": "2026-10-01T00:28:40.175Z",
+  "checks": [
+    "Failed private draft and warning survive app route changes; retry persists all fields",
+    "Locked lesson keeps workbook save warnings and a working retry",
+    "Two-tab independent practice steps both persist under queued writes",
+    "Queued plan edits preserve independently updated review dates"
+  ],
+  "observations": [
+    {
+      "case": "failed draft after internal route return",
+      "action": "Synthetic unsaved action",
+      "fallback": "Synthetic unsaved fallback",
+      "alerts": 1
+    },
+    {
+      "case": "locked lesson save warning",
+      "locked": true,
+      "alerts": 1,
+      "retryButtons": 1
+    },
+    {
+      "case": "independent two-tab checkbox edits",
+      "checked": [
+        true,
+        true,
+        false
+      ]
+    },
+    {
+      "case": "independent two-tab cue and review date",
+      "cue": "Synthetic independent cue",
+      "reviewOn": "2027-01-01"
+    }
+  ],
+  "errors": [],
+  "status": "passed"
+}

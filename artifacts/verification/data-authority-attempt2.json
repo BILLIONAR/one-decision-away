@@ -1,0 +1,27 @@
+{
+  "base": "http://127.0.0.1:3031",
+  "at": "2026-10-01T00:47:47.898Z",
+  "checks": [],
+  "observations": [
+    {
+      "case": "first course session created during aborted provisional replacement",
+      "initial": {
+        "initialAction": "Synthetic held provisional course action",
+        "typedAction": "Synthetic input typed during failed restore"
+      },
+      "replaceResult": {
+        "rejected": true,
+        "error": "Error: Record storage is unavailable. Your changes were not saved. Try again."
+      },
+      "retained": {
+        "saved": true,
+        "action": "Original synthetic action",
+        "warning": false,
+        "savedAction": "Original synthetic action"
+      }
+    }
+  ],
+  "errors": [],
+  "status": "failed",
+  "failure": "AssertionError [ERR_ASSERTION]: A newly created session must preserve input typed while another tab exposes an uncommitted replacement\n+ actual - expected\n\n+ 'Original synthetic action'\n- 'Synthetic input typed during failed restore'\n\n    at <anonymous> (/workspace/one-decision-away/scripts/qa-data-authority.mjs:170:14)"
+}

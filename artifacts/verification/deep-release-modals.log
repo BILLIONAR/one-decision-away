@@ -1,0 +1,22 @@
+
+> oda-one-decision-away@1.0.0 qa:modals
+> node --import tsx scripts/qa-modal-fallback.mjs
+
+PASS missing-showModal: setting a decision opens an identified dialog and preserves the saved decision
+PASS missing-showModal: forward/backward Tab and background focus stay contained
+PASS missing-showModal: Escape, backdrop and close button survive reopening, restore focus/scroll and keep data unchanged
+PASS missing-close: setting a decision opens an identified dialog and preserves the saved decision
+PASS missing-close: forward/backward Tab and background focus stay contained
+PASS missing-close: Escape, backdrop and close button survive reopening, restore focus/scroll and keep data unchanged
+PASS missing-dialog-and-inert: setting a decision opens an identified dialog and preserves the saved decision
+PASS missing-dialog-and-inert: forward/backward Tab and background focus stay contained
+PASS missing-dialog-and-inert: Escape, backdrop and close button survive reopening, restore focus/scroll and keep data unchanged
+PASS native-dialog: setting a decision opens an identified dialog and preserves the saved decision
+PASS native-dialog: forward/backward Tab and background focus stay contained
+PASS native-dialog: Escape, backdrop and close button survive reopening, restore focus/scroll and keep data unchanged
+PASS no uncaught errors across feature-absence and native-dialog checks
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

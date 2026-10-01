@@ -1,0 +1,30 @@
+{
+  "head": "ec89ff6",
+  "source": "http://localhost:3021",
+  "data": "Disposable Chromium contexts, synthetic records; external network blocked",
+  "observations": [
+    {
+      "case": "blocked save then internal route leave/return",
+      "before": { "value": "Synthetic unsaved action", "alerts": 1 },
+      "after": { "value": "", "alerts": 0 }
+    },
+    {
+      "case": "locked lesson workbook failed save",
+      "locked": true,
+      "workbookValue": "Synthetic locked unsaved action",
+      "saveNotes": 0,
+      "alerts": 0,
+      "retryButtons": 0
+    },
+    {
+      "case": "simultaneous independent checkbox edits in two tabs",
+      "optimistic": { "first": [true, false, false], "second": [false, true, false] },
+      "stored": [false, true, false]
+    },
+    {
+      "case": "independent cue overwrites queued other-tab review date",
+      "optimistic": { "firstReviewDate": "2026-10-02", "secondReviewDate": "2027-01-01" },
+      "stored": { "cue": "Synthetic independent cue", "reviewOn": "2026-10-02" }
+    }
+  ]
+}

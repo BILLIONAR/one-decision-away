@@ -1,0 +1,161 @@
+
+> oda-one-decision-away@1.0.0 check
+> npm run lint && node scripts/validate-i18n.mjs && node --import tsx scripts/test-i18n.ts && node --import tsx scripts/test-notebook.ts && node --import tsx scripts/test-notebook-voice.ts && node --import tsx scripts/test-routing.ts && npm test && npm run build
+
+
+> oda-one-decision-away@1.0.0 lint
+> tsc --noEmit
+
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice
+tr: 6821 entries; missing keys 0; placeholder differences 0
+es: 6821 entries; missing keys 0; placeholder differences 0
+English-first startup, saved choices, EN/TR/ES switching, fallback and repeated placeholders passed.
+TAP version 13
+# Subtest: old backups normalize without copying or losing any legacy Dream Journal field
+ok 1 - old backups normalize without copying or losing any legacy Dream Journal field
+  ---
+  duration_ms: 2.134672
+  type: 'test'
+  ...
+# Subtest: new writing of every kind including affirmation earns 25 once; intention alone does not
+ok 2 - new writing of every kind including affirmation earns 25 once; intention alone does not
+  ---
+  duration_ms: 2.006503
+  type: 'test'
+  ...
+# Subtest: edit, no-op, delete and recreate preserve immutable once-per-day reward claims
+ok 3 - edit, no-op, delete and recreate preserve immutable once-per-day reward claims
+  ---
+  duration_ms: 0.516565
+  type: 'test'
+  ...
+# Subtest: local writing day and existing UTC reward ceiling are separate and cap-safe
+ok 4 - local writing day and existing UTC reward ceiling are separate and cap-safe
+  ---
+  duration_ms: 0.439341
+  type: 'test'
+  ...
+# Subtest: 369 only counts matching written intentions, allows partial saves and retains archived histories
+ok 5 - 369 only counts matching written intentions, allows partial saves and retains archived histories
+  ---
+  duration_ms: 1.513262
+  type: 'test'
+  ...
+# Subtest: 369 derives a real 33-day streak and preserves the achieved target after a gap
+ok 6 - 369 derives a real 33-day streak and preserves the achieved target after a gap
+  ---
+  duration_ms: 1.742221
+  type: 'test'
+  ...
+# Subtest: 369 matches Turkish dotted/dotless uppercase pairs without stripping meaningful accents
+ok 7 - 369 matches Turkish dotted/dotless uppercase pairs without stripping meaningful accents
+  ---
+  duration_ms: 0.461904
+  type: 'test'
+  ...
+# Subtest: calendar streaks use local days across DST, not elapsed 24-hour periods
+ok 8 - calendar streaks use local days across DST, not elapsed 24-hour periods
+  ---
+  duration_ms: 0.511107
+  type: 'test'
+  ...
+# Subtest: validation rejects blank entries, future dates, past creation and excess slots without altering input
+ok 9 - validation rejects blank entries, future dates, past creation and excess slots without altering input
+  ---
+  duration_ms: 0.590305
+  type: 'test'
+  ...
+# Subtest: legacy edits preserve photos, links and original date; unified JSON roundtrip is lossless
+ok 10 - legacy edits preserve photos, links and original date; unified JSON roundtrip is lossless
+  ---
+  duration_ms: 7.056292
+  type: 'test'
+  ...
+# Subtest: real repository serializes concurrent writes, protects from stale saves, and honors explicit restore
+ok 11 - real repository serializes concurrent writes, protects from stale saves, and honors explicit restore
+  ---
+  duration_ms: 9.078258
+  type: 'test'
+  ...
+# Subtest: stale whole-document saves do not resurrect deleted legacy entries or lose new ones
+ok 12 - stale whole-document saves do not resurrect deleted legacy entries or lose new ones
+  ---
+  duration_ms: 1.166137
+  type: 'test'
+  ...
+# Subtest: Notebook rebases after a delayed load against a concurrent profile and ledger save
+ok 13 - Notebook rebases after a delayed load against a concurrent profile and ledger save
+  ---
+  duration_ms: 1.193488
+  type: 'test'
+  ...
+# Subtest: concurrent mission and Notebook reward evaluation share the same 2500 ceiling
+ok 14 - concurrent mission and Notebook reward evaluation share the same 2500 ceiling
+  ---
+  duration_ms: 8.225465
+  type: 'test'
+  ...
+# Subtest: failed storage saves reject, do not push cloud or claim rewards, and queue recovers
+not ok 15 - failed storage saves reject, do not push cloud or claim rewards, and queue recovers
+  ---
+  duration_ms: 4.426958
+  type: 'test'
+  location: '/workspace/one-decision-away/scripts/test-notebook.ts:1:15653'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/workspace/one-decision-away/scripts/test-notebook.ts:298:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: unreadable saved JSON is preserved, never silently replaced with seed data
+ok 16 - unreadable saved JSON is preserved, never silently replaced with seed data
+  ---
+  duration_ms: 0.271672
+  type: 'test'
+  ...
+# Subtest: explicit local restore blocks older cloud data across failed uploads and is account/project scoped
+ok 17 - explicit local restore blocks older cloud data across failed uploads and is account/project scoped
+  ---
+  duration_ms: 2.780108
+  type: 'test'
+  ...
+# Subtest: an old in-flight cloud upload cannot overwrite a newer restored snapshot or clear its marker
+ok 18 - an old in-flight cloud upload cannot overwrite a newer restored snapshot or clear its marker
+  ---
+  duration_ms: 0.804261
+  type: 'test'
+  ...
+# Subtest: a signed-out import binds to the first later connection and stays isolated from other accounts
+ok 19 - a signed-out import binds to the first later connection and stays isolated from other accounts
+  ---
+  duration_ms: 2.142073
+  type: 'test'
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 18
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 79.00262
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

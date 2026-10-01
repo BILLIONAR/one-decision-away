@@ -1,0 +1,25 @@
+{
+  "source": "Observed current uncommitted source before durable restore validation and origin backup guard fixes",
+  "method": "Fresh esbuild bundle in a disposable Chromium context with every browser request fulfilled locally; genuine IndexedDB transactions held open using repeated reads",
+  "realProviderRequests": 0,
+  "observations": [
+    {
+      "case": "remote replacement expires during durable commit",
+      "guardAfterSwitch": false,
+      "applied": true,
+      "activeUser": "B",
+      "canonicalBelongsToOriginalAccountA": true
+    },
+    {
+      "case": "settings save account expires during durable commit",
+      "activeUser": "B",
+      "scheduledTimers": 1,
+      "uploads": [
+        {
+          "user": "B",
+          "recordBelongsToOriginalAccountA": true
+        }
+      ]
+    }
+  ]
+}

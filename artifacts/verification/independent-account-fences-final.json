@@ -1,0 +1,74 @@
+{
+  "at": "2026-10-01T01:06:20.380Z",
+  "source": "fresh in-memory bundle of current checkout",
+  "realProviderRequests": 0,
+  "checks": [
+    "Expired account replacement restores the exact prior canonical record without publication",
+    "settings save succeeds locally and cannot schedule another account's backup",
+    "notebook save succeeds locally and cannot schedule another account's backup",
+    "Expired course event keeps its origin guard; other-tab refresh never schedules an upload",
+    "Current course event keeps its origin guard; other-tab refresh never schedules an upload"
+  ],
+  "observations": [
+    {
+      "case": "remote replacement expires during durable commit",
+      "applied": false,
+      "activeUser": "B",
+      "originalPreserved": true,
+      "targetPublished": false
+    },
+    {
+      "case": "settings save account expires during durable commit",
+      "uploads": [],
+      "localSaved": true
+    },
+    {
+      "case": "notebook save account expires during durable commit",
+      "uploads": [],
+      "localSaved": true
+    },
+    {
+      "case": "course event expired during durable commit",
+      "saved": true,
+      "notifications": [
+        {
+          "guarded": true,
+          "current": false
+        },
+        {
+          "guarded": false,
+          "current": null
+        }
+      ],
+      "uploadsAfterLocalEvent": [],
+      "uploadsAfterStorageEvent": []
+    },
+    {
+      "case": "course event current during durable commit",
+      "saved": true,
+      "notifications": [
+        {
+          "guarded": true,
+          "current": true
+        },
+        {
+          "guarded": false,
+          "current": null
+        }
+      ],
+      "uploadsAfterLocalEvent": [
+        {
+          "user": "A",
+          "name": "Synthetic account A record"
+        }
+      ],
+      "uploadsAfterStorageEvent": [
+        {
+          "user": "A",
+          "name": "Synthetic account A record"
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

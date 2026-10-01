@@ -1,0 +1,13 @@
+PASS validated restore review is mobile accessible and traps keyboard focus before changing data
+PASS cancelling a file restore leaves the entire saved record intact
+PASS downloaded JSON includes current course reflections, completion, plans and practice logs
+PASS confirmed modern restore and course work survive a full reload
+PASS restoring an older backup preserves course work already on the device
+PASS malformed backups are rejected before review or any personal-data write
+PASS quota failure leaves the previous personal record and course work intact
+PASS cross-tab course saves are included in an export from an already-open Settings screen
+PASS a real cross-tab Web Lock preserves both a delayed notebook write and the queued course mutation
+PASS manual cloud cancellation neither uploads local data nor marks a sync; retry reviews and restores successfully
+PASS changing account/project during an open cloud review keeps local data and does not mark or upload the stale record
+PASS manual sync with a late previous-account SELECT does not fall back to uploading local data into the new account
+PASS desktop backup controls render without browser exceptions

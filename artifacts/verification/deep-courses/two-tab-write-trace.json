@@ -1,0 +1,1362 @@
+[
+  {
+    "iteration": 1,
+    "loaded": [
+      {
+        "latest": true,
+        "session": true
+      },
+      {
+        "latest": true,
+        "session": true
+      }
+    ],
+    "stored": [
+      true,
+      true,
+      false
+    ],
+    "aTrace": [
+      {
+        "op": "get",
+        "at": 1790814593028,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:111:54\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814593028,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:89:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "set",
+        "at": 1790814593029,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.setItem (<anonymous>:2:474)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:93:29)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814593029,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814593029,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814593070,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814593070,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814593100,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:37)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:311:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+      },
+      {
+        "op": "get",
+        "at": 1790814593110,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at eval (eval at evaluate (:311:30), <anonymous>:1:37)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+      }
+    ],
+    "bTrace": [
+      {
+        "op": "get",
+        "at": 1790814593029,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:111:54\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814593030,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:89:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "set",
+        "at": 1790814593030,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.setItem (<anonymous>:2:474)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:93:29)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814593030,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814593030,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814593031,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814593031,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      }
+    ]
+  },
+  {
+    "iteration": 2,
+    "loaded": [
+      {
+        "latest": true,
+        "session": true
+      },
+      {
+        "latest": true,
+        "session": true
+      }
+    ],
+    "stored": [
+      false,
+      true,
+      false
+    ],
+    "aTrace": [
+      {
+        "op": "get",
+        "at": 1790814596929,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:111:54\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814596929,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:89:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "set",
+        "at": 1790814596929,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.setItem (<anonymous>:2:474)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:93:29)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814596930,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814596930,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814596975,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814596976,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814596977,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:37)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:311:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+      },
+      {
+        "op": "get",
+        "at": 1790814597013,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at eval (eval at evaluate (:311:30), <anonymous>:1:37)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+      }
+    ],
+    "bTrace": [
+      {
+        "op": "get",
+        "at": 1790814596932,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:111:54\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814596932,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:89:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "set",
+        "at": 1790814596932,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.setItem (<anonymous>:2:474)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:93:29)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814596932,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814596933,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814596965,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814596966,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      }
+    ]
+  },
+  {
+    "iteration": 3,
+    "loaded": [
+      {
+        "latest": true,
+        "session": true
+      },
+      {
+        "latest": true,
+        "session": true
+      }
+    ],
+    "stored": [
+      false,
+      true,
+      false
+    ],
+    "aTrace": [
+      {
+        "op": "get",
+        "at": 1790814600796,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:111:54\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814600797,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:89:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "set",
+        "at": 1790814600797,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.setItem (<anonymous>:2:474)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:93:29)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814600797,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814600797,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814600841,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814600841,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814600871,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:37)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:311:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+      },
+      {
+        "op": "get",
+        "at": 1790814600877,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at eval (eval at evaluate (:311:30), <anonymous>:1:37)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+      }
+    ],
+    "bTrace": [
+      {
+        "op": "get",
+        "at": 1790814600805,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:111:54\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814600805,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:89:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "set",
+        "at": 1790814600805,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.setItem (<anonymous>:2:474)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:93:29)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814600805,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814600806,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814600834,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814600834,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      }
+    ]
+  },
+  {
+    "iteration": 4,
+    "loaded": [
+      {
+        "latest": true,
+        "session": true
+      },
+      {
+        "latest": true,
+        "session": true
+      }
+    ],
+    "stored": [
+      true,
+      true,
+      false
+    ],
+    "aTrace": [
+      {
+        "op": "get",
+        "at": 1790814604798,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:111:54\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814604798,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:89:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "set",
+        "at": 1790814604799,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.setItem (<anonymous>:2:474)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:93:29)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814604799,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814604799,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814604840,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814604840,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814604875,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:37)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:311:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+      },
+      {
+        "op": "get",
+        "at": 1790814604904,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at eval (eval at evaluate (:311:30), <anonymous>:1:37)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+      }
+    ],
+    "bTrace": [
+      {
+        "op": "get",
+        "at": 1790814604801,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814604802,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814604802,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:111:54\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814604803,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:89:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "set",
+        "at": 1790814604803,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.setItem (<anonymous>:2:474)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:93:29)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814604803,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814604803,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      }
+    ]
+  },
+  {
+    "iteration": 5,
+    "loaded": [
+      {
+        "latest": true,
+        "session": true
+      },
+      {
+        "latest": true,
+        "session": true
+      }
+    ],
+    "stored": [
+      false,
+      true,
+      false
+    ],
+    "aTrace": [
+      {
+        "op": "get",
+        "at": 1790814609134,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:111:54\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814609134,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:89:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "set",
+        "at": 1790814609134,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.setItem (<anonymous>:2:474)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:93:29)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814609135,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814609135,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814609176,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814609176,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814609176,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:37)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:311:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+      },
+      {
+        "op": "get",
+        "at": 1790814609215,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at eval (eval at evaluate (:311:30), <anonymous>:1:37)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+      }
+    ],
+    "bTrace": [
+      {
+        "op": "get",
+        "at": 1790814609135,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:111:54\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814609135,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:89:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "set",
+        "at": 1790814609135,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.setItem (<anonymous>:2:474)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:93:29)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814609136,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814609136,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814609170,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814609170,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      }
+    ]
+  },
+  {
+    "iteration": 6,
+    "loaded": [
+      {
+        "latest": true,
+        "session": true
+      },
+      {
+        "latest": true,
+        "session": true
+      }
+    ],
+    "stored": [
+      false,
+      true,
+      false
+    ],
+    "aTrace": [
+      {
+        "op": "get",
+        "at": 1790814613023,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:111:54\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814613023,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:89:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "set",
+        "at": 1790814613024,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.setItem (<anonymous>:2:474)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:93:29)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814613024,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814613024,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814613058,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814613058,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814613083,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:37)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:311:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+      },
+      {
+        "op": "get",
+        "at": 1790814613103,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at eval (eval at evaluate (:311:30), <anonymous>:1:37)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+      }
+    ],
+    "bTrace": [
+      {
+        "op": "get",
+        "at": 1790814613025,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:111:54\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814613025,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:89:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "set",
+        "at": 1790814613025,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.setItem (<anonymous>:2:474)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:93:29)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814613026,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814613026,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814613060,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814613061,
+        "checked": [
+          false,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      }
+    ]
+  },
+  {
+    "iteration": 7,
+    "loaded": [
+      {
+        "latest": true,
+        "session": true
+      },
+      {
+        "latest": true,
+        "session": true
+      }
+    ],
+    "stored": [
+      true,
+      true,
+      false
+    ],
+    "aTrace": [
+      {
+        "op": "get",
+        "at": 1790814616932,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:111:54\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814616932,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:89:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "set",
+        "at": 1790814616932,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.setItem (<anonymous>:2:474)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:93:29)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814616933,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814616933,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814616969,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814616970,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814616996,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:37)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:311:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+      },
+      {
+        "op": "get",
+        "at": 1790814617011,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at eval (eval at evaluate (:311:30), <anonymous>:1:37)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+      }
+    ],
+    "bTrace": [
+      {
+        "op": "get",
+        "at": 1790814616933,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:111:54\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814616933,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:89:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "set",
+        "at": 1790814616933,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.setItem (<anonymous>:2:474)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:93:29)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814616933,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814616934,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814616934,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814616934,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      }
+    ]
+  },
+  {
+    "iteration": 8,
+    "loaded": [
+      {
+        "latest": true,
+        "session": true
+      },
+      {
+        "latest": true,
+        "session": true
+      }
+    ],
+    "stored": [
+      true,
+      true,
+      false
+    ],
+    "aTrace": [
+      {
+        "op": "get",
+        "at": 1790814620793,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:111:54\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814620793,
+        "checked": null,
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:89:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "set",
+        "at": 1790814620793,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.setItem (<anonymous>:2:474)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:93:29)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814620794,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814620795,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814620835,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814620835,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814620872,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:37)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:311:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+      },
+      {
+        "op": "get",
+        "at": 1790814620878,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at eval (eval at evaluate (:311:30), <anonymous>:1:37)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+      }
+    ],
+    "bTrace": [
+      {
+        "op": "get",
+        "at": 1790814620794,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814620794,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at storageListener (http://127.0.0.1:3023/src/services/courseProgress.ts:124:112)"
+      },
+      {
+        "op": "get",
+        "at": 1790814620822,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:111:54\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814620823,
+        "checked": [
+          true,
+          false,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:89:39)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "set",
+        "at": 1790814620823,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.setItem (<anonymous>:2:474)\n    at persistCurrentProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:93:29)\n    at http://127.0.0.1:3023/src/services/courseProgress.ts:112:7\n    at http://127.0.0.1:3023/src/services/dataWrites.ts:3:130"
+      },
+      {
+        "op": "get",
+        "at": 1790814620823,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at LocalDemoRepository.load (http://127.0.0.1:3023/src/services/repository.ts:120:35)\n    at http://127.0.0.1:3023/src/store/useApp.tsx:67:21\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      },
+      {
+        "op": "get",
+        "at": 1790814620823,
+        "checked": [
+          true,
+          true,
+          false
+        ],
+        "stack": "Error\n    at Storage.getItem (<anonymous>:2:748)\n    at readStoredCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:70:39)\n    at readCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:82:12)\n    at http://127.0.0.1:3023/src/services/courseProgressDraft.ts:88:51\n    at notifyCourseProgressChanged (http://127.0.0.1:3023/src/services/courseProgress.ts:134:45)\n    at mutateCourseProgress (http://127.0.0.1:3023/src/services/courseProgress.ts:118:3)\n    at async http://127.0.0.1:3023/src/services/courseProgressDraft.ts:20:18"
+      }
+    ]
+  }
+]

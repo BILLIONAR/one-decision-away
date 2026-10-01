@@ -1,0 +1,1991 @@
+{
+  "base": "http://127.0.0.1:3029",
+  "at": "2026-10-01T00:56:41.556Z",
+  "raceRepeats": 8,
+  "checks": [
+    "Failed private draft and warning survive app route changes; retry persists all fields",
+    "Locked lesson keeps workbook save warnings and a working retry",
+    "Two-tab independent practice steps both persist under queued writes (1/8)",
+    "Two-tab independent practice steps both persist under queued writes (2/8)",
+    "Two-tab independent practice steps both persist under queued writes (3/8)",
+    "Two-tab independent practice steps both persist under queued writes (4/8)",
+    "Two-tab independent practice steps both persist under queued writes (5/8)",
+    "Two-tab independent practice steps both persist under queued writes (6/8)",
+    "Two-tab independent practice steps both persist under queued writes (7/8)",
+    "Two-tab independent practice steps both persist under queued writes (8/8)",
+    "Successful other-tab replacement discards the old draft and prevents retry resurrection",
+    "Queued plan edits preserve independently updated review dates"
+  ],
+  "observations": [
+    {
+      "case": "failed draft after internal route return",
+      "action": "Synthetic unsaved action",
+      "fallback": "Synthetic unsaved fallback",
+      "alerts": 1
+    },
+    {
+      "case": "locked lesson save warning",
+      "locked": true,
+      "alerts": 1,
+      "retryButtons": 1
+    },
+    {
+      "case": "independent two-tab checkbox edits",
+      "iteration": 1,
+      "checked": [
+        true,
+        true,
+        false
+      ],
+      "firstTrace": [
+        {
+          "operation": "get",
+          "at": 1790816215333,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215333,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:54\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215333,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:119:28\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:47\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215334,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:90:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "set",
+          "at": 1790816215334,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.setItem (eval at evaluate (:311:30), <anonymous>:15:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:94:29)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215334,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215335,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:140:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215335,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at readCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:83:12)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:144:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215372,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215372,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at LocalDemoRepository.loadCurrent (http://127.0.0.1:3029/src/services/repository.ts:127:35)\n    at http://127.0.0.1:3029/src/services/repository.ts:122:38\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215372,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215374,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:48)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:311:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215427,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at eval (eval at evaluate (:311:30), <anonymous>:1:48)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215429,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215429,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        }
+      ],
+      "secondTrace": [
+        {
+          "operation": "get",
+          "at": 1790816215338,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215338,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:54\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215338,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:119:28\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:47\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215338,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:90:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "set",
+          "at": 1790816215339,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.setItem (eval at evaluate (:311:30), <anonymous>:15:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:94:29)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215339,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215339,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:140:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215339,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at readCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:83:12)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:144:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215375,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215375,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215431,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215431,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:140:30\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:134:19\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215431,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at readCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:83:12)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:144:30\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:134:19\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816215431,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        }
+      ]
+    },
+    {
+      "case": "independent two-tab checkbox edits",
+      "iteration": 2,
+      "checked": [
+        true,
+        true,
+        false
+      ],
+      "firstTrace": [
+        {
+          "operation": "get",
+          "at": 1790816218953,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816218954,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:54\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816218954,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:119:28\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:47\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816218954,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:90:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "set",
+          "at": 1790816218954,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.setItem (eval at evaluate (:311:30), <anonymous>:15:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:94:29)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816218954,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816218955,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:48)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:311:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816218956,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:48)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816218957,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:140:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816218957,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at readCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:83:12)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:144:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816218978,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:48)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816218982,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at eval (eval at evaluate (:311:30), <anonymous>:1:48)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        }
+      ],
+      "secondTrace": [
+        {
+          "operation": "get",
+          "at": 1790816218958,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816218958,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:54\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816218958,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:119:28\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:47\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816218959,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:90:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "set",
+          "at": 1790816218959,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.setItem (eval at evaluate (:311:30), <anonymous>:15:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:94:29)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816218959,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816218960,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:140:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816218960,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at readCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:83:12)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:144:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        }
+      ]
+    },
+    {
+      "case": "independent two-tab checkbox edits",
+      "iteration": 3,
+      "checked": [
+        true,
+        true,
+        false
+      ],
+      "firstTrace": [
+        {
+          "operation": "get",
+          "at": 1790816221973,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816221973,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:54\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816221973,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:119:28\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:47\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816221973,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:90:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "set",
+          "at": 1790816221974,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.setItem (eval at evaluate (:311:30), <anonymous>:15:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:94:29)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816221974,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816221993,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:140:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816221994,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at readCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:83:12)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:144:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816221994,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:48)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:311:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816222017,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:48)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816222018,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:48)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816222021,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at eval (eval at evaluate (:311:30), <anonymous>:1:48)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816222021,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816222021,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at LocalDemoRepository.loadCurrent (http://127.0.0.1:3029/src/services/repository.ts:127:35)\n    at http://127.0.0.1:3029/src/services/repository.ts:122:38\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816222022,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        }
+      ],
+      "secondTrace": [
+        {
+          "operation": "get",
+          "at": 1790816222003,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816222004,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:54\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816222004,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:119:28\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:47\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816222004,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:90:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "set",
+          "at": 1790816222004,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.setItem (eval at evaluate (:311:30), <anonymous>:15:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:94:29)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816222004,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816222005,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:140:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816222006,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at readCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:83:12)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:144:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816222032,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816222032,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        }
+      ]
+    },
+    {
+      "case": "independent two-tab checkbox edits",
+      "iteration": 4,
+      "checked": [
+        true,
+        true,
+        false
+      ],
+      "firstTrace": [
+        {
+          "operation": "get",
+          "at": 1790816224936,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816224937,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:54\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816224937,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:119:28\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:47\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816224937,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:90:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "set",
+          "at": 1790816224937,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.setItem (eval at evaluate (:311:30), <anonymous>:15:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:94:29)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816224937,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816224946,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:48)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:311:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816224947,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:48)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816224947,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:140:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816224948,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at readCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:83:12)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:144:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816224972,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:48)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816224974,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at eval (eval at evaluate (:311:30), <anonymous>:1:48)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816224975,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816224975,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at LocalDemoRepository.loadCurrent (http://127.0.0.1:3029/src/services/repository.ts:127:35)\n    at http://127.0.0.1:3029/src/services/repository.ts:122:38\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816224975,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        }
+      ],
+      "secondTrace": [
+        {
+          "operation": "get",
+          "at": 1790816224948,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816224949,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:54\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816224949,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:119:28\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:47\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816224949,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:90:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "set",
+          "at": 1790816224949,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.setItem (eval at evaluate (:311:30), <anonymous>:15:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:94:29)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816224949,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816224950,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:140:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816224950,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at readCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:83:12)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:144:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816224976,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816224977,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        }
+      ]
+    },
+    {
+      "case": "independent two-tab checkbox edits",
+      "iteration": 5,
+      "checked": [
+        true,
+        true,
+        false
+      ],
+      "firstTrace": [
+        {
+          "operation": "get",
+          "at": 1790816227734,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227735,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:54\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227735,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:119:28\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:47\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227735,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:90:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "set",
+          "at": 1790816227735,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.setItem (eval at evaluate (:311:30), <anonymous>:15:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:94:29)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227735,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227737,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:140:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227737,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at readCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:83:12)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:144:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227781,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:48)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:311:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227781,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227781,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at LocalDemoRepository.loadCurrent (http://127.0.0.1:3029/src/services/repository.ts:127:35)\n    at http://127.0.0.1:3029/src/services/repository.ts:122:38\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227782,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227815,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at eval (eval at evaluate (:311:30), <anonymous>:1:48)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227817,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227817,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        }
+      ],
+      "secondTrace": [
+        {
+          "operation": "get",
+          "at": 1790816227738,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227741,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:54\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227741,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:119:28\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:47\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227742,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:90:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "set",
+          "at": 1790816227742,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.setItem (eval at evaluate (:311:30), <anonymous>:15:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:94:29)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227742,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227743,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:140:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227743,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at readCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:83:12)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:144:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227783,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227783,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227820,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227820,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:140:30\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:134:19\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227820,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at readCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:83:12)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:144:30\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:134:19\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816227820,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        }
+      ]
+    },
+    {
+      "case": "independent two-tab checkbox edits",
+      "iteration": 6,
+      "checked": [
+        true,
+        true,
+        false
+      ],
+      "firstTrace": [
+        {
+          "operation": "get",
+          "at": 1790816230537,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816230538,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:54\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816230538,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:119:28\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:47\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816230538,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:90:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "set",
+          "at": 1790816230538,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.setItem (eval at evaluate (:311:30), <anonymous>:15:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:94:29)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816230538,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816230539,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:140:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816230539,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at readCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:83:12)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:144:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816230572,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:48)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:311:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816230573,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816230573,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at LocalDemoRepository.loadCurrent (http://127.0.0.1:3029/src/services/repository.ts:127:35)\n    at http://127.0.0.1:3029/src/services/repository.ts:122:38\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816230573,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816230603,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at eval (eval at evaluate (:311:30), <anonymous>:1:48)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        }
+      ],
+      "secondTrace": [
+        {
+          "operation": "get",
+          "at": 1790816230542,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816230542,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:54\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816230543,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:119:28\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:47\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816230543,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:90:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "set",
+          "at": 1790816230543,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.setItem (eval at evaluate (:311:30), <anonymous>:15:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:94:29)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816230543,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816230544,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:140:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816230544,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at readCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:83:12)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:144:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816230574,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816230574,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        }
+      ]
+    },
+    {
+      "case": "independent two-tab checkbox edits",
+      "iteration": 7,
+      "checked": [
+        true,
+        true,
+        false
+      ],
+      "firstTrace": [
+        {
+          "operation": "get",
+          "at": 1790816233317,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816233318,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:54\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816233318,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:119:28\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:47\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816233318,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:90:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "set",
+          "at": 1790816233318,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.setItem (eval at evaluate (:311:30), <anonymous>:15:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:94:29)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816233318,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816233319,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:140:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816233319,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at readCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:83:12)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:144:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816233358,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:48)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:311:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816233358,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816233358,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at LocalDemoRepository.loadCurrent (http://127.0.0.1:3029/src/services/repository.ts:127:35)\n    at http://127.0.0.1:3029/src/services/repository.ts:122:38\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816233359,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816233406,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at eval (eval at evaluate (:311:30), <anonymous>:1:48)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        }
+      ],
+      "secondTrace": [
+        {
+          "operation": "get",
+          "at": 1790816233323,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816233323,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:54\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816233323,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:119:28\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:47\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816233323,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:90:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "set",
+          "at": 1790816233323,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.setItem (eval at evaluate (:311:30), <anonymous>:15:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:94:29)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816233324,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816233324,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:140:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816233325,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at readCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:83:12)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:144:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816233366,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816233366,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        }
+      ]
+    },
+    {
+      "case": "independent two-tab checkbox edits",
+      "iteration": 8,
+      "checked": [
+        true,
+        true,
+        false
+      ],
+      "firstTrace": [
+        {
+          "operation": "get",
+          "at": 1790816235686,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816235686,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:54\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816235686,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:119:28\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:47\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816235686,
+          "checked": null,
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:90:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "set",
+          "at": 1790816235686,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.setItem (eval at evaluate (:311:30), <anonymous>:15:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:94:29)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816235686,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816235687,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:140:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816235688,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at readCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:83:12)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:144:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816235714,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:48)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:311:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816235715,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816235715,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at LocalDemoRepository.loadCurrent (http://127.0.0.1:3029/src/services/repository.ts:127:35)\n    at http://127.0.0.1:3029/src/services/repository.ts:122:38\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816235715,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816235743,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at eval (eval at evaluate (:311:30), <anonymous>:1:48)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+        }
+      ],
+      "secondTrace": [
+        {
+          "operation": "get",
+          "at": 1790816235688,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816235688,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:54\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816235689,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:119:28\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:114:47\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816235689,
+          "checked": [
+            true,
+            false,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:90:39)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "set",
+          "at": 1790816235689,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.setItem (eval at evaluate (:311:30), <anonymous>:15:29)\n    at persistCurrentProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:94:29)\n    at http://127.0.0.1:3029/src/services/courseProgress.ts:115:7\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:176:26)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816235690,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816235691,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readRecordRevision (http://127.0.0.1:3029/src/services/courseProgressDraft.ts:93:50)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:140:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816235691,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readStoredCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:71:39)\n    at readCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:83:12)\n    at http://127.0.0.1:3029/src/services/courseProgressDraft.ts:144:30\n    at localListener (http://127.0.0.1:3029/src/services/courseProgress.ts:139:36)\n    at notifyCourseProgressChanged (http://127.0.0.1:3029/src/services/courseProgress.ts:149:45)\n    at mutateCourseProgress (http://127.0.0.1:3029/src/services/courseProgress.ts:121:3)\n    at async http://127.0.0.1:3029/src/services/courseProgressDraft.ts:23:18"
+        },
+        {
+          "operation": "get",
+          "at": 1790816235718,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at hydrateProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:31:22)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:169:7)"
+        },
+        {
+          "operation": "get",
+          "at": 1790816235718,
+          "checked": [
+            true,
+            true,
+            false
+          ],
+          "stack": "Error\n    at record (eval at evaluate (:311:30), <anonymous>:7:83)\n    at Storage.getItem (eval at evaluate (:311:30), <anonymous>:11:29)\n    at readProjection (http://127.0.0.1:3029/src/services/dataWrites.ts:19:27)\n    at runOperation (http://127.0.0.1:3029/src/services/dataWrites.ts:180:20)"
+        }
+      ]
+    },
+    {
+      "case": "successful other-tab replacement discards previous private draft",
+      "action": "Restored synthetic plan",
+      "alerts": 0
+    },
+    {
+      "case": "independent two-tab cue and review date",
+      "cue": "Synthetic independent cue",
+      "reviewOn": "2027-01-01"
+    }
+  ],
+  "errors": [],
+  "status": "passed"
+}

@@ -1,0 +1,97 @@
+{
+  "base": "http://127.0.0.1:4179",
+  "at": "2026-10-01T01:06:33.419Z",
+  "checks": [
+    "landing mobile: no horizontal overflow",
+    "landing mobile: no serious/critical axe findings",
+    "interrupted onboarding restores name, intention and first decision",
+    "onboarding final step: no serious/critical axe findings",
+    "modal contains keyboard focus and Escape dismisses",
+    "onboarding decision uses local calendar date across UTC midnight",
+    "first decision saved and setup draft removed only after success",
+    "daily reflection survives reload and remains editable",
+    "Today mobile: no horizontal overflow",
+    "Today mobile: no serious/critical axe findings",
+    "decision completion persists once across reload without duplicate reward",
+    "course plan, attempt, reflection and partial practice survive interruption",
+    "sequential course progression preserves plan in unified backup record",
+    "lesson mobile: no horizontal overflow",
+    "lesson mobile: no serious/critical axe findings",
+    "downloaded backup contains course plan, attempts, progression and notebook",
+    "malformed restore leaves existing data intact",
+    "cancelled restore leaves existing data intact",
+    "confirmed backup restore retains applied course work",
+    "unexpected legacy rendering errors preserve data, offer recovery download and reach support",
+    "support remains reachable outside the application when legacy data breaks provider initialization",
+    "Today 320px: no horizontal overflow",
+    "correct primary navigation at 320px",
+    "courses 320px: no horizontal overflow",
+    "landing 320px: no horizontal overflow",
+    "Turkish dark lesson 320px: no horizontal overflow",
+    "Turkish dark lesson 320px: no serious/critical axe findings",
+    "Spanish support 320px: no horizontal overflow",
+    "Spanish support 320px: no serious/critical axe findings",
+    "Today 1440px: no horizontal overflow",
+    "correct primary navigation at 1440px",
+    "courses 1440px: no horizontal overflow",
+    "landing 1440px: no horizontal overflow",
+    "landing desktop: no serious/critical axe findings",
+    "Turkish dark lesson 1440px: no horizontal overflow",
+    "Turkish dark lesson 1440px: no serious/critical axe findings",
+    "Spanish support 1440px: no horizontal overflow",
+    "Spanish support 1440px: no serious/critical axe findings",
+    "no uncaught browser errors across tested flows"
+  ],
+  "accessibility": [
+    {
+      "name": "landing mobile",
+      "violations": []
+    },
+    {
+      "name": "onboarding final step",
+      "violations": []
+    },
+    {
+      "name": "Today mobile",
+      "violations": []
+    },
+    {
+      "name": "lesson mobile",
+      "violations": []
+    },
+    {
+      "name": "Turkish dark lesson 320px",
+      "violations": []
+    },
+    {
+      "name": "Spanish support 320px",
+      "violations": []
+    },
+    {
+      "name": "landing desktop",
+      "violations": []
+    },
+    {
+      "name": "Turkish dark lesson 1440px",
+      "violations": []
+    },
+    {
+      "name": "Spanish support 1440px",
+      "violations": []
+    }
+  ],
+  "errors": [],
+  "screenshots": [
+    "landing-mobile.png",
+    "onboarding-mobile.png",
+    "today-mobile.png",
+    "lesson-mobile.png",
+    "today-320.png",
+    "courses-320.png",
+    "today-desktop.png",
+    "courses-desktop.png",
+    "landing-desktop.png",
+    "lesson-dark-desktop.png"
+  ],
+  "status": "passed"
+}

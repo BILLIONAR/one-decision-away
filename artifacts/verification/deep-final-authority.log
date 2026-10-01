@@ -1,0 +1,9 @@
+PASS A course session first opened during an aborted replacement preserves and saves newly typed private work
+PASS Authority abort rejects save, restores both storage values, and prevents caller publication and cloud scheduling
+PASS Blocked projection rollback rejects without cloud publication; the next permitted read recovers authority and later edits save
+PASS An aborted course write retains the private draft and warning; retry saves it and clears the warning
+PASS Failed replacement preserves caller, course and notebook drafts; successful replacement publishes and resets drafts
+PASS An aborted other-tab replacement cannot discard a pending private course draft through provisional storage events
+PASS Failed clear preserves records and notebook drafts; successful clear resets drafts and prevents private course resurrection
+PASS Missing browser indexedDB rejects writes and preserves existing private records
+PASS Missing browser locks rejects writes and preserves existing private records

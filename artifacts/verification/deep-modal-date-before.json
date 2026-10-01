@@ -1,0 +1,66 @@
+{
+  "at": "2026-10-01T00:37:10.824Z",
+  "source": "ec89ff6 baseline",
+  "base": "http://127.0.0.1:3030",
+  "cases": [
+    {
+      "bug": "habit toggle disagrees with local Today date",
+      "localDate": "2026-10-01",
+      "storedDates": [
+        "2026-09-30"
+      ],
+      "ariaPressed": "false"
+    },
+    {
+      "bug": "undo and recheck pay the same habit twice",
+      "rewards": [
+        {
+          "amount": 25,
+          "dayKey": "2026-09-30"
+        },
+        {
+          "amount": 25,
+          "dayKey": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "bug": "arrival and full check-in create different records for one local day",
+      "dates": [
+        "2026-09-30",
+        "2026-10-01"
+      ],
+      "rewardDays": [
+        "2026-09-30",
+        "2026-10-01"
+      ]
+    },
+    {
+      "bug": "auto-plan overlaps completion and loses fallback dialog focus",
+      "dialogs": [
+        {
+          "title": "Make it doable",
+          "inert": false,
+          "hidden": null,
+          "focused": false
+        },
+        {
+          "title": "Complete today's decision",
+          "inert": true,
+          "hidden": "true",
+          "focused": false
+        }
+      ],
+      "activeElement": "BODY"
+    },
+    {
+      "bug": "check-in reward bypasses remaining UTC reward ceiling",
+      "actualReward": 50,
+      "expectedReward": 10,
+      "actualLedgerDay": "2026-10-01",
+      "expectedLedgerDay": "2026-09-30"
+    }
+  ],
+  "errors": [],
+  "status": "reproduced"
+}
