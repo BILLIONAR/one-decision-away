@@ -1,6 +1,6 @@
 # ODA fresh cloud WebKit mobile validation · 1 October 2026
 
-**Cloud WebKit gate passed: 59 named checks.** [The final report](../artifacts/verification/webkit-mobile-final/report.json) records the complete run against the unchanged application source, including verified transport loss to the disposable local origin and successful cache-fallback flows. Intermediate failures remain retained below. Merge, automatic GitHub Pages deployment, exact-commit CI and live checks are not yet verified by this report.
+**Local cloud WebKit passed: 59 named checks; exact-commit Pages deployment succeeded; live verification is blocked.** [The local final report](../artifacts/verification/webkit-mobile-final/report.json) records the complete run against the unchanged application source, including verified transport loss to the disposable local origin and successful cache-fallback flows. Intermediate failures remain retained below. The publication record and public-origin blocker are separate evidence; no successful live core-flow check is claimed.
 
 ## Source and authorized environment
 
@@ -11,6 +11,8 @@
 - Engine: official Playwright WebKit **revision 2359 / version 26.6**, explicitly launched through `webkit.executablePath()`; no other browser supplies these results.
 
 The existing application source is retained. This task extends the QA runner and evidence; intermediate harness corrections are not application repairs. ODA / ONE DECISION AWAY remains English-primary with EN/TR/ES support and the original C4 branching-sprout logo.
+
+The post-release source comparison against `bf704df99b15f268f2e848400010ca8bb1b3f5b8` has no differences in `src`, `public`, `package.json`, `package-lock.json` or `.github/workflows/deploy-pages.yml`. The release changes QA/evidence/documentation, preserving the application and deployment workflow.
 
 ## Dependency and build receipts
 
@@ -69,8 +71,20 @@ This reproduction supports an offline-emulation/runtime limitation independent o
 
 `navigator.onLine` remained **true** during this transport loss. The result does not establish airplane mode or a working `context.setOffline(true)` reload. The earlier emulation failure remains a limitation; no application code was changed to conceal it.
 
-## Release gate and limits
+## Publication record and blocked live verification
 
-The required cloud WebKit/mobile gate has passed. Publication remains pending: the root task will preserve latest main/user changes, push/merge without force, monitor CI for the exact published commit to a terminal result and check live core flows. No deployment outcome is asserted here before those records exist.
+The required local cloud WebKit/mobile gate passed before publication. The root pushed development and main release **`a793799d008f3577bcced1e608f60b08ab70a1e4`** without force; the original main **`b27d1ea2cbb3a516657ff0dbeb3c35494e9ade41`** remains its ancestor. The automatic [GitHub Pages run 36805521226](https://github.com/BILLIONAR/one-decision-away/actions/runs/36805521226) is **completed / success** for that exact main SHA. Its `build` and `deploy` jobs both completed successfully. CI reran **258 core + 19 notebook = 277 distinct tests**, with zero failures; the 11 standalone routing cases repeat core coverage. [The CI receipt](../artifacts/verification/webkit-live-release-ci/ci-summary.json) binds run, jobs, SHA and counts; [the test summary](../artifacts/verification/webkit-live-release-ci/test-summary.log) retains the count evidence.
+
+The deployment job reported **`https://billionar.github.io/one-decision-away/`** as its environment URL. [The retained deployment URL](../artifacts/verification/webkit-live-release-ci/deployment-url.log) supports that publication destination. A successful deploy job does not establish that the public application passed browser flows.
+
+**Live status: BLOCKED, zero completed live checks.** [The actual public-origin WebKit attempt](../artifacts/verification/webkit-live/report.json), started at **2026-10-01 02:24:33 UTC**, failed at its first `page.goto` with **“Download is starting”**. The report records WebKit **26.6**, expected release SHA `a793799d008f3577bcced1e608f60b08ab70a1e4`, `ignoreHTTPSErrors: false`, no verified assets and zero completed checks. The caller-supplied expected SHA is not evidence of the public page's content; CI separately binds publication to that commit.
+
+At **2026-10-01 02:27:58 UTC**, one curl diagnostic to the exact public deployment URL received **`CONNECT tunnel failed, response 403`**. The retained response is **HTTP 403** with **`server: envoy`** from the execution environment's HTTPS CONNECT layer, **before an origin response**; no Pages response body was received. [The network-block receipt](../artifacts/verification/webkit-live/network-block.json), [raw response headers](../artifacts/verification/webkit-live/connect-response-headers.txt) and [transport diagnostic](../artifacts/verification/webkit-live/transport-diagnostic.log) retain that evidence. The diagnostic used zero retries and did not follow redirects. Further public requests stopped after the 403, without new hosts, mirrors, alternate proxies or network-policy bypass.
+
+This access failure leaves public reachability, served-asset identity and live core flows **unverified** from the task environment. It does not determine the Pages origin's health or establish an ODA application defect. The successful local 59-check run and successful exact-commit Pages deployment remain valid, separately bounded results.
+
+These post-release artifacts and documentation updates are recorded in a **follow-up commit on `feat/oda-growth-studio` only**, whose SHA is reported separately in the final handoff. The stable main release remains **`a793799d008f3577bcced1e608f60b08ab70a1e4`**. This evidence-only follow-up does not change that deployed identity or retrigger main deployment.
+
+## Remaining limits
 
 This evidence covers the official Linux WebKit engine with mobile/touch emulation. It is not branded Safari, iOS, Xcode, Capacitor's actual WKWebView host or a physical iPhone. Real safe areas/software keyboard, VoiceOver, native lifecycle/notifications, StoreKit/RevenueCat, live Supabase and device performance remain unverified. Automated axe scans are bounded accessibility checks, not a full assistive-technology audit. [The cloud/native handoff](CLOUD_MOBILE_VALIDATION.md) retains the optional future Mac/iPhone instructions and historical blocked-run evidence. No bug-free or perfect-device claim follows from this validation.

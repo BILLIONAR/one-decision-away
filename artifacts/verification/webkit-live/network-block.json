@@ -1,0 +1,31 @@
+{
+  "observedAt": "2026-10-01T02:27:58Z",
+  "status": "blocked",
+  "url": "https://billionar.github.io/one-decision-away/",
+  "releaseSha": "a793799d008f3577bcced1e608f60b08ab70a1e4",
+  "deploymentRun": "https://github.com/BILLIONAR/one-decision-away/actions/runs/36805521226",
+  "deploymentConclusion": "success",
+  "liveChecksPassed": 0,
+  "browserAttempt": {
+    "engine": "official Playwright WebKit 26.6 revision 2359",
+    "phase": "public English first use",
+    "result": "page.goto: Download is starting",
+    "evidence": "report.json"
+  },
+  "singleTransportDiagnostic": {
+    "method": "curl HTTPS GET through the configured execution-environment transport",
+    "retries": 0,
+    "redirectFollowing": false,
+    "result": "curl: (56) CONNECT tunnel failed, response 403",
+    "responseLayer": "HTTPS CONNECT tunnel, before an origin response",
+    "status": 403,
+    "server": "envoy",
+    "headersEvidence": "connect-response-headers.txt"
+  },
+  "disposition": "Stopped further public-host requests after the 403, as instructed. No alternate host, mirror, proxy, or network-policy bypass was used.",
+  "limits": [
+    "Successful exact-commit CI and Pages deployment do not establish public-site reachability from this environment.",
+    "No live core flow or served-asset comparison completed; the public deployment is not described as live-tested.",
+    "The public host is outside the three newly approved extra dependency domains. The environment rejected the tunnel; this record does not infer the origin site's health."
+  ]
+}
