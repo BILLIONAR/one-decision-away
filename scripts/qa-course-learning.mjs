@@ -173,11 +173,14 @@ try {
       pass('landing/Today selection contract opens the intended course for an onboarded user');
       await page.getByRole('button', { name: 'All courses', exact: true }).click();
       await page.route('https://images.unsplash.com/**', route => route.abort());
+      await page.route('**/assets/oda/course-covers/*.png', route => route.abort());
       await page.reload(); await ready(page);
       await page.locator('.oda-course-row').first().scrollIntoViewIfNeeded();
-      await page.locator('.oda-course-row .oda-course-photo-fallback').first().waitFor();
-      assert.ok(await page.locator('.oda-course-row').first().locator('.oda-course-art').isVisible());
-      pass('blocked photographs fall back to the original ODA artwork');
+      await page.locator('.oda-course-row .oda-course-cover[data-image-failed="true"]').first().waitFor();
+      assert.equal(await page.locator('.oda-course-row').first().locator('.oda-course-cover img').count(), 0);
+      assert.ok(await page.locator('.oda-course-row').first().locator('.oda-course-row-title').isVisible());
+      assert.equal(await page.locator('.oda-course-row').count(), 18);
+      pass('blocked original covers retain stable cards, readable titles and all course navigation');
       await patchPersonalRecordFixture(page, [{ path: ['profile', 'theme'], value: 'dark' }]);
       await page.reload(); await ready(page);
       assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');

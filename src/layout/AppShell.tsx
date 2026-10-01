@@ -177,7 +177,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
 
       {/* Content */}
       <main id="oda-main" tabIndex={-1} className="outline-none flex-1 min-w-0 overflow-y-auto pb-36 md:pb-12 min-h-screen">
-        <div key={activeRoute} className={`oda-page-enter ${activeRoute === '/app/courses' || activeRoute === '/app/tools' ? 'max-w-[1040px]' : 'max-w-[760px]'} mx-auto px-5 sm:px-8 ${isSecondary ? 'pt-6' : 'pt-[calc(env(safe-area-inset-top,0px)+1.5rem)]'} md:pt-12`}>{children}</div>
+        <div key={activeRoute} className={`oda-page-enter ${activeRoute === '/app' ? 'max-w-[1160px]' : activeRoute === '/app/courses' || activeRoute === '/app/tools' ? 'max-w-[1040px]' : 'max-w-[760px]'} mx-auto px-5 sm:px-8 ${isSecondary ? 'pt-6' : 'pt-[calc(env(safe-area-inset-top,0px)+1.5rem)]'} md:pt-12`}>{children}</div>
       </main>
 
       {/* Mobile bottom tabs */}

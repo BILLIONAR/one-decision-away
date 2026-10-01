@@ -19,6 +19,8 @@ import {
   CloudUpload,
 } from 'lucide-react';
 import { EvidenceTree } from '../components/momentum/EvidenceTree';
+import { treePresentation } from '../data/treePresentation';
+import { growthCopy } from '../i18n/growth';
 import { YourMonth, InsightLine, Milestones } from '../components/me/MyProgress';
 import { useCloudState } from '../services/useCloudState';
 import { usePro } from '../services/purchases';
@@ -105,6 +107,8 @@ export const Me: React.FC = () => {
     },
   ];
   const evidence = evidenceSummary(data.missions);
+  const tree = treePresentation(evidence.total);
+  const treeLabel = growthCopy(locale).treeLabel(tree.total, tree.leaves, tree.blossoms);
 
   const feedbackHref = `mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent('One Decision Away feedback')}`;
 
@@ -122,8 +126,8 @@ export const Me: React.FC = () => {
               {role ? t('Day {n} · {role}', { n: stats.dayNumber, role: t(role) }) : t('Day {n}', { n: stats.dayNumber })}
             </p>
           </div>
-          <button type="button" onClick={() => setActiveRoute('/app/evidence')} className="shrink-0 -my-2" aria-label={t('Your evidence tree: {n} leaves', { n: evidence.total })}>
-            <EvidenceTree count={evidence.total} className="w-20 h-[70px]" label={t('Your evidence tree: {n} leaves', { n: evidence.total })} />
+          <button type="button" onClick={() => setActiveRoute('/app/evidence')} className="shrink-0 -my-2 w-20" aria-label={treeLabel}>
+            <EvidenceTree count={evidence.total} className="w-full" label={treeLabel} />
           </button>
         </div>
         {cloud.configured && !cloud.session && (

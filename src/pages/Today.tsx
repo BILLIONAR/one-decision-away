@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight, AudioLines, Check, ChevronDown, ChevronRight, Leaf, Plus, MessageCircle, GraduationCap, Route, Share2, Waves } from 'lucide-react';
-import { ProgressRing } from '../components/ProgressRing';
+import { GrowthTreePanel, GrowthWeek } from '../components/momentum/GrowthDashboard';
+import { growthCopy } from '../i18n/growth';
 import { courseCatalogFor } from '../data/courseCatalog';
 import { courseForIntent } from '../data/starterDecisions';
 import { useApp } from '../store/useApp';
@@ -67,6 +68,7 @@ export const Today: React.FC = () => {
   const c = companionCopy(locale);
   const d = designCopy(locale);
   const loop = dailyLoopCopy(locale);
+  const growth = growthCopy(locale);
 
   const [completingMission, setCompletingMission] = useState<Mission | null>(null);
   const [newDecisionTitle, setNewDecisionTitle] = useState('');
@@ -177,7 +179,7 @@ export const Today: React.FC = () => {
   const reviewWeek = availableReviewWeek(now);
   const keptCount = keptDecisions(data.missions).length;
   const chain = decisionChain(data.missions);
-  const week = evidenceSummary(data.missions);
+  const week = evidenceSummary(data.missions, now);
   const suggestedCourse = courseCatalogFor(locale).find(c => c.id === courseForIntent(data.profile.intent));
   const draftForToday = data.profile.nextDecisionDraft?.forDay === localDayKey() ? data.profile.nextDecisionDraft.text : null;
   const pickSuggestion = (title: string) => {
@@ -205,9 +207,8 @@ export const Today: React.FC = () => {
       <header className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <p className="text-[13px] text-[var(--fg-muted)]">{dateLine}</p>
-          <h1 className="oda-display text-[30px] sm:text-[34px] tracking-tight text-[var(--fg)] leading-tight">
-            {greeting}
-          </h1>
+          <p className="text-[14px] text-[var(--fg-muted)] mt-1">{greeting}</p>
+          <h1 className="oda-display oda-today-headline">{growth.headline}</h1>
         </div>
         <button
           type="button"
@@ -220,20 +221,12 @@ export const Today: React.FC = () => {
         </button>
       </header>
 
-      <DailyPractice mission={todayOneDecision} dayKey={todayStr} />
-
-      <MomentumCard
-        decisionOpen={!decisionDone}
-        hasDecision={Boolean(todayOneDecision)}
-        onMakeSmaller={() => setPlan({ open: true, smaller: true })}
-        onChoose={() => document.getElementById('today-decision-input')?.focus()}
-        onPickEasy={(title) => void quickSetDecision(title)}
-      />
-
+      <div className="oda-growth-dashboard">
+        <GrowthTreePanel count={keptCount} onEvidence={() => setActiveRoute('/app/evidence')} />
+        <div className="oda-growth-actions">
       {/* 2. One decision: a soft card with this week's ring, one clear action and a check. */}
       <section id="set-one-decision" className="oda-decision" aria-labelledby="today-decision-label">
         <div className="flex items-center gap-4">
-          <ProgressRing value={week.last7} max={7} label={`${week.last7} / 7 · ${loop.last7}`} caption={loop.last7} />
           <div className="min-w-0 flex-1 space-y-1">
             <p className="flex items-baseline justify-between gap-2">
               <span id="today-decision-label" className="oda-kicker text-[var(--brand-burgundy)]">{todayOneDecision?.status === 'active' && todayOneDecision.scheduledFor && todayOneDecision.scheduledFor < todayStr ? loop.carry : t("Today's one decision")}</span>
@@ -312,6 +305,21 @@ export const Today: React.FC = () => {
         )}
       </section>
       {decisionError && <p role="alert" className="oda-loop-error">{loop.saveError}</p>}
+          <CourseNextStep />
+        </div>
+      </div>
+      <GrowthWeek summary={week} onEvidence={() => setActiveRoute('/app/evidence')} />
+
+      <DailyPractice mission={todayOneDecision} dayKey={todayStr} />
+
+      <MomentumCard
+        decisionOpen={!decisionDone}
+        hasDecision={Boolean(todayOneDecision)}
+        onMakeSmaller={() => setPlan({ open: true, smaller: true })}
+        onChoose={() => document.getElementById('today-decision-input')?.focus()}
+        onPickEasy={(title) => void quickSetDecision(title)}
+      />
+
 
       <ArrivalCheckIn
         decisionState={!todayOneDecision ? 'none' : decisionDone ? 'done' : 'open'}
@@ -358,7 +366,6 @@ export const Today: React.FC = () => {
 
       {decisionDone && <KeptMomentCard />}
       <DailyReflection key={todayStr} mission={todayOneDecision} dayKey={todayStr} />
-      <CourseNextStep />
       <WeeklyOutcomeReview key={reviewWeek} weekKey={reviewWeek} />
       <EvidenceStrip />
       {checkInDue && <TwoWeekCheckIn />}

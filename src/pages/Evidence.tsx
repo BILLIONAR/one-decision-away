@@ -1,9 +1,12 @@
 import React from 'react';
 import { Check, Timer, Route } from 'lucide-react';
 import { useApp } from '../store/useApp';
-import { useT, formatDate } from '../i18n';
+import { useT, formatDate, useLocale } from '../i18n';
 import { decisionChain, evidenceSummary, keptDecisions } from '../services/momentum';
-import { EvidenceTree, TREE_LEAVES } from '../components/momentum/EvidenceTree';
+import { EvidenceTree } from '../components/momentum/EvidenceTree';
+
+import { treePresentation } from '../data/treePresentation';
+import { growthCopy } from '../i18n/growth';
 
 /**
  * The evidence log: every kept One Decision is proof of the identity the
@@ -11,11 +14,14 @@ import { EvidenceTree, TREE_LEAVES } from '../components/momentum/EvidenceTree';
  */
 export const Evidence: React.FC = () => {
   const t = useT();
+  const [locale] = useLocale();
+  const copy = growthCopy(locale);
   const { data, setActiveRoute } = useApp();
   if (!data) return null;
   const kept = keptDecisions(data.missions);
   const s = evidenceSummary(data.missions);
   const chain = decisionChain(data.missions);
+  const tree = treePresentation(kept.length);
 
   const byMonth = new Map<string, typeof kept>();
   for (const entry of kept) {
@@ -38,11 +44,10 @@ export const Evidence: React.FC = () => {
       </header>
 
       <figure className="rounded-[var(--radius-lg)] oda-card px-4 pt-4 pb-3 flex flex-col items-center">
-        <EvidenceTree count={kept.length} className="w-full max-w-[320px] h-auto" label={t('Your evidence tree: {n} leaves', { n: kept.length })} />
+        <EvidenceTree count={kept.length} className="w-full max-w-[320px] h-auto" label={copy.treeLabel(tree.total, tree.leaves, tree.blossoms)} />
         <figcaption className="text-[13px] text-center leading-relaxed text-[var(--fg-muted)] max-w-[40ch]">
-          {kept.length === 0 ? t('Your tree grows one leaf for every decision you keep.')
-            : kept.length < TREE_LEAVES ? t('{n} leaves, one for each promise you kept.', { n: kept.length })
-            : t('A full tree. Every new promise now adds a blossom.')}
+          <span className="block font-medium text-[var(--accent)]">{copy.kept(tree.total)}</span>
+          {tree.total === 0 ? copy.start : copy.ledger(tree.leaves, tree.blossoms)}
           {chain.days > 0 && <span className="block mt-1">{t('Current chain: {n} days', { n: chain.days })}{chain.graceUsed ? ` · ${t('flex day used')}` : ''}</span>}
         </figcaption>
       </figure>

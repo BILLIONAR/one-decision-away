@@ -1,0 +1,39 @@
+{
+  "at": "2026-10-01T18:56:21.386Z",
+  "base": "http://127.0.0.1:4173",
+  "checks": [
+    "missing-showModal: setting a decision opens an identified dialog and preserves the saved decision",
+    "missing-showModal: forward/backward Tab and background focus stay contained",
+    "missing-showModal: Escape, backdrop and close button survive reopening, restore focus/scroll and keep data unchanged",
+    "missing-close: setting a decision opens an identified dialog and preserves the saved decision",
+    "missing-close: forward/backward Tab and background focus stay contained",
+    "missing-close: Escape, backdrop and close button survive reopening, restore focus/scroll and keep data unchanged",
+    "missing-dialog-and-inert: setting a decision opens an identified dialog and preserves the saved decision",
+    "missing-dialog-and-inert: forward/backward Tab and background focus stay contained",
+    "missing-dialog-and-inert: Escape, backdrop and close button survive reopening, restore focus/scroll and keep data unchanged",
+    "native-dialog: setting a decision opens an identified dialog and preserves the saved decision",
+    "native-dialog: forward/backward Tab and background focus stay contained",
+    "native-dialog: Escape, backdrop and close button survive reopening, restore focus/scroll and keep data unchanged",
+    "no uncaught errors across feature-absence and native-dialog checks"
+  ],
+  "accessibility": [
+    {
+      "scenario": "missing-showModal",
+      "violations": []
+    },
+    {
+      "scenario": "missing-close",
+      "violations": []
+    },
+    {
+      "scenario": "missing-dialog-and-inert",
+      "violations": []
+    },
+    {
+      "scenario": "native-dialog",
+      "violations": []
+    }
+  ],
+  "errors": [],
+  "status": "passed"
+}

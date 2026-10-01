@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, ArrowRight, Check, ChevronRight, Clock3, LockKeyhole, Search, RotateCcw } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Clock3, LockKeyhole, Search, RotateCcw } from 'lucide-react';
 import { COURSES, coursesFor, sourcesFor, type GuidedCourse } from '../data/courses';
 import { canCompleteLesson, completeLesson, getLessonProgress, nextLessonIndex, updateLessonProgress } from '../services/courseProgress';
 import { getCourseProgressSession } from '../services/courseProgressDraft';
 import { CourseVisual } from '../components/CourseVisual';
 import { CoursePhoto, TechniqueCard } from '../components/CoursePhoto';
+import { CourseCover } from '../components/CourseCover';
 import { CoursePracticeStudio } from '../components/CoursePracticeStudio';
 import { categoryForCourse, courseLearningCopy, type CourseCategory } from '../data/courseLearningCopy';
+import { courseCatalogueCopy, courseOutcomeFor } from '../data/coursePresentation';
 import { getCourseExperiment, isCourseReviewDue } from '../services/courseLearning';
 import { useLocale, useT } from '../i18n';
 import { useApp } from '../store/useApp';
@@ -24,6 +26,7 @@ export const Courses: React.FC = () => {
   const [locale] = useLocale();
   const t = useT();
   const copy = courseLearningCopy(locale);
+  const catalogue = courseCatalogueCopy(locale);
   const courses = coursesFor(locale);
   const langOf = (item?: GuidedCourse) => (item?.lang && item.lang !== locale ? item.lang : undefined);
   const draft = getCourseProgressSession();
@@ -85,13 +88,13 @@ export const Courses: React.FC = () => {
     <header className="oda-course-intro">
       <div>
         <p className="oda-course-eyebrow">{t('ODA / Guided courses')}</p>
-        <h1 ref={titleRef} tabIndex={-1} className="oda-display oda-course-title outline-none scroll-mt-16">{t("Even if you're afraid,")}<br /><span className="text-[var(--accent)]">{t('you can still begin.')}</span></h1>
-        <p className="oda-course-intro-copy">{t('Sometimes a quote gives you courage. Sometimes you need to see the next step together. Pick a topic and move at your own pace with short lessons.')}</p>
+        <h1 ref={titleRef} tabIndex={-1} className="oda-display oda-course-title outline-none scroll-mt-16">{catalogue.title}</h1>
+        <p className="oda-course-intro-copy">{catalogue.intro}</p>
         {languageNote}
       </div>
       <div className="oda-course-method">
         <p className="oda-course-method-path"><span>{t('Understand')}</span><ArrowRight size={13} aria-hidden="true" /><span>{t('Try')}</span><ArrowRight size={13} aria-hidden="true" /><span>{t('Reinforce')}</span></p>
-        <p>{t('{courses} courses · {lessons} lessons', { courses: courses.length, lessons: courses.reduce((sum, item) => sum + item.lessons.length, 0) })}<br />{copy.studioIntro}</p>
+        <p>{t('{courses} courses · {lessons} lessons', { courses: courses.length, lessons: courses.reduce((sum, item) => sum + item.lessons.length, 0) })}</p>
         <button type="button" onClick={() => { if (bibliographyRef.current) bibliographyRef.current.open = true; researchRef.current?.scrollIntoView({ block: 'start' }); researchRef.current?.focus(); }} className="oda-course-research-link">{t('Content based on {count} scientific publications', { count: researchSources.length })}<ArrowRight size={13} aria-hidden="true" /></button>
       </div>
     </header>
@@ -109,24 +112,24 @@ export const Courses: React.FC = () => {
     {reviewCourse && <section className="oda-course-review-ready" aria-labelledby="course-return-title"><RotateCcw size={22} aria-hidden="true" /><div><p className="oda-course-eyebrow">{copy.returnTitle}</p><h2 id="course-return-title" className="oda-display">{reviewCourse.title}</h2><p>{copy.returnBody}</p></div><button type="button" onClick={() => open(reviewCourse)} className="oda-course-primary">{copy.openReview}<ArrowRight size={16} aria-hidden="true" /></button></section>}
 
     <section aria-labelledby="course-list-title">
-      <div className="oda-course-section-heading"><h2 id="course-list-title" className="oda-display">{resumeCourse ? t('Explore the other paths too') : t('Which topic feels close to you today?')}</h2><p>{t('Pick a topic. Start with one small step.')}</p></div>
+      <div className="oda-course-section-heading"><h2 id="course-list-title" className="oda-display">{resumeCourse ? t('Explore the other paths too') : catalogue.explore}</h2><p>{t('Pick a topic. Start with one small step.')}</p></div>
       <div className="oda-course-discovery"><label htmlFor="course-search" className="oda-course-search"><Search size={18} aria-hidden="true" /><span className="sr-only">{copy.search}</span><input id="course-search" type="search" value={query} placeholder={copy.searchPlaceholder} onChange={event => setQuery(event.target.value)} /></label><div role="group" aria-label={copy.all} className="oda-course-filters">{(['all', 'courage', 'attention', 'perspective'] as const).map(value => <button type="button" key={value} aria-pressed={category === value} onClick={() => setCategory(value)}>{copy[value]}</button>)}</div><p role="status" className="oda-course-results">{visibleCourses.length} {copy.pathsFound}</p></div>
       {!visibleCourses.length && <div className="oda-course-empty"><p>{copy.noResults}</p><button type="button" className="oda-course-primary" onClick={() => { setQuery(''); setCategory('all'); }}>{copy.clearSearch}</button></div>}
       <div className="oda-course-list">{visibleCourses.map((item, i) => {
         const completed = countCompleted(item);
         const hasStarted = started(item);
-        return <button key={item.id} type="button" onClick={() => open(item)} className="oda-course-row">
-          <span className="oda-course-art-wrap"><CoursePhoto photo={item.photo} courseId={item.id} variant="thumb" lang={langOf(item)} /><span className="oda-course-row-number" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span></span>
+        return <button key={item.id} type="button" onClick={() => open(item)} className="oda-course-row" data-course-id={item.id}>
+          <CourseCover courseId={item.id} eager={i < 2} />
           <span className="oda-course-row-content">
+            <span className="oda-course-row-heading"><span className="oda-course-row-category">{copy[categoryForCourse(item.id)]}</span><span className="oda-course-row-number" aria-hidden="true">{String(courses.findIndex(entry => entry.id === item.id) + 1).padStart(2, '0')}</span></span>
             <span lang={langOf(item)} className="oda-display oda-course-row-title">{item.title}</span>
             {item.id === suggestedId && <span className="oda-course-suggested">{t('Suggested for you')}</span>}
             <span lang={langOf(item)} className="oda-course-row-subtitle">{item.subtitle}</span>
-            <span lang={langOf(item)} className="oda-course-row-description">{item.description}</span>
-            <span className="oda-course-row-outcome"><span>{copy.courseOutcome}</span><span lang={langOf(item)}>{item.outcome}</span></span>
-            <span className="oda-course-row-meta"><span>{t('{lessons} lessons · {minutes} min', { lessons: item.lessons.length, minutes: item.lessons.reduce((sum, lesson) => sum + lesson.minutes, 0) })}</span><span className="oda-course-row-state">{completed === item.lessons.length ? t('Completed · review again') : hasStarted ? t('{done}/{total} completed · continue', { done: completed, total: item.lessons.length }) : t('Start course')}</span></span>
+            <span className="oda-course-row-meta"><span>{t('{lessons} lessons · {minutes} min', { lessons: item.lessons.length, minutes: item.lessons.reduce((sum, lesson) => sum + lesson.minutes, 0) })}</span><span>{catalogue.pace}</span></span>
+            <span className="oda-course-row-outcome"><span>{catalogue.outcome}</span><span>{courseOutcomeFor(item.id, locale) ?? item.outcome}</span></span>
             {completed > 0 && <span role="progressbar" aria-label={t('{title} progress', { title: item.title })} aria-valuenow={completed} aria-valuemin={0} aria-valuemax={item.lessons.length} className="oda-course-progress"><span className="oda-course-progress-fill" style={{ width: `${completed / item.lessons.length * 100}%` }} /></span>}
+            <span className="oda-course-row-footer"><span className="oda-course-row-state">{completed === item.lessons.length ? t('Completed · review again') : hasStarted ? t('{done}/{total} completed · continue', { done: completed, total: item.lessons.length }) : t('Start course')}</span><ArrowRight className="oda-course-row-arrow" size={22} aria-hidden="true" /></span>
           </span>
-          <ChevronRight className="oda-course-row-arrow" size={20} aria-hidden="true" />
         </button>;
       })}</div>
     </section>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ArrowRight, BookOpen } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { courseCatalogFor } from '../../data/courseCatalog';
 import { courseForIntent } from '../../data/starterDecisions';
 import { useApp } from '../../store/useApp';
@@ -31,8 +31,8 @@ export const CourseNextStep: React.FC = () => {
     setActiveRoute('/app/courses');
   };
   return <section className="oda-course-next-step" aria-labelledby="course-next-step-title">
-    <div className="oda-loop-heading"><span className="oda-loop-icon" aria-hidden="true"><BookOpen size={20} strokeWidth={1.7} /></span><div><p className="oda-kicker">{next.started ? c.continueCourse : c.startCourse}</p><h2 id="course-next-step-title" className="oda-display">{next.course.title}</h2><p>{c.lesson} {next.index + 1} {c.of} {next.course.lessonCount} · {next.completed}/{next.course.lessonCount} {c.lessonsComplete}</p></div></div>
-    <p className="oda-loop-help">{c.learningHint}</p>
+    <div className="oda-loop-heading"><div><p className="oda-kicker">{next.started ? c.continueCourse : c.startCourse}</p><h2 id="course-next-step-title" className="oda-display">{next.course.title}</h2><p>{c.lesson} {next.index + 1} {c.of} {next.course.lessonCount} · {next.completed}/{next.course.lessonCount} {c.lessonsComplete}</p></div></div>
+    <div className="oda-growth-course-progress" role="progressbar" aria-label={next.course.title} aria-valuenow={next.completed} aria-valuemin={0} aria-valuemax={next.course.lessonCount}><span style={{ width: `${next.completed / next.course.lessonCount * 100}%` }} /></div>
     <button type="button" onClick={open} className="oda-loop-link">{next.started ? c.continue : c.begin}<ArrowRight size={16} aria-hidden="true" /></button>
   </section>;
 };

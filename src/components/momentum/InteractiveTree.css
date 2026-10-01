@@ -1,0 +1,14 @@
+.oda-tree-3d { position: relative; width: 100%; color: #173e35; }
+.oda-tree-3d-viewport { position: relative; min-height: 320px; height: clamp(320px, 40vw, 480px); border-radius: 24px; background: radial-gradient(ellipse at 50% 60%, #eee9dc 0%, #f7f3ea 68%); overflow: hidden; }
+.oda-tree-3d canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: pan-y; outline-offset: -5px; border-radius: inherit; }
+.oda-tree-3d canvas:active { cursor: grabbing; }
+.oda-tree-3d canvas:focus-visible { outline: 2px solid #8a3042; }
+.oda-tree-3d-loading { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; font-size: .85rem; }
+.oda-tree-3d-instructions { margin: 12px 0 10px; text-align: center; font-size: .75rem; line-height: 1.55; color: #56645b; }
+.oda-tree-3d-controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.oda-tree-3d-controls button { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; border: 1px solid #173e3526; border-radius: 50%; background: #f7f3ea; color: #173e35; font-size: 1.1rem; }
+.oda-tree-3d-controls button:focus-visible, .oda-tree-3d-return:focus-visible { outline: 2px solid #8a3042; outline-offset: 3px; }
+.oda-tree-3d-controls button:hover { background: #e7e7dc; }
+.oda-tree-3d-controls .oda-tree-3d-reset { border-radius: 24px; padding: 0 14px; font-size: .75rem; }
+.oda-tree-3d-return { display: block; margin: 12px auto 0; min-height: 44px; border: 0; background: transparent; text-decoration: underline; text-underline-offset: 4px; color: #173e35; font-size: .75rem; }
+@media (max-width: 420px) { .oda-tree-3d-viewport { min-height: 300px; height: 340px; } }

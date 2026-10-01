@@ -2,12 +2,12 @@
 .oda-courses button, .oda-courses summary, .oda-courses a { -webkit-tap-highlight-color: transparent; }
 .oda-courses button:focus-visible, .oda-courses summary:focus-visible, .oda-courses a:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
 .oda-course-eyebrow { font-family: var(--font-editorial); font-style: italic; font-size: .95rem; line-height: 1.4; font-weight: 400; color: var(--accent); }
-.oda-course-intro { display: grid; gap: 1.75rem; padding-block: .5rem 2rem; border-bottom: 1px solid var(--border); }
-.oda-course-title { font-size: clamp(2.5rem, 6vw, 4.25rem); line-height: 1.04; letter-spacing: -0.012em; margin-block: .85rem 1rem; max-width: 12ch; }
-.oda-course-intro-copy { max-width: 43ch; font-size: .94rem; line-height: 1.75; color: var(--fg-muted); }
-.oda-course-method { align-self: end; padding: 1.25rem; border-left: 2px solid var(--brand-burgundy); background: var(--bg-muted); }
+.oda-course-intro { padding-block: .5rem 1.5rem; border-bottom: 1px solid var(--border); }
+.oda-course-title { font-size: clamp(2.6rem, 6vw, 4.5rem); line-height: 1.06; letter-spacing: -0.025em; margin-block: .85rem 1rem; max-width: 20ch; color: var(--accent); }
+.oda-course-intro-copy { max-width: 48ch; font-size: clamp(.98rem, 2vw, 1.15rem); line-height: 1.65; color: var(--fg); }
+.oda-course-method { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.5rem; margin-top: 1.35rem; }
 .oda-course-method .oda-course-method-path { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; margin-top: 0; font-size: .9rem; font-weight: 650; color: var(--accent); }
-.oda-course-method p { margin-top: .65rem; font-size: .8rem; line-height: 1.65; color: var(--fg-muted); }
+.oda-course-method p { font-size: .8rem; line-height: 1.65; color: var(--fg-muted); }
 .oda-course-research-link { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; font-size: .74rem; text-decoration: underline; text-underline-offset: 4px; color: var(--accent); cursor: pointer; }
 .oda-course-resume { display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; padding: 1.5rem; margin-top: 1.5rem; border: 1px solid var(--border); border-radius: 16px; background: var(--accent-soft); }
 .oda-course-resume h2 { font-size: 1.5rem; line-height: 1.25; margin-block: .35rem; }
@@ -16,21 +16,24 @@
 .oda-course-section-heading { display: flex; align-items: baseline; flex-wrap: wrap; justify-content: space-between; gap: .5rem 1rem; padding-block: 2rem 1rem; }
 .oda-course-section-heading h2 { font-size: 1.7rem; line-height: 1.2; }
 .oda-course-section-heading p { font-size: .78rem; color: var(--fg-muted); }
-.oda-course-list { border-top: 1px solid var(--border); }
-.oda-course-row { display: grid; grid-template-columns: 104px minmax(0, 1fr) 24px; align-items: center; gap: 1.1rem; width: 100%; text-align: left; padding: 1.4rem .25rem; border-bottom: 1px solid var(--border); cursor: pointer; border-radius: 3px; }
-.oda-course-art-wrap { display: block; position: relative; background: var(--bg-muted); border-radius: 12px 34px 12px 12px; overflow: hidden; aspect-ratio: 1; }
-.oda-course-row:nth-child(even) .oda-course-art-wrap { background: var(--brand-burgundy-soft); border-radius: 34px 12px 12px 12px; }
+.oda-course-list { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.2rem; }
+.oda-course-row { display: flex; flex-direction: column; align-items: stretch; min-width: 0; width: 100%; padding: 0; overflow: hidden; text-align: left; border: 1px solid var(--border); border-radius: 16px; background: var(--bg-elevated); cursor: pointer; transition: border-color 160ms ease; }
+.oda-course-row:hover { border-color: color-mix(in srgb, var(--accent) 48%, var(--border)); }
+.oda-course-cover { display: block; width: 100%; aspect-ratio: 16 / 9; flex: none; overflow: hidden; background: var(--bg-muted); }
+.oda-course-cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .oda-course-art { display: block; width: 100%; height: auto; overflow: visible; }
-.oda-course-row-number { position: absolute; top: .45rem; left: .5rem; padding: .1rem .35rem; border-radius: 999px; font-size: .6rem; font-weight: 650; color: #fff; background: rgb(20 20 20 / .45); backdrop-filter: blur(4px); }
-.oda-course-row-content { display: block; min-width: 0; }
-.oda-course-row-title { display: block; font-size: 1.4rem; line-height: 1.25; letter-spacing: -0.012em; font-weight: 600; }
-.oda-course-row-subtitle { display: block; margin-top: .35rem; font-size: .86rem; color: var(--accent); font-weight: 550; }
-.oda-course-row-description { display: block; max-width: 61ch; margin-top: .5rem; font-size: .84rem; line-height: 1.65; color: var(--fg-muted); }
-.oda-course-row-meta { display: flex; align-items: center; flex-wrap: wrap; gap: .4rem 1rem; margin-top: .75rem; font-size: .7rem; color: var(--fg-muted); }
-.oda-course-row-state { font-weight: 650; color: var(--brand-burgundy); }
+.oda-course-row-content { display: flex; flex: 1; flex-direction: column; align-items: flex-start; min-width: 0; padding: 1.25rem; }
+.oda-course-row-heading { display: flex; align-items: baseline; justify-content: space-between; gap: .75rem; width: 100%; margin-bottom: .6rem; }
+.oda-course-row-category { color: var(--brand-burgundy); font-size: .64rem; font-weight: 650; line-height: 1.6; letter-spacing: .09em; text-transform: uppercase; }
+.oda-course-row-number { flex: none; font-size: .75rem; color: var(--fg-muted); font-variant-numeric: tabular-nums; }
+.oda-course-row-title { display: block; font-size: 1.85rem; line-height: 1.13; letter-spacing: -0.018em; font-weight: 500; color: var(--accent); overflow-wrap: anywhere; }
+.oda-course-row-subtitle { display: block; margin-top: .45rem; font-size: .8rem; line-height: 1.6; color: var(--fg-muted); }
+.oda-course-row-meta { display: flex; align-items: center; flex-wrap: wrap; gap: .3rem .9rem; margin-top: .75rem; font-size: .72rem; line-height: 1.5; color: var(--fg-muted); }
+.oda-course-row-footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; width: 100%; margin-top: auto; padding-top: 1.1rem; }
+.oda-course-row-state { font-family: var(--font-editorial); font-size: 1.13rem; line-height: 1.3; font-weight: 550; color: var(--accent); }
 .oda-course-row-arrow { color: var(--accent); transition: transform 160ms ease; }
 .oda-course-row:hover .oda-course-row-arrow { transform: translateX(3px); }
-.oda-course-progress { display: block; height: 3px; max-width: 240px; margin-top: .8rem; border-radius: 999px; background: var(--bg-muted); overflow: hidden; }
+.oda-course-progress { display: block; width: 100%; height: 3px; margin-top: .9rem; border-radius: 999px; background: var(--bg-muted); overflow: hidden; }
 .oda-course-progress-fill { display: block; height: 100%; border-radius: inherit; background: var(--accent); }
 .oda-course-storage { margin-top: 1.5rem; }
 .oda-course-research { margin-top: 3rem; padding: 1.5rem; border: 1px solid var(--border); border-radius: 16px; background: var(--bg-elevated); scroll-margin-top: 5rem; }
@@ -73,18 +76,16 @@
 .oda-course-option span { font-size: .88rem; line-height: 1.65; }
 .oda-course-finish { padding: 1.5rem; border-radius: 14px; border: 1px solid var(--border); background: var(--accent-soft); }
 @media (min-width: 760px) {
-  .oda-course-intro { grid-template-columns: minmax(0, 1.3fr) minmax(245px, .85fr); align-items: center; gap: 2.5rem; padding-block: .5rem 2.5rem; }
-  .oda-course-row { grid-template-columns: 132px minmax(0, 1fr) 24px; gap: 1.8rem; padding-block: 1.5rem; }
-  .oda-course-row-title { font-size: 1.65rem; }
-  .oda-course-row-description { font-size: .9rem; }
+  .oda-course-intro { padding-block: .5rem 1.75rem; }
+  .oda-course-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.4rem; }
+  .oda-course-row-content { padding: 1.4rem; }
+  .oda-course-row-title { font-size: 2rem; }
   .oda-course-research { padding: 2rem; }
 }
 @media (max-width: 479px) {
-  .oda-course-row { grid-template-columns: 78px minmax(0, 1fr) 16px; gap: .7rem; padding-block: 1.35rem; }
-  .oda-course-row-title { font-size: 1.22rem; }
-  .oda-course-row-subtitle { font-size: .78rem; }
-  .oda-course-row-description { grid-column: 2; font-size: .8rem; }
-  .oda-course-row-meta { column-gap: .65rem; font-size: .67rem; }
+  .oda-course-title { font-size: clamp(2.5rem, 10.5vw, 3.1rem); }
+  .oda-course-row-content { padding: 1rem; }
+  .oda-course-row-title { font-size: 1.75rem; }
   .oda-course-resume { flex-wrap: wrap; padding: 1.2rem; }
   .oda-course-resume .oda-course-primary { width: 100%; }
   .oda-course-lesson-header { gap: .6rem; align-items: flex-start; }
@@ -191,14 +192,8 @@
 .oda-course-filters button { min-height: 44px; padding: .55rem .9rem; border: 1px solid var(--border); border-radius: 999px; color: var(--fg-muted); font-size: .76rem; cursor: pointer; }
 .oda-course-filters button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
 .oda-course-results { color: var(--fg-muted); font-size: .73rem; }
-.oda-course-list { display: grid; gap: 1rem; border-top: 0; }
-.oda-course-row { grid-template-columns: 76px minmax(0, 1fr) 16px; align-items: start; gap: .9rem; padding: 1.25rem; border: 1px solid var(--border); border-radius: 18px; background: var(--bg-elevated); transition: border-color 160ms ease; }
-.oda-course-row:hover { border-color: color-mix(in srgb, var(--accent) 48%, var(--border)); }
-.oda-course-row-title { font-size: 1.35rem; }
-.oda-course-row-description { margin-top: .7rem; font-size: .83rem; }
-.oda-course-row-arrow { margin-top: .35rem; }
-.oda-course-row-outcome { display: grid; gap: .25rem; margin-top: .9rem; padding-top: .75rem; border-top: 1px solid var(--border); font-size: .8rem; line-height: 1.6; color: var(--fg); }
-.oda-course-row-outcome > span:first-child { font-size: .65rem; font-weight: 650; color: var(--accent); }
+.oda-course-row-outcome { display: grid; gap: .45rem; width: 100%; margin-top: 1rem; padding-top: .9rem; border-top: 1px solid var(--border); font-size: .86rem; line-height: 1.65; color: var(--fg); }
+.oda-course-row-outcome > span:first-child { font-size: .6rem; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--fg-muted); }
 .oda-course-empty { display: grid; justify-items: start; gap: 1rem; padding: 1.5rem; border: 1px dashed var(--border); border-radius: 16px; font-size: .9rem; }
 .oda-course-review-ready { display: flex; align-items: center; gap: 1rem; margin-top: 1.25rem; padding: 1.25rem; border: 1px solid var(--border); border-radius: 16px; background: var(--bg-elevated); }
 .oda-course-review-ready > svg { flex: none; color: var(--brand-burgundy); }
@@ -293,8 +288,6 @@
   .oda-practice-entry-fields { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 479px) {
-  .oda-course-row { grid-template-columns: 54px minmax(0, 1fr) 14px; padding: 1rem; gap: .65rem; }
-  .oda-course-row-title { font-size: 1.25rem; }
   .oda-course-review-ready { flex-wrap: wrap; }
   .oda-course-review-ready > div { min-width: 70%; }
   .oda-course-review-ready .oda-course-primary, .oda-practice .oda-course-primary { width: 100%; }
