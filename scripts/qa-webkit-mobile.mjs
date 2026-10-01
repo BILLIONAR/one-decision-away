@@ -5,9 +5,10 @@
  * and a shortened viewport do not constitute iOS, Xcode, or a real keyboard test.
  */
 import assert from 'node:assert/strict';
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, readlinkSync, realpathSync, writeFileSync } from 'node:fs';
 import { platform, release } from 'node:os';
 import { createRequire } from 'node:module';
+import { resolve } from 'node:path';
 import { webkit, devices } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 import { getInitialDemoState } from '../src/services/repository.ts';
@@ -15,9 +16,13 @@ import { coursesFor } from '../src/data/courses.ts';
 import { courseLearningCopy } from '../src/data/courseLearningCopy.ts';
 
 const BASE = (process.env.ODA_QA_URL || 'http://localhost:4173').replace(/\/$/, '');
-const HASH_ROUTES = new URL(BASE).pathname !== '/';
+const BASE_URL = new URL(BASE);
+const HASH_ROUTES = BASE_URL.pathname !== '/';
+const LOCAL_SELF_SIGNED_PREVIEW = BASE_URL.protocol === 'https:' && ['127.0.0.1', 'localhost'].includes(BASE_URL.hostname);
 const routeUrl = path => HASH_ROUTES ? `${BASE}/#${path}` : `${BASE}${path}`;
 const OUT = process.env.ODA_WEBKIT_QA_OUT || 'artifacts/webkit-mobile';
+const LOCAL_DEPS = process.env.ODA_WEBKIT_LOCAL_DEPS === '1';
+const ORIGIN_PID = process.env.ODA_WEBKIT_ORIGIN_PID;
 const KEY = 'one_decision_away_app_data_v1';
 const require = createRequire(import.meta.url);
 mkdirSync(OUT, { recursive: true });
@@ -25,10 +30,13 @@ const report = {
   at: new Date().toISOString(), base: BASE, hashRoutes: HASH_ROUTES, engine: 'webkit',
   host: { platform: platform(), release: release(), node: process.version },
   playwrightVersion: require('playwright/package.json').version,
+  executablePath: webkit.executablePath(), localDependencyLaunch: LOCAL_DEPS,
+  localSelfSignedPreview: LOCAL_SELF_SIGNED_PREVIEW,
   plannedCoverage: [
     'English first-use touch onboarding, interrupted draft, user-local date and successful setup',
     'Daily decision completion, reflection edit, reload and duplicate reward prevention',
     '390px/320px reflow, relevant 44px targets, light/dark and reduced-motion preferences',
+    '390x844 workbook helper hit-tests, maximum-scroll clearance, and recorded native/synthetic safe-area geometry',
     'Shortened viewport with focused textarea: space approximation only, not an iOS keyboard',
     'EN/TR/ES course reading, partial practice, saved plans, adapted attempts, review and text download',
     'Blocked storage draft retention/retry, sequential lesson carry-forward and JSON backup/restore',
@@ -39,9 +47,10 @@ const report = {
   limits: [
     'Linux WebKit engine with mobile/touch emulation; not Apple Safari or a real iPhone.',
     'Viewport shortening approximates available space; no real iOS software keyboard was exercised.',
+    'The 34px navigation-bottom stress check is a temporary CSS geometry override, not a real device safe-area measurement.',
     'No Xcode compilation, physical device, VoiceOver, StoreKit, or live cloud account was tested.',
   ],
-  checks: [], contexts: [], accessibility: [], touchTargets: [], capabilities: [], screenshots: [], errors: [],
+  checks: [], contexts: [], accessibility: [], touchTargets: [], capabilities: [], mobileGeometry: [], safeArea: [], screenshots: [], errors: [],
 };
 const pass = name => { report.checks.push(name); console.log(`PASS ${name}`); };
 let browser;
@@ -63,6 +72,122 @@ const dismiss = async page => {
 const screenshot = async (page, name, fullPage = false) => {
   await page.screenshot({ path: `${OUT}/${name}.png`, fullPage });
   report.screenshots.push(`${name}.png`);
+};
+const settleFrames = page => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+const clearOfMobileBars = async (page, locator, name) => {
+  const geometry = await locator.evaluate(element => {
+    const rect = element.getBoundingClientRect();
+    const nav = document.querySelector('.oda-tabbar').getBoundingClientRect();
+    const header = document.querySelector('.oda-glass-bar')?.getBoundingClientRect();
+    const viewportTop = visualViewport?.offsetTop ?? 0;
+    const viewportBottom = viewportTop + (visualViewport?.height ?? innerHeight);
+    const usableTop = Math.max(viewportTop, header?.bottom ?? viewportTop);
+    const usableBottom = Math.min(viewportBottom, nav.top);
+    const x = rect.left + rect.width / 2;
+    const hitTests = [rect.top + 2, rect.top + rect.height / 2, rect.bottom - 2].map(y => {
+      const hit = document.elementFromPoint(x, y);
+      return { x, y, belongsToTarget: Boolean(hit && element.contains(hit)), hit: hit ? { tag: hit.tagName, id: hit.id, className: hit.className } : null };
+    });
+    return {
+      target: element.id || element.className, rect: { top: rect.top, bottom: rect.bottom, width: rect.width, height: rect.height },
+      viewport: { width: innerWidth, height: innerHeight, visualTop: viewportTop, visualBottom: viewportBottom },
+      usableTop, usableBottom, nav: { top: nav.top, bottom: nav.bottom }, hitTests,
+    };
+  });
+  report.mobileGeometry.push({ name, ...geometry });
+  assert.ok(geometry.rect.width > 0 && geometry.rect.height > 0, `${name}: empty target ${JSON.stringify(geometry)}`);
+  assert.ok(geometry.rect.top >= geometry.usableTop - 1 && geometry.rect.bottom <= geometry.usableBottom + 1, `${name}: target overlaps mobile bars or viewport ${JSON.stringify(geometry)}`);
+  assert.ok(geometry.hitTests.every(hit => hit.belongsToTarget), `${name}: overlay intercepts target ${JSON.stringify(geometry)}`);
+};
+const workbookGeometry = async (page, name, syntheticBottom = null) => {
+  const safeArea = await page.evaluate(() => {
+    const probe = document.createElement('div');
+    probe.style.cssText = 'position:fixed;visibility:hidden;pointer-events:none;padding-bottom:env(safe-area-inset-bottom,0px)';
+    document.body.appendChild(probe);
+    const nativeInset = parseFloat(getComputedStyle(probe).paddingBottom);
+    probe.remove();
+    return { nativeInset, navBottom: parseFloat(getComputedStyle(document.querySelector('.oda-tabbar')).bottom), viewportMeta: document.querySelector('meta[name=viewport]')?.content };
+  });
+  report.safeArea.push({ name, mode: syntheticBottom === null ? 'observed browser env() value' : 'temporary CSS navigation-bottom override', syntheticBottom, ...safeArea });
+  assert.ok(Number.isFinite(safeArea.nativeInset), `${name}: safe-area value was not measurable`);
+  if (syntheticBottom === null) assert.ok(safeArea.navBottom >= Math.max(14, safeArea.nativeInset) - 1, `${name}: navigation does not clear the observed inset ${JSON.stringify(safeArea)}`);
+  else assert.ok(Math.abs(safeArea.navBottom - syntheticBottom) <= 1, `${name}: synthetic bottom spacing was not applied ${JSON.stringify(safeArea)}`);
+  for (const [selector, helper] of [['#practice-procrastination-date-note', 'review date helper'], ['.oda-practice-export > p', 'export helper']]) {
+    const locator = page.locator(selector);
+    await locator.evaluate(element => element.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' }));
+    await settleFrames(page);
+    await clearOfMobileBars(page, locator, `${name}: ${helper}`);
+  }
+  pass(`${name}: date/export helpers can scroll clear of navigation and pass top/center/bottom hit-tests`);
+  await page.evaluate(() => {
+    for (const element of new Set([document.scrollingElement, document.getElementById('oda-main')])) {
+      if (element) element.scrollTop = element.scrollHeight;
+    }
+  });
+  await settleFrames(page);
+  const scrollRoots = await page.evaluate(() => [...new Set([document.scrollingElement, document.getElementById('oda-main')])].filter(Boolean).map(element => ({
+    target: element.id || element.tagName, scrollTop: element.scrollTop, scrollHeight: element.scrollHeight, clientHeight: element.clientHeight,
+  })).filter(item => item.scrollHeight > item.clientHeight + 1));
+  report.mobileGeometry.push({ name: `${name}: maximum scroll`, scrollRoots });
+  assert.ok(scrollRoots.length > 0, `${name}: expected a scrolling lesson`);
+  // WebKit can report scrollTop slightly beyond scrollHeight - clientHeight.
+  assert.ok(scrollRoots.every(item => item.scrollTop >= item.scrollHeight - item.clientHeight - 1), `${name}: did not reach maximum scroll ${JSON.stringify(scrollRoots)}`);
+  await clearOfMobileBars(page, page.locator('.oda-course-save-note > p'), `${name}: final lesson helper at maximum scroll`);
+  pass(`${name}: final lesson helper is fully above floating navigation at maximum scroll`);
+};
+const stopLocalPreview = async context => {
+  assert.match(ORIGIN_PID, /^\d+$/, 'ODA_WEBKIT_ORIGIN_PID must be a decimal process ID');
+  const pid = Number(ORIGIN_PID);
+  assert.ok(Number.isSafeInteger(pid) && pid > 1 && pid !== process.pid, 'Invalid preview process ID');
+  assert.ok(LOCAL_SELF_SIGNED_PREVIEW && BASE_URL.port === '4175', 'Transport loss is restricted to the task loopback HTTPS preview on port 4175');
+  const proc = `/proc/${pid}`;
+  const cmdline = readFileSync(`${proc}/cmdline`, 'utf8');
+  const argv = cmdline.split('\0').filter(Boolean);
+  const owner = readFileSync(`${proc}/status`, 'utf8').match(/^Uid:\s+(\d+)\s+(\d+)/m);
+  assert.ok(owner && Number(owner[1]) === process.getuid() && Number(owner[2]) === process.getuid(), 'Preview must belong to the current task user');
+  const cwd = readlinkSync(`${proc}/cwd`);
+  assert.equal(realpathSync(`${proc}/exe`), realpathSync(process.execPath), 'Preview must use this task Node executable');
+  assert.equal(realpathSync(resolve(cwd, argv[1])), realpathSync(resolve('node_modules/vite/bin/vite.js')), 'Preview must use this checkout Vite CLI');
+  assert.equal(argv[2], 'preview', 'Only a Vite preview process may be stopped');
+  const valueFor = flag => {
+    const values = argv.flatMap((arg, index) => arg === flag ? [argv[index + 1]] : arg.startsWith(`${flag}=`) ? [arg.slice(flag.length + 1)] : []);
+    assert.equal(values.length, 1, `Expected exactly one preview ${flag} option`);
+    return values[0];
+  };
+  assert.equal(valueFor('--outDir'), '/tmp/oda-webkit-project-build', 'Unexpected preview output directory');
+  assert.equal(valueFor('--host'), '127.0.0.1', 'Unexpected preview bind address');
+  assert.equal(valueFor('--port'), '4175', 'Unexpected preview port');
+  const online = await context.request.get(`${BASE}/`, { timeout: 3000 });
+  const onlineStatus = online.status();
+  assert.equal(onlineStatus, 200, `Preview positive control failed with HTTP ${onlineStatus}`);
+  await online.dispose();
+  // Recheck the exact process immediately before signalling it.
+  assert.equal(readFileSync(`${proc}/cmdline`, 'utf8'), cmdline, 'Preview process changed before shutdown');
+  process.kill(pid, 'SIGTERM');
+  const deadline = Date.now() + 5000;
+  let exitState;
+  while (!exitState && Date.now() < deadline) {
+    try {
+      const state = readFileSync(`${proc}/status`, 'utf8').match(/^State:\s+(\w)/m)?.[1];
+      if (state === 'Z' || state === 'X') exitState = state;
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+      exitState = 'process removed';
+    }
+    if (!exitState) await new Promise(resolve => setTimeout(resolve, 50));
+  }
+  assert.ok(exitState, 'Task preview did not terminate after SIGTERM');
+  let requestFailure;
+  try {
+    const unexpected = await context.request.get(`${BASE}/`, { timeout: 3000 });
+    await unexpected.dispose();
+  } catch (error) {
+    requestFailure = String(error);
+  }
+  report.offlineNetwork = { mode: 'app-origin transport loss', pid, argv, onlineStatus, exitState, directOriginRequestFailed: Boolean(requestFailure), requestFailure };
+  assert.ok(requestFailure, 'Direct origin request still succeeded after task preview shutdown');
+  assert.match(requestFailure, /ECONNREFUSED|ECONNRESET|connection (?:refused|reset)/i, 'Origin-loss proof must be a connection refusal/reset, not a certificate error or timeout');
+  pass('task-owned loopback HTTPS preview stopped; independent origin request has connection refusal/reset for cache-fallback checks');
 };
 const layout = async (page, name, scan = true) => {
   const dimensions = await page.evaluate(() => ({ width: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
@@ -94,6 +219,7 @@ const context = async ({ name, seed, locale = 'en', width = 390, serviceWorkers 
   const options = {
     ...devices['iPhone 13'], viewport: { width, height: width === 320 ? 740 : 844 },
     locale: 'en-US', timezoneId: 'America/New_York', reducedMotion: 'reduce', serviceWorkers,
+    ignoreHTTPSErrors: LOCAL_SELF_SIGNED_PREVIEW,
   };
   const result = await browser.newContext(options);
   if (seed || locale !== 'en' || missingModal) await result.addInitScript(({ key, seed, locale, missingModal }) => {
@@ -108,15 +234,48 @@ const context = async ({ name, seed, locale = 'en', width = 390, serviceWorkers 
   const page = await result.newPage(); activePage = page;
   page.on('pageerror', error => report.errors.push({ phase, message: error.message }));
   await page.goto(`${BASE}/`);
+  await ready(page);
   const observed = await page.evaluate(() => ({
     userAgent: navigator.userAgent, width: innerWidth, height: innerHeight,
     maxTouchPoints: navigator.maxTouchPoints, coarsePointer: matchMedia('(pointer: coarse)').matches,
+    touchEventApi: 'ontouchstart' in window,
     reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
   }));
-  assert.ok(observed.maxTouchPoints > 0 && observed.coarsePointer, 'Expected actual touch-enabled mobile context');
+  // This Linux WebKit can report maxTouchPoints=0 while receiving trusted touch input.
+  // Observe browser-generated events from a real Playwright tap; do not spoof capabilities.
+  await page.evaluate(() => {
+    const button = document.createElement('button');
+    button.id = 'oda-webkit-touch-probe';
+    button.type = 'button';
+    button.textContent = 'Touch probe';
+    button.setAttribute('aria-label', 'WebKit QA touch probe');
+    button.style.cssText = 'position:fixed;left:8px;top:8px;width:44px;height:44px;z-index:2147483647;font-size:8px';
+    button.odaTouchEvidence = [];
+    for (const type of ['pointerdown', 'pointerup', 'touchstart', 'touchend']) button.addEventListener(type, event => {
+      button.odaTouchEvidence.push({ type: event.type, isTrusted: event.isTrusted, pointerType: event.pointerType ?? null, touches: event.touches?.length ?? null, changedTouches: event.changedTouches?.length ?? null });
+    });
+    document.body.appendChild(button);
+  });
+  const probe = page.locator('#oda-webkit-touch-probe');
+  let touchEvents;
+  try {
+    await probe.tap();
+    touchEvents = await probe.evaluate(element => element.odaTouchEvidence);
+  } finally {
+    await probe.evaluate(element => element.remove());
+  }
+  report.contexts.push({ name, descriptor: 'iPhone 13', isMobile: options.isMobile, hasTouch: options.hasTouch, viewport: options.viewport, locale: options.locale, timezoneId: options.timezoneId, serviceWorkers, ignoreHTTPSErrors: options.ignoreHTTPSErrors, observed, touchEvents });
+  assert.ok(observed.coarsePointer, 'Expected the configured coarse-pointer mobile context');
+  assert.ok(touchEvents.some(event => event.type === 'touchstart' && event.isTrusted && event.touches === 1), `Expected trusted single-touch start: ${JSON.stringify(touchEvents)}`);
+  assert.ok(touchEvents.some(event => event.type === 'touchend' && event.isTrusted && event.touches === 0 && event.changedTouches === 1), `Expected trusted single-touch end: ${JSON.stringify(touchEvents)}`);
+  assert.ok(touchEvents.some(event => event.type === 'pointerdown' && event.isTrusted && event.pointerType === 'touch'), `Expected trusted touch pointer: ${JSON.stringify(touchEvents)}`);
   assert.equal(observed.width, width);
   assert.equal(observed.reducedMotion, true);
-  report.contexts.push({ name, descriptor: 'iPhone 13', isMobile: options.isMobile, hasTouch: options.hasTouch, viewport: options.viewport, locale: options.locale, timezoneId: options.timezoneId, serviceWorkers, observed });
+  if (observed.maxTouchPoints === 0) {
+    const limit = 'This Linux WebKit reports navigator.maxTouchPoints=0 despite trusted touch/pointer events; touch capability was verified from the recorded tap events.';
+    if (!report.limits.includes(limit)) report.limits.push(limit);
+  }
+  pass(`${name}: mobile WebKit receives trusted touchstart/touchend and touch-pointer input`);
   return { context: result, page };
 };
 const completedSeed = (locale = 'en', theme = 'light') => {
@@ -150,7 +309,8 @@ const trapFocus = async (page, dialog) => {
 
 try {
   // No Chromium fallback: engine unavailability is a blocking result.
-  browser = await webkit.launch();
+  // The explicit path uses this same official engine with task-local Debian dependencies.
+  browser = await webkit.launch(LOCAL_DEPS ? { executablePath: report.executablePath } : {});
   report.browserVersion = browser.version();
   pass('official Playwright WebKit engine launched on the recorded cloud host');
 
@@ -280,7 +440,51 @@ try {
     pass(`${locale}: review persists and downloaded private notes contain the actual saved plan/attempt/adjustment`);
     await targets(page, `${locale} workbook`, [page.getByRole('button', { name: copy.addAttempt, exact: true }), page.getByRole('button', { name: copy.saveReview, exact: true }), page.getByRole('button', { name: copy.export, exact: true })]);
     await layout(page, `${locale} workbook 390px${locale === 'es' ? ' dark' : ''}`);
+    await workbookGeometry(page, `${locale} workbook 390x844 observed safe area`);
     if (locale === 'en') {
+      await screenshot(page, 'workbook-webkit-maxscroll-native-390');
+      const originalNext = await page.locator('#practice-procrastination-next').inputValue();
+      const shortenedNext = 'Put my notes beside the draft; keep the first step small.';
+      const navigation = page.locator('.oda-tabbar');
+      const originalNavigationStyle = await navigation.getAttribute('style');
+      try {
+        await navigation.evaluate(element => element.style.setProperty('bottom', '34px', 'important'));
+        await settleFrames(page);
+        await page.waitForFunction(() => Math.abs(parseFloat(getComputedStyle(document.querySelector('.oda-tabbar')).bottom) - 34) <= 1, null, { timeout: 10_000 });
+        await workbookGeometry(page, 'English workbook 390x844 synthetic 34px navigation bottom', 34);
+        await screenshot(page, 'workbook-webkit-maxscroll-synthetic-34px');
+        const next = page.locator('#practice-procrastination-next');
+        await next.tap();
+        await page.setViewportSize({ width: 390, height: 430 });
+        await next.evaluate(element => element.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' }));
+        await settleFrames(page);
+        assert.ok(await next.evaluate(element => element === document.activeElement), 'Shortened workbook viewport lost textarea focus');
+        await clearOfMobileBars(page, next, 'English workbook focused textarea 390x430 synthetic 34px navigation bottom');
+        await next.fill(shortenedNext);
+        const reviewButton = page.getByRole('button', { name: copy.saveReview, exact: true });
+        await reviewButton.evaluate(element => element.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' }));
+        await settleFrames(page);
+        await clearOfMobileBars(page, reviewButton, 'English workbook review button 390x430 synthetic 34px navigation bottom');
+        assert.equal(await page.getByText(copy.reviewSaved, { exact: true }).count(), 0, 'Expected fresh review-save feedback before the shortened-viewport action');
+        await reviewButton.tap();
+        await page.getByText(copy.reviewSaved, { exact: true }).waitFor();
+        await persist(page, ({ key, nextAction }) => {
+          const review = JSON.parse(localStorage.getItem(key))?.courseProgress?.experiments?.procrastination?.review;
+          return Boolean(review?.reviewedOn) && review.nextAction === nextAction;
+        }, { nextAction: shortenedNext });
+        pass('focused workbook textarea and review save work in a 390x430 space approximation with synthetic 34px navigation bottom; no real keyboard exercised');
+      } finally {
+        await navigation.evaluate((element, originalStyle) => {
+          if (originalStyle === null) element.removeAttribute('style');
+          else element.setAttribute('style', originalStyle);
+        }, originalNavigationStyle);
+        await page.setViewportSize({ width: 390, height: 844 });
+      }
+      await page.reload(); await ready(page); await openWorkbook(page);
+      assert.equal(await page.locator('#practice-procrastination-next').inputValue(), shortenedNext);
+      pass('review saved from the shortened workbook viewport survives reload');
+      await page.locator('#practice-procrastination-next').fill(originalNext);
+      await persist(page, ({ key, nextAction }) => JSON.parse(localStorage.getItem(key))?.courseProgress?.experiments?.procrastination?.review?.nextAction === nextAction, { nextAction: originalNext });
       await page.locator('#practice-procrastination-plan').evaluate(element => element.scrollIntoView({ block: 'start' }));
       await screenshot(page, 'workbook-webkit-390');
       await page.setViewportSize({ width: 320, height: 740 });
@@ -366,8 +570,9 @@ try {
     await current.context.close();
   }
 
-  phase = 'WebKit offline and service worker capability';
-  const offline = await context({ name: 'WebKit offline mobile', seed: completedSeed(), serviceWorkers: 'allow' });
+  const offlineCoverage = ORIGIN_PID !== undefined ? 'WebKit origin-unavailable/cache-fallback' : 'WebKit offline';
+  phase = `${offlineCoverage} and service worker capability`;
+  const offline = await context({ name: `${offlineCoverage} mobile`, seed: completedSeed(), serviceWorkers: 'allow' });
   const pageOffline = offline.page;
   const capabilities = await pageOffline.evaluate(() => ({ serviceWorker: 'serviceWorker' in navigator, cacheStorage: 'caches' in window, webLocks: 'locks' in navigator }));
   report.capabilities.push({ name: 'WebKit offline', ...capabilities });
@@ -382,7 +587,15 @@ try {
     await navigate(pageOffline, '/app/settings');
     await pageOffline.getByRole('button', { name: 'Download backup', exact: true }).waitFor();
     await navigate(pageOffline, '/app/support'); await pageOffline.locator('#support-contact').waitFor();
-    await offline.context.setOffline(true);
+    if (ORIGIN_PID !== undefined) {
+      await stopLocalPreview(offline.context);
+      report.offlineNetwork.navigatorOnLine = await pageOffline.evaluate(() => navigator.onLine);
+      report.offlineNetwork.offlineEmulationLimit = 'context.setOffline(true) blocked service-worker reload in a separate minimal Linux WebKit probe; this run instead removes app-origin transport.';
+      report.limits.push('Offline coverage in this run uses verified app-origin transport loss. Browser navigator.onLine can remain true; this is not airplane mode or a successful context.setOffline(true) reload test. The emulation reload failure was reproduced separately with an unrelated minimal service worker.');
+    } else {
+      await offline.context.setOffline(true);
+      report.offlineNetwork = { mode: 'Playwright context.setOffline(true)', navigatorOnLine: await pageOffline.evaluate(() => navigator.onLine) };
+    }
     await navigate(pageOffline, '/app');
     await pageOffline.locator('#today-decision-input').fill('Open my saved notes offline');
     await pageOffline.getByRole('button', { name: 'Set decision', exact: true }).tap();
@@ -395,7 +608,7 @@ try {
     await persist(pageOffline, ({ key, id }) => JSON.parse(localStorage.getItem(key))?.courseProgress?.lessons?.[id]?.reflection === 'An offline first step stays small.', { id: firstLesson.id });
     await pageOffline.reload(); await ready(pageOffline);
     assert.equal(await pageOffline.locator('#course-reflection').inputValue(), 'An offline first step stays small.');
-    pass('WebKit downloaded app/course reload offline and retain a new decision and lesson reflection');
+    pass(`${offlineCoverage}: downloaded app/course reload and retain a new decision and lesson reflection`);
     await navigate(pageOffline, '/app/settings');
     const offlineBackup = pageOffline.waitForEvent('download');
     await pageOffline.getByRole('button', { name: 'Download backup', exact: true }).tap();
@@ -406,7 +619,7 @@ try {
     await pageOffline.goto(routeUrl('/app')); await pageOffline.locator('#set-one-decision').waitFor();
     await pageOffline.getByText('Open my saved notes offline', { exact: true }).waitFor();
     await screenshot(pageOffline, 'today-webkit-offline');
-    pass('WebKit offline backup and both support routes work without overwriting the cached app shell');
+    pass(`${offlineCoverage}: backup and both support routes work without overwriting the cached app shell`);
   }
   await offline.context.close();
   assert.deepEqual(report.errors, [], 'Unexpected WebKit runtime errors');

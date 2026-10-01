@@ -1,0 +1,31 @@
+PASS official Playwright WebKit engine launched on the recorded cloud host
+PASS fresh English iPhone-sized first use: mobile WebKit receives trusted touchstart/touchend and touch-pointer input
+PASS English landing 390px: reflow and no serious/critical axe findings
+PASS onboarding: relevant touch targets at least 44px
+PASS touch onboarding restores interrupted name/intention/decision draft
+PASS resumed onboarding 390px: reflow and no serious/critical axe findings
+PASS successful setup persists one chosen decision using the configured user-local day
+PASS Today 390px: relevant touch targets at least 44px
+PASS shortened viewport while reflection is focused: reflow
+PASS focused textarea remains usable in shortened viewport; reflection saves without completing the decision
+PASS touch completion/reload/reflection edit preserves one completion, one writing record and unchanged rewards
+PASS Today light 390px: reflow and no serious/critical axe findings
+PASS Today light 320px: reflow and no serious/critical axe findings
+PASS mobile navigation 320px: relevant touch targets at least 44px
+PASS en course touch 390px: mobile WebKit receives trusted touchstart/touchend and touch-pointer input
+PASS en reading 390px: reflow and no serious/critical axe findings
+PASS en: partial lesson, personal plan and ungraded adapted attempt survive reload without unlocking the next lesson
+PASS en: review persists and downloaded private notes contain the actual saved plan/attempt/adjustment
+PASS en workbook: relevant touch targets at least 44px
+PASS en workbook 390px: reflow and no serious/critical axe findings
+PASS en workbook 390x844 observed safe area: date/export helpers can scroll clear of navigation and pass top/center/bottom hit-tests
+AssertionError [ERR_ASSERTION]: en workbook 390x844 observed safe area: did not reach maximum scroll [{"target":"HTML","scrollTop":8001,"scrollHeight":8840,"clientHeight":844}]
+    at workbookGeometry (file:///workspace/one-decision-away/scripts/qa-webkit-mobile.mjs:131:10)
+    at async file:///workspace/one-decision-away/scripts/qa-webkit-mobile.mjs:386:5 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

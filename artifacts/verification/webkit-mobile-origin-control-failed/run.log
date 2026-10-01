@@ -1,0 +1,71 @@
+  ➜  Local:   https://127.0.0.1:4175/one-decision-away/
+Owned preview identity {"pid":9812,"cwd":"/workspace/one-decision-away","exe":"/workspace/.cloud-tools/node_modules/node/bin/node"}
+  ➜  Local:   https://localhost:4175/one-decision-away/
+PASS official Playwright WebKit engine launched on the recorded cloud host
+PASS fresh English iPhone-sized first use: mobile WebKit receives trusted touchstart/touchend and touch-pointer input
+PASS English landing 390px: reflow and no serious/critical axe findings
+PASS onboarding: relevant touch targets at least 44px
+PASS touch onboarding restores interrupted name/intention/decision draft
+PASS resumed onboarding 390px: reflow and no serious/critical axe findings
+PASS successful setup persists one chosen decision using the configured user-local day
+PASS Today 390px: relevant touch targets at least 44px
+PASS shortened viewport while reflection is focused: reflow
+PASS focused textarea remains usable in shortened viewport; reflection saves without completing the decision
+PASS touch completion/reload/reflection edit preserves one completion, one writing record and unchanged rewards
+PASS Today light 390px: reflow and no serious/critical axe findings
+PASS Today light 320px: reflow and no serious/critical axe findings
+PASS mobile navigation 320px: relevant touch targets at least 44px
+PASS en course touch 390px: mobile WebKit receives trusted touchstart/touchend and touch-pointer input
+PASS en reading 390px: reflow and no serious/critical axe findings
+PASS en: partial lesson, personal plan and ungraded adapted attempt survive reload without unlocking the next lesson
+PASS en: review persists and downloaded private notes contain the actual saved plan/attempt/adjustment
+PASS en workbook: relevant touch targets at least 44px
+PASS en workbook 390px: reflow and no serious/critical axe findings
+PASS en workbook 390x844 observed safe area: date/export helpers can scroll clear of navigation and pass top/center/bottom hit-tests
+PASS en workbook 390x844 observed safe area: final lesson helper is fully above floating navigation at maximum scroll
+PASS English workbook 390x844 synthetic 34px navigation bottom: date/export helpers can scroll clear of navigation and pass top/center/bottom hit-tests
+PASS English workbook 390x844 synthetic 34px navigation bottom: final lesson helper is fully above floating navigation at maximum scroll
+PASS focused workbook textarea and review save work in a 390x430 space approximation with synthetic 34px navigation bottom; no real keyboard exercised
+PASS review saved from the shortened workbook viewport survives reload
+PASS workbook 320px: reflow and no serious/critical axe findings
+PASS WebKit blocked storage preserves the old record and visible draft; retry commits after storage recovers
+PASS touch sequential lesson progression carries the saved real-life workbook forward
+PASS WebKit JSON download, malformed/cancelled restore and confirmed replacement preserve course work through reload
+PASS tr course touch 390px: mobile WebKit receives trusted touchstart/touchend and touch-pointer input
+PASS tr reading 390px: reflow and no serious/critical axe findings
+PASS tr: partial lesson, personal plan and ungraded adapted attempt survive reload without unlocking the next lesson
+PASS tr: review persists and downloaded private notes contain the actual saved plan/attempt/adjustment
+PASS tr workbook: relevant touch targets at least 44px
+PASS tr workbook 390px: reflow and no serious/critical axe findings
+PASS tr workbook 390x844 observed safe area: date/export helpers can scroll clear of navigation and pass top/center/bottom hit-tests
+PASS tr workbook 390x844 observed safe area: final lesson helper is fully above floating navigation at maximum scroll
+PASS es course touch 390px: mobile WebKit receives trusted touchstart/touchend and touch-pointer input
+PASS es reading 390px: reflow and no serious/critical axe findings
+PASS es: partial lesson, personal plan and ungraded adapted attempt survive reload without unlocking the next lesson
+PASS es: review persists and downloaded private notes contain the actual saved plan/attempt/adjustment
+PASS es workbook: relevant touch targets at least 44px
+PASS es workbook 390px dark: reflow and no serious/critical axe findings
+PASS es workbook 390x844 observed safe area: date/export helpers can scroll clear of navigation and pass top/center/bottom hit-tests
+PASS es workbook 390x844 observed safe area: final lesson helper is fully above floating navigation at maximum scroll
+PASS WebKit native dialog: mobile WebKit receives trusted touchstart/touchend and touch-pointer input
+PASS native dialog 390px: reflow and no serious/critical axe findings
+PASS native modal close: relevant touch targets at least 44px
+PASS native WebKit modal contains forward/backward focus, reopens, closes and restores focus without changing the decision
+PASS WebKit missing-dialog/inert fallback: mobile WebKit receives trusted touchstart/touchend and touch-pointer input
+PASS fallback dialog 320px: reflow and no serious/critical axe findings
+PASS fallback modal close: relevant touch targets at least 44px
+PASS fallback WebKit modal contains forward/backward focus, reopens, closes and restores focus without changing the decision
+PASS WebKit origin-unavailable/cache-fallback mobile: mobile WebKit receives trusted touchstart/touchend and touch-pointer input
+AssertionError [ERR_ASSERTION]: Preview positive control failed with HTTP 404
+
+404 !== 200
+
+    at stopLocalPreview (file:///workspace/one-decision-away/scripts/qa-webkit-mobile.mjs:162:10)
+    at async file:///workspace/one-decision-away/scripts/qa-webkit-mobile.mjs:591:7 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 404,
+  expected: 200,
+  operator: 'strictEqual',
+  diff: 'simple'
+}

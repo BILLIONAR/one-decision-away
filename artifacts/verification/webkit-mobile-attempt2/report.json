@@ -1,0 +1,436 @@
+{
+  "at": "2026-10-01T01:58:16.824Z",
+  "base": "https://127.0.0.1:4175/one-decision-away",
+  "hashRoutes": true,
+  "engine": "webkit",
+  "host": {
+    "platform": "linux",
+    "release": "6.18.44",
+    "node": "v22.23.3"
+  },
+  "playwrightVersion": "1.63.0",
+  "executablePath": "/workspace/.cloud-tools/playwright-browsers/webkit-2359/pw_run.sh",
+  "localDependencyLaunch": true,
+  "localSelfSignedPreview": true,
+  "plannedCoverage": [
+    "English first-use touch onboarding, interrupted draft, user-local date and successful setup",
+    "Daily decision completion, reflection edit, reload and duplicate reward prevention",
+    "390px/320px reflow, relevant 44px targets, light/dark and reduced-motion preferences",
+    "390x844 workbook helper hit-tests, maximum-scroll clearance, and recorded native/synthetic safe-area geometry",
+    "Shortened viewport with focused textarea: space approximation only, not an iOS keyboard",
+    "EN/TR/ES course reading, partial practice, saved plans, adapted attempts, review and text download",
+    "Blocked storage draft retention/retry, sequential lesson carry-forward and JSON backup/restore",
+    "Native and missing-dialog/inert fallback focus containment/return and accessible modal controls",
+    "Detected service-worker capability, downloaded offline app/course persistence, backup and support",
+    "Mobile axe serious/critical findings and uncaught runtime errors"
+  ],
+  "limits": [
+    "Linux WebKit engine with mobile/touch emulation; not Apple Safari or a real iPhone.",
+    "Viewport shortening approximates available space; no real iOS software keyboard was exercised.",
+    "The 34px navigation-bottom stress check is a temporary CSS geometry override, not a real device safe-area measurement.",
+    "No Xcode compilation, physical device, VoiceOver, StoreKit, or live cloud account was tested.",
+    "This Linux WebKit reports navigator.maxTouchPoints=0 despite trusted touch/pointer events; touch capability was verified from the recorded tap events."
+  ],
+  "checks": [
+    "official Playwright WebKit engine launched on the recorded cloud host",
+    "fresh English iPhone-sized first use: mobile WebKit receives trusted touchstart/touchend and touch-pointer input",
+    "English landing 390px: reflow and no serious/critical axe findings",
+    "onboarding: relevant touch targets at least 44px",
+    "touch onboarding restores interrupted name/intention/decision draft",
+    "resumed onboarding 390px: reflow and no serious/critical axe findings",
+    "successful setup persists one chosen decision using the configured user-local day",
+    "Today 390px: relevant touch targets at least 44px",
+    "shortened viewport while reflection is focused: reflow",
+    "focused textarea remains usable in shortened viewport; reflection saves without completing the decision",
+    "touch completion/reload/reflection edit preserves one completion, one writing record and unchanged rewards",
+    "Today light 390px: reflow and no serious/critical axe findings",
+    "Today light 320px: reflow and no serious/critical axe findings",
+    "mobile navigation 320px: relevant touch targets at least 44px",
+    "en course touch 390px: mobile WebKit receives trusted touchstart/touchend and touch-pointer input",
+    "en reading 390px: reflow and no serious/critical axe findings",
+    "en: partial lesson, personal plan and ungraded adapted attempt survive reload without unlocking the next lesson",
+    "en: review persists and downloaded private notes contain the actual saved plan/attempt/adjustment",
+    "en workbook: relevant touch targets at least 44px",
+    "en workbook 390px: reflow and no serious/critical axe findings",
+    "en workbook 390x844 observed safe area: date/export helpers can scroll clear of navigation and pass top/center/bottom hit-tests"
+  ],
+  "contexts": [
+    {
+      "name": "fresh English iPhone-sized first use",
+      "descriptor": "iPhone 13",
+      "isMobile": true,
+      "hasTouch": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "locale": "en-US",
+      "timezoneId": "America/New_York",
+      "serviceWorkers": "block",
+      "ignoreHTTPSErrors": true,
+      "observed": {
+        "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Mobile/15E148 Safari/604.1",
+        "width": 390,
+        "height": 844,
+        "maxTouchPoints": 0,
+        "coarsePointer": true,
+        "touchEventApi": true,
+        "reducedMotion": true
+      },
+      "touchEvents": [
+        {
+          "type": "pointerdown",
+          "isTrusted": true,
+          "pointerType": "touch",
+          "touches": null,
+          "changedTouches": null
+        },
+        {
+          "type": "touchstart",
+          "isTrusted": true,
+          "pointerType": null,
+          "touches": 1,
+          "changedTouches": 1
+        },
+        {
+          "type": "pointerup",
+          "isTrusted": true,
+          "pointerType": "touch",
+          "touches": null,
+          "changedTouches": null
+        },
+        {
+          "type": "touchend",
+          "isTrusted": true,
+          "pointerType": null,
+          "touches": 0,
+          "changedTouches": 1
+        }
+      ]
+    },
+    {
+      "name": "en course touch 390px",
+      "descriptor": "iPhone 13",
+      "isMobile": true,
+      "hasTouch": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "locale": "en-US",
+      "timezoneId": "America/New_York",
+      "serviceWorkers": "block",
+      "ignoreHTTPSErrors": true,
+      "observed": {
+        "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Mobile/15E148 Safari/604.1",
+        "width": 390,
+        "height": 844,
+        "maxTouchPoints": 0,
+        "coarsePointer": true,
+        "touchEventApi": true,
+        "reducedMotion": true
+      },
+      "touchEvents": [
+        {
+          "type": "pointerdown",
+          "isTrusted": true,
+          "pointerType": "touch",
+          "touches": null,
+          "changedTouches": null
+        },
+        {
+          "type": "touchstart",
+          "isTrusted": true,
+          "pointerType": null,
+          "touches": 1,
+          "changedTouches": 1
+        },
+        {
+          "type": "pointerup",
+          "isTrusted": true,
+          "pointerType": "touch",
+          "touches": null,
+          "changedTouches": null
+        },
+        {
+          "type": "touchend",
+          "isTrusted": true,
+          "pointerType": null,
+          "touches": 0,
+          "changedTouches": 1
+        }
+      ]
+    }
+  ],
+  "accessibility": [
+    {
+      "name": "English landing 390px",
+      "violations": []
+    },
+    {
+      "name": "resumed onboarding 390px",
+      "violations": []
+    },
+    {
+      "name": "Today light 390px",
+      "violations": []
+    },
+    {
+      "name": "Today light 320px",
+      "violations": []
+    },
+    {
+      "name": "en reading 390px",
+      "violations": []
+    },
+    {
+      "name": "en workbook 390px",
+      "violations": []
+    }
+  ],
+  "touchTargets": [
+    {
+      "name": "onboarding",
+      "measured": [
+        {
+          "label": "Continue",
+          "width": 358,
+          "height": 48
+        }
+      ]
+    },
+    {
+      "name": "Today 390px",
+      "measured": [
+        {
+          "label": "Today",
+          "width": 67.796875,
+          "height": 52
+        },
+        {
+          "label": "Dreams",
+          "width": 67.796875,
+          "height": 52
+        },
+        {
+          "label": "Notebook",
+          "width": 67.796875,
+          "height": 52
+        },
+        {
+          "label": "AI coach",
+          "width": 67.796875,
+          "height": 52
+        },
+        {
+          "label": "Me",
+          "width": 67.796875,
+          "height": 52
+        },
+        {
+          "label": "Done · +D$ 500",
+          "width": 52,
+          "height": 52
+        },
+        {
+          "label": "Start · just 2 minutes",
+          "width": 252,
+          "height": 52
+        }
+      ]
+    },
+    {
+      "name": "mobile navigation 320px",
+      "measured": [
+        {
+          "label": "Today",
+          "width": 53.796875,
+          "height": 52
+        },
+        {
+          "label": "Dreams",
+          "width": 53.796875,
+          "height": 52
+        },
+        {
+          "label": "Notebook",
+          "width": 53.796875,
+          "height": 52
+        },
+        {
+          "label": "AI coach",
+          "width": 53.796875,
+          "height": 52
+        },
+        {
+          "label": "Me",
+          "width": 53.796875,
+          "height": 52
+        }
+      ]
+    },
+    {
+      "name": "en workbook",
+      "measured": [
+        {
+          "label": "Save practice entry",
+          "width": 316,
+          "height": 48
+        },
+        {
+          "label": "Save review and revisit in a week",
+          "width": 316,
+          "height": 48
+        },
+        {
+          "label": "Download my practice notes",
+          "width": 192,
+          "height": 44
+        }
+      ]
+    }
+  ],
+  "capabilities": [],
+  "mobileGeometry": [
+    {
+      "name": "en workbook 390x844 observed safe area: review date helper",
+      "target": "practice-procrastination-date-note",
+      "rect": {
+        "top": 382.125,
+        "bottom": 424.5,
+        "width": 316,
+        "height": 42.375
+      },
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "visualTop": 5,
+        "visualBottom": 844
+      },
+      "usableTop": 52,
+      "usableBottom": 754,
+      "nav": {
+        "top": 754,
+        "bottom": 820
+      },
+      "hitTests": [
+        {
+          "x": 195,
+          "y": 384.125,
+          "belongsToTarget": true,
+          "hit": {
+            "tag": "P",
+            "id": "practice-procrastination-date-note",
+            "className": "oda-practice-help"
+          }
+        },
+        {
+          "x": 195,
+          "y": 403.3125,
+          "belongsToTarget": true,
+          "hit": {
+            "tag": "P",
+            "id": "practice-procrastination-date-note",
+            "className": "oda-practice-help"
+          }
+        },
+        {
+          "x": 195,
+          "y": 422.5,
+          "belongsToTarget": true,
+          "hit": {
+            "tag": "P",
+            "id": "practice-procrastination-date-note",
+            "className": "oda-practice-help"
+          }
+        }
+      ]
+    },
+    {
+      "name": "en workbook 390x844 observed safe area: export helper",
+      "target": "",
+      "rect": {
+        "top": 393.78125,
+        "bottom": 411.953125,
+        "width": 316,
+        "height": 18.171875
+      },
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "visualTop": 5,
+        "visualBottom": 844
+      },
+      "usableTop": 52,
+      "usableBottom": 754,
+      "nav": {
+        "top": 754,
+        "bottom": 820
+      },
+      "hitTests": [
+        {
+          "x": 195,
+          "y": 395.78125,
+          "belongsToTarget": true,
+          "hit": {
+            "tag": "P",
+            "id": "",
+            "className": ""
+          }
+        },
+        {
+          "x": 195,
+          "y": 402.8671875,
+          "belongsToTarget": true,
+          "hit": {
+            "tag": "P",
+            "id": "",
+            "className": ""
+          }
+        },
+        {
+          "x": 195,
+          "y": 409.953125,
+          "belongsToTarget": true,
+          "hit": {
+            "tag": "P",
+            "id": "",
+            "className": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "en workbook 390x844 observed safe area: maximum scroll",
+      "scrollRoots": [
+        {
+          "target": "HTML",
+          "scrollTop": 8001,
+          "scrollHeight": 8840,
+          "clientHeight": 844
+        }
+      ]
+    }
+  ],
+  "safeArea": [
+    {
+      "name": "en workbook 390x844 observed safe area",
+      "mode": "observed browser env() value",
+      "syntheticBottom": null,
+      "nativeInset": 0,
+      "navBottom": 14,
+      "viewportMeta": "width=device-width, initial-scale=1.0, viewport-fit=cover"
+    }
+  ],
+  "screenshots": [
+    "landing-webkit-390.png",
+    "today-webkit-390.png",
+    "today-webkit-320.png",
+    "failure.png"
+  ],
+  "errors": [],
+  "browserVersion": "26.6",
+  "status": "failed",
+  "failurePhase": "en course/workbook persistence",
+  "failure": "AssertionError [ERR_ASSERTION]: en workbook 390x844 observed safe area: did not reach maximum scroll [{\"target\":\"HTML\",\"scrollTop\":8001,\"scrollHeight\":8840,\"clientHeight\":844}]\n    at workbookGeometry (file:///workspace/one-decision-away/scripts/qa-webkit-mobile.mjs:131:10)\n    at async file:///workspace/one-decision-away/scripts/qa-webkit-mobile.mjs:386:5"
+}

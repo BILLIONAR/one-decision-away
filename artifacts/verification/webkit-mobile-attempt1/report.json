@@ -1,0 +1,49 @@
+{
+  "at": "2026-10-01T01:54:53.139Z",
+  "base": "http://127.0.0.1:4174/one-decision-away",
+  "hashRoutes": true,
+  "engine": "webkit",
+  "host": {
+    "platform": "linux",
+    "release": "6.18.44",
+    "node": "v22.23.3"
+  },
+  "playwrightVersion": "1.63.0",
+  "executablePath": "/workspace/.cloud-tools/playwright-browsers/webkit-2359/pw_run.sh",
+  "localDependencyLaunch": true,
+  "plannedCoverage": [
+    "English first-use touch onboarding, interrupted draft, user-local date and successful setup",
+    "Daily decision completion, reflection edit, reload and duplicate reward prevention",
+    "390px/320px reflow, relevant 44px targets, light/dark and reduced-motion preferences",
+    "390x844 workbook helper hit-tests, maximum-scroll clearance, and recorded native/synthetic safe-area geometry",
+    "Shortened viewport with focused textarea: space approximation only, not an iOS keyboard",
+    "EN/TR/ES course reading, partial practice, saved plans, adapted attempts, review and text download",
+    "Blocked storage draft retention/retry, sequential lesson carry-forward and JSON backup/restore",
+    "Native and missing-dialog/inert fallback focus containment/return and accessible modal controls",
+    "Detected service-worker capability, downloaded offline app/course persistence, backup and support",
+    "Mobile axe serious/critical findings and uncaught runtime errors"
+  ],
+  "limits": [
+    "Linux WebKit engine with mobile/touch emulation; not Apple Safari or a real iPhone.",
+    "Viewport shortening approximates available space; no real iOS software keyboard was exercised.",
+    "The 34px navigation-bottom stress check is a temporary CSS geometry override, not a real device safe-area measurement.",
+    "No Xcode compilation, physical device, VoiceOver, StoreKit, or live cloud account was tested."
+  ],
+  "checks": [
+    "official Playwright WebKit engine launched on the recorded cloud host"
+  ],
+  "contexts": [],
+  "accessibility": [],
+  "touchTargets": [],
+  "capabilities": [],
+  "mobileGeometry": [],
+  "safeArea": [],
+  "screenshots": [
+    "failure.png"
+  ],
+  "errors": [],
+  "browserVersion": "26.6",
+  "status": "failed",
+  "failurePhase": "English first use and daily practice",
+  "failure": "AssertionError [ERR_ASSERTION]: Expected actual touch-enabled mobile context\n    at context (file:///workspace/one-decision-away/scripts/qa-webkit-mobile.mjs:181:10)\n    at async file:///workspace/one-decision-away/scripts/qa-webkit-mobile.mjs:224:17"
+}

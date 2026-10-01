@@ -1,8 +1,24 @@
 # ODA cloud mobile validation and native handoff
 
-ODA / ONE DECISION AWAY serves an international audience with English as its primary language and English, Turkish and Spanish support. This handoff covers the authorized Linux cloud web checks and optional future native validation. The root task owns browser installation, execution, release checks and publication. Physical iPhone testing is future native work and is not a prerequisite for the cloud web publication scope approved in this task. Publication remains pending the required successful WebKit check.
+ODA / ONE DECISION AWAY serves an international audience with English as its primary language and English, Turkish and Spanish support. This handoff covers the authorized Linux cloud web checks and optional future native validation. The root task owns browser installation, execution, release checks and publication. Physical iPhone testing is future native work and is not a prerequisite for the cloud web publication scope approved in this task. The required cloud WebKit check has passed; publication, exact-commit CI and live checks remain pending.
 
-## Current results
+## Current fresh-task results · 1 October 2026
+
+**The full cloud WebKit run passed: 59 named checks.** The fresh task fetched application source `bf704df99b15f268f2e848400010ca8bb1b3f5b8` from `feat/oda-growth-studio`; main at its start was `b27d1ea2cbb3a516657ff0dbeb3c35494e9ade41`. The parent attested published environment configuration `6abdbafe0ef4819a90382822ddf8abf0`, with only the three approved added hosts: `cdn.playwright.dev`, `playwright.download.prss.microsoft.com` and `snapshot.debian.org`. That configuration readback belongs to the parent; this task's evidence is the actual successful authorized download, dependency retrieval and launch.
+
+Official Playwright **1.63.0** WebKit **revision 2359 / version 26.6** launched on Debian 13.6 x64 with Node 22.23.3. Ten authenticated Debian packages from the existing `snapshot.debian.org` repository (`20260828T000000Z`) were extracted into task-local directories for the missing libraries. Package sources and the environment package preset were unchanged. [Dependency receipt](../artifacts/verification/webkit-mobile-setup/dependencies.json)
+
+Fresh `npm run check` passed **258 core + 19 notebook = 277 distinct automated tests**, TypeScript, translation/voice assertions and the root production build. The routing command reran 11 already-counted core cases. The separate `/one-decision-away/` build also passed. [Fresh check log](../artifacts/verification/webkit-mobile-setup/oda-check-20261001.log). The earlier **158 named Chromium checks and two separate synthetic scenarios** remain prior evidence in [the October 1 review](VERIFICATION_2026-10-01.md); they are not fresh Chromium runs in this task.
+
+[The final WebKit report](../artifacts/verification/webkit-mobile-final/report.json) records **59 passing named checks**, seven mobile contexts, 13 axe scans with zero violations, 18 geometry records, eight screenshots and no uncaught page errors. The app-origin transport-loss control first received HTTP 200, then removed the task-owned preview process and independently received `ECONNREFUSED` at `127.0.0.1:4175`. Cached app/course reloads retained a new decision and lesson reflection; JSON backup and both support routes passed without replacing the cached app shell. `navigator.onLine` remained true, so this establishes origin-unavailable/cache-fallback behavior rather than airplane mode.
+
+[Intermediate attempt 5](../artifacts/verification/webkit-mobile-attempt5/report.json) remains failed after 55 checks: `context.setOffline(true)` followed by reload returned **“WebKit encountered an internal error.”** ODA and unrelated minimal service-worker probes reproduce that emulation failure. The final pass uses actual local-origin transport loss; it does not claim that `setOffline(true)` reload works. Merge/publication, exact-commit CI and live checks remain pending.
+
+Executed checks include touch onboarding and daily persistence, EN/TR/ES workbook storage/download/restore, 320/390px reflow, relevant 44px controls, light/dark, reduced motion and native/fallback web-dialog focus. The **390×844 workbook** checks verify date/export helper hit-tests and final-helper clearance at maximum scroll. Linux WebKit reported `env(safe-area-inset-bottom) = 0`; a temporary **34px CSS navigation-bottom override** adds geometry stress without claiming a physical safe area. A focused **390×430 viewport** verifies usable space and saving, without exercising an iOS keyboard. Trusted touch/pointer events were recorded despite this Linux engine reporting `navigator.maxTouchPoints = 0`.
+
+The [fresh WebKit release report](WEBKIT_MOBILE_RELEASE_2026-10-01.md) records setup receipts, intermediate harness failures, geometry and the remaining release gate. No physical iPhone, Xcode, native keyboard/VoiceOver, StoreKit or live Supabase validation has occurred.
+
+## Historical results · earlier existing tasks
 
 **Blocked at WebKit installation.** The root run attempted the official download with this command:
 
@@ -16,7 +32,7 @@ At the first blocked run, application code matched `0a04e2d264344b9f47f5e2a71735
 
 The approved update added only `cdn.playwright.dev` and `playwright.download.prss.microsoft.com` to the saved environment configuration. One official installation retry after republishing still received HTTP 403 in this existing task. The response is verified; the exact rejecting network layer is not. No further download attempts or alternate routes were used. The current [cloud environment guide](https://learn.chatgpt.com/docs/environments/cloud-environments) directs using a new task after republishing; existing tasks retain their own saved state. Transfer the verified development branch to a QA-only task using that same updated environment, then test official WebKit availability there. The original workspace and archives remain intact.
 
-| Evidence | Current status |
+| Evidence | Historical status at the blocked run |
 | --- | --- |
 | Application source and intended build URL | October 1 development branch; intended project path `/one-decision-away/`; no URL loaded in WebKit |
 | Linux image, Node and Playwright versions | Debian 13.6, Linux x64; Node 22.23.3; Playwright 1.63.0 |
@@ -28,7 +44,7 @@ The approved update added only `cdn.playwright.dev` and `playwright.download.prs
 | Post-publication URL and smoke checks | Pending successful required WebKit validation |
 | Xcode compilation, Simulator and physical iPhone execution | Not performed in this Linux task |
 
-Keep the earlier verified archives intact. Save this run's reports and screenshots in a new, clearly named location; record that location here when execution finishes. A browser-launch failure is a missing check, not a passing application result.
+These historical archives remain intact. Fresh setup is under `artifacts/verification/webkit-mobile-setup/`; intermediate runs are under `artifacts/verification/webkit-mobile-attempt1/` through `webkit-mobile-attempt5/`. A browser-launch failure remains a missing check, not a passing application result.
 
 ## What Linux WebKit establishes
 
@@ -57,15 +73,24 @@ VITE_BASE_PATH=/one-decision-away/ npx vite build --outDir /tmp/oda-cloud-mobile
 VITE_BASE_PATH=/one-decision-away/ npx vite preview --outDir /tmp/oda-cloud-mobile-web --host 127.0.0.1 --port 4174
 ```
 
-The dedicated runner uses WebKit without a browser fallback:
+The dedicated runner uses WebKit without a browser fallback. The earlier blocked invocation was:
 
 ```sh
 PLAYWRIGHT_BROWSERS_PATH=/workspace/.cloud-tools/playwright-browsers ODA_QA_URL=http://127.0.0.1:4174/one-decision-away/ node --import tsx scripts/qa-webkit-mobile.mjs
 ```
 
-Its syntax check passed. The actual invocation exited 1 at WebKit launch and saved a `blocked` report with **zero checks, contexts or screenshots**. A passing syntax check does not validate its application flows. Running it requires an authorized cloud environment with the matching WebKit engine already installed or access to the official download hosts and required Linux libraries. No exposed control applies a newly published configuration to this running executor.
+That historical invocation exited 1 at WebKit launch and saved a `blocked` report with **zero checks, contexts or screenshots**. A passing syntax check did not validate its application flows. The fresh task installed the official engine and dependencies and executed the runner against `https://127.0.0.1:4175/one-decision-away/`, using task-local dependency launch. The temporary self-signed loopback HTTPS preview preserves the application's `upgrade-insecure-requests` CSP; certificate errors are tolerated only for localhost/127.0.0.1 contexts. This does not alter public-host TLS verification. Build hashes and the exact base are in [the local build receipt](../artifacts/verification/webkit-mobile-setup/local-build.json).
 
-Existing browser scripts must explicitly launch WebKit to establish WebKit evidence; a narrow Chromium viewport alone establishes Chromium mobile-layout behavior. The new runner prepares disposable contexts and synthetic records for onboarding, daily choose/act/reflect, interrupted course work, backup export/restore, keyboard dialogs, direct route reload and offline revisit. It also prepares 320/390px touch/reflow, EN/TR/ES, reduced-motion, light/dark and axe checks. These are **pending coverage**, not results. Offline checks detect actual service-worker/cache support; a shortened viewport is only an approximation of available keyboard space.
+With the official engine and task-local dependencies ready, the fresh origin-loss reproduction is:
+
+```sh
+VITE_BASE_PATH=/one-decision-away/ npx vite build --outDir /tmp/oda-webkit-project-build
+ODA_WEBKIT_LOCAL_DEPS=1 PLAYWRIGHT_BROWSERS_PATH=/workspace/.cloud-tools/playwright-browsers ODA_WEBKIT_QA_OUT=artifacts/verification/webkit-mobile-final node --import tsx scripts/qa-webkit-origin-harness.mjs
+```
+
+The tracked harness creates and owns a disposable HTTPS preview and temporary loopback certificate, then cleans them up on exit. The runner verifies that precise process and a successful direct-origin request before removing transport. Read [the fresh report](WEBKIT_MOBILE_RELEASE_2026-10-01.md) for intermediate process/control failures and the final gate status.
+
+Existing browser scripts must explicitly launch WebKit to establish WebKit evidence; a narrow Chromium viewport alone establishes Chromium mobile-layout behavior. The runner uses disposable contexts and synthetic records. Use its saved report to distinguish executed checks from planned coverage and inspect its overall status. Offline checks detect service-worker/cache support and record the actual loss-of-network method; a shortened viewport is only an approximation of available keyboard space.
 
 ## Optional future Mac and iPhone validation
 
