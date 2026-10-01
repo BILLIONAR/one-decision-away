@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, Check, ChevronRight, Clock3, LockKeyhole, Search, RotateCcw } from 'lucide-react';
 import { COURSES, coursesFor, sourcesFor, type GuidedCourse } from '../data/courses';
-import { canCompleteLesson, completeLesson, getLessonProgress, mutateCourseProgress, nextLessonIndex, readCourseProgress, subscribeCourseProgress, updateLessonProgress } from '../services/courseProgress';
-import { createCourseProgressDraft } from '../services/courseProgressDraft';
+import { canCompleteLesson, completeLesson, getLessonProgress, nextLessonIndex, updateLessonProgress } from '../services/courseProgress';
+import { getCourseProgressSession } from '../services/courseProgressDraft';
 import { CourseVisual } from '../components/CourseVisual';
 import { CoursePhoto, TechniqueCard } from '../components/CoursePhoto';
 import { CoursePracticeStudio } from '../components/CoursePracticeStudio';
@@ -26,7 +26,8 @@ export const Courses: React.FC = () => {
   const copy = courseLearningCopy(locale);
   const courses = coursesFor(locale);
   const langOf = (item?: GuidedCourse) => (item?.lang && item.lang !== locale ? item.lang : undefined);
-  const [state, setState] = useState(readCourseProgress);
+  const draft = getCourseProgressSession();
+  const [state, setState] = useState(draft.read);
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState<CourseCategory>('all');
   const { data: appData, setActiveRoute } = useApp();
@@ -39,17 +40,16 @@ export const Courses: React.FC = () => {
   const course = courses.find(item => item.id === selected);
   const content = langOf(course);
   const [index, setIndex] = useState(() => course ? Math.min(nextLessonIndex(state, course), course.lessons.length - 1) : 0);
-  const [storageError, setStorageError] = useState(false);
-  const draftRef = useRef<ReturnType<typeof createCourseProgressDraft> | null>(null);
-  if (!draftRef.current) draftRef.current = createCourseProgressDraft(state, mutateCourseProgress, setState, saved => setStorageError(!saved));
+  const [storageError, setStorageError] = useState(draft.saveFailed);
   const [notice, setNotice] = useState('');
   const titleRef = useRef<HTMLHeadingElement>(null);
   const researchRef = useRef<HTMLElement>(null);
   const bibliographyRef = useRef<HTMLDetailsElement>(null);
   const didMount = useRef(false);
-  useEffect(() => subscribeCourseProgress(() => {
-    draftRef.current!.receive(readCourseProgress());
-  }), []);
+  useEffect(() => draft.subscribe((progress, failed) => {
+    setState(progress);
+    setStorageError(failed);
+  }), [draft]);
   useEffect(() => {
     if (didMount.current) { titleRef.current?.focus(); titleRef.current?.scrollIntoView({ block: 'start' }); }
     didMount.current = true;
@@ -61,7 +61,7 @@ export const Courses: React.FC = () => {
   }, [state, course, index]);
 
   // Each updater is replayed onto the latest stored copy under the shared data lock.
-  const commit = (update: (current: typeof state) => typeof state) => draftRef.current!.update(update);
+  const commit = (update: (current: typeof state) => typeof state) => draft.update(update);
   const open = (item?: GuidedCourse) => {
     setSelected(item?.id ?? null);
     if (item) setLastVisited(item.id);
@@ -79,7 +79,7 @@ export const Courses: React.FC = () => {
   const reviewCourse = courses.find(item => isCourseReviewDue(getCourseExperiment(state.experiments, item.id)));
   const researchSources = sourcesFor(locale).filter(source => source.type === 'research');
   const languageNote = courses.some(item => item.lang && item.lang !== locale) && <p lang={locale} className="text-xs text-[var(--fg-muted)] mt-3">{t('Some courses are not yet available in your language; they open in the language they were written in.')}</p>;
-  const storageNote = <div className="oda-course-save-note"><p className={`text-xs leading-relaxed ${storageError ? 'text-[var(--brand-burgundy)]' : 'text-[var(--fg-muted)]'}`} role={storageError ? 'alert' : undefined}>{storageError ? t("This browser can't save your progress right now. If you close the page, changes from this session may be lost.") : copy.privacy}</p>{storageError && <button type="button" onClick={() => { void draftRef.current!.retry(); }}>{copy.retrySave}</button>}</div>;
+  const storageNote = <div className="oda-course-save-note"><p className={`text-xs leading-relaxed ${storageError ? 'text-[var(--brand-burgundy)]' : 'text-[var(--fg-muted)]'}`} role={storageError ? 'alert' : undefined}>{storageError ? t("This browser can't save your progress right now. If you close the page, changes from this session may be lost.") : copy.privacy}</p>{storageError && <button type="button" onClick={() => { void draft.retry(); }}>{copy.retrySave}</button>}</div>;
 
   if (!course) return <div className="oda-courses">
     <header className="oda-course-intro">
@@ -201,7 +201,14 @@ export const Courses: React.FC = () => {
       <h2 id="course-practice-title" className="oda-course-stage-title"><span className="oda-course-stage-number" aria-hidden="true">02</span><span className="oda-display">{t('Try')}</span></h2>
       {lesson.technique && <TechniqueCard technique={lesson.technique} lang={content} labels={{ technique: t('Technique'), evidence: t('What research says') }} />}
       <p className="text-sm text-[var(--fg-muted)] mt-3 leading-relaxed">{t("Let's try it together now. Check off each step after you try it. You can pause anytime.")}</p>
-      <div lang={content} className="oda-course-practice">{lesson.practice.map((step, i) => <label key={step} className="oda-course-practice-step" data-checked={progress.checked[i] ?? false}><input type="checkbox" checked={progress.checked[i] ?? false} disabled={progress.completed} onChange={event => patch({ checked: lesson.practice.map((_, j) => i === j ? event.target.checked : !!progress.checked[j]) })} /><span><span className="font-semibold mr-1">{i + 1}.</span>{step}</span></label>)}</div>
+      <div lang={content} className="oda-course-practice">{lesson.practice.map((step, i) => <label key={step} className="oda-course-practice-step" data-checked={progress.checked[i] ?? false}><input type="checkbox" checked={progress.checked[i] ?? false} disabled={progress.completed} onChange={event => {
+        const checked = event.target.checked;
+        void commit(current => {
+          const latest = getLessonProgress(current, lesson);
+          return updateLessonProgress(current, lesson, { checked: latest.checked.map((value, j) => i === j ? checked : value) });
+        });
+        setNotice('');
+      }} /><span><span className="font-semibold mr-1">{i + 1}.</span>{step}</span></label>)}</div>
     </section>
 
     <section className="oda-course-reflection"><label htmlFor="course-reflection" lang={content} className="block text-sm font-semibold leading-relaxed">{lesson.reflection}</label><p id="reflection-note" className="text-xs text-[var(--fg-muted)] mt-2 leading-relaxed">{t('Leaving a note is optional; you can keep your answer just for yourself.')}</p><textarea id="course-reflection" aria-describedby="reflection-note" value={progress.reflection} onChange={event => patch({ reflection: event.target.value })} maxLength={2000} rows={3} placeholder={t('A small note to myself…')} /></section>
@@ -210,7 +217,8 @@ export const Courses: React.FC = () => {
 
     <details className="border-y border-[var(--border)] py-2"><summary className="min-h-11 py-3 text-sm font-semibold cursor-pointer">{t('Sources and limits of this lesson')}</summary><div className="space-y-4 py-3">{lesson.sources.map(id => sourcesFor(locale).find(source => source.id === id)!).map(source => <article key={source.id}><p className="text-[11px] uppercase tracking-wide text-[var(--accent)]">{source.type === 'research' ? t('Scientific publication') : source.type === 'religious' ? t('Religious source') : source.type === 'technique' ? t('Technique from a book or teacher') : t('Official health guidance')}</p><p className="text-sm font-medium mt-1 mb-1">{source.title}</p><p className="text-xs leading-relaxed text-[var(--fg-muted)]">{source.finding}</p><p className="text-xs leading-relaxed text-[var(--fg-muted)] mt-2">{source.limitation}</p><a href={source.url} target="_blank" rel="noopener noreferrer" className="oda-course-source-link">{t('Source')}<ArrowRight size={13} aria-hidden="true" /></a></article>)}</div></details>
     {progress.completed ? <section className="oda-course-finish space-y-3"><p className="flex items-center gap-2 text-sm font-semibold text-[var(--accent)]"><Check size={18} aria-hidden="true" />{completed === course.lessons.length ? t('Course completed') : t('Lesson completed')}</p><p lang={content} className="oda-display text-2xl leading-relaxed">{lesson.takeaway}</p>{completed === course.lessons.length && <p className="text-sm text-[var(--fg-muted)] leading-relaxed">{t('What you take with you: {outcome} You can reread the lessons whenever you like.', { outcome: course.outcome })}</p>}<button type="button" onClick={index < course.lessons.length - 1 ? goNext : () => open()} className="oda-course-primary">{index < course.lessons.length - 1 ? t('Go to the next lesson') : t('Back to courses')}<ArrowRight size={16} aria-hidden="true" /></button></section> : <div className="space-y-3"><p className="text-xs text-[var(--fg-muted)] leading-relaxed">{t('To complete the lesson, check the three practice steps and choose the right answer to the question. A personal note is optional.')}</p><button type="button" disabled={!eligible} onClick={async () => { const saved = await commit(current => completeLesson(current, course, index)); setNotice(saved ? t("Lesson completed. When you're ready, you can move to the next step.") : copy.savingFailed); }} className="oda-course-primary w-full">{t('Complete lesson')}<Check size={16} aria-hidden="true" /></button></div>}
-    <p role="status" className="text-xs text-[var(--accent)]">{notice}</p>{storageNote}
+    <p role="status" className="text-xs text-[var(--accent)]">{notice}</p>
     </>}
+    {storageNote}
   </div>;
 };

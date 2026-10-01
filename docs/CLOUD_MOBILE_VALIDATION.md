@@ -12,11 +12,13 @@ PLAYWRIGHT_BROWSERS_PATH=/workspace/.cloud-tools/playwright-browsers npx playwri
 
 The official hosts `cdn.playwright.dev` and `playwright.download.prss.microsoft.com` returned **HTTP 403** with the response **“Domain forbidden.”** No WebKit engine launched and no WebKit application test passed. This is an environment/download blocker; it does not establish either a WebKit application pass or an application defect. The conditional merge/publication step remains pending a successful WebKit run.
 
-The application code is unchanged from `0a04e2d264344b9f47f5e2a71735e5241c73ef3b`. The existing **209 distinct automated tests and 118 named Chromium QA checks** remain unchanged; see [the verification report](VERIFICATION_2026-09-30.md). They are historical Chromium evidence, not WebKit or native iPhone evidence. Planned commands below are not additional test results. A supported additional-network-permission attempt returned the same download denial; no alternate download route was used.
+At the first blocked run, application code matched `0a04e2d264344b9f47f5e2a71735e5241c73ef3b`. Its **209 distinct automated tests and 118 named Chromium QA checks** are historical results in [the original verification report](VERIFICATION_2026-09-30.md). The additional October 1 bug review changes the application; see [its verification report](VERIFICATION_2026-10-01.md) for current results. Neither report establishes WebKit or native iPhone execution.
+
+The approved update added only `cdn.playwright.dev` and `playwright.download.prss.microsoft.com` to the saved environment configuration. One official installation retry after republishing still received HTTP 403 in this existing task. The response is verified; the exact rejecting network layer is not. No further download attempts or alternate routes were used. The current [cloud environment guide](https://learn.chatgpt.com/docs/environments/cloud-environments) directs using a new task after republishing; existing tasks retain their own saved state. Transfer the verified development branch to a QA-only task using that same updated environment, then test official WebKit availability there. The original workspace and archives remain intact.
 
 | Evidence | Current status |
 | --- | --- |
-| Application source and intended build URL | `0a04e2d`; project preview `http://127.0.0.1:4174/one-decision-away/`; no URL loaded in WebKit |
+| Application source and intended build URL | October 1 development branch; intended project path `/one-decision-away/`; no URL loaded in WebKit |
 | Linux image, Node and Playwright versions | Debian 13.6, Linux x64; Node 22.23.3; Playwright 1.63.0 |
 | WebKit installation and successful launch | Blocked: official downloads returned HTTP 403 “Domain forbidden”; no launch |
 | Exact WebKit version, desktop and mobile context parameters | Unavailable; no WebKit context created |
@@ -61,7 +63,7 @@ The dedicated runner uses WebKit without a browser fallback:
 PLAYWRIGHT_BROWSERS_PATH=/workspace/.cloud-tools/playwright-browsers ODA_QA_URL=http://127.0.0.1:4174/one-decision-away/ node --import tsx scripts/qa-webkit-mobile.mjs
 ```
 
-Its syntax check passed. The actual invocation exited 1 at WebKit launch and saved a `blocked` report with **zero checks, contexts or screenshots**. A passing syntax check does not validate its application flows. Running it requires an authorized cloud environment with the matching WebKit engine already installed or access to the official download hosts and required Linux libraries. No control available in this executor changes the denied domain policy.
+Its syntax check passed. The actual invocation exited 1 at WebKit launch and saved a `blocked` report with **zero checks, contexts or screenshots**. A passing syntax check does not validate its application flows. Running it requires an authorized cloud environment with the matching WebKit engine already installed or access to the official download hosts and required Linux libraries. No exposed control applies a newly published configuration to this running executor.
 
 Existing browser scripts must explicitly launch WebKit to establish WebKit evidence; a narrow Chromium viewport alone establishes Chromium mobile-layout behavior. The new runner prepares disposable contexts and synthetic records for onboarding, daily choose/act/reflect, interrupted course work, backup export/restore, keyboard dialogs, direct route reload and offline revisit. It also prepares 320/390px touch/reflow, EN/TR/ES, reduced-motion, light/dark and axe checks. These are **pending coverage**, not results. Offline checks detect actual service-worker/cache support; a shortened viewport is only an approximation of available keyboard space.
 

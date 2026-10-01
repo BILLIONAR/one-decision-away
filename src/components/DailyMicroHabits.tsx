@@ -24,13 +24,13 @@ import {
 } from 'lucide-react';
 import { MicroHabit, MicroHabitCategory, CustomHabitCategory } from '../types/models';
 import { soundSynthesizer } from '../utils/soundSynthesizer';
-import { calculateBestMicroHabitStreak } from '../services/microHabitsService';
+import { calculateBestMicroHabitStreak, getCurrentDateKey } from '../services/microHabitsService';
 import { MicroHabitCheckbox } from './MicroHabitCheckbox';
 import { resolveCategoryConfig, ICON_MAP } from '../utils/categoryHelpers';
 import { CustomCategoryModal } from './CustomCategoryModal';
 import { GoalModal } from './GoalModal';
 import { EditMicroHabitModal } from './EditMicroHabitModal';
-import { useT, N_ } from '../i18n';
+import { useT, N_, formatDate } from '../i18n';
 
 export interface CategoryConfig {
   id: MicroHabitCategory;
@@ -166,7 +166,7 @@ export interface HabitBestStreakIndicatorProps {
 
 export const HabitBestStreakIndicator: React.FC<HabitBestStreakIndicatorProps> = ({
   habit,
-  todayStr = new Date().toISOString().slice(0, 10),
+  todayStr = getCurrentDateKey(),
   showTooltip = true,
 }) => {
   const t = useT();
@@ -242,7 +242,7 @@ export const DailyMicroHabits: React.FC = () => {
   const goals = data.goals || [];
   const habits = data.microHabits || [];
   const customCategories = data.customHabitCategories || [];
-  const todayStr = new Date().toISOString().slice(0, 10);
+  const todayStr = getCurrentDateKey();
 
   const completedCount = habits.filter((h) => h.completedDates.includes(todayStr)).length;
   const totalCount = habits.length;
@@ -817,11 +817,12 @@ export const DailyMicroHabits: React.FC = () => {
                                 habit.bestStreak || 0
                               );
                               const past7Days = Array.from({ length: 7 }).map((_, i) => {
-                                const d = new Date(Date.now() - (6 - i) * 86400000);
+                                const today = new Date();
+                                const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 6 + i, 12);
                                 return {
-                                  dateKey: d.toISOString().slice(0, 10),
-                                  label: d.toLocaleDateString(undefined, { weekday: 'narrow' }),
-                                  fullLabel: d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }),
+                                  dateKey: getCurrentDateKey(d),
+                                  label: formatDate(d, { weekday: 'narrow' }),
+                                  fullLabel: formatDate(d, { weekday: 'short', month: 'short', day: 'numeric' }),
                                 };
                               });
 

@@ -6,7 +6,7 @@
 import { UserData, WalletTransaction, Mission, Purchase, RealityBridge, LifeScoreRecord, Goal } from '../types/models';
 import { SEED_INITIAL_GOALS, SEED_INITIAL_MISSIONS, DEFAULT_BUDGET, SEED_MARKET_ITEMS, SEED_SEASONS, SEED_MICRO_HABITS, SEED_CUSTOM_CATEGORIES } from '../data/seed';
 import { computeLedgerBalance, evaluateMissionReward, ECONOMY_CONSTANTS } from './economy';
-import { checkAndApplyDailyMicroHabitRollover } from './microHabitsService';
+import { checkAndApplyDailyMicroHabitRollover, getCurrentDateKey } from './microHabitsService';
 import { cloudSync } from './cloudSync';
 import { getLocale, N_, t } from '../i18n';
 import { firstRunCopy } from '../i18n/firstRun';
@@ -14,14 +14,18 @@ import { applyNotebookAction, normalizeNotebook, preserveNotebookWrites } from '
 import type { NotebookAction, NotebookUpdateResult } from './notebook';
 import { EMPTY_PROGRESS, normalizeCourseProgress, readCourseProgress, notifyCourseProgressChanged } from './courseProgress';
 import { prepareBackupRestore } from './backup';
-import { APP_DATA_STORAGE_KEY } from './storageKeys';
-import { queueDataWrite } from './dataWrites';
+import { APP_DATA_STORAGE_KEY, COURSE_PROGRESS_STORAGE_KEY } from './storageKeys';
+import { afterDataWriteCommit, DataWriteCancelledError, queueDataWrite, validateDataWriteCommit } from './dataWrites';
+import { DataSaveConflictError, mergeDataSnapshot, newReplacementEpoch, publishDataSnapshot, REPLACEMENT_EPOCH_KEY, trackDataSnapshot } from './dataSnapshots';
+import { resetCourseProgressSession } from './courseProgressDraft';
+import { clearNotebookDrafts } from './notebookDrafts';
+import { createRecordId } from '../utils/recordId';
 
 export interface DataRepository {
   readonly mode: 'demo' | 'server';
   load(): Promise<UserData>;
   save(data: UserData): Promise<void>;
-  replaceAll(data: UserData, canReplace?: () => boolean): Promise<boolean>;
+  replaceAll(data: UserData, canReplace?: (originalRaw?: string | null) => boolean): Promise<boolean>;
   clear(): Promise<void>;
   mutateNotebook(action: NotebookAction): Promise<NotebookUpdateResult>;
   completeMission(params: {
@@ -129,7 +133,7 @@ export function getInitialDemoState(): UserData {
     customHabitCategories: SEED_CUSTOM_CATEGORIES,
     checkIns: [],
     dailyPrimaryGoals: [],
-    lastActiveDateKey: now.slice(0, 10),
+    lastActiveDateKey: getCurrentDateKey(new Date(now)),
     lastDailyResetTimestamp: now,
     offlineQueue: [],
   };
@@ -149,6 +153,12 @@ export class LocalDemoRepository implements DataRepository {
   readonly mode = 'demo' as const;
 
   async load(): Promise<UserData> {
+    const cloudScopeIsCurrent = cloudSync.currentAccountGuard();
+    return queueDataWrite(() => this.loadCurrent(cloudScopeIsCurrent));
+  }
+
+  /** Reads/migrations share the same authority as writers, without nesting the queue. */
+  private async loadCurrent(cloudScopeIsCurrent: () => boolean): Promise<UserData> {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
@@ -184,12 +194,15 @@ export class LocalDemoRepository implements DataRepository {
         if (!parsed.dailyPrimaryGoals) parsed.dailyPrimaryGoals = [];
         if (!parsed.profile.onboardingStep) parsed.profile.onboardingStep = 'completed';
 
+        // Preserve the immutable read baseline through ordinary UI object spreads.
+        trackDataSnapshot(parsed, stored);
+
         // Check upon application load if dateKey has changed since last app usage
         // Automatically resets uncompleted daily micro-habits and recalculates broken streaks
         const rollover = checkAndApplyDailyMicroHabitRollover(parsed);
         if (rollover.hasChanged || !parsed.lastActiveDateKey) {
           parsed = rollover.updatedData;
-          await this.save(parsed);
+          this.saveCurrent(parsed, cloudScopeIsCurrent);
         }
 
         return parsed;
@@ -199,54 +212,89 @@ export class LocalDemoRepository implements DataRepository {
       throw new Error(t('Could not read saved data. Your existing records were not replaced.'), { cause: e });
     }
     const initial = getInitialDemoState();
-    await this.save(initial);
+    Object.defineProperty(initial, REPLACEMENT_EPOCH_KEY, {
+      configurable: true, enumerable: true, writable: true, value: newReplacementEpoch(),
+    });
+    this.saveCurrent(initial, cloudScopeIsCurrent);
     return initial;
   }
 
   async save(data: UserData): Promise<void> {
-    await queueDataWrite(async () => { this.saveCurrent(data); });
+    const cloudScopeIsCurrent = cloudSync.currentAccountGuard();
+    await queueDataWrite(async () => { this.saveCurrent(data, cloudScopeIsCurrent); });
   }
 
   /** Synchronous commit, called only while holding the shared data-write lock. */
-  private saveCurrent(data: UserData): void {
+  private saveCurrent(data: UserData, cloudScopeIsCurrent: () => boolean): void {
     let saved: UserData;
+    let committed: string;
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       const stored = raw ? JSON.parse(raw) as UserData : null;
-      saved = preserveNotebookWrites(data, stored);
+      if (stored && !stored.transactions) stored.transactions = [];
+      // Legacy records can have no notebook; preservation then returns the
+      // caller itself. Normalize a copy so failed authority commits cannot
+      // publish protected fields into an unsaved caller.
+      saved = { ...preserveNotebookWrites(mergeDataSnapshot(data, stored, raw), stored) };
       saved.notebook = normalizeNotebook(saved.notebook);
       // A course can be saved after this caller loaded its personal-data snapshot.
       // Prefer the freshly read course work so another feature cannot roll it back.
       saved.courseProgress = stored && Object.prototype.hasOwnProperty.call(stored, 'courseProgress')
         ? normalizeCourseProgress(stored.courseProgress)
         : normalizeCourseProgress(data.courseProgress ?? readCourseProgress());
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+      committed = JSON.stringify(saved);
+      localStorage.setItem(STORAGE_KEY, committed);
     } catch (e) {
+      if (e instanceof DataSaveConflictError) throw e;
       throw new Error(t('Your changes could not be saved. Free some device storage and try again.'), { cause: e });
     }
-    // Existing callers publish this object to React after saving; include protected newer data.
-    Object.assign(data, saved);
-    // Optional cloud backup (no-op unless signed in)
-    cloudSync.schedulePush(saved);
-  }
-
-  /** Replaces the whole local dataset (used by Restore from backup and cloud pull). */
-  async replaceAll(data: UserData, canReplace?: () => boolean): Promise<boolean> {
-    return queueDataWrite(() => {
-      // Optional cloud restore identity must be checked after acquiring the lock,
-      // before validation or any write. It can expire while queued or under review.
-      if (canReplace && !canReplace()) return false;
-      const restored = prepareBackupRestore(data);
-      // Course work is part of the same JSON document: validation and quota
-      // failures leave every previous record intact, with no partial side-store writes.
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(restored));
-      notifyCourseProgressChanged();
-      return true;
+    afterDataWriteCommit(() => {
+      // Existing callers publish this object to React after saving; include protected newer data.
+      publishDataSnapshot(data, saved, committed);
+      // Optional cloud backup (no-op unless signed in).
+      if (cloudScopeIsCurrent()) cloudSync.schedulePush(saved);
     });
   }
 
+  /** Replaces the whole local dataset (used by Restore from backup and cloud pull). */
+  async replaceAll(data: UserData, canReplace?: (originalRaw?: string | null) => boolean): Promise<boolean> {
+    try { return await queueDataWrite(() => {
+      // Optional cloud restore identity must be checked after acquiring the lock,
+      // before validation or any write. It can expire while queued or under review.
+      const originalRaw = localStorage.getItem(STORAGE_KEY);
+      if (canReplace && !canReplace(originalRaw)) return false;
+      if (canReplace) validateDataWriteCommit(() => canReplace(originalRaw));
+      const restored = prepareBackupRestore(data);
+      Object.defineProperty(restored, REPLACEMENT_EPOCH_KEY, {
+        configurable: true, enumerable: true, writable: true, value: newReplacementEpoch(),
+      });
+      // Course work is part of the same JSON document: validation and quota
+      // failures leave every previous record intact, with no partial side-store writes.
+      const committed = JSON.stringify(restored);
+      localStorage.setItem(STORAGE_KEY, committed);
+      afterDataWriteCommit(() => {
+        publishDataSnapshot(data, restored, committed);
+        resetCourseProgressSession();
+        clearNotebookDrafts();
+        notifyCourseProgressChanged();
+      });
+      return true;
+    }); } catch (error) {
+      if (error instanceof DataWriteCancelledError) return false;
+      throw error;
+    }
+  }
+
   async clear(): Promise<void> {
-    await queueDataWrite(async () => { localStorage.removeItem(STORAGE_KEY); });
+    await queueDataWrite(() => {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(COURSE_PROGRESS_STORAGE_KEY);
+      afterDataWriteCommit(() => {
+        resetCourseProgressSession();
+        clearNotebookDrafts();
+        notifyCourseProgressChanged();
+      });
+    });
   }
 
   /** Re-read at commit time: a previous asynchronous load is never a write baseline. */
@@ -256,15 +304,16 @@ export class LocalDemoRepository implements DataRepository {
     current.notebook = normalizeNotebook(current.notebook);
     current.courseProgress = Object.prototype.hasOwnProperty.call(current, 'courseProgress')
       ? normalizeCourseProgress(current.courseProgress) : readCourseProgress();
-    return current;
+    return trackDataSnapshot(current, raw);
   }
 
   async mutateNotebook(action: NotebookAction): Promise<NotebookUpdateResult> {
-    await this.load(); // initializes/migrates outside the lock; load may itself save a rollover
+    const cloudScopeIsCurrent = cloudSync.currentAccountGuard();
+    await this.load(); // Initializes/migrates in its own coherent queue operation.
     return queueDataWrite(async () => {
       const current = this.readCurrent();
       const update = applyNotebookAction(current, action);
-      if (update.data !== current) this.saveCurrent(update.data);
+      if (update.data !== current) this.saveCurrent(update.data, cloudScopeIsCurrent);
       return update;
     });
   }
@@ -276,6 +325,7 @@ export class LocalDemoRepository implements DataRepository {
     note?: string;
     reflection?: { completedSummary: string; resistanceNoticed: string; nextStep: string };
   }): Promise<{ data: UserData; rewardAmount: number; message: string }> {
+    const cloudScopeIsCurrent = cloudSync.currentAccountGuard();
     await this.load();
     return queueDataWrite(async () => {
       const data = this.readCurrent();
@@ -320,7 +370,7 @@ export class LocalDemoRepository implements DataRepository {
 
       // Record completion
       data.completions.unshift({
-        id: `comp-${Date.now()}`,
+        id: createRecordId('comp'),
         missionId: mission.id,
         userId: data.profile.id,
         completedAt: now,
@@ -335,7 +385,7 @@ export class LocalDemoRepository implements DataRepository {
       // Record transaction in ledger if reward > 0
       if (evalResult.rewardAmount > 0) {
         data.transactions.unshift({
-          id: `tx-${Date.now()}`,
+          id: createRecordId('tx'),
           walletId: 'wallet-demo',
           userId: data.profile.id,
           kind: mission.isOneDecision ? 'one_decision_reward' : 'mission_reward',
@@ -353,7 +403,7 @@ export class LocalDemoRepository implements DataRepository {
       // Update Two Futures Trajectory Vote
       data.twoFutures.buildingVotes = (data.twoFutures.buildingVotes || 0) + 1;
 
-      this.saveCurrent(data);
+      this.saveCurrent(data, cloudScopeIsCurrent);
 
       let message = t('Mission completed!');
       if (evalResult.rewardAmount > 0) {
@@ -368,46 +418,49 @@ export class LocalDemoRepository implements DataRepository {
   }
 
   async purchaseItem(itemId: string): Promise<{ data: UserData; purchase: Purchase; message: string }> {
-    const data = await this.load();
-    const allItems = [...SEED_MARKET_ITEMS, ...data.customMarketItems];
-    const item = allItems.find((i) => i.id === itemId);
+    const cloudScopeIsCurrent = cloudSync.currentAccountGuard();
+    await this.load();
+    return queueDataWrite(() => {
+      const data = this.readCurrent();
+      const allItems = [...SEED_MARKET_ITEMS, ...data.customMarketItems];
+      const item = allItems.find((i) => i.id === itemId);
 
-    if (!item) {
-      throw new Error(t('Item not found in Dream Market'));
-    }
+      if (!item) {
+        throw new Error(t('Item not found in Dream Market'));
+      }
 
-    // Check if already purchased
-    const alreadyOwned = data.purchases.some((p) => p.itemId === itemId);
-    if (alreadyOwned) {
-      throw new Error(t('You already own this dream in My Future Life'));
-    }
+      // Check if already purchased
+      const alreadyOwned = data.purchases.some((p) => p.itemId === itemId);
+      if (alreadyOwned) {
+        throw new Error(t('You already own this dream in My Future Life'));
+      }
 
-    const currentBalance = computeLedgerBalance(data.transactions);
-    if (currentBalance < item.dreamDollarPrice) {
-      throw new Error(
-        t('Insufficient Dream Dollars. You have D${balance}, but this requires D${price}', { balance: currentBalance.toLocaleString(), price: item.dreamDollarPrice.toLocaleString() })
-      );
-    }
+      const currentBalance = computeLedgerBalance(data.transactions);
+      if (currentBalance < item.dreamDollarPrice) {
+        throw new Error(
+          t('Insufficient Dream Dollars. You have D${balance}, but this requires D${price}', { balance: currentBalance.toLocaleString(), price: item.dreamDollarPrice.toLocaleString() })
+        );
+      }
 
-    const now = new Date().toISOString();
-    const todayStr = now.slice(0, 10);
+      const now = new Date().toISOString();
+      const todayStr = now.slice(0, 10);
 
-    // Atomic negative ledger insertion
-    data.transactions.unshift({
-      id: `tx-purchase-${Date.now()}`,
-      walletId: 'wallet-demo',
-      userId: data.profile.id,
-      kind: 'purchase',
-      amount: -item.dreamDollarPrice,
-      dayKey: todayStr,
-      refType: 'purchase',
-      refId: item.id,
-      memo: t('Purchased dream: {name}', { name: item.name }),
-      createdAt: now,
+      // Atomic negative ledger insertion
+      data.transactions.unshift({
+        id: createRecordId('tx-purchase'),
+        walletId: 'wallet-demo',
+        userId: data.profile.id,
+        kind: 'purchase',
+        amount: -item.dreamDollarPrice,
+        dayKey: todayStr,
+        refType: 'purchase',
+        refId: item.id,
+        memo: t('Purchased dream: {name}', { name: item.name }),
+        createdAt: now,
     });
 
     const newPurchase: Purchase = {
-      id: `purch-${Date.now()}`,
+        id: createRecordId('purch'),
       userId: data.profile.id,
       itemId: item.id,
       dreamDollarPaid: item.dreamDollarPrice,
@@ -417,67 +470,72 @@ export class LocalDemoRepository implements DataRepository {
 
     data.purchases.unshift(newPurchase);
 
-    await this.save(data);
+    this.saveCurrent(data, cloudScopeIsCurrent);
 
     return {
       data,
       purchase: newPurchase,
       message: t('Successfully purchased {name}! Added to My Future Life.', { name: item.name }),
     };
+    });
   }
 
   async createRealityBridge(
     bridgeData: Omit<RealityBridge, 'id' | 'createdAt' | 'updatedAt' | 'savingsLogs'>
   ): Promise<{ data: UserData; bridge: RealityBridge }> {
-    const data = await this.load();
-    const now = new Date().toISOString();
+    const cloudScopeIsCurrent = cloudSync.currentAccountGuard();
+    await this.load();
+    return queueDataWrite(() => {
+      const data = this.readCurrent();
+      const now = new Date().toISOString();
 
-    // Generate real actionable mission if requested
-    let generatedMissionId: string | undefined;
-    if (bridgeData.firstRealAction) {
-      const newMission: Mission = {
-        id: `mission-bridge-${Date.now()}`,
-        userId: data.profile.id,
-        purchaseId: bridgeData.purchaseId,
-        title: bridgeData.firstRealAction,
-        type: 'weekly_mission',
-        area: 'Money',
-        difficulty: 'medium',
-        estimatedMinutes: 60,
-        isOneDecision: false,
-        status: 'active',
+      // Generate real actionable mission if requested
+      let generatedMissionId: string | undefined;
+      if (bridgeData.firstRealAction) {
+        const newMission: Mission = {
+          id: createRecordId('mission-bridge'),
+          userId: data.profile.id,
+          purchaseId: bridgeData.purchaseId,
+          title: bridgeData.firstRealAction,
+          type: 'weekly_mission',
+          area: 'Money',
+          difficulty: 'medium',
+          estimatedMinutes: 60,
+          isOneDecision: false,
+          status: 'active',
+          createdAt: now,
+        };
+        data.missions.unshift(newMission);
+        generatedMissionId = newMission.id;
+      }
+
+      const realProgressPct =
+        bridgeData.realCostUsd > 0
+          ? Math.min(100, Math.round((bridgeData.currentSavingsUsd / bridgeData.realCostUsd) * 100))
+          : 0;
+
+      const newBridge: RealityBridge = {
+        id: createRecordId('bridge'),
+        ...bridgeData,
+        generatedMissionId,
+        realProgressPct,
+        savingsLogs: [
+          {
+            id: createRecordId('log'),
+            date: now.slice(0, 10),
+            amountUsd: bridgeData.currentSavingsUsd,
+            note: t('Initial Reality Bridge baseline'),
+          },
+        ],
         createdAt: now,
+        updatedAt: now,
       };
-      data.missions.unshift(newMission);
-      generatedMissionId = newMission.id;
-    }
 
-    const realProgressPct =
-      bridgeData.realCostUsd > 0
-        ? Math.min(100, Math.round((bridgeData.currentSavingsUsd / bridgeData.realCostUsd) * 100))
-        : 0;
+      data.realityBridges.unshift(newBridge);
+      this.saveCurrent(data, cloudScopeIsCurrent);
 
-    const newBridge: RealityBridge = {
-      id: `bridge-${Date.now()}`,
-      ...bridgeData,
-      generatedMissionId,
-      realProgressPct,
-      savingsLogs: [
-        {
-          id: `log-${Date.now()}`,
-          date: now.slice(0, 10),
-          amountUsd: bridgeData.currentSavingsUsd,
-          note: t('Initial Reality Bridge baseline'),
-        },
-      ],
-      createdAt: now,
-      updatedAt: now,
-    };
-
-    data.realityBridges.unshift(newBridge);
-    await this.save(data);
-
-    return { data, bridge: newBridge };
+      return { data, bridge: newBridge };
+    });
   }
 
   async updateRealityBridgeSavings(
@@ -485,28 +543,32 @@ export class LocalDemoRepository implements DataRepository {
     addedAmount: number,
     note?: string
   ): Promise<{ data: UserData; bridge: RealityBridge }> {
-    const data = await this.load();
-    const bridge = data.realityBridges.find((b) => b.id === bridgeId);
-    if (!bridge) {
-      throw new Error(t('Reality Bridge not found'));
-    }
+    const cloudScopeIsCurrent = cloudSync.currentAccountGuard();
+    await this.load();
+    return queueDataWrite(() => {
+      const data = this.readCurrent();
+      const bridge = data.realityBridges.find((b) => b.id === bridgeId);
+      if (!bridge) {
+        throw new Error(t('Reality Bridge not found'));
+      }
 
-    const now = new Date().toISOString();
-    bridge.currentSavingsUsd += addedAmount;
-    bridge.realProgressPct = Math.min(
-      100,
-      Math.round((bridge.currentSavingsUsd / bridge.realCostUsd) * 100)
-    );
-    bridge.savingsLogs.unshift({
-      id: `log-${Date.now()}`,
-      date: now.slice(0, 10),
-      amountUsd: addedAmount,
-      note: note || t('Savings progress update'),
+      const now = new Date().toISOString();
+      bridge.currentSavingsUsd += addedAmount;
+      bridge.realProgressPct = Math.min(
+        100,
+        Math.round((bridge.currentSavingsUsd / bridge.realCostUsd) * 100)
+      );
+      bridge.savingsLogs.unshift({
+        id: createRecordId('log'),
+        date: now.slice(0, 10),
+        amountUsd: addedAmount,
+        note: note || t('Savings progress update'),
     });
     bridge.updatedAt = now;
 
-    await this.save(data);
+    this.saveCurrent(data, cloudScopeIsCurrent);
     return { data, bridge };
+    });
   }
 }
 

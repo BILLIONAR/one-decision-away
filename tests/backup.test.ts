@@ -200,7 +200,7 @@ test('ledger and notebook rewards retain one UTC ceiling when the local decision
     assert.equal(localDayKey(), '2026-09-30');
     const data = fixture();
     assert.equal(data.transactions[0].dayKey, '2026-10-01');
-    assert.equal(data.lastActiveDateKey, '2026-10-01');
+    assert.equal(data.lastActiveDateKey, '2026-09-30');
     data.missions = [{ id: 'utc-cap-task', userId: data.profile.id, title: 'A local-day decision', type: 'daily_quest', area: 'Work', difficulty: 'easy', isOneDecision: true, scheduledFor: localDayKey(), status: 'active', createdAt: new Date().toISOString() }];
     data.transactions.push({ id: 'prior-credit', userId: data.profile.id, walletId: 'wallet-demo', kind: 'mission_reward', amount: 2475, dayKey: '2026-10-01', memo: 'Earlier work', createdAt: new Date().toISOString() });
     put(data);
@@ -256,7 +256,7 @@ test('cloud previews do not change last-sync or local data until the reviewed re
     assert.deepEqual(storage.values, original);
     await new LocalDemoRepository().replaceAll(retry!);
     cloudSync.markRemoteApplied(retry!);
-    assert.equal(storage.getItem('oda_cloud_last_sync'), '2030-01-01T00:00:00Z');
+    assert.equal(cloudSync.getState().lastSyncAt, '2030-01-01T00:00:00Z');
     assert.equal(await cloudSync.pullIfNewer(await new LocalDemoRepository().load()), null);
     assert.deepEqual(readCourseProgress(), progress());
   } finally { Object.assign(internal, previous); }

@@ -30,6 +30,7 @@ try {
   const initial = await page.evaluate(async () => {
     const { getInitialDemoState } = await import('/src/services/repository.ts');
     const { courseCatalogFor } = await import('/src/data/courseCatalog.ts');
+    const { queueDataWrite } = await import('/src/services/dataWrites.ts');
     const record = getInitialDemoState();
     record.profile = { ...record.profile, onboardingStep: 'completed', displayName: 'Local record', locale: 'en' };
     const course = courseCatalogFor('en')[0];
@@ -40,7 +41,7 @@ try {
       experiments: { [course.id]: { cue: 'After tea', action: 'Open the document', fallback: 'Write one word', evidence: 'A dated draft', reviewOn: '2026-10-07', attempts: [{ id: 'attempt-browser', date: '2026-09-30', outcome: 'tried', note: 'A small start happened.' }], review: { recall: 'Make the step observable', nextAction: 'Try the same cue', reviewedOn: '2026-09-30' } } },
     };
     localStorage.setItem('oda_locale', 'en');
-    localStorage.setItem('one_decision_away_app_data_v1', JSON.stringify(record));
+    await queueDataWrite(() => localStorage.setItem('one_decision_away_app_data_v1', JSON.stringify(record)));
     return record;
   });
   await page.goto(`${BASE}/app/settings`);
@@ -133,8 +134,9 @@ try {
   assert.ok(Object.values(JSON.parse(readFileSync(`${OUT}/cross-tab-backup.json`, 'utf8')).courseProgress.lessons).some(lesson => lesson.reflection === newerReflection));
   check('cross-tab course saves are included in an export from an already-open Settings screen');
 
-  await second.evaluate(() => {
-    window.odaNotebookLock = navigator.locks.request('oda-data-writes', async () => {
+  await second.evaluate(async () => {
+    const { queueDataWrite } = await import('/src/services/dataWrites.ts');
+    window.odaNotebookLock = queueDataWrite(async () => {
       const snapshot = JSON.parse(localStorage.getItem('one_decision_away_app_data_v1'));
       window.odaNotebookLockHeld = true;
       await new Promise(resolve => { window.odaReleaseNotebookLock = resolve; });

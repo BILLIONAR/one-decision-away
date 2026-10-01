@@ -42,17 +42,20 @@ import {
 } from '../types/models';
 import type { NotebookAction } from '../services/notebook';
 import { clearNotebookDrafts } from '../services/notebookDrafts';
-import { COURSE_PROGRESS_STORAGE_KEY, subscribeCourseProgress } from '../services/courseProgress';
+import { subscribeCourseProgress } from '../services/courseProgress';
 import { createBackupSnapshot, prepareBackupRestore, InvalidBackupError } from '../services/backup';
 import { createRepository, DataRepository } from '../services/repository';
+import { DataSaveConflictError, subscribeDataSaveConflicts } from '../services/dataSnapshots';
+import { subscribeDataWriteRecovery } from '../services/dataWrites';
 import { cloudSync } from '../services/cloudSync';
 import { notificationScheduler } from '../services/notificationScheduler';
-import { getBaseReward, isExemptFromDailyCap, ECONOMY_CONSTANTS } from '../services/economy';
+import { getBaseReward, isExemptFromDailyCap, ECONOMY_CONSTANTS, getDailyRewardAmount, getMicroHabitRewardAmount, microHabitRewardId } from '../services/economy';
 import {
   checkAndApplyDailyMicroHabitRollover,
   getCurrentDateKey,
   DailyMicroHabitRolloverResult,
   calculateBestMicroHabitStreak,
+  calculateMicroHabitStreak,
 } from '../services/microHabitsService';
 import { triggerMissionConfetti, triggerBigRewardConfetti, triggerGoldConfetti, triggerSmallConfetti } from '../utils/confetti';
 import { SEED_MARKET_ITEMS } from '../data/seed';
@@ -289,18 +292,46 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [cloudRestoreReview, setCloudRestoreReview] = useState<{ record: UserData; resolve: (accepted: boolean) => void } | null>(null);
   const cloudReviewActive = useRef(false);
 
-  useEffect(() => subscribeCourseProgress(() => {
+  useEffect(() => subscribeCourseProgress(canSync => {
     // Courses save directly into the personal record. Keep other surfaces and
     // optional debounced cloud sync aligned with that latest saved snapshot.
     void repository.load().then(latest => {
       setData(latest);
-      cloudSync.schedulePush(latest);
+      // The originating tab owns backup scheduling. A storage notification or
+      // an edit whose original account expired must not upload to this account.
+      if (canSync?.()) cloudSync.schedulePush(latest);
     }).catch(() => undefined);
   }), []);
 
   const showToast = useCallback((message: string, type: 'success' | 'info' | 'error' = 'success') => {
     setToast({ message, type });
   }, []);
+
+  useEffect(() => {
+    let mounted = true;
+    let refreshing = false;
+    const refreshSavedRecord = () => {
+      if (refreshing) return;
+      refreshing = true;
+      void repository.load().then(latest => {
+        if (mounted) setData(latest);
+      }).catch(() => undefined).finally(() => { refreshing = false; });
+    };
+    const stopConflicts = subscribeDataSaveConflicts(() => {
+      showToast(new DataSaveConflictError('document').message, 'error');
+      refreshSavedRecord();
+    });
+    const stopRecovery = subscribeDataWriteRecovery(() => {
+      const locale = getLocale();
+      showToast(locale === 'tr'
+        ? 'Kayıt depolama alanına erişilemiyor. Değişikliklerin kaydedilmedi. Tekrar dene.'
+        : locale === 'es'
+          ? 'No se puede acceder al almacenamiento. Tus cambios no se guardaron. Inténtalo de nuevo.'
+          : 'Record storage is unavailable. Your changes were not saved. Try again.', 'error');
+      refreshSavedRecord();
+    });
+    return () => { mounted = false; stopConflicts(); stopRecovery(); };
+  }, [showToast]);
 
   const hideToast = useCallback(() => {
     setToast(null);
@@ -654,7 +685,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         await cloudSync.init();
         const remote = options?.skipCloudPull ? null : await cloudSync.pullIfNewer(loaded);
         if (remote) {
-          if (await repository.replaceAll(remote, () => cloudSync.canApplyRemote(remote))) cloudSync.markRemoteApplied(remote);
+          if (await repository.replaceAll(remote, originalRecord => cloudSync.canApplyRemote(remote, originalRecord))) cloudSync.markRemoteApplied(remote);
         }
         // A remote request can overlap a newer local save; render the latest record.
         loaded = await repository.load();
@@ -1505,7 +1536,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const toggleMicroHabit = useCallback(
     async (habitId: string) => {
       if (!data) return;
-      const todayStr = new Date().toISOString().slice(0, 10);
+      const todayStr = getCurrentDateKey();
       const habits = data.microHabits || [];
       const habit = habits.find((h) => h.id === habitId);
       if (!habit) return;
@@ -1519,13 +1550,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (isCompletedToday) {
         // Toggle off
         updatedDates = habit.completedDates.filter((d) => d !== todayStr);
-        updatedStreak = Math.max(0, updatedStreak - 1);
+        updatedStreak = calculateMicroHabitStreak(updatedDates);
         soundSynthesizer.playMicroHabitCue(habit.category, 'undo');
         showToast(t('Untoggled: {title}', { title: t(habit.title) }), 'info');
       } else {
         // Toggle on
         updatedDates = [...habit.completedDates, todayStr];
-        updatedStreak = updatedStreak + 1;
+        updatedStreak = calculateMicroHabitStreak(updatedDates);
         
         // Play category-differentiated acoustic synthesis & haptic pulse (Health / Learning / Discipline / Mindset)
         soundSynthesizer.playMicroHabitCue(habit.category, 'complete');
@@ -1543,21 +1574,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           }, 450);
         }
 
-        // Award a 25 D$ micro-momentum reward
+        // A completion earns once per habit/day, within the UTC reward ceiling.
         const now = new Date().toISOString();
+        const rewardAmount = getMicroHabitRewardAmount(newTransactions, habitId, todayStr, new Date(now));
         const habitTx: WalletTransaction = {
-          id: `tx-habit-${Date.now()}`,
+          id: microHabitRewardId(habitId, todayStr),
           walletId: 'wallet-demo',
           userId: data.profile.id,
           kind: 'micro_habit_reward',
-          amount: 25,
-          dayKey: todayStr,
+          amount: rewardAmount,
+          dayKey: now.slice(0, 10),
+          refType: 'micro_habit',
+          refId: habitId,
           memo: t('5-Min Micro-Habit Momentum: {title}', { title: habit.title }),
           createdAt: now,
         };
-        newTransactions = [habitTx, ...newTransactions];
+        if (rewardAmount > 0) newTransactions = [habitTx, ...newTransactions];
 
-        if (isLastRemaining) {
+        if (rewardAmount !== 25) {
+          showToast(t('Saved.'), 'success');
+        } else if (isLastRemaining) {
           showToast(t('✨ All micro-habits completed today! Full momentum secured! (+ D$25)'), 'success');
         } else {
           showToast(t('✓ Micro-Habit completed: "{title}"! (+ D$25 momentum)', { title: t(habit.title) }), 'success');
@@ -1878,12 +1914,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const resetMicroHabitsToday = useCallback(async () => {
     if (!data) return;
-    const todayStr = new Date().toISOString().slice(0, 10);
+    const todayStr = getCurrentDateKey();
     const existingHabits = data.microHabits || [];
-    const updatedHabits = existingHabits.map((h) => ({
-      ...h,
-      completedDates: h.completedDates.filter((d) => d !== todayStr),
-    }));
+    const updatedHabits = existingHabits.map((h) => {
+      const completedDates = h.completedDates.filter((d) => d !== todayStr);
+      return { ...h, completedDates, streakCount: calculateMicroHabitStreak(completedDates) };
+    });
     const updated: UserData = {
       ...data,
       microHabits: updatedHabits,
@@ -1898,7 +1934,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (!data) return null;
 
       const currentDateKey = getCurrentDateKey();
-      const previousDateKey = data.lastActiveDateKey || data.profile?.lastOpenedAt?.slice(0, 10);
+      const previousDateKey = data.lastActiveDateKey || (data.profile?.lastOpenedAt ? getCurrentDateKey(new Date(data.profile.lastOpenedAt)) : undefined);
 
       // If date hasn't changed and not forced, nothing to reset
       if (previousDateKey === currentDateKey && !force) {
@@ -1946,10 +1982,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (!nextDateKey) {
         const d = new Date();
         d.setDate(d.getDate() + 1);
-        nextDateKey = d.toISOString().slice(0, 10);
+        nextDateKey = getCurrentDateKey(d);
       }
 
-      const simulatedRefDate = new Date(`${nextDateKey}T10:00:00Z`);
+      const simulatedRefDate = new Date(`${nextDateKey}T12:00:00`);
       const result = checkAndApplyDailyMicroHabitRollover(data, simulatedRefDate, true);
 
       await repository.save(result.updatedData);
@@ -2021,7 +2057,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       dateKey?: string;
     }) => {
       if (!data) return;
-      const todayStr = checkIn.dateKey || new Date().toISOString().slice(0, 10);
+      const todayStr = checkIn.dateKey || getCurrentDateKey();
       const existingCheckIns = data.checkIns || [];
       const existingIndex = existingCheckIns.findIndex((c) => c.dateKey === todayStr);
 
@@ -2056,6 +2092,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       let newTransactions = data.transactions || [];
       if (isFirstToday) {
+        const rewardAmount = getDailyRewardAmount(newTransactions, 50, new Date(now));
         soundSynthesizer.playSuccessChord();
         triggerMissionConfetti();
         const checkInTx: WalletTransaction = {
@@ -2063,13 +2100,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           walletId: 'wallet-demo',
           userId: data.profile.id,
           kind: 'check_in_reward',
-          amount: 50,
-          dayKey: todayStr,
+          amount: rewardAmount,
+          dayKey: now.slice(0, 10),
           memo: t('Daily Check-in (Focus: {focus}/10, Energy: {energy}/10, Mood: {mood}/10)', { focus: checkIn.focus, energy: checkIn.energy, mood: checkIn.mood }),
           createdAt: now,
         };
-        newTransactions = [checkInTx, ...newTransactions];
-        showToast(t('Daily check-in recorded. +D$50'), 'success');
+        if (rewardAmount > 0) newTransactions = [checkInTx, ...newTransactions];
+        showToast(rewardAmount === 50 ? t('Daily check-in recorded. +D$50') : t('Saved.'), 'success');
       } else {
         soundSynthesizer.playTapChime();
         showToast(t('Daily Check-in updated.'), 'info');
@@ -2132,10 +2169,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const updateProfile = useCallback(
     async (profileData: Partial<Profile>) => {
       if (!data) return;
-      if (profileData.theme) applyTheme(profileData.theme);
-      if (profileData.soundMuted !== undefined) {
-        soundSynthesizer.setMuted(profileData.soundMuted);
-      }
       const updated: UserData = {
         ...data,
         profile: {
@@ -2144,6 +2177,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         },
       };
       await repository.save(updated);
+      if (updated.profile.theme) applyTheme(updated.profile.theme);
+      soundSynthesizer.setMuted(!!updated.profile.soundMuted);
       setData(updated);
       showToast(t('Profile updated.'), 'success');
     },
@@ -2154,10 +2189,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (!data) return;
     const currentMuted = !!data.profile.soundMuted;
     const nextMuted = !currentMuted;
-    soundSynthesizer.setMuted(nextMuted);
-    if (!nextMuted) {
-      soundSynthesizer.playTapChime();
-    }
 
     const updated: UserData = {
       ...data,
@@ -2167,6 +2198,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       },
     };
     await repository.save(updated);
+    soundSynthesizer.setMuted(!!updated.profile.soundMuted);
+    if (!updated.profile.soundMuted) soundSynthesizer.playTapChime();
     setData(updated);
     showToast(
       nextMuted ? t('UI Sound Effects Muted') : t('UI Sound Effects Active'),
@@ -2178,10 +2211,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     async (muted: boolean) => {
       if (!data) return;
       if (data.profile.soundMuted === muted) return;
-      soundSynthesizer.setMuted(muted);
-      if (!muted) {
-        soundSynthesizer.playTapChime();
-      }
 
       const updated: UserData = {
         ...data,
@@ -2191,6 +2220,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         },
       };
       await repository.save(updated);
+      soundSynthesizer.setMuted(!!updated.profile.soundMuted);
+      if (!updated.profile.soundMuted) soundSynthesizer.playTapChime();
       setData(updated);
       showToast(
         muted ? t('UI Sound Effects Muted') : t('UI Sound Effects Active'),
@@ -2263,7 +2294,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const currentTheme = resolveTheme(data.profile.theme || 'light');
     const newTheme: 'light' | 'dark' = currentTheme === 'dark' ? 'light' : 'dark';
     soundSynthesizer.playTapChime();
-    applyTheme(newTheme);
 
     const updated: UserData = {
       ...data,
@@ -2273,6 +2303,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       },
     };
     await repository.save(updated);
+    applyTheme(updated.profile.theme || 'light');
     setData(updated);
     showToast(
       newTheme === 'dark'
@@ -2287,7 +2318,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (!data) return;
       if (data.profile.theme === newTheme) return;
       soundSynthesizer.playTapChime();
-      applyTheme(newTheme);
 
       const updated: UserData = {
         ...data,
@@ -2297,6 +2327,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         },
       };
       await repository.save(updated);
+      applyTheme(updated.profile.theme || 'light');
       setData(updated);
     },
     [data]
@@ -2370,7 +2401,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // device must stop receiving server push for the old profile.
   const clearSideStores = useCallback(async () => {
     await disablePush().catch(() => undefined);
-    for (const key of [COURSE_PROGRESS_STORAGE_KEY, 'oda_course_selection_v1', 'oda_saved_sourced_quotes_v1']) {
+    for (const key of ['oda_course_selection_v1', 'oda_saved_sourced_quotes_v1']) {
       try { localStorage.removeItem(key); } catch { /* storage unavailable */ }
     }
     clearNotebookDrafts();
@@ -2421,7 +2452,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (remote) {
         const accepted = await new Promise<boolean>(resolve => setCloudRestoreReview({ record: remote, resolve }));
         if (!accepted) return true;
-        if (!await repository.replaceAll(remote, () => cloudSync.canApplyRemote(remote))) {
+        if (!await repository.replaceAll(remote, originalRecord => cloudSync.canApplyRemote(remote, originalRecord))) {
           showToast(backupCopy(getLocale()).cloudChanged, 'info');
           return true;
         }

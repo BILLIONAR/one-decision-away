@@ -7,6 +7,7 @@ import { getInitialDemoState } from '../src/services/repository.ts';
 import { coursesFor } from '../src/data/courses.ts';
 import { courseLearningCopy } from '../src/data/courseLearningCopy.ts';
 import { practiceGuideFor } from '../src/data/coursePracticeContent.ts';
+import { patchPersonalRecordFixture } from './qa-personal-record-fixtures.mjs';
 
 const base = process.env.ODA_QA_URL || 'http://localhost:3000';
 const out = process.env.ODA_COURSE_QA_OUT || 'artifacts/learning';
@@ -177,11 +178,9 @@ try {
       await page.locator('.oda-course-row .oda-course-photo-fallback').first().waitFor();
       assert.ok(await page.locator('.oda-course-row').first().locator('.oda-course-art').isVisible());
       pass('blocked photographs fall back to the original ODA artwork');
-      await page.evaluate(key => {
-        const stored = JSON.parse(localStorage.getItem(key));
-        stored.profile.theme = 'dark'; localStorage.setItem(key, JSON.stringify(stored));
-      }, key);
+      await patchPersonalRecordFixture(page, [{ path: ['profile', 'theme'], value: 'dark' }]);
       await page.reload(); await ready(page);
+      assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
       await layout(page, 'catalog dark');
       await screenshot(page, 'catalog-dark-top', false);
       await page.locator('#course-search').fill(course.title);

@@ -27,7 +27,10 @@ export function CoursePracticeStudio({ course, locale, experiments, completed, o
   const reviewDue = isCourseReviewDue(experiment);
   const outcomeLabels = { tried: copy.tried, adapted: copy.adapted, paused: copy.paused };
   const update = (patch: Parameters<typeof updateCourseExperiment>[2]) => onUpdate(current => updateCourseExperiment(current, course.id, patch));
-  const updatePlan = (field: 'cue' | 'action' | 'fallback' | 'evidence', value: string) => update({ [field]: value, reviewOn: experiment.reviewOn ?? practiceDateAfter(7) });
+  const updatePlan = (field: 'cue' | 'action' | 'fallback' | 'evidence', value: string) => onUpdate(current => {
+    const latest = getCourseExperiment(current, course.id);
+    return updateCourseExperiment(current, course.id, { [field]: value, reviewOn: latest.reviewOn ?? practiceDateAfter(7) });
+  });
   const formatDate = (value: string) => new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(`${value}T12:00:00`));
   const download = () => {
     const body = coursePracticeText(course.title, experiment, { cue: copy.cue, action: copy.action, fallback: copy.fallback, evidence: copy.evidence, review: copy.reviewDate, attempts: copy.attempts, recall: copy.recall, nextAction: copy.nextAction, outcomes: outcomeLabels });

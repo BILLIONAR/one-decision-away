@@ -86,7 +86,7 @@ for (const [name, mutate] of mutations) test(`a reviewed cloud restore is checke
   const release = deferred<void>();
   const lock = queueDataWrite(async () => { held.resolve(); await release.promise; });
   await held.promise;
-  const replacement = new LocalDemoRepository().replaceAll(reviewed, () => cloudSync.canApplyRemote(reviewed));
+  const replacement = new LocalDemoRepository().replaceAll(reviewed, originalRecord => cloudSync.canApplyRemote(reviewed, originalRecord));
   await mutate();
   const previous = new Map(storage.values);
   release.resolve(); await lock;
@@ -101,10 +101,10 @@ test('an unchanged reviewed cloud record commits once and records its scoped syn
   const pending = cloudSync.pullIfNewer(fixture.local);
   await fixture.started.promise; fixture.respond();
   const reviewed = (await pending)!;
-  assert.equal(await new LocalDemoRepository().replaceAll(reviewed, () => cloudSync.canApplyRemote(reviewed)), true);
+  assert.equal(await new LocalDemoRepository().replaceAll(reviewed, originalRecord => cloudSync.canApplyRemote(reviewed, originalRecord)), true);
   cloudSync.markRemoteApplied(reviewed);
   assert.equal(JSON.parse(storage.getItem(APP_DATA_STORAGE_KEY)!).profile.displayName, fixture.remote.profile.displayName);
-  assert.equal(storage.getItem('oda_cloud_last_sync'), '2030-01-01T00:00:00Z');
+  assert.equal(cloudSync.getState().lastSyncAt, '2030-01-01T00:00:00Z');
 });
 
 test('manual sync cannot fall back to uploading a captured previous-account snapshot', async () => {

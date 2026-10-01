@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { CheckCircle2, LogOut, Mail, RefreshCw } from 'lucide-react';
 import { useApp } from '../store/useApp';
-import { useT, formatDate } from '../i18n';
+import { useT, formatDate, getLocale } from '../i18n';
 import { cloudSync } from '../services/cloudSync';
 import { useCloudState } from '../services/useCloudState';
 import { disablePush } from '../services/pushNotifications';
@@ -9,6 +9,7 @@ import { keptDecisions } from '../services/momentum';
 import { EvidenceTree } from '../components/momentum/EvidenceTree';
 import { Modal } from '../components/ui';
 import { isNative } from '../services/native';
+import { backupCopy } from '../data/backupCopy';
 
 /**
  * Optional membership. ODA works fully without an account (everything stays
@@ -50,23 +51,36 @@ export const Account: React.FC = () => {
   };
 
   const syncNow = async () => {
+    const current = cloudSync.currentOperationGuard();
     const pulled = await syncFromCloud();
     if (!pulled) {
+      if (!current()) { showToast(backupCopy(getLocale()).cloudChanged, 'info'); return; }
       const ok = await cloudSync.push(data);
+      if (!current()) { showToast(backupCopy(getLocale()).cloudChanged, 'info'); return; }
       showToast(ok ? t('Backed up to cloud.') : t('Cloud backup failed — check your connection.'), ok ? 'success' : 'error');
     }
   };
 
   const signOut = async () => {
+    const current = cloudSync.currentAccountGuard();
     try { await disablePush(); } catch { /* signing out must never be blocked by notifications */ }
+    if (!current()) { showToast(backupCopy(getLocale()).cloudChanged, 'info'); return; }
     await cloudSync.signOut();
+    if (cloudSync.getState().session) { showToast(backupCopy(getLocale()).cloudChanged, 'info'); return; }
     showToast(t('Signed out. Your data stays on this device.'), 'success');
   };
 
   const deleteAccount = async () => {
     if (deleting) return;
+    const current = cloudSync.currentAccountGuard();
     setDeleting(true);
     try { await disablePush(); } catch { /* deletion must not wait on notifications */ }
+    if (!current()) {
+      setDeleting(false);
+      setConfirmDelete(false);
+      showToast(backupCopy(getLocale()).cloudChanged, 'info');
+      return;
+    }
     const res = await cloudSync.deleteAccount();
     setDeleting(false);
     setConfirmDelete(false);

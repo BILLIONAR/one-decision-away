@@ -93,10 +93,13 @@ export const Today: React.FC = () => {
     if (!firstPlanCandidate || !firstWeek) return;
     const markOpened = () => { try { localStorage.setItem('oda_plan_prompted', firstPlanCandidate.id); } catch { /* The offer can still open without storage. */ } };
     if (plan.open) { markOpened(); return; }
+    // Defer the automatic sheet while another task is open. Closing that task
+    // rechecks the offer, so it is never consumed by an overlapping dialog.
+    if (completingMission || startOpen || habitsModalOpen) return;
     try { if (localStorage.getItem('oda_plan_prompted') === firstPlanCandidate.id) return; } catch { /* Optional reminder memory. */ }
     const timer = window.setTimeout(() => { markOpened(); setPlan({ open: true, justSet: true }); }, 700);
     return () => window.clearTimeout(timer);
-  }, [firstPlanCandidate?.id, firstWeek, plan.open]);
+  }, [firstPlanCandidate?.id, firstWeek, plan.open, completingMission?.id, startOpen, habitsModalOpen]);
 
   if (!data) return null;
 

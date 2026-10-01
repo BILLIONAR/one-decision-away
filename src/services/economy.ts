@@ -18,12 +18,29 @@ export const ECONOMY_CONSTANTS = {
 } as const;
 
 /** Notebook uses local days for writing, but shares the existing UTC economy ceiling. */
-export function getNotebookRewardAmount(transactions: WalletTransaction[], now = new Date()): number {
+export function getDailyRewardAmount(transactions: WalletTransaction[], requested: number, now = new Date()): number {
   const economyDay = now.toISOString().slice(0, 10);
   const earned = transactions
     .filter((tx) => tx.dayKey === economyDay && tx.amount > 0 && tx.kind !== 'welcome_grant')
     .reduce((total, tx) => total + tx.amount, 0);
-  return Math.min(ECONOMY_CONSTANTS.NOTEBOOK_DAILY_REWARD, Math.max(0, ECONOMY_CONSTANTS.DAILY_REWARD_CAP - earned));
+  return Math.min(requested, Math.max(0, ECONOMY_CONSTANTS.DAILY_REWARD_CAP - earned));
+}
+
+export function getNotebookRewardAmount(transactions: WalletTransaction[], now = new Date()): number {
+  return getDailyRewardAmount(transactions, ECONOMY_CONSTANTS.NOTEBOOK_DAILY_REWARD, now);
+}
+
+export function microHabitRewardId(habitId: string, localDay: string): string {
+  return `tx-habit:${encodeURIComponent(habitId)}:${localDay}`;
+}
+
+/** Undo keeps the reward; toggling again cannot earn twice in either calendar. */
+export function getMicroHabitRewardAmount(transactions: WalletTransaction[], habitId: string, localDay: string, now = new Date()): number {
+  const economyDay = now.toISOString().slice(0, 10);
+  const id = microHabitRewardId(habitId, localDay);
+  if (transactions.some(tx => tx.kind === 'micro_habit_reward' && (tx.id === id
+    || (tx.refType === 'micro_habit' && tx.refId === habitId && tx.dayKey === economyDay)))) return 0;
+  return getDailyRewardAmount(transactions, 25, now);
 }
 
 export function getBaseReward(type: MissionType, difficulty: MissionDifficulty, isOneDecision: boolean): number {

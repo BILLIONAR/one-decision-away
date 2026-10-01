@@ -7,6 +7,7 @@ import { createAICoach, getCoachAvailability, setCoachFocus, MAX_COACH_MESSAGE_L
 import { INTENTS } from '../data/starterDecisions';
 import { useApp } from '../store/useApp';
 import { useCloudState } from '../services/useCloudState';
+import { cloudSync } from '../services/cloudSync';
 import {
   CloudCoachError, buildCoachContext, getCloudCoachStatus, readContextConsent, sendToCloudCoach, writeContextConsent,
   type CloudTier,
@@ -74,15 +75,28 @@ export const Coach: React.FC = () => {
   }, [engine, speechSupported]);
 
   useEffect(() => {
+    // A shared browser must not send or display a previous member's conversation.
+    controller.current?.abort();
+    recognition.current?.abort();
+    if (speechSupported) window.speechSynthesis.cancel();
+    busy.current = false;
+    setCloudBusy(false);
+    setPhase(engine.isReady ? 'ready' : 'idle');
+    setProgress(0);
+    setListening(false);
+    setMessages([]);
+    setDraft('');
+    setError('');
+    setShareContext(readContextConsent());
     setCloudStatus(null);
     setCloudChecked(false);
     if (!cloudReady) return;
     const abort = new AbortController();
     getCloudCoachStatus('en', abort.signal)
-      .then(result => { setCloudStatus({ remaining: result.remaining, limit: result.limit, tier: result.tier }); setCloudChecked(true); })
+      .then(result => { if (!abort.signal.aborted) { setCloudStatus({ remaining: result.remaining, limit: result.limit, tier: result.tier }); setCloudChecked(true); } })
       .catch(err => { if ((err as Error).name !== 'AbortError') setCloudChecked(true); }); // not deployed or offline: the on-device coach stays
     return () => abort.abort();
-  }, [cloudReady, cloudUserId]);
+  }, [cloudReady, cloudUserId, cloud.scopeRevision, speechSupported, engine]);
 
   useEffect(() => {
     if (followOutput.current && log.current) log.current.scrollTop = log.current.scrollHeight;
@@ -94,14 +108,14 @@ export const Coach: React.FC = () => {
     setError(''); setPhase('loading'); setProgress(0);
     const abort = new AbortController(); controller.current = abort;
     try {
-      await engine.initialize(p => { if (mounted.current) setProgress(Math.min(100, Math.round(p.progress * 100))); }, abort.signal);
-      if (mounted.current) setPhase('ready');
+      await engine.initialize(p => { if (mounted.current && controller.current === abort && !abort.signal.aborted) setProgress(Math.min(100, Math.round(p.progress * 100))); }, abort.signal);
+      if (mounted.current && controller.current === abort && !abort.signal.aborted) setPhase('ready');
     } catch (err) {
-      if (mounted.current) {
+      if (mounted.current && controller.current === abort) {
         setPhase('idle');
         if ((err as Error).name !== 'AbortError') setError((err as Error).message);
       }
-    } finally { busy.current = false; }
+    } finally { if (controller.current === abort) busy.current = false; }
   }
 
   function speak(answer: string) {
@@ -114,6 +128,7 @@ export const Coach: React.FC = () => {
   }
 
   async function sendCloud(content: string) {
+    const current = cloudSync.currentAccountGuard();
     busy.current = true; setCloudBusy(true);
     const before = messages.filter(m => m.content.trim());
     const history: CoachMessage[] = [...before, { role: 'user', content }];
@@ -121,24 +136,27 @@ export const Coach: React.FC = () => {
     setMessages([...history, { role: 'assistant', content: '' }]);
     const abort = new AbortController(); controller.current = abort;
     try {
-      const context = shareContext && cloudStatus?.tier === 'coach' ? buildCoachContext(data, t) : null;
+      const context = shareContext && readContextConsent() && cloudStatus?.tier === 'coach' ? buildCoachContext(data, t) : null;
       const result = await sendToCloudCoach(history, locale, context, abort.signal);
-      if (!mounted.current || abort.signal.aborted) return;
+      if (!mounted.current || !current() || abort.signal.aborted) return;
       setCloudStatus({ remaining: result.remaining, limit: result.limit, tier: result.tier });
       const answer = result.reply?.trim() ?? '';
       if (!answer) { setMessages(before); setDraft(content); setError(c.emptyReply); return; }
       setMessages([...history, { role: 'assistant', content: answer }]);
       speak(answer);
     } catch (err) {
-      if (!mounted.current || (err as Error).name === 'AbortError') return;
+      if (!mounted.current || !current() || (err as Error).name === 'AbortError') return;
       setMessages(before); setDraft(content);
       if (err instanceof CloudCoachError) {
         if (err.kind === 'quota' && err.info) setCloudStatus({ remaining: 0, limit: err.info.limit, tier: err.info.tier });
         else setError(err.message);
       } else setError(t('The cloud coach could not answer just now. This message was not counted. Please try again in a moment.'));
     } finally {
-      busy.current = false;
-      if (mounted.current) { setCloudBusy(false); textarea.current?.focus(); }
+      // A cancelled previous-account request must not release a newer request's lock.
+      if (controller.current === abort) {
+        busy.current = false;
+        if (mounted.current) { setCloudBusy(false); textarea.current?.focus(); }
+      }
     }
   }
 
@@ -156,19 +174,21 @@ export const Coach: React.FC = () => {
     const abort = new AbortController(); controller.current = abort;
     try {
       const answer = await engine.stream(history, fullText => {
-        if (mounted.current) setMessages([...history, { role: 'assistant', content: fullText }]);
+        if (mounted.current && controller.current === abort && !abort.signal.aborted) setMessages([...history, { role: 'assistant', content: fullText }]);
       }, abort.signal);
-      if (mounted.current && !abort.signal.aborted) {
+      if (mounted.current && controller.current === abort && !abort.signal.aborted) {
         if (!answer.trim()) setError(c.emptyReply);
         speak(answer);
       }
     } catch (err) {
-      if (mounted.current && (err as Error).name !== 'AbortError') setError((err as Error).message);
+      if (mounted.current && controller.current === abort && (err as Error).name !== 'AbortError') setError((err as Error).message);
     } finally {
-      busy.current = false;
-      if (mounted.current) {
-        setMessages(current => current.filter(message => message.content.trim()));
-        setPhase(engine.isReady ? 'ready' : 'idle'); textarea.current?.focus();
+      if (controller.current === abort) {
+        busy.current = false;
+        if (mounted.current) {
+          setMessages(current => current.filter(message => message.content.trim()));
+          setPhase(engine.isReady ? 'ready' : 'idle'); textarea.current?.focus();
+        }
       }
     }
   }

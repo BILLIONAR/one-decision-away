@@ -9,9 +9,11 @@ import { UserData } from '../types/models';
 import { t } from '../i18n';
 import { createBackupSnapshot, prepareBackupRestore } from './backup';
 import { APP_DATA_STORAGE_KEY } from './storageKeys';
+import { REPLACEMENT_EPOCH_KEY } from './dataSnapshots';
 
 const CFG_KEY = 'oda_cloud_cfg';
 const LAST_SYNC_KEY = 'oda_cloud_last_sync';
+const LOCAL_SYNC_SCOPE_KEY = `${LAST_SYNC_KEY}:local_scope`;
 const PENDING_RESTORE_KEY = 'oda_cloud_pending_restore';
 const UNBOUND_RESTORE_KEY = `${PENDING_RESTORE_KEY}:unbound`;
 const TABLE = 'oda_user_data';
@@ -28,6 +30,7 @@ export interface CloudState {
   lastSyncAt: string | null;
   syncing: boolean;
   error: string | null;
+  scopeRevision: number;
 }
 
 class CloudSync {
@@ -53,15 +56,53 @@ class CloudSync {
     this.session = session;
   }
 
-  /** Keep an asynchronous user action bound to its original account and local snapshot. */
-  public currentOperationGuard(): () => boolean {
+  /** Token refreshes retain a scope; signing out, changing accounts or projects expires it. */
+  public currentAccountGuard(): () => boolean {
     const userId = this.session?.user.id;
     const projectUrl = this.config?.url;
     const client = this.client;
     const revision = this.scopeRevision;
-    const localRecord = localStorage.getItem(APP_DATA_STORAGE_KEY);
     return () => !!userId && !!projectUrl && this.session?.user.id === userId && this.config?.url === projectUrl
-      && this.client === client && this.scopeRevision === revision && localStorage.getItem(APP_DATA_STORAGE_KEY) === localRecord;
+      && this.client === client && this.scopeRevision === revision;
+  }
+
+  /** Keep an asynchronous user action bound to its original account and local snapshot. */
+  public currentOperationGuard(): () => boolean {
+    const current = this.currentAccountGuard();
+    const localRecord = localStorage.getItem(APP_DATA_STORAGE_KEY);
+    return () => current() && localStorage.getItem(APP_DATA_STORAGE_KEY) === localRecord;
+  }
+
+  private syncKey(projectUrl: string, userId: string): string {
+    return `${LAST_SYNC_KEY}:${encodeURIComponent(projectUrl)}:${userId}`;
+  }
+
+  private localEpoch(raw: string | null): string | null | undefined {
+    if (!raw) return undefined;
+    try {
+      const record = JSON.parse(raw);
+      if (!record || typeof record !== 'object' || Array.isArray(record)) return undefined;
+      const epoch = record[REPLACEMENT_EPOCH_KEY];
+      return epoch === undefined ? null : typeof epoch === 'string' ? epoch : undefined;
+    } catch { return undefined; }
+  }
+
+  private markLocalSyncScope(key: string, raw: string | null, updatedAt: string): void {
+    const epoch = this.localEpoch(raw);
+    if (epoch !== undefined) localStorage.setItem(LOCAL_SYNC_SCOPE_KEY, JSON.stringify({ key, epoch, updatedAt }));
+  }
+
+  private lastSyncAt(): string | null {
+    if (!this.config || !this.session) return null;
+    const key = this.syncKey(this.config.url, this.session.user.id);
+    // Returning to A after B synchronized cannot use A's historical timestamp
+    // as evidence that the current device document still belongs to A.
+    try {
+      const owner = JSON.parse(localStorage.getItem(LOCAL_SYNC_SCOPE_KEY) || 'null');
+      const epoch = this.localEpoch(localStorage.getItem(APP_DATA_STORAGE_KEY));
+      const updatedAt = localStorage.getItem(key);
+      return epoch !== undefined && owner?.key === key && owner.epoch === epoch && owner.updatedAt === updatedAt ? updatedAt : null;
+    } catch { return null; }
   }
 
   constructor() {
@@ -153,9 +194,10 @@ class CloudSync {
     return {
       configured: this.isConfigured(),
       session: this.session,
-      lastSyncAt: localStorage.getItem(LAST_SYNC_KEY),
+      lastSyncAt: this.lastSyncAt(),
       syncing: this.syncing,
       error: this.error,
+      scopeRevision: this.scopeRevision,
     };
   }
 
@@ -214,10 +256,11 @@ class CloudSync {
   }
 
   public async signOut() {
+    const current = this.currentAccountGuard();
     const client = await this.getClient();
-    if (!client) return;
+    if (!client || !current()) return;
     await client.auth.signOut();
-    if (this.client !== client) return;
+    if (!current()) return;
     this.setSession(null);
     this.emit();
   }
@@ -227,13 +270,20 @@ class CloudSync {
    * delete-account edge function, then signs out. Data on this device stays.
    */
   public async deleteAccount(): Promise<{ ok: boolean; message?: string }> {
+    const current = this.currentAccountGuard();
+    const session = this.session;
     const client = await this.getClient();
-    if (!client || !this.session) return { ok: false, message: t('You are not signed in.') };
+    if (!client || !session || !current()) return { ok: false, message: t('You are not signed in.') };
     if (this.pushTimer) window.clearTimeout(this.pushTimer);
     this.pushTimer = null;
-    const { error } = await client.functions.invoke('delete-account', { method: 'POST' });
+    const { error } = await client.functions.invoke('delete-account', {
+      method: 'POST', headers: { Authorization: `Bearer ${session.access_token}` },
+    });
     if (error) return { ok: false, message: t('We couldn’t delete your account. Check your connection and try again.') };
+    // The original account was deleted, but a newer connection belongs to its own member.
+    if (!current()) return { ok: true };
     try { await client.auth.signOut({ scope: 'local' }); } catch { /* the user no longer exists */ }
+    if (!current()) return { ok: true };
     this.setSession(null);
     this.emit();
     return { ok: true };
@@ -249,6 +299,7 @@ class CloudSync {
 
   public async push(data: UserData): Promise<boolean> {
     const snapshot = createBackupSnapshot(data);
+    const localRecord = localStorage.getItem(APP_DATA_STORAGE_KEY);
     // Capture account and restore identity now: an older queued upload cannot clear a newer import.
     const userId = this.session?.user.id;
     const projectUrl = this.config?.url;
@@ -258,19 +309,19 @@ class CloudSync {
     const restoreToken = localStorage.getItem(restoreScope);
     const run = async () => {
       if (!userId || !projectUrl || this.session?.user.id !== userId || this.config?.url !== projectUrl
-        || this.scopeRevision !== revision || this.client !== client) return false;
-      return this.pushSnapshot(snapshot, userId, projectUrl, revision, restoreScope, restoreToken);
+        || this.scopeRevision !== revision || this.client !== client || localStorage.getItem(APP_DATA_STORAGE_KEY) !== localRecord) return false;
+      return this.pushSnapshot(snapshot, userId, projectUrl, revision, restoreScope, restoreToken, localRecord);
     };
     const result = this.pushQueue.then(run, run);
     this.pushQueue = result;
     return result;
   }
 
-  private async pushSnapshot(data: UserData, userId: string, projectUrl: string, revision: number, restoreScope: string, restoreToken: string | null): Promise<boolean> {
+  private async pushSnapshot(data: UserData, userId: string, projectUrl: string, revision: number, restoreScope: string, restoreToken: string | null, localRecord: string | null): Promise<boolean> {
     const client = await this.getClient();
     const currentScope = () => this.client === client && this.session?.user.id === userId
       && this.config?.url === projectUrl && this.scopeRevision === revision;
-    if (!client || !currentScope()) return false;
+    if (!client || !currentScope() || localStorage.getItem(APP_DATA_STORAGE_KEY) !== localRecord) return false;
     this.syncing = true;
     this.error = null;
     this.emit();
@@ -280,7 +331,10 @@ class CloudSync {
         .upsert({ user_id: userId, data, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
       if (!currentScope()) return false;
       if (error) throw error;
-      localStorage.setItem(LAST_SYNC_KEY, new Date().toISOString());
+      const key = this.syncKey(projectUrl, userId);
+      const updatedAt = new Date().toISOString();
+      localStorage.setItem(key, updatedAt);
+      if (localStorage.getItem(APP_DATA_STORAGE_KEY) === localRecord) this.markLocalSyncScope(key, localRecord, updatedAt);
       if (restoreToken && localStorage.getItem(restoreScope) === restoreToken) localStorage.removeItem(restoreScope);
       return true;
     } catch (e) {
@@ -291,7 +345,7 @@ class CloudSync {
     }
   }
 
-  /** Returns remote data if it is newer than the local copy (by profile.lastOpenedAt / updated_at). */
+  /** Compare timestamps only within the account/project that synchronized them. */
   public async pullIfNewer(local: UserData | null): Promise<UserData | null> {
     const userId = this.session?.user.id;
     const projectUrl = this.config?.url;
@@ -316,7 +370,10 @@ class CloudSync {
       if (localStorage.getItem(restoreScope)) return null;
       const remote = data.data as UserData;
       const remoteTs = new Date(data.updated_at).getTime();
-      const localTs = local ? new Date(localStorage.getItem(LAST_SYNC_KEY) || local.profile.lastOpenedAt || 0).getTime() : 0;
+      // An unsynchronized device profile may belong to another account. Its opening
+      // date and a legacy global sync date cannot establish this account's freshness.
+      const synchronizedAt = this.lastSyncAt();
+      const localTs = local && synchronizedAt ? new Date(synchronizedAt).getTime() : 0;
       if (!local || remoteTs > localTs + 2000) {
         const restored = prepareBackupRestore(remote);
         this.pendingPulls.set(restored, { updatedAt: data.updated_at, userId, projectUrl, client, revision, restoreScope, localRecord });
@@ -330,12 +387,15 @@ class CloudSync {
   }
 
   /** Recheck inside the personal-data write lock, including after an open review or a queued commit. */
-  public canApplyRemote(data: UserData): boolean {
+  public canApplyRemote(data: UserData, originalRecord?: string | null): boolean {
     const pending = this.pendingPulls.get(data);
     if (!pending || pending.userId !== this.session?.user.id || pending.projectUrl !== this.config?.url
       || pending.client !== this.client || pending.revision !== this.scopeRevision) return false;
     try {
-      return !localStorage.getItem(pending.restoreScope) && localStorage.getItem(APP_DATA_STORAGE_KEY) === pending.localRecord;
+      // A queued replacement validates its original authoritative record again
+      // after the async commit, while its own projection already contains new data.
+      const localRecord = originalRecord === undefined ? localStorage.getItem(APP_DATA_STORAGE_KEY) : originalRecord;
+      return !localStorage.getItem(pending.restoreScope) && localRecord === pending.localRecord;
     } catch { return false; }
   }
 
@@ -345,7 +405,11 @@ class CloudSync {
     if (!pending || pending.userId !== this.session?.user.id || pending.projectUrl !== this.config?.url
       || pending.client !== this.client || pending.revision !== this.scopeRevision || localStorage.getItem(pending.restoreScope)
       || localStorage.getItem(APP_DATA_STORAGE_KEY) !== JSON.stringify(data)) return;
-    try { localStorage.setItem(LAST_SYNC_KEY, pending.updatedAt); } catch { /* The personal record is already committed. */ }
+    try {
+      const key = this.syncKey(pending.projectUrl, pending.userId);
+      localStorage.setItem(key, pending.updatedAt);
+      this.markLocalSyncScope(key, localStorage.getItem(APP_DATA_STORAGE_KEY), pending.updatedAt);
+    } catch { /* The personal record is already committed. */ }
     this.pendingPulls.delete(data);
     this.emit();
   }

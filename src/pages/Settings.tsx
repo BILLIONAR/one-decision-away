@@ -15,6 +15,7 @@ import { SUPPORT } from '../data/support';
 import { nativeCopy } from '../i18n/native';
 import { isNative } from '../services/native';
 import { nativePermission, requestNativePermission, showNativeReminderPreview } from '../services/nativeNotifications';
+import { DataSaveConflictError } from '../services/dataSnapshots';
 
 /* ----------------------------- Local primitives ----------------------------- */
 
@@ -177,15 +178,24 @@ export const Settings: React.FC = () => {
   const currentWisdom: SeasonalWisdom =
     seasonalWisdomPool[wisdomIndex % seasonalWisdomPool.length] || getDailyWisdomInsight(activeSeason?.id, wisdomIndex);
 
+  const reportSaveError = (error: unknown) => {
+    // Conflicts already refresh the shared record and display a localized toast.
+    if (!(error instanceof DataSaveConflictError)) {
+      showToast(error instanceof Error ? error.message : t('Something went wrong. Please try again.'), 'error');
+    }
+  };
+
   const handleSelectTheme = async (selectedTheme: 'light' | 'dark' | 'system') => {
     setCurrentThemeState(selectedTheme);
-    await setTheme(selectedTheme);
+    try { await setTheme(selectedTheme); }
+    catch (error) { setCurrentThemeState(data.profile.theme || 'light'); reportSaveError(error); }
   };
 
   const handleToggleSound = async () => {
     const nextMuted = !soundMuted;
     setSoundMutedState(nextMuted);
-    await setSoundMuted(nextMuted);
+    try { await setSoundMuted(nextMuted); }
+    catch (error) { setSoundMutedState(data.profile.soundMuted ?? false); reportSaveError(error); }
   };
 
   const requireSound = () => {
@@ -216,6 +226,7 @@ export const Settings: React.FC = () => {
 
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
+    try {
     await updateProfile({
       displayName: displayName.trim(),
       email: email.trim(),
@@ -229,6 +240,7 @@ export const Settings: React.FC = () => {
     });
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 2500);
+    } catch (error) { setIsSaved(false); reportSaveError(error); }
   };
 
   const handleShuffleWisdom = () => {

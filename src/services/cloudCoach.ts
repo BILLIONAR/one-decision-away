@@ -84,14 +84,27 @@ export function buildCoachContext(data: UserData | null | undefined, tr: (s: str
 }
 
 // ---------------------------------------------------------------------------
-// Consent to share context (coach level only). Local to this device, off by default.
+// Consent to share context (coach level only). Local to this account/project on
+// this device, off by default; ambiguous legacy device-wide consent is ignored.
 // ---------------------------------------------------------------------------
 const CONSENT_KEY = 'oda_coach_share_context';
+function consentKey(): string | null {
+  const config = cloudSync.getConfig();
+  const session = cloudSync.getState().session;
+  return config && session ? `${CONSENT_KEY}:${encodeURIComponent(config.url)}:${session.user.id}` : null;
+}
 export function readContextConsent(): boolean {
-  try { return localStorage.getItem(CONSENT_KEY) === '1'; } catch { return false; }
+  try {
+    const key = consentKey();
+    return !!key && localStorage.getItem(key) === '1';
+  } catch { return false; }
 }
 export function writeContextConsent(on: boolean): void {
-  try { if (on) localStorage.setItem(CONSENT_KEY, '1'); else localStorage.removeItem(CONSENT_KEY); } catch { /* not saved */ }
+  try {
+    const key = consentKey();
+    if (!key) return;
+    if (on) localStorage.setItem(key, '1'); else localStorage.removeItem(key);
+  } catch { /* not saved */ }
 }
 
 // ---------------------------------------------------------------------------
@@ -106,30 +119,38 @@ async function call(body: ReturnType<typeof buildRequestBody>, signal?: AbortSig
   const session = cloudSync.getState().session;
   if (!config) throw new CloudCoachError('unavailable', t('The cloud coach is not available right now.'));
   if (!session) throw new CloudCoachError('not-signed-in', t('Please sign in again to use the cloud coach.'));
+  const current = cloudSync.currentAccountGuard();
   // Stop button and a 45 s timeout share one signal (AbortSignal.any is missing on older iPhones).
   const link = new AbortController();
   const timer = setTimeout(() => link.abort(), 45_000);
   const onAbort = () => link.abort();
+  const unsubscribe = cloudSync.subscribe(() => { if (!current()) link.abort(); });
   signal?.addEventListener('abort', onAbort);
   if (signal?.aborted) link.abort();
-  let response: Response;
   try {
-    response = await fetch(`${config.url.replace(/\/$/, '')}/functions/v1/coach-chat`, {
-      method: 'POST',
-      headers: { apikey: config.anonKey, Authorization: `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-      signal: link.signal,
-    });
-  } catch (error) {
-    if ((error as Error).name === 'AbortError' && signal?.aborted) throw error;
-    throw new CloudCoachError('offline', t('You seem to be offline. The tools above still work without a connection.'));
+    let response: Response;
+    try {
+      response = await fetch(`${config.url.replace(/\/$/, '')}/functions/v1/coach-chat`, {
+        method: 'POST',
+        headers: { apikey: config.anonKey, Authorization: `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+        signal: link.signal,
+      });
+    } catch (error) {
+      if (!current()) throw new DOMException('The cloud account changed.', 'AbortError');
+      if ((error as Error).name === 'AbortError' && signal?.aborted) throw error;
+      throw new CloudCoachError('offline', t('You seem to be offline. The tools above still work without a connection.'));
+    }
+    let payload: unknown = null;
+    try { payload = await response.json(); } catch { /* not JSON, or the download was cancelled */ }
+    if (!current() || signal?.aborted) throw new DOMException('The cloud account changed or the request was cancelled.', 'AbortError');
+    if (link.signal.aborted) throw new CloudCoachError('offline', t('You seem to be offline. The tools above still work without a connection.'));
+    return interpretResponse(response.status, payload);
   } finally {
     clearTimeout(timer);
     signal?.removeEventListener('abort', onAbort);
+    unsubscribe();
   }
-  let payload: unknown = null;
-  try { payload = await response.json(); } catch { /* not JSON */ }
-  return interpretResponse(response.status, payload);
 }
 
 /** Sends the conversation and returns the reply with what is left this month. */

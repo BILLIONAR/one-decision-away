@@ -3,9 +3,10 @@ import assert from 'node:assert/strict';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { chromium } from 'playwright';
 import { getInitialDemoState } from '../src/services/repository.ts';
+import { readPersonalRecordFixture } from './qa-personal-record-fixtures.mjs';
 const root = process.env.ODA_QA_URL || 'http://localhost:4173';
 const project = process.env.ODA_PROJECT_QA_URL || 'http://localhost:4174/one-decision-away/';
-const out = 'artifacts/platform';
+const out = process.env.ODA_PLATFORM_QA_OUT || 'artifacts/platform';
 mkdirSync(out, { recursive: true });
 const report = { at: new Date().toISOString(), checks: [], errors: [] };
 const pass = message => { report.checks.push(message); console.log(`PASS ${message}`); };
@@ -27,6 +28,8 @@ try {
   await page.goto(`${root}/app`); await page.locator('#set-one-decision').waitFor();
   await page.locator('#today-decision-input').fill('Read the next two pages');
   await page.getByRole('button', { name: 'Set decision', exact: true }).click();
+  // Wait for acknowledged persistence, rather than reload an in-flight save.
+  await page.getByText('Read the next two pages', { exact: true }).waitFor();
   await page.keyboard.press('Escape');
   await page.reload(); await page.locator('#set-one-decision').waitFor();
   assert.ok(await page.getByText('Read the next two pages', { exact: true }).isVisible());
@@ -35,6 +38,8 @@ try {
   assert.equal(await page.locator('.oda-course-row').count(), 18);
   await page.locator('.oda-course-row').first().click(); await page.locator('#course-reflection').waitFor();
   await page.locator('#course-reflection').fill('My first step can stay small.');
+  const savedCourse = await readPersonalRecordFixture(page);
+  assert.ok(Object.values(savedCourse.courseProgress.lessons).some(lesson => lesson.reflection === 'My first step can stay small.'));
   await page.reload(); await page.locator('#course-reflection').waitFor();
   assert.equal(await page.locator('#course-reflection').inputValue(), 'My first step can stay small.');
   pass('previously visited course content and saved reflection work offline');
@@ -55,7 +60,7 @@ try {
   await context.close();
 
   const projectContext = await browser.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: 'block', reducedMotion: 'reduce' });
-  await projectContext.addInitScript(([key, seed]) => { localStorage.setItem(key, JSON.stringify(seed)); localStorage.setItem('oda_locale', 'en'); }, [key, seed]);
+  await projectContext.addInitScript(([key, seed]) => { if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify(seed)); localStorage.setItem('oda_locale', 'en'); }, [key, seed]);
   const nested = await projectContext.newPage(); nested.on('pageerror', error => report.errors.push(error.message));
   await nested.goto(`${project}#/app/courses`); await nested.locator('#course-search').waitFor();
   assert.equal(await nested.locator('.oda-course-row').count(), 18);

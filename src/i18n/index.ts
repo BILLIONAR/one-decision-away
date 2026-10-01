@@ -182,7 +182,17 @@ export function formatNumber(value: number, options?: Intl.NumberFormatOptions):
 /** Locale-aware date formatting. */
 export function formatDate(value: string | number | Date, options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' }): string {
   try {
-    return new Intl.DateTimeFormat(getSpeechLang(), options).format(new Date(value));
+    // A saved practice date is a calendar day; ISO timestamp strings are instants.
+    // Parsing a bare day through Date would shift it to yesterday west of UTC.
+    let date: Date;
+    if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+      date = new Date(`${value}T12:00:00`);
+      const parsedDay = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+      if (parsedDay !== value) return value;
+    } else {
+      date = new Date(value);
+    }
+    return new Intl.DateTimeFormat(getSpeechLang(), options).format(date);
   } catch {
     return String(value);
   }

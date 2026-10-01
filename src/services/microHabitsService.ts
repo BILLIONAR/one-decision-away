@@ -7,20 +7,21 @@
  */
 
 import { UserData, MicroHabit } from '../types/models';
+import { localDayKey } from './momentum';
 
 /**
- * Returns a standardized YYYY-MM-DD date key in ISO representation.
+ * Returns the user's local calendar date, shared with Today and the notebook.
  */
 export function getCurrentDateKey(date = new Date()): string {
-  return date.toISOString().slice(0, 10);
+  return localDayKey(date);
 }
 
 /**
  * Returns the date key for the day prior to the reference date.
  */
 export function getYesterdayDateKey(date = new Date()): string {
-  const yesterday = new Date(date.getTime() - 86400000);
-  return yesterday.toISOString().slice(0, 10);
+  const yesterday = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 12);
+  return getCurrentDateKey(yesterday);
 }
 
 /**
@@ -47,13 +48,13 @@ export function calculateMicroHabitStreak(
   // Count backwards starting from today (if completed today) or yesterday
   let streak = 0;
   const startFromToday = uniqueDays.has(todayStr);
-  let checkDate = new Date(startFromToday ? referenceDate : new Date(referenceDate.getTime() - 86400000));
+  const checkDate = new Date(referenceDate.getFullYear(), referenceDate.getMonth(), referenceDate.getDate() - (startFromToday ? 0 : 1), 12);
 
   for (let i = 0; i < 365; i++) {
-    const key = checkDate.toISOString().slice(0, 10);
+    const key = getCurrentDateKey(checkDate);
     if (uniqueDays.has(key)) {
       streak++;
-      checkDate = new Date(checkDate.getTime() - 86400000);
+      checkDate.setDate(checkDate.getDate() - 1);
     } else {
       break;
     }
@@ -134,7 +135,7 @@ export function checkAndApplyDailyMicroHabitRollover(
   forceCheck = false
 ): DailyMicroHabitRolloverResult {
   const currentDateKey = getCurrentDateKey(referenceDate);
-  const previousDateKey = data.lastActiveDateKey || data.profile?.lastOpenedAt?.slice(0, 10);
+  const previousDateKey = data.lastActiveDateKey || (data.profile?.lastOpenedAt ? getCurrentDateKey(new Date(data.profile.lastOpenedAt)) : undefined);
 
   // If this is the initial load with no recorded dateKey, record current dateKey and validate streaks
   if (!previousDateKey) {

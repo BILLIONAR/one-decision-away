@@ -4,6 +4,7 @@ import { mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 import { courseCatalogFor } from '../src/data/courseCatalog.ts';
+import { patchPersonalRecordFixture } from './qa-personal-record-fixtures.mjs';
 
 const BASE = process.env.ODA_QA_URL || 'http://localhost:3000';
 const OUT = process.env.ODA_QA_OUT || 'artifacts/qa';
@@ -186,12 +187,13 @@ try {
   await page.waitForTimeout(250);
   assert.equal((await data(page)).courseProgress.experiments.procrastination.attempts.length, 1);
   check('confirmed backup restore retains applied course work');
-  const storage = await context.storageState();
+  const storage = await context.storageState({ indexedDB: true });
   await context.close();
 
   const { page: recovery, context: recoveryContext } = await createPage({ storageState: storage }); activePage = recovery;
   await recovery.goto(`${BASE}/app/support`);
-  await recovery.evaluate(key => { const saved = JSON.parse(localStorage.getItem(key)); saved.lifeScores = [{}, {}]; localStorage.setItem(key, JSON.stringify(saved)); }, APP_KEY);
+  await stable(recovery);
+  await patchPersonalRecordFixture(recovery, [{ path: ['lifeScores'], value: [{}, {}] }]);
   await recovery.goto(`${BASE}/app/me`);
   await recovery.getByRole('button', { name: 'Download a recovery copy', exact: true }).waitFor();
   const retained = await data(recovery);
@@ -206,7 +208,7 @@ try {
   await recovery.locator('h1').first().waitFor();
   assert.equal(await recovery.getByRole('button', { name: 'Download a recovery copy', exact: true }).count(), 0);
   check('unexpected legacy rendering errors preserve data, offer recovery download and reach support');
-  await recovery.evaluate(key => { const saved = JSON.parse(localStorage.getItem(key)); saved.missions = {}; localStorage.setItem(key, JSON.stringify(saved)); }, APP_KEY);
+  await patchPersonalRecordFixture(recovery, [{ path: ['missions'], value: {} }]);
   const providerRecord = await data(recovery);
   await recovery.goto(`${BASE}/app`);
   await recovery.getByRole('button', { name: 'Download a recovery copy', exact: true }).waitFor();

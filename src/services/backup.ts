@@ -1,6 +1,7 @@
 import type { UserData } from '../types/models';
 import { normalizeNotebook } from './notebook';
 import { normalizeCourseProgress, readCourseProgress, type CourseProgress } from './courseProgress';
+import { isPracticeDate } from './courseLearning';
 
 type RecordValue = Record<string, unknown>;
 const isRecord = (value: unknown): value is RecordValue => typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -31,6 +32,14 @@ function fields(value: RecordValue, path: string, keys: string[], kind: 'string'
 
 function optionalFields(value: RecordValue, path: string, keys: string[], kind: 'string' | 'number' | 'boolean'): void {
   fields(value, path, keys.filter(key => own(value, key)), kind);
+}
+
+function calendarDay(value: unknown, path: string): void {
+  if (!isPracticeDate(value)) throw new InvalidBackupError(path);
+}
+
+function instant(value: unknown, path: string): void {
+  if (typeof value !== 'string' || !Number.isFinite(new Date(value).getTime())) throw new InvalidBackupError(path);
 }
 
 function marketItem(value: unknown, path: string): void {
@@ -73,17 +82,19 @@ function validateCourseProgress(value: unknown): void {
       const path = `courseProgress.experiments.${id}`;
       const experiment = record(raw, path);
       for (const key of ['cue', 'action', 'fallback', 'evidence']) if (own(experiment, key)) fields(experiment, path, [key], 'string');
-      if (own(experiment, 'reviewOn') && experiment.reviewOn !== null && typeof experiment.reviewOn !== 'string') throw new InvalidBackupError(`${path}.reviewOn`);
+      if (own(experiment, 'reviewOn') && experiment.reviewOn !== null) calendarDay(experiment.reviewOn, `${path}.reviewOn`);
       if (own(experiment, 'attempts')) {
         collection(experiment, 'attempts', true, (attempt, itemPath) => {
           fields(attempt, itemPath, ['id', 'date', 'outcome', 'note'], 'string');
+          // Import must not report success after normalization discards a private log.
+          calendarDay(attempt.date, `${path}.${itemPath}.date`);
           if (!['tried', 'adapted', 'paused'].includes(attempt.outcome as string)) throw new InvalidBackupError(`${path}.attempts.outcome`);
         });
       }
       if (own(experiment, 'review')) {
         const review = record(experiment.review, `${path}.review`);
         fields(review, `${path}.review`, ['recall', 'nextAction'], 'string');
-        if (review.reviewedOn !== null && typeof review.reviewedOn !== 'string') throw new InvalidBackupError(`${path}.review.reviewedOn`);
+        if (review.reviewedOn !== null) calendarDay(review.reviewedOn, `${path}.review.reviewedOn`);
       }
     }
   }
@@ -92,15 +103,31 @@ function validateCourseProgress(value: unknown): void {
 function validateNotebook(value: unknown): void {
   const notebook = record(value, 'notebook');
   if (notebook.version !== undefined && notebook.version !== 1) throw new InvalidBackupError('notebook.version');
-  collection(notebook, 'entries', false, (entry, path) => fields(entry, path, ['id', 'kind', 'title', 'content', 'dateKey', 'createdAt', 'updatedAt'], 'string'));
+  collection(notebook, 'entries', false, (entry, path) => {
+    fields(entry, path, ['id', 'kind', 'title', 'content', 'dateKey', 'createdAt', 'updatedAt'], 'string');
+    optionalFields(entry, path, ['mood', 'promptId'], 'string');
+    calendarDay(entry.dateKey, `${path}.dateKey`);
+    if (!['journal', 'scripting', 'future_letter'].includes(entry.kind as string)) throw new InvalidBackupError(`${path}.kind`);
+  });
   collection(notebook, 'affirmations', false, (entry, path) => fields(entry, path, ['id', 'text', 'createdAt', 'updatedAt'], 'string'));
-  collection(notebook, 'gratitudeDays', false, (entry, path) => { fields(entry, path, ['dateKey', 'createdAt', 'updatedAt'], 'string'); strings(entry.items, `${path}.items`); });
-  collection(notebook, 'activityDays', false, (entry, path) => { fields(entry, path, ['dateKey', 'firstRecordedAt', 'economyDayKey'], 'string'); fields(entry, path, ['rewardAmount'], 'number'); });
+  collection(notebook, 'gratitudeDays', false, (entry, path) => {
+    fields(entry, path, ['dateKey', 'createdAt', 'updatedAt'], 'string'); strings(entry.items, `${path}.items`);
+    calendarDay(entry.dateKey, `${path}.dateKey`);
+  });
+  collection(notebook, 'activityDays', false, (entry, path) => {
+    fields(entry, path, ['dateKey', 'firstRecordedAt', 'economyDayKey'], 'string'); fields(entry, path, ['rewardAmount'], 'number');
+    optionalFields(entry, path, ['transactionId'], 'string');
+    calendarDay(entry.dateKey, `${path}.dateKey`); calendarDay(entry.economyDayKey, `${path}.economyDayKey`);
+  });
   collection(notebook, 'practices369', false, (entry, path) => {
     fields(entry, path, ['id', 'intention', 'startDateKey', 'createdAt', 'updatedAt'], 'string');
+    optionalFields(entry, path, ['archivedAt'], 'string');
+    calendarDay(entry.startDateKey, `${path}.startDateKey`);
     const days = record(entry.days, `${path}.days`);
     for (const [key, raw] of Object.entries(days)) {
+      calendarDay(key, `${path}.days.${key}`);
       const day = record(raw, `${path}.days.${key}`);
+      optionalFields(day, `${path}.days.${key}`, ['updatedAt'], 'string');
       for (const slot of ['morning', 'midday', 'evening']) if (own(day, slot)) strings(day[slot], `${path}.days.${key}.${slot}`);
     }
   });
@@ -162,7 +189,10 @@ export function prepareBackupRestore(value: unknown, existingCourses: CourseProg
     optionalFields(entry, path, ['category', 'customCategoryId', 'goalId', 'description'], 'string'); optionalFields(entry, path, ['durationMinutes', 'streakCount', 'bestStreak'], 'number');
   });
   collection(backup, 'dailyPrimaryGoals', false, (entry, path) => { fields(entry, path, ['dateKey', 'title'], 'string'); fields(entry, path, ['completed'], 'boolean'); optionalFields(entry, path, ['id', 'notes', 'completedAt'], 'string'); });
-  collection(backup, 'dreamJournal', false, (entry, path) => { fields(entry, path, ['id', 'title', 'content', 'createdAt'], 'string'); optionalFields(entry, path, ['userId', 'photoDataUrl', 'dreamId', 'dreamName', 'mood', 'updatedAt'], 'string'); });
+  collection(backup, 'dreamJournal', false, (entry, path) => {
+    fields(entry, path, ['id', 'title', 'content', 'createdAt'], 'string'); optionalFields(entry, path, ['userId', 'photoDataUrl', 'dreamId', 'dreamName', 'mood', 'updatedAt'], 'string');
+    instant(entry.createdAt, `${path}.createdAt`);
+  });
   collection(backup, 'seasonProgress', true, (entry, path) => { fields(entry, path, ['seasonId'], 'string'); strings(entry.completedMissionIds, `${path}.completedMissionIds`); fields(entry, path, ['isCompleted'], 'boolean'); });
   collection(backup, 'weeklyReviews', false, (entry, path) => { fields(entry, path, ['weekKey', 'createdAt'], 'string'); fields(entry, path, ['kept'], 'number'); optionalFields(entry, path, ['helped', 'blocked', 'change'], 'string'); });
   collection(backup, 'checkIns', false, (entry, path) => { fields(entry, path, ['id', 'dateKey', 'createdAt'], 'string'); fields(entry, path, ['focus', 'energy', 'mood'], 'number'); optionalFields(entry, path, ['notes', 'updatedAt'], 'string'); });

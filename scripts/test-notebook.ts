@@ -286,8 +286,11 @@ test('failed storage saves reject, do not push cloud or claim rewards, and queue
   await repo.replaceAll(fixture());
   const before = storage.getItem('one_decision_away_app_data_v1');
   const schedulePush = cloudSync.schedulePush;
+  const currentAccountGuard = cloudSync.currentAccountGuard;
   let pushes = 0;
   cloudSync.schedulePush = () => { pushes += 1; };
+  // Exercise successful scheduling for a stable, synthetic signed-in scope.
+  cloudSync.currentAccountGuard = () => () => true;
   try {
     storage.failWrites = true;
     await assert.rejects(repo.mutateNotebook(source()), /could not be saved/);
@@ -302,6 +305,7 @@ test('failed storage saves reject, do not push cloud or claim rewards, and queue
   } finally {
     storage.failWrites = false;
     cloudSync.schedulePush = schedulePush;
+    cloudSync.currentAccountGuard = currentAccountGuard;
   }
 });
 

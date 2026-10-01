@@ -2,7 +2,8 @@ import type { CourseLesson, GuidedCourse } from '../data/courses';
 import { courseCatalogFor } from '../data/courseCatalog';
 import { normalizeCourseExperiments, type CourseExperiment } from './courseLearning';
 import { APP_DATA_STORAGE_KEY, COURSE_PROGRESS_STORAGE_KEY } from './storageKeys';
-import { queueDataWrite } from './dataWrites';
+import { afterDataWriteCommit, queueDataWrite } from './dataWrites';
+import { cloudSync } from './cloudSync';
 
 export { COURSE_PROGRESS_STORAGE_KEY } from './storageKeys';
 
@@ -105,18 +106,23 @@ export function parseCourseProgress(raw: string | null): CourseProgress {
   }
 }
 
+/** Mutation baselines must propagate read errors rather than invent an empty record. */
+function readStoredCourseProgress(fallback: CourseProgress = EMPTY_PROGRESS): CourseProgress {
+  const raw = globalThis.localStorage.getItem(APP_DATA_STORAGE_KEY);
+  if (raw) {
+    const stored: unknown = JSON.parse(raw);
+    if (isRecord(stored) && Object.prototype.hasOwnProperty.call(stored, 'courseProgress')) {
+      return normalizeCourseProgress(stored.courseProgress);
+    }
+  }
+  // Existing devices used a separate key. It is read only until the next save.
+  const legacy = globalThis.localStorage.getItem(COURSE_PROGRESS_STORAGE_KEY);
+  return legacy === null ? normalizeCourseProgress(fallback) : normalizeCourseProgress(JSON.parse(legacy));
+}
+
 export function readCourseProgress(fallback: CourseProgress = EMPTY_PROGRESS): CourseProgress {
   try {
-    const raw = globalThis.localStorage.getItem(APP_DATA_STORAGE_KEY);
-    if (raw) {
-      const stored: unknown = JSON.parse(raw);
-      if (isRecord(stored) && Object.prototype.hasOwnProperty.call(stored, 'courseProgress')) {
-        return normalizeCourseProgress(stored.courseProgress);
-      }
-    }
-    // Existing devices used a separate key. It is read only until the next save.
-    const legacy = globalThis.localStorage.getItem(COURSE_PROGRESS_STORAGE_KEY);
-    return legacy === null ? normalizeCourseProgress(fallback) : parseCourseProgress(legacy);
+    return readStoredCourseProgress(fallback);
   } catch {
     return normalizeCourseProgress(fallback);
   }
@@ -138,43 +144,60 @@ function persistCurrentProgress(state: CourseProgress): void {
 
 /** A false result lets the UI retain the draft and explain that saving failed. */
 export async function saveCourseProgress(state: CourseProgress): Promise<boolean> {
+  const canSync = cloudSync.currentAccountGuard();
   try {
-    await queueDataWrite(() => persistCurrentProgress(state));
+    await queueDataWrite(() => {
+      persistCurrentProgress(state);
+      afterDataWriteCommit(() => notifyCourseProgressChanged(canSync));
+    });
   } catch { return false; }
-  notifyCourseProgressChanged();
   return true;
 }
 
 /** Re-read inside the shared lock so queued edits never use a stale personal-data snapshot. */
 export async function mutateCourseProgress(update: (latest: CourseProgress) => CourseProgress): Promise<CourseProgress | null> {
+  const canSync = cloudSync.currentAccountGuard();
   let next: CourseProgress;
   try {
     next = await queueDataWrite(() => {
-      const updated = normalizeCourseProgress(update(readCourseProgress()));
+      const updated = normalizeCourseProgress(update(readStoredCourseProgress()));
       persistCurrentProgress(updated);
+      afterDataWriteCommit(() => notifyCourseProgressChanged(canSync));
       return updated;
     });
   } catch { return null; }
-  notifyCourseProgressChanged();
   return next;
 }
 
 /** Same-tab edits/restores and other-tab saves refresh any open learning surface. */
-export function subscribeCourseProgress(listener: () => void): () => void {
+export function subscribeCourseProgress(listener: (canSync?: () => boolean) => void): () => void {
   if (typeof window === 'undefined') return () => undefined;
+  let active = true;
+  let refreshQueued = false;
   const storageListener = (event: StorageEvent) => {
-    if (event.key === null || event.key === APP_DATA_STORAGE_KEY || event.key === COURSE_PROGRESS_STORAGE_KEY) listener();
+    if (event.key !== null && event.key !== APP_DATA_STORAGE_KEY && event.key !== COURSE_PROGRESS_STORAGE_KEY) return;
+    if (refreshQueued) return;
+    refreshQueued = true;
+    // A different tab can expose a provisional projection before its IndexedDB
+    // transaction commits. Wait for the record lock and hydrate the durable
+    // record before a listener inspects replacement epochs or resets drafts.
+    void queueDataWrite(() => {
+      refreshQueued = false;
+      if (active) listener();
+    }).catch(() => { refreshQueued = false; });
   };
-  window.addEventListener(CHANGE_EVENT, listener);
+  const localListener = (event: Event) => listener((event as CustomEvent<{ canSync?: () => boolean }>).detail?.canSync);
+  window.addEventListener(CHANGE_EVENT, localListener);
   window.addEventListener('storage', storageListener);
   return () => {
-    window.removeEventListener(CHANGE_EVENT, listener);
+    active = false;
+    window.removeEventListener(CHANGE_EVENT, localListener);
     window.removeEventListener('storage', storageListener);
   };
 }
 
-export function notifyCourseProgressChanged(): void {
-  if (typeof window !== 'undefined') window.dispatchEvent(new Event(CHANGE_EVENT));
+export function notifyCourseProgressChanged(canSync?: () => boolean): void {
+  if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent(CHANGE_EVENT, { detail: { canSync } }));
 }
 
 export function updateLessonProgress(

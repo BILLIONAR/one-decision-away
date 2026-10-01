@@ -12,7 +12,8 @@ import {
 import { useApp } from '../store/useApp';
 import { Card, Button, Textarea } from './ui';
 import { CheckCircle2 } from 'lucide-react';
-import { useT, N_ } from '../i18n';
+import { useT, N_, formatDate } from '../i18n';
+import { getCurrentDateKey } from '../services/microHabitsService';
 
 const FOCUS_LABELS: Record<number, string> = {
   1: N_('Scattered / Foggy'),
@@ -70,7 +71,7 @@ export const DailyCheckIn: React.FC = () => {
   const t = useT();
   const checkIns = data?.checkIns || [];
 
-  const todayStr = useMemo(() => new Date().toISOString().slice(0, 10), []);
+  const todayStr = getCurrentDateKey();
 
   const todayCheckIn = useMemo(() => {
     return checkIns.find((c) => c.dateKey === todayStr);
@@ -114,13 +115,13 @@ export const DailyCheckIn: React.FC = () => {
     }> = [];
 
     for (let i = 6; i >= 0; i--) {
-      const d = new Date(now.getTime() - i * 86400000);
-      const key = d.toISOString().slice(0, 10);
+      const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i, 12);
+      const key = getCurrentDateKey(d);
       const isToday = i === 0;
       const dayName = isToday
         ? t('Today')
-        : d.toLocaleDateString(undefined, { weekday: 'short' });
-      const fullDate = d.toLocaleDateString(undefined, {
+        : formatDate(d, { weekday: 'short' });
+      const fullDate = formatDate(d, {
         month: 'short',
         day: 'numeric',
       });
@@ -140,7 +141,7 @@ export const DailyCheckIn: React.FC = () => {
     }
 
     return result;
-  }, [checkIns, t]);
+  }, [checkIns, t, todayStr]);
 
   // Calculate 7-day averages
   const stats = useMemo(() => {
@@ -458,10 +459,7 @@ export const DailyCheckIn: React.FC = () => {
           {checkIns.length > 0 ? (
             <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
               {checkIns.slice(0, 10).map((entry) => {
-                const formattedDate = new Date(entry.createdAt || entry.dateKey).toLocaleDateString(
-                  undefined,
-                  { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }
-                );
+                const formattedDate = formatDate(entry.dateKey, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
                 return (
                   <div
                     key={entry.id}
