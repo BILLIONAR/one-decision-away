@@ -10,9 +10,9 @@ mkdirSync(out, { recursive: true });
 const browser = await chromium.launch({ executablePath: process.env.ODA_CHROMIUM || '/usr/bin/chromium', args: ['--no-sandbox'] });
 const report = { at: new Date().toISOString(), base, checks: [], screenshots: [], accessibility: [], pageErrors: [] };
 const expected = {
-  en: { title: 'Make room for', demo: 'Read two pages after breakfast.', reflect: 'Two pages. A little more space.', course: 'Preview course' },
-  tr: { title: 'Önem verdiğine', demo: 'Kahvaltıdan sonra iki sayfa oku.', reflect: 'İki sayfa. Kendime biraz alan.', course: 'Kursu incele' },
-  es: { title: 'Haz espacio para', demo: 'Leer dos páginas después del desayuno.', reflect: 'Dos páginas. Un poco más de espacio.', course: 'Ver el curso' },
+  en: { title: 'Change starts with one decision.', demo: 'Read two pages after breakfast.', reflect: 'Two pages. A little more space.', course: 'Preview course' },
+  tr: { title: 'Değişim tek bir kararla başlar.', demo: 'Kahvaltıdan sonra iki sayfa oku.', reflect: 'İki sayfa. Kendime biraz alan.', course: 'Kursu incele' },
+  es: { title: 'El cambio empieza con una decisión.', demo: 'Leer dos páginas después del desayuno.', reflect: 'Dos páginas. Un poco más de espacio.', course: 'Ver el curso' },
 };
 const pass = message => { report.checks.push(message); console.log(`PASS ${message}`); };
 

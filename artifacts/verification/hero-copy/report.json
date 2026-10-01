@@ -1,0 +1,3338 @@
+{
+  "at": "2026-10-01T04:06:23.234Z",
+  "base": "https://127.0.0.1:4176/one-decision-away/",
+  "build": "/tmp/oda-hero-copy-project-build",
+  "engine": "webkit",
+  "executablePath": "/workspace/.cloud-tools/playwright-browsers/webkit-2359/pw_run.sh",
+  "playwrightVersion": "1.63.0",
+  "nodeVersion": "v22.23.3",
+  "checkoutHead": "a793799d008f3577bcced1e608f60b08ab70a1e4",
+  "landingCopySha256": "f6e65dcd03bde9b75677d7b9fb071cb3e93858cfee12a515b23784219d12eef7",
+  "buildIndexSha256": "12dece252fefb0a8ab3ce376d3067d9aae5bf8e5e971bda093bc2b6a299fa617",
+  "localSelfSignedPreview": true,
+  "expected": {
+    "en": {
+      "headline": "Change starts with one decision.",
+      "introduction": "Turn what matters to you into daily action—with practical courses, guided reflection, and progress you can see."
+    },
+    "tr": {
+      "headline": "Değişim tek bir kararla başlar.",
+      "introduction": "Senin için önemli olanları günlük adımlara dönüştür—uygulamalı kurslar, rehberli düşünme ve görebileceğin ilerlemeyle."
+    },
+    "es": {
+      "headline": "El cambio empieza con una decisión.",
+      "introduction": "Convierte lo que te importa en acciones diarias, con cursos prácticos, reflexión guiada y un progreso que puedes ver."
+    }
+  },
+  "checks": [
+    "cached official WebKit 26.6 launched against owned loopback HTTPS production preview",
+    "en-320x740-light: exact localized headline/subheadline and requested theme render",
+    "en-320x740-light: rendered line boxes stay in bounds without clipping, block/preview overlap, or CTA/logo overflow",
+    "en-320x740-light: hero/header CTAs scroll into view and receive unobscured center hit-tests",
+    "en-390x844-light: exact localized headline/subheadline and requested theme render",
+    "en-390x844-light: rendered line boxes stay in bounds without clipping, block/preview overlap, or CTA/logo overflow",
+    "en-390x844-light: hero/header CTAs scroll into view and receive unobscured center hit-tests",
+    "en-1440x1000-light: exact localized headline/subheadline and requested theme render",
+    "en-1440x1000-light: rendered line boxes stay in bounds without clipping, block/preview overlap, or CTA/logo overflow",
+    "en-1440x1000-light: hero/header CTAs scroll into view and receive unobscured center hit-tests",
+    "en-390x844-dark: exact localized headline/subheadline and requested theme render",
+    "en-390x844-dark: rendered line boxes stay in bounds without clipping, block/preview overlap, or CTA/logo overflow",
+    "en-390x844-dark: hero/header CTAs scroll into view and receive unobscured center hit-tests",
+    "tr-320x740-light: exact localized headline/subheadline and requested theme render",
+    "tr-320x740-light: rendered line boxes stay in bounds without clipping, block/preview overlap, or CTA/logo overflow",
+    "tr-320x740-light: hero/header CTAs scroll into view and receive unobscured center hit-tests",
+    "tr-390x844-light: exact localized headline/subheadline and requested theme render",
+    "tr-390x844-light: rendered line boxes stay in bounds without clipping, block/preview overlap, or CTA/logo overflow",
+    "tr-390x844-light: hero/header CTAs scroll into view and receive unobscured center hit-tests",
+    "tr-1440x1000-light: exact localized headline/subheadline and requested theme render",
+    "tr-1440x1000-light: rendered line boxes stay in bounds without clipping, block/preview overlap, or CTA/logo overflow",
+    "tr-1440x1000-light: hero/header CTAs scroll into view and receive unobscured center hit-tests",
+    "tr-390x844-dark: exact localized headline/subheadline and requested theme render",
+    "tr-390x844-dark: rendered line boxes stay in bounds without clipping, block/preview overlap, or CTA/logo overflow",
+    "tr-390x844-dark: hero/header CTAs scroll into view and receive unobscured center hit-tests",
+    "es-320x740-light: exact localized headline/subheadline and requested theme render",
+    "es-320x740-light: rendered line boxes stay in bounds without clipping, block/preview overlap, or CTA/logo overflow",
+    "es-320x740-light: hero/header CTAs scroll into view and receive unobscured center hit-tests",
+    "es-390x844-light: exact localized headline/subheadline and requested theme render",
+    "es-390x844-light: rendered line boxes stay in bounds without clipping, block/preview overlap, or CTA/logo overflow",
+    "es-390x844-light: hero/header CTAs scroll into view and receive unobscured center hit-tests",
+    "es-1440x1000-light: exact localized headline/subheadline and requested theme render",
+    "es-1440x1000-light: rendered line boxes stay in bounds without clipping, block/preview overlap, or CTA/logo overflow",
+    "es-1440x1000-light: hero/header CTAs scroll into view and receive unobscured center hit-tests",
+    "es-390x844-dark: exact localized headline/subheadline and requested theme render",
+    "es-390x844-dark: rendered line boxes stay in bounds without clipping, block/preview overlap, or CTA/logo overflow",
+    "es-390x844-dark: hero/header CTAs scroll into view and receive unobscured center hit-tests",
+    "all twelve hero-copy cases have zero uncaught browser errors"
+  ],
+  "cases": [
+    {
+      "name": "en-320x740-light",
+      "width": 320,
+      "height": 740,
+      "theme": "light",
+      "locale": "en",
+      "mobileEmulation": true,
+      "viewport": {
+        "width": 320,
+        "height": 740,
+        "documentWidth": 320,
+        "scrollWidth": 320
+      },
+      "lang": "en",
+      "reducedMotion": true,
+      "title": {
+        "text": "Change starts with one decision.",
+        "rect": {
+          "left": 16,
+          "right": 304,
+          "top": 169,
+          "bottom": 332.046875,
+          "width": 288,
+          "height": 163.046875
+        },
+        "lines": [
+          {
+            "center": 195.453125,
+            "left": 16,
+            "right": 170.78125,
+            "top": 168.453125,
+            "bottom": 222.453125,
+            "text": "Change"
+          },
+          {
+            "center": 248.359375,
+            "left": 16,
+            "right": 220.140625,
+            "top": 221.359375,
+            "bottom": 275.359375,
+            "text": "starts with"
+          },
+          {
+            "center": 303.421875,
+            "left": 16,
+            "right": 242.765625,
+            "top": 276.421875,
+            "bottom": 330.421875,
+            "text": "one decision."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 320,
+              "top": 0,
+              "bottom": 7447.3125,
+              "width": 320,
+              "height": 7447.3125
+            }
+          }
+        ]
+      },
+      "introduction": {
+        "text": "Turn what matters to you into daily action—with practical courses, guided reflection, and progress you can see.",
+        "rect": {
+          "left": 16,
+          "right": 304,
+          "top": 354.046875,
+          "bottom": 437.296875,
+          "width": 288,
+          "height": 83.25
+        },
+        "lines": [
+          {
+            "center": 367.921875,
+            "left": 16,
+            "right": 253.53125,
+            "top": 358.921875,
+            "bottom": 376.921875,
+            "text": "Turn what matters to you into daily"
+          },
+          {
+            "center": 395.671875,
+            "left": 16,
+            "right": 276.0625,
+            "top": 386.671875,
+            "bottom": 404.671875,
+            "text": "action—with practical courses, guided"
+          },
+          {
+            "center": 423.421875,
+            "left": 16,
+            "right": 265.390625,
+            "top": 414.421875,
+            "bottom": 432.421875,
+            "text": "reflection, and progress you can see."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 320,
+              "top": 0,
+              "bottom": 7447.3125,
+              "width": 320,
+              "height": 7447.3125
+            }
+          }
+        ]
+      },
+      "hero": {
+        "left": 16,
+        "right": 304,
+        "top": 89,
+        "bottom": 1348.390625,
+        "width": 288,
+        "height": 1259.390625
+      },
+      "copy": {
+        "left": 16,
+        "right": 304,
+        "top": 131,
+        "bottom": 621.890625,
+        "width": 288,
+        "height": 490.890625
+      },
+      "kicker": {
+        "left": 16,
+        "right": 304,
+        "top": 131,
+        "bottom": 147,
+        "width": 288,
+        "height": 16
+      },
+      "actions": {
+        "left": 16,
+        "right": 304,
+        "top": 462.296875,
+        "bottom": 568.296875,
+        "width": 288,
+        "height": 106
+      },
+      "privacy": {
+        "left": 16,
+        "right": 304,
+        "top": 582.296875,
+        "bottom": 621.890625,
+        "width": 288,
+        "height": 39.59375
+      },
+      "preview": {
+        "left": 16,
+        "right": 304,
+        "top": 657.890625,
+        "bottom": 1306.390625,
+        "width": 288,
+        "height": 648.5
+      },
+      "header": {
+        "left": 16,
+        "right": 304,
+        "top": 0,
+        "bottom": 89,
+        "width": 288,
+        "height": 89
+      },
+      "brand": {
+        "left": 16,
+        "right": 98.734375,
+        "top": 32,
+        "bottom": 56,
+        "width": 82.734375,
+        "height": 24
+      },
+      "logo": {
+        "left": 16,
+        "right": 40,
+        "top": 32,
+        "bottom": 56,
+        "width": 24,
+        "height": 24
+      },
+      "logoImage": "/one-decision-away/brand/oda-c4.png",
+      "controls": [
+        {
+          "text": "Open ODA",
+          "rect": {
+            "left": 224.921875,
+            "right": 304,
+            "top": 22,
+            "bottom": 66,
+            "width": 79.078125,
+            "height": 44
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "Choose my first decision",
+          "rect": {
+            "left": 16,
+            "right": 241.5,
+            "top": 462.296875,
+            "bottom": 514.296875,
+            "width": 225.5,
+            "height": 52
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "See the daily practice",
+          "rect": {
+            "left": 16,
+            "right": 173.09375,
+            "top": 520.296875,
+            "bottom": 568.296875,
+            "width": 157.09375,
+            "height": 48
+          },
+          "inInitialViewport": true
+        }
+      ],
+      "controlHitTests": [
+        {
+          "text": "Open ODA",
+          "rect": {
+            "left": 224.921875,
+            "right": 304,
+            "top": 22,
+            "bottom": 66
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "Choose my first decision",
+          "rect": {
+            "left": 16,
+            "right": 241.5,
+            "top": 325.296875,
+            "bottom": 377.296875
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "See the daily practice",
+          "rect": {
+            "left": 16,
+            "right": 173.09375,
+            "top": 327.296875,
+            "bottom": 375.296875
+          },
+          "centerHit": true,
+          "inViewport": true
+        }
+      ]
+    },
+    {
+      "name": "en-390x844-light",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "locale": "en",
+      "mobileEmulation": true,
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "scrollWidth": 390
+      },
+      "lang": "en",
+      "reducedMotion": true,
+      "title": {
+        "text": "Change starts with one decision.",
+        "rect": {
+          "left": 20,
+          "right": 316.984375,
+          "top": 169,
+          "bottom": 332.046875,
+          "width": 296.984375,
+          "height": 163.046875
+        },
+        "lines": [
+          {
+            "center": 195.453125,
+            "left": 20,
+            "right": 174.78125,
+            "top": 168.453125,
+            "bottom": 222.453125,
+            "text": "Change"
+          },
+          {
+            "center": 248.359375,
+            "left": 20,
+            "right": 224.140625,
+            "top": 221.359375,
+            "bottom": 275.359375,
+            "text": "starts with"
+          },
+          {
+            "center": 303.421875,
+            "left": 20,
+            "right": 246.765625,
+            "top": 276.421875,
+            "bottom": 330.421875,
+            "text": "one decision."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 0,
+              "bottom": 6985.4375,
+              "width": 390,
+              "height": 6985.4375
+            }
+          }
+        ]
+      },
+      "introduction": {
+        "text": "Turn what matters to you into daily action—with practical courses, guided reflection, and progress you can see.",
+        "rect": {
+          "left": 20,
+          "right": 370,
+          "top": 354.046875,
+          "bottom": 437.296875,
+          "width": 350,
+          "height": 83.25
+        },
+        "lines": [
+          {
+            "center": 367.921875,
+            "left": 20,
+            "right": 304.015625,
+            "top": 358.921875,
+            "bottom": 376.921875,
+            "text": "Turn what matters to you into daily action"
+          },
+          {
+            "center": 395.671875,
+            "left": 20,
+            "right": 309.78125,
+            "top": 386.671875,
+            "bottom": 404.671875,
+            "text": "—with practical courses, guided reflection,"
+          },
+          {
+            "center": 423.421875,
+            "left": 20,
+            "right": 196.84375,
+            "top": 414.421875,
+            "bottom": 432.421875,
+            "text": "and progress you can see."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 0,
+              "bottom": 6985.4375,
+              "width": 390,
+              "height": 6985.4375
+            }
+          }
+        ]
+      },
+      "hero": {
+        "left": 20,
+        "right": 370,
+        "top": 89,
+        "bottom": 1325.390625,
+        "width": 350,
+        "height": 1236.390625
+      },
+      "copy": {
+        "left": 20,
+        "right": 370,
+        "top": 131,
+        "bottom": 621.890625,
+        "width": 350,
+        "height": 490.890625
+      },
+      "kicker": {
+        "left": 20,
+        "right": 370,
+        "top": 131,
+        "bottom": 147,
+        "width": 350,
+        "height": 16
+      },
+      "actions": {
+        "left": 20,
+        "right": 370,
+        "top": 462.296875,
+        "bottom": 568.296875,
+        "width": 350,
+        "height": 106
+      },
+      "privacy": {
+        "left": 20,
+        "right": 337.015625,
+        "top": 582.296875,
+        "bottom": 621.890625,
+        "width": 317.015625,
+        "height": 39.59375
+      },
+      "preview": {
+        "left": 20,
+        "right": 370,
+        "top": 657.890625,
+        "bottom": 1283.390625,
+        "width": 350,
+        "height": 625.5
+      },
+      "header": {
+        "left": 20,
+        "right": 370,
+        "top": 0,
+        "bottom": 89,
+        "width": 350,
+        "height": 89
+      },
+      "brand": {
+        "left": 20,
+        "right": 136.71875,
+        "top": 25.90625,
+        "bottom": 62.09375,
+        "width": 116.71875,
+        "height": 36.1875
+      },
+      "logo": {
+        "left": 20,
+        "right": 49,
+        "top": 29.5,
+        "bottom": 58.5,
+        "width": 29,
+        "height": 29
+      },
+      "logoImage": "/one-decision-away/brand/oda-c4.png",
+      "controls": [
+        {
+          "text": "Open ODA",
+          "rect": {
+            "left": 284.921875,
+            "right": 370,
+            "top": 22,
+            "bottom": 66,
+            "width": 85.078125,
+            "height": 44
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "Choose my first decision",
+          "rect": {
+            "left": 20,
+            "right": 245.5,
+            "top": 462.296875,
+            "bottom": 514.296875,
+            "width": 225.5,
+            "height": 52
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "See the daily practice",
+          "rect": {
+            "left": 20,
+            "right": 177.09375,
+            "top": 520.296875,
+            "bottom": 568.296875,
+            "width": 157.09375,
+            "height": 48
+          },
+          "inInitialViewport": true
+        }
+      ],
+      "controlHitTests": [
+        {
+          "text": "Open ODA",
+          "rect": {
+            "left": 284.921875,
+            "right": 370,
+            "top": 22,
+            "bottom": 66
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "Choose my first decision",
+          "rect": {
+            "left": 20,
+            "right": 245.5,
+            "top": 377.296875,
+            "bottom": 429.296875
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "See the daily practice",
+          "rect": {
+            "left": 20,
+            "right": 177.09375,
+            "top": 379.296875,
+            "bottom": 427.296875
+          },
+          "centerHit": true,
+          "inViewport": true
+        }
+      ]
+    },
+    {
+      "name": "en-1440x1000-light",
+      "width": 1440,
+      "height": 1000,
+      "theme": "light",
+      "locale": "en",
+      "mobileEmulation": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "documentWidth": 1435,
+        "scrollWidth": 1435
+      },
+      "lang": "en",
+      "reducedMotion": true,
+      "title": {
+        "text": "Change starts with one decision.",
+        "rect": {
+          "left": 127.5,
+          "right": 563.09375,
+          "top": 279.53125,
+          "bottom": 545.265625,
+          "width": 435.59375,
+          "height": 265.734375
+        },
+        "lines": [
+          {
+            "center": 322.65625,
+            "left": 127.5,
+            "right": 379.75,
+            "top": 278.65625,
+            "bottom": 366.65625,
+            "text": "Change"
+          },
+          {
+            "center": 408.875,
+            "left": 127.5,
+            "right": 460.171875,
+            "top": 364.875,
+            "bottom": 452.875,
+            "text": "starts with"
+          },
+          {
+            "center": 498.625,
+            "left": 127.5,
+            "right": 497.046875,
+            "top": 454.625,
+            "bottom": 542.625,
+            "text": "one decision."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 1435,
+              "top": 0,
+              "bottom": 4551.765625,
+              "width": 1435,
+              "height": 4551.765625
+            }
+          }
+        ]
+      },
+      "introduction": {
+        "text": "Turn what matters to you into daily action—with practical courses, guided reflection, and progress you can see.",
+        "rect": {
+          "left": 127.5,
+          "right": 578.140625,
+          "top": 571.265625,
+          "bottom": 630.453125,
+          "width": 450.640625,
+          "height": 59.1875
+        },
+        "lines": [
+          {
+            "center": 586.0625,
+            "left": 127.5,
+            "right": 543.71875,
+            "top": 576.5625,
+            "bottom": 595.5625,
+            "text": "Turn what matters to you into daily action—with practical"
+          },
+          {
+            "center": 615.65625,
+            "left": 127.5,
+            "right": 511.96875,
+            "top": 606.15625,
+            "bottom": 625.15625,
+            "text": "courses, guided reflection, and progress you can see."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 1435,
+              "top": 0,
+              "bottom": 4551.765625,
+              "width": 1435,
+              "height": 4551.765625
+            }
+          }
+        ]
+      },
+      "hero": {
+        "left": 127.5,
+        "right": 1307.5,
+        "top": 106,
+        "bottom": 907,
+        "width": 1180,
+        "height": 801
+      },
+      "copy": {
+        "left": 127.5,
+        "right": 730.125,
+        "top": 238.9375,
+        "bottom": 770.046875,
+        "width": 602.625,
+        "height": 531.109375
+      },
+      "kicker": {
+        "left": 127.5,
+        "right": 730.125,
+        "top": 238.9375,
+        "bottom": 256.53125,
+        "width": 602.625,
+        "height": 17.59375
+      },
+      "actions": {
+        "left": 127.5,
+        "right": 730.125,
+        "top": 660.453125,
+        "bottom": 712.453125,
+        "width": 602.625,
+        "height": 52
+      },
+      "privacy": {
+        "left": 127.5,
+        "right": 430.09375,
+        "top": 730.453125,
+        "bottom": 770.046875,
+        "width": 302.59375,
+        "height": 39.59375
+      },
+      "preview": {
+        "left": 794.125,
+        "right": 1307.5,
+        "top": 179,
+        "bottom": 830,
+        "width": 513.375,
+        "height": 651
+      },
+      "header": {
+        "left": 127.5,
+        "right": 1307.5,
+        "top": 0,
+        "bottom": 106,
+        "width": 1180,
+        "height": 106
+      },
+      "brand": {
+        "left": 127.5,
+        "right": 283.78125,
+        "top": 30.703125,
+        "bottom": 74.296875,
+        "width": 156.28125,
+        "height": 43.59375
+      },
+      "logo": {
+        "left": 127.5,
+        "right": 164.5,
+        "top": 34,
+        "bottom": 71,
+        "width": 37,
+        "height": 37
+      },
+      "logoImage": "/one-decision-away/brand/oda-c4.png",
+      "controls": [
+        {
+          "text": "Open ODA",
+          "rect": {
+            "left": 1175.5,
+            "right": 1307.5,
+            "top": 30.5,
+            "bottom": 74.5,
+            "width": 132,
+            "height": 44
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "Choose my first decision",
+          "rect": {
+            "left": 127.5,
+            "right": 370.421875,
+            "top": 660.453125,
+            "bottom": 712.453125,
+            "width": 242.921875,
+            "height": 52
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "See the daily practice",
+          "rect": {
+            "left": 393.421875,
+            "right": 550.515625,
+            "top": 662.453125,
+            "bottom": 710.453125,
+            "width": 157.09375,
+            "height": 48
+          },
+          "inInitialViewport": true
+        }
+      ],
+      "controlHitTests": [
+        {
+          "text": "Open ODA",
+          "rect": {
+            "left": 1175.5,
+            "right": 1307.5,
+            "top": 30.5,
+            "bottom": 74.5
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "Choose my first decision",
+          "rect": {
+            "left": 127.5,
+            "right": 370.421875,
+            "top": 458.453125,
+            "bottom": 510.453125
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "See the daily practice",
+          "rect": {
+            "left": 393.421875,
+            "right": 550.515625,
+            "top": 460.453125,
+            "bottom": 508.453125
+          },
+          "centerHit": true,
+          "inViewport": true
+        }
+      ]
+    },
+    {
+      "name": "en-390x844-dark",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "locale": "en",
+      "mobileEmulation": true,
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "scrollWidth": 390
+      },
+      "lang": "en",
+      "reducedMotion": true,
+      "title": {
+        "text": "Change starts with one decision.",
+        "rect": {
+          "left": 20,
+          "right": 316.984375,
+          "top": 169,
+          "bottom": 332.046875,
+          "width": 296.984375,
+          "height": 163.046875
+        },
+        "lines": [
+          {
+            "center": 195.453125,
+            "left": 20,
+            "right": 174.78125,
+            "top": 168.453125,
+            "bottom": 222.453125,
+            "text": "Change"
+          },
+          {
+            "center": 248.359375,
+            "left": 20,
+            "right": 224.140625,
+            "top": 221.359375,
+            "bottom": 275.359375,
+            "text": "starts with"
+          },
+          {
+            "center": 303.421875,
+            "left": 20,
+            "right": 246.765625,
+            "top": 276.421875,
+            "bottom": 330.421875,
+            "text": "one decision."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 0,
+              "bottom": 6985.4375,
+              "width": 390,
+              "height": 6985.4375
+            }
+          }
+        ]
+      },
+      "introduction": {
+        "text": "Turn what matters to you into daily action—with practical courses, guided reflection, and progress you can see.",
+        "rect": {
+          "left": 20,
+          "right": 370,
+          "top": 354.046875,
+          "bottom": 437.296875,
+          "width": 350,
+          "height": 83.25
+        },
+        "lines": [
+          {
+            "center": 367.921875,
+            "left": 20,
+            "right": 304.015625,
+            "top": 358.921875,
+            "bottom": 376.921875,
+            "text": "Turn what matters to you into daily action"
+          },
+          {
+            "center": 395.671875,
+            "left": 20,
+            "right": 309.78125,
+            "top": 386.671875,
+            "bottom": 404.671875,
+            "text": "—with practical courses, guided reflection,"
+          },
+          {
+            "center": 423.421875,
+            "left": 20,
+            "right": 196.84375,
+            "top": 414.421875,
+            "bottom": 432.421875,
+            "text": "and progress you can see."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 0,
+              "bottom": 6985.4375,
+              "width": 390,
+              "height": 6985.4375
+            }
+          }
+        ]
+      },
+      "hero": {
+        "left": 20,
+        "right": 370,
+        "top": 89,
+        "bottom": 1325.390625,
+        "width": 350,
+        "height": 1236.390625
+      },
+      "copy": {
+        "left": 20,
+        "right": 370,
+        "top": 131,
+        "bottom": 621.890625,
+        "width": 350,
+        "height": 490.890625
+      },
+      "kicker": {
+        "left": 20,
+        "right": 370,
+        "top": 131,
+        "bottom": 147,
+        "width": 350,
+        "height": 16
+      },
+      "actions": {
+        "left": 20,
+        "right": 370,
+        "top": 462.296875,
+        "bottom": 568.296875,
+        "width": 350,
+        "height": 106
+      },
+      "privacy": {
+        "left": 20,
+        "right": 337.015625,
+        "top": 582.296875,
+        "bottom": 621.890625,
+        "width": 317.015625,
+        "height": 39.59375
+      },
+      "preview": {
+        "left": 20,
+        "right": 370,
+        "top": 657.890625,
+        "bottom": 1283.390625,
+        "width": 350,
+        "height": 625.5
+      },
+      "header": {
+        "left": 20,
+        "right": 370,
+        "top": 0,
+        "bottom": 89,
+        "width": 350,
+        "height": 89
+      },
+      "brand": {
+        "left": 20,
+        "right": 136.71875,
+        "top": 25.90625,
+        "bottom": 62.09375,
+        "width": 116.71875,
+        "height": 36.1875
+      },
+      "logo": {
+        "left": 20,
+        "right": 49,
+        "top": 29.5,
+        "bottom": 58.5,
+        "width": 29,
+        "height": 29
+      },
+      "logoImage": "/one-decision-away/brand/oda-c4.png",
+      "controls": [
+        {
+          "text": "Open ODA",
+          "rect": {
+            "left": 284.921875,
+            "right": 370,
+            "top": 22,
+            "bottom": 66,
+            "width": 85.078125,
+            "height": 44
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "Choose my first decision",
+          "rect": {
+            "left": 20,
+            "right": 245.5,
+            "top": 462.296875,
+            "bottom": 514.296875,
+            "width": 225.5,
+            "height": 52
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "See the daily practice",
+          "rect": {
+            "left": 20,
+            "right": 177.09375,
+            "top": 520.296875,
+            "bottom": 568.296875,
+            "width": 157.09375,
+            "height": 48
+          },
+          "inInitialViewport": true
+        }
+      ],
+      "controlHitTests": [
+        {
+          "text": "Open ODA",
+          "rect": {
+            "left": 284.921875,
+            "right": 370,
+            "top": 22,
+            "bottom": 66
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "Choose my first decision",
+          "rect": {
+            "left": 20,
+            "right": 245.5,
+            "top": 377.296875,
+            "bottom": 429.296875
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "See the daily practice",
+          "rect": {
+            "left": 20,
+            "right": 177.09375,
+            "top": 379.296875,
+            "bottom": 427.296875
+          },
+          "centerHit": true,
+          "inViewport": true
+        }
+      ]
+    },
+    {
+      "name": "tr-320x740-light",
+      "width": 320,
+      "height": 740,
+      "theme": "light",
+      "locale": "tr",
+      "mobileEmulation": true,
+      "viewport": {
+        "width": 320,
+        "height": 740,
+        "documentWidth": 320,
+        "scrollWidth": 320
+      },
+      "lang": "tr",
+      "reducedMotion": true,
+      "title": {
+        "text": "Değişim tek bir kararla başlar.",
+        "rect": {
+          "left": 16,
+          "right": 304,
+          "top": 169,
+          "bottom": 336.375,
+          "width": 288,
+          "height": 167.375
+        },
+        "lines": [
+          {
+            "center": 195.453125,
+            "left": 16,
+            "right": 181.265625,
+            "top": 168.453125,
+            "bottom": 222.453125,
+            "text": "Değişim"
+          },
+          {
+            "center": 250.515625,
+            "left": 16,
+            "right": 277.03125,
+            "top": 223.515625,
+            "bottom": 277.515625,
+            "text": "tek bir kararla"
+          },
+          {
+            "center": 307.75,
+            "left": 16,
+            "right": 134.28125,
+            "top": 280.75,
+            "bottom": 334.75,
+            "text": "başlar."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 320,
+              "top": 0,
+              "bottom": 7269.296875,
+              "width": 320,
+              "height": 7269.296875
+            }
+          }
+        ]
+      },
+      "introduction": {
+        "text": "Senin için önemli olanları günlük adımlara dönüştür—uygulamalı kurslar, rehberli düşünme ve görebileceğin ilerlemeyle.",
+        "rect": {
+          "left": 16,
+          "right": 304,
+          "top": 358.375,
+          "bottom": 441.625,
+          "width": 288,
+          "height": 83.25
+        },
+        "lines": [
+          {
+            "center": 372.25,
+            "left": 16,
+            "right": 298.421875,
+            "top": 363.25,
+            "bottom": 381.25,
+            "text": "Senin için önemli olanları günlük adımlara"
+          },
+          {
+            "center": 400,
+            "left": 16,
+            "right": 273,
+            "top": 391,
+            "bottom": 409,
+            "text": "dönüştür—uygulamalı kurslar, rehberli"
+          },
+          {
+            "center": 427.75,
+            "left": 16,
+            "right": 275.984375,
+            "top": 418.75,
+            "bottom": 436.75,
+            "text": "düşünme ve görebileceğin ilerlemeyle."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 320,
+              "top": 0,
+              "bottom": 7269.296875,
+              "width": 320,
+              "height": 7269.296875
+            }
+          }
+        ]
+      },
+      "hero": {
+        "left": 16,
+        "right": 304,
+        "top": 89,
+        "bottom": 1352.71875,
+        "width": 288,
+        "height": 1263.71875
+      },
+      "copy": {
+        "left": 16,
+        "right": 304,
+        "top": 131,
+        "bottom": 626.21875,
+        "width": 288,
+        "height": 495.21875
+      },
+      "kicker": {
+        "left": 16,
+        "right": 304,
+        "top": 131,
+        "bottom": 147,
+        "width": 288,
+        "height": 16
+      },
+      "actions": {
+        "left": 16,
+        "right": 304,
+        "top": 466.625,
+        "bottom": 572.625,
+        "width": 288,
+        "height": 106
+      },
+      "privacy": {
+        "left": 16,
+        "right": 304,
+        "top": 586.625,
+        "bottom": 626.21875,
+        "width": 288,
+        "height": 39.59375
+      },
+      "preview": {
+        "left": 16,
+        "right": 304,
+        "top": 662.21875,
+        "bottom": 1310.71875,
+        "width": 288,
+        "height": 648.5
+      },
+      "header": {
+        "left": 16,
+        "right": 304,
+        "top": 0,
+        "bottom": 89,
+        "width": 288,
+        "height": 89
+      },
+      "brand": {
+        "left": 16,
+        "right": 98.734375,
+        "top": 32,
+        "bottom": 56,
+        "width": 82.734375,
+        "height": 24
+      },
+      "logo": {
+        "left": 16,
+        "right": 40,
+        "top": 32,
+        "bottom": 56,
+        "width": 24,
+        "height": 24
+      },
+      "logoImage": "/one-decision-away/brand/oda-c4.png",
+      "controls": [
+        {
+          "text": "ODA’yı aç",
+          "rect": {
+            "left": 229.828125,
+            "right": 304,
+            "top": 22,
+            "bottom": 66,
+            "width": 74.171875,
+            "height": 44
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "İlk kararımı seç",
+          "rect": {
+            "left": 16,
+            "right": 183.3125,
+            "top": 466.625,
+            "bottom": 518.625,
+            "width": 167.3125,
+            "height": 52
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "Günlük pratiği gör",
+          "rect": {
+            "left": 16,
+            "right": 151.625,
+            "top": 524.625,
+            "bottom": 572.625,
+            "width": 135.625,
+            "height": 48
+          },
+          "inInitialViewport": true
+        }
+      ],
+      "controlHitTests": [
+        {
+          "text": "ODA’yı aç",
+          "rect": {
+            "left": 229.828125,
+            "right": 304,
+            "top": 22,
+            "bottom": 66
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "İlk kararımı seç",
+          "rect": {
+            "left": 16,
+            "right": 183.3125,
+            "top": 324.625,
+            "bottom": 376.625
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "Günlük pratiği gör",
+          "rect": {
+            "left": 16,
+            "right": 151.625,
+            "top": 326.625,
+            "bottom": 374.625
+          },
+          "centerHit": true,
+          "inViewport": true
+        }
+      ]
+    },
+    {
+      "name": "tr-390x844-light",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "locale": "tr",
+      "mobileEmulation": true,
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "scrollWidth": 390
+      },
+      "lang": "tr",
+      "reducedMotion": true,
+      "title": {
+        "text": "Değişim tek bir kararla başlar.",
+        "rect": {
+          "left": 20,
+          "right": 316.984375,
+          "top": 169,
+          "bottom": 336.375,
+          "width": 296.984375,
+          "height": 167.375
+        },
+        "lines": [
+          {
+            "center": 195.453125,
+            "left": 20,
+            "right": 185.265625,
+            "top": 168.453125,
+            "bottom": 222.453125,
+            "text": "Değişim"
+          },
+          {
+            "center": 250.515625,
+            "left": 20,
+            "right": 281.03125,
+            "top": 223.515625,
+            "bottom": 277.515625,
+            "text": "tek bir kararla"
+          },
+          {
+            "center": 307.75,
+            "left": 20,
+            "right": 138.28125,
+            "top": 280.75,
+            "bottom": 334.75,
+            "text": "başlar."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 0,
+              "bottom": 6835.640625,
+              "width": 390,
+              "height": 6835.640625
+            }
+          }
+        ]
+      },
+      "introduction": {
+        "text": "Senin için önemli olanları günlük adımlara dönüştür—uygulamalı kurslar, rehberli düşünme ve görebileceğin ilerlemeyle.",
+        "rect": {
+          "left": 20,
+          "right": 370,
+          "top": 358.375,
+          "bottom": 441.625,
+          "width": 350,
+          "height": 83.25
+        },
+        "lines": [
+          {
+            "center": 372.25,
+            "left": 20,
+            "right": 302.421875,
+            "top": 363.25,
+            "bottom": 381.25,
+            "text": "Senin için önemli olanları günlük adımlara"
+          },
+          {
+            "center": 400,
+            "left": 20,
+            "right": 344,
+            "top": 391,
+            "bottom": 409,
+            "text": "dönüştür—uygulamalı kurslar, rehberli düşünme"
+          },
+          {
+            "center": 427.75,
+            "left": 20,
+            "right": 212.78125,
+            "top": 418.75,
+            "bottom": 436.75,
+            "text": "ve görebileceğin ilerlemeyle."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 0,
+              "bottom": 6835.640625,
+              "width": 390,
+              "height": 6835.640625
+            }
+          }
+        ]
+      },
+      "hero": {
+        "left": 20,
+        "right": 370,
+        "top": 89,
+        "bottom": 1275.71875,
+        "width": 350,
+        "height": 1186.71875
+      },
+      "copy": {
+        "left": 20,
+        "right": 370,
+        "top": 131,
+        "bottom": 572.21875,
+        "width": 350,
+        "height": 441.21875
+      },
+      "kicker": {
+        "left": 20,
+        "right": 370,
+        "top": 131,
+        "bottom": 147,
+        "width": 350,
+        "height": 16
+      },
+      "actions": {
+        "left": 20,
+        "right": 370,
+        "top": 466.625,
+        "bottom": 518.625,
+        "width": 350,
+        "height": 52
+      },
+      "privacy": {
+        "left": 20,
+        "right": 337.015625,
+        "top": 532.625,
+        "bottom": 572.21875,
+        "width": 317.015625,
+        "height": 39.59375
+      },
+      "preview": {
+        "left": 20,
+        "right": 370,
+        "top": 608.21875,
+        "bottom": 1233.71875,
+        "width": 350,
+        "height": 625.5
+      },
+      "header": {
+        "left": 20,
+        "right": 370,
+        "top": 0,
+        "bottom": 89,
+        "width": 350,
+        "height": 89
+      },
+      "brand": {
+        "left": 20,
+        "right": 136.71875,
+        "top": 25.90625,
+        "bottom": 62.09375,
+        "width": 116.71875,
+        "height": 36.1875
+      },
+      "logo": {
+        "left": 20,
+        "right": 49,
+        "top": 29.5,
+        "bottom": 58.5,
+        "width": 29,
+        "height": 29
+      },
+      "logoImage": "/one-decision-away/brand/oda-c4.png",
+      "controls": [
+        {
+          "text": "ODA’yı aç",
+          "rect": {
+            "left": 289.828125,
+            "right": 370,
+            "top": 22,
+            "bottom": 66,
+            "width": 80.171875,
+            "height": 44
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "İlk kararımı seç",
+          "rect": {
+            "left": 20,
+            "right": 187.3125,
+            "top": 466.625,
+            "bottom": 518.625,
+            "width": 167.3125,
+            "height": 52
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "Günlük pratiği gör",
+          "rect": {
+            "left": 205.3125,
+            "right": 340.9375,
+            "top": 468.625,
+            "bottom": 516.625,
+            "width": 135.625,
+            "height": 48
+          },
+          "inInitialViewport": true
+        }
+      ],
+      "controlHitTests": [
+        {
+          "text": "ODA’yı aç",
+          "rect": {
+            "left": 289.828125,
+            "right": 370,
+            "top": 22,
+            "bottom": 66
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "İlk kararımı seç",
+          "rect": {
+            "left": 20,
+            "right": 187.3125,
+            "top": 376.625,
+            "bottom": 428.625
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "Günlük pratiği gör",
+          "rect": {
+            "left": 205.3125,
+            "right": 340.9375,
+            "top": 378.625,
+            "bottom": 426.625
+          },
+          "centerHit": true,
+          "inViewport": true
+        }
+      ]
+    },
+    {
+      "name": "tr-1440x1000-light",
+      "width": 1440,
+      "height": 1000,
+      "theme": "light",
+      "locale": "tr",
+      "mobileEmulation": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "documentWidth": 1435,
+        "scrollWidth": 1435
+      },
+      "lang": "tr",
+      "reducedMotion": true,
+      "title": {
+        "text": "Değişim tek bir kararla başlar.",
+        "rect": {
+          "left": 127.5,
+          "right": 563.09375,
+          "top": 261.21875,
+          "bottom": 533.984375,
+          "width": 435.59375,
+          "height": 272.765625
+        },
+        "lines": [
+          {
+            "center": 304.34375,
+            "left": 127.5,
+            "right": 396.8125,
+            "top": 260.34375,
+            "bottom": 348.34375,
+            "text": "Değişim"
+          },
+          {
+            "center": 394.078125,
+            "left": 127.5,
+            "right": 552.890625,
+            "top": 350.078125,
+            "bottom": 438.078125,
+            "text": "tek bir kararla"
+          },
+          {
+            "center": 487.34375,
+            "left": 127.5,
+            "right": 320.25,
+            "top": 443.34375,
+            "bottom": 531.34375,
+            "text": "başlar."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 1435,
+              "top": 0,
+              "bottom": 4530.171875,
+              "width": 1435,
+              "height": 4530.171875
+            }
+          }
+        ]
+      },
+      "introduction": {
+        "text": "Senin için önemli olanları günlük adımlara dönüştür—uygulamalı kurslar, rehberli düşünme ve görebileceğin ilerlemeyle.",
+        "rect": {
+          "left": 127.5,
+          "right": 578.140625,
+          "top": 559.984375,
+          "bottom": 648.765625,
+          "width": 450.640625,
+          "height": 88.78125
+        },
+        "lines": [
+          {
+            "center": 574.78125,
+            "left": 127.5,
+            "right": 498.625,
+            "top": 565.28125,
+            "bottom": 584.28125,
+            "text": "Senin için önemli olanları günlük adımlara dönüştür"
+          },
+          {
+            "center": 604.375,
+            "left": 127.5,
+            "right": 428.6875,
+            "top": 594.875,
+            "bottom": 613.875,
+            "text": "—uygulamalı kurslar, rehberli düşünme ve"
+          },
+          {
+            "center": 633.96875,
+            "left": 127.5,
+            "right": 312.375,
+            "top": 624.46875,
+            "bottom": 643.46875,
+            "text": "görebileceğin ilerlemeyle."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 1435,
+              "top": 0,
+              "bottom": 4530.171875,
+              "width": 1435,
+              "height": 4530.171875
+            }
+          }
+        ]
+      },
+      "hero": {
+        "left": 127.5,
+        "right": 1307.5,
+        "top": 106,
+        "bottom": 907,
+        "width": 1180,
+        "height": 801
+      },
+      "copy": {
+        "left": 127.5,
+        "right": 730.125,
+        "top": 220.625,
+        "bottom": 788.359375,
+        "width": 602.625,
+        "height": 567.734375
+      },
+      "kicker": {
+        "left": 127.5,
+        "right": 730.125,
+        "top": 220.625,
+        "bottom": 238.21875,
+        "width": 602.625,
+        "height": 17.59375
+      },
+      "actions": {
+        "left": 127.5,
+        "right": 730.125,
+        "top": 678.765625,
+        "bottom": 730.765625,
+        "width": 602.625,
+        "height": 52
+      },
+      "privacy": {
+        "left": 127.5,
+        "right": 430.09375,
+        "top": 748.765625,
+        "bottom": 788.359375,
+        "width": 302.59375,
+        "height": 39.59375
+      },
+      "preview": {
+        "left": 794.125,
+        "right": 1307.5,
+        "top": 179,
+        "bottom": 830,
+        "width": 513.375,
+        "height": 651
+      },
+      "header": {
+        "left": 127.5,
+        "right": 1307.5,
+        "top": 0,
+        "bottom": 106,
+        "width": 1180,
+        "height": 106
+      },
+      "brand": {
+        "left": 127.5,
+        "right": 283.78125,
+        "top": 30.703125,
+        "bottom": 74.296875,
+        "width": 156.28125,
+        "height": 43.59375
+      },
+      "logo": {
+        "left": 127.5,
+        "right": 164.5,
+        "top": 34,
+        "bottom": 71,
+        "width": 37,
+        "height": 37
+      },
+      "logoImage": "/one-decision-away/brand/oda-c4.png",
+      "controls": [
+        {
+          "text": "ODA’yı aç",
+          "rect": {
+            "left": 1180.828125,
+            "right": 1307.5,
+            "top": 30.5,
+            "bottom": 74.5,
+            "width": 126.671875,
+            "height": 44
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "İlk kararımı seç",
+          "rect": {
+            "left": 127.5,
+            "right": 307.75,
+            "top": 678.765625,
+            "bottom": 730.765625,
+            "width": 180.25,
+            "height": 52
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "Günlük pratiği gör",
+          "rect": {
+            "left": 330.75,
+            "right": 466.375,
+            "top": 680.765625,
+            "bottom": 728.765625,
+            "width": 135.625,
+            "height": 48
+          },
+          "inInitialViewport": true
+        }
+      ],
+      "controlHitTests": [
+        {
+          "text": "ODA’yı aç",
+          "rect": {
+            "left": 1180.828125,
+            "right": 1307.5,
+            "top": 30.5,
+            "bottom": 74.5
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "İlk kararımı seç",
+          "rect": {
+            "left": 127.5,
+            "right": 307.75,
+            "top": 457.765625,
+            "bottom": 509.765625
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "Günlük pratiği gör",
+          "rect": {
+            "left": 330.75,
+            "right": 466.375,
+            "top": 459.765625,
+            "bottom": 507.765625
+          },
+          "centerHit": true,
+          "inViewport": true
+        }
+      ]
+    },
+    {
+      "name": "tr-390x844-dark",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "locale": "tr",
+      "mobileEmulation": true,
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "scrollWidth": 390
+      },
+      "lang": "tr",
+      "reducedMotion": true,
+      "title": {
+        "text": "Değişim tek bir kararla başlar.",
+        "rect": {
+          "left": 20,
+          "right": 316.984375,
+          "top": 169,
+          "bottom": 336.375,
+          "width": 296.984375,
+          "height": 167.375
+        },
+        "lines": [
+          {
+            "center": 195.453125,
+            "left": 20,
+            "right": 185.265625,
+            "top": 168.453125,
+            "bottom": 222.453125,
+            "text": "Değişim"
+          },
+          {
+            "center": 250.515625,
+            "left": 20,
+            "right": 281.03125,
+            "top": 223.515625,
+            "bottom": 277.515625,
+            "text": "tek bir kararla"
+          },
+          {
+            "center": 307.75,
+            "left": 20,
+            "right": 138.28125,
+            "top": 280.75,
+            "bottom": 334.75,
+            "text": "başlar."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 0,
+              "bottom": 6835.640625,
+              "width": 390,
+              "height": 6835.640625
+            }
+          }
+        ]
+      },
+      "introduction": {
+        "text": "Senin için önemli olanları günlük adımlara dönüştür—uygulamalı kurslar, rehberli düşünme ve görebileceğin ilerlemeyle.",
+        "rect": {
+          "left": 20,
+          "right": 370,
+          "top": 358.375,
+          "bottom": 441.625,
+          "width": 350,
+          "height": 83.25
+        },
+        "lines": [
+          {
+            "center": 372.25,
+            "left": 20,
+            "right": 302.421875,
+            "top": 363.25,
+            "bottom": 381.25,
+            "text": "Senin için önemli olanları günlük adımlara"
+          },
+          {
+            "center": 400,
+            "left": 20,
+            "right": 344,
+            "top": 391,
+            "bottom": 409,
+            "text": "dönüştür—uygulamalı kurslar, rehberli düşünme"
+          },
+          {
+            "center": 427.75,
+            "left": 20,
+            "right": 212.78125,
+            "top": 418.75,
+            "bottom": 436.75,
+            "text": "ve görebileceğin ilerlemeyle."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 0,
+              "bottom": 6835.640625,
+              "width": 390,
+              "height": 6835.640625
+            }
+          }
+        ]
+      },
+      "hero": {
+        "left": 20,
+        "right": 370,
+        "top": 89,
+        "bottom": 1275.71875,
+        "width": 350,
+        "height": 1186.71875
+      },
+      "copy": {
+        "left": 20,
+        "right": 370,
+        "top": 131,
+        "bottom": 572.21875,
+        "width": 350,
+        "height": 441.21875
+      },
+      "kicker": {
+        "left": 20,
+        "right": 370,
+        "top": 131,
+        "bottom": 147,
+        "width": 350,
+        "height": 16
+      },
+      "actions": {
+        "left": 20,
+        "right": 370,
+        "top": 466.625,
+        "bottom": 518.625,
+        "width": 350,
+        "height": 52
+      },
+      "privacy": {
+        "left": 20,
+        "right": 337.015625,
+        "top": 532.625,
+        "bottom": 572.21875,
+        "width": 317.015625,
+        "height": 39.59375
+      },
+      "preview": {
+        "left": 20,
+        "right": 370,
+        "top": 608.21875,
+        "bottom": 1233.71875,
+        "width": 350,
+        "height": 625.5
+      },
+      "header": {
+        "left": 20,
+        "right": 370,
+        "top": 0,
+        "bottom": 89,
+        "width": 350,
+        "height": 89
+      },
+      "brand": {
+        "left": 20,
+        "right": 136.71875,
+        "top": 25.90625,
+        "bottom": 62.09375,
+        "width": 116.71875,
+        "height": 36.1875
+      },
+      "logo": {
+        "left": 20,
+        "right": 49,
+        "top": 29.5,
+        "bottom": 58.5,
+        "width": 29,
+        "height": 29
+      },
+      "logoImage": "/one-decision-away/brand/oda-c4.png",
+      "controls": [
+        {
+          "text": "ODA’yı aç",
+          "rect": {
+            "left": 289.828125,
+            "right": 370,
+            "top": 22,
+            "bottom": 66,
+            "width": 80.171875,
+            "height": 44
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "İlk kararımı seç",
+          "rect": {
+            "left": 20,
+            "right": 187.3125,
+            "top": 466.625,
+            "bottom": 518.625,
+            "width": 167.3125,
+            "height": 52
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "Günlük pratiği gör",
+          "rect": {
+            "left": 205.3125,
+            "right": 340.9375,
+            "top": 468.625,
+            "bottom": 516.625,
+            "width": 135.625,
+            "height": 48
+          },
+          "inInitialViewport": true
+        }
+      ],
+      "controlHitTests": [
+        {
+          "text": "ODA’yı aç",
+          "rect": {
+            "left": 289.828125,
+            "right": 370,
+            "top": 22,
+            "bottom": 66
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "İlk kararımı seç",
+          "rect": {
+            "left": 20,
+            "right": 187.3125,
+            "top": 376.625,
+            "bottom": 428.625
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "Günlük pratiği gör",
+          "rect": {
+            "left": 205.3125,
+            "right": 340.9375,
+            "top": 378.625,
+            "bottom": 426.625
+          },
+          "centerHit": true,
+          "inViewport": true
+        }
+      ]
+    },
+    {
+      "name": "es-320x740-light",
+      "width": 320,
+      "height": 740,
+      "theme": "light",
+      "locale": "es",
+      "mobileEmulation": true,
+      "viewport": {
+        "width": 320,
+        "height": 740,
+        "documentWidth": 320,
+        "scrollWidth": 320
+      },
+      "lang": "es",
+      "reducedMotion": true,
+      "title": {
+        "text": "El cambio empieza con una decisión.",
+        "rect": {
+          "left": 16,
+          "right": 304,
+          "top": 169,
+          "bottom": 389.28125,
+          "width": 288,
+          "height": 220.28125
+        },
+        "lines": [
+          {
+            "center": 195.453125,
+            "left": 16,
+            "right": 214.359375,
+            "top": 168.453125,
+            "bottom": 222.453125,
+            "text": "El cambio"
+          },
+          {
+            "center": 248.359375,
+            "left": 16,
+            "right": 180.015625,
+            "top": 221.359375,
+            "bottom": 275.359375,
+            "text": "empieza"
+          },
+          {
+            "center": 303.421875,
+            "left": 16,
+            "right": 160.609375,
+            "top": 276.421875,
+            "bottom": 330.421875,
+            "text": "con una"
+          },
+          {
+            "center": 360.65625,
+            "left": 16,
+            "right": 168.953125,
+            "top": 333.65625,
+            "bottom": 387.65625,
+            "text": "decisión."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 320,
+              "top": 0,
+              "bottom": 7598.234375,
+              "width": 320,
+              "height": 7598.234375
+            }
+          }
+        ]
+      },
+      "introduction": {
+        "text": "Convierte lo que te importa en acciones diarias, con cursos prácticos, reflexión guiada y un progreso que puedes ver.",
+        "rect": {
+          "left": 16,
+          "right": 304,
+          "top": 411.28125,
+          "bottom": 494.53125,
+          "width": 288,
+          "height": 83.25
+        },
+        "lines": [
+          {
+            "center": 425.15625,
+            "left": 16,
+            "right": 287.734375,
+            "top": 416.15625,
+            "bottom": 434.15625,
+            "text": "Convierte lo que te importa en acciones"
+          },
+          {
+            "center": 452.90625,
+            "left": 16,
+            "right": 276.25,
+            "top": 443.90625,
+            "bottom": 461.90625,
+            "text": "diarias, con cursos prácticos, reflexión"
+          },
+          {
+            "center": 480.65625,
+            "left": 16,
+            "right": 269.71875,
+            "top": 471.65625,
+            "bottom": 489.65625,
+            "text": "guiada y un progreso que puedes ver."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 320,
+              "top": 0,
+              "bottom": 7598.234375,
+              "width": 320,
+              "height": 7598.234375
+            }
+          }
+        ]
+      },
+      "hero": {
+        "left": 16,
+        "right": 304,
+        "top": 89,
+        "bottom": 1405.625,
+        "width": 288,
+        "height": 1316.625
+      },
+      "copy": {
+        "left": 16,
+        "right": 304,
+        "top": 131,
+        "bottom": 679.125,
+        "width": 288,
+        "height": 548.125
+      },
+      "kicker": {
+        "left": 16,
+        "right": 304,
+        "top": 131,
+        "bottom": 147,
+        "width": 288,
+        "height": 16
+      },
+      "actions": {
+        "left": 16,
+        "right": 304,
+        "top": 519.53125,
+        "bottom": 625.53125,
+        "width": 288,
+        "height": 106
+      },
+      "privacy": {
+        "left": 16,
+        "right": 304,
+        "top": 639.53125,
+        "bottom": 679.125,
+        "width": 288,
+        "height": 39.59375
+      },
+      "preview": {
+        "left": 16,
+        "right": 304,
+        "top": 715.125,
+        "bottom": 1363.625,
+        "width": 288,
+        "height": 648.5
+      },
+      "header": {
+        "left": 16,
+        "right": 304,
+        "top": 0,
+        "bottom": 89,
+        "width": 288,
+        "height": 89
+      },
+      "brand": {
+        "left": 16,
+        "right": 98.734375,
+        "top": 32,
+        "bottom": 56,
+        "width": 82.734375,
+        "height": 24
+      },
+      "logo": {
+        "left": 16,
+        "right": 40,
+        "top": 32,
+        "bottom": 56,
+        "width": 24,
+        "height": 24
+      },
+      "logoImage": "/one-decision-away/brand/oda-c4.png",
+      "controls": [
+        {
+          "text": "Abrir ODA",
+          "rect": {
+            "left": 227.234375,
+            "right": 304,
+            "top": 22,
+            "bottom": 66,
+            "width": 76.765625,
+            "height": 44
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "Elegir mi primera decisión",
+          "rect": {
+            "left": 16,
+            "right": 249.78125,
+            "top": 519.53125,
+            "bottom": 571.53125,
+            "width": 233.78125,
+            "height": 52
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "Ver la práctica diaria",
+          "rect": {
+            "left": 16,
+            "right": 166.609375,
+            "top": 577.53125,
+            "bottom": 625.53125,
+            "width": 150.609375,
+            "height": 48
+          },
+          "inInitialViewport": true
+        }
+      ],
+      "controlHitTests": [
+        {
+          "text": "Abrir ODA",
+          "rect": {
+            "left": 227.234375,
+            "right": 304,
+            "top": 22,
+            "bottom": 66
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "Elegir mi primera decisión",
+          "rect": {
+            "left": 16,
+            "right": 249.78125,
+            "top": 324.53125,
+            "bottom": 376.53125
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "Ver la práctica diaria",
+          "rect": {
+            "left": 16,
+            "right": 166.609375,
+            "top": 326.53125,
+            "bottom": 374.53125
+          },
+          "centerHit": true,
+          "inViewport": true
+        }
+      ]
+    },
+    {
+      "name": "es-390x844-light",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "locale": "es",
+      "mobileEmulation": true,
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "scrollWidth": 390
+      },
+      "lang": "es",
+      "reducedMotion": true,
+      "title": {
+        "text": "El cambio empieza con una decisión.",
+        "rect": {
+          "left": 20,
+          "right": 316.984375,
+          "top": 169,
+          "bottom": 389.28125,
+          "width": 296.984375,
+          "height": 220.28125
+        },
+        "lines": [
+          {
+            "center": 195.453125,
+            "left": 20,
+            "right": 218.359375,
+            "top": 168.453125,
+            "bottom": 222.453125,
+            "text": "El cambio"
+          },
+          {
+            "center": 248.359375,
+            "left": 20,
+            "right": 184.015625,
+            "top": 221.359375,
+            "bottom": 275.359375,
+            "text": "empieza"
+          },
+          {
+            "center": 303.421875,
+            "left": 20,
+            "right": 164.609375,
+            "top": 276.421875,
+            "bottom": 330.421875,
+            "text": "con una"
+          },
+          {
+            "center": 360.65625,
+            "left": 20,
+            "right": 172.953125,
+            "top": 333.65625,
+            "bottom": 387.65625,
+            "text": "decisión."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 0,
+              "bottom": 7201.09375,
+              "width": 390,
+              "height": 7201.09375
+            }
+          }
+        ]
+      },
+      "introduction": {
+        "text": "Convierte lo que te importa en acciones diarias, con cursos prácticos, reflexión guiada y un progreso que puedes ver.",
+        "rect": {
+          "left": 20,
+          "right": 370,
+          "top": 411.28125,
+          "bottom": 494.53125,
+          "width": 350,
+          "height": 83.25
+        },
+        "lines": [
+          {
+            "center": 425.15625,
+            "left": 20,
+            "right": 291.734375,
+            "top": 416.15625,
+            "bottom": 434.15625,
+            "text": "Convierte lo que te importa en acciones"
+          },
+          {
+            "center": 452.90625,
+            "left": 20,
+            "right": 280.25,
+            "top": 443.90625,
+            "bottom": 461.90625,
+            "text": "diarias, con cursos prácticos, reflexión"
+          },
+          {
+            "center": 480.65625,
+            "left": 20,
+            "right": 273.71875,
+            "top": 471.65625,
+            "bottom": 489.65625,
+            "text": "guiada y un progreso que puedes ver."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 0,
+              "bottom": 7201.09375,
+              "width": 390,
+              "height": 7201.09375
+            }
+          }
+        ]
+      },
+      "hero": {
+        "left": 20,
+        "right": 370,
+        "top": 89,
+        "bottom": 1382.625,
+        "width": 350,
+        "height": 1293.625
+      },
+      "copy": {
+        "left": 20,
+        "right": 370,
+        "top": 131,
+        "bottom": 679.125,
+        "width": 350,
+        "height": 548.125
+      },
+      "kicker": {
+        "left": 20,
+        "right": 370,
+        "top": 131,
+        "bottom": 147,
+        "width": 350,
+        "height": 16
+      },
+      "actions": {
+        "left": 20,
+        "right": 370,
+        "top": 519.53125,
+        "bottom": 625.53125,
+        "width": 350,
+        "height": 106
+      },
+      "privacy": {
+        "left": 20,
+        "right": 337.015625,
+        "top": 639.53125,
+        "bottom": 679.125,
+        "width": 317.015625,
+        "height": 39.59375
+      },
+      "preview": {
+        "left": 20,
+        "right": 370,
+        "top": 715.125,
+        "bottom": 1340.625,
+        "width": 350,
+        "height": 625.5
+      },
+      "header": {
+        "left": 20,
+        "right": 370,
+        "top": 0,
+        "bottom": 89,
+        "width": 350,
+        "height": 89
+      },
+      "brand": {
+        "left": 20,
+        "right": 136.71875,
+        "top": 25.90625,
+        "bottom": 62.09375,
+        "width": 116.71875,
+        "height": 36.1875
+      },
+      "logo": {
+        "left": 20,
+        "right": 49,
+        "top": 29.5,
+        "bottom": 58.5,
+        "width": 29,
+        "height": 29
+      },
+      "logoImage": "/one-decision-away/brand/oda-c4.png",
+      "controls": [
+        {
+          "text": "Abrir ODA",
+          "rect": {
+            "left": 287.234375,
+            "right": 370,
+            "top": 22,
+            "bottom": 66,
+            "width": 82.765625,
+            "height": 44
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "Elegir mi primera decisión",
+          "rect": {
+            "left": 20,
+            "right": 253.78125,
+            "top": 519.53125,
+            "bottom": 571.53125,
+            "width": 233.78125,
+            "height": 52
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "Ver la práctica diaria",
+          "rect": {
+            "left": 20,
+            "right": 170.609375,
+            "top": 577.53125,
+            "bottom": 625.53125,
+            "width": 150.609375,
+            "height": 48
+          },
+          "inInitialViewport": true
+        }
+      ],
+      "controlHitTests": [
+        {
+          "text": "Abrir ODA",
+          "rect": {
+            "left": 287.234375,
+            "right": 370,
+            "top": 22,
+            "bottom": 66
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "Elegir mi primera decisión",
+          "rect": {
+            "left": 20,
+            "right": 253.78125,
+            "top": 376.53125,
+            "bottom": 428.53125
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "Ver la práctica diaria",
+          "rect": {
+            "left": 20,
+            "right": 170.609375,
+            "top": 378.53125,
+            "bottom": 426.53125
+          },
+          "centerHit": true,
+          "inViewport": true
+        }
+      ]
+    },
+    {
+      "name": "es-1440x1000-light",
+      "width": 1440,
+      "height": 1000,
+      "theme": "light",
+      "locale": "es",
+      "mobileEmulation": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "documentWidth": 1435,
+        "scrollWidth": 1435
+      },
+      "lang": "es",
+      "reducedMotion": true,
+      "title": {
+        "text": "El cambio empieza con una decisión.",
+        "rect": {
+          "left": 127.5,
+          "right": 563.09375,
+          "top": 232.90625,
+          "bottom": 591.90625,
+          "width": 435.59375,
+          "height": 359
+        },
+        "lines": [
+          {
+            "center": 276.03125,
+            "left": 127.5,
+            "right": 450.765625,
+            "top": 232.03125,
+            "bottom": 320.03125,
+            "text": "El cambio"
+          },
+          {
+            "center": 362.25,
+            "left": 127.5,
+            "right": 394.796875,
+            "top": 318.25,
+            "bottom": 406.25,
+            "text": "empieza"
+          },
+          {
+            "center": 452,
+            "left": 127.5,
+            "right": 363.15625,
+            "top": 408,
+            "bottom": 496,
+            "text": "con una"
+          },
+          {
+            "center": 545.265625,
+            "left": 127.5,
+            "right": 376.75,
+            "top": 501.265625,
+            "bottom": 589.265625,
+            "text": "decisión."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 1435,
+              "top": 0,
+              "bottom": 4573.953125,
+              "width": 1435,
+              "height": 4573.953125
+            }
+          }
+        ]
+      },
+      "introduction": {
+        "text": "Convierte lo que te importa en acciones diarias, con cursos prácticos, reflexión guiada y un progreso que puedes ver.",
+        "rect": {
+          "left": 127.5,
+          "right": 578.140625,
+          "top": 617.90625,
+          "bottom": 677.09375,
+          "width": 450.640625,
+          "height": 59.1875
+        },
+        "lines": [
+          {
+            "center": 632.703125,
+            "left": 127.5,
+            "right": 556.390625,
+            "top": 623.203125,
+            "bottom": 642.203125,
+            "text": "Convierte lo que te importa en acciones diarias, con cursos"
+          },
+          {
+            "center": 662.296875,
+            "left": 127.5,
+            "right": 540.59375,
+            "top": 652.796875,
+            "bottom": 671.796875,
+            "text": "prácticos, reflexión guiada y un progreso que puedes ver."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 1435,
+              "top": 0,
+              "bottom": 4573.953125,
+              "width": 1435,
+              "height": 4573.953125
+            }
+          }
+        ]
+      },
+      "hero": {
+        "left": 127.5,
+        "right": 1307.5,
+        "top": 106,
+        "bottom": 907,
+        "width": 1180,
+        "height": 801
+      },
+      "copy": {
+        "left": 127.5,
+        "right": 730.125,
+        "top": 192.3125,
+        "bottom": 816.6875,
+        "width": 602.625,
+        "height": 624.375
+      },
+      "kicker": {
+        "left": 127.5,
+        "right": 730.125,
+        "top": 192.3125,
+        "bottom": 209.90625,
+        "width": 602.625,
+        "height": 17.59375
+      },
+      "actions": {
+        "left": 127.5,
+        "right": 730.125,
+        "top": 707.09375,
+        "bottom": 759.09375,
+        "width": 602.625,
+        "height": 52
+      },
+      "privacy": {
+        "left": 127.5,
+        "right": 430.09375,
+        "top": 777.09375,
+        "bottom": 816.6875,
+        "width": 302.59375,
+        "height": 39.59375
+      },
+      "preview": {
+        "left": 794.125,
+        "right": 1307.5,
+        "top": 179,
+        "bottom": 830,
+        "width": 513.375,
+        "height": 651
+      },
+      "header": {
+        "left": 127.5,
+        "right": 1307.5,
+        "top": 0,
+        "bottom": 106,
+        "width": 1180,
+        "height": 106
+      },
+      "brand": {
+        "left": 127.5,
+        "right": 283.78125,
+        "top": 30.703125,
+        "bottom": 74.296875,
+        "width": 156.28125,
+        "height": 43.59375
+      },
+      "logo": {
+        "left": 127.5,
+        "right": 164.5,
+        "top": 34,
+        "bottom": 71,
+        "width": 37,
+        "height": 37
+      },
+      "logoImage": "/one-decision-away/brand/oda-c4.png",
+      "controls": [
+        {
+          "text": "Abrir ODA",
+          "rect": {
+            "left": 1178,
+            "right": 1307.5,
+            "top": 30.5,
+            "bottom": 74.5,
+            "width": 129.5,
+            "height": 44
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "Elegir mi primera decisión",
+          "rect": {
+            "left": 127.5,
+            "right": 379.328125,
+            "top": 707.09375,
+            "bottom": 759.09375,
+            "width": 251.828125,
+            "height": 52
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "Ver la práctica diaria",
+          "rect": {
+            "left": 402.328125,
+            "right": 552.9375,
+            "top": 709.09375,
+            "bottom": 757.09375,
+            "width": 150.609375,
+            "height": 48
+          },
+          "inInitialViewport": true
+        }
+      ],
+      "controlHitTests": [
+        {
+          "text": "Abrir ODA",
+          "rect": {
+            "left": 1178,
+            "right": 1307.5,
+            "top": 30.5,
+            "bottom": 74.5
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "Elegir mi primera decisión",
+          "rect": {
+            "left": 127.5,
+            "right": 379.328125,
+            "top": 458.09375,
+            "bottom": 510.09375
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "Ver la práctica diaria",
+          "rect": {
+            "left": 402.328125,
+            "right": 552.9375,
+            "top": 460.09375,
+            "bottom": 508.09375
+          },
+          "centerHit": true,
+          "inViewport": true
+        }
+      ]
+    },
+    {
+      "name": "es-390x844-dark",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "locale": "es",
+      "mobileEmulation": true,
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "scrollWidth": 390
+      },
+      "lang": "es",
+      "reducedMotion": true,
+      "title": {
+        "text": "El cambio empieza con una decisión.",
+        "rect": {
+          "left": 20,
+          "right": 316.984375,
+          "top": 169,
+          "bottom": 389.28125,
+          "width": 296.984375,
+          "height": 220.28125
+        },
+        "lines": [
+          {
+            "center": 195.453125,
+            "left": 20,
+            "right": 218.359375,
+            "top": 168.453125,
+            "bottom": 222.453125,
+            "text": "El cambio"
+          },
+          {
+            "center": 248.359375,
+            "left": 20,
+            "right": 184.015625,
+            "top": 221.359375,
+            "bottom": 275.359375,
+            "text": "empieza"
+          },
+          {
+            "center": 303.421875,
+            "left": 20,
+            "right": 164.609375,
+            "top": 276.421875,
+            "bottom": 330.421875,
+            "text": "con una"
+          },
+          {
+            "center": 360.65625,
+            "left": 20,
+            "right": 172.953125,
+            "top": 333.65625,
+            "bottom": 387.65625,
+            "text": "decisión."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 0,
+              "bottom": 7201.09375,
+              "width": 390,
+              "height": 7201.09375
+            }
+          }
+        ]
+      },
+      "introduction": {
+        "text": "Convierte lo que te importa en acciones diarias, con cursos prácticos, reflexión guiada y un progreso que puedes ver.",
+        "rect": {
+          "left": 20,
+          "right": 370,
+          "top": 411.28125,
+          "bottom": 494.53125,
+          "width": 350,
+          "height": 83.25
+        },
+        "lines": [
+          {
+            "center": 425.15625,
+            "left": 20,
+            "right": 291.734375,
+            "top": 416.15625,
+            "bottom": 434.15625,
+            "text": "Convierte lo que te importa en acciones"
+          },
+          {
+            "center": 452.90625,
+            "left": 20,
+            "right": 280.25,
+            "top": 443.90625,
+            "bottom": 461.90625,
+            "text": "diarias, con cursos prácticos, reflexión"
+          },
+          {
+            "center": 480.65625,
+            "left": 20,
+            "right": 273.71875,
+            "top": 471.65625,
+            "bottom": 489.65625,
+            "text": "guiada y un progreso que puedes ver."
+          }
+        ],
+        "clippingAncestors": [
+          {
+            "tag": "DIV",
+            "className": "oda-landing",
+            "overflowX": "clip",
+            "overflowY": "clip",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 0,
+              "bottom": 7201.09375,
+              "width": 390,
+              "height": 7201.09375
+            }
+          }
+        ]
+      },
+      "hero": {
+        "left": 20,
+        "right": 370,
+        "top": 89,
+        "bottom": 1382.625,
+        "width": 350,
+        "height": 1293.625
+      },
+      "copy": {
+        "left": 20,
+        "right": 370,
+        "top": 131,
+        "bottom": 679.125,
+        "width": 350,
+        "height": 548.125
+      },
+      "kicker": {
+        "left": 20,
+        "right": 370,
+        "top": 131,
+        "bottom": 147,
+        "width": 350,
+        "height": 16
+      },
+      "actions": {
+        "left": 20,
+        "right": 370,
+        "top": 519.53125,
+        "bottom": 625.53125,
+        "width": 350,
+        "height": 106
+      },
+      "privacy": {
+        "left": 20,
+        "right": 337.015625,
+        "top": 639.53125,
+        "bottom": 679.125,
+        "width": 317.015625,
+        "height": 39.59375
+      },
+      "preview": {
+        "left": 20,
+        "right": 370,
+        "top": 715.125,
+        "bottom": 1340.625,
+        "width": 350,
+        "height": 625.5
+      },
+      "header": {
+        "left": 20,
+        "right": 370,
+        "top": 0,
+        "bottom": 89,
+        "width": 350,
+        "height": 89
+      },
+      "brand": {
+        "left": 20,
+        "right": 136.71875,
+        "top": 25.90625,
+        "bottom": 62.09375,
+        "width": 116.71875,
+        "height": 36.1875
+      },
+      "logo": {
+        "left": 20,
+        "right": 49,
+        "top": 29.5,
+        "bottom": 58.5,
+        "width": 29,
+        "height": 29
+      },
+      "logoImage": "/one-decision-away/brand/oda-c4.png",
+      "controls": [
+        {
+          "text": "Abrir ODA",
+          "rect": {
+            "left": 287.234375,
+            "right": 370,
+            "top": 22,
+            "bottom": 66,
+            "width": 82.765625,
+            "height": 44
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "Elegir mi primera decisión",
+          "rect": {
+            "left": 20,
+            "right": 253.78125,
+            "top": 519.53125,
+            "bottom": 571.53125,
+            "width": 233.78125,
+            "height": 52
+          },
+          "inInitialViewport": true
+        },
+        {
+          "text": "Ver la práctica diaria",
+          "rect": {
+            "left": 20,
+            "right": 170.609375,
+            "top": 577.53125,
+            "bottom": 625.53125,
+            "width": 150.609375,
+            "height": 48
+          },
+          "inInitialViewport": true
+        }
+      ],
+      "controlHitTests": [
+        {
+          "text": "Abrir ODA",
+          "rect": {
+            "left": 287.234375,
+            "right": 370,
+            "top": 22,
+            "bottom": 66
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "Elegir mi primera decisión",
+          "rect": {
+            "left": 20,
+            "right": 253.78125,
+            "top": 376.53125,
+            "bottom": 428.53125
+          },
+          "centerHit": true,
+          "inViewport": true
+        },
+        {
+          "text": "Ver la práctica diaria",
+          "rect": {
+            "left": 20,
+            "right": 170.609375,
+            "top": 378.53125,
+            "bottom": 426.53125
+          },
+          "centerHit": true,
+          "inViewport": true
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    "hero-en-320x740-light-viewport.png",
+    "hero-en-320x740-light-hero.png",
+    "hero-en-390x844-light-viewport.png",
+    "hero-en-390x844-light-hero.png",
+    "hero-en-1440x1000-light-viewport.png",
+    "hero-en-1440x1000-light-hero.png",
+    "hero-en-390x844-dark-viewport.png",
+    "hero-en-390x844-dark-hero.png",
+    "hero-tr-320x740-light-viewport.png",
+    "hero-tr-320x740-light-hero.png",
+    "hero-tr-390x844-light-viewport.png",
+    "hero-tr-390x844-light-hero.png",
+    "hero-tr-1440x1000-light-viewport.png",
+    "hero-tr-1440x1000-light-hero.png",
+    "hero-tr-390x844-dark-viewport.png",
+    "hero-tr-390x844-dark-hero.png",
+    "hero-es-320x740-light-viewport.png",
+    "hero-es-320x740-light-hero.png",
+    "hero-es-390x844-light-viewport.png",
+    "hero-es-390x844-light-hero.png",
+    "hero-es-1440x1000-light-viewport.png",
+    "hero-es-1440x1000-light-hero.png",
+    "hero-es-390x844-dark-viewport.png",
+    "hero-es-390x844-dark-hero.png"
+  ],
+  "errors": [],
+  "blockedRequests": [],
+  "limits": [
+    "Official Linux WebKit 26.6; mobile contexts are emulation, not physical iPhone or branded Safari.",
+    "Only read-only requests to the owned loopback HTTPS origin are permitted; external requests are aborted.",
+    "Text ranges measure rendered line boxes; screenshots support visual review. No native keyboard or device safe-area test.",
+    "Targeted hero-copy validation; no live Pages requests, production account, deployment, or provider writes."
+  ],
+  "previewPid": 18213,
+  "browserVersion": "26.6",
+  "status": "passed"
+}

@@ -2,8 +2,8 @@ import type { Locale } from '../i18n';
 
 const en = {
   open: 'Open ODA', start: 'Choose my first decision', explore: 'See the daily practice',
-  eyebrow: 'A little direction. A daily practice.', title: 'Make room for', titleAccent: 'what matters.',
-  introduction: 'Turn something you care about into one small action. ODA brings your daily decisions, guided learning and reflection into a space you can return to.',
+  eyebrow: 'A little direction. A daily practice.', title: 'Change starts with', titleAccent: 'one decision.',
+  introduction: 'Turn what matters to you into daily action—with practical courses, guided reflection, and progress you can see.',
   privacy: 'Begin free, without an account. Your daily practice saves on this device.',
   mainNavigation: 'Main navigation', methodNav: 'The practice', coursesNav: 'Courses', skip: 'Skip to content',
   previewLabel: 'A day in ODA', previewHint: 'Try the three steps', previewNote: 'An example, for you to explore. Your own practice begins inside ODA.',
@@ -49,8 +49,8 @@ const en = {
 
 const tr: typeof en = {
   open: 'ODA’yı aç', start: 'İlk kararımı seç', explore: 'Günlük pratiği gör',
-  eyebrow: 'Biraz yön. Her gün biraz pratik.', title: 'Önem verdiğine', titleAccent: 'yer aç.',
-  introduction: 'Önemsediğin bir şeyi küçük bir adıma dönüştür. ODA günlük kararlarını, rehberli öğrenmeyi ve düşünmeyi yeniden dönebileceğin bir alanda bir araya getirir.',
+  eyebrow: 'Biraz yön. Her gün biraz pratik.', title: 'Değişim', titleAccent: 'tek bir kararla başlar.',
+  introduction: 'Senin için önemli olanları günlük adımlara dönüştür—uygulamalı kurslar, rehberli düşünme ve görebileceğin ilerlemeyle.',
   privacy: 'Ücretsiz ve hesapsız başla. Günlük pratiğin bu cihazda saklanır.',
   mainNavigation: 'Ana gezinme', methodNav: 'Günlük pratik', coursesNav: 'Kurslar', skip: 'İçeriğe geç',
   previewLabel: 'ODA’da bir gün', previewHint: 'Üç adımı dene', previewNote: 'Keşfetmen için bir örnek. Kendi pratiğin ODA’nın içinde başlar.',
@@ -96,8 +96,8 @@ const tr: typeof en = {
 
 const es: typeof en = {
   open: 'Abrir ODA', start: 'Elegir mi primera decisión', explore: 'Ver la práctica diaria',
-  eyebrow: 'Un poco de dirección. Una práctica diaria.', title: 'Haz espacio para', titleAccent: 'lo que importa.',
-  introduction: 'Convierte algo que te importa en una pequeña acción. ODA reúne tus decisiones diarias, el aprendizaje guiado y la reflexión en un espacio al que puedes volver.',
+  eyebrow: 'Un poco de dirección. Una práctica diaria.', title: 'El cambio empieza', titleAccent: 'con una decisión.',
+  introduction: 'Convierte lo que te importa en acciones diarias, con cursos prácticos, reflexión guiada y un progreso que puedes ver.',
   privacy: 'Empieza gratis, sin cuenta. Tu práctica diaria se guarda en este dispositivo.',
   mainNavigation: 'Navegación principal', methodNav: 'La práctica', coursesNav: 'Cursos', skip: 'Saltar al contenido',
   previewLabel: 'Un día en ODA', previewHint: 'Prueba los tres pasos', previewNote: 'Un ejemplo para explorar. Tu propia práctica comienza dentro de ODA.',

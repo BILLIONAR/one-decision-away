@@ -1,0 +1,61 @@
+{
+  "sourceMainBefore": "a793799d008f3577bcced1e608f60b08ab70a1e4",
+  "applicationChanges": "Only EN/TR/ES title, titleAccent and introduction in src/data/landingCopy.ts",
+  "landingCopySha256": "f6e65dcd03bde9b75677d7b9fb071cb3e93858cfee12a515b23784219d12eef7",
+  "tests": {
+    "core": {
+      "command": "npm test with authorized execution permissions",
+      "tests": 258,
+      "pass": 258,
+      "fail": 0
+    },
+    "notebook": {
+      "tests": 19,
+      "pass": 19,
+      "fail": 0
+    },
+    "distinctTotal": 277,
+    "routingRerunExcluded": 11,
+    "restrictedCheckNote": "npm run check exited zero but the restricted local core runner reported 37 file groups. A subsequent authorized npm test reported all 258 named cases; no counts are inferred from file groups."
+  },
+  "checks": {
+    "types": "passed",
+    "translations": "passed",
+    "notebookVoice": "passed",
+    "rootProductionBuild": "passed",
+    "pagesBaseProductionBuild": "passed"
+  },
+  "browser": {
+    "engine": "official Playwright WebKit revision2359 version26.6",
+    "checks": 38,
+    "cases": 12,
+    "status": "passed",
+    "screenshots": 24,
+    "uncaughtErrors": 0,
+    "externalRequests": 0,
+    "viewportWidths": [
+      320,
+      390,
+      1440
+    ],
+    "locales": [
+      "en",
+      "tr",
+      "es"
+    ],
+    "dark390AllLocales": true
+  },
+  "unchangedFilesSha256": {
+    "src/pages/Landing.tsx": "e21186fe0580526a2ca45c4f7079c13fd3dc09e02e08da8c3c06c92b08ff0096",
+    "src/styles/landing.css": "65bb766bebcc213b745218aa92fa6816216ffebefd7a15465d9d7629992b85eb",
+    "src/components/Logo.tsx": "ea2e8fea1d2d78e96522300474543dc34d62897d7b8d646b54dddaf8a304f6aa",
+    "src/brand/current.ts": "c0dbd0d2881208be8a93a735b53805342f75256511db759dc9838adb622a615f",
+    "src/components/brand/LogoC4.tsx": "a9f5dcd6b3d737241057ba6310e977682b01622529ddad4d207721f16a37f359",
+    "package.json": "0fab35df24511b2e7f3539fac0a949ef69bd7dc846031bbc7cda86903e758319",
+    "package-lock.json": "de7c49a36467bc56d9ecd397f709cf9c5419ce73f3bf909485471f1a40acd573",
+    ".github/workflows/deploy-pages.yml": "bfa989f1cd1384bf74b6f8b821cb615dba6fa0a3aa95b195bd0565c0284503a6"
+  },
+  "originalC4LogoSha256": "94a0b00cc38c89d6aac75a3334a39d115731aa5c114e054a65260671e03c8395",
+  "publication": "Exact-commit Pages outcome and release SHA are reported in the final handoff. This receipt records the prepublication validation.",
+  "liveVerification": "Delegated to parent. No requests to the blocked public Pages host in this task."
+}
