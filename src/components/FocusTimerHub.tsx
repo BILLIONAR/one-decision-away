@@ -442,36 +442,19 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
       )}
 
       {section === 'custom' && (
-        <div className="space-y-5">
-          <div className="space-y-1.5">
-            <label htmlFor="focus-mission" className="block text-sm text-[var(--fg-muted)]">
-              {t('Mission')}
-            </label>
-            <select
-              id="focus-mission"
-              value={selectedMissionId}
-              onChange={(e) => handleSelectMission(e.target.value)}
-              className={selectCls}
-            >
-              <option value="custom">{t('Free intention')}</option>
-              {activeMissions.map((m) => (
-                <option key={m.id} value={m.id}>
-                  {m.isOneDecision ? `${t('One decision')} · ` : `${t(m.area)} · `}
-                  {t(m.title)} ({m.estimatedMinutes || 30}m)
-                </option>
-              ))}
-            </select>
-            {selectedMissionId === 'custom' && (
-              <input
-                type="text"
-                value={customGoal}
-                onChange={(e) => setCustomGoal(e.target.value)}
-                placeholder={t('What will you focus on? Optional')}
-                className={`${selectCls} placeholder:text-[var(--fg-subtle)]`}
-              />
-            )}
+        <div className="oda-focus-custom space-y-5">
+          <div className="oda-focus-launch">
+            <div><p className="text-xs text-[var(--fg-muted)]">{t('Duration')}</p><p className="oda-focus-duration" aria-label={t('{n} min', { n: durationMinutes })}>{String(durationMinutes).padStart(2, '0')}:00</p></div>
+          <div className="flex items-center justify-between gap-3 pt-1">
+            <span className="text-sm text-[var(--fg-muted)]">
+              {t('Reward')} <span className="text-[var(--accent)] font-medium">D$ {estimatedReward.toLocaleString()}</span>
+            </span>
+            <button type="button" onClick={handleStart} className={startBtn}>
+              <Play className="w-[18px] h-[18px]" strokeWidth={1.8} />
+              {t('Start {n} min', { n: durationMinutes })}
+            </button>
           </div>
-
+          </div>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-sm text-[var(--fg-muted)]">{t('Duration')}</span>
@@ -524,6 +507,35 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
                 </div>
               )}
             </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <label htmlFor="focus-mission" className="block text-sm text-[var(--fg-muted)]">
+              {t('Mission')}
+            </label>
+            <select
+              id="focus-mission"
+              value={selectedMissionId}
+              onChange={(e) => handleSelectMission(e.target.value)}
+              className={selectCls}
+            >
+              <option value="custom">{t('Free intention')}</option>
+              {activeMissions.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.isOneDecision ? `${t('One decision')} · ` : `${t(m.area)} · `}
+                  {t(m.title)} ({m.estimatedMinutes || 30}m)
+                </option>
+              ))}
+            </select>
+            {selectedMissionId === 'custom' && (
+              <input
+                type="text"
+                value={customGoal}
+                onChange={(e) => setCustomGoal(e.target.value)}
+                placeholder={t('What will you focus on? Optional')}
+                className={`${selectCls} placeholder:text-[var(--fg-subtle)]`}
+              />
+            )}
           </div>
 
           <div className="space-y-2">
@@ -583,15 +595,6 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center justify-between gap-3 pt-1">
-            <span className="text-sm text-[var(--fg-muted)]">
-              {t('Reward')} <span className="text-[var(--accent)] font-medium">D$ {estimatedReward.toLocaleString()}</span>
-            </span>
-            <button type="button" onClick={handleStart} className={startBtn}>
-              <Play className="w-[18px] h-[18px]" strokeWidth={1.8} />
-              {t('Start {n} min', { n: durationMinutes })}
-            </button>
-          </div>
         </div>
       )}
     </div>

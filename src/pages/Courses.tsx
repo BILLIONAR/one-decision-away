@@ -103,7 +103,7 @@ export const Courses: React.FC = () => {
   const languageNote = courses.some(item => item.lang && item.lang !== locale) && <p lang={locale} className="text-xs text-[var(--fg-muted)] mt-3">{t('Some courses are not yet available in your language; they open in the language they were written in.')}</p>;
   const storageNote = <div className="oda-course-save-note"><p className={`text-xs leading-relaxed ${storageError ? 'text-[var(--brand-burgundy)]' : 'text-[var(--fg-muted)]'}`} role={storageError ? 'alert' : undefined}>{storageError ? t("This browser can't save your progress right now. If you close the page, changes from this session may be lost.") : copy.privacy}</p>{storageError && <button type="button" onClick={() => { void draft.retry(); }}>{copy.retrySave}</button>}</div>;
 
-  if (!course) return <div className="oda-courses">
+  if (!course) return <div className="oda-courses oda-courses-fidelity">
     <header className="oda-course-intro">
       <div>
         <p className="oda-course-eyebrow">{t('ODA / Guided courses')}</p>
@@ -116,6 +116,7 @@ export const Courses: React.FC = () => {
         <p>{t('{courses} courses · {lessons} lessons', { courses: courses.length, lessons: courses.reduce((sum, item) => sum + item.lessons.length, 0) })}</p>
         <button type="button" onClick={() => { if (bibliographyRef.current) bibliographyRef.current.open = true; researchRef.current?.scrollIntoView({ block: 'start' }); researchRef.current?.focus(); }} className="oda-course-research-link">{t('Content based on {count} scientific publications', { count: researchSources.length })}<ArrowRight size={13} aria-hidden="true" /></button>
       </div>
+      {ordered[0] && <CourseCover courseId={ordered[0].id} eager className="oda-course-intro-art" />}
     </header>
 
     {resumeCourse && <section className="oda-course-resume" aria-label={t('Continue the course you started')}>
@@ -159,16 +160,30 @@ export const Courses: React.FC = () => {
     </section>
   </div>;
 
-  if (showOverview) return <div className="oda-courses oda-course-lesson oda-course-overview space-y-7" data-course-overview={course.id}>
+  if (showOverview) return <div className="oda-courses oda-courses-fidelity oda-course-lesson oda-course-overview" data-course-overview={course.id}>
     <button type="button" onClick={() => open()} className="inline-flex items-center gap-2 min-h-11 text-sm text-[var(--fg-muted)] cursor-pointer"><ArrowLeft size={16} aria-hidden="true" />{t('All courses')}</button>
-    <header>
+    <header className="oda-course-overview-lead">
+      <div>
       <p className="oda-course-eyebrow">{entryCopy.overview}</p>
       <h1 id="course-overview-title" lang={content} ref={titleRef} tabIndex={-1} className="oda-display oda-course-title outline-none scroll-mt-16">{course.title}</h1>
       <p lang={content} className="text-sm leading-relaxed text-[var(--fg-muted)]">{course.subtitle}</p>
       <p className="flex flex-wrap items-center gap-2 text-xs text-[var(--fg-muted)] mt-3"><Clock3 size={14} aria-hidden="true" />{t('{lessons} lessons · {minutes} min', { lessons: course.lessons.length, minutes: course.lessons.reduce((sum, lesson) => sum + lesson.minutes, 0) })} · {catalogue.pace}</p>
       {languageNote}
+      </div>
+      <CourseCover courseId={course.id} eager layout="overview" className="oda-course-overview-art" />
     </header>
-    <CourseCover courseId={course.id} eager layout="overview" className="rounded-[var(--radius-lg)]" />
+    <button id="course-start-lesson" type="button" className="oda-course-primary w-full" onClick={() => {
+      manuallyEnteredLesson.current = true;
+      setIndex(entry!.index);
+      setEntryRequest({ courseId: course.id, scope: entryScope, mode: 'lesson', resumeOnHydration: !entry!.started });
+      setNotice('');
+    }}>{entry!.started ? entryCopy.continueLesson.replace('{number}', String(entry!.index + 1)) : entryCopy.startFirst}<ArrowRight size={16} aria-hidden="true" /></button>
+    <section className="oda-course-map" aria-labelledby="course-overview-lessons">
+      <h2 id="course-overview-lessons" className="oda-display text-xl pt-4">{entryCopy.lessons}</h2>
+      <ol>{course.lessons.map((lesson, i) => <li key={lesson.id} data-course-overview-lesson={lesson.id} className="flex items-start gap-3 py-3 text-sm leading-relaxed">
+        <span className="oda-course-map-number" aria-hidden="true">{i + 1}</span><span lang={content} className="flex-1 min-w-0">{lesson.title}</span><span className="shrink-0 text-xs text-[var(--fg-muted)] whitespace-nowrap">{lesson.minutes} min</span>
+      </li>)}</ol>
+    </section>
     <section aria-labelledby="course-overview-about">
       <h2 id="course-overview-about" className="oda-display text-xl mb-3">{entryCopy.about}</h2>
       <p lang={content} className="text-sm leading-relaxed">{course.description}</p>
@@ -178,18 +193,6 @@ export const Courses: React.FC = () => {
       <p lang={content}>{course.outcome}</p>
     </section>
     <p lang={content} className="text-xs leading-relaxed text-[var(--fg-muted)]">{course.scope}</p>
-    <section className="oda-course-map" aria-labelledby="course-overview-lessons">
-      <h2 id="course-overview-lessons" className="oda-display text-xl pt-4">{entryCopy.lessons}</h2>
-      <ol>{course.lessons.map((lesson, i) => <li key={lesson.id} data-course-overview-lesson={lesson.id} className="flex items-start gap-3 py-3 text-sm leading-relaxed">
-        <span className="oda-course-map-number" aria-hidden="true">{i + 1}</span><span lang={content} className="flex-1 min-w-0">{lesson.title}</span><span className="shrink-0 text-xs text-[var(--fg-muted)] whitespace-nowrap">{lesson.minutes} min</span>
-      </li>)}</ol>
-    </section>
-    <button id="course-start-lesson" type="button" className="oda-course-primary w-full" onClick={() => {
-      manuallyEnteredLesson.current = true;
-      setIndex(entry!.index);
-      setEntryRequest({ courseId: course.id, scope: entryScope, mode: 'lesson', resumeOnHydration: !entry!.started });
-      setNotice('');
-    }}>{entry!.started ? entryCopy.continueLesson.replace('{number}', String(entry!.index + 1)) : entryCopy.startFirst}<ArrowRight size={16} aria-hidden="true" /></button>
     {storageNote}
   </div>;
 
@@ -202,7 +205,7 @@ export const Courses: React.FC = () => {
   const goNext = () => { manuallyEnteredLesson.current = true; setIndex(value => Math.min(value + 1, course.lessons.length - 1)); setNotice(''); };
   const patch = (value: Parameters<typeof updateLessonProgress>[2]) => { commit(current => updateLessonProgress(current, lesson, value)); setNotice(''); };
 
-  return <div className="oda-courses oda-course-lesson space-y-7">
+  return <div className="oda-courses oda-courses-fidelity oda-course-lesson space-y-7">
     <div className="flex flex-wrap items-center justify-between gap-2">
       <button type="button" onClick={() => open()} className="inline-flex items-center gap-2 min-h-11 text-sm text-[var(--fg-muted)] cursor-pointer"><ArrowLeft size={16} aria-hidden="true" />{t('All courses')}</button>
       <button type="button" onClick={() => { manuallyEnteredLesson.current = true; setEntryRequest({ courseId: course.id, scope: entryScope, mode: 'overview' }); }} className="min-h-11 text-sm text-[var(--accent)] underline underline-offset-4 cursor-pointer">{entryCopy.about}</button>

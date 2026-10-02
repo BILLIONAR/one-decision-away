@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight, AudioLines, Check, ChevronDown, ChevronRight, Leaf, Plus, MessageCircle, GraduationCap, Route, Share2, Waves } from 'lucide-react';
 import { GrowthTreePanel, GrowthWeek } from '../components/momentum/GrowthDashboard';
+import { EvidenceTree } from '../components/momentum/EvidenceTree';
 import { growthCopy } from '../i18n/growth';
 import { courseCatalogFor } from '../data/courseCatalog';
 import { courseForIntent } from '../data/starterDecisions';
@@ -43,6 +44,7 @@ import { decisionChain, evidenceSummary, isSimpleMode, keptDecisions, localDayKe
 import { EasyDecisionChips, KeptMomentCard } from '../components/momentum/FirstSteps';
 import { easyDecisions } from '../data/starterDecisions';
 import { firstRunCopy } from '../i18n/firstRun';
+import '../styles/workingSurfaces.css';
 
 const RITUALS_KEY = 'oda_rituals_open';
 
@@ -185,7 +187,7 @@ export const Today: React.FC = () => {
   };
 
   return (
-    <div className="oda-reference-today space-y-6">
+    <div className="oda-reference-today oda-fidelity-today space-y-6">
       {/* 1. Header */}
       <header className="flex items-start justify-between gap-4">
         <div className="min-w-0">
@@ -204,10 +206,12 @@ export const Today: React.FC = () => {
         </button>
       </header>
 
-      {/* Quote of the day */}
-      <figure className="oda-quote flex gap-3 py-6">
+      <div className="oda-fidelity-command">
+      {/* The saved growth stage supplies the illustration; the daily quote stays real. */}
+      <figure className="oda-quote oda-fidelity-hero">
+        <div className="oda-fidelity-hero-art" aria-hidden="true"><EvidenceTree count={keptCount} label={growth.growth} /></div>
         <span aria-hidden="true" className="oda-quote-mark text-5xl">“</span>
-        <div className="min-w-0">
+        <div className="oda-fidelity-hero-copy min-w-0">
           <p className="oda-kicker text-[var(--fg-muted)] mb-2">{d.quote}</p>
           <blockquote className="oda-display text-[22px] leading-snug text-[var(--fg)] max-w-[46ch]">
             {locale === 'tr' && quote.tr ? quote.tr : t(quote.text)}
@@ -310,8 +314,10 @@ export const Today: React.FC = () => {
         <GrowthTreePanel count={keptCount} onEvidence={() => setActiveRoute('/app/evidence')} />
       </div>
       <GrowthWeek summary={week} onEvidence={() => setActiveRoute('/app/evidence')} />
+      </div>
       <BackupReminder />
 
+      <div className="oda-fidelity-support">
       <DailyPractice mission={todayOneDecision} dayKey={todayStr} />
 
       <MomentumCard
@@ -333,7 +339,7 @@ export const Today: React.FC = () => {
       />
 
       {/* Quick actions: four tinted tiles */}
-      <nav aria-label={t('Quick actions')} className="grid grid-cols-2 gap-2.5">
+      <nav aria-label={t('Quick actions')} className="oda-fidelity-shortcuts grid grid-cols-2 gap-2.5">
         {todayOneDecision && !decisionDone && !decisionPlan?.ifThen ? (
           <button type="button" onClick={() => setPlan({ open: true })} className="oda-tile">
             <span className="oda-tile-icon oda-tint-sage"><Route size={18} strokeWidth={1.9} aria-hidden="true" /></span>
@@ -373,7 +379,7 @@ export const Today: React.FC = () => {
       {checkInDue && <TwoWeekCheckIn />}
 
       {/* 3. Three small habits */}
-      <section className="bg-[var(--bg-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] p-5">
+      <section className="oda-fidelity-habits bg-[var(--bg-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] p-5">
         <div className="flex items-center justify-between gap-3 mb-2">
           <h2 className="text-[15px] font-semibold text-[var(--fg)]">{t('Three small habits')}</h2>
           <span className="text-[13px] text-[var(--fg-muted)]">
@@ -537,6 +543,7 @@ export const Today: React.FC = () => {
       </section>
 
       </>}
+      </div>
 
       {/* Modals */}
       <DecisionPlanModal

@@ -35,7 +35,7 @@ export const Notebook: React.FC = () => {
   if (!data) return <p role="status" className="text-sm text-[var(--fg-muted)]">{t('Opening your notebook…')}</p>;
   const stats = getNotebookStats(data);
   const tabs = [{ id: 'journal' as const, label: t('Journal') }, { id: 'manifest' as const, label: t('Practices') }];
-  return <div className="oda-notebook space-y-6 text-[var(--fg)]">
+  return <div className="oda-notebook oda-notebook-fidelity text-[var(--fg)]">
     <header className="oda-notebook-heading">
       <div>
       <h1 className="oda-display text-[32px] leading-tight text-[var(--fg)]">{t('Notebook')}</h1>

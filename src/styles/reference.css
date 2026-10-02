@@ -57,112 +57,24 @@
   font-family: var(--font-sans);
 }
 .oda-reference-app [role="status"] button { min-height: 44px; min-width: 44px; }
-.oda-reference-today > header { align-items: center; }
-.oda-reference-today .oda-today-headline { font-size: clamp(1.8rem, 3.3vw, 2.8rem); }
-.oda-reference-today > .oda-quote {
-  padding: clamp(20px, 3vw, 30px);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  background: linear-gradient(115deg, var(--surface) 35%, var(--accent-soft));
-  box-shadow: var(--surface-shadow);
-}
-.oda-reference-today > .oda-quote blockquote {
-  font-family: var(--font-editorial);
-  font-weight: 400;
-  font-size: clamp(1.2rem, 2vw, 1.55rem);
-}
-.oda-reference-today .oda-growth-dashboard { align-items: start; gap: 20px; }
-.oda-reference-today .oda-growth-actions { gap: 20px; }
-.oda-reference-today .oda-growth-panel {
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  border-radius: 26px;
-  border: 1px solid var(--border);
-  background: radial-gradient(ellipse at 50% 45%, var(--accent-soft), transparent 65%), var(--surface);
-  box-shadow: var(--surface-shadow);
-  max-width: none;
-}
-.oda-reference-today .oda-growth-panel .oda-evidence-tree {
-  width: min(100%, 340px);
-  margin: 0 auto;
-  flex-shrink: 0;
-}
-.oda-reference-today .oda-growth-heading h2 { font-size: 1.2rem; }
-.oda-reference-today .oda-growth-caption { margin-top: 0; }
-.oda-reference-today .oda-growth-actions .oda-decision {
-  --bg: #1A243A;
-  --bg-elevated: #172039;
-  --bg-muted: #26324B;
-  --fg: #FFFFFF;
-  --fg-muted: #CCD2E5;
-  --fg-subtle: #CBD0E1;
-  --accent: #CAB7FF;
-  --on-accent: #251540;
-  --accent-soft: #352C50;
-  --border: #46506E;
-  --surface-border: #46506E;
-  --brand-burgundy: #D7C6FF;
-  --tint-rose: #372D50;
-  --tint-sage: #314844;
-  --ink-sage: #AFF0D9;
-  --primary-grad: linear-gradient(120deg, #E9D9FF, #BBA4FF);
-  --on-primary: #251540;
-  color: var(--fg);
-  border-radius: 26px;
-  background: radial-gradient(ellipse at 95% 0, #443363, transparent 55%), #101728;
-  box-shadow: 0 15px 28px -20px #101728;
-}
-.oda-reference-today .oda-growth-actions .oda-decision-text {
-  font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: clamp(1.4rem, 2.5vw, 2rem);
-  line-height: 1.3;
-}
-.oda-reference-today .oda-decision-input {
-  font-family: var(--font-sans);
-  font-size: 16px;
-  border-color: var(--border);
-}
-.oda-reference-today .oda-growth-week {
-  padding: 24px;
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  background: var(--surface);
-  box-shadow: var(--surface-shadow);
-}
-.oda-reference-today .oda-growth-day { width: 36px; height: 36px; }
-.oda-reference-today .oda-tile-icon { border-radius: 50%; }
-.oda-reference-focus {
-  --bg: #1D2940;
-  --bg-muted: #26354D;
-  --bg-elevated: #18243A;
-  --bg-inset: #26354D;
-  --fg: #F8FAFF;
-  --fg-muted: #C8D4E6;
-  --fg-subtle: #BDCBE0;
-  --accent: #7358DF;
-  --on-accent: #FFFFFF;
-  --accent-soft: #31334F;
-  --border: #46526A;
-  --surface-border: #46526A;
-  background: radial-gradient(ellipse at 100% 0%, #244851, transparent 65%), #101728;
-  border-radius: 26px;
-  color: var(--fg);
-}
-.oda-reference-focus button { min-height: 44px; }
-.oda-reference-focus input:not([type="range"]), .oda-reference-focus select { border: 1px solid var(--border); }
-@media (min-width: 1024px) {
-  .oda-reference-today .oda-growth-dashboard { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
-}
-@media (max-width: 479px) {
-  .oda-reference-today > header { gap: 8px; align-items: flex-start; }
-  .oda-reference-today > header > button { padding-inline: 10px; font-size: 12px; }
-  .oda-reference-today > .oda-quote, .oda-reference-today .oda-growth-panel,
-  .oda-reference-today .oda-growth-week { padding: 18px; border-radius: 22px; }
-  .oda-reference-today .oda-growth-panel .oda-evidence-tree { width: min(100%, 250px); }
-  .oda-reference-today .oda-growth-day { width: 29px; height: 29px; }
-}
 @media (prefers-reduced-transparency: reduce) {
   .oda-reference-app .oda-tabbar { backdrop-filter: none; -webkit-backdrop-filter: none; }
+}
+
+/* The source working screens use neutral pearl modules, compact borders and a
+   rectangular navigation shelf. Each category keeps its own local material. */
+.oda-reference-app .oda-sidebar { border-radius: 16px; box-shadow: 0 8px 28px -18px #4C4C7025; }
+.oda-reference-app .oda-sidebar-profile { flex-direction: column; text-align: center; padding: 18px 8px; gap: 9px; }
+.oda-reference-app .oda-sidebar-avatar { width: 62px; height: 62px; border: 1px solid #DCD8ED; background: radial-gradient(circle at 30% 20%, #FFF, var(--accent-soft)); }
+.oda-reference-app .oda-nav-active { background: linear-gradient(90deg, var(--accent-soft), var(--surface)); border-radius: 9px; }
+.oda-reference-app .oda-tabbar { border-radius: 16px; box-shadow: 0 7px 24px -12px #39325430; }
+.oda-reference-app .oda-tab { border-radius: 12px; }
+.oda-reference-app .oda-tab[aria-current="page"] { box-shadow: inset 0 0 0 1px var(--border); }
+.oda-reference-app[data-app-route="/app/coach"] { background: #040B1C; }
+.oda-reference-app[data-app-route="/app/coach"] .oda-tabbar { background: #09152B; border-color: #2D3B60; color: #B8C6E2; box-shadow: 0 0 18px -8px #396DC0; }
+.oda-reference-app[data-app-route="/app/coach"] .oda-tab { color: #B8C6E2; }
+.oda-reference-app[data-app-route="/app/coach"] .oda-tab[aria-current="page"] { color: #B5C4FF; background: #1C254E; box-shadow: inset 0 0 0 1px #3D5290; }
+@media (max-width: 767px) {
+  .oda-reference-app[data-app-route="/app/coach"] .oda-page-enter { padding: 10px 10px 0; }
+  .oda-reference-app[data-app-route="/app/coach"] .coach-page { min-height: calc(100vh - 10px); border: 0; border-radius: 0; }
 }

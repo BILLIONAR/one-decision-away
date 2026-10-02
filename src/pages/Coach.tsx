@@ -239,7 +239,7 @@ export const Coach: React.FC = () => {
           <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed max-w-xl">{c.coachIntro}</p>
         </div>
         <div className="coach-orbit" aria-hidden="true" data-state={replying ? 'replying' : listening ? 'listening' : phase === 'loading' ? 'loading' : 'idle'}>
-          <div className="coach-orb"><span /><span /><span /></div>
+          <div className="coach-orb"><img src={`${import.meta.env.BASE_URL}assets/oda/reference-fidelity/coach-liquid-form.svg`} alt="" width={420} height={420} decoding="async" /></div>
           <div className="coach-orbit-ring" />
         </div>
       </header>

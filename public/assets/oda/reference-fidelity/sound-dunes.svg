@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1280" viewBox="0 0 960 1280">
+  <!-- Original ODA vector landscape for the reference-led layout. Not the reference photograph. No external resources. -->
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#c5b5a5"/><stop offset=".42" stop-color="#786e72"/><stop offset="1" stop-color="#343e50"/></linearGradient>
+    <linearGradient id="far" x2=".7" y2="1"><stop stop-color="#7e7378"/><stop offset="1" stop-color="#303644"/></linearGradient>
+    <linearGradient id="ridge" x2=".4" y2="1"><stop stop-color="#515467"/><stop offset="1" stop-color="#1c2434"/></linearGradient>
+    <linearGradient id="front" x1=".2" x2=".8" y2="1"><stop stop-color="#343747"/><stop offset="1" stop-color="#111928"/></linearGradient>
+    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" stitchTiles="stitch"/></filter>
+  </defs>
+  <path fill="url(#sky)" d="M0 0H960V1280H0Z"/>
+  <path fill="#d9c7b0" opacity=".24" d="M0 125C280 85 530 60 960 105V220H0Z"/>
+  <path fill="#66636e" d="M0 500C250 440 430 495 690 395S850 420 960 400V1280H0Z"/>
+  <path fill="url(#far)" d="M0 545C245 570 515 353 718 377C812 389 908 432 960 453V1280H0Z"/>
+  <path fill="#bbb0a7" opacity=".35" d="M0 545C245 570 515 353 718 377C812 389 908 432 960 453C843 424 783 402 718 398C503 382 239 594 0 563Z"/>
+  <path fill="url(#ridge)" d="M0 840C295 789 598 532 960 532V1280H0Z"/>
+  <path fill="#767386" opacity=".25" d="M0 840C295 789 598 532 960 532V546C594 559 293 813 0 857Z"/>
+  <path fill="url(#front)" d="M0 1040C213 840 351 827 556 1028S824 1130 960 974V1280H0Z"/>
+  <path fill="#888694" opacity=".14" d="M0 1040C213 840 351 827 556 1028S824 1130 960 974C825 1153 701 1190 540 1048S207 868 0 1074Z"/>
+  <path fill="#0e1826" opacity=".4" d="M0 0H960V1280H0Z"/>
+  <path filter="url(#grain)" opacity=".065" d="M0 0H960V1280H0Z"/>
+</svg>

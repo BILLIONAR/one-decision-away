@@ -80,3 +80,62 @@
   .oda-notebook button { transition: none; }
   .oda-notebook-calendar-scroll { scroll-behavior: auto; }
 }
+
+/* Reference 7's tall illustrated module, compact journal and thin white dividers. */
+.oda-notebook-fidelity { display: grid; gap: 16px; }
+.oda-notebook-fidelity .oda-notebook-heading h1 { font-size: 1.7rem; }
+.oda-notebook-fidelity .oda-notebook-heading p { font-size: .82rem; }
+.oda-notebook-fidelity .oda-notebook-mark { width: 44px; height: 44px; border-radius: 12px; background: var(--surface); }
+.oda-notebook-fidelity .oda-notebook-stats { border-radius: 16px; padding: 12px 14px; gap: 8px; box-shadow: none; }
+.oda-notebook-fidelity .oda-notebook-stat-values { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); flex: 1; gap: 0; }
+.oda-notebook-fidelity .oda-notebook-stat { padding: .35rem .6rem; background: none; border-radius: 0; border-inline-start: 1px solid var(--border); font-size: .75rem; }
+.oda-notebook-fidelity .oda-notebook-stat:first-child { border-inline-start: 0; padding-inline-start: 0; }
+.oda-notebook-fidelity .oda-notebook-stats [role="status"] { width: 100%; padding-top: 7px; border-top: 1px solid var(--border); font-size: .7rem; }
+.oda-notebook-fidelity .oda-notebook-tabs { max-width: 300px; padding: 3px; border-radius: 12px; background: var(--surface); }
+.oda-notebook-fidelity .oda-notebook-tabs button { border-radius: 9px; font-size: .82rem; padding-block: .5rem; }
+.oda-notebook-fidelity .oda-notebook-tabs button[aria-pressed="true"] { background: var(--accent-soft); box-shadow: none; }
+.oda-notebook-fidelity .oda-notebook-workspace { gap: 16px; }
+.oda-notebook-fidelity .oda-notebook-writing-column { display: contents; }
+.oda-notebook-fidelity .oda-notebook-calendar-lead { padding: 16px; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); }
+.oda-notebook-fidelity .oda-notebook-calendar-lead > div:first-child { gap: .6rem; }
+.oda-notebook-fidelity .oda-notebook-calendar-lead > div:first-child h2 { font-size: .88rem; }
+.oda-notebook-fidelity .oda-notebook-calendar-lead > div:first-child button { border-radius: 10px; }
+.oda-notebook-fidelity .oda-notebook-calendar-lead input[type="search"] { min-height: 44px; }
+.oda-notebook-reflection-hero { min-width: 0; overflow: hidden; align-self: start; padding: 18px; border: 1px solid var(--border); border-radius: 18px; background: linear-gradient(155deg, var(--surface) 5%, color-mix(in srgb, var(--tint-blue) 35%, var(--surface)), var(--surface) 95%); box-shadow: var(--surface-shadow); }
+.oda-notebook-reflection-art { position: relative; height: 210px; }
+.oda-notebook-reflection-art::before { content: ''; position: absolute; width: 180px; height: 195px; left: 50%; top: 4px; transform: translateX(-50%); border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--border)); border-radius: 48% 48% 18% 18%; background: radial-gradient(ellipse at 28% 22%, color-mix(in srgb, var(--surface) 85%, transparent), transparent 65%); box-shadow: inset 0 0 25px color-mix(in srgb, var(--surface) 80%, transparent); }
+.oda-notebook-reflection-art .oda-evidence-tree { width: 230px; margin: 0 auto; }
+.oda-notebook-reflection-art .oda-evidence-tree img { filter: hue-rotate(185deg) saturate(.65); }
+.oda-notebook-reflection-art::after { content: ''; position: absolute; width: 160px; height: 13px; top: 190px; left: 50%; transform: translateX(-50%); border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border)); border-radius: 50%; background: linear-gradient(var(--surface), var(--accent-soft)); box-shadow: 0 7px 12px -7px var(--accent); }
+.oda-notebook-reflection-hero > section { position: relative; padding: 12px 0 0; border: 0; border-radius: 0; background: none; box-shadow: none; }
+.oda-notebook-reflection-hero > section .oda-display { font-family: var(--font-sans); font-size: 1.55rem; font-weight: 650; line-height: 1.25; letter-spacing: -.025em; text-transform: uppercase; }
+.oda-notebook-reflection-hero > section button { min-height: 44px; height: auto; padding-block: .6rem; border-radius: 999px; background: var(--surface); white-space: normal; }
+.oda-notebook-fidelity .oda-notebook-editor { border-radius: 18px; box-shadow: var(--surface-shadow); }
+.oda-notebook-fidelity .oda-notebook-editor-heading { padding: 16px 18px 12px; border-bottom: 1px solid var(--border); margin-bottom: 14px; }
+.oda-notebook-fidelity .oda-notebook-editor-heading h2 { font-size: 1rem; }
+.oda-notebook-fidelity .oda-notebook-editor-heading > button { border-radius: 10px; background: var(--surface); border: 1px solid var(--border); font-size: .8rem; }
+.oda-notebook-fidelity .oda-notebook-editor-form { padding-inline: 18px; }
+.oda-notebook-fidelity input, .oda-notebook-fidelity textarea, .oda-notebook-fidelity select { border-radius: 10px; background: var(--surface); }
+.oda-notebook-fidelity #notebook-journal-content { height: 220px; min-height: 220px !important; }
+.oda-notebook-fidelity .oda-notebook-editor-actions button { border-radius: 10px; }
+.oda-notebook-fidelity .oda-notebook-archive { padding: 16px; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); }
+.oda-notebook-fidelity .oda-notebook-archive > div:first-child h2 { font-size: .88rem; }
+.oda-notebook-fidelity .oda-notebook-calendar { display: flex; flex-direction: column; gap: 8px; border-radius: 14px; border: 1px solid var(--border); padding: 8px; }
+.oda-notebook-fidelity .oda-notebook-calendar > * { margin-block: 0; }
+.oda-notebook-fidelity .oda-notebook-calendar-scroll-hint { order: 1; }
+.oda-notebook-fidelity .oda-notebook-calendar-scroll { order: 2; }
+.oda-notebook-fidelity .oda-notebook-calendar > p:last-child { order: 3; }
+.oda-notebook-fidelity .oda-notebook-calendar td button { border-radius: 999px; }
+.oda-notebook-fidelity .oda-notebook-calendar > div:first-child button { background: var(--surface); }
+.oda-notebook-fidelity .oda-notebook-entry-list { border-radius: 12px; box-shadow: none; }
+@container oda-notebook (min-width: 850px) {
+  .oda-notebook-fidelity .oda-notebook-workspace { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); }
+  .oda-notebook-fidelity .oda-notebook-calendar-lead { grid-column: 2; grid-row: 1; }
+  .oda-notebook-reflection-hero { grid-column: 1; grid-row: 1 / span 2; min-height: 570px; }
+  .oda-notebook-fidelity .oda-notebook-editor { grid-column: 2; grid-row: 2; }
+  .oda-notebook-fidelity .oda-notebook-archive { grid-column: 1; grid-row: 3; }
+  .oda-notebook-reflection-art { height: 310px; }
+  .oda-notebook-reflection-art .oda-evidence-tree { width: min(100%, 330px); }
+  .oda-notebook-reflection-art::before { width: 240px; height: 285px; }
+  .oda-notebook-reflection-art::after { width: 200px; top: 285px; }
+}

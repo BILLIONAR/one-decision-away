@@ -315,3 +315,63 @@
   .oda-course-overview [data-course-overview-lesson] { column-gap: .6rem; }
   .oda-course-overview [data-course-overview-lesson] > span:last-child { font-size: .68rem; }
 }
+
+/* The reference roadmap has fine lines, real step circles and divided pearl panels. */
+.oda-courses-fidelity .oda-course-intro { position: relative; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; padding: 24px; border-radius: 18px; background: var(--surface); }
+.oda-courses-fidelity .oda-course-intro > div { position: relative; z-index: 1; }
+.oda-courses-fidelity .oda-course-intro-art { display: none; }
+.oda-courses-fidelity .oda-course-title { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
+.oda-courses-fidelity .oda-course-intro-copy { font-size: .92rem; }
+.oda-courses-fidelity .oda-course-method { border: 0; border-top: 1px solid var(--border); border-radius: 0; background: none; padding: 12px 0 0; }
+.oda-courses-fidelity .oda-course-section-heading { padding-top: 24px; }
+.oda-courses-fidelity .oda-course-section-heading h2 { font-size: 1.35rem; }
+.oda-courses-fidelity .oda-course-search { border-radius: 12px; }
+.oda-courses-fidelity .oda-course-filters button { border-radius: 10px; font-size: .76rem; }
+.oda-courses-fidelity .oda-course-list { gap: 16px; }
+.oda-courses-fidelity .oda-course-row { position: relative; border-radius: 18px; min-height: 245px; }
+.oda-courses-fidelity .oda-course-row > .oda-course-cover { position: absolute; inset: 0 0 0 auto; width: 42%; height: 100%; opacity: .8; }
+.oda-courses-fidelity .oda-course-row-content { position: relative; z-index: 1; padding: 18px; background: linear-gradient(90deg, var(--surface) 40%, color-mix(in srgb, var(--surface) 88%, transparent) 72%, color-mix(in srgb, var(--surface) 72%, transparent)); }
+.oda-courses-fidelity .oda-course-row-title { font-size: 1.55rem; max-width: 20ch; }
+.oda-courses-fidelity .oda-course-row-category { background: none; padding-inline: 0; font-size: .62rem; }
+.oda-courses-fidelity .oda-course-row-number { width: 28px; height: 28px; border: 1px solid var(--border); background: var(--surface); }
+.oda-courses-fidelity .oda-course-row-outcome { margin-top: .7rem; padding-top: .7rem; font-size: .79rem; }
+.oda-courses-fidelity .oda-course-row-state { font-family: var(--font-sans); font-size: .82rem; font-weight: 650; }
+.oda-courses-fidelity .oda-course-row-arrow { border: 1px solid var(--border); background: var(--surface); }
+.oda-courses-fidelity .oda-course-map, .oda-courses-fidelity .oda-course-overview > header { border-radius: 18px; background: var(--surface); }
+.oda-courses-fidelity.oda-course-overview > header { background: var(--surface); border-radius: 18px; }
+.oda-courses-fidelity.oda-course-overview { display: grid; gap: 16px; }
+.oda-courses-fidelity .oda-course-eyebrow { font-family: var(--font-sans); font-style: normal; font-size: .75rem; }
+.oda-courses-fidelity .oda-course-overview-lead { display: grid; grid-template-columns: minmax(0, 1fr) 85px; gap: 12px; align-items: start; padding: 16px; border: 1px solid var(--border); }
+.oda-courses-fidelity .oda-course-overview-lead .oda-course-title { font-size: clamp(1.65rem, 4vw, 2.5rem); margin-block: .45rem; }
+.oda-courses-fidelity .oda-course-overview-lead .oda-course-eyebrow { font-size: .75rem; }
+.oda-courses-fidelity .oda-course-overview-lead p.text-sm { font-size: .8rem; }
+.oda-courses-fidelity .oda-course-overview-art { width: 85px; height: 150px; border-radius: 45px 45px 12px 12px; }
+.oda-courses-fidelity.oda-course-overview .oda-course-map { padding: 12px 16px 0; }
+.oda-courses-fidelity.oda-course-overview .oda-course-map h2 { font-size: 1rem; padding-top: 0; }
+.oda-courses-fidelity.oda-course-overview .oda-course-map ol { margin-top: 10px; }
+.oda-courses-fidelity.oda-course-overview [data-course-overview-lesson] { min-height: 44px; padding-block: 10px; font-size: .82rem; }
+.oda-courses-fidelity.oda-course-overview #course-start-lesson { border-radius: 12px; }
+.oda-courses-fidelity .oda-course-steps { position: relative; isolation: isolate; padding: 12px; border-radius: 16px; gap: 12px; }
+.oda-courses-fidelity .oda-course-steps::before { content: ''; position: absolute; top: 50%; inset-inline: 24px; height: 1px; background: var(--border-strong); z-index: -1; }
+.oda-courses-fidelity .oda-course-step { justify-self: center; width: 44px; border-color: var(--border-strong); background: var(--surface); }
+.oda-courses-fidelity .oda-course-step[aria-current="step"] { background: var(--accent); color: var(--on-accent); }
+.oda-courses-fidelity .oda-course-step[data-completed="true"] { background: var(--accent-soft); }
+.oda-courses-fidelity .oda-course-map li { border-radius: 0; background: none; }
+.oda-courses-fidelity .oda-course-map li + li { border-top: 1px solid var(--border); margin-top: 0; }
+.oda-courses-fidelity .oda-course-map li button { min-height: 56px; border-radius: 0; }
+.oda-courses-fidelity .oda-course-map-number { width: 28px; height: 28px; }
+.oda-courses-fidelity .oda-course-goal { padding: 18px; border-radius: 16px; background: var(--surface); border-inline-start: 3px solid var(--accent); }
+.oda-courses-fidelity .oda-course-goal p:last-child { font-size: 1rem; }
+.oda-courses-fidelity .oda-course-lesson-header, .oda-courses-fidelity .oda-course-photo-hero, .oda-courses-fidelity .oda-course-research { border-radius: 18px; }
+.oda-courses-fidelity .oda-course-lesson-title { font-size: clamp(1.75rem, 4vw, 2.65rem); }
+.oda-courses-fidelity .oda-practice-roadmap { padding: 16px; border-radius: 16px; background: var(--surface); }
+.oda-courses-fidelity .oda-practice-workbook, .oda-courses-fidelity .oda-course-reflection, .oda-courses-fidelity .oda-course-practice, .oda-courses-fidelity .oda-course-option { border-radius: 16px; }
+@media (min-width: 900px) {
+  .oda-courses-fidelity .oda-course-intro { padding-right: 35%; min-height: 285px; }
+  .oda-courses-fidelity .oda-course-intro-art { display: block; position: absolute; right: 0; top: 0; width: 32%; height: 100%; border-radius: 50% 0 0 0; }
+}
+@media (max-width: 479px) {
+  .oda-courses-fidelity .oda-course-intro { padding: 18px; }
+  .oda-courses-fidelity .oda-course-row-content { padding: 16px; }
+  .oda-courses-fidelity .oda-course-steps { gap: 8px; }
+}

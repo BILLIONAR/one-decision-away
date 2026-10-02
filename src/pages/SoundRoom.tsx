@@ -57,22 +57,29 @@ function useTick(active: boolean, ms: number) {
 
 type Scene = 'coast' | 'night' | 'dunes' | 'leaves';
 const SECTION_SCENES: Record<SoundRoomSectionId, Scene> = {
-  relax: 'coast', sleep: 'night', focus: 'dunes', breathe: 'leaves', frequencies: 'night',
+  relax: 'dunes', sleep: 'leaves', focus: 'coast', breathe: 'night', frequencies: 'night',
 };
 const SECTION_ICONS = { relax: Waves, sleep: Moon, focus: Headphones, breathe: Wind };
+const SCENE_ASSETS: Record<Scene, string> = {
+  dunes: 'sound-dunes.svg', leaves: 'sound-palms.svg', coast: 'sound-ocean.svg', night: 'sound-palms.svg',
+};
 
-/** Original decorative landscape contours; the leaf photograph is an existing owned ODA asset. */
-const SoundScene: React.FC<{ scene: Scene; className?: string }> = ({ scene, className = '' }) => {
+/** Original local landscape illustrations; unavailable art falls back to existing owned ODA art. */
+const SoundScene: React.FC<{ scene: Scene; className?: string; eager?: boolean }> = ({ scene, className = '', eager = false }) => {
+  const [failed, setFailed] = useState(false);
+  useEffect(() => setFailed(false), [scene]);
   return (
-    <span className={`oda-sound-scene ${className}`} data-scene={scene} aria-hidden="true">
-      {scene === 'leaves' && <img className="oda-sound-scene-leaves" src={`${import.meta.env.BASE_URL}assets/oda/delivery/course-covers/oda-growth-values-640.webp`} alt="" width={640} height={360} loading="lazy" decoding="async" />}
-      <span className="oda-sound-scene-light" />
-      <span className="oda-sound-scene-contour oda-sound-scene-contour-back" />
-      <span className="oda-sound-scene-contour oda-sound-scene-contour-middle" />
-      <span className="oda-sound-scene-contour oda-sound-scene-contour-front" />
+    <span className={`oda-sound-scene ${className}`} data-scene={scene} data-artwork={failed ? 'owned-fallback' : scene} aria-hidden="true">
+      <img src={`${import.meta.env.BASE_URL}${failed ? 'assets/oda/delivery/course-covers/oda-growth-values-640.webp' : `assets/oda/reference-fidelity/${SCENE_ASSETS[scene]}`}`} alt="" loading={eager ? 'eager' : 'lazy'} decoding="async" onError={() => setFailed(true)} />
     </span>
   );
 };
+
+const CoverWave: React.FC = () => (
+  <svg className="oda-sound-cover-wave" viewBox="0 0 400 100" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 5C75 74 129 12 220 29S337 37 400 91V100H0Z" />
+  </svg>
+);
 
 const SoundCard: React.FC<{ sound: SoundRoomSound; sectionId: SoundRoomSectionId; indexInCategory: number; playing: boolean; locked?: boolean }> = ({ sound, sectionId, indexInCategory, playing, locked }) => {
   const t = useT();
@@ -210,6 +217,8 @@ const PlayerBar: React.FC = () => {
   else if (player.playing) status = t('Playing · no timer');
   else status = t('Paused');
 
+  if (!player.track) return null;
+
   return (
     <div className="oda-sound-player" role="region" aria-label={t('Sound player')}>
       <div className="oda-sound-player-inner">
@@ -267,6 +276,33 @@ const PlayerBar: React.FC = () => {
   );
 };
 
+/** The same real player state, given the reference's larger teal-glass presentation. */
+const NowPlayingPanel: React.FC = () => {
+  const t = useT();
+  const player = usePlayer();
+  const sound = soundForTrack(player.track);
+  const scene = SECTION_SCENES[SOUND_ROOM_SECTIONS.find((item) => item.sounds.some((entry) => entry.track === player.track))?.id ?? 'relax'];
+  if (!sound) return null;
+  return (
+    <section className="oda-sound-now-panel" aria-label={t('Sound player')}>
+      <div className="oda-sound-now-heading">
+        <p className="oda-kicker">{t('Sound Room')}</p>
+        <h2 className="oda-display">{sound ? t(sound.name) : t('Choose a sound to begin')}</h2>
+        {sound && <p>{t(sound.description)}</p>}
+      </div>
+      <SoundScene scene={scene} className="oda-sound-now-art" eager />
+      <div className="oda-sound-now-controls">
+        <Headphones size={20} aria-hidden="true" />
+        <button type="button" className="oda-sound-now-toggle" disabled={!sound} aria-label={player.playing ? t('Pause') : t('Play')} onClick={() => (player.playing ? soundRoomPlayer.pause() : soundRoomPlayer.resume())}>
+          {player.playing ? <Pause size={27} strokeWidth={2.2} /> : <Play size={27} strokeWidth={2.2} />}
+        </button>
+        <Timer size={20} aria-hidden="true" />
+      </div>
+      <p className="oda-sound-now-note">{sound ? t(sound.why) : t('Sound for calm, sleep and focus')}</p>
+    </section>
+  );
+};
+
 /**
  * Sound Room: relaxation, sleep, focus and breathing sounds, synthesized in
  * the browser. Honest by design: sound can help you settle; it is not a
@@ -313,14 +349,11 @@ export const SoundRoom: React.FC = () => {
     <div className="oda-sound">
       <header className="oda-sound-intro">
         <div className="oda-sound-intro-copy">
-          <p className="oda-kicker text-[var(--accent)]">{t('Sound Room')}</p>
-          <h1 className="oda-display oda-sound-title">{t('Sound for calm, sleep and focus')}</h1>
-          <p className="oda-sound-lede">
-            {t('Sound can help you relax, settle and fall asleep more easily. It is not a treatment.')}
-          </p>
+          <h1 className="oda-display oda-sound-title">{t('Sound Room')}</h1>
         </div>
       </header>
 
+      <div className="oda-sound-experience">
       <div
         role="tablist"
         aria-label={t('Sound Room sections')}
@@ -344,7 +377,7 @@ export const SoundRoom: React.FC = () => {
             data-section={item.id}
             onClick={() => choose(item.id)}
           >
-            <SoundScene scene={SECTION_SCENES[item.id]} />
+            <SoundScene scene={SECTION_SCENES[item.id]} eager={item.id === 'relax'} />
             <span className="oda-sound-tab-copy">
               <span className="oda-sound-tab-icon" aria-hidden="true"><Icon size={19} strokeWidth={1.8} /></span>
               <span className="oda-sound-tab-name">{t(item.label)}</span>
@@ -355,18 +388,25 @@ export const SoundRoom: React.FC = () => {
         })}
       </div>
 
+      <div className="oda-sound-session-column">
       <section
         role="tabpanel"
         id={`${baseId}-panel`}
         aria-labelledby={`${baseId}-tab-${section.id}`}
         className="oda-sound-panel"
       >
-        <div className="oda-sound-panel-heading">
-          <p className="oda-kicker">{t('Sound Room')}</p>
+        <div className="oda-sound-panel-cover">
+          <SoundScene key={section.id} scene={SECTION_SCENES[section.id]} eager />
+          <div className="oda-sound-panel-heading">
           <h2 className="oda-display oda-sound-section-title">{t(section.label)}</h2>
           <p className="oda-sound-section-intro">{t(section.intro)}</p>
+          </div>
+          <CoverWave />
         </div>
 
+        <div className="oda-sound-panel-body">
+        <SoundScene key={section.id} scene={SECTION_SCENES[section.id]} className="oda-sound-detail-thumb" />
+        <p className="oda-sound-detail-credit">ODA · {t('Sound Room')}</p>
         {section.id === 'breathe' ? (
           <BreathePanel sound={section.sounds[0]} soundPlaying={isPlaying('breath_pacer')} />
         ) : (
@@ -383,7 +423,17 @@ export const SoundRoom: React.FC = () => {
             {t('Pick a timer in the player below. The sound fades out gently over the last minute.')}
           </p>
         )}
+        </div>
       </section>
+      <NowPlayingPanel />
+      </div>
+      </div>
+
+      <details className="oda-sound-about">
+        <summary><Info size={17} aria-hidden="true" />{t('About')}</summary>
+        <p className="oda-sound-intro-line">{t('Sound for calm, sleep and focus')}</p>
+        <p className="oda-sound-lede">{t('Sound can help you relax, settle and fall asleep more easily. It is not a treatment.')}</p>
+      </details>
 
       <section className="oda-sound-frequencies" aria-labelledby={`${baseId}-frequencies`}>
         <p className="oda-kicker text-[var(--accent)]">{t('Frequencies')}</p>

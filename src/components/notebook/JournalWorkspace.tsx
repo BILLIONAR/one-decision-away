@@ -8,6 +8,8 @@ import { NotebookCalendar } from './NotebookCalendar';
 import { TodaysPrompt } from './TodaysPrompt';
 import { ActionNotice, dateLabel, quietButton, smallLabel, cardCls, NButton, NField, NInput, NSelect, NTextarea, useNotebookAction, useSessionDraft } from './shared';
 import { useDialogAccessibility } from '../../utils/useDialogAccessibility';
+import { EvidenceTree } from '../momentum/EvidenceTree';
+import { keptDecisions } from '../../services/momentum';
 
 const MOODS = [
   ['joyful', N_('Joyful')], ['calm', N_('Calm')], ['grateful', N_('Grateful')],
@@ -102,8 +104,13 @@ export const JournalWorkspace: React.FC<{ today: string }> = ({ today }) => {
   };
 
   return <div className="oda-notebook-workspace">
+    <section className="oda-notebook-calendar-lead min-w-0 space-y-3" aria-label={t('Journal archive')}>
+      <div className="flex justify-between items-center"><h2 className="text-[15px] font-semibold">{t('Entries')} <span className="text-[var(--fg-muted)] font-normal">({entries.length})</span></h2><NButton type="button" variant="ghost" icon={CalendarDays} aria-expanded={showCalendar} aria-controls="notebook-calendar" onClick={() => setShowCalendar(!showCalendar)}>{t('Calendar')}</NButton></div>
+      <div className="relative"><Search className="absolute left-3 top-3.5 w-4 h-4 text-[var(--fg-muted)]" aria-hidden="true" strokeWidth={1.8} /><label htmlFor="notebook-journal-search" className="sr-only">{t('Search entries')}</label><NInput id="notebook-journal-search" type="search" className="pl-9 !bg-[var(--bg-muted)] !border-transparent" value={query} onChange={e => setQuery(e.target.value)} placeholder={t('Search')} /></div>
+      {showCalendar && <div id="notebook-calendar"><NotebookCalendar today={today} selected={selectedDate} dates={dates} onSelect={setSelectedDate} /></div>}
+      {selectedDate && <div className="flex gap-2 justify-between items-center text-sm"><span>{dateLabel(selectedDate)}</span><button type="button" className={quietButton} onClick={() => setSelectedDate('')}>{t('All dates')}</button></div>}
+    </section>
     <div className="oda-notebook-writing-column">
-    <TodaysPrompt today={today} onUse={usePrompt} />
     <div className={`${cardCls} oda-notebook-editor`}>
       <div className="oda-notebook-editor-heading p-5 flex items-start justify-between gap-3">
         <div><p className={smallLabel}>{editing ? dateLabel(editing.dateKey) : dateLabel(today)}</p><h2 className="text-lg font-semibold tracking-tight text-[var(--fg)] mt-0.5">{editing ? t('Edit entry') : t('Today')}</h2></div>
@@ -124,13 +131,13 @@ export const JournalWorkspace: React.FC<{ today: string }> = ({ today }) => {
         </div>
       </form>
     </div>
+    <div className="oda-notebook-reflection-hero">
+      <div className="oda-notebook-reflection-art" aria-hidden="true"><EvidenceTree count={keptDecisions(data.missions).length} label={t('Notebook')} /></div>
+    <TodaysPrompt today={today} onUse={usePrompt} />
+    </div>
     </div>
 
     <section className="oda-notebook-archive min-w-0 space-y-3" aria-label={t('Journal archive')}>
-      <div className="flex justify-between items-center"><h2 className="text-[15px] font-semibold">{t('Entries')} <span className="text-[var(--fg-muted)] font-normal">({entries.length})</span></h2><NButton type="button" variant="ghost" icon={CalendarDays} aria-expanded={showCalendar} aria-controls="notebook-calendar" onClick={() => setShowCalendar(!showCalendar)}>{t('Calendar')}</NButton></div>
-      <div className="relative"><Search className="absolute left-3 top-3.5 w-4 h-4 text-[var(--fg-muted)]" aria-hidden="true" strokeWidth={1.8} /><label htmlFor="notebook-journal-search" className="sr-only">{t('Search entries')}</label><NInput id="notebook-journal-search" type="search" className="pl-9 !bg-[var(--bg-muted)] !border-transparent" value={query} onChange={e => setQuery(e.target.value)} placeholder={t('Search')} /></div>
-      {showCalendar && <div id="notebook-calendar"><NotebookCalendar today={today} selected={selectedDate} dates={dates} onSelect={setSelectedDate} /></div>}
-      {selectedDate && <div className="flex gap-2 justify-between items-center text-sm"><span>{dateLabel(selectedDate)}</span><button type="button" className={quietButton} onClick={() => setSelectedDate('')}>{t('All dates')}</button></div>}
       {entries.length === 0 ? <div className="oda-card rounded-[var(--radius-lg)] p-5 text-center"><p className="text-[15px] font-semibold">{query || selectedDate ? t('No entries match.') : t('Nothing written yet')}</p><p className="text-sm text-[var(--fg-muted)] mt-1">{query || selectedDate ? t('Try another word or choose all dates.') : t('Your first entry will appear here.')}</p>{(query || selectedDate) && <button type="button" className={`${quietButton} mt-2`} onClick={() => { setQuery(''); setSelectedDate(''); }}>{t('Clear filters')}</button>}</div> : <div className="oda-notebook-entry-list bg-[var(--bg-muted)] rounded-[var(--radius-md)] divide-y divide-[var(--border)] max-h-[650px] overflow-y-auto">{entries.map(entry => <button type="button" key={entry.viewId} disabled={busy} aria-current={editing?.viewId === entry.viewId ? 'true' : undefined} onClick={() => openEntry(entry)} className={`w-full text-left px-4 py-3 min-h-[56px] cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset disabled:opacity-50 ${editing?.viewId === entry.viewId ? 'bg-[var(--bg-inset)]' : ''}`}>
         <span className="flex justify-between gap-2 text-xs text-[var(--fg-muted)]"><span>{dateLabel(entry.dateKey, { month: 'short', day: 'numeric', year: 'numeric' })}</span>{entry.source === 'dream' && <span>{t('Dream journal')}</span>}</span>
         <span className="text-[15px] font-medium leading-snug block break-words mt-0.5">{displayText(entry, 'title') || t('Untitled')}</span>
