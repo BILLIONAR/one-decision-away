@@ -1,0 +1,905 @@
+{
+  "sourceCommit": "3ddb98b57669ceed6f220583aa01aa523d6b6a47",
+  "previousTestedCommit": "d7ed5455fd8a0eaa9372e22bd495f19d7f8cd494",
+  "sealedAtUtc": "2026-10-02T20:49:15.931703+00:00",
+  "sourceFileCount": 696,
+  "unchangedSources": 695,
+  "changedSources": [
+    "src/styles/workingSurfaces.css"
+  ],
+  "distFileCount": 394,
+  "allCurrentSourceAndDistStable": true,
+  "cleanSourceAfterRun": true,
+  "historicalEvidenceFilesPreserved": 158,
+  "firstUseNewExecution": {
+    "checks": 64,
+    "status": "passed",
+    "commandReceipt": "first-use/command-receipt.json",
+    "logSHA256": "1778a9210b0472d6b632225e1004ac65fc26d571fd2a39945764ec3fe5de1d1d",
+    "targetedCompletedCases": 6
+  },
+  "previousSuitesExplicitlyCarried": [
+    {
+      "suite": "courses",
+      "testedCommit": "d7ed5455fd8a0eaa9372e22bd495f19d7f8cd494",
+      "commandReceipt": "/workspace/scratch/oda-reference-redesign/fidelity-rework/final/ssr-boundary-fix/flows/courses/command-receipt.json",
+      "receiptSHA256": "9316dfa7e720cb79d5d726fab114e2fe0a531cf6e8cc895c2c051a24bcebd73d",
+      "exactLogSHA256": "5d0b6571300622d45b9cafd3e3b935a3354e55f2a21f5a1b1dc5d7a3c7046ea4",
+      "newExecutionPerformed": false,
+      "continuity": "All source/runtime controllers and all unaffected styling are byte-identical; current source/build and served assets verified separately. No claim that compiled chunk bytes equal prior renamed chunks."
+    },
+    {
+      "suite": "guidance",
+      "testedCommit": "d7ed5455fd8a0eaa9372e22bd495f19d7f8cd494",
+      "commandReceipt": "/workspace/scratch/oda-reference-redesign/fidelity-rework/final/ssr-boundary-fix/flows/guidance/command-receipt.json",
+      "receiptSHA256": "01a498b15e9aa29c0d21bd9d76370a7bbac0f7e261d78d232d5c956dbd4f15b6",
+      "exactLogSHA256": "d666ce31196ac3b18895d359c5ec582ac8fb99044b5aa5de6b41a77283434552",
+      "newExecutionPerformed": false,
+      "continuity": "All source/runtime controllers and all unaffected styling are byte-identical; current source/build and served assets verified separately. No claim that compiled chunk bytes equal prior renamed chunks."
+    },
+    {
+      "suite": "localized-preview",
+      "testedCommit": "d7ed5455fd8a0eaa9372e22bd495f19d7f8cd494",
+      "commandReceipt": "/workspace/scratch/oda-reference-redesign/fidelity-rework/final/ssr-boundary-fix/flows/localized-preview/command-receipt.json",
+      "receiptSHA256": "84ebe9cbb232e7522e7c1ca46a2e245eaeb0d578fc413682f62393b20a08c86f",
+      "exactLogSHA256": "be912bc824de59e8b8ea80742cf517d01af46f9865ab288b10a59ae4b87854ed",
+      "newExecutionPerformed": false,
+      "continuity": "All source/runtime controllers and all unaffected styling are byte-identical; current source/build and served assets verified separately. No claim that compiled chunk bytes equal prior renamed chunks."
+    },
+    {
+      "suite": "notebook",
+      "testedCommit": "d7ed5455fd8a0eaa9372e22bd495f19d7f8cd494",
+      "commandReceipt": "/workspace/scratch/oda-reference-redesign/fidelity-rework/final/ssr-boundary-fix/flows/notebook/command-receipt.json",
+      "receiptSHA256": "5b54e1539a5e889ccecfcdd27cd7ed881cdbfaf04799bde73843ca366cd22b93",
+      "exactLogSHA256": "58effa4f8ca90cb360d4f6057abe370c53fbba0810af46a22ccdab6f668e3c9e",
+      "newExecutionPerformed": false,
+      "continuity": "All source/runtime controllers and all unaffected styling are byte-identical; current source/build and served assets verified separately. No claim that compiled chunk bytes equal prior renamed chunks."
+    },
+    {
+      "suite": "calendar",
+      "testedCommit": "d7ed5455fd8a0eaa9372e22bd495f19d7f8cd494",
+      "commandReceipt": "/workspace/scratch/oda-reference-redesign/fidelity-rework/final/ssr-boundary-fix/flows/calendar/command-receipt.json",
+      "receiptSHA256": "137d9280a7370be1860d456898388419dcb3b024b8d44c33daad9c9c88dda8ff",
+      "exactLogSHA256": "e450e0fce45653a6f83958ed7d7150f28fd480a1522167de6db8c7ed440b7e89",
+      "newExecutionPerformed": false,
+      "continuity": "All source/runtime controllers and all unaffected styling are byte-identical; current source/build and served assets verified separately. No claim that compiled chunk bytes equal prior renamed chunks."
+    },
+    {
+      "suite": "sound",
+      "testedCommit": "d7ed5455fd8a0eaa9372e22bd495f19d7f8cd494",
+      "commandReceipt": "/workspace/scratch/oda-reference-redesign/fidelity-rework/final/ssr-boundary-fix/flows/sound/command-receipt.json",
+      "receiptSHA256": "f5473fd0b8d27a235056921bc7012e37f684ef30160a3479cc30e66dbb3203c8",
+      "exactLogSHA256": "2393541e98b7be9118047a2f343ead956dfcff014eedac17c58745fc4b1e4375",
+      "newExecutionPerformed": false,
+      "continuity": "All source/runtime controllers and all unaffected styling are byte-identical; current source/build and served assets verified separately. No claim that compiled chunk bytes equal prior renamed chunks."
+    },
+    {
+      "suite": "dialogs",
+      "testedCommit": "d7ed5455fd8a0eaa9372e22bd495f19d7f8cd494",
+      "commandReceipt": "/workspace/scratch/oda-reference-redesign/fidelity-rework/final/ssr-boundary-fix/flows/dialogs/command-receipt.json",
+      "receiptSHA256": "f44035eb4014fbaf25785c3f53fa66848e6f2de2f5bd9eb9d3b71cd43a3c42cc",
+      "exactLogSHA256": "74d7af0da5cfaba4bdf19bca61fb75560cf3ebfbb808668a4ceff30b43081fc5",
+      "newExecutionPerformed": false,
+      "continuity": "All source/runtime controllers and all unaffected styling are byte-identical; current source/build and served assets verified separately. No claim that compiled chunk bytes equal prior renamed chunks."
+    }
+  ],
+  "freshServedJavaScriptCount": 94,
+  "freshServedCSSCount": 7,
+  "served": [
+    {
+      "file": "dist/assets/Account-B55AVs9v.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Account-B55AVs9v.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 11764,
+      "sha256": "285798ce00bf6c7d141a359a8d604281ea77817e97d46d1f180d4922a0aa1ce9"
+    },
+    {
+      "file": "dist/assets/Bank-CsSgAeBa.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Bank-CsSgAeBa.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 29776,
+      "sha256": "03428afb434ff4b201ff36e7ca9258b36285cc6500bf1bdde517b708884b7edd"
+    },
+    {
+      "file": "dist/assets/Bridge-CdMm2yYO.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Bridge-CdMm2yYO.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 6529,
+      "sha256": "4e2837afe9d60ef673cba9985008601e4cd2f0d0daeed143a32f1abc15c4d2e2"
+    },
+    {
+      "file": "dist/assets/Budget-BQj6OO_f.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Budget-BQj6OO_f.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 4451,
+      "sha256": "cbec776fafa712250cf8a3c0bb7f7ccb1788ab9cbc26b1206974e880e93b08ea"
+    },
+    {
+      "file": "dist/assets/Coach-DFQUsGrz.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Coach-DFQUsGrz.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 49373,
+      "sha256": "789a6953781ababde1ceb8bb08f86a7c18dd52105bcfa927a65d11212cb4269f"
+    },
+    {
+      "file": "dist/assets/Coach-FmmySK6D.css",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Coach-FmmySK6D.css",
+      "status": 200,
+      "contentType": "text/css",
+      "bytes": 5948,
+      "sha256": "6eb76cfc9995bda8ee074c10b46a93d1d8c82bf07346caf697b6606d862f8102"
+    },
+    {
+      "file": "dist/assets/CourseCover-CWObC5wY.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/CourseCover-CWObC5wY.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 6182,
+      "sha256": "edfa04ec827e8b503346372c5ae9725a366717a598664090b32f106e931a7d95"
+    },
+    {
+      "file": "dist/assets/Courses-BKn5AeI_.css",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Courses-BKn5AeI_.css",
+      "status": 200,
+      "contentType": "text/css",
+      "bytes": 34158,
+      "sha256": "cd0bbf47752b5e89bf671bad7502a82ce36b0c3a0db4fa1ad0711a6dc5d22459"
+    },
+    {
+      "file": "dist/assets/Courses-Bkf70NIs.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Courses-Bkf70NIs.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 112197,
+      "sha256": "f8f7187f86963c5f52d58dc8b40f0c842beee9a27a7cc6bb6c88d6b139618342"
+    },
+    {
+      "file": "dist/assets/DailyMicroHabits-Do7kyg55.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/DailyMicroHabits-Do7kyg55.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 56818,
+      "sha256": "f9dd3b515642935629d5007ef01dd2f57f9c4be4fd6a880a04d25e905e7e2d86"
+    },
+    {
+      "file": "dist/assets/DreamArt-B7_PR_32.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/DreamArt-B7_PR_32.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 12840,
+      "sha256": "a4b3b6e1f859773293774e2744a311074fddda2a4795c8dabe800fbb04e0c33b"
+    },
+    {
+      "file": "dist/assets/Dreams-D-wUY_Dz.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Dreams-D-wUY_Dz.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 53111,
+      "sha256": "ac8043b6ba54cf8c73b5f35f3a4a927b3ac776aa3be0d604df589b625284dd1e"
+    },
+    {
+      "file": "dist/assets/Evidence-C81v9CcN.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Evidence-C81v9CcN.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 5448,
+      "sha256": "4dafa169e3315807fcb4e260e06be217d17ecdd724ef22b99b852676fb362663"
+    },
+    {
+      "file": "dist/assets/Focus-d9zTXBGs.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Focus-d9zTXBGs.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 901,
+      "sha256": "21cfd0c2d0d4a024f6f14121270e20d73999b3182c13242be0761ca433dae605"
+    },
+    {
+      "file": "dist/assets/FocusTimerHub-Azv1sJe2.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/FocusTimerHub-Azv1sJe2.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 15211,
+      "sha256": "f02072c4f9b2b6f94cbb3e7676ecbedaca7a2c92ea21e6b820dd7a2b0d736ee0"
+    },
+    {
+      "file": "dist/assets/FutureSelf-CV_Wd1zg.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/FutureSelf-CV_Wd1zg.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 6863,
+      "sha256": "192d9f08250b1a700ca2c3ec2393697d93c7f6b2edaa285ff12142a1f2ef6fe9"
+    },
+    {
+      "file": "dist/assets/Legal-DIRc0PxV.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Legal-DIRc0PxV.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 1997,
+      "sha256": "c8149e7ec3509838e15fa70cb649d41d29cf093494af76cd4b4e7551491888d4"
+    },
+    {
+      "file": "dist/assets/LifeScore-BRwNVUxv.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/LifeScore-BRwNVUxv.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 5719,
+      "sha256": "1f9e898a10547f014a1fe6b7311c8a8f3d3e14b01b3c8b5c9511c332aed801f2"
+    },
+    {
+      "file": "dist/assets/Me-B1AQuvtb.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Me-B1AQuvtb.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 16306,
+      "sha256": "9778b9fbb952e94f72811e64866bfd01b351abba70d642263e9f5a9219e91037"
+    },
+    {
+      "file": "dist/assets/MissionFlows-wCH5EKtV.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/MissionFlows-wCH5EKtV.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 8100,
+      "sha256": "827daee6776a818820bf46bd0886a32f9756a7f74403e057e7d61fa4aff664d4"
+    },
+    {
+      "file": "dist/assets/Missions-B-2Wv4q5.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Missions-B-2Wv4q5.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 5652,
+      "sha256": "52032845c484e0076e52bf321b3d985fd928b736761caa5b7c72d7fda8b00e79"
+    },
+    {
+      "file": "dist/assets/Notebook-BpVWSCZr.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Notebook-BpVWSCZr.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 51754,
+      "sha256": "08c21b0789c4455ecc19ca3536135e3f2b487051ff027917ae3fc42f33bfb00f"
+    },
+    {
+      "file": "dist/assets/Notebook-D4Mn9VZC.css",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Notebook-D4Mn9VZC.css",
+      "status": 200,
+      "contentType": "text/css",
+      "bytes": 14151,
+      "sha256": "ac67b361b1b9c444a2c1b902ac120d99b1bcd2a9dadb06e3e98d421c9b895501"
+    },
+    {
+      "file": "dist/assets/Progress-C0pxFPXI.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Progress-C0pxFPXI.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 75840,
+      "sha256": "fbccafb303200614b87fba11bf4d81874fa92dab7a295b55e16ecb7a5d8b4beb"
+    },
+    {
+      "file": "dist/assets/PublicTwoFutures-HYjhSYLm.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/PublicTwoFutures-HYjhSYLm.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 11239,
+      "sha256": "68846e8ea4e249501b6c9eee103f61df1fe913d66a9cc33b02bedeab38e4a115"
+    },
+    {
+      "file": "dist/assets/Seasons-D-sFi7PZ.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Seasons-D-sFi7PZ.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 3645,
+      "sha256": "f1f09e9fdeaaba6620b5501d24be11074beb17d2b4e8cf45fc4e70c0c481813e"
+    },
+    {
+      "file": "dist/assets/Settings-CuiOH-k7.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Settings-CuiOH-k7.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 41218,
+      "sha256": "6c4364ad5b39c202071ce0e04d84beab622cb0ae80d102f6e67084e0bce01f11"
+    },
+    {
+      "file": "dist/assets/SoundRoom-ChqXJkTy.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/SoundRoom-ChqXJkTy.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 24213,
+      "sha256": "02297ef2e4cd85aa6e20864a82e3539b75a59c5e47738bdbfe33584c1e65be0d"
+    },
+    {
+      "file": "dist/assets/SoundRoom-D7sph2cN.css",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/SoundRoom-D7sph2cN.css",
+      "status": 200,
+      "contentType": "text/css",
+      "bytes": 15985,
+      "sha256": "64999ca70a7396599c6af52253af916936b11162dbe9ef141adc7170a943e0a5"
+    },
+    {
+      "file": "dist/assets/Support-BjoSkJeX.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Support-BjoSkJeX.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 3541,
+      "sha256": "cbc5ceecb2a9364817520e0d7b8ef3cb8f0cf2bc1b0154c35250ed04c4868276"
+    },
+    {
+      "file": "dist/assets/Today-D76Bu5Fr.css",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Today-D76Bu5Fr.css",
+      "status": 200,
+      "contentType": "text/css",
+      "bytes": 4803,
+      "sha256": "5efc5db34efe27058e8c3c8be002710c4819470eabc278f5e2d62de5d5878b55"
+    },
+    {
+      "file": "dist/assets/Today-DLDLVCvI.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Today-DLDLVCvI.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 141255,
+      "sha256": "52f7e5cb6caa645a788b6c29d9ebb15261f923499eba9b4765a9c62007008246"
+    },
+    {
+      "file": "dist/assets/Tools-j0wS85YP.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Tools-j0wS85YP.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 5598,
+      "sha256": "fa9ebbb92869632e02caa5b56c4ceb51bd23c23501144de78aac8315c6895518"
+    },
+    {
+      "file": "dist/assets/TwoFutures-Bkebc-mn.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/TwoFutures-Bkebc-mn.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 19689,
+      "sha256": "600b21689a7edf5b57c9972d93a0acdbeccb5cc989b5ae1f54d928796fd273d0"
+    },
+    {
+      "file": "dist/assets/Upgrade-BR51xnJn.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/Upgrade-BR51xnJn.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 19677,
+      "sha256": "d3a6c76732f1d1e6975e8840827e83f95b1ce88aa2579e7a559f986554e8d2d3"
+    },
+    {
+      "file": "dist/assets/account-dsycojCa.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/account-dsycojCa.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 2946,
+      "sha256": "b7554c92d49a91bfe07b885a870aa101fca44f8861cf957bf317070ec5f9b93a"
+    },
+    {
+      "file": "dist/assets/aiCoach.worker-C60CQ1Xm.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/aiCoach.worker-C60CQ1Xm.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 6039341,
+      "sha256": "2911a3e0a34aff2f379a4c39914cd5321e83b48fb0c190e04e9813dd9d19559a"
+    },
+    {
+      "file": "dist/assets/archive-gpr_6Y3F.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/archive-gpr_6Y3F.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 427,
+      "sha256": "2dbf0992bef20dae1046972b217ba0193b40aa27d539e661ed3944ff31d4755b"
+    },
+    {
+      "file": "dist/assets/arrow-up-right-CxW44OEE.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/arrow-up-right-CxW44OEE.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 341,
+      "sha256": "921cf3cfcd6dae391deda1f7d64a486411e73941317390d48c7f5694a68e93ab"
+    },
+    {
+      "file": "dist/assets/calendar-days-DIegiwvP.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/calendar-days-DIegiwvP.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 668,
+      "sha256": "8d723751c228265f2111f3dfc5c6050286b9f01c450c4f54b64110024364ef13"
+    },
+    {
+      "file": "dist/assets/charts-Bzd-XkHo.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/charts-Bzd-XkHo.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 431582,
+      "sha256": "2d7b9b31411e27fb1b9b31b24e3ed0884969780d21dbe5da936cf583f3e7f820"
+    },
+    {
+      "file": "dist/assets/chevron-right-BDAYAbRP.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/chevron-right-BDAYAbRP.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 304,
+      "sha256": "595d6693740b5677629de65c45a89ac55cd73fc920ccdf5efdd3265271898726"
+    },
+    {
+      "file": "dist/assets/circle-check-B0jjxZ1w.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/circle-check-B0jjxZ1w.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 352,
+      "sha256": "a1fed65f82a3a7ea49054e5a52a4053eb6e021c39dfb20b94c5f4b098d0c99cf"
+    },
+    {
+      "file": "dist/assets/courseEntryCopy-ClIZWujk.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/courseEntryCopy-ClIZWujk.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 1345,
+      "sha256": "5c956cd2c43cf451c4bbe07a796a00e2623cc2d01d9fdad99afc9976c6462d4e"
+    },
+    {
+      "file": "dist/assets/courses-CKtnra3s.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/courses-CKtnra3s.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 2510751,
+      "sha256": "065e50aeb656d6a99eba1fb1ea1091bd330fdf9be272670136d23a158ce49d6b"
+    },
+    {
+      "file": "dist/assets/de-FmFgRqLi.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/de-FmFgRqLi.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 33,
+      "sha256": "49751e83c2dabf8a8ead01b84ca4a250f0f305b4845f33a0cd4ffe880e409d63"
+    },
+    {
+      "file": "dist/assets/es-qQNFzrdv.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/es-qQNFzrdv.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 573845,
+      "sha256": "92990cb37ff89f11df72023a4ab7d593b65d633604a335732deda681614f54d2"
+    },
+    {
+      "file": "dist/assets/fr-FmFgRqLi.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/fr-FmFgRqLi.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 33,
+      "sha256": "49751e83c2dabf8a8ead01b84ca4a250f0f305b4845f33a0cd4ffe880e409d63"
+    },
+    {
+      "file": "dist/assets/genai-DNIGCYRr.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/genai-DNIGCYRr.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 409926,
+      "sha256": "8a6e1b7ad484e6f05eb9a1a9c350f45654173834e8a5954adcb6822f390bc2b4"
+    },
+    {
+      "file": "dist/assets/growth-CtfcX3mW.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/growth-CtfcX3mW.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 2073,
+      "sha256": "18302f2287d962e3923bb4a8924f7e79d99b1a95f0bae11a29dc54e4174ecf63"
+    },
+    {
+      "file": "dist/assets/headphones-NWBjV-LN.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/headphones-NWBjV-LN.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 411,
+      "sha256": "ff85dbe998ef8f26997dc513e5a1445511a7ff77a82ca9c57558005c1ab9a5dc"
+    },
+    {
+      "file": "dist/assets/index-BD7SNJOJ.css",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/index-BD7SNJOJ.css",
+      "status": 200,
+      "contentType": "text/css",
+      "bytes": 110586,
+      "sha256": "d4273caa7b5def85ab9338b27d53a7767168e2a55aba942d9dbb7a8b4d0fb57f"
+    },
+    {
+      "file": "dist/assets/index-BFaas6yb.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/index-BFaas6yb.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 715,
+      "sha256": "af5bd7f376d9a34fa01594a12c8e48863d49d49374a1e9d191366849d16f7e3c"
+    },
+    {
+      "file": "dist/assets/index-BGWxpwgw.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/index-BGWxpwgw.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 951679,
+      "sha256": "eedb82c8f37ab460301f386b8af974f432bab70e598b04ab1b9d957fe8298bf7"
+    },
+    {
+      "file": "dist/assets/index-BMm9S-UO.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/index-BMm9S-UO.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 5959047,
+      "sha256": "fdea32eebf4492e73dd3c40dd045456a6cb22e10ef2d522a1c6769b1644782cd"
+    },
+    {
+      "file": "dist/assets/index-C4y7G68f.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/index-C4y7G68f.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 448,
+      "sha256": "157865e4206363c7e6eabc0ff45a3a81ae144997c2875aea2fd49a8c478876d6"
+    },
+    {
+      "file": "dist/assets/index-CKnDqe0Q.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/index-CKnDqe0Q.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 380,
+      "sha256": "78b8c94984214e918895ee290f2fb272f59914aef1625a7b651000cc05d9bf7a"
+    },
+    {
+      "file": "dist/assets/index-ChzAsrsi.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/index-ChzAsrsi.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 669,
+      "sha256": "cd33eb9ed36d55c8512774f7de8e8e5830220567d5b7a46f3291a748f41862cb"
+    },
+    {
+      "file": "dist/assets/index-DCZd3clG.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/index-DCZd3clG.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 8719,
+      "sha256": "1677c9e6b2b5f9f80f8a086bbba44c9902ce1eb411d56487b2d1ff64347d301b"
+    },
+    {
+      "file": "dist/assets/index-DDRbzIpT.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/index-DDRbzIpT.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 475,
+      "sha256": "80494e17033d865bd864dfb84ab93bdf38463a2b08992e5460adf395eeced703"
+    },
+    {
+      "file": "dist/assets/it-FmFgRqLi.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/it-FmFgRqLi.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 33,
+      "sha256": "49751e83c2dabf8a8ead01b84ca4a250f0f305b4845f33a0cd4ffe880e409d63"
+    },
+    {
+      "file": "dist/assets/lock-keyhole-Dmw6Tvri.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/lock-keyhole-Dmw6Tvri.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 429,
+      "sha256": "fc4a0b4eafd13757ea17bd5c913f746d0bcd2e1567ee185de5e28596cea8d9a8"
+    },
+    {
+      "file": "dist/assets/mail-BfFX-zXk.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/mail-BfFX-zXk.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 387,
+      "sha256": "0e64426e3b8523702e2a4819f06d02a38798de1872c48eb02410047f3f9364d6"
+    },
+    {
+      "file": "dist/assets/media-2mgEiOLR.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 23753,
+      "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+    },
+    {
+      "file": "dist/assets/moon-QU1IsNdX.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/moon-QU1IsNdX.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 391,
+      "sha256": "d359024b9ed3a6bf14d4e4f45a310be5bc6cfa2a8f8cad32f3aa3267e7e02019"
+    },
+    {
+      "file": "dist/assets/motion-HNvQpnN_.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/motion-HNvQpnN_.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 128884,
+      "sha256": "3b8beefe6f5abed46ca686013afdcd2ea9c013557b337d8e606719a91894be70"
+    },
+    {
+      "file": "dist/assets/music-JV0YFr67.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/music-JV0YFr67.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 751,
+      "sha256": "9e90dc7ac854e95406eda5bd59ea2a0bc5fbec53d7ab7fd377fe4cb3aaf68a16"
+    },
+    {
+      "file": "dist/assets/pen-line-D79oz0Ai.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/pen-line-D79oz0Ai.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 451,
+      "sha256": "88ce201df0593c32db75f30145f9d77ab4daf1e7579e90dbbb464104a6854fa0"
+    },
+    {
+      "file": "dist/assets/pencil-C0Ol4oxN.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/pencil-C0Ol4oxN.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 450,
+      "sha256": "1cd90bba24516acfbeb0917d67e0525d069475dde1b474476371a5b5328edff7"
+    },
+    {
+      "file": "dist/assets/purchaseIdentityBinding-tFcjnp2u.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/purchaseIdentityBinding-tFcjnp2u.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 776,
+      "sha256": "0be60da02104ddc2cf5c35fd01c384f90c63a4ca056336be444d1aae5dc7c6a9"
+    },
+    {
+      "file": "dist/assets/purchases-B7weGxQa.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/purchases-B7weGxQa.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 10508,
+      "sha256": "cb03f22770cda0e8c10d6ce200d1ae00670d600fd7aad1c086f80ba824f3bd90"
+    },
+    {
+      "file": "dist/assets/react-5GCfeWye.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 229422,
+      "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+    },
+    {
+      "file": "dist/assets/refresh-cw-DpyR8EG0.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/refresh-cw-DpyR8EG0.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 495,
+      "sha256": "d7a022fcdc4710c807c7d6e080ec03f0b2a5a99270b713657128220c6fc002de"
+    },
+    {
+      "file": "dist/assets/rewards-CHfgIbrs.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/rewards-CHfgIbrs.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 4172,
+      "sha256": "a5234a327c58f2c4afb1994dce8f3068ec46ffe25b14077f91d12d11d2a63420"
+    },
+    {
+      "file": "dist/assets/rotate-ccw-D4Vk_l9X.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/rotate-ccw-D4Vk_l9X.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 374,
+      "sha256": "f09dc6611ac2c088ead222b65604aa074eac6a544631c4cc7b73b4dbeb198a5d"
+    },
+    {
+      "file": "dist/assets/route-7eN6LqKh.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/route-7eN6LqKh.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 428,
+      "sha256": "64cf40ecf38b97a005181b6cec7e22a34a2b94a4dd781457247dc89d8c655e16"
+    },
+    {
+      "file": "dist/assets/ru-FmFgRqLi.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/ru-FmFgRqLi.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 33,
+      "sha256": "49751e83c2dabf8a8ead01b84ca4a250f0f305b4845f33a0cd4ffe880e409d63"
+    },
+    {
+      "file": "dist/assets/search-Rk-dfqLb.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/search-Rk-dfqLb.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 348,
+      "sha256": "679b678389b3d452490f57f68362a0c504e6d0c42b746cdf4d1e92d1679127f0"
+    },
+    {
+      "file": "dist/assets/share-2-DgeydMQg.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/share-2-DgeydMQg.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 531,
+      "sha256": "953cd3527e16534cd460baf2590c2769fb7b8bcf49eb39c4cf2972128fb04bd7"
+    },
+    {
+      "file": "dist/assets/shuffle-Cbat7C_v.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/shuffle-Cbat7C_v.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 557,
+      "sha256": "b723d504578ab31bb822665826712d4ded6930cdc3a2a3b080e8038709cd10dc"
+    },
+    {
+      "file": "dist/assets/sparkles-DFJcHBbQ.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/sparkles-DFJcHBbQ.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 668,
+      "sha256": "8ae7767e6ead60c8b1350b7bc93991cc6240c11e333f32f052dd56716e389b77"
+    },
+    {
+      "file": "dist/assets/square-C7EVho8q.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/square-C7EVho8q.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 321,
+      "sha256": "b3ee683acb2adf33d6952f5a3330b2497b9dcaf5d61a67a77dea18523eef7259"
+    },
+    {
+      "file": "dist/assets/sun-moon-BnVS48cx.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/sun-moon-BnVS48cx.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 565,
+      "sha256": "4a6bfa4a4c1b5214ee56c63083c71fa75b62a1a55590f384abe59d6fd18036ff"
+    },
+    {
+      "file": "dist/assets/supabase--wUpN4Ei.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/supabase--wUpN4Ei.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 228140,
+      "sha256": "4eabff7c823396ed92c53d7ef1e3048817d69196726a12688e7e62483013d1dd"
+    },
+    {
+      "file": "dist/assets/support-DThR-5W1.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/support-DThR-5W1.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 11791,
+      "sha256": "2773399c4f7f01bd8de60e337b5ecf71ad004f8c065faf24a625d6e5a12503f4"
+    },
+    {
+      "file": "dist/assets/timer-R8ZZmi61.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/timer-R8ZZmi61.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 412,
+      "sha256": "c1d1bfc603f448a3aa51368eed71cca509f60860a4f01b6736831751bc10979c"
+    },
+    {
+      "file": "dist/assets/tr-COHWLD3Y.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/tr-COHWLD3Y.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 561390,
+      "sha256": "2732c892675ea69e982a265497e037025ce1e8cc81a99d1cf3d4c07333bee939"
+    },
+    {
+      "file": "dist/assets/trash-2-BUEkVt3_.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/trash-2-BUEkVt3_.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 502,
+      "sha256": "c9b8a65d18084cca0de143794ed13362590c0922e518b59473ee61ad47fa2f25"
+    },
+    {
+      "file": "dist/assets/trending-up-CEWon7SU.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/trending-up-CEWon7SU.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 694,
+      "sha256": "112293f6c7a74f182478ead8de4fbe61f680efcc96b2781435388b01dc0c26fe"
+    },
+    {
+      "file": "dist/assets/useCloudState-K00nOFZH.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/useCloudState-K00nOFZH.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 200,
+      "sha256": "2782d9b0dd28e1605a473ccbfc4b6c7e0a5f2d31cc2628cc8e5b94a0c225ae05"
+    },
+    {
+      "file": "dist/assets/user-round-Dusc9Z0B.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/user-round-Dusc9Z0B.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 356,
+      "sha256": "25b9358aa379e46401e2884f1e7dceef55339028fd8675a2f38678124d37790c"
+    },
+    {
+      "file": "dist/assets/waves-BQdBDCzf.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/waves-BQdBDCzf.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 602,
+      "sha256": "a94ee24b8ca6319a489db3eae02ae57b5dd2db34dc3e39e62a572dd885a57f81"
+    },
+    {
+      "file": "dist/assets/web-C4BoAV3f.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/web-C4BoAV3f.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 10186,
+      "sha256": "4e61007ad3198b36892d902420ccd7fca3c184c792561fe0ce20c218941f96a0"
+    },
+    {
+      "file": "dist/assets/web-CJsFYp4W.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/web-CJsFYp4W.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 899,
+      "sha256": "bad3fffaa64363ac4a273e812e6ec0cca66ec4f3c5c75a4b4c4dac4f7bd251ce"
+    },
+    {
+      "file": "dist/assets/web-CPHF10zT.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/web-CPHF10zT.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 1055,
+      "sha256": "276a0757b77acd772a8a3c8a5451deed098c1aecc521fc17e396a3e61947dbd0"
+    },
+    {
+      "file": "dist/assets/web-D58yoJYe.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/web-D58yoJYe.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 176,
+      "sha256": "2fbd2344177e526a36687892aeda693891f9b62c38ee478589098efb45f6200d"
+    },
+    {
+      "file": "dist/assets/web-QNZWbscG.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/web-QNZWbscG.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 4648,
+      "sha256": "8765eb5d5c92d39350d8843fb98c6dca02d461ef74dc1c98b3f6115a664a3256"
+    },
+    {
+      "file": "dist/assets/wind-DYzbf7VQ.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/wind-DYzbf7VQ.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 420,
+      "sha256": "f66df7f00b53a4884bcebe2317824d5e8c7ac406a27e8938fe7112b905ad5022"
+    },
+    {
+      "file": "dist/assets/workingSurfaces-C7ThxB-U.css",
+      "url": "http://127.0.0.1:4183/one-decision-away/assets/workingSurfaces-C7ThxB-U.css",
+      "status": 200,
+      "contentType": "text/css",
+      "bytes": 14425,
+      "sha256": "4252abcd9dcbb1181c00b5ead7ee4717207894448a44ad7e1b6790fd00785af2"
+    },
+    {
+      "file": "dist/sw.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/sw.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 6485,
+      "sha256": "51e9575be78bfaa1cf9d2de7a461d819c6fae141cbfe196b4985c34aa04511ef"
+    },
+    {
+      "file": "dist/theme-init.js",
+      "url": "http://127.0.0.1:4183/one-decision-away/theme-init.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 740,
+      "sha256": "bcfb6eb36d90eb505920c80e174d179045456b548e1accff53bf56b19a44caa5"
+    }
+  ],
+  "limitations": [
+    "Compiled chunks changed names/references with CSS content addressing; old response bodies were not retained for a normalized-body comparison. Source/runtime controllers are byte-identical, not an asserted compiled-byte equality.",
+    "Historical passing suites were not rerun; their commands, tested commit and immutable bytes are explicitly retained.",
+    "Controlled browser clock checks real application timer boundary; no physical device, human audio listening or visual approval claim."
+  ],
+  "strictSoundMaterialGateStillHeld": true,
+  "noBuildInstallSourceEditDeploy": true
+}

@@ -1,3 +1,5 @@
+> Current held follow-up: [reference fidelity rework](fidelity-rework/README.md), exact application source **`3ddb98b57669ceed6f220583aa01aa523d6b6a47`**. Actual597/0 aggregate log, final independent QA and seven synthetic before/after sheets are included. Both readability P2s pass; **Sound material remains2/4 and strict visual acceptance is HELD**. Raw failed attempts and inherited compact-target P3s remain disclosed. No publication. Previous timer/calendar evidence below is unchanged and historical.
+
 > Current follow-up: the [minimal Sound Room timer label repair](timer-label-fix/README.md) is bound to application source **`4a8b5753dc7c1c676e5a2146ae1d4e63a4772b75`**, with fresh 597/0 aggregate and independent EN/TR/ES mobile QA. The original parent-approved 9adcd46 / 71f1ce packet below remains historical; its logs are unchanged. No deployment.
 
 # ODA reference-led review candidate

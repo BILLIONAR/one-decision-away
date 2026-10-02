@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1280" viewBox="0 0 960 1280">
+  <!-- Original ODA ocean/surf vector illustration for composition review. Exact source photo is unavailable. -->
+  <defs>
+    <linearGradient id="water" x1="0" x2="1" y2="1"><stop stop-color="#386c75"/><stop offset=".5" stop-color="#17424e"/><stop offset="1" stop-color="#122630"/></linearGradient>
+    <linearGradient id="surf" x2="1" y2=".7"><stop stop-color="#a3c6c7" stop-opacity=".65"/><stop offset=".6" stop-color="#539696" stop-opacity=".4"/><stop offset="1" stop-color="#082731" stop-opacity="0"/></linearGradient>
+    <filter id="foam"><feTurbulence type="fractalNoise" baseFrequency=".018" numOctaves="3" seed="9"/><feColorMatrix values="0 0 0 0 .56 0 0 0 0 .73 0 0 0 0 .74 0 0 0 .85 0"/></filter>
+    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="2" stitchTiles="stitch"/></filter>
+  </defs>
+  <path fill="url(#water)" d="M0 0H960V1280H0Z"/>
+  <path fill="#59898c" opacity=".25" d="M-60 300C226 115 280 470 555 397S843 240 1040 423L1020 654C758 465 702 692 455 589S121 329-55 598Z"/>
+  <path fill="url(#surf)" d="M-60 578C133 482 164 780 455 657S781 486 1000 754V918C741 602 662 834 463 881S136 609-60 785Z"/>
+  <path fill="none" stroke="#bad7d2" stroke-width="8" opacity=".44" d="M-60 593C132 493 193 751 438 683S769 507 1020 807"/>
+  <path fill="none" stroke="#bdd5d1" stroke-width="3" opacity=".4" d="M-60 620C140 521 194 778 444 710S779 531 1020 834M-60 652C139 554 207 800 461 739S788 561 1020 869"/>
+  <path filter="url(#foam)" opacity=".22" d="M-60 578C133 482 164 780 455 657S781 486 1000 754V848C778 585 655 785 467 818S139 608-60 728Z"/>
+  <path fill="#0b2030" opacity=".26" d="M0 0H960V1280H0Z"/>
+  <path filter="url(#grain)" opacity=".065" d="M0 0H960V1280H0Z"/>
+</svg>

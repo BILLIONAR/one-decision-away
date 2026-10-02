@@ -1,0 +1,52 @@
+import { createRequire } from 'node:module';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import { getInitialDemoState } from '/workspace/oda-reference-redesign/src/services/repository.ts';
+const require = createRequire('/workspace/oda-reference-redesign/package.json');
+const { chromium } = require('playwright');
+const AxeBuilder = require('@axe-core/playwright').default;
+const out='/workspace/scratch/oda-reference-redesign/fidelity-rework/sound';
+const report={at:new Date().toISOString(),base:'http://127.0.0.1:4181',contexts:[],screenshots:[],errors:[],externalRequests:[],limits:['Actual cloud Chromium UI with synthetic local records; no physical device or perceptual audio-quality claim.','External requests aborted; references adapted from actual viewed user pixels, never embedded.','This is a development preview of ongoing integration, not the root final aggregate or independent QA.']};
+const browser=await chromium.launch({executablePath:'/usr/bin/chromium'});report.browser=await browser.version();
+try {
+ for(const locale of ['en','tr','es']) for(const theme of ['light','dark']) for(const width of [390,320]){
+  const name=`${locale}-${theme}-${width}`;
+  const seed=getInitialDemoState();Object.assign(seed.profile,{displayName:'Synthetic Sound QA',locale,theme,onboardingStep:'completed',firstOpenedAt:new Date().toISOString(),soundMuted:false,nudgesEnabled:false,dailyWisdomEnabled:false});
+  const context=await browser.newContext({viewport:{width,height:844},reducedMotion:'reduce',serviceWorkers:'block'});
+  await context.route('**/*',route=>new URL(route.request().url()).origin==='http://127.0.0.1:4181'?route.continue():(report.externalRequests.push({case:name,url:route.request().url()}),route.abort()));
+  await context.addInitScript(({seed,locale})=>{if(!localStorage.getItem('one_decision_away_app_data_v1'))localStorage.setItem('one_decision_away_app_data_v1',JSON.stringify(seed));localStorage.setItem('oda_locale',locale);},{seed,locale});
+  const page=await context.newPage();page.on('pageerror',error=>report.errors.push({case:name,message:error.message}));
+  await page.goto('http://127.0.0.1:4181/app/sound');await page.locator('.oda-sound').waitFor();await page.evaluate(()=>document.fonts.ready);
+  for(let n=0;n<3;n++){if(!await page.getByRole('dialog').count())break;await page.keyboard.press('Escape');}
+  assert.equal(await page.locator('.oda-sound-tab').count(),4);
+  assert.equal(await page.locator('.oda-sound-player').count(),0, 'idle player overlay absent');
+  assert.equal(await page.locator('.oda-sound-now-panel').count(),0, 'idle expanded player absent');
+  assert.equal(await page.locator('.oda-sound-card').count(),9);
+  const tab=page.locator('.oda-sound-tab[data-section="relax"]');await tab.focus();await page.keyboard.press('End');
+  assert.equal(await page.locator('.oda-sound-tab[data-section="breathe"]').getAttribute('aria-selected'),'true');
+  assert.equal(await page.locator('.oda-sound-breathe-stage[data-reduced="true"]').count(),1);
+  await page.keyboard.press('Home');assert.equal(await tab.getAttribute('aria-selected'),'true');
+  const measures=await page.evaluate(()=>({width:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth,theme:document.documentElement.dataset.theme}));
+  assert.ok(measures.scroll<=measures.width+1,`${name} overflow`);assert.equal(measures.theme,theme);
+  const axe=await new AxeBuilder({page}).include('.oda-sound').withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa']).analyze();
+  const violations=axe.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary}))}));
+  report.contexts.push({name,measures,violations});
+  assert.equal(violations.filter(v=>['serious','critical'].includes(v.impact)).length,0,JSON.stringify(violations));
+  if(locale==='en'&&width===390){await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:`${out}/${name}-discovery.png`,animations:'disabled'});report.screenshots.push(`${name}-discovery.png`);}
+  await page.locator('.oda-sound-panel .oda-sound-card-button').first().click();
+  await page.waitForFunction(()=>[...document.querySelectorAll('.oda-sound-now-art img')].every(img=>img.complete&&img.naturalWidth>0));
+  assert.equal(await page.locator('.oda-sound-scene[data-artwork="owned-fallback"]').count(),0);
+  const expanded=page.locator('.oda-sound-now-toggle'); const expandedLabel=await expanded.getAttribute('aria-label'); await expanded.click(); assert.notEqual(await expanded.getAttribute('aria-label'),expandedLabel); await expanded.click(); assert.equal(await expanded.getAttribute('aria-label'),expandedLabel);
+  const toggle=page.locator('.oda-sound-player-toggle');const activeLabel=await toggle.getAttribute('aria-label');await toggle.click();assert.notEqual(await toggle.getAttribute('aria-label'),activeLabel);await toggle.click();assert.equal(await toggle.getAttribute('aria-label'),activeLabel);
+  await page.locator('.oda-sound-player-timer select').selectOption('10');assert.equal(await page.locator('.oda-sound-player-timer select').inputValue(),'10');
+  const range=page.locator('.oda-sound-player-volume input');await range.focus();await page.keyboard.press('Home');assert.equal(await range.inputValue(),'0');await page.keyboard.press('ArrowRight');assert.equal(await range.inputValue(),'0.01');
+  if(locale==='en'&&width===390){await page.locator('.oda-sound-panel').evaluate(el=>el.scrollIntoView({block:'start'}));await page.screenshot({path:`${out}/${name}-sessions-player.png`,animations:'disabled'});report.screenshots.push(`${name}-sessions-player.png`);}
+  if(locale==='en'&&width===390){await page.locator('.oda-sound-now-panel').evaluate(el=>el.scrollIntoView({block:'start'})); await page.screenshot({path:`${out}/${name}-expanded-player.png`,animations:'disabled'}); report.screenshots.push(`${name}-expanded-player.png`);}
+  await page.locator('.oda-sound-tab[data-section="sleep"]').click();await page.reload();await page.locator('.oda-sound').waitFor();assert.equal(await page.locator('.oda-sound-tab[data-section="sleep"]').getAttribute('aria-selected'),'true');
+  await page.locator('.oda-sound-tab[data-section="breathe"]').click();await page.locator('.oda-sound-secondary').click();assert.equal(await page.locator('.oda-sound-secondary').getAttribute('aria-pressed'),'true');await page.locator('.oda-sound-secondary').click();assert.equal(await page.locator('.oda-sound-secondary').getAttribute('aria-pressed'),'false');
+  if(locale==='en'&&width===390){await page.locator('.oda-sound-breathe').scrollIntoViewIfNeeded();await page.screenshot({path:`${out}/${name}-breathe.png`,animations:'disabled'});report.screenshots.push(`${name}-breathe.png`);}
+  await context.close();console.log(`PASS ${name}`);
+ }
+ assert.equal(report.errors.length,0);
+} catch(error){report.failure=String(error);throw error;}
+finally{fs.writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2)+'\n');await browser.close();}

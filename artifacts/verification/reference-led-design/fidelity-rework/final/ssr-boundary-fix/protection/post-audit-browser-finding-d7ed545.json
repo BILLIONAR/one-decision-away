@@ -1,0 +1,24 @@
+{
+  "kind": "separate post-source-audit independent browser finding; earlier sealed evidence preserved",
+  "recordedAtUtc": "2026-10-02T20:37:08.812035+00:00",
+  "historicalSourceCommit": "d7ed5455fd8a0eaa9372e22bd495f19d7f8cd494",
+  "historicalReceiptFile": "/workspace/scratch/oda-reference-redesign/fidelity-rework/final/ssr-boundary-fix/protection/final-review-receipt-d7ed545.json",
+  "historicalReceiptSha256": "5e7648b8a9ae1777cefefb32c8a467857ca194d776d90c232efc94cfd0a64458",
+  "reportedBy": "parent relay of independent runtime/axe reviewer",
+  "reviewerReproducedBrowserFailure": false,
+  "finding": {
+    "priority": "P2",
+    "surface": "Today saved planning button",
+    "file": "src/styles/workingSurfaces.css",
+    "description": "Saved planning button inherits a light --tint-rose background while the local navy module supplies light foreground and muted text; independent browser review found serious contrast failure.",
+    "parentProposedRepair": "One scoped CSS rule gives the planning button background var(--bg-muted) and color var(--fg).",
+    "state": "Parent correction and exact-source freeze pending."
+  },
+  "currentCandidateReady": false,
+  "strictVisualGateStillHeld": "Sound artwork/material dependency remains held.",
+  "nextAudit": "Review exact CSS delta, preserve controller/protected parity and bind next successful aggregate/raw/source/compiled receipt.",
+  "newTestsOrBuildsRun": false,
+  "appSourceEdited": false,
+  "priorSealedReportsModified": false,
+  "publicationPerformed": false
+}

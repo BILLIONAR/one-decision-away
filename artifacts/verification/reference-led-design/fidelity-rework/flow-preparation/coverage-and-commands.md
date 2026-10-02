@@ -1,0 +1,32 @@
+# Focused functional regression preparation
+
+Prepared at `8fc4ef0572a4cfd20964be6e276325161b3a2acf` on the existing `design/reference-led-oda` branch. These are preparation materials only: no source edits, builds, browser runs or new acceptance claims. Await parent GO containing exact frozen source commit, build receipt and normal built-preview URL.
+
+Before runs, verify every reviewed source against that commit and parent receipt, every dist file against the new receipt, actual HTTP index/entry JavaScript hashes/content type, clean status, and hosted hash routes via `appRouteHref`. Recheck source/dist after runs. Use isolated synthetic profiles, reduced motion, blocked service workers except the explicit first-load case, and abort external/non-read requests. No production/user/provider/account/payment operations. Raw logs are exclusive-write and must not replace older results.
+
+## Necessary coverage
+
+1. **First-use and Today:** truthful preview/fast-forward/sample proof; no earned completion/reward during demo; selected demo decision seeds only when no saved draft; exact saved empty/whitespace/manually typed drafts across Back/reload; optional planning only by user action, no automatic 700 ms modal; real application 120-second boundary tested with labelled controlled-browser-clock simulation; expiry gives no automatic reward; triple confirmation yields one completion/reward/leaf retained after reload; Today real next-lesson title/minutes/goal without full lesson payload; saved lesson 2 resume. Reuse `first-use.mjs`; adapt selectors after freeze, preserve assertions.
+2. **Courses:** actual description/outcome/ordered lesson title/minutes overview and explicit Start without manufactured progress; real search/filter and empty-state recovery; workbook example preserves existing text; persist plan/attempt/reflection/review; download; storage-failure draft/retry; actual practice/quiz completion and lesson resume; blocked-cover fallback. Reuse `courses.mjs`; avoid assuming prior row composition or styling.
+3. **Notebook:** exact title/writing/mood draft survives reload; explicit canonical save/reset and archive reopen without duplicate records; EN/TR/ES read-aloud retains its own locale; saved owned photo opens under actual native dialog and missing-method/inert fixtures; calendar localized scroll hint and named keyboard region, 44 px dates, keyboard scroll/focus/weekend selection/clear/month round trip without changing saved records. Reuse corrected `notebook.mjs`, settled-scroll `calendar.mjs`, guidance locale cases and repository `qa-mobile-core-quality.mjs`. Do not assume a horizontal calendar when the new design fits all dates; require all actual controls accessible and a cue whenever it overflows.
+4. **Recorded English guidance:** zero MP3 first-load; current + two upcoming on session start; truthful localized Preview voice/speaker icon loads only one English current clip; real native decoder/source/gain; stop/switch while held loading; pause/resume while loading and normal playback; replay/volume 0/keyboard step; all sources stopped/disconnected and no late fallback; actual CacheStorage offline replay after session switch; missing file only strict English device fixture or explicit unavailable, never wrong-language/paid-provider output; Notebook own locale unchanged. Reuse `common.mjs`, `guidance.mjs`, `localized-preview.mjs`. Native recordings are not human-listening/transcription evidence.
+5. **Focus safety:** End early named modal focus/Tab/Escape/background isolation/trigger and scroll restoration; cancelled focus does not grant completion/reward; fullscreen unsupported disabled, denial leaves truthful state, actual supported enter/exit. Reuse unchanged `scripts/qa-mobile-core-quality.mjs`.
+6. **Sound Room / 4a8:** inspect actual newest native timer/select or equivalent controls; localized no-timer and every real timer choice visible and operable at 320/390; keyboard choice 10/60 min and cancel timer; selected preference reflects playback countdown and preserves pause/resume/volume; selected sound and actual play/pause state truthful; no focus reward from ambient timer; volume zero/step reaches current player. Prior 4a8 snapshot is archived. Carry its behavior/readability constraints, omit prior single-row and identical-height assertions since the new composition is explicitly authorized. Actual physical touch/native iOS and audible quality remain outside cloud-browser evidence.
+
+## Commands after GO
+
+Run from `/workspace/oda-reference-redesign`; substitute parent-approved newest preview URL and new scratch namespace. These are planned commands, not executed results.
+
+```sh
+ODA_QA_REPO=/workspace/oda-reference-redesign ODA_QA_URL='<preview>/#' ODA_QA_OUT='<new-out>/first-use' node --import tsx '<harness>/first-use.mjs'
+ODA_QA_URL='<preview>/#' ODA_QA_ISOLATE_EXTERNAL=1 ODA_COURSE_QA_OUT='<new-out>/courses' node --import tsx '<harness>/courses.mjs'
+ODA_QA_REPO=/workspace/oda-reference-redesign ODA_QA_URL='<preview>/#' ODA_QA_OUT='<new-out>/notebook' node --import tsx '<harness>/notebook.mjs'
+ODA_QA_REPO=/workspace/oda-reference-redesign ODA_QA_URL='<preview>/#' ODA_QA_OUT='<new-out>/calendar' node --import tsx '<harness>/calendar.mjs'
+ODA_GUIDANCE_REPO=/workspace/oda-reference-redesign ODA_GUIDANCE_URL='<preview>/' ODA_GUIDANCE_OUT='<new-out>/guidance' ODA_FLOW_BUILD_RECEIPT='<new-preflight-receipt>' node --import tsx '<harness>/guidance.mjs'
+ODA_GUIDANCE_REPO=/workspace/oda-reference-redesign ODA_GUIDANCE_URL='<preview>/' ODA_GUIDANCE_OUT='<new-out>/localized-preview' node --import tsx '<harness>/localized-preview.mjs'
+ODA_QA_URL='<preview>/' ODA_MOBILE_CORE_QA_OUT='<new-out>/dialogs' node --import tsx scripts/qa-mobile-core-quality.mjs
+```
+
+The new Sound Room functional script will be prepared after source freeze using actual supported controls, with selector-only adaptation documented. Root owns aggregate check/build; this agent will not start another aggregate or rebuild. Independent visual review owns reference fidelity, full layout/contrast and actual preview approval. Functional cases may overlap, so report per-run counts rather than summing unique-case totals.
+
+Capture meaningful real state PNGs at 320/390 EN/TR/ES and inspect pixels using `view_image`. Preserve initial genuine failures, identify P0–P3 blockers promptly, and recheck only affected flows after a bounded fix. Archive executable QA snapshots with `.log` suffix when parent packages review evidence.

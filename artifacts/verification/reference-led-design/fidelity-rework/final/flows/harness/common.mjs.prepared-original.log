@@ -1,0 +1,93 @@
+import { chromium } from '/workspace/oda-reference-redesign/node_modules/playwright/index.mjs';
+import { mkdirSync, writeFileSync, readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+
+export const repo = process.env.ODA_GUIDANCE_REPO || '/workspace/one-decision-away';
+const { getInitialDemoState } = await import(`${repo}/src/services/repository.ts`);
+export const base = process.env.ODA_GUIDANCE_URL || 'http://127.0.0.1:4182/one-decision-away/';
+export const origin = new URL(base).origin;
+export const out = process.env.ODA_GUIDANCE_OUT || `${repo}/artifacts/verification/english-guidance-browser`;
+mkdirSync(out, { recursive: true });
+export const sha = file => createHash('sha256').update(readFileSync(`${repo}/${file}`)).digest('hex');
+export const sourceHashes = () => Object.fromEntries(['src/utils/recordedNarration.ts', 'src/utils/voiceGuide.ts', 'src/data/englishNarrationAssets.ts', 'src/components/FocusTimerHub.tsx', 'src/components/FocusLockView.tsx'].map(file => [file, sha(file)]));
+export const save = (name, report) => writeFileSync(`${out}/${name}.json`, JSON.stringify(report, null, 2) + '\n');
+export const launch = () => chromium.launch({ executablePath: '/usr/bin/chromium', args: [] });
+export const seed = (locale = 'en') => {
+  const value = structuredClone(getInitialDemoState());
+  value.profile = { ...value.profile, displayName: 'Synthetic guidance QA', onboardingStep: 'completed', locale, theme: 'light', simpleModeOff: false, focusTabBlinkEnabled: false, focusScreenPulseEnabled: false };
+  return value;
+};
+export async function initApp(context, locale = 'en', seedValue = seed(locale)) {
+  await context.addInitScript(({ seed, locale }) => {
+    const key = 'one_decision_away_app_data_v1';
+    if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify(seed));
+    localStorage.setItem('oda_locale', locale);
+    localStorage.setItem('oda_theme', 'light');
+    localStorage.setItem('oda_voice_prefs', JSON.stringify({ enabled: true, volume: 1, engine: 'browser' }));
+  }, { seed: seedValue, locale });
+}
+export async function instrument(context, voices = null) {
+  await context.addInitScript(({ voices }) => {
+    const qa = window.__guidanceQA = { sources: [], decodes: [], speech: [], contexts: [], gains: [], events: [], modes: [] };
+    const decoded = new WeakMap();
+    const connections = new WeakMap();
+    const nativeContext = window.AudioContext;
+    const createSource = nativeContext.prototype.createBufferSource;
+    const createGain = nativeContext.prototype.createGain;
+    const decode = nativeContext.prototype.decodeAudioData;
+    nativeContext.prototype.createGain = function(...args) {
+      const gain = createGain.apply(this, args); qa.gains.push(gain); return gain;
+    };
+    nativeContext.prototype.decodeAudioData = function(...args) {
+      const start = performance.now();
+      return decode.apply(this, args).then(buffer => {
+        const info = { index: qa.decodes.length, duration: buffer.duration, channels: buffer.numberOfChannels, sampleRate: buffer.sampleRate, samples: buffer.length, decodeMs: performance.now() - start };
+        qa.decodes.push(info); decoded.set(buffer, info); return buffer;
+      });
+    };
+    nativeContext.prototype.createBufferSource = function(...args) {
+      const source = createSource.apply(this, args), ctx = this;
+      const start = source.start.bind(source), stop = source.stop.bind(source), connect = source.connect.bind(source), disconnect = source.disconnect.bind(source);
+      source.connect = function(target, ...extra) { connections.set(source, target); return connect(target, ...extra); };
+      let record;
+      source.start = function(...args) {
+        const info = decoded.get(source.buffer);
+        if (info) { const target = connections.get(source); record = { ...info, at: performance.now(), offset: args[1] || 0, gainAtStart: target?.gain?.value, gainIndex: qa.gains.indexOf(target), contextState: ctx.state, stopped: false, disconnected: false }; qa.sources.push(record); qa.events.push({ action: 'recorded-start', at: record.at, index: qa.sources.length - 1 }); }
+        return start(...args);
+      };
+      source.stop = function(...args) { if (record) { record.stopped = true; record.stoppedAt = performance.now(); qa.events.push({ action: 'recorded-stop', at: record.stoppedAt }); } return stop(...args); };
+      source.disconnect = function(...args) { if (record) record.disconnected = true; return disconnect(...args); };
+      return source;
+    };
+    if (voices !== null) {
+      window.SpeechSynthesisUtterance = class { constructor(text) { this.text = text; } };
+      const voiceList = voices.map(v => ({ ...v, localService: true, default: false }));
+      const synthesis = { speaking: false, paused: false, getVoices: () => voiceList, addEventListener() {}, removeEventListener() {}, cancel() { this.speaking = false; }, pause() { this.paused = true; }, resume() { this.paused = false; }, speak(utterance) { qa.speech.push({ text: utterance.text, lang: utterance.lang, voiceLang: utterance.voice?.lang, voiceName: utterance.voice?.name, volume: utterance.volume }); this.speaking = true; utterance.onstart?.(); } };
+      Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: synthesis });
+    } else {
+      const synthesis = window.speechSynthesis, speak = synthesis.speak.bind(synthesis);
+      synthesis.speak = function(utterance) { qa.speech.push({ text: utterance.text, lang: utterance.lang, voiceLang: utterance.voice?.lang, volume: utterance.volume }); return speak(utterance); };
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      new MutationObserver(() => {
+        const value = document.querySelector('[data-guidance-mode]')?.getAttribute('data-guidance-mode');
+        if (value && value !== qa.modes.at(-1)?.value) qa.modes.push({ value, at: performance.now() });
+      }).observe(document.documentElement, { attributes: true, childList: true, subtree: true });
+    });
+  }, { voices });
+}
+export const snapshot = page => page.evaluate(() => ({ sources: window.__guidanceQA.sources, decodes: window.__guidanceQA.decodes, speech: window.__guidanceQA.speech, events: window.__guidanceQA.events, modes: window.__guidanceQA.modes, gains: window.__guidanceQA.gains.map(g => g.gain.value), speechVoices: window.speechSynthesis.getVoices().map(v => ({ lang: v.lang, name: v.name })) }));
+export const gotoFocus = async page => { await page.goto(`${base}#/app/focus`); await page.locator('#focus-timer-hub').waitFor(); await page.evaluate(() => document.fonts.ready); };
+export const openGuided = async page => { await page.locator('#focus-timer-hub > div').nth(1).getByRole('button').nth(1).click(); await page.locator('[data-guided-session]').first().waitFor(); };
+export const preview = (page, sessionId) => page.locator(`[data-guided-session="${sessionId}"]`).getByRole('button').first();
+export const start = (page, sessionId) => page.locator(`[data-guided-session="${sessionId}"]`).getByRole('button').last();
+export async function routeSafe(context, report, handler) {
+  await context.route('**/*', async route => {
+    const request = route.request(), url = new URL(request.url());
+    if (url.origin !== origin || !['GET', 'HEAD'].includes(request.method())) {
+      report.blockedRequests.push({ method: request.method(), url: request.url() }); return route.abort('blockedbyclient');
+    }
+    if (handler && await handler(route, url)) return;
+    return route.continue();
+  });
+}

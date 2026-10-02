@@ -1,0 +1,81 @@
+import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
+import { mkdirSync, writeFileSync } from 'node:fs';
+
+const repo = process.env.ODA_QA_REPO;
+const require = createRequire(`${repo}/package.json`);
+const { chromium } = require('playwright');
+const { getInitialDemoState } = await import(`${repo}/src/services/repository.ts`);
+const { readPersonalRecordFixture } = await import(`${repo}/scripts/qa-personal-record-fixtures.mjs`);
+const base = process.env.ODA_QA_URL;
+const out = process.env.ODA_QA_OUT;
+mkdirSync(out, { recursive: true });
+const origin = new URL(base).origin;
+const hints = { en: 'Scroll sideways to see all dates', tr: 'Tüm tarihleri görmek için yana kaydırın', es: 'Desliza hacia los lados para ver todas las fechas' };
+const report = { at: new Date().toISOString(), sourceCommit: '71f1ce41f77bddb519cc9d18933303cc13336073', base, synthetic: true, checks: [], errors: [], blockedExternal: [], screenshots: [], cases: [], limits: ['Synthetic Chromium viewport/keyboard checks, not physical iPhone touch/swipe validation.'] };
+const browser = await chromium.launch({ executablePath: '/usr/bin/chromium' });
+report.browser = await browser.version();
+let active;
+const pass = (name, evidence) => { report.checks.push({ name, evidence }); console.log(`PASS ${name}`); };
+try {
+  for (const locale of ['en', 'tr', 'es']) for (const width of [320, 390]) {
+    const label = `${locale}-${width}`;
+    const seed = getInitialDemoState();
+    seed.profile = { ...seed.profile, displayName: 'Synthetic calendar regression', onboardingStep: 'completed', locale, theme: 'light', soundMuted: true, nudgesEnabled: false, dailyWisdomEnabled: false };
+    seed.notebook.entries = []; seed.dreamJournal = [];
+    const context = await browser.newContext({ viewport: { width, height: 844 }, timezoneId: 'UTC', reducedMotion: 'reduce', serviceWorkers: 'block' });
+    await context.route('**/*', route => {
+      if (new URL(route.request().url()).origin === origin && ['GET', 'HEAD'].includes(route.request().method())) return route.continue();
+      report.blockedExternal.push({ label, url: route.request().url() }); return route.abort();
+    });
+    await context.addInitScript(({ seed, locale }) => {
+      if (!localStorage.getItem('one_decision_away_app_data_v1')) localStorage.setItem('one_decision_away_app_data_v1', JSON.stringify(seed));
+      localStorage.setItem('oda_locale', locale); localStorage.setItem('oda_theme', 'light');
+    }, { seed, locale });
+    const page = await context.newPage(); active = page; page.setDefaultTimeout(8000);
+    page.on('pageerror', error => report.errors.push({ label, message: error.message }));
+    await page.goto(`${base}/app/notebook`); await page.locator('#notebook-journal-content').waitFor();
+    const calendar = page.locator('.oda-notebook-calendar');
+    const region = calendar.locator('.oda-notebook-calendar-scroll');
+    const hint = calendar.locator('.oda-notebook-calendar-scroll-hint');
+    assert.equal(await hint.innerText(), hints[locale]);
+    assert.equal(await hint.isVisible(), true);
+    assert.equal(await region.getAttribute('role'), 'region');
+    assert.ok(await region.getAttribute('aria-label'));
+    assert.equal(await region.getAttribute('tabindex'), '0');
+    const size = await region.evaluate(el => ({ viewport: innerWidth, document: document.documentElement.scrollWidth, width: el.clientWidth, scrollWidth: el.scrollWidth }));
+    assert.ok(size.scrollWidth > size.width); assert.ok(size.document <= size.viewport + 1);
+    pass(`${label}: overflow is localized and discoverable in a named keyboard region without page overflow`, size);
+    await region.scrollIntoViewIfNeeded(); await region.focus();
+    assert.equal(await region.evaluate(el => document.activeElement === el), true);
+    await page.screenshot({ path: `${out}/calendar-hint-${label}.png`, fullPage: false, animations: 'disabled' }); report.screenshots.push(`calendar-hint-${label}.png`);
+    for (let i = 0; i < 6; i++) await page.keyboard.press('ArrowRight');
+    await page.waitForFunction(() => document.querySelector('.oda-notebook-calendar-scroll').scrollLeft > 0);
+    pass(`${label}: native keyboard arrows scroll the calendar region`, { scrollLeft: await region.evaluate(el => el.scrollLeft) });
+    const before = await readPersonalRecordFixture(page);
+    const sunday = region.locator('tbody tr td:nth-child(7) button').first();
+    await sunday.focus();
+    await page.keyboard.press('Enter');
+    assert.equal(await sunday.getAttribute('aria-pressed'), 'true');
+    await page.waitForFunction(element => { const b = element.getBoundingClientRect(); const c = element.closest('.oda-notebook-calendar-scroll').getBoundingClientRect(); return b.left >= c.left - 1 && b.right <= c.right + 1; }, await sunday.elementHandle(), { timeout: 2000 });
+    const bounds = await sunday.evaluate(el => { const b = el.getBoundingClientRect(); const c = el.closest('.oda-notebook-calendar-scroll').getBoundingClientRect(); return { left: b.left, right: b.right, containerLeft: c.left, containerRight: c.right }; });
+    assert.ok(bounds.left >= bounds.containerLeft - 1 && bounds.right <= bounds.containerRight + 1);
+    await page.screenshot({ path: `${out}/calendar-weekend-selected-${label}.png`, fullPage: false, animations: 'disabled' }); report.screenshots.push(`calendar-weekend-selected-${label}.png`);
+    await page.keyboard.press('Enter'); assert.equal(await sunday.getAttribute('aria-pressed'), 'false');
+    assert.deepEqual(await readPersonalRecordFixture(page), before);
+    pass(`${label}: keyboard reaches, selects and clears the weekend date without writing user records`, bounds);
+    const labelBefore = await calendar.locator('[aria-live="polite"]').innerText();
+    const monthButtons = calendar.locator('> div').first().getByRole('button');
+    await monthButtons.nth(0).click(); assert.notEqual(await calendar.locator('[aria-live="polite"]').innerText(), labelBefore);
+    await monthButtons.nth(1).click(); assert.equal(await calendar.locator('[aria-live="polite"]').innerText(), labelBefore);
+    pass(`${label}: previous/next month handlers retain their original round-trip behavior`);
+    report.cases.push({ label, passed: true }); await context.close();
+  }
+  assert.deepEqual(report.errors, []); assert.deepEqual(report.blockedExternal, []); report.status = 'passed';
+} catch (error) {
+  report.status = 'failed'; report.failure = String(error.stack || error); process.exitCode = 1; console.error(report.failure);
+  if (active && !active.isClosed()) await active.screenshot({ path: `${out}/failure.png`, fullPage: false }).catch(() => {});
+} finally {
+  await browser.close(); report.finishedAt = new Date().toISOString(); writeFileSync(`${out}/calendar-report.json`, `${JSON.stringify(report, null, 2)}\n`);
+  console.log(JSON.stringify({ status: report.status, cases: report.cases.length, checks: report.checks.length, errors: report.errors.length }));
+}

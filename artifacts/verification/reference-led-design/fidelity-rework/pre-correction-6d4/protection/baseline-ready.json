@@ -1,0 +1,692 @@
+{
+  "kind": "sealed immutable protection and semantic baseline ready for authorized visual rework",
+  "capturedAtUtc": "2026-10-02T19:43:23.267548+00:00",
+  "baselineSourceCommit": "8fc4ef0572a4cfd20964be6e276325161b3a2acf",
+  "testedFunctionalSourceCommit": "4a8b5753dc7c1c676e5a2146ae1d4e63a4772b75",
+  "all691SourceHashesMatchTestedFunctionalCommit": true,
+  "protectedFiles": 348,
+  "narrationMp3s": 160,
+  "tsxSnapshots": 105,
+  "componentControllers": 191,
+  "controlAndAriaAttributes": 3233,
+  "currentReviewedFixBindings": [
+    {
+      "file": "src/components/FocusLockView.tsx",
+      "gitBlob": "135c5c7e6e126294baebd76d96a3b0dd8ca9a701",
+      "bytes": 25325,
+      "sha256": "d1bf8e2c0df5349bad8c7580e6c76a9b01b84353ddb896b1c5a64f93b41acfc1",
+      "matchesTested4a8Source": true
+    },
+    {
+      "file": "src/utils/useDialogAccessibility.ts",
+      "gitBlob": "0a2e743895cfd77afd769c1ed28272695f19b8de",
+      "bytes": 4193,
+      "sha256": "5b068c627b873c7da369502937470a45704cd748d1d4e22a70015ef9e66cf027",
+      "matchesTested4a8Source": true
+    },
+    {
+      "file": "src/components/ui.tsx",
+      "gitBlob": "7807bb6e7ac8b294147fe5e4e1ecf511ed02141b",
+      "bytes": 19945,
+      "sha256": "26fcc938ee5d5a32106033b1e58055f70b12f053210388218d2931e666858b46",
+      "matchesTested4a8Source": true
+    },
+    {
+      "file": "src/components/Onboarding.tsx",
+      "gitBlob": "d30b28693259d5429fc1bec48a5ff55ad37c2293",
+      "bytes": 20388,
+      "sha256": "6c4ed805aac7b96df0f96982ae717ba31fc94eef0df81c1a7ee260c7c4fb3a43",
+      "matchesTested4a8Source": true
+    },
+    {
+      "file": "src/components/momentum/TwoMinuteStart.tsx",
+      "gitBlob": "07275d93b52ef8ac1514cc52cb9c11869ff14718",
+      "bytes": 4126,
+      "sha256": "e156b3661636cc203018da2023b9813b0bcccf332c4c85ac313fbb33d354e050",
+      "matchesTested4a8Source": true
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "gitBlob": "41ba469da528650e8888c8cae4db7894fa928f4e",
+      "bytes": 15441,
+      "sha256": "a0008e1343fafca6665edd6d247831a2bb26f8f5fbf39abe356e8ee142c7bdd7",
+      "matchesTested4a8Source": true
+    },
+    {
+      "file": "src/components/notebook/NotebookCalendar.tsx",
+      "gitBlob": "bb42dd9fb93c407b3b58486e5939a2b297b07c7c",
+      "bytes": 3958,
+      "sha256": "9e05a127e9b90ded1a1f257289a2eee28b789172370e92d499557e785603da5f",
+      "matchesTested4a8Source": true
+    },
+    {
+      "file": "src/pages/Courses.tsx",
+      "gitBlob": "cedf5cd50fe5475ecc467c15ccc72988c36c9b81",
+      "bytes": 31168,
+      "sha256": "a42d95ca0c02e51ffcb12ac9cd1bd6c971c37765214c94092e724550629a462a",
+      "matchesTested4a8Source": true
+    },
+    {
+      "file": "src/components/today/CourseNextStep.tsx",
+      "gitBlob": "8b464788cd0c174a1abe5681a9508bfa448cee24",
+      "bytes": 3387,
+      "sha256": "1e3fd909d5eeb4ce327e8b53b3b608676727ac1fc0179f3ae18be4d395d3a15f",
+      "matchesTested4a8Source": true
+    },
+    {
+      "file": "src/components/FocusTimerHub.tsx",
+      "gitBlob": "8467268cecfc0f3083a2fbbb1c2ac57f503d5bd0",
+      "bytes": 25955,
+      "sha256": "32a10d4ef52d659bcc5580eae42bc8311982ddf9598c6c1fe989b2bd17d7325a",
+      "matchesTested4a8Source": true
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "gitBlob": "dffb55e745ca7d219e03024820a459bfb2a34ffc",
+      "bytes": 19493,
+      "sha256": "e7ac3e6eaa6dc75bd83255a6bd760613064702ddd2a60fdc9266b508ecb8b7df",
+      "matchesTested4a8Source": true
+    },
+    {
+      "file": "src/styles/notebook.css",
+      "gitBlob": "d0ca43a5cdec0b74c136dfb4808afba8f15f4b80",
+      "bytes": 7086,
+      "sha256": "e38797e8c1bf0410c535d29ee78cfcc96162c3924aa27cb3eddd6b89e663ffc3",
+      "matchesTested4a8Source": true
+    },
+    {
+      "file": "src/styles/sound.css",
+      "gitBlob": "de0941341972aa79e2bc1ffd780f26f71096581e",
+      "bytes": 15622,
+      "sha256": "67cfe6fd84dee5d43fe93f0cbae24f8e3c47852a160be80d3bce481f84ba8068",
+      "matchesTested4a8Source": true
+    }
+  ],
+  "localRefState": {
+    "currentHead": "8fc4ef0572a4cfd20964be6e276325161b3a2acf",
+    "worktreeStatusAtSeal": " M src/components/notebook/JournalWorkspace.tsx\n M src/pages/Courses.tsx\n M src/pages/Focus.tsx\n M src/pages/Notebook.tsx\n M src/pages/SoundRoom.tsx\n M src/pages/Today.tsx\n",
+    "recordedOriginMain": "350aa158f30c773a373f2895e267119f9f2eb17a",
+    "liveRemoteFreshnessVerified": false
+  },
+  "applicationFileOwnership": {
+    "parent": "Coach/shared shell/tokens",
+    "soundWorker": "SoundRoom/soundCSS",
+    "surfaceWorker": "Today/Focus/Notebook/Courses and assigned unique styles",
+    "auditor": "Read-only; no application files"
+  },
+  "paletteReworkAuthorized": true,
+  "old83AppearanceByteParityRequired": false,
+  "newTestsOrBuildsRun": false,
+  "appSourceEdited": false,
+  "publicationPerformed": false,
+  "baselineIsReady": true,
+  "finalReworkAuditPendingParentFreeze": true,
+  "modelSettingFreshlyVerified": false,
+  "sealedFiles": [
+    {
+      "file": "baseline-build-reference.json",
+      "bytes": 603,
+      "sha256": "8c75a3f2aa472e3dedd3772ec2a959e888628950e268a4b2fc1de936f169bd51"
+    },
+    {
+      "file": "committed-tsx/src/App.tsx",
+      "bytes": 6126,
+      "sha256": "5a26c5377532d754c334de1d77c2bcdaf4f884dde73d65a0593604081c802058"
+    },
+    {
+      "file": "committed-tsx/src/components/AddVisionDreamModal.tsx",
+      "bytes": 25620,
+      "sha256": "c6ea19070483f7f126d09111b7cbd7a8dbbcd570b9b49461217ac3eba132afc4"
+    },
+    {
+      "file": "committed-tsx/src/components/AppErrorBoundary.tsx",
+      "bytes": 3788,
+      "sha256": "c49623c7531d5e172372c0338b35e5b80433aa096500633e7a269f62ff99ed2b"
+    },
+    {
+      "file": "committed-tsx/src/components/ArchiveDreamModal.tsx",
+      "bytes": 6173,
+      "sha256": "a32664f06fcc8f67957f39f9ac1bf8e456f07065e693eb860cdfe0fa0116384f"
+    },
+    {
+      "file": "committed-tsx/src/components/ArchivedMarketHistory.tsx",
+      "bytes": 11525,
+      "sha256": "20deb6ee475f87c6b91c7d184cf946a83e219701ef886b36d98bb9d0f0087c28"
+    },
+    {
+      "file": "committed-tsx/src/components/BackupAndCloudSettings.tsx",
+      "bytes": 10690,
+      "sha256": "c3be63b88cecb21e642d292a3783f13104c3d1bd9b51a3c373a58fc82d2e95bf"
+    },
+    {
+      "file": "committed-tsx/src/components/BackupReminder.tsx",
+      "bytes": 3557,
+      "sha256": "e9dc4a4122099409103674c525640afb0b6c27fe4e16d14d8b24ead4dad35ca1"
+    },
+    {
+      "file": "committed-tsx/src/components/BackupRestoreReview.tsx",
+      "bytes": 2025,
+      "sha256": "1c6e9fb305734c64bc64347406ebed054e0aca046ce4fe4d00780aadd01d6beb"
+    },
+    {
+      "file": "committed-tsx/src/components/CourseArtwork.tsx",
+      "bytes": 7949,
+      "sha256": "3de9ec822666decc6dae2dfbf426a1e5e4bf91c4af49447c71250b08f7d54a2b"
+    },
+    {
+      "file": "committed-tsx/src/components/CourseCover.tsx",
+      "bytes": 1676,
+      "sha256": "cf4542df87f1a78c431784fded0de6332a092416d8c2254389090e5687acbb37"
+    },
+    {
+      "file": "committed-tsx/src/components/CoursePhoto.tsx",
+      "bytes": 3318,
+      "sha256": "32c5d7ee5b7b66df5767d723aa465401ef8c7c57cf68bbe5f561b212f2fac198"
+    },
+    {
+      "file": "committed-tsx/src/components/CoursePracticeStudio.tsx",
+      "bytes": 11567,
+      "sha256": "19669c96d751005c062bf08ccf6f366bf85debc99ea77e056b72f593f40cea4a"
+    },
+    {
+      "file": "committed-tsx/src/components/CourseVisual.tsx",
+      "bytes": 5947,
+      "sha256": "20eb3d5cfd715a680037c9a9f0d5086b4c22d584faf1021aeab4265e8103f72b"
+    },
+    {
+      "file": "committed-tsx/src/components/CustomCategoryModal.tsx",
+      "bytes": 11776,
+      "sha256": "98414380210791997391f40898dec280f1a6b8055559c5754a5874f8577d2bbe"
+    },
+    {
+      "file": "committed-tsx/src/components/DailyAffirmationWidget.tsx",
+      "bytes": 9190,
+      "sha256": "d56901ec0ebcb09dbd101819a5bc287afab10ce4d7af518a376c4ed025d5a30c"
+    },
+    {
+      "file": "committed-tsx/src/components/DailyCheckIn.tsx",
+      "bytes": 18853,
+      "sha256": "2f6e58d61eb0bedf98f52c8610397cf6315c500ce2cd5509ff5204df3f170e37"
+    },
+    {
+      "file": "committed-tsx/src/components/DailyDeepQuestion.tsx",
+      "bytes": 6160,
+      "sha256": "77dc6090f399de6f85027def7de77d0bdf5c4a690989590bd6d8c44bf6eba66c"
+    },
+    {
+      "file": "committed-tsx/src/components/DailyMicroHabits.tsx",
+      "bytes": 41692,
+      "sha256": "12298bda10cdb9533f863131e0de109b51bbe2b0d8d4ffbb0a2a4786bcca529c"
+    },
+    {
+      "file": "committed-tsx/src/components/DailyNudgesSettings.tsx",
+      "bytes": 9000,
+      "sha256": "813bc5681c9e00aafe2ac8ce53a7262b8b30164080af8a1e2ae51d77eb5b707c"
+    },
+    {
+      "file": "committed-tsx/src/components/DailyPrimaryGoalsChart.tsx",
+      "bytes": 36582,
+      "sha256": "9a6066c051d41708b0a5b3727e9fb9c8f9e2be8053649f24c47dbd1f65b271f2"
+    },
+    {
+      "file": "committed-tsx/src/components/DefaultFutureStudio.tsx",
+      "bytes": 21495,
+      "sha256": "9c5ff554aeb479d132a90c214ffcc98580cc1e7ac3a51d602d7e91c6c0f1648e"
+    },
+    {
+      "file": "committed-tsx/src/components/DreamArt.tsx",
+      "bytes": 16965,
+      "sha256": "d6921771541dd62ac3dfdbc239942459fd5d5c14c30f623a28122b89c5100cb7"
+    },
+    {
+      "file": "committed-tsx/src/components/DreamDollarChart.tsx",
+      "bytes": 15979,
+      "sha256": "318c0091093b1dfb9524db12a75ec742b6eb6c8989f2fb5d9534375fecc9f862"
+    },
+    {
+      "file": "committed-tsx/src/components/DreamJournal.tsx",
+      "bytes": 29229,
+      "sha256": "17b82a3a5067e303241c9b143791d35a73166c559a4e61516e8e2b56a3c2caf0"
+    },
+    {
+      "file": "committed-tsx/src/components/DreamReceipt.tsx",
+      "bytes": 7698,
+      "sha256": "afb85f8407154d0d60008069b841e7112b680584edb20384cb52d729aa95ab95"
+    },
+    {
+      "file": "committed-tsx/src/components/EditMicroHabitModal.tsx",
+      "bytes": 7324,
+      "sha256": "aa785a671a35055353083ca61ea9fc657a53097bc6f242f878ac12e36566395d"
+    },
+    {
+      "file": "committed-tsx/src/components/ExportHabitHistoryModal.tsx",
+      "bytes": 7011,
+      "sha256": "7910efe8683d38676240602ddb6dc28df48d01a09c7b6e205f0f5195666d74ce"
+    },
+    {
+      "file": "committed-tsx/src/components/ExportProgressModal.tsx",
+      "bytes": 7497,
+      "sha256": "cd8574f71defdd1e633eae29a6f1f5930e979c03161c705236709db6f009564c"
+    },
+    {
+      "file": "committed-tsx/src/components/FocusLockView.tsx",
+      "bytes": 25325,
+      "sha256": "d1bf8e2c0df5349bad8c7580e6c76a9b01b84353ddb896b1c5a64f93b41acfc1"
+    },
+    {
+      "file": "committed-tsx/src/components/FocusTimerHub.tsx",
+      "bytes": 25955,
+      "sha256": "32a10d4ef52d659bcc5580eae42bc8311982ddf9598c6c1fe989b2bd17d7325a"
+    },
+    {
+      "file": "committed-tsx/src/components/GoalModal.tsx",
+      "bytes": 7231,
+      "sha256": "ec1bd661078782af8451e40d82811f16dcf2754295f2b6241dd2b48ca8d8b3bd"
+    },
+    {
+      "file": "committed-tsx/src/components/LanguagePicker.tsx",
+      "bytes": 2934,
+      "sha256": "c536d540364c894a3ab6b771dfcd2e36f603319ff2c97cf3c9e94c7d53626a57"
+    },
+    {
+      "file": "committed-tsx/src/components/Last7DaysSummary.tsx",
+      "bytes": 29243,
+      "sha256": "4c72e922a9fee68d8569beae7608aa04097a54a6f12145cf3cb8f633e60d58cd"
+    },
+    {
+      "file": "committed-tsx/src/components/Logo.tsx",
+      "bytes": 875,
+      "sha256": "ea2e8fea1d2d78e96522300474543dc34d62897d7b8d646b54dddaf8a304f6aa"
+    },
+    {
+      "file": "committed-tsx/src/components/MeditateNowWidget.tsx",
+      "bytes": 3177,
+      "sha256": "1b1c31463179e848ac8363279d98d4a517da62e8e3c324464e33eb0c8ebd8217"
+    },
+    {
+      "file": "committed-tsx/src/components/MicroHabitCheckbox.tsx",
+      "bytes": 10128,
+      "sha256": "29303e2beb3480d94a3ecf3725c10b887020c761cd1d74799d242b2a52f4e58d"
+    },
+    {
+      "file": "committed-tsx/src/components/MicroHabitsProgressIndicator.tsx",
+      "bytes": 5067,
+      "sha256": "9480be43a0774bffc5b59e9cd7f17ea1aadef97cec46fcf178b471fc6583b3e0"
+    },
+    {
+      "file": "committed-tsx/src/components/MissionFlows.tsx",
+      "bytes": 14513,
+      "sha256": "c7b592b26e5d9a1bc6ed76e67763cf4162ccfd6d43cf1b702b70a03b087cf223"
+    },
+    {
+      "file": "committed-tsx/src/components/MorningVision.tsx",
+      "bytes": 4627,
+      "sha256": "5aded8e5f00e8ee06b0806f0b92cb22996a1b221126161ea05e2711852052a71"
+    },
+    {
+      "file": "committed-tsx/src/components/NaturalVoiceSettings.tsx",
+      "bytes": 8067,
+      "sha256": "be594eac7b058197e36a084ea74d9d15240d75b3f8a5f9d37739f85965e2ab6d"
+    },
+    {
+      "file": "committed-tsx/src/components/Onboarding.tsx",
+      "bytes": 20388,
+      "sha256": "6c4ed805aac7b96df0f96982ae717ba31fc94eef0df81c1a7ee260c7c4fb3a43"
+    },
+    {
+      "file": "committed-tsx/src/components/OneDecisionStreakCounter.tsx",
+      "bytes": 9072,
+      "sha256": "87c8de9e22646ee660650bd6fdf8daa0ba03d117bdb5cfcc8ad1ac9d47c9048e"
+    },
+    {
+      "file": "committed-tsx/src/components/ProgressRing.tsx",
+      "bytes": 1731,
+      "sha256": "a73f65903ba8be58b60f20f23ded0859810a53a6fa0e15c65db3a01d8e6ac55a"
+    },
+    {
+      "file": "committed-tsx/src/components/PurchaseReveal.tsx",
+      "bytes": 3019,
+      "sha256": "256ffd67708ba01bfdc00adfd9e159a12c8a5e063a3fe07a21c5fd920f577d39"
+    },
+    {
+      "file": "committed-tsx/src/components/QuickDreamJournalModal.tsx",
+      "bytes": 14405,
+      "sha256": "975c3c498b82fdcc5f6120d48b6babdb266b8790d7392ff3671f61ddbe4f048b"
+    },
+    {
+      "file": "committed-tsx/src/components/SavingsMomentumChart.tsx",
+      "bytes": 30341,
+      "sha256": "181131e900e3c9ad0355f1870f81729b14c8418cdce8a01df5d4b213dcaf4506"
+    },
+    {
+      "file": "committed-tsx/src/components/ShareCards.tsx",
+      "bytes": 11339,
+      "sha256": "7873e90fe46253fc2ca4a6427495b122239c05ada6e25b1a34e16ee2f0bc58b7"
+    },
+    {
+      "file": "committed-tsx/src/components/TwoFuturesPulseWidgets.tsx",
+      "bytes": 5106,
+      "sha256": "5068b1ca2d26d159d28204d212600ee6b80edbc8a091981a751f48caa8827067"
+    },
+    {
+      "file": "committed-tsx/src/components/WeeklyMicroHabitsSummary.tsx",
+      "bytes": 32187,
+      "sha256": "0ade5af7ce5d9730019705ce023ce2e02fe7c3403c091a1e1cee6023025b2f1d"
+    },
+    {
+      "file": "committed-tsx/src/components/brand/LogoC4.tsx",
+      "bytes": 919,
+      "sha256": "a9f5dcd6b3d737241057ba6310e977682b01622529ddad4d207721f16a37f359"
+    },
+    {
+      "file": "committed-tsx/src/components/brand/LogoV2.tsx",
+      "bytes": 1632,
+      "sha256": "76fcb85dbb6f3034e88920ab4744100448cdfecbbbfbc717904c91875217e756"
+    },
+    {
+      "file": "committed-tsx/src/components/brand/LogoV3.tsx",
+      "bytes": 1513,
+      "sha256": "aca926702abca7418c071819d251b89c11ea9a3abab910f0205c007635c400fb"
+    },
+    {
+      "file": "committed-tsx/src/components/brand/LogoV4.tsx",
+      "bytes": 1611,
+      "sha256": "84bc0dd4b893b6c266e1e3ace0e220f46ea99cdcd34aef800932acf72e67b447"
+    },
+    {
+      "file": "committed-tsx/src/components/coach/CoachTools.tsx",
+      "bytes": 24439,
+      "sha256": "ba6395bc6aca2efba46d2fbdcd9d005ce40c24f3cee8fe4032e1627de4b2c043"
+    },
+    {
+      "file": "committed-tsx/src/components/me/MyProgress.tsx",
+      "bytes": 10406,
+      "sha256": "a69007d9694d606db475444a645747ec51d54378fd3d8ad340f1d24c21f2ffe5"
+    },
+    {
+      "file": "committed-tsx/src/components/momentum/DecisionPlanModal.tsx",
+      "bytes": 5549,
+      "sha256": "07e37b78c331da65946f28eaf0f2d35fd2c969db23f83d4690e4a4b6bebf15e9"
+    },
+    {
+      "file": "committed-tsx/src/components/momentum/DreamRealityCheck.tsx",
+      "bytes": 3922,
+      "sha256": "244246d5d2df09081f079387b17d36b425118abc7170edf41e075495ef23a3c3"
+    },
+    {
+      "file": "committed-tsx/src/components/momentum/EvidenceTree.tsx",
+      "bytes": 2305,
+      "sha256": "54594d05524e4803a3c7c7163086038e19f06db0af2a910760ae20377d3c00fd"
+    },
+    {
+      "file": "committed-tsx/src/components/momentum/FirstSteps.tsx",
+      "bytes": 8166,
+      "sha256": "55e735b0c09d7ff20612cc300df5386ab0313c8c9a3c1fa258a9b042e2c01fa8"
+    },
+    {
+      "file": "committed-tsx/src/components/momentum/GrowthDashboard.tsx",
+      "bytes": 2284,
+      "sha256": "f7e28bc39b4bb2bd251a35e36ff0eb7cb82910eaa79f5dcbde4acd251382cbc2"
+    },
+    {
+      "file": "committed-tsx/src/components/momentum/InteractiveTree.tsx",
+      "bytes": 13433,
+      "sha256": "42ff165dc6f47731f6424fb8fa8ebbcb18b83802369f31e9af8845e558b65d9f"
+    },
+    {
+      "file": "committed-tsx/src/components/momentum/TodayMomentum.tsx",
+      "bytes": 13403,
+      "sha256": "a049eb6f9646375ba5682618080715e1cffb5da37e25c06df4b99d90fe7ba996"
+    },
+    {
+      "file": "committed-tsx/src/components/momentum/TwoMinuteStart.tsx",
+      "bytes": 4126,
+      "sha256": "e156b3661636cc203018da2023b9813b0bcccf332c4c85ac313fbb33d354e050"
+    },
+    {
+      "file": "committed-tsx/src/components/notebook/DailyPractices.tsx",
+      "bytes": 10402,
+      "sha256": "afe55a06bc77b2b07159fc47e2c52b7d9594bf2a19af7e50bb0242797cd69105"
+    },
+    {
+      "file": "committed-tsx/src/components/notebook/JournalWorkspace.tsx",
+      "bytes": 15441,
+      "sha256": "a0008e1343fafca6665edd6d247831a2bb26f8f5fbf39abe356e8ee142c7bdd7"
+    },
+    {
+      "file": "committed-tsx/src/components/notebook/NotebookCalendar.tsx",
+      "bytes": 3958,
+      "sha256": "9e05a127e9b90ded1a1f257289a2eee28b789172370e92d499557e785603da5f"
+    },
+    {
+      "file": "committed-tsx/src/components/notebook/Practice369.tsx",
+      "bytes": 11419,
+      "sha256": "f593535fd3fc53c9ac828e4b0fdb24a5ba9d1bf152bb17e7b366ca56bc265f94"
+    },
+    {
+      "file": "committed-tsx/src/components/notebook/TodaysPrompt.tsx",
+      "bytes": 940,
+      "sha256": "1f3474787c37341b2fb3239c52994796fda6391f2a5eb2df6e182881ebbdeb3c"
+    },
+    {
+      "file": "committed-tsx/src/components/notebook/WrittenPractice.tsx",
+      "bytes": 8722,
+      "sha256": "85d430f1a578d5163f3e31cfced55c6c24919cf477c9ee0e14cf910581f5b983"
+    },
+    {
+      "file": "committed-tsx/src/components/notebook/shared.tsx",
+      "bytes": 8168,
+      "sha256": "1b6238327f391c2691136060ee8d8903fb115a873cb18fd6ac9c7784411d9410"
+    },
+    {
+      "file": "committed-tsx/src/components/today/ArrivalCheckIn.tsx",
+      "bytes": 8898,
+      "sha256": "a2733ff515674667a58ea594800a4338b7ad78f5c186afd65f337750337094e3"
+    },
+    {
+      "file": "committed-tsx/src/components/today/CourseNextStep.tsx",
+      "bytes": 3387,
+      "sha256": "1e3fd909d5eeb4ce327e8b53b3b608676727ac1fc0179f3ae18be4d395d3a15f"
+    },
+    {
+      "file": "committed-tsx/src/components/today/DailyPractice.tsx",
+      "bytes": 6029,
+      "sha256": "9f1560683684a1c85abc11e4076d523500549a36d5a9b55e4db33862eefd622d"
+    },
+    {
+      "file": "committed-tsx/src/components/today/EveningLine.tsx",
+      "bytes": 4348,
+      "sha256": "32dcb3aba796f0ec304a7aa6b6d917ccb71d6f7081b7bdc6ce9eb8c8c17c4880"
+    },
+    {
+      "file": "committed-tsx/src/components/today/WeeklyOutcomeReview.tsx",
+      "bytes": 5720,
+      "sha256": "615df293975b56150c0f1d57ca8119852a3fa8ced871a16d55862eaefb139eeb"
+    },
+    {
+      "file": "committed-tsx/src/components/ui.tsx",
+      "bytes": 19945,
+      "sha256": "26fcc938ee5d5a32106033b1e58055f70b12f053210388218d2931e666858b46"
+    },
+    {
+      "file": "committed-tsx/src/layout/AppShell.tsx",
+      "bytes": 10695,
+      "sha256": "dfa27da9b5351954b113619f1f6013ce92e4f324914f680e1e6afda1f4db0b64"
+    },
+    {
+      "file": "committed-tsx/src/main.tsx",
+      "bytes": 1755,
+      "sha256": "306b1a41d4c19ebb78304c3014867f1925afe2269a4030dd68ce0a63a073a0bc"
+    },
+    {
+      "file": "committed-tsx/src/pages/Account.tsx",
+      "bytes": 15549,
+      "sha256": "c2c68d5526171849c74a48e851caa9176b234ac0bd116383445125c044ec468b"
+    },
+    {
+      "file": "committed-tsx/src/pages/Bank.tsx",
+      "bytes": 6408,
+      "sha256": "27a773372fc18781ea3df8c0b0334f66e44abc4d72a5ee8d7016dc4227743c1f"
+    },
+    {
+      "file": "committed-tsx/src/pages/Bridge.tsx",
+      "bytes": 9270,
+      "sha256": "52b266401770d502ccbbb3e05685f968496aa14c8f5b1ec284190820d603ea07"
+    },
+    {
+      "file": "committed-tsx/src/pages/Budget.tsx",
+      "bytes": 6169,
+      "sha256": "0a32ca98441ee9e3a5779bab53d605d788364ed983d497cf3d7f682310c361f9"
+    },
+    {
+      "file": "committed-tsx/src/pages/Coach.tsx",
+      "bytes": 24472,
+      "sha256": "e8075ab437c354bdc2af21e8fe67139bc9101ed87306ddeaba6ab5a5ac20f467"
+    },
+    {
+      "file": "committed-tsx/src/pages/Courses.tsx",
+      "bytes": 31168,
+      "sha256": "a42d95ca0c02e51ffcb12ac9cd1bd6c971c37765214c94092e724550629a462a"
+    },
+    {
+      "file": "committed-tsx/src/pages/Dreams.tsx",
+      "bytes": 32550,
+      "sha256": "138034ffdcb85e7ad661f034565696f23dab03ee70abcaae21f004e8aec57bc2"
+    },
+    {
+      "file": "committed-tsx/src/pages/Evidence.tsx",
+      "bytes": 6980,
+      "sha256": "315e3fde4d7fb92579b6ec08da47539192ddbe97908181cfe4cb48481af3e0fb"
+    },
+    {
+      "file": "committed-tsx/src/pages/Focus.tsx",
+      "bytes": 611,
+      "sha256": "526ba92a276accf0e85f7808fdb9ac6c1eeea64980616fbd85cf080ae5489db4"
+    },
+    {
+      "file": "committed-tsx/src/pages/FutureSelf.tsx",
+      "bytes": 9233,
+      "sha256": "c357e51fc71e9bbd4a684218de0bd8237f3529e1c4cc77323ea2edb1c12017b0"
+    },
+    {
+      "file": "committed-tsx/src/pages/Landing.tsx",
+      "bytes": 12224,
+      "sha256": "e21186fe0580526a2ca45c4f7079c13fd3dc09e02e08da8c3c06c92b08ff0096"
+    },
+    {
+      "file": "committed-tsx/src/pages/Legal.tsx",
+      "bytes": 2567,
+      "sha256": "a593fec0f4aaf5e4874d1253e8357da45b95678ce8fd9cef72842f463cd6d9f1"
+    },
+    {
+      "file": "committed-tsx/src/pages/LifeScore.tsx",
+      "bytes": 7977,
+      "sha256": "677d8e75723a9280629e173b5f938af1c76c55bbd6e92aae098fa2d67ac5d228"
+    },
+    {
+      "file": "committed-tsx/src/pages/Me.tsx",
+      "bytes": 9318,
+      "sha256": "24e39368b632ba6490adc58166cc6cbfe18a6b1f74628df26f95ea5ae97cb170"
+    },
+    {
+      "file": "committed-tsx/src/pages/Missions.tsx",
+      "bytes": 8715,
+      "sha256": "1f98e652b4bab117bf5daed46461f51d6bd10beb4f62b99556628c707248a739"
+    },
+    {
+      "file": "committed-tsx/src/pages/Notebook.tsx",
+      "bytes": 5744,
+      "sha256": "ab74050eadfcaaef79a0a0fbd6f9ca34874deac06cf3707fda0219c0605d1889"
+    },
+    {
+      "file": "committed-tsx/src/pages/Progress.tsx",
+      "bytes": 9692,
+      "sha256": "0812fa310a2130e9b38f7076e1cd2f5ac271dd84dda60f950d3215e0be6c75df"
+    },
+    {
+      "file": "committed-tsx/src/pages/PublicTwoFutures.tsx",
+      "bytes": 16346,
+      "sha256": "b2093361d5a896de4643b5c2229fad1b404dc204571cf62e04eb02890bafab81"
+    },
+    {
+      "file": "committed-tsx/src/pages/Seasons.tsx",
+      "bytes": 4912,
+      "sha256": "37041d26f70c14bcb5effd440fdce7db037ee6dd02b2dcc78a728134b7aebd28"
+    },
+    {
+      "file": "committed-tsx/src/pages/Settings.tsx",
+      "bytes": 25646,
+      "sha256": "908bc57f4d9666ab7567f253a656b7b1c4118a47699320bcfc26870ecfc46572"
+    },
+    {
+      "file": "committed-tsx/src/pages/SoundRoom.tsx",
+      "bytes": 19493,
+      "sha256": "e7ac3e6eaa6dc75bd83255a6bd760613064702ddd2a60fdc9266b508ecb8b7df"
+    },
+    {
+      "file": "committed-tsx/src/pages/Support.tsx",
+      "bytes": 4097,
+      "sha256": "4ba7fe505d9526ed19bc85b691731dccf64a2738af6c4e81a07b635c89af3a46"
+    },
+    {
+      "file": "committed-tsx/src/pages/Today.tsx",
+      "bytes": 28293,
+      "sha256": "f48b20a7e01b57c017b65800c3547f546a7181a59b9e9bf9fbcc12f065c718ee"
+    },
+    {
+      "file": "committed-tsx/src/pages/Tools.tsx",
+      "bytes": 4312,
+      "sha256": "fd7fe7a9765d70f04459576629087ecaaed3abc72be2a6b13fed2ca070b5fad1"
+    },
+    {
+      "file": "committed-tsx/src/pages/TwoFutures.tsx",
+      "bytes": 7049,
+      "sha256": "6d31f09ebeebd4ab4623430a778b907a5606936364e44c1a4838c9e2768560a8"
+    },
+    {
+      "file": "committed-tsx/src/pages/Upgrade.tsx",
+      "bytes": 22447,
+      "sha256": "5347a3452b252fce1050b0ffaa080e1429984b62e2b3365592309a44ceb78998"
+    },
+    {
+      "file": "committed-tsx/src/store/useApp.tsx",
+      "bytes": 96366,
+      "sha256": "0576b4a1b6c849049f88e8d9c043143c667e1aabf9357bbfba35fe79f5ac6497"
+    },
+    {
+      "file": "controller-semantic-baseline.json",
+      "bytes": 1976548,
+      "sha256": "87b15f7a83ec2a9cddb5d3c1fb101e77277f3846772fa7ec0c292f328ff798a3"
+    },
+    {
+      "file": "generate-semantic-baseline.mjs",
+      "bytes": 4632,
+      "sha256": "b47d32964681538f4545f4ea284a5d02770fdcd833a6e7240ac93d7426c07624"
+    },
+    {
+      "file": "metadata-baseline.json",
+      "bytes": 2004,
+      "sha256": "0b6835ae5e6a7455cc3c6789dbbef6b6a528bfc85866f041defbbc70ba003552"
+    },
+    {
+      "file": "protected-baseline.json",
+      "bytes": 81963,
+      "sha256": "be9797f12543b978a90d4a686bf94ccfc08f3f2147f7fa178caa1713990dc94c"
+    },
+    {
+      "file": "review-criteria.md",
+      "bytes": 4827,
+      "sha256": "413b446ce9799bc5968000e26aa4d6482ac4b724ad0f8214647fe202237bc0a5"
+    },
+    {
+      "file": "source-baseline.json",
+      "bytes": 222159,
+      "sha256": "5442d5a2fe1d5e1e1ea08ec2da7a1b4bf6f639000ab406ad95797368a66b3570"
+    }
+  ],
+  "findings": [],
+  "limits": [
+    "This seals pre-rework committed source/protection/semantic inventory; it does not approve the future visual diff.",
+    "Recorded main state is local-only. Parent source freeze, fresh aggregate/browser evidence and visual/QA checkpoint are needed later."
+  ]
+}

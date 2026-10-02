@@ -1,0 +1,426 @@
+{
+  "sourceBase": "6d4c0bb7f2f9b6c9629b66ce4458f6615ee03f7b",
+  "sourceFrozen": true,
+  "correctedFiles": [
+    {
+      "file": "src/pages/Today.tsx",
+      "bytes": 29482,
+      "sha256": "c6a0a76eef52ec53812d3bfcdb7ec8d5e51b13575258b8478e7c932fcda7be7c",
+      "newFile": false,
+      "eventHandlersIdentical": true,
+      "oldEventHandlerCount": 38,
+      "originalEventHandlersPreserved": true,
+      "addedEventHandlers": [],
+      "eventHandlerCount": 38,
+      "controllerStatementsIdentical": true,
+      "controllerStatementsExceptAuthorizedCalendarDefaultIdentical": true
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "bytes": 16955,
+      "sha256": "8e6887288ee5c0bf16b7e0e6deb3d4d5041fcd8ceeb477be3cfb664d805b044c",
+      "newFile": false,
+      "eventHandlersIdentical": false,
+      "oldEventHandlerCount": 21,
+      "originalEventHandlersPreserved": true,
+      "addedEventHandlers": [
+        "onClick={() => setSelectedDate(selectedDate === key ? '' : key)}"
+      ],
+      "eventHandlerCount": 22,
+      "controllerStatementsIdentical": false,
+      "controllerStatementsExceptAuthorizedCalendarDefaultIdentical": true
+    },
+    {
+      "file": "src/styles/notebook.css",
+      "bytes": 15997,
+      "sha256": "34ed7c9dc1bbbecd90bc925970250870031289f416e86c5843b3b76a2dc46a18",
+      "newFile": false
+    },
+    {
+      "file": "src/styles/workingSurfaces.css",
+      "bytes": 15872,
+      "sha256": "3ec1884029fefb5497eedd429b1da7ea6cbf2a41e6867a0feb283c4e75535c6b",
+      "newFile": false
+    }
+  ],
+  "authorPreviewCount": 26,
+  "runtimeErrors": [],
+  "scopedAxeViolations": 0,
+  "pageOverflowCases": [],
+  "focusedInteractions": {
+    "at": "2026-10-02T20:21:26.546Z",
+    "kind": "Author focused interactions against current dev source with synthetic isolated profile",
+    "checks": [
+      {
+        "name": "Draft survives practices/journal toggle and real weekend archive filter; 44 px targets and keyboard horizontal scrolling",
+        "hitTargets": 30
+      },
+      {
+        "name": "Promoted readout reflects actual preset then actual mission minutes; Start opens real 120 second timer, Pause and End work"
+      },
+      {
+        "name": "Untouched course has five real roadmap lessons and first-fold Start lesson 1 enters actual lesson",
+        "startRect": {
+          "x": 20,
+          "y": 303,
+          "width": 350,
+          "height": 48
+        }
+      }
+    ],
+    "errors": [],
+    "status": "passed"
+  },
+  "sameZeroKeptFixture": [
+    {
+      "theme": "light",
+      "file": "same-fixture-light-390-today.png",
+      "bytes": 137833,
+      "sha256": "476e0d2877c9fec489c2eec11c15f3d2ac85028789146504c367218ecc46292d",
+      "metrics": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "start": {
+          "y": 525.390625,
+          "height": 52,
+          "bottom": 577.390625
+        },
+        "treeCount": "0",
+        "treeStage": "seedling",
+        "week": "0",
+        "weekMax": "7"
+      },
+      "axe": []
+    },
+    {
+      "theme": "dark",
+      "file": "same-fixture-dark-390-today.png",
+      "bytes": 148569,
+      "sha256": "be16951eac3cfe40e2a922150be9b2270943b7b62212286997b31ec4a6a260fe",
+      "metrics": {
+        "viewport": 390,
+        "pageWidth": 390,
+        "start": {
+          "y": 525.390625,
+          "height": 52,
+          "bottom": 577.390625
+        },
+        "treeCount": "0",
+        "treeStage": "seedling",
+        "week": "0",
+        "weekMax": "7"
+      },
+      "axe": []
+    }
+  ],
+  "rawCheckReceipts": [
+    {
+      "log": "preview.log",
+      "command": "node --import tsx correction-6d4/preview.mjs",
+      "exitCode": 0,
+      "bytes": 1736,
+      "sha256": "2cc70b7e547cb64aa241148fe7d477965836eb7f817c4bc2c863eafb8420841d"
+    },
+    {
+      "log": "same-fixture.log",
+      "command": "node --import tsx correction-6d4/same-fixture.mjs",
+      "exitCode": 0,
+      "bytes": 646,
+      "sha256": "60192452e97c0af1d59f8123a77d4ee68962b4bd75bd497180cbd0e5c8e5198a"
+    },
+    {
+      "log": "interaction-check.log",
+      "command": "node --import tsx correction-6d4/interaction-check.mjs",
+      "exitCode": 0,
+      "bytes": 615,
+      "sha256": "6457f295b373b4f799442f5ac229672bb06974bb0f1d1dc14bf8626821e07843"
+    },
+    {
+      "log": "source-proof.log",
+      "command": "node correction-6d4/source-proof.mjs",
+      "exitCode": 0,
+      "bytes": 5763,
+      "sha256": "a3f3d2701ff81aeae7de09fcc58029d1545851651f629e9d1c8fd3f8867da3f0"
+    },
+    {
+      "log": "week-geometry.log",
+      "command": "node --import tsx correction-6d4/week-geometry.mjs",
+      "exitCode": 0,
+      "bytes": 1063,
+      "sha256": "ffe9fcb4c5c6006d59ae74b5d6e62079443154ac84e907aead0b7e21af492044"
+    }
+  ],
+  "limits": [
+    "Actual normal Chromium dev preview, synthetic local profiles. Not final independent built-byte QA or visual-acceptance proof. Exact original reference artwork is unavailable."
+  ],
+  "weekGeometry": {
+    "at": "2026-10-02T20:24:12.932Z",
+    "synthetic": true,
+    "cases": [
+      {
+        "width": 390,
+        "locale": "en",
+        "theme": "light",
+        "file": "final-empty-en-light-390-notebook.png",
+        "metrics": {
+          "pageWidth": 390,
+          "viewport": 390,
+          "calendarExpanded": "false",
+          "fullCalendarCount": 0,
+          "weekClient": 324,
+          "weekScroll": 324,
+          "weekHint": "none",
+          "targets": [
+            {
+              "width": 44.5625,
+              "height": 62
+            },
+            {
+              "width": 44.578125,
+              "height": 62
+            },
+            {
+              "width": 44.5625,
+              "height": 62
+            },
+            {
+              "width": 44.578125,
+              "height": 62
+            },
+            {
+              "width": 44.5625,
+              "height": 62
+            },
+            {
+              "width": 44.578125,
+              "height": 62
+            },
+            {
+              "width": 44.578125,
+              "height": 62
+            }
+          ],
+          "writingTop": 662.78125,
+          "writingHeight": 280
+        }
+      },
+      {
+        "width": 320,
+        "locale": "tr",
+        "theme": "dark",
+        "file": "final-empty-tr-dark-320-notebook.png",
+        "metrics": {
+          "pageWidth": 320,
+          "viewport": 320,
+          "calendarExpanded": "false",
+          "fullCalendarCount": 0,
+          "weekClient": 254,
+          "weekScroll": 320,
+          "weekHint": "block",
+          "targets": [
+            {
+              "width": 44,
+              "height": 62
+            },
+            {
+              "width": 44,
+              "height": 62
+            },
+            {
+              "width": 44,
+              "height": 62
+            },
+            {
+              "width": 44,
+              "height": 62
+            },
+            {
+              "width": 44,
+              "height": 62
+            },
+            {
+              "width": 44,
+              "height": 62
+            },
+            {
+              "width": 44,
+              "height": 62
+            }
+          ],
+          "writingTop": 690.78125,
+          "writingHeight": 280
+        }
+      }
+    ],
+    "errors": [],
+    "status": "passed"
+  },
+  "currentRootCommitAtEvidenceClose": "37b826fb0eea083095d2fe0fed0fb9bae55ed6f4",
+  "pngs": [
+    {
+      "file": "en-light-1440-course-lesson.png",
+      "bytes": 161928,
+      "sha256": "363e8796b0f632e588dd184a64bc3a00be5c2279df2c90eaac6d8bdf6cf7dd45"
+    },
+    {
+      "file": "en-light-1440-course-overview.png",
+      "bytes": 182541,
+      "sha256": "a46135145718771060cac18c0b204047a9f2e2f55523b90ca7bef3fdb3d2bce5"
+    },
+    {
+      "file": "en-light-1440-courses.png",
+      "bytes": 412923,
+      "sha256": "1857dd21a845de8a8ea204e131ba52ff3c06f49a2cb3094e5a90923af6609b74"
+    },
+    {
+      "file": "en-light-1440-focus.png",
+      "bytes": 257022,
+      "sha256": "7b3304edc6a8e1177ac8962569fde312890539fc0c488d930b382e1925693929"
+    },
+    {
+      "file": "en-light-1440-notebook-calendar.png",
+      "bytes": 269842,
+      "sha256": "b9fff1826a93a2432979638bb60229fdc31bd327e9ca0dc36b291a5b86ed4d9c"
+    },
+    {
+      "file": "en-light-1440-notebook.png",
+      "bytes": 265909,
+      "sha256": "cab4eac68e38937cb988acb42a55135a7e4549c360a4f6e84488c3276aa05fa0"
+    },
+    {
+      "file": "en-light-1440-today.png",
+      "bytes": 432666,
+      "sha256": "164c6889353fbcfb1a2c092f0c3f6d78f8d0293ae5642f435ce1257863299e13"
+    },
+    {
+      "file": "en-light-390-actual-focus-paused.png",
+      "bytes": 33271,
+      "sha256": "eb33bd24bdf2b0288002b06b346f2afabe36f605956bbb99450ca893944474ab"
+    },
+    {
+      "file": "en-light-390-course-lesson.png",
+      "bytes": 76640,
+      "sha256": "a66caa548b246d1437b72b9efd9be1b4c35628d5b56558e24244080bd41b13c7"
+    },
+    {
+      "file": "en-light-390-course-overview.png",
+      "bytes": 79335,
+      "sha256": "154f5d776ee628ca6bb3b8c4e0e68e15df42181bdb2257af53060f47dc83d72e"
+    },
+    {
+      "file": "en-light-390-courses.png",
+      "bytes": 74638,
+      "sha256": "5e880359b571a3443699e6732a76ea4cf73b2dd2c2c39137bb333480a6730a3e"
+    },
+    {
+      "file": "en-light-390-focus.png",
+      "bytes": 49732,
+      "sha256": "11956121f7c3f97e272235937a82ab185244d4a10026a2d1e75280d7dcfa9061"
+    },
+    {
+      "file": "en-light-390-notebook-calendar.png",
+      "bytes": 50309,
+      "sha256": "b5b981b9922c270e61e98351be902b0d9b134f908fd08a0bdfca6b8713167a2d"
+    },
+    {
+      "file": "en-light-390-notebook.png",
+      "bytes": 56180,
+      "sha256": "35daf377ac5c2f266d908e85dee727e72eaaeabca6279b7187f7d0c4c344534e"
+    },
+    {
+      "file": "en-light-390-today.png",
+      "bytes": 147755,
+      "sha256": "c4de2c41f5e0b8ed2ca84bbcb88c032b5da800daf7b3c0ed4b9f05f3f747ae2e"
+    },
+    {
+      "file": "es-light-390-course-lesson.png",
+      "bytes": 73174,
+      "sha256": "6d5e7382893e2ea456882be0233c40280fe8bcdc4d6cf2d33589966b28d74b2c"
+    },
+    {
+      "file": "es-light-390-course-overview.png",
+      "bytes": 80902,
+      "sha256": "d8adaad5f2b512acbc56d90c3a6cdec94f754b4311f5cd953e205c259b6cec84"
+    },
+    {
+      "file": "es-light-390-courses.png",
+      "bytes": 71867,
+      "sha256": "6629cce31c7acdd59d9c68a7f0a677721a3a9c4e8e40b4034a87366f4bcb1fcb"
+    },
+    {
+      "file": "es-light-390-focus.png",
+      "bytes": 54973,
+      "sha256": "18629d47bf58095af4da4e4e21ed79e42e9ab8acee59a5a09c30b61ffcbaf660"
+    },
+    {
+      "file": "es-light-390-notebook-calendar.png",
+      "bytes": 52076,
+      "sha256": "675ff2393a17a9c11474947b1f61a496c833b2deedc5bed8300ccb896f746d81"
+    },
+    {
+      "file": "es-light-390-notebook.png",
+      "bytes": 54965,
+      "sha256": "cf0c826de05da45c3660d5a4410692e6699322dfe2e9bf4a016738c3a399251c"
+    },
+    {
+      "file": "es-light-390-today.png",
+      "bytes": 149318,
+      "sha256": "2c662fa1cb2b672a4cc21d369d571c54655a222e99a33330bc6e60a312455bfa"
+    },
+    {
+      "file": "final-empty-en-light-390-notebook.png",
+      "bytes": 56180,
+      "sha256": "35daf377ac5c2f266d908e85dee727e72eaaeabca6279b7187f7d0c4c344534e"
+    },
+    {
+      "file": "final-empty-tr-dark-320-notebook.png",
+      "bytes": 56388,
+      "sha256": "bb6e127837aa1f44e2277987629fcc994c3d67025fa526f94422746805fd91dc"
+    },
+    {
+      "file": "same-fixture-dark-390-today.png",
+      "bytes": 148569,
+      "sha256": "be16951eac3cfe40e2a922150be9b2270943b7b62212286997b31ec4a6a260fe"
+    },
+    {
+      "file": "same-fixture-light-390-today.png",
+      "bytes": 137833,
+      "sha256": "476e0d2877c9fec489c2eec11c15f3d2ac85028789146504c367218ecc46292d"
+    },
+    {
+      "file": "tr-dark-320-course-lesson.png",
+      "bytes": 71545,
+      "sha256": "ff9693c0f9ac6450a27186a3a56f855d8714b4849fe78ef3a3323e10cafaf8db"
+    },
+    {
+      "file": "tr-dark-320-course-overview.png",
+      "bytes": 78890,
+      "sha256": "cd5f08f0e8ab65174e45a212525202b4ee0d7afaf46c5d0bfb327a6d8fe41a47"
+    },
+    {
+      "file": "tr-dark-320-courses.png",
+      "bytes": 62489,
+      "sha256": "81b2b2dab099ceb213a0aabafcd0f132dede8ae461621571c168a2687836271d"
+    },
+    {
+      "file": "tr-dark-320-focus.png",
+      "bytes": 56140,
+      "sha256": "de6c0bd91ed86cb794a67342004843de679f7abcf1ee6c0b5d1d4e3ff70492da"
+    },
+    {
+      "file": "tr-dark-320-notebook-calendar.png",
+      "bytes": 48708,
+      "sha256": "c26e44ce30193407f12f35f1ef25abcb501e4c40ddf035dc378a8d580e51fe31"
+    },
+    {
+      "file": "tr-dark-320-notebook.png",
+      "bytes": 56388,
+      "sha256": "bb6e127837aa1f44e2277987629fcc994c3d67025fa526f94422746805fd91dc"
+    },
+    {
+      "file": "tr-dark-320-today.png",
+      "bytes": 140931,
+      "sha256": "6a528680e2e557e3ef653e15c8ca738a86f278fd7cce4ca546cc4a4d04fa0ef4"
+    }
+  ]
+}

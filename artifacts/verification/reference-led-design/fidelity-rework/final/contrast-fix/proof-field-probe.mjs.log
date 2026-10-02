@@ -1,0 +1,150 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import { chromium } from '/workspace/oda-reference-redesign/node_modules/playwright/index.mjs';
+import AxeBuilder from '/workspace/oda-reference-redesign/node_modules/@axe-core/playwright/dist/index.js';
+import { getInitialDemoState } from '/workspace/oda-reference-redesign/src/services/repository.ts';
+import { firstRunCopy } from '/workspace/oda-reference-redesign/src/i18n/firstRun.ts';
+import { appRouteHref } from '/workspace/oda-reference-redesign/src/utils/routing.ts';
+
+const repo = '/workspace/oda-reference-redesign';
+const out = process.env.ODA_VISUAL_OUT; if (!out) throw new Error('Explicit output namespace required');
+const expectedSource=process.env.ODA_VISUAL_SOURCE;const receiptPath=process.env.ODA_VISUAL_RECEIPT;if(!expectedSource||!receiptPath)throw new Error('Exact source and receipt required');const parentReceipt=JSON.parse(fs.readFileSync(receiptPath,'utf8'));
+const base = process.env.ODA_VISUAL_URL || 'http://127.0.0.1:4183/one-decision-away/';
+const origin = new URL(base).origin;
+const url = route => new URL(appRouteHref(route, new URL(base).pathname), origin).href;
+const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+const inventory = dir => {
+  const files = [];
+  const walk = current => { for (const entry of fs.readdirSync(current, { withFileTypes: true })) { const full = path.join(current, entry.name); if (entry.isDirectory()) walk(full); else files.push({ file: path.relative(repo, full), bytes: fs.statSync(full).size, sha256: hash(fs.readFileSync(full)) }); } };
+  walk(dir); return files.sort((a, b) => a.file.localeCompare(b.file));
+};
+const sourceSnapshot = () => {
+  const files = execFileSync('git', ['ls-files', '-z'], { cwd: repo }).toString().split('\0').filter(Boolean).filter(file => /^(src\/|public\/|index\.html$|vite\.config|package|tsconfig)/.test(file));
+  const untracked = execFileSync('git', ['ls-files', '--others', '--exclude-standard', '-z'], { cwd: repo }).toString().split('\0').filter(Boolean).filter(file => file.startsWith('src/'));
+  return [...new Set([...files, ...untracked])].sort().map(file => ({ file, bytes: fs.statSync(path.join(repo, file)).size, sha256: hash(fs.readFileSync(path.join(repo, file))) }));
+};
+fs.mkdirSync(out, { recursive: true });
+const report = {
+  at: new Date().toISOString(), base, sourceCommit: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repo }).toString().trim(),
+  statusBefore: execFileSync('git', ['status', '--short'], { cwd: repo }).toString(), sourceBefore: sourceSnapshot(), buildBefore: inventory(path.join(repo, 'dist')),
+  referencesInspected: ['IMG_8669.jpeg', 'IMG_8668.jpeg', 'IMG_8667.jpeg', 'IMG_8666.jpeg', 'IMG_8665.jpeg', 'IMG_8664.jpeg', 'IMG_8663.jpeg'],
+  kind:'Bounded correctness/clipping diagnostic matrix; strict Sound fidelity remains failed2/4, not visual acceptance',
+  referenceEvidence: 'All seven actual inline reference pixels inspected; original local JPEG bytes0/7, original SVG approximation declared.',
+  parentReceipt:receiptPath,compiledSourceCommit:expectedSource,
+
+  limits: ['Actual cloud Chromium against the final local production build, with isolated synthetic profile records and synthetic draft text only.', 'Every external request is blocked; no provider, account, payment, model download, production action or physical device test.', 'Scoped axe and measured CSS/solid background contrast are useful evidence, not full WCAG certification. Gradient contrast is independently represented by axe/manual visual review.', 'Screenshots are viewport PNGs; selected lower-page states are explicitly scrolled into view. PNGs must be personally inspected before final conclusions.', 'No human audio listening or transcription quality review is claimed.'],
+  browser: '', cases: [], screenshots: [], errors: [], httpErrors: [], externalBlocked: [], failures: []
+};
+if(report.sourceCommit!==expectedSource||parentReceipt.sourceCommit!==expectedSource)throw new Error('Source/receipt mismatch');
+const matches=(a,b)=>{const m=new Map(a.map(x=>[x.file,x.bytes+':'+x.sha256]));return m.size===b.length&&b.every(x=>m.get(x.file)===x.bytes+':'+x.sha256)};
+report.initialDistMatchesReceipt=matches(report.buildBefore,parentReceipt.build);if(!report.initialDistMatchesReceipt)throw new Error('Dist mismatch');report.receiptSourceBefore=parentReceipt.source.map(x=>({...x,matches:fs.existsSync(repo+'/'+x.file)&&fs.statSync(repo+'/'+x.file).size===x.bytes&&hash(fs.readFileSync(repo+'/'+x.file))===x.sha256}));if(!report.receiptSourceBefore.every(x=>x.matches))throw new Error('Receipt source mismatch');report.aggregateLog={bytes:fs.statSync(path.join(path.dirname(receiptPath),parentReceipt.log)).size,sha256:hash(fs.readFileSync(path.join(path.dirname(receiptPath),parentReceipt.log)))};if(report.aggregateLog.bytes!==parentReceipt.logBytes||report.aggregateLog.sha256!==parentReceipt.logSha256)throw new Error('Aggregate log hash mismatch');
+const browser = await chromium.launch({ executablePath: '/usr/bin/chromium' });
+report.browser = browser.version();
+const save = () => fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify(report, null, 2) + '\n');
+const verify = (condition, message, evidence) => { if (!condition) report.failures.push({ message, evidence }); };
+const capture = async (page, caseId, state, region) => {
+  await page.waitForTimeout(100);
+  const dismiss = page.locator('.oda-reference-app > div [role="status"] button, .oda-reference-app > [role="status"] button');
+  if (await dismiss.count()) await dismiss.first().click();
+  if (region) await page.locator(region).scrollIntoViewIfNeeded(); else await page.evaluate(() => scrollTo(0, 0));
+  await page.evaluate(() => document.fonts.ready);
+  const file = `${caseId}-${state}.png`;
+  await page.screenshot({ path: path.join(out, file), animations: 'disabled', fullPage: false });
+  report.screenshots.push({ file, caseId, state, bytes: fs.statSync(path.join(out, file)).size, sha256: hash(fs.readFileSync(path.join(out, file))) });
+};
+const measurements = async (page, scope) => page.locator(scope).evaluate(root => {
+  const visible = el => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(el).visibility !== 'hidden'; };
+  const id = el => ({ tag: el.tagName, id: el.id || null, class: typeof el.className === 'string' ? el.className.slice(0, 180) : null, label: (el.getAttribute('aria-label') || el.innerText || '').trim().slice(0, 170) });
+  const buttons = [...root.querySelectorAll('button,select,input[type="range"]')].filter(visible).map(el => { const r = el.getBoundingClientRect(); return { ...id(el), width: +r.width.toFixed(2), height: +r.height.toFixed(2), disabled: el.disabled || false }; });
+  const clipped = [...root.querySelectorAll('button,button span,label,h1,h2,h3,p')].filter(visible).filter(el => el.scrollWidth > el.clientWidth + 1 && getComputedStyle(el).overflowX !== 'visible').map(el => ({ ...id(el), client: el.clientWidth, scroll: el.scrollWidth, overflow: getComputedStyle(el).overflowX, textOverflow: getComputedStyle(el).textOverflow }));
+  const overflowing = [...root.querySelectorAll('*')].filter(visible).filter(el => { const r = el.getBoundingClientRect(); return r.left < -1 || r.right > document.documentElement.clientWidth + 1; }).filter(el => !el.closest('.oda-notebook-calendar-scroll') && !el.classList.contains('sr-only') && getComputedStyle(el).position !== 'absolute').slice(0, 15).map(el => ({ ...id(el), x: el.getBoundingClientRect().x, right: el.getBoundingClientRect().right }));
+  const brokenImages = [...root.querySelectorAll('img')].filter(el => el.complete && el.naturalWidth === 0).map(el => ({ src: el.getAttribute('src'), alt: el.alt }));
+  const rgb = value => { const nums = value.match(/[\d.]+/g)?.map(Number); return nums && nums.length >= 3 ? [nums[0], nums[1], nums[2], nums[3] ?? 1] : null; };
+  const lum = color => color.slice(0, 3).map(v => { v /= 255; return v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; }).reduce((n, v, i) => n + v * [.2126, .7152, .0722][i], 0);
+  const contrast = [];
+  for (const el of [...root.querySelectorAll('h1,h2,p,label,button,select')].filter(visible).filter(el => !el.querySelector('p,h1,h2')).slice(0, 100)) {
+    const style = getComputedStyle(el), fg = rgb(style.color); if (!fg || !el.textContent.trim()) continue;
+    let bg = null, gradient = false;
+    for (let p = el; p; p = p.parentElement) { const s = getComputedStyle(p); if (s.backgroundImage !== 'none') gradient = true; const c = rgb(s.backgroundColor); if (c && c[3] >= .99) { bg = c; break; } }
+    if (!bg) continue;
+    const ratio = (Math.max(lum(fg), lum(bg)) + .05) / (Math.min(lum(fg), lum(bg)) + .05);
+    contrast.push({ ...id(el), foreground: style.color, background: `rgb(${bg.slice(0, 3).join(' ')})`, ratio: +ratio.toFixed(3), gradientInChain: gradient, fontSize: style.fontSize, fontWeight: style.fontWeight });
+  }
+  return { clientWidth: document.documentElement.clientWidth, scrollWidth: document.documentElement.scrollWidth, theme: document.documentElement.dataset.theme, buttons, below44: buttons.filter(el => el.width < 43.9 || el.height < 43.9), clipped, overflowing, brokenImages, contrast };
+});
+const scan = async (page, record, state, scope, runAxe) => {
+  const measure = await measurements(page, scope);
+  verify(measure.scrollWidth <= measure.clientWidth + 1, `${record.id}/${state}: horizontal page overflow`, measure);
+  verify(measure.brokenImages.length === 0, `${record.id}/${state}: broken images`, measure.brokenImages);
+  verify(measure.theme === record.theme, `${record.id}/${state}: wrong theme`, measure.theme);
+  let axe = null;
+  if (runAxe) {
+    const result = await new AxeBuilder({ page }).include(scope).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+    axe = { violations: result.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.map(n => ({ target: n.target, summary: n.failureSummary })) })), incomplete: result.incomplete.map(v => ({ id: v.id, nodes: v.nodes.map(n => ({ target: n.target, summary: n.failureSummary })) })), contrastPassCount: result.passes.find(v => v.id === 'color-contrast')?.nodes.length ?? 0 };
+    verify(axe.violations.length === 0, `${record.id}/${state}: scoped axe findings`, axe.violations);
+  }
+  record.states.push({ state, scope, measure, axe });
+};
+const matrix = [];
+for (const locale of ['en', 'tr', 'es']) for (const theme of ['light', 'dark']) for (const width of [320, 390, 1440]) if(locale==='en'&&theme==='light'&&width===320)matrix.push({ id: `${locale}-${theme}-${width}`, locale, theme, width, height: width === 1440 ? 1000 : 844, states: [], checks: [] });
+async function run(record) {
+  const seed = getInitialDemoState();
+  Object.assign(seed.profile, { displayName: 'Synthetic ODA review', onboardingStep: 'completed', locale: record.locale, theme: record.theme, firstOpenedAt: new Date().toISOString(), soundMuted: true, nudgesEnabled: false, dailyWisdomEnabled: false, focusTabBlinkEnabled: false, focusScreenPulseEnabled: false });
+  seed.missions = [];seed.dreamJournal=[{id:'synthetic-photo-entry',userId:seed.profile.id,title:'Synthetic photo entry',content:'Isolated QA fixture for archive and photo dialog.',createdAt:new Date().toISOString(),photoDataUrl:'data:image/svg+xml;base64,'+Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200"><rect width="320" height="200" fill="#514078"/><circle cx="160" cy="95" r="50" fill="#cbbdf0"/><text x="160" y="175" text-anchor="middle" fill="white">Synthetic QA photo</text></svg>').toString('base64')}];
+  const context = await browser.newContext({ viewport: { width: record.width, height: record.height }, reducedMotion: 'reduce', serviceWorkers: 'block' });
+  await context.route('**/*', route => {
+    const requestUrl = new URL(route.request().url());
+    if (requestUrl.origin === origin) return route.continue();
+    report.externalBlocked.push({ case: record.id, url: `${requestUrl.origin}${requestUrl.pathname}`, type: route.request().resourceType() });
+    return route.abort();
+  });
+  await context.addInitScript(({ seed, locale, theme }) => {
+    if (!localStorage.getItem('one_decision_away_app_data_v1')) localStorage.setItem('one_decision_away_app_data_v1', JSON.stringify(seed));
+    localStorage.setItem('oda_locale', locale); localStorage.setItem('oda_theme', theme);
+  }, { seed, locale: record.locale, theme: record.theme });
+  const page = await context.newPage();
+  page.on('pageerror', error => report.errors.push({ case: record.id, message: error.message }));
+  page.on('response', response => { if (response.status() >= 400 && new URL(response.url()).origin === origin) report.httpErrors.push({ case: record.id, status: response.status(), path: new URL(response.url()).pathname }); });
+  const axe = record.width === 390 || (record.locale === 'en' && record.width === 1440);
+  try {
+    await page.goto(url('/app'));
+    await page.locator('#today-decision-input').waitFor();
+    await page.locator('#today-decision-input').fill('Read two pages');
+    await page.locator('#set-one-decision form button[type="submit"]').click();
+    await page.locator('.oda-decision-action').waitFor();
+    const toastDismiss = page.locator('.oda-reference-app > div [role="status"] button, .oda-reference-app > [role="status"] button');
+    if (await toastDismiss.count()) await toastDismiss.first().click();
+    await page.locator('a[href="#oda-main"]').focus(); await page.keyboard.press('Enter');
+    verify(await page.locator('#oda-main').evaluate(el => el === document.activeElement), `${record.id}: skip link keyboard focus`);
+    record.checks.push('Actual set-decision handler and skip-link keyboard focus');
+    await capture(page, record.id, 'today'); await scan(page, record, 'today', '.oda-reference-today', axe);
+    await capture(page, record.id, 'today-growth', '.oda-growth-panel');
+    await page.getByRole('button',{name:firstRunCopy(record.locale).optionalPlan,exact:true}).click();
+    await page.locator('#plan-obstacle').fill('I might reach for my phone');await page.locator('#plan-then').fill('Leave it aside and read two pages');
+    await page.getByRole('dialog').locator('button').last().click();await page.locator('.oda-decision-plan').waitFor();
+    await capture(page,record.id,'today-saved-plan');await scan(page,record,'today-saved-plan','#set-one-decision',axe);
+    record.planColors=await page.locator('.oda-decision-plan').evaluate(e=>({background:getComputedStyle(e).backgroundColor,text:[...e.children].map(n=>({text:n.textContent,color:getComputedStyle(n).color}))}));
+    await page.locator('.oda-decision-done').click();await page.getByRole('dialog').locator('button').last().click();await page.locator('.oda-decision-kept').waitFor();
+    await capture(page,record.id,'today-kept');await scan(page,record,'today-kept','.oda-reference-today',axe);
+    const proofSelector='.oda-fidelity-support section:has(.oda-evidence-tree.w-20)';const proof=page.locator(proofSelector);verify(await proof.count()===1,`${record.id}: real first-proof exists`);if(await proof.count()){await capture(page,record.id,'today-first-proof',proofSelector);record.proofBounds=await proof.evaluate(e=>({width:e.getBoundingClientRect().width,text:[...e.querySelectorAll('h2,p')].map(p=>({text:p.textContent,width:p.getBoundingClientRect().width,right:p.getBoundingClientRect().right})),input:[...e.querySelectorAll('input')].map(n=>({width:n.getBoundingClientRect().width,height:n.getBoundingClientRect().height,id:n.id})),art:[...e.querySelectorAll('.oda-evidence-tree')].map(n=>({width:n.getBoundingClientRect().width}))}));verify(record.proofBounds.text.every(p=>p.width>=100),`${record.id}: first-proof readable text column`,record.proofBounds);}
+    record.checks.push('Real optional planning save, contrast diagnostic and actual completion/first-proof rendering');
+
+
+  } catch (error) { report.failures.push({ message: `${record.id}: exception`, evidence: error.stack }); }
+  finally { report.cases.push(record); save(); await context.close(); console.log(`DONE ${record.id}: ${record.states.length} states`); }
+}
+try {
+  for (let index = 0; index < matrix.length; index += 2) await Promise.all(matrix.slice(index, index + 2).map(run));
+  report.sourceAfter = sourceSnapshot(); report.buildAfter = inventory(path.join(repo, 'dist'));
+  report.statusAfter = execFileSync('git', ['status', '--short'], { cwd: repo }).toString();
+  verify(JSON.stringify(report.sourceBefore) === JSON.stringify(report.sourceAfter), 'App source changed during independent visual QA');
+  verify(JSON.stringify(report.buildBefore) === JSON.stringify(report.buildAfter), 'Built bytes changed during independent visual QA');
+  verify(report.errors.length === 0, 'Unhandled page errors', report.errors);
+  verify(report.httpErrors.length === 0, 'Local preview HTTP errors', report.httpErrors);
+  report.finalDistMatchesReceipt=matches(report.buildAfter,parentReceipt.build);verify(report.finalDistMatchesReceipt,'Final compiled bytes match exact receipt');report.receiptSourceAfter=parentReceipt.source.map(x=>({...x,matches:fs.existsSync(repo+'/'+x.file)&&fs.statSync(repo+'/'+x.file).size===x.bytes&&hash(fs.readFileSync(repo+'/'+x.file))===x.sha256}));verify(report.receiptSourceAfter.every(x=>x.matches),'All receipt source files stable/equal');
+  report.completedAt = new Date().toISOString(); report.pass = report.failures.length === 0;
+  save(); console.log(JSON.stringify({ pass: report.pass, cases: report.cases.length, states: report.cases.reduce((n, c) => n + c.states.length, 0), screenshots: report.screenshots.length, failures: report.failures, errors: report.errors, sourceStable: JSON.stringify(report.sourceBefore) === JSON.stringify(report.sourceAfter), buildStable: JSON.stringify(report.buildBefore) === JSON.stringify(report.buildAfter) }));
+  if (!report.pass) process.exitCode = 1;
+} finally { save(); await browser.close(); }

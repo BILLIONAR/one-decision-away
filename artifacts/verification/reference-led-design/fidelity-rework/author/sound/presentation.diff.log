@@ -1,0 +1,434 @@
+diff --git a/src/pages/SoundRoom.tsx b/src/pages/SoundRoom.tsx
+index dffb55e..745d42a 100644
+--- a/src/pages/SoundRoom.tsx
++++ b/src/pages/SoundRoom.tsx
+@@ -57,23 +57,30 @@ function useTick(active: boolean, ms: number) {
+ 
+ type Scene = 'coast' | 'night' | 'dunes' | 'leaves';
+ const SECTION_SCENES: Record<SoundRoomSectionId, Scene> = {
+-  relax: 'coast', sleep: 'night', focus: 'dunes', breathe: 'leaves', frequencies: 'night',
++  relax: 'dunes', sleep: 'leaves', focus: 'coast', breathe: 'night', frequencies: 'night',
+ };
+ const SECTION_ICONS = { relax: Waves, sleep: Moon, focus: Headphones, breathe: Wind };
++const SCENE_ASSETS: Record<Scene, string> = {
++  dunes: 'sound-dunes.svg', leaves: 'sound-palms.svg', coast: 'sound-ocean.svg', night: 'sound-palms.svg',
++};
+ 
+-/** Original decorative landscape contours; the leaf photograph is an existing owned ODA asset. */
+-const SoundScene: React.FC<{ scene: Scene; className?: string }> = ({ scene, className = '' }) => {
++/** Original local landscape illustrations; unavailable art falls back to existing owned ODA art. */
++const SoundScene: React.FC<{ scene: Scene; className?: string; eager?: boolean }> = ({ scene, className = '', eager = false }) => {
++  const [failed, setFailed] = useState(false);
++  useEffect(() => setFailed(false), [scene]);
+   return (
+-    <span className={`oda-sound-scene ${className}`} data-scene={scene} aria-hidden="true">
+-      {scene === 'leaves' && <img className="oda-sound-scene-leaves" src={`${import.meta.env.BASE_URL}assets/oda/delivery/course-covers/oda-growth-values-640.webp`} alt="" width={640} height={360} loading="lazy" decoding="async" />}
+-      <span className="oda-sound-scene-light" />
+-      <span className="oda-sound-scene-contour oda-sound-scene-contour-back" />
+-      <span className="oda-sound-scene-contour oda-sound-scene-contour-middle" />
+-      <span className="oda-sound-scene-contour oda-sound-scene-contour-front" />
++    <span className={`oda-sound-scene ${className}`} data-scene={scene} data-artwork={failed ? 'owned-fallback' : scene} aria-hidden="true">
++      <img src={`${import.meta.env.BASE_URL}${failed ? 'assets/oda/delivery/course-covers/oda-growth-values-640.webp' : `assets/oda/reference-fidelity/${SCENE_ASSETS[scene]}`}`} alt="" loading={eager ? 'eager' : 'lazy'} decoding="async" onError={() => setFailed(true)} />
+     </span>
+   );
+ };
+ 
++const CoverWave: React.FC = () => (
++  <svg className="oda-sound-cover-wave" viewBox="0 0 400 100" preserveAspectRatio="none" aria-hidden="true">
++    <path d="M0 5C75 74 129 12 220 29S337 37 400 91V100H0Z" />
++  </svg>
++);
++
+ const SoundCard: React.FC<{ sound: SoundRoomSound; sectionId: SoundRoomSectionId; indexInCategory: number; playing: boolean; locked?: boolean }> = ({ sound, sectionId, indexInCategory, playing, locked }) => {
+   const t = useT();
+   const { setActiveRoute } = useApp();
+@@ -210,6 +217,8 @@ const PlayerBar: React.FC = () => {
+   else if (player.playing) status = t('Playing · no timer');
+   else status = t('Paused');
+ 
++  if (!player.track) return null;
++
+   return (
+     <div className="oda-sound-player" role="region" aria-label={t('Sound player')}>
+       <div className="oda-sound-player-inner">
+@@ -267,6 +276,33 @@ const PlayerBar: React.FC = () => {
+   );
+ };
+ 
++/** The same real player state, given the reference's larger teal-glass presentation. */
++const NowPlayingPanel: React.FC = () => {
++  const t = useT();
++  const player = usePlayer();
++  const sound = soundForTrack(player.track);
++  const scene = SECTION_SCENES[SOUND_ROOM_SECTIONS.find((item) => item.sounds.some((entry) => entry.track === player.track))?.id ?? 'relax'];
++  if (!sound) return null;
++  return (
++    <section className="oda-sound-now-panel" aria-label={t('Sound player')}>
++      <div className="oda-sound-now-heading">
++        <p className="oda-kicker">{t('Sound Room')}</p>
++        <h2 className="oda-display">{sound ? t(sound.name) : t('Choose a sound to begin')}</h2>
++        {sound && <p>{t(sound.description)}</p>}
++      </div>
++      <SoundScene scene={scene} className="oda-sound-now-art" eager />
++      <div className="oda-sound-now-controls">
++        <Headphones size={20} aria-hidden="true" />
++        <button type="button" className="oda-sound-now-toggle" disabled={!sound} aria-label={player.playing ? t('Pause') : t('Play')} onClick={() => (player.playing ? soundRoomPlayer.pause() : soundRoomPlayer.resume())}>
++          {player.playing ? <Pause size={27} strokeWidth={2.2} /> : <Play size={27} strokeWidth={2.2} />}
++        </button>
++        <Timer size={20} aria-hidden="true" />
++      </div>
++      <p className="oda-sound-now-note">{sound ? t(sound.why) : t('Sound for calm, sleep and focus')}</p>
++    </section>
++  );
++};
++
+ /**
+  * Sound Room: relaxation, sleep, focus and breathing sounds, synthesized in
+  * the browser. Honest by design: sound can help you settle; it is not a
+@@ -313,14 +349,11 @@ export const SoundRoom: React.FC = () => {
+     <div className="oda-sound">
+       <header className="oda-sound-intro">
+         <div className="oda-sound-intro-copy">
+-          <p className="oda-kicker text-[var(--accent)]">{t('Sound Room')}</p>
+-          <h1 className="oda-display oda-sound-title">{t('Sound for calm, sleep and focus')}</h1>
+-          <p className="oda-sound-lede">
+-            {t('Sound can help you relax, settle and fall asleep more easily. It is not a treatment.')}
+-          </p>
++          <h1 className="oda-display oda-sound-title">{t('Sound Room')}</h1>
+         </div>
+       </header>
+ 
++      <div className="oda-sound-experience">
+       <div
+         role="tablist"
+         aria-label={t('Sound Room sections')}
+@@ -344,7 +377,7 @@ export const SoundRoom: React.FC = () => {
+             data-section={item.id}
+             onClick={() => choose(item.id)}
+           >
+-            <SoundScene scene={SECTION_SCENES[item.id]} />
++            <SoundScene scene={SECTION_SCENES[item.id]} eager={item.id === 'relax'} />
+             <span className="oda-sound-tab-copy">
+               <span className="oda-sound-tab-icon" aria-hidden="true"><Icon size={19} strokeWidth={1.8} /></span>
+               <span className="oda-sound-tab-name">{t(item.label)}</span>
+@@ -355,18 +388,25 @@ export const SoundRoom: React.FC = () => {
+         })}
+       </div>
+ 
++      <div className="oda-sound-session-column">
+       <section
+         role="tabpanel"
+         id={`${baseId}-panel`}
+         aria-labelledby={`${baseId}-tab-${section.id}`}
+         className="oda-sound-panel"
+       >
+-        <div className="oda-sound-panel-heading">
+-          <p className="oda-kicker">{t('Sound Room')}</p>
++        <div className="oda-sound-panel-cover">
++          <SoundScene key={section.id} scene={SECTION_SCENES[section.id]} eager />
++          <div className="oda-sound-panel-heading">
+           <h2 className="oda-display oda-sound-section-title">{t(section.label)}</h2>
+           <p className="oda-sound-section-intro">{t(section.intro)}</p>
++          </div>
++          <CoverWave />
+         </div>
+ 
++        <div className="oda-sound-panel-body">
++        <SoundScene key={section.id} scene={SECTION_SCENES[section.id]} className="oda-sound-detail-thumb" />
++        <p className="oda-sound-detail-credit">ODA · {t('Sound Room')}</p>
+         {section.id === 'breathe' ? (
+           <BreathePanel sound={section.sounds[0]} soundPlaying={isPlaying('breath_pacer')} />
+         ) : (
+@@ -383,7 +423,17 @@ export const SoundRoom: React.FC = () => {
+             {t('Pick a timer in the player below. The sound fades out gently over the last minute.')}
+           </p>
+         )}
++        </div>
+       </section>
++      <NowPlayingPanel />
++      </div>
++      </div>
++
++      <details className="oda-sound-about">
++        <summary><Info size={17} aria-hidden="true" />{t('About')}</summary>
++        <p className="oda-sound-intro-line">{t('Sound for calm, sleep and focus')}</p>
++        <p className="oda-sound-lede">{t('Sound can help you relax, settle and fall asleep more easily. It is not a treatment.')}</p>
++      </details>
+ 
+       <section className="oda-sound-frequencies" aria-labelledby={`${baseId}-frequencies`}>
+         <p className="oda-kicker text-[var(--accent)]">{t('Frequencies')}</p>
+diff --git a/src/styles/sound.css b/src/styles/sound.css
+index de09413..03480d9 100644
+--- a/src/styles/sound.css
++++ b/src/styles/sound.css
+@@ -1,66 +1,97 @@
+-/* Sound Room: original scenic contours, light session rows and a local teal player atmosphere. */
+-.oda-sound { --sound-cyan: #56E0DB; --sound-on-cyan: #12373A; color: var(--fg); padding-bottom: 9rem; }
++/* SoundRoom reference composition. Original vector scenes are illustrations, not source photographs. */
++.oda-sound { --sound-cyan: #58DFDB; --sound-on-cyan: #113B40; position: relative; color: var(--fg); padding-bottom: 9rem; }
+ .oda-sound button, .oda-sound select, .oda-sound input { -webkit-tap-highlight-color: transparent; }
+ .oda-sound button:focus-visible, .oda-sound select:focus-visible, .oda-sound input:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
++.oda-sound-scene { display: block; position: relative; overflow: hidden; background: #19313C; }
++.oda-sound-scene img { display: block; width: 100%; height: 100%; object-fit: cover; }
++.oda-sound-scene[data-scene="night"] img { filter: brightness(.68) saturate(.7); }
++.oda-sound-intro { position: absolute; top: 1.5rem; left: 0; right: 0; z-index: 6; text-align: center; pointer-events: none; }
++.oda-sound-title { margin: 0; font-size: .76rem; font-weight: 600; line-height: 1.2; letter-spacing: .12em; text-transform: uppercase; color: #FFFFFF; text-shadow: 0 1px 8px #152536; }
++.oda-sound-intro-line { margin-top: .4rem; font-size: .88rem; font-weight: 600; color: var(--fg); }
++.oda-sound-lede { margin-top: .4rem; max-width: 65ch; font-size: .76rem; line-height: 1.6; color: var(--fg-muted); }
++.oda-sound-experience, .oda-sound-session-column { min-width: 0; }
++.oda-sound-about { margin-top: 1.25rem; padding: .15rem 1rem .8rem; border: 1px solid var(--border); border-radius: 17px; background: var(--bg-elevated); }
++.oda-sound-about summary { display: flex; align-items: center; gap: .55rem; min-height: 44px; font-size: .8rem; font-weight: 600; cursor: pointer; }
++.oda-sound-about summary::marker { content: ''; }
+ 
+-/* Decorative landscapes: original contours, not photos or measured audio visualizations. */
+-.oda-sound-scene { --scene-sky: #7CAAB4; --scene-back: #365D69; --scene-middle: #244955; --scene-front: #132D39; display: block; position: relative; isolation: isolate; overflow: hidden; background: linear-gradient(155deg, #C9D6D0, var(--scene-sky) 55%, var(--scene-back)); }
+-.oda-sound-scene[data-scene="night"] { --scene-sky: #666A94; --scene-back: #3B476A; --scene-middle: #283D5A; --scene-front: #19233C; background: linear-gradient(150deg, #C6B8CA, #777391 40%, #28394E); }
+-.oda-sound-scene[data-scene="dunes"] { --scene-sky: #BBA18C; --scene-back: #837080; --scene-middle: #4E465D; --scene-front: #292C42; background: linear-gradient(155deg, #E5CAB0, #B8A3AC 50%, #6D6381); }
+-.oda-sound-scene[data-scene="leaves"] { --scene-sky: #8EBAAA; --scene-back: #466A65; --scene-middle: #2B565B; --scene-front: #183740; background: linear-gradient(145deg, #CCDDD3, #6EAEA3 50%, #224E57); }
+-.oda-sound-scene-light { position: absolute; width: 16%; aspect-ratio: 1; top: 12%; right: 17%; border-radius: 50%; background: #FFF2D5; opacity: .7; box-shadow: 0 0 32px 12px rgb(255 240 209 / .15); }
+-.oda-sound-scene[data-scene="night"] .oda-sound-scene-light { background: #E1EBF4; opacity: .8; width: 12%; }
+-.oda-sound-scene-contour { position: absolute; display: block; width: 150%; height: 75%; left: -25%; border-radius: 50% 55% 0 0 / 50% 65% 0 0; }
+-.oda-sound-scene-contour-back { bottom: -26%; background: var(--scene-back); transform: rotate(-10deg); }
+-.oda-sound-scene-contour-middle { bottom: -43%; background: var(--scene-middle); transform: rotate(9deg); }
+-.oda-sound-scene-contour-front { bottom: -59%; background: var(--scene-front); transform: rotate(-12deg); }
+-.oda-sound-scene[data-scene="coast"] .oda-sound-scene-contour { border-radius: 50% 40% 0 0 / 65% 50% 0 0; }
+-.oda-sound-scene-leaves { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .6; mix-blend-mode: luminosity; }
+-.oda-sound-scene[data-scene="leaves"] .oda-sound-scene-light { display: none; }
+-
+-.oda-sound-intro { padding-bottom: 1.4rem; }
+-.oda-sound-title { margin-top: .6rem; max-width: 20ch; font-size: clamp(2rem, 6.8vw, 3rem); line-height: 1.08; letter-spacing: -.035em; }
+-.oda-sound-lede { margin-top: .85rem; max-width: 58ch; font-size: .92rem; line-height: 1.7; color: var(--fg-muted); }
+-
+-/* Existing roving focus and persisted selection remain intact. */
+-.oda-sound-tabs { display: grid; grid-template-columns: minmax(0, 1fr); gap: .65rem; padding: .25rem; max-width: 100%; }
+-.oda-sound-tab { position: relative; isolation: isolate; min-width: 0; width: 100%; min-height: 140px; border: 2px solid transparent; border-radius: 24px 60px 24px 24px; overflow: hidden; text-align: left; cursor: pointer; transition: border-color 160ms ease, box-shadow 160ms ease; }
+-.oda-sound-tab:nth-child(even) { border-radius: 60px 24px 24px 24px; }
++/* One continuous canvas: three full-width scenic bands flow into the dark local breathing action. */
++.oda-sound-tabs { display: flex; flex-direction: column; position: relative; isolation: isolate; width: calc(100% + 40px); margin-inline: -20px; border-radius: 30px; overflow: hidden; background: #10232C; }
++.oda-sound-tab { position: relative; flex: none; width: 100%; min-width: 0; min-height: 280px; border: 0; border-radius: 0; overflow: hidden; text-align: center; cursor: pointer; }
++.oda-sound-tab:nth-child(1) { z-index: 4; border-radius: 0 0 18% 64% / 0 0 20% 40%; }
++.oda-sound-tab:nth-child(2) { z-index: 3; margin-top: -104px; min-height: 310px; border-radius: 0 0 65% 16% / 0 0 34% 18%; }
++.oda-sound-tab:nth-child(3) { z-index: 2; margin-top: -108px; min-height: 320px; border-radius: 0 0 28% 62% / 0 0 16% 24%; }
+ .oda-sound-tab > .oda-sound-scene { position: absolute; inset: 0; }
+-.oda-sound-tab::after { content: ''; position: absolute; z-index: 0; inset: 0; background: linear-gradient(100deg, rgb(10 22 36 / .76), rgb(10 22 36 / .46) 65%, rgb(10 22 36 / .1)); }
+-.oda-sound-tab-copy { position: relative; z-index: 1; display: grid; grid-template-columns: 38px minmax(0, 1fr); column-gap: .65rem; row-gap: .25rem; padding: 1.2rem 1.05rem; color: #FFFFFF; }
+-.oda-sound-tab-icon { grid-row: span 2; display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; margin-top: .05rem; border: 1px solid rgb(255 255 255 / .32); border-radius: 50%; background: rgb(15 29 45 / .45); }
+-.oda-sound-tab-name { font-size: 1.35rem; font-weight: 650; line-height: 1.15; letter-spacing: -.025em; }
+-.oda-sound-tab-detail { max-width: 40ch; font-size: .77rem; line-height: 1.55; color: #F1F3F8; }
+-.oda-sound-tab:hover { border-color: color-mix(in srgb, var(--accent) 60%, transparent); }
+-.oda-sound-tab[aria-selected="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft), var(--shadow-md); }
+-.oda-sound-tab[aria-selected="true"] .oda-sound-tab-icon { background: #DDE4F6; border-color: #DDE4F6; color: #26314E; }
+-.oda-sound .oda-sound-tab:focus-visible { outline-offset: 2px; }
++.oda-sound-tab::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(8 19 28 / .08), rgb(8 19 28 / .18) 45%, rgb(8 19 28 / .5)); }
++.oda-sound-tab-copy { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 250px; padding: 2rem 1.45rem 3.5rem; color: #FFFFFF; }
++.oda-sound-tab:nth-child(2) .oda-sound-tab-copy { padding-top: 6rem; }
++.oda-sound-tab:nth-child(3) .oda-sound-tab-copy { padding-top: 7rem; }
++.oda-sound-tab-icon { display: none; }
++.oda-sound-tab-name { font-size: clamp(2rem, 9.6vw, 2.65rem); font-weight: 700; line-height: 1.06; letter-spacing: -.045em; text-shadow: 0 2px 16px rgb(0 0 0 / .4); }
++.oda-sound-tab-detail { display: block; max-width: 35ch; margin-top: .5rem; font-size: .76rem; line-height: 1.5; color: #FFFFFF; text-shadow: 0 1px 8px #10232C; }
++.oda-sound-tab[aria-selected="true"] .oda-sound-tab-name::after { content: ''; display: block; width: 26px; height: 3px; margin: .45rem auto 0; border-radius: 99px; background: #FFFFFF; }
++.oda-sound .oda-sound-tab:focus-visible { outline: none; }
++.oda-sound-tab:focus-visible .oda-sound-tab-name { outline: 2px solid #FFFFFF; outline-offset: 8px; border-radius: 4px; }
++.oda-sound-tab[data-section="breathe"] { z-index: 1; min-height: 122px; margin-top: -24px; padding-top: 12px; background: #10232C; }
++.oda-sound-tab[data-section="breathe"] > .oda-sound-scene, .oda-sound-tab[data-section="breathe"]::after { display: none; }
++.oda-sound-tab[data-section="breathe"] .oda-sound-tab-copy { min-height: 112px; padding: .8rem 1rem 1.25rem; }
++.oda-sound-tab[data-section="breathe"] .oda-sound-tab-icon { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; margin-bottom: .35rem; border: 1px solid #53747D; border-radius: 50%; background: #1A3540; }
++.oda-sound-tab[data-section="breathe"][aria-selected="true"] .oda-sound-tab-icon { background: #ECF8F5; color: #1B3840; border-color: #ECF8F5; }
++.oda-sound-tab[data-section="breathe"] .oda-sound-tab-name { font-size: .83rem; font-weight: 600; letter-spacing: 0; }
++.oda-sound-tab[data-section="breathe"] .oda-sound-tab-detail { display: none; }
+ 
+-/* Dark scenic covers transition to a readable working surface with real catalog rows. */
+-.oda-sound-panel { margin-top: 1.4rem; padding: 1.2rem 1rem; border: 1px solid var(--border); border-radius: 26px; background: var(--bg-elevated); box-shadow: var(--surface-shadow); }
+-.oda-sound-panel-heading .oda-kicker { color: var(--fg-muted); }
+-.oda-sound-section-title { margin-block: .45rem .55rem; font-size: clamp(1.6rem, 5vw, 2rem); line-height: 1.15; letter-spacing: -.025em; }
+-.oda-sound-section-intro { max-width: 58ch; font-size: .88rem; line-height: 1.65; color: var(--fg-muted); }
+-.oda-sound-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: .65rem; margin-top: 1.05rem; }
++/* A large dark cover meets a light lesson-style list through one continuous organic edge. */
++.oda-sound-panel { min-width: 0; margin-top: 1.5rem; overflow: hidden; border: 1px solid var(--border); border-radius: 30px; background: var(--bg-elevated); box-shadow: var(--surface-shadow); }
++.oda-sound-panel-cover { position: relative; isolation: isolate; min-height: 340px; padding: 3rem 1.4rem 6.5rem; background: #182D36; text-align: center; color: #FFFFFF; }
++.oda-sound-panel-cover > .oda-sound-scene { position: absolute; z-index: -2; inset: 0; }
++.oda-sound-panel-cover::after { content: ''; position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, rgb(8 20 30 / .55), rgb(8 20 30 / .18) 60%, rgb(8 20 30 / .45)); }
++.oda-sound-section-title { margin-block: .4rem .6rem; font-size: clamp(1.7rem, 6.5vw, 2.25rem); line-height: 1.1; letter-spacing: -.035em; }
++.oda-sound-section-intro { max-width: 58ch; margin-inline: auto; font-size: .87rem; line-height: 1.65; color: var(--fg-muted); }
++.oda-sound-panel-cover .oda-sound-section-intro { max-width: 34ch; color: #FFFFFF; font-size: .81rem; }
++.oda-sound-cover-wave { position: absolute; left: 0; bottom: -1px; display: block; width: 100%; height: 90px; fill: var(--bg-elevated); }
++.oda-sound-panel-body { position: relative; padding: 0 1.1rem 1.4rem; }
++.oda-sound-detail-thumb { position: relative; z-index: 1; width: 136px; height: 156px; margin: -122px auto 0; border: 1px solid rgb(241 252 251 / .42); border-radius: 32px; box-shadow: 0 12px 32px -18px #14202A; }
++.oda-sound-detail-credit { margin-top: .95rem; text-align: center; font-size: .74rem; color: var(--fg-muted); }
++.oda-sound-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; margin-top: 1.1rem; }
+ .oda-sound-card { min-width: 0; }
+-.oda-sound-card-button { position: relative; display: grid; grid-template-columns: 58px minmax(0, 1fr) 40px; align-items: start; gap: .75rem; width: 100%; height: 100%; padding: .9rem .75rem; text-align: left; cursor: pointer; border: 1px solid var(--border); border-radius: 17px; background: var(--bg-elevated); transition: border-color 160ms ease, background-color 160ms ease; }
+-.oda-sound-card-button:hover { background: var(--bg-muted); border-color: var(--border-strong); }
+-.oda-sound-card-button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+-.oda-sound-card-media { display: block; position: relative; width: 58px; height: 72px; border-radius: 13px 24px 13px 13px; overflow: hidden; }
+-.oda-sound-card-media .oda-sound-scene { width: 100%; height: 100%; }
+-.oda-sound-card-play { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 44px; border: 1px solid var(--border); border-radius: 50%; color: var(--fg); background: var(--bg-muted); }
+-.oda-sound-card-button[aria-pressed="true"] .oda-sound-card-play { border-color: #285E64; background: #285E64; color: #FFFFFF; }
+-.oda-sound-card-body { display: flex; min-width: 0; flex-direction: column; gap: .35rem; }
+-.oda-sound-card-name { font-size: .96rem; font-weight: 650; line-height: 1.3; letter-spacing: -.015em; color: var(--fg); overflow-wrap: anywhere; }
+-.oda-sound-card-description { font-size: .8rem; line-height: 1.55; color: var(--fg); }
+-.oda-sound-card-why { font-size: .77rem; line-height: 1.55; color: var(--fg-muted); }
+-.oda-sound-card-note { display: inline-flex; align-items: center; gap: .35rem; align-self: flex-start; margin-top: .2rem; padding: .3rem .5rem; border-radius: 12px; font-size: .71rem; font-weight: 600; line-height: 1.45; color: var(--fg); background: var(--accent-soft); }
++.oda-sound-card + .oda-sound-card { border-top: 1px solid var(--border); }
++.oda-sound-card-button { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr); align-items: start; gap: .7rem; width: 100%; min-height: 76px; padding: 1rem .15rem; border: 0; border-radius: 0; background: transparent; text-align: left; cursor: pointer; transition: background-color 160ms ease; }
++.oda-sound-card-button:hover { background: var(--bg-muted); }
++.oda-sound-card-button[aria-pressed="true"] { background: var(--accent-soft); }
++.oda-sound-card-media { display: none; }
++.oda-sound-card-play { grid-column: 1; grid-row: 1; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 0; border-radius: 50%; color: var(--fg-muted); background: transparent; }
++.oda-sound-card-button[aria-pressed="true"] .oda-sound-card-play { background: #285E64; color: #FFFFFF; }
++.oda-sound-card-body { grid-column: 2; grid-row: 1; display: flex; min-width: 0; flex-direction: column; gap: .35rem; }
++.oda-sound-card-name { font-size: .93rem; font-weight: 650; line-height: 1.3; letter-spacing: -.015em; color: var(--fg); overflow-wrap: anywhere; }
++.oda-sound-card-description { font-size: .77rem; line-height: 1.5; color: var(--fg); }
++.oda-sound-card-why { font-size: .74rem; line-height: 1.5; color: var(--fg-muted); }
++.oda-sound-card-note { display: inline-flex; align-items: center; gap: .35rem; align-self: flex-start; margin-top: .15rem; padding: .3rem .5rem; border-radius: 12px; font-size: .71rem; font-weight: 600; line-height: 1.45; color: var(--fg); background: var(--accent-soft); }
+ .oda-sound-card-note svg { flex: none; }
+-.oda-sound-card-pro { position: absolute; bottom: 0; left: 0; right: 0; padding: 3px; background: rgb(16 23 40 / .88); color: #FFFFFF; text-align: center; font-size: .66rem; font-weight: 650; }
++.oda-sound-card-pro { display: none; }
+ .oda-sound-hint { display: flex; gap: .5rem; align-items: flex-start; margin-top: 1rem; font-size: .8rem; line-height: 1.55; color: var(--fg-muted); }
+ .oda-sound-hint svg { flex: none; margin-top: .15rem; color: var(--accent); }
+ 
++/* Reference 3: real player state inside a tall cyan-edge atmospheric glass panel. */
++.oda-sound-now-panel { position: relative; margin-top: 1.5rem; padding: 1.6rem 1.1rem 1.3rem; border: 2px solid #45BFC6; border-radius: 30px; overflow: hidden; background: linear-gradient(140deg, #40666B, #1C414A 58%, #283D4A); color: #F1FCFB; box-shadow: inset 0 1px 0 rgb(199 251 242 / .25), 0 18px 44px -24px #163946; }
++.oda-sound-now-heading { position: relative; z-index: 1; }
++.oda-sound-now-heading .oda-kicker { color: #D5EEEB; }
++.oda-sound-now-heading h2 { margin-top: .5rem; font-size: 1.5rem; letter-spacing: -.03em; line-height: 1.15; }
++.oda-sound-now-heading > p:last-child { margin-top: .7rem; max-width: 36ch; font-size: .8rem; line-height: 1.6; color: #E4F4F0; }
++.oda-sound-now-art { width: calc(100% + 2.2rem); height: 300px; margin: 1.4rem -1.1rem 0; border-radius: 0 0 45% 15% / 0 0 18% 6%; }
++.oda-sound-now-art img { object-position: center 65%; mix-blend-mode: luminosity; }
++.oda-sound-now-controls { display: flex; justify-content: space-around; align-items: center; width: min(100%, 270px); margin: -18px auto 0; padding: .7rem; position: relative; border: 1px solid rgb(194 245 239 / .22); border-radius: 26px; background: rgb(50 99 106 / .8); backdrop-filter: blur(14px); color: #D9EEEA; }
++.oda-sound-now-toggle { display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 50%; color: var(--sound-on-cyan); background: var(--sound-cyan); cursor: pointer; box-shadow: 0 0 22px rgb(71 218 217 / .2); }
++.oda-sound-now-toggle:disabled { background: #587C80; color: #E3F0ED; cursor: not-allowed; box-shadow: none; }
++.oda-sound-now-toggle:focus-visible { outline-color: #F1FCFB; }
++.oda-sound-now-note { margin-top: 1rem; font-size: .77rem; line-height: 1.55; text-align: center; color: #DEEFED; }
++
++@media (min-width: 640px) { .oda-sound-tabs { width: 100%; margin-inline: 0; } }
++@media (min-width: 1000px) {
++  .oda-sound-experience { display: grid; grid-template-columns: minmax(0, .88fr) minmax(0, 1fr); align-items: start; gap: 1.5rem; }
++  .oda-sound-intro { right: auto; width: calc((100% - 1.5rem) * .468); }
++  .oda-sound-tabs { position: sticky; top: 24px; }
++  .oda-sound-panel { margin-top: 0; }
++  .oda-sound-panel-cover { min-height: 380px; }
++}
+ /* Breath timing remains synchronized to the existing audio clock. */
+ .oda-sound-breathe { display: flex; flex-direction: column; align-items: center; margin-top: 1.25rem; padding: 1.5rem 1rem 1.4rem; border: 1px solid #477B7D; border-radius: 23px; background: radial-gradient(ellipse at 50% 0, #285A62, #15383F 70%); color: #F1FCFB; text-align: center; }
+ .oda-sound-breathe-stage { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; width: min(260px, 65vw); aspect-ratio: 1; }
+@@ -113,16 +144,6 @@
+ .oda-sound-player-timer select { width: auto; min-width: 118px; max-width: 100%; min-height: 44px; padding: .3rem .4rem; border: 1px solid #71999F; border-radius: 11px; background: #25444F; color: #F1FCFB; font-size: .77rem; cursor: pointer; }
+ .oda-sound-player button:focus-visible, .oda-sound-player input:focus-visible, .oda-sound-player select:focus-visible { outline-color: #D3F7F4; }
+ 
+-@media (min-width: 560px) {
+-  .oda-sound-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .85rem; }
+-  .oda-sound-tab { min-height: 180px; }
+-  .oda-sound-tab-copy { padding: 1.4rem 1.1rem; }
+-  .oda-sound-tab-name { font-size: 1.65rem; }
+-  .oda-sound-panel { padding: 1.4rem 1.35rem; }
+-  .oda-sound-card-button { grid-template-columns: 76px minmax(0, 1fr) 44px; gap: 1rem; padding: 1rem; }
+-  .oda-sound-card-media { width: 76px; height: 84px; }
+-  .oda-sound-card-play { width: 44px; }
+-}
+ @media (min-width: 768px) {
+   .oda-sound { padding-bottom: 7rem; }
+   /* AppShell has a 15rem sidebar; align within the remaining page column. */
+@@ -133,10 +154,8 @@
+   .oda-sound-evidence { padding: 1.5rem; }
+ }
+ @media (max-width: 359px) {
+-  .oda-sound-card-button { grid-template-columns: minmax(0, 1fr) 40px; gap: .6rem; padding: .85rem .7rem; }
+-  .oda-sound-card-media { display: none; }
+-  .oda-sound-tab-copy { grid-template-columns: 32px minmax(0, 1fr); padding: 1.1rem .85rem; }
+-  .oda-sound-tab-icon { width: 32px; height: 32px; }
++  .oda-sound-tab-copy { padding-inline: 1rem; }
++  .oda-sound-panel-body { padding-inline: .8rem; }
+   .oda-sound-player-controls { gap: .5rem; }
+ }
+ @media (prefers-reduced-motion: reduce) {
+diff --git a/public/assets/oda/reference-fidelity/sound-dunes.svg b/public/assets/oda/reference-fidelity/sound-dunes.svg
+new file mode 100644
+index 0000000..438100b
+--- /dev/null
++++ b/public/assets/oda/reference-fidelity/sound-dunes.svg
+@@ -0,0 +1,21 @@
++<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1280" viewBox="0 0 960 1280">
++  <!-- Original ODA vector landscape for the reference-led layout. Not the reference photograph. No external resources. -->
++  <defs>
++    <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#c5b5a5"/><stop offset=".42" stop-color="#786e72"/><stop offset="1" stop-color="#343e50"/></linearGradient>
++    <linearGradient id="far" x2=".7" y2="1"><stop stop-color="#7e7378"/><stop offset="1" stop-color="#303644"/></linearGradient>
++    <linearGradient id="ridge" x2=".4" y2="1"><stop stop-color="#515467"/><stop offset="1" stop-color="#1c2434"/></linearGradient>
++    <linearGradient id="front" x1=".2" x2=".8" y2="1"><stop stop-color="#343747"/><stop offset="1" stop-color="#111928"/></linearGradient>
++    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" stitchTiles="stitch"/></filter>
++  </defs>
++  <path fill="url(#sky)" d="M0 0H960V1280H0Z"/>
++  <path fill="#d9c7b0" opacity=".24" d="M0 125C280 85 530 60 960 105V220H0Z"/>
++  <path fill="#66636e" d="M0 500C250 440 430 495 690 395S850 420 960 400V1280H0Z"/>
++  <path fill="url(#far)" d="M0 545C245 570 515 353 718 377C812 389 908 432 960 453V1280H0Z"/>
++  <path fill="#bbb0a7" opacity=".35" d="M0 545C245 570 515 353 718 377C812 389 908 432 960 453C843 424 783 402 718 398C503 382 239 594 0 563Z"/>
++  <path fill="url(#ridge)" d="M0 840C295 789 598 532 960 532V1280H0Z"/>
++  <path fill="#767386" opacity=".25" d="M0 840C295 789 598 532 960 532V546C594 559 293 813 0 857Z"/>
++  <path fill="url(#front)" d="M0 1040C213 840 351 827 556 1028S824 1130 960 974V1280H0Z"/>
++  <path fill="#888694" opacity=".14" d="M0 1040C213 840 351 827 556 1028S824 1130 960 974C825 1153 701 1190 540 1048S207 868 0 1074Z"/>
++  <path fill="#0e1826" opacity=".4" d="M0 0H960V1280H0Z"/>
++  <path filter="url(#grain)" opacity=".065" d="M0 0H960V1280H0Z"/>
++</svg>
+diff --git a/public/assets/oda/reference-fidelity/sound-palms.svg b/public/assets/oda/reference-fidelity/sound-palms.svg
+new file mode 100644
+index 0000000..4f8098a
+--- /dev/null
++++ b/public/assets/oda/reference-fidelity/sound-palms.svg
+@@ -0,0 +1,34 @@
++<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1280" viewBox="0 0 960 1280">
++  <!-- Original ODA palm/sky vector illustration. Not an exact reference photo or a copied designer asset. -->
++  <defs>
++    <linearGradient id="sky" x2=".8" y2="1"><stop stop-color="#50697d"/><stop offset=".48" stop-color="#a0b4c0"/><stop offset="1" stop-color="#305868"/></linearGradient>
++    <linearGradient id="haze" x2="1" y2="1"><stop stop-color="#d8d9cd" stop-opacity=".25"/><stop offset="1" stop-color="#0f2636" stop-opacity=".25"/></linearGradient>
++    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="2" stitchTiles="stitch"/></filter>
++  </defs>
++  <path fill="url(#sky)" d="M0 0H960V1280H0Z"/>
++  <path fill="url(#haze)" d="M0 0H960V1280H0Z"/>
++  <g fill="none" stroke="#132c31" stroke-linecap="round">
++    <path stroke-width="32" d="M-30 1300C80 1120 198 810 206 563"/>
++    <path stroke-width="20" d="M993 1275C900 1120 820 910 801 640"/>
++  </g>
++  <g fill="#152f33">
++    <path d="M208 588C34 480-89 521-140 628C-2 568 126 576 208 588Z"/>
++    <path d="M208 588C81 340 3 315-73 376C40 411 116 501 208 588Z"/>
++    <path d="M208 588C117 346 135 264 231 242C181 369 190 489 208 588Z"/>
++    <path d="M208 588C216 319 289 246 379 284C278 355 235 485 208 588Z"/>
++    <path d="M208 588C353 384 470 369 526 458C378 462 289 533 208 588Z"/>
++    <path d="M208 588C431 522 541 561 551 667C415 602 305 594 208 588Z"/>
++    <path d="M208 588C356 620 413 719 379 808C321 696 263 638 208 588Z"/>
++    <path d="M801 650C695 440 596 421 535 504C662 516 740 587 801 650Z"/>
++    <path d="M801 650C751 395 787 306 874 308C819 440 820 554 801 650Z"/>
++    <path d="M801 650C858 386 949 352 1025 409C923 453 846 573 801 650Z"/>
++    <path d="M801 650C1007 474 1124 517 1145 600C1001 585 894 627 801 650Z"/>
++    <path d="M801 650C983 631 1054 702 1045 804C944 714 859 681 801 650Z"/>
++    <path d="M801 650C693 600 620 652 599 737C678 685 747 656 801 650Z"/>
++  </g>
++  <g fill="none" stroke="#6c8584" opacity=".34" stroke-width="1.8">
++    <path d="M208 588Q40 402-73 376M208 588Q119 342 231 242M208 588Q254 332 379 284M208 588Q376 404 526 458M208 588Q391 545 551 667M801 650Q728 459 535 504M801 650Q782 402 874 308M801 650Q923 412 1025 409M801 650Q1002 552 1145 600"/>
++  </g>
++  <path fill="#0d2531" opacity=".24" d="M0 0H960V1280H0Z"/>
++  <path filter="url(#grain)" opacity=".06" d="M0 0H960V1280H0Z"/>
++</svg>
+diff --git a/public/assets/oda/reference-fidelity/sound-ocean.svg b/public/assets/oda/reference-fidelity/sound-ocean.svg
+new file mode 100644
+index 0000000..7e69fdd
+--- /dev/null
++++ b/public/assets/oda/reference-fidelity/sound-ocean.svg
+@@ -0,0 +1,17 @@
++<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1280" viewBox="0 0 960 1280">
++  <!-- Original ODA ocean/surf vector illustration for composition review. Exact source photo is unavailable. -->
++  <defs>
++    <linearGradient id="water" x1="0" x2="1" y2="1"><stop stop-color="#386c75"/><stop offset=".5" stop-color="#17424e"/><stop offset="1" stop-color="#122630"/></linearGradient>
++    <linearGradient id="surf" x2="1" y2=".7"><stop stop-color="#a3c6c7" stop-opacity=".65"/><stop offset=".6" stop-color="#539696" stop-opacity=".4"/><stop offset="1" stop-color="#082731" stop-opacity="0"/></linearGradient>
++    <filter id="foam"><feTurbulence type="fractalNoise" baseFrequency=".018" numOctaves="3" seed="9"/><feColorMatrix values="0 0 0 0 .56 0 0 0 0 .73 0 0 0 0 .74 0 0 0 .85 0"/></filter>
++    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="2" stitchTiles="stitch"/></filter>
++  </defs>
++  <path fill="url(#water)" d="M0 0H960V1280H0Z"/>
++  <path fill="#59898c" opacity=".25" d="M-60 300C226 115 280 470 555 397S843 240 1040 423L1020 654C758 465 702 692 455 589S121 329-55 598Z"/>
++  <path fill="url(#surf)" d="M-60 578C133 482 164 780 455 657S781 486 1000 754V918C741 602 662 834 463 881S136 609-60 785Z"/>
++  <path fill="none" stroke="#bad7d2" stroke-width="8" opacity=".44" d="M-60 593C132 493 193 751 438 683S769 507 1020 807"/>
++  <path fill="none" stroke="#bdd5d1" stroke-width="3" opacity=".4" d="M-60 620C140 521 194 778 444 710S779 531 1020 834M-60 652C139 554 207 800 461 739S788 561 1020 869"/>
++  <path filter="url(#foam)" opacity=".22" d="M-60 578C133 482 164 780 455 657S781 486 1000 754V848C778 585 655 785 467 818S139 608-60 728Z"/>
++  <path fill="#0b2030" opacity=".26" d="M0 0H960V1280H0Z"/>
++  <path filter="url(#grain)" opacity=".065" d="M0 0H960V1280H0Z"/>
++</svg>

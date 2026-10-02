@@ -1,0 +1,66 @@
+{
+  "checkedAtUtc": "2026-10-02T20:56:40.785183+00:00",
+  "selectedExecutionEnvironment": "Saved Linux cloud under /workspace; not connected Mac",
+  "platform": "Linux",
+  "workdir": "/workspace/oda-reference-redesign",
+  "checks": [
+    {
+      "argv": [
+        "pwd"
+      ],
+      "exitCode": 0,
+      "stdout": "/workspace/oda-reference-redesign\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "exitCode": 0,
+      "stdout": "design/reference-led-oda\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exitCode": 0,
+      "stdout": "3ddb98b57669ceed6f220583aa01aa523d6b6a47\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "v24.19.0\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "npm",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "11.9.0\n",
+      "stderr": ""
+    }
+  ],
+  "modelSettingGetterAvailable": false,
+  "deployment": false
+}

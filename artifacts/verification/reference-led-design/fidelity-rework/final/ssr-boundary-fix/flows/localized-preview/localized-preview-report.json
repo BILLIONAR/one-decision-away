@@ -1,0 +1,181 @@
+{
+  "at": "2026-10-02T20:36:11.940Z",
+  "base": "http://127.0.0.1:4183/one-decision-away/",
+  "synthetic": true,
+  "checks": [
+    {
+      "name": "en-320: truthful localized Preview voice + speaker icon starts only one English recorded current cue and Stop retires it",
+      "requests": [
+        "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3"
+      ],
+      "source": {
+        "index": 0,
+        "duration": 6.5,
+        "channels": 1,
+        "sampleRate": 44100,
+        "samples": 286650,
+        "decodeMs": 14.600000008940697,
+        "at": 1248.5,
+        "offset": 0,
+        "gainAtStart": 1,
+        "gainIndex": 0,
+        "contextState": "running",
+        "stopped": false,
+        "disconnected": false
+      },
+      "stopped": true
+    },
+    {
+      "name": "en-390: truthful localized Preview voice + speaker icon starts only one English recorded current cue and Stop retires it",
+      "requests": [
+        "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3"
+      ],
+      "source": {
+        "index": 0,
+        "duration": 6.5,
+        "channels": 1,
+        "sampleRate": 44100,
+        "samples": 286650,
+        "decodeMs": 14.300000011920929,
+        "at": 1324.7000000029802,
+        "offset": 0,
+        "gainAtStart": 1,
+        "gainIndex": 0,
+        "contextState": "running",
+        "stopped": false,
+        "disconnected": false
+      },
+      "stopped": true
+    },
+    {
+      "name": "tr-320: truthful localized Preview voice + speaker icon starts only one English recorded current cue and Stop retires it",
+      "requests": [
+        "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3"
+      ],
+      "source": {
+        "index": 0,
+        "duration": 6.5,
+        "channels": 1,
+        "sampleRate": 44100,
+        "samples": 286650,
+        "decodeMs": 16.900000005960464,
+        "at": 1411.5,
+        "offset": 0,
+        "gainAtStart": 1,
+        "gainIndex": 0,
+        "contextState": "running",
+        "stopped": false,
+        "disconnected": false
+      },
+      "stopped": true
+    },
+    {
+      "name": "tr-390: truthful localized Preview voice + speaker icon starts only one English recorded current cue and Stop retires it",
+      "requests": [
+        "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3"
+      ],
+      "source": {
+        "index": 0,
+        "duration": 6.5,
+        "channels": 1,
+        "sampleRate": 44100,
+        "samples": 286650,
+        "decodeMs": 15.699999988079071,
+        "at": 1290.5999999940395,
+        "offset": 0,
+        "gainAtStart": 1,
+        "gainIndex": 0,
+        "contextState": "running",
+        "stopped": false,
+        "disconnected": false
+      },
+      "stopped": true
+    },
+    {
+      "name": "es-320: truthful localized Preview voice + speaker icon starts only one English recorded current cue and Stop retires it",
+      "requests": [
+        "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3"
+      ],
+      "source": {
+        "index": 0,
+        "duration": 6.5,
+        "channels": 1,
+        "sampleRate": 44100,
+        "samples": 286650,
+        "decodeMs": 13.700000002980232,
+        "at": 1234.8999999910593,
+        "offset": 0,
+        "gainAtStart": 1,
+        "gainIndex": 0,
+        "contextState": "running",
+        "stopped": false,
+        "disconnected": false
+      },
+      "stopped": true
+    },
+    {
+      "name": "es-390: truthful localized Preview voice + speaker icon starts only one English recorded current cue and Stop retires it",
+      "requests": [
+        "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3"
+      ],
+      "source": {
+        "index": 0,
+        "duration": 6.5,
+        "channels": 1,
+        "sampleRate": 44100,
+        "samples": 286650,
+        "decodeMs": 16.700000002980232,
+        "at": 1182.800000011921,
+        "offset": 0,
+        "gainAtStart": 1,
+        "gainIndex": 0,
+        "contextState": "running",
+        "stopped": false,
+        "disconnected": false
+      },
+      "stopped": true
+    }
+  ],
+  "errors": [],
+  "blockedRequests": [],
+  "cases": [
+    {
+      "label": "en-320",
+      "passed": true
+    },
+    {
+      "label": "en-390",
+      "passed": true
+    },
+    {
+      "label": "tr-320",
+      "passed": true
+    },
+    {
+      "label": "tr-390",
+      "passed": true
+    },
+    {
+      "label": "es-320",
+      "passed": true
+    },
+    {
+      "label": "es-390",
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    "trusted-recorded-preview-en-320.png",
+    "trusted-recorded-preview-en-390.png",
+    "trusted-recorded-preview-tr-320.png",
+    "trusted-recorded-preview-tr-390.png",
+    "trusted-recorded-preview-es-320.png",
+    "trusted-recorded-preview-es-390.png"
+  ],
+  "limits": [
+    "Real Chromium MP3 decoder and trusted preview clicks; no independently listened naturalness or physical-device claim."
+  ],
+  "browser": "151.0.7922.173",
+  "status": "passed",
+  "finishedAt": "2026-10-02T20:36:22.052Z"
+}
