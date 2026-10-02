@@ -1,0 +1,230 @@
+{
+  "base": "http://127.0.0.1:4311",
+  "at": "2026-10-02T13:23:03.311Z",
+  "browser": "151.0.7922.173",
+  "sourceHashes": {
+    "src/components/FocusLockView.tsx": "3357c65a769c52523f37ebaa608fc6b69a3311e9e408271a2a60f75bca1956ad",
+    "src/components/notebook/JournalWorkspace.tsx": "90b35dd2195f076e2ad0291beea4b45b0e2997698e41ace61b31ef7e39a353b5",
+    "src/components/ui.tsx": "26fcc938ee5d5a32106033b1e58055f70b12f053210388218d2931e666858b46",
+    "src/components/AppErrorBoundary.tsx": "c49623c7531d5e172372c0338b35e5b80433aa096500633e7a269f62ff99ed2b"
+  },
+  "cases": [
+    {
+      "name": "End early confirmation moves keyboard focus inside",
+      "baselinePassed": false,
+      "failure": "End early confirmation moves keyboard focus inside\n\nfalse !== true\n",
+      "evidence": {
+        "inside": false,
+        "active": "<button type=\"button\" aria-label=\"End early\" title=\"End early\" class=\"w-11 h-11 rounded-[var(--radius-sm)] flex items-center justify-center cursor-pointer text-[var(--bg)]/60 hover:text-[var(--bg)]\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-x w-5 h-5\" aria-hidden=\"true\"><path d=\"M18 6 6 18\"></path><path d=\"m6 6 12 12\"></path></svg></button>",
+        "role": null,
+        "dialogCount": 0
+      }
+    },
+    {
+      "name": "End early confirmation exposes a named accessible dialog",
+      "baselinePassed": false,
+      "failure": "End early confirmation exposes a named accessible dialog\n\nfalse !== true\n",
+      "evidence": {
+        "inside": false,
+        "active": "<button type=\"button\" aria-label=\"End early\" title=\"End early\" class=\"w-11 h-11 rounded-[var(--radius-sm)] flex items-center justify-center cursor-pointer text-[var(--bg)]/60 hover:text-[var(--bg)]\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-x w-5 h-5\" aria-hidden=\"true\"><path d=\"M18 6 6 18\"></path><path d=\"m6 6 12 12\"></path></svg></button>",
+        "role": null,
+        "dialogCount": 0
+      }
+    },
+    {
+      "name": "Tab remains inside End early confirmation",
+      "baselinePassed": false,
+      "failure": "Tab remains inside End early confirmation\n\nfalse !== true\n",
+      "evidence": [
+        {
+          "inside": false,
+          "tag": "BUTTON",
+          "name": "Pause"
+        },
+        {
+          "inside": false,
+          "tag": "BUTTON",
+          "name": "Done"
+        },
+        {
+          "inside": false,
+          "tag": "BUTTON",
+          "name": "Breathe"
+        },
+        {
+          "inside": false,
+          "tag": "BUTTON",
+          "name": "Bowl"
+        },
+        {
+          "inside": false,
+          "tag": "BUTTON",
+          "name": "Silence"
+        },
+        {
+          "inside": false,
+          "tag": "INPUT",
+          "name": "Park a thought for later"
+        }
+      ]
+    },
+    {
+      "name": "Escape dismisses End early confirmation without ending the session",
+      "baselinePassed": false,
+      "failure": "Escape dismisses End early confirmation without ending the session\n\nfalse !== true\n",
+      "evidence": {
+        "stillOpen": 1
+      }
+    },
+    {
+      "name": "Supported native photo dialog opens, closes and preserves Notebook",
+      "baselinePassed": true,
+      "failure": null,
+      "evidence": {
+        "focusReturned": true
+      }
+    },
+    {
+      "name": "Notebook remains usable without dialog.showModal",
+      "baselinePassed": false,
+      "failure": "Notebook remains usable without dialog.showModal\n\nfalse !== true\n",
+      "evidence": {
+        "method": "showModal",
+        "recoveryRendered": true,
+        "savedRecordPreserved": true
+      }
+    },
+    {
+      "name": "notebook-missing-showModal: recovery download retains the exact saved record",
+      "baselinePassed": true,
+      "failure": null,
+      "evidence": {
+        "format": "oda-recovery-v1"
+      }
+    },
+    {
+      "name": "notebook-missing-showModal: recovery support remains reachable without resetting data",
+      "baselinePassed": true,
+      "failure": null,
+      "evidence": {
+        "url": "http://127.0.0.1:4311/support.html",
+        "recordPreserved": true
+      }
+    },
+    {
+      "name": "Notebook remains usable without dialog.close",
+      "baselinePassed": false,
+      "failure": "Notebook remains usable without dialog.close\n\nfalse !== true\n",
+      "evidence": {
+        "method": "close",
+        "recoveryRendered": true,
+        "savedRecordPreserved": true
+      }
+    },
+    {
+      "name": "notebook-missing-close: recovery download retains the exact saved record",
+      "baselinePassed": true,
+      "failure": null,
+      "evidence": {
+        "format": "oda-recovery-v1"
+      }
+    },
+    {
+      "name": "notebook-missing-close: recovery support remains reachable without resetting data",
+      "baselinePassed": true,
+      "failure": null,
+      "evidence": {
+        "url": "http://127.0.0.1:4311/support.html",
+        "recordPreserved": true
+      }
+    }
+  ],
+  "productDefects": [
+    {
+      "id": "focus-end-dialog",
+      "severity": "P2",
+      "source": "src/components/FocusLockView.tsx:512",
+      "reproduced": true,
+      "focus": {
+        "inside": false,
+        "active": "<button type=\"button\" aria-label=\"End early\" title=\"End early\" class=\"w-11 h-11 rounded-[var(--radius-sm)] flex items-center justify-center cursor-pointer text-[var(--bg)]/60 hover:text-[var(--bg)]\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-x w-5 h-5\" aria-hidden=\"true\"><path d=\"M18 6 6 18\"></path><path d=\"m6 6 12 12\"></path></svg></button>",
+        "role": null,
+        "dialogCount": 0
+      },
+      "tabs": [
+        {
+          "inside": false,
+          "tag": "BUTTON",
+          "name": "Pause"
+        },
+        {
+          "inside": false,
+          "tag": "BUTTON",
+          "name": "Done"
+        },
+        {
+          "inside": false,
+          "tag": "BUTTON",
+          "name": "Breathe"
+        },
+        {
+          "inside": false,
+          "tag": "BUTTON",
+          "name": "Bowl"
+        },
+        {
+          "inside": false,
+          "tag": "BUTTON",
+          "name": "Silence"
+        },
+        {
+          "inside": false,
+          "tag": "INPUT",
+          "name": "Park a thought for later"
+        }
+      ],
+      "stillOpenAfterEscape": 1,
+      "backgroundMutation": {
+        "confirmationVisible": true,
+        "pausedBehindConfirmation": true
+      },
+      "fixIdea": "Give the existing End early panel modal semantics and shared focus/escape/return behavior while preserving its existing visual classes. Focus Keep going; Escape cancels only the confirmation; restore focus to End early."
+    },
+    {
+      "id": "notebook-photo-dialog-capability",
+      "severity": "P2",
+      "source": "src/components/notebook/JournalWorkspace.tsx:62",
+      "reproduced": true,
+      "variants": [
+        {
+          "method": "showModal",
+          "recoveryRendered": true,
+          "recordPreserved": true,
+          "recoveryDownloadPreservesExactRecord": true,
+          "errors": []
+        },
+        {
+          "method": "close",
+          "recoveryRendered": true,
+          "recordPreserved": true,
+          "recoveryDownloadPreservesExactRecord": true,
+          "errors": []
+        }
+      ],
+      "fixIdea": "Route the photo viewer through the existing feature-detected Modal/fallback primitive, preserving the image and panel appearance. Do not call showModal/close on missing methods; prevent Notebook mount or View photo from escalating to whole-app recovery."
+    }
+  ],
+  "errors": [],
+  "externalBlocked": [],
+  "screenshots": [
+    "focus-confirmation-keyboard.png",
+    "focus-background-paused.png",
+    "notebook-missing-showModal-recovery.png",
+    "notebook-missing-close-recovery.png"
+  ],
+  "limits": [
+    "Actual app, real AppProvider/repository/UI handlers in Chromium on saved Linux cloud executor. Only synthetic records and dialog-method absence are injected.",
+    "No native keyboard/device or unsupported real-device claims. All requests outside the local preview are blocked. No providers, payments, secrets, app edits or deployment."
+  ],
+  "sourceUnchanged": true
+}

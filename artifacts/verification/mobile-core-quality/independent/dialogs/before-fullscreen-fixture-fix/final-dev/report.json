@@ -1,0 +1,549 @@
+{
+  "at": "2026-10-02T13:31:53.978Z",
+  "base": "http://127.0.0.1:4311",
+  "browser": "151.0.7922.173",
+  "checks": [
+    {
+      "name": "focus-normal: named modal focuses Keep going",
+      "evidence": {
+        "role": "dialog",
+        "ariaModal": "true"
+      }
+    },
+    {
+      "name": "focus-normal: forward and reverse Tab stay inside",
+      "evidence": [
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true
+        }
+      ]
+    },
+    {
+      "name": "focus-normal: background Pause is isolated and cannot take focus"
+    },
+    {
+      "name": "focus-normal: Escape cancels only confirmation and restores trigger/scroll"
+    },
+    {
+      "name": "focus-normal: reopen and Keep going restore trigger/scroll"
+    },
+    {
+      "name": "focus-normal: backdrop dismisses reopened confirmation"
+    },
+    {
+      "name": "focus-normal: explicit cancel ends session without completion/reward/data changes"
+    },
+    {
+      "name": "focus-no-inert: named modal focuses Keep going",
+      "evidence": {
+        "role": "dialog",
+        "ariaModal": "true"
+      }
+    },
+    {
+      "name": "focus-no-inert: forward and reverse Tab stay inside",
+      "evidence": [
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true
+        }
+      ]
+    },
+    {
+      "name": "focus-no-inert: background Pause is isolated and cannot take focus"
+    },
+    {
+      "name": "focus-no-inert: Escape cancels only confirmation and restores trigger/scroll"
+    },
+    {
+      "name": "focus-no-inert: reopen and Keep going restore trigger/scroll"
+    },
+    {
+      "name": "focus-no-inert: backdrop dismisses reopened confirmation"
+    },
+    {
+      "name": "focus-no-inert: explicit cancel ends session without completion/reward/data changes"
+    },
+    {
+      "name": "photo-native: Notebook mounts without whole-app recovery"
+    },
+    {
+      "name": "photo-native: actual saved photo loads and dialog receives focus"
+    },
+    {
+      "name": "photo-native: owned synthetic image and Close control fit viewport",
+      "evidence": {
+        "viewport": [
+          390,
+          844
+        ],
+        "panelFits": true,
+        "imageFits": true,
+        "closeFits": true
+      }
+    },
+    {
+      "name": "photo-native: forward and reverse Tab stay inside",
+      "evidence": [
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true
+        }
+      ]
+    },
+    {
+      "name": "photo-native: programmatic background focus stays inside"
+    },
+    {
+      "name": "photo-native: Escape restores photo trigger/scroll/exact data"
+    },
+    {
+      "name": "photo-native: repeated Close and backdrop restore photo trigger/exact data"
+    },
+    {
+      "name": "photo-native: reload preserves usable Notebook and exact photo data"
+    },
+    {
+      "name": "photo-native-320: Notebook mounts without whole-app recovery"
+    },
+    {
+      "name": "photo-native-320: actual saved photo loads and dialog receives focus"
+    },
+    {
+      "name": "photo-native-320: owned synthetic image and Close control fit viewport",
+      "evidence": {
+        "viewport": [
+          320,
+          844
+        ],
+        "panelFits": true,
+        "imageFits": true,
+        "closeFits": true
+      }
+    },
+    {
+      "name": "photo-native-320: forward and reverse Tab stay inside",
+      "evidence": [
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true
+        }
+      ]
+    },
+    {
+      "name": "photo-native-320: programmatic background focus stays inside"
+    },
+    {
+      "name": "photo-native-320: Escape restores photo trigger/scroll/exact data"
+    },
+    {
+      "name": "photo-native-320: repeated Close and backdrop restore photo trigger/exact data"
+    },
+    {
+      "name": "photo-native-320: reload preserves usable Notebook and exact photo data"
+    },
+    {
+      "name": "photo-no-showModal: Notebook mounts without whole-app recovery"
+    },
+    {
+      "name": "photo-no-showModal: actual saved photo loads and dialog receives focus"
+    },
+    {
+      "name": "photo-no-showModal: owned synthetic image and Close control fit viewport",
+      "evidence": {
+        "viewport": [
+          320,
+          844
+        ],
+        "panelFits": true,
+        "imageFits": true,
+        "closeFits": true
+      }
+    },
+    {
+      "name": "photo-no-showModal: forward and reverse Tab stay inside",
+      "evidence": [
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true
+        }
+      ]
+    },
+    {
+      "name": "photo-no-showModal: programmatic background focus stays inside"
+    },
+    {
+      "name": "photo-no-showModal: Escape restores photo trigger/scroll/exact data"
+    },
+    {
+      "name": "photo-no-showModal: repeated Close and backdrop restore photo trigger/exact data"
+    },
+    {
+      "name": "photo-no-showModal: reload preserves usable Notebook and exact photo data"
+    },
+    {
+      "name": "photo-no-close: Notebook mounts without whole-app recovery"
+    },
+    {
+      "name": "photo-no-close: actual saved photo loads and dialog receives focus"
+    },
+    {
+      "name": "photo-no-close: owned synthetic image and Close control fit viewport",
+      "evidence": {
+        "viewport": [
+          390,
+          844
+        ],
+        "panelFits": true,
+        "imageFits": true,
+        "closeFits": true
+      }
+    },
+    {
+      "name": "photo-no-close: forward and reverse Tab stay inside",
+      "evidence": [
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true
+        }
+      ]
+    },
+    {
+      "name": "photo-no-close: programmatic background focus stays inside"
+    },
+    {
+      "name": "photo-no-close: Escape restores photo trigger/scroll/exact data"
+    },
+    {
+      "name": "photo-no-close: repeated Close and backdrop restore photo trigger/exact data"
+    },
+    {
+      "name": "photo-no-close: reload preserves usable Notebook and exact photo data"
+    },
+    {
+      "name": "photo-no-methods-or-inert: Notebook mounts without whole-app recovery"
+    },
+    {
+      "name": "photo-no-methods-or-inert: actual saved photo loads and dialog receives focus"
+    },
+    {
+      "name": "photo-no-methods-or-inert: owned synthetic image and Close control fit viewport",
+      "evidence": {
+        "viewport": [
+          320,
+          844
+        ],
+        "panelFits": true,
+        "imageFits": true,
+        "closeFits": true
+      }
+    },
+    {
+      "name": "photo-no-methods-or-inert: forward and reverse Tab stay inside",
+      "evidence": [
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Tab",
+          "inside": true
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true
+        },
+        {
+          "key": "Shift+Tab",
+          "inside": true
+        }
+      ]
+    },
+    {
+      "name": "photo-no-methods-or-inert: programmatic background focus stays inside"
+    },
+    {
+      "name": "photo-no-methods-or-inert: Escape restores photo trigger/scroll/exact data"
+    },
+    {
+      "name": "photo-no-methods-or-inert: repeated Close and backdrop restore photo trigger/exact data"
+    },
+    {
+      "name": "photo-no-methods-or-inert: reload preserves usable Notebook and exact photo data"
+    }
+  ],
+  "errors": [
+    {
+      "case": "fullscreen-unsupported",
+      "message": "Cannot set properties of null (setting 'requestFullscreen')"
+    }
+  ],
+  "externalBlocked": [],
+  "contexts": [
+    {
+      "name": "focus-normal",
+      "options": {
+        "missingInert": false,
+        "width": 390
+      }
+    },
+    {
+      "name": "focus-no-inert",
+      "options": {
+        "missingInert": true,
+        "width": 320
+      }
+    },
+    {
+      "name": "photo-native",
+      "options": {
+        "name": "photo-native",
+        "missing": [],
+        "width": 390
+      }
+    },
+    {
+      "name": "photo-native-320",
+      "options": {
+        "name": "photo-native-320",
+        "missing": [],
+        "width": 320
+      }
+    },
+    {
+      "name": "photo-no-showModal",
+      "options": {
+        "name": "photo-no-showModal",
+        "missing": [
+          "showModal"
+        ],
+        "width": 320
+      }
+    },
+    {
+      "name": "photo-no-close",
+      "options": {
+        "name": "photo-no-close",
+        "missing": [
+          "close"
+        ],
+        "width": 390
+      }
+    },
+    {
+      "name": "photo-no-methods-or-inert",
+      "options": {
+        "name": "photo-no-methods-or-inert",
+        "missing": [
+          "showModal",
+          "close"
+        ],
+        "missingInert": true,
+        "width": 320
+      }
+    },
+    {
+      "name": "fullscreen-unsupported",
+      "options": {
+        "fullscreen": "missing"
+      }
+    }
+  ],
+  "screenshots": [
+    "focus-normal-confirmation.png",
+    "focus-no-inert-confirmation.png",
+    "photo-native.png",
+    "photo-native-320.png",
+    "photo-no-showModal.png",
+    "photo-no-close.png",
+    "photo-no-methods-or-inert.png",
+    "failure.png"
+  ],
+  "sourceHashes": {
+    "src/components/FocusLockView.tsx": "d1bf8e2c0df5349bad8c7580e6c76a9b01b84353ddb896b1c5a64f93b41acfc1",
+    "src/components/notebook/JournalWorkspace.tsx": "20219d8ca48e826efdf754666cc8d9f57b0a48cb065be9e39719d1f49552c602",
+    "src/utils/useDialogAccessibility.ts": "5b068c627b873c7da369502937470a45704cd748d1d4e22a70015ef9e66cf027",
+    "src/components/ui.tsx": "26fcc938ee5d5a32106033b1e58055f70b12f053210388218d2931e666858b46",
+    "src/components/AppErrorBoundary.tsx": "c49623c7531d5e172372c0338b35e5b80433aa096500633e7a269f62ff99ed2b",
+    "scripts/qa-mobile-core-quality.mjs": "0fd2aab4861ad43203b78887b78565af3b32b00372bb0afd277ed5a2cae56753"
+  },
+  "syntheticPhotoFixture": {
+    "path": "public/assets/oda/trees/tree-00-seedling-0.png",
+    "bytes": 134287,
+    "sha256": "9be7d6a7175f1e2aebdcead274b506ee65d8ce669f523d9a6f9c75b20fe1e512"
+  },
+  "limits": [
+    "Actual app, AppProvider, repository and UI handlers in cloud Chromium; synthetic local records and capability failures only.",
+    "Native dialog and fullscreen success exercise actual Chromium APIs. Method absence, missing inert, and denial are explicit simulations.",
+    "All requests outside the preview origin are blocked. No provider, payment, cloud account, physical native device, or audio-quality claim."
+  ],
+  "failure": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\nfalse !== true\n\n    at file:///workspace/oda-mobile-core-quality/scripts/qa-mobile-core-quality.mjs:242:12",
+  "sourceUnchanged": true,
+  "artifactHashes": {
+    "focus-normal-confirmation.png": "071fcb49223dd49ace5cacd30d90983320234a4420d53d7727e8475a4113b949",
+    "focus-no-inert-confirmation.png": "752f173b1b94da4f2b649a365babb7b0395fea787ca309ac52f8044026c6c705",
+    "photo-native.png": "7da2d322943a503d83ae161c60ba997eb2c1e4a99665928f88af2ba6a5fbebfa",
+    "photo-native-320.png": "b3b42773f3bc5d706c7a6876452fce7a5aa828cdd17ce56c99b9e45021cfa377",
+    "photo-no-showModal.png": "c1d4ca6c047919f443ad74abcecc7b5d06f759f7041b0282c6663edab7453c24",
+    "photo-no-close.png": "84214b121139ae22a70ee10cf8e9b361345f58f1c631f33c2b88610d7d9e9c08",
+    "photo-no-methods-or-inert.png": "d8f503806e77c96688758f9af3ce1c98a938a75ca18f80148b4003bde0834b21",
+    "failure.png": "c92e4d781c1f672913605da6d8c54c1ee7a8cf4904ca558a4e2a35262c197405"
+  }
+}

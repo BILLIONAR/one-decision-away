@@ -1,0 +1,42 @@
+{
+  "base": "999586179446182ad156c6d249def00459700ea6",
+  "branch": "fix/mobile-core-quality",
+  "repositorySourceEdits": false,
+  "cleanStatus": true,
+  "preview": "http://127.0.0.1:4311",
+  "initialInspection": {
+    "status": "complete",
+    "screenshots": 42,
+    "localeViewportMatrix": "EN/TR/ES at 320x740 and 390x844",
+    "screens": "Today, saved decision, two-minute start, course catalogue, untouched overview, lesson, open workbook",
+    "horizontalOverflowCases": [],
+    "pageErrors": []
+  },
+  "boundedBehaviour": {
+    "status": "complete",
+    "screenshots": 8,
+    "checks": [
+      "320: fresh onboarding radio keys, draft reload, no auto obstacle modal, 120s expiry without automatic completion",
+      "390: fresh onboarding radio keys, draft reload, no auto obstacle modal, 120s expiry without automatic completion",
+      "320: course first lesson actual practice/quiz completion succeeds; focus evidence captured",
+      "320: actual next lesson and returning saved lesson2 survive reload"
+    ],
+    "pageErrors": []
+  },
+  "materialDefectsFound": [],
+  "nonBlockingObservation": "Completing the lesson removes the focused Complete lesson button. Active element becomes body; the next Tab lands on the adjacent Sources and limits summary. Completion is visible/announced via status and the next lesson remains reachable. This was not promoted to a material defect in the bounded pass.",
+  "blockedExternalAttempts": 22,
+  "limitations": [
+    "Synthetic local records; Chromium viewport checks, not physical mobile OS/browser or software-keyboard testing",
+    "External requests are aborted at the browser context; no account, provider or payment operation",
+    "Existing automatic-modal expectation in qa-modal-fallback is stale; script was read as reference, not run as a product failure",
+    "The first inspection harness needed .first() for a nested workbook summary; its failed log/report are retained under before-harness-selector-fix"
+  ],
+  "sourceHashes": {
+    "src/components/Onboarding.tsx": "6c4ed805aac7b96df0f96982ae717ba31fc94eef0df81c1a7ee260c7c4fb3a43",
+    "src/pages/Today.tsx": "13791aac306dc07068353b6fd8754936f4771c6833dc033c70cffafbd8b8cfa6",
+    "src/pages/Courses.tsx": "a42d95ca0c02e51ffcb12ac9cd1bd6c971c37765214c94092e724550629a462a",
+    "src/components/CoursePracticeStudio.tsx": "19669c96d751005c062bf08ccf6f366bf85debc99ea77e056b72f593f40cea4a",
+    "src/components/momentum/TwoMinuteStart.tsx": "e156b3661636cc203018da2023b9813b0bcccf332c4c85ac313fbb33d354e050"
+  }
+}

@@ -1,0 +1,49 @@
+import { createRequire } from 'node:module';
+import { mkdirSync, writeFileSync } from 'node:fs';
+const repo = '/workspace/oda-mobile-core-quality';
+const require = createRequire(`${repo}/package.json`);
+const { chromium } = require('playwright');
+const { getInitialDemoState } = await import(`${repo}/src/services/repository.ts`);
+const { coursesFor } = await import(`${repo}/src/data/courses.ts`);
+const base='http://127.0.0.1:4311';
+const out='/tmp/oda-mobile-quality-browser';
+const key='one_decision_away_app_data_v1';
+const report={base, cases:[],pageErrors:[],externalBlocked:0};
+const browser=await chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox']});
+async function makePage(width,locale,seeded=true){
+ const context=await browser.newContext({viewport:{width,height:width===320?740:844},reducedMotion:'reduce',serviceWorkers:'block',locale:'en-US'});
+ await context.route('**/*',route=>new URL(route.request().url()).origin===base?route.continue():(report.externalBlocked++,route.abort()));
+ const seed=getInitialDemoState();
+ if(seeded) seed.profile={...seed.profile,displayName:'Synthetic mobile review',locale,onboardingStep:'completed',theme:'light',simpleModeOff:true,firstOpenedAt:'2026-08-01T00:00:00.000Z',createdAt:'2026-08-01T00:00:00.000Z'};
+ await context.addInitScript(({key,seed,locale})=>{if(!localStorage.getItem(key))localStorage.setItem(key,JSON.stringify(seed));localStorage.setItem('oda_locale',locale)},{key,seed,locale});
+ const page=await context.newPage();page.on('pageerror',e=>report.pageErrors.push(e.message));
+ return {page,context};
+}
+async function capture(page,label){
+ await page.evaluate(()=>document.fonts.ready); await page.waitForTimeout(130);
+ const measured=await page.evaluate(()=>({client:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth,active:{tag:document.activeElement?.tagName,id:document.activeElement?.id,text:document.activeElement?.textContent?.slice(0,100)},overflow:[...document.querySelectorAll('body *')].filter(el=>{const r=el.getBoundingClientRect();return r.width&&r.height&&(r.right>innerWidth+1||r.left < -1)&&getComputedStyle(el).position!=='absolute'}).slice(0,10).map(el=>({tag:el.tagName,class:el.className?.toString(),text:el.textContent?.slice(0,80),rect:el.getBoundingClientRect().toJSON()}))}));
+ const path=`${out}/${label}.png`;await page.screenshot({path});report.cases.push({label,path,...measured}); console.log(label,JSON.stringify(measured));
+}
+try{
+ for(const width of [320,390]) for(const locale of ['en','tr','es']){
+  const {page,context}=await makePage(width,locale);
+  await page.goto(`${base}/app`);await page.locator('#today-decision-input').waitFor();
+  await capture(page,`today-${locale}-${width}`);
+  await page.locator('#today-decision-input').fill('Read two pages of my course');
+  await page.locator('#set-one-decision button[type=submit]').click();
+  await page.locator('.oda-decision-action').waitFor(); await capture(page,`decision-${locale}-${width}`);
+  await page.locator('.oda-decision-action').click();await page.getByRole('dialog').waitFor();
+  await capture(page,`two-minute-${locale}-${width}`);await page.keyboard.press('Escape');
+  await page.goto(`${base}/app/courses`);await page.locator('.oda-course-row').first().waitFor();
+  await capture(page,`courses-${locale}-${width}`);
+  await page.locator('[data-course-id=procrastination]').click();await page.locator('.oda-course-overview').waitFor();
+  await capture(page,`overview-${locale}-${width}`);
+  await page.locator('#course-start-lesson').click();await page.locator('.oda-course-lesson-title').waitFor();
+  await capture(page,`lesson-${locale}-${width}`);
+  await page.locator('#course-practice-studio summary').first().click();
+  await page.locator('#practice-procrastination-action').focus();await capture(page,`workbook-${locale}-${width}`);
+  await context.close();
+ }
+ report.status='complete';
+}catch(e){report.status='failed';report.error=String(e.stack||e);console.error(e);process.exitCode=1}
+finally{writeFileSync(`${out}/initial-inspection-report.json`,JSON.stringify(report,null,2));await browser.close()}

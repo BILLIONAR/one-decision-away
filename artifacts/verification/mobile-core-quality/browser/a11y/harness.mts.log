@@ -1,0 +1,49 @@
+import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { getInitialDemoState } from '/workspace/oda-mobile-core-quality/src/services/repository.ts';
+const require = createRequire('/workspace/oda-mobile-core-quality/package.json');
+const { chromium } = require('playwright');
+const AxeBuilder = require('@axe-core/playwright').default;
+const base = 'http://127.0.0.1:4313/one-decision-away';
+const browser = await chromium.launch({ executablePath: '/usr/bin/chromium' });
+const report: any = { sourceCommit: 'ca4c949b0773272ce8ba4c8f3d2fec7d6a51e4ec', base, browser: await browser.version(), scope: 'Selected dialog WCAG checks only; not a full-app, assistive-technology or device audit', cases: [], errors: [], externalBlocked: [] };
+try {
+  for (const scenario of [{name:'focus-390',width:390,photo:false,fallback:false},{name:'focus-no-inert-320',width:320,photo:false,fallback:true},{name:'photo-native-390',width:390,photo:true,fallback:false},{name:'photo-fallback-320',width:320,photo:true,fallback:true}]) {
+    const seed = getInitialDemoState();
+    Object.assign(seed.profile, { onboardingStep:'completed', locale:'en', soundMuted:true, nudgesEnabled:false, dailyWisdomEnabled:false, firstOpenedAt:new Date().toISOString() });
+    seed.missions = [];
+    seed.dreamJournal = [{id:'qa-photo', userId:seed.profile.id, title:'Synthetic QA photo',content:'Synthetic accessibility fixture.',createdAt:new Date().toISOString(),photoDataUrl:'data:image/png;base64,'+readFileSync('/workspace/oda-mobile-core-quality/public/assets/oda/trees/tree-00-seedling-0.png').toString('base64')}];
+    const context = await browser.newContext({ viewport:{width:scenario.width,height:844},serviceWorkers:'block',reducedMotion:'reduce' });
+    await context.route('**/*', route => {
+      if (new URL(route.request().url()).origin === new URL(base).origin) return route.continue();
+      report.externalBlocked.push(route.request().url()); return route.abort();
+    });
+    await context.addInitScript(({seed,scenario}) => {
+      if (!localStorage.getItem('one_decision_away_app_data_v1')) localStorage.setItem('one_decision_away_app_data_v1',JSON.stringify(seed));
+      localStorage.setItem('oda_locale','en');
+      if (scenario.fallback) { HTMLDialogElement.prototype.showModal = undefined; HTMLDialogElement.prototype.close = undefined; delete HTMLElement.prototype.inert; }
+    }, {seed,scenario});
+    const page = await context.newPage();
+    page.on('pageerror',error => report.errors.push(error.message));
+    await page.goto(`${base}/#/app/${scenario.photo?'notebook':'focus'}`);
+    if (scenario.photo) {
+      await page.getByRole('button',{name:/Synthetic QA photo/}).click();
+      await page.getByRole('button',{name:'View journal photo',exact:true}).click();
+    } else {
+      await page.getByRole('button',{name:'Ambient',exact:true}).click();
+      await page.getByRole('button',{name:/^Silence/}).click();
+      await page.getByRole('button',{name:'Start 25 min',exact:true}).click();
+      await page.getByRole('button',{name:'End early',exact:true}).click();
+    }
+    await page.getByRole('dialog').waitFor();
+    const result = await new AxeBuilder({page}).include('dialog[open], [role="dialog"]').withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa']).analyze();
+    const violations = result.violations.map(item => ({id:item.id,impact:item.impact,description:item.description,nodes:item.nodes.map(node=>node.target)}));
+    report.cases.push({name:scenario.name,violations,passes:result.passes.length});
+    assert.deepEqual(violations,[]);
+    await context.close();
+  }
+  assert.deepEqual(report.errors,[]);
+  report.status='passed';
+} catch(error) { report.status='failed';report.failure=String(error);process.exitCode=1; }
+finally { await browser.close();writeFileSync('/workspace/scratch/oda-mobile-core-quality/targeted-a11y-final.json',JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report)); }
