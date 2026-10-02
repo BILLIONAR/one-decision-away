@@ -1,0 +1,15 @@
+import hashlib,json,os,subprocess,time
+from pathlib import Path
+from datetime import datetime,timezone
+root=Path('/workspace/oda-reference-redesign'); packet=root/'artifacts/verification/reference-led-design/scoped-layout-repair';out=packet/'packaging';out.mkdir(exist_ok=True)
+prior=json.loads((packet/'final/control-clearance-fix/build-receipt.json').read_text());head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip();assert head==prior['sourceCommit']
+def ent(name):
+ data=(root/name).read_bytes();return {'file':name,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()}
+before=[ent(e['file']) for e in prior['source']];assert before==prior['source'];assert all((root/e['file']).read_bytes()==subprocess.check_output(['git','show',head+':'+e['file']],cwd=root) for e in before)
+compiled_before=[ent(str(p.relative_to(root))) for p in sorted((root/'dist').rglob('*')) if p.is_file()];assert compiled_before==prior['build']
+ignore=root/'artifacts/verification/reference-led-design/.gitignore';assert hashlib.sha256(ignore.read_bytes()).hexdigest()=='40924ff8865226e36c075666e2252b3b8a8e5afeaeecc0a75b5d0df67324bbd7'
+env=os.environ.copy();env['VITE_BASE_PATH']='/one-decision-away/';start=time.monotonic();at=datetime.now(timezone.utc).isoformat();log=out/'reproducible-build.log'
+with log.open('xb') as f:proc=subprocess.run(['npm','run','build'],cwd=root,env=env,stdout=f,stderr=subprocess.STDOUT)
+after=[ent(e['file']) for e in before];compiled=[ent(str(p.relative_to(root))) for p in sorted((root/'dist').rglob('*')) if p.is_file()];raw=log.read_bytes()
+r={'sourceCommit':head,'startedAtUtc':at,'command':'VITE_BASE_PATH=/one-decision-away/ npm run build','exitCode':proc.returncode,'elapsedSeconds':round(time.monotonic()-start,3),'purpose':'Separate post-evidence-placement reproducible build, required because QA strings can affect Tailwind discovery. Not a test rerun or replacement aggregate log.','allQaReadersStoppedBeforeBuild':True,'log':'reproducible-build.log','logBytes':len(raw),'logSha256':hashlib.sha256(raw).hexdigest(),'sourceCount':len(after),'sourceUnchangedAndEqualTestedReceipt':after==before==prior['source'],'source':after,'compiledCount':len(compiled),'compiledUnchangedAndEqualTestedReceipt':compiled==compiled_before==prior['build'],'build':compiled,'reviewIgnoreSha256':hashlib.sha256(ignore.read_bytes()).hexdigest(),'originalAggregateLog':{'file':'../final/control-clearance-fix/aggregate-check.log','bytes':prior['logBytes'],'sha256':prior['logSha256']},'appSourceEdited':False,'testRerun':False,'deployment':False}
+(out/'reproducible-build-receipt.json').write_text(json.dumps(r,indent=2)+'\n');print(json.dumps({k:v for k,v in r.items() if k not in ('source','build')},indent=2),flush=True);assert proc.returncode==0 and r['sourceUnchangedAndEqualTestedReceipt'] and r['compiledUnchangedAndEqualTestedReceipt']

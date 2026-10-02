@@ -1,0 +1,242 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import { chromium } from '/workspace/oda-reference-redesign/node_modules/playwright/index.mjs';
+import AxeBuilder from '/workspace/oda-reference-redesign/node_modules/@axe-core/playwright/dist/index.js';
+import { getInitialDemoState } from '/workspace/oda-reference-redesign/src/services/repository.ts';
+import { firstRunCopy } from '/workspace/oda-reference-redesign/src/i18n/firstRun.ts';
+import { appRouteHref } from '/workspace/oda-reference-redesign/src/utils/routing.ts';
+
+const repo = '/workspace/oda-reference-redesign';
+const out = process.env.ODA_VISUAL_OUT; if (!out) throw new Error('Explicit output namespace required');
+const expectedSource=process.env.ODA_VISUAL_SOURCE;const receiptPath=process.env.ODA_VISUAL_RECEIPT;if(!expectedSource||!receiptPath)throw new Error('Exact source and receipt required');const parentReceipt=JSON.parse(fs.readFileSync(receiptPath,'utf8'));
+const base = process.env.ODA_VISUAL_URL || 'http://127.0.0.1:4183/one-decision-away/';
+const origin = new URL(base).origin;
+const url = route => new URL(appRouteHref(route, new URL(base).pathname), origin).href;
+const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+const inventory = dir => {
+  const files = [];
+  const walk = current => { for (const entry of fs.readdirSync(current, { withFileTypes: true })) { const full = path.join(current, entry.name); if (entry.isDirectory()) walk(full); else files.push({ file: path.relative(repo, full), bytes: fs.statSync(full).size, sha256: hash(fs.readFileSync(full)) }); } };
+  walk(dir); return files.sort((a, b) => a.file.localeCompare(b.file));
+};
+const sourceSnapshot = () => {
+  const files = execFileSync('git', ['ls-files', '-z'], { cwd: repo }).toString().split('\0').filter(Boolean).filter(file => /^(src\/|public\/|index\.html$|vite\.config|package|tsconfig)/.test(file));
+  const untracked = execFileSync('git', ['ls-files', '--others', '--exclude-standard', '-z'], { cwd: repo }).toString().split('\0').filter(Boolean).filter(file => file.startsWith('src/'));
+  return [...new Set([...files, ...untracked])].sort().map(file => ({ file, bytes: fs.statSync(path.join(repo, file)).size, sha256: hash(fs.readFileSync(path.join(repo, file))) }));
+};
+fs.mkdirSync(out, { recursive: true });
+const report = {
+  at: new Date().toISOString(), base, sourceCommit: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repo }).toString().trim(),
+  statusBefore: execFileSync('git', ['status', '--short'], { cwd: repo }).toString(), sourceBefore: sourceSnapshot(), buildBefore: inventory(path.join(repo, 'dist')),
+  referencesInspected: ['IMG_8669.jpeg', 'IMG_8668.jpeg', 'IMG_8667.jpeg', 'IMG_8666.jpeg', 'IMG_8665.jpeg', 'IMG_8664.jpeg', 'IMG_8663.jpeg'],
+  kind:'Parent8-scoped layout/interaction diagnostic only; strict material hold retained, no visual acceptance',
+  referenceEvidence: 'All seven actual inline reference pixels inspected; original local JPEG bytes0/7, original SVG approximation declared.',
+  parentReceipt:receiptPath,compiledSourceCommit:expectedSource,
+
+  limits: ['Actual cloud Chromium against the final local production build, with isolated synthetic profile records and synthetic draft text only.', 'Every external request is blocked; no provider, account, payment, model download, production action or physical device test.', 'Scoped axe and measured CSS/solid background contrast are useful evidence, not full WCAG certification. Gradient contrast is independently represented by axe/manual visual review.', 'Screenshots are viewport PNGs; selected lower-page states are explicitly scrolled into view. PNGs must be personally inspected before final conclusions.', 'No human audio listening or transcription quality review is claimed.'],
+  browser: '', cases: [], screenshots: [], errors: [], httpErrors: [], externalBlocked: [], failures: []
+};
+if(report.sourceCommit!==expectedSource||parentReceipt.sourceCommit!==expectedSource)throw new Error('Source/receipt mismatch');
+const matches=(a,b)=>{const m=new Map(a.map(x=>[x.file,x.bytes+':'+x.sha256]));return m.size===b.length&&b.every(x=>m.get(x.file)===x.bytes+':'+x.sha256)};
+report.initialDistMatchesReceipt=matches(report.buildBefore,parentReceipt.build);if(!report.initialDistMatchesReceipt)throw new Error('Dist mismatch');report.receiptSourceBefore=parentReceipt.source.map(x=>({...x,matches:fs.existsSync(repo+'/'+x.file)&&fs.statSync(repo+'/'+x.file).size===x.bytes&&hash(fs.readFileSync(repo+'/'+x.file))===x.sha256}));if(!report.receiptSourceBefore.every(x=>x.matches))throw new Error('Receipt source mismatch');report.aggregateLog={bytes:fs.statSync(path.join(path.dirname(receiptPath),parentReceipt.log)).size,sha256:hash(fs.readFileSync(path.join(path.dirname(receiptPath),parentReceipt.log)))};if(report.aggregateLog.bytes!==parentReceipt.logBytes||report.aggregateLog.sha256!==parentReceipt.logSha256)throw new Error('Aggregate log hash mismatch');
+const browser = await chromium.launch({ executablePath: '/usr/bin/chromium' });
+report.browser = browser.version();
+const save = () => fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify(report, null, 2) + '\n');
+const verify = (condition, message, evidence) => { if (!condition) report.failures.push({ message, evidence }); };
+const capture = async (page, caseId, state, region) => {
+  await page.waitForTimeout(100);
+  const dismiss = page.locator('.oda-reference-app > div [role="status"] button, .oda-reference-app > [role="status"] button');
+  if (await dismiss.count()) await dismiss.first().click();
+  if (region) await page.locator(region).scrollIntoViewIfNeeded(); else await page.evaluate(() => scrollTo(0, 0));
+  await page.evaluate(() => document.fonts.ready);
+  const file = `${caseId}-${state}.png`;
+  await page.screenshot({ path: path.join(out, file), animations: 'disabled', fullPage: false });
+  report.screenshots.push({ file, caseId, state, bytes: fs.statSync(path.join(out, file)).size, sha256: hash(fs.readFileSync(path.join(out, file))) });
+};
+const measurements = async (page, scope) => page.locator(scope).evaluate(root => {
+  const visible = el => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(el).visibility !== 'hidden'; };
+  const id = el => ({ tag: el.tagName, id: el.id || null, class: typeof el.className === 'string' ? el.className.slice(0, 180) : null, label: (el.getAttribute('aria-label') || el.innerText || '').trim().slice(0, 170) });
+  const buttons = [...root.querySelectorAll('button,select,input[type="range"]')].filter(visible).map(el => { const r = el.getBoundingClientRect(); return { ...id(el), width: +r.width.toFixed(2), height: +r.height.toFixed(2), disabled: el.disabled || false }; });
+  const clipped = [...root.querySelectorAll('button,button span,label,h1,h2,h3,p')].filter(visible).filter(el => el.scrollWidth > el.clientWidth + 1 && getComputedStyle(el).overflowX !== 'visible').map(el => ({ ...id(el), client: el.clientWidth, scroll: el.scrollWidth, overflow: getComputedStyle(el).overflowX, textOverflow: getComputedStyle(el).textOverflow }));
+  const overflowing = [...root.querySelectorAll('*')].filter(visible).filter(el => { const r = el.getBoundingClientRect(); return r.left < -1 || r.right > document.documentElement.clientWidth + 1; }).filter(el => !el.closest('.oda-notebook-calendar-scroll') && !el.classList.contains('sr-only') && getComputedStyle(el).position !== 'absolute').slice(0, 15).map(el => ({ ...id(el), x: el.getBoundingClientRect().x, right: el.getBoundingClientRect().right }));
+  const brokenImages = [...root.querySelectorAll('img')].filter(el => el.complete && el.naturalWidth === 0).map(el => ({ src: el.getAttribute('src'), alt: el.alt }));
+  const rgb = value => { const nums = value.match(/[\d.]+/g)?.map(Number); return nums && nums.length >= 3 ? [nums[0], nums[1], nums[2], nums[3] ?? 1] : null; };
+  const lum = color => color.slice(0, 3).map(v => { v /= 255; return v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; }).reduce((n, v, i) => n + v * [.2126, .7152, .0722][i], 0);
+  const contrast = [];
+  for (const el of [...root.querySelectorAll('h1,h2,p,label,button,select')].filter(visible).filter(el => !el.querySelector('p,h1,h2')).slice(0, 100)) {
+    const style = getComputedStyle(el), fg = rgb(style.color); if (!fg || !el.textContent.trim()) continue;
+    let bg = null, gradient = false;
+    for (let p = el; p; p = p.parentElement) { const s = getComputedStyle(p); if (s.backgroundImage !== 'none') gradient = true; const c = rgb(s.backgroundColor); if (c && c[3] >= .99) { bg = c; break; } }
+    if (!bg) continue;
+    const ratio = (Math.max(lum(fg), lum(bg)) + .05) / (Math.min(lum(fg), lum(bg)) + .05);
+    contrast.push({ ...id(el), foreground: style.color, background: `rgb(${bg.slice(0, 3).join(' ')})`, ratio: +ratio.toFixed(3), gradientInChain: gradient, fontSize: style.fontSize, fontWeight: style.fontWeight });
+  }
+  return { clientWidth: document.documentElement.clientWidth, scrollWidth: document.documentElement.scrollWidth, theme: document.documentElement.dataset.theme, buttons, below44: buttons.filter(el => el.width < 43.9 || el.height < 43.9), clipped, overflowing, brokenImages, contrast };
+});
+const scan = async (page, record, state, scope, runAxe) => {
+  const measure = await measurements(page, scope);
+  verify(measure.scrollWidth <= measure.clientWidth + 1, `${record.id}/${state}: horizontal page overflow`, measure);
+  verify(measure.brokenImages.length === 0, `${record.id}/${state}: broken images`, measure.brokenImages);
+  verify(measure.theme === record.theme, `${record.id}/${state}: wrong theme`, measure.theme);
+  let axe = null;
+  if (runAxe) {
+    const result = await new AxeBuilder({ page }).include(scope).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+    axe = { violations: result.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.map(n => ({ target: n.target, summary: n.failureSummary })) })), incomplete: result.incomplete.map(v => ({ id: v.id, nodes: v.nodes.map(n => ({ target: n.target, summary: n.failureSummary })) })), contrastPassCount: result.passes.find(v => v.id === 'color-contrast')?.nodes.length ?? 0 };
+    verify(axe.violations.length === 0, `${record.id}/${state}: scoped axe findings`, axe.violations);
+  }
+  record.states.push({ state, scope, measure, axe });
+};
+const matrix = [];
+for (const locale of ['en', 'tr', 'es']) for (const theme of ['light', 'dark']) for (const width of [320, 390, 1440]) matrix.push({ id: `${locale}-${theme}-${width}`, locale, theme, width, height: width === 1440 ? 1000 : 844, states: [], checks: [] });
+async function run(record) {
+  const seed = getInitialDemoState();
+  Object.assign(seed.profile, { displayName: 'Synthetic ODA review', onboardingStep: 'completed', locale: record.locale, theme: record.theme, firstOpenedAt: new Date().toISOString(), soundMuted: true, nudgesEnabled: false, dailyWisdomEnabled: false, focusTabBlinkEnabled: false, focusScreenPulseEnabled: false });
+  seed.missions = [];seed.dreamJournal=[{id:'synthetic-photo-entry',userId:seed.profile.id,title:'Synthetic photo entry',content:'Isolated QA fixture for archive and photo dialog.',createdAt:new Date().toISOString(),photoDataUrl:'data:image/svg+xml;base64,'+Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200"><rect width="320" height="200" fill="#514078"/><circle cx="160" cy="95" r="50" fill="#cbbdf0"/><text x="160" y="175" text-anchor="middle" fill="white">Synthetic QA photo</text></svg>').toString('base64')}];
+  const context = await browser.newContext({ viewport: { width: record.width, height: record.height }, reducedMotion: 'reduce', serviceWorkers: 'block' });
+  await context.route('**/*', route => {
+    const requestUrl = new URL(route.request().url());
+    if (requestUrl.origin === origin) return route.continue();
+    report.externalBlocked.push({ case: record.id, url: `${requestUrl.origin}${requestUrl.pathname}`, type: route.request().resourceType() });
+    return route.abort();
+  });
+  await context.addInitScript(({ seed, locale, theme }) => {
+    if (!localStorage.getItem('one_decision_away_app_data_v1')) localStorage.setItem('one_decision_away_app_data_v1', JSON.stringify(seed));
+    localStorage.setItem('oda_locale', locale); localStorage.setItem('oda_theme', theme);
+  }, { seed, locale: record.locale, theme: record.theme });
+  const page = await context.newPage();
+  page.on('pageerror', error => report.errors.push({ case: record.id, message: error.message }));
+  page.on('response', response => { if (response.status() >= 400 && new URL(response.url()).origin === origin) report.httpErrors.push({ case: record.id, status: response.status(), path: new URL(response.url()).pathname }); });
+  const axe = record.width === 390 || (record.locale === 'en' && record.width === 1440);
+  try {
+    await page.goto(url('/app'));
+    await page.locator('#today-decision-input').waitFor();
+    await page.locator('#today-decision-input').fill('Read two pages');
+    await page.locator('#set-one-decision form button[type="submit"]').click();
+    await page.locator('.oda-decision-action').waitFor();
+    const toastDismiss = page.locator('.oda-reference-app > div [role="status"] button, .oda-reference-app > [role="status"] button');
+    if (await toastDismiss.count()) await toastDismiss.first().click();
+    await page.locator('a[href="#oda-main"]').focus(); await page.keyboard.press('Enter');
+    verify(await page.locator('#oda-main').evaluate(el => el === document.activeElement), `${record.id}: skip link keyboard focus`);
+    record.checks.push('Actual set-decision handler and skip-link keyboard focus');
+    await capture(page, record.id, 'today'); await scan(page, record, 'today', '.oda-reference-today', axe);
+    record.todayPrincipal=await page.locator('.oda-reference-today').evaluate(e=>({heroTreeCount:e.querySelectorAll('.oda-fidelity-hero .oda-evidence-tree').length,principalTreeCount:e.querySelectorAll('.oda-growth-panel .oda-evidence-tree').length,heroCountCopy:e.querySelectorAll('.oda-fidelity-hero .oda-fidelity-live-evidence,.oda-fidelity-hero .oda-fidelity-week-ring').length,treeRects:[...e.querySelectorAll('.oda-evidence-tree')].map(t=>({width:t.getBoundingClientRect().width,height:t.getBoundingClientRect().height,count:t.getAttribute('data-kept-count')}))}));verify(record.todayPrincipal.heroTreeCount===0&&record.todayPrincipal.principalTreeCount===1&&record.todayPrincipal.heroCountCopy===0,`${record.id}: single principal Today tree/no duplicate hero fact`,record.todayPrincipal);
+    await capture(page, record.id, 'today-growth', '.oda-growth-panel');
+    await page.getByRole('button',{name:firstRunCopy(record.locale).optionalPlan,exact:true}).click();
+    await page.locator('#plan-obstacle').fill('I might reach for my phone');await page.locator('#plan-then').fill('Leave it aside and read two pages');
+    await page.getByRole('dialog').locator('button').last().click();await page.locator('.oda-decision-plan').waitFor();
+    await capture(page,record.id,'today-saved-plan');await scan(page,record,'today-saved-plan','#set-one-decision',axe);
+    record.planColors=await page.locator('.oda-decision-plan').evaluate(e=>({background:getComputedStyle(e).backgroundColor,text:[...e.children].map(n=>({text:n.textContent,color:getComputedStyle(n).color}))}));
+    await page.locator('.oda-decision-done').click();await page.getByRole('dialog').locator('button').last().click();await page.locator('.oda-decision-kept').waitFor();
+    await capture(page,record.id,'today-kept');await scan(page,record,'today-kept','.oda-reference-today',axe);
+    const proofSelector='.oda-fidelity-support section:has(.oda-evidence-tree.w-20)';const proof=page.locator(proofSelector);verify(await proof.count()===1,`${record.id}: real first-proof exists`);if(await proof.count()){await capture(page,record.id,'today-first-proof',proofSelector);record.proofBounds=await proof.evaluate(e=>({width:e.getBoundingClientRect().width,text:[...e.querySelectorAll('h2,p')].map(p=>({text:p.textContent,width:p.getBoundingClientRect().width,right:p.getBoundingClientRect().right})),art:[...e.querySelectorAll('.oda-evidence-tree')].map(n=>({width:n.getBoundingClientRect().width}))}));verify(record.proofBounds.text.every(p=>p.width>=100),`${record.id}: first-proof readable text column`,record.proofBounds);}
+    const tomorrow=page.locator('#tomorrow-draft'),dismiss=proof.locator('button.absolute').first();record.compactTargets=[];for(const [name,el] of [['tomorrow',tomorrow],['Dismiss',dismiss]]){const r=await el.boundingBox();record.compactTargets.push({name,...r});verify(r.width>=43.9&&r.height>=43.9,`${record.id}:44px ${name}`,r);}
+    record.checks.push('Real optional planning save, contrast diagnostic and actual completion/first-proof rendering with44px compact controls');
+
+    await page.goto(url('/app/sound')); await page.locator('.oda-sound').waitFor();
+    await page.locator('.oda-sound-tab[data-section="relax"]').focus(); await page.keyboard.press('End');
+    verify(await page.locator('.oda-sound-tab[data-section="breathe"]').getAttribute('aria-selected') === 'true', `${record.id}: Sound tab End keyboard`);
+    verify(await page.locator('.oda-sound-breathe-stage[data-reduced="true"]').count() === 1, `${record.id}: breathing reduced-motion state`);
+    await capture(page, record.id, 'sound-breathe', '.oda-sound-breathe'); await scan(page, record, 'sound-breathe', '.oda-sound', false);
+    await page.keyboard.press('Home');
+    verify(await page.locator('.oda-sound-tab[data-section="relax"]').getAttribute('aria-selected') === 'true', `${record.id}: Sound tab Home keyboard`);
+    record.checks.push('Sound tab End/Home keyboard and actual reduced-motion breathing state');
+    await capture(page, record.id, 'sound-discovery'); await scan(page, record, 'sound-discovery', '.oda-sound', axe);
+    await page.locator('.oda-sound-panel .oda-sound-card-button').first().click();
+    await page.locator('.oda-sound-player-toggle').waitFor();
+    await capture(page, record.id, 'sound-player', '.oda-sound-panel'); await scan(page, record, 'sound-player', '.oda-sound-player', axe);
+    await capture(page,record.id,'sound-cover','.oda-sound-panel-cover');await scan(page,record,'sound-detail','.oda-sound-panel',axe);
+    await capture(page,record.id,'sound-expanded-player','.oda-sound-now-panel');await scan(page,record,'sound-expanded-player','.oda-sound-now-panel',false);
+    const select=page.locator('.oda-sound-player select'),volume=page.locator('.oda-sound-player input[type="range"]');
+    const optionValues=await select.locator('option').evaluateAll(o=>o.map(e=>e.value));record.timerOptions=[];
+    for(const value of optionValues){await select.selectOption(value);const m=await select.evaluate(e=>{const s=getComputedStyle(e),r=e.getBoundingClientRect(),c=document.createElement('canvas').getContext('2d');c.font=s.font||`${s.fontStyle} ${s.fontWeight} ${s.fontSize} ${s.fontFamily}`;const width=c.measureText(e.selectedOptions[0].textContent).width,available=r.width-parseFloat(s.paddingLeft)-parseFloat(s.paddingRight)-parseFloat(s.borderLeftWidth)-parseFloat(s.borderRightWidth)-20;return{text:e.selectedOptions[0].textContent,value:e.value,width:r.width,height:r.height,font:c.font,textWidth:width,available,nativeArrowReserveEstimate:20,fits:width<=available};});record.timerOptions.push(m);verify(m.fits,`${record.id}: native timer option fit`,m);}
+    await select.focus();await page.keyboard.press('Home');await page.keyboard.press('ArrowDown');await page.keyboard.press('Enter');verify(await select.inputValue()==='10',`${record.id}: native timer keyboard10`);await page.keyboard.press('End');await page.keyboard.press('Enter');verify(await select.inputValue()==='60',`${record.id}: native timer keyboard60`);await select.selectOption('');
+    await volume.focus();await page.keyboard.press('Home');verify(await volume.inputValue()==='0',`${record.id}: volume Home0`);await page.keyboard.press('ArrowRight');verify(await volume.inputValue()==='0.01',`${record.id}: volume ArrowRight0.01`);
+    const toggle=page.locator('.oda-sound-player-toggle'),activeLabel=await toggle.getAttribute('aria-label');await toggle.click();verify(await toggle.getAttribute('aria-label')!==activeLabel,`${record.id}: actual player pause`);await toggle.click();verify(await toggle.getAttribute('aria-label')===activeLabel,`${record.id}: actual player resume`);
+    record.playerClearance=await page.locator('.oda-sound-player').evaluate(e=>{const p=e.getBoundingClientRect(),n=document.querySelector('.oda-tabbar').getBoundingClientRect();return{playerBottom:p.bottom,navTop:n.top,navHeight:n.height,clearance:n.top-p.bottom};});verify(record.playerClearance.navHeight===0||record.playerClearance.clearance>=0,`${record.id}: player/nav clearance`,record.playerClearance);
+    record.checks.push('Five native timer labels, keyboard10/60min, volume Home/ArrowRight, actual pause/resume and navigation clearance');
+
+    await page.goto(url('/app/coach')); await page.locator('.coach-page h1').waitFor();
+    verify(await page.locator('.coach-orbit[aria-hidden="true"][data-state="idle"]').count() === 1, `${record.id}: decorative truthful idle Coach orb`);
+    const prompt = page.locator('.coach-starter').first(); const promptText = await prompt.innerText();
+    await prompt.focus(); await page.keyboard.press('Enter');
+    verify(await page.locator('#coach-message').inputValue() === promptText, `${record.id}: Coach starter keyboard draft`);
+    verify(await page.locator('#coach-message').evaluate(el => el === document.activeElement), `${record.id}: Coach starter keyboard focus`);
+    const motion = await page.locator('.coach-orb').evaluate(el => ({ animation: getComputedStyle(el).animationName, transition: getComputedStyle(el).transitionDuration }));
+    verify(motion.animation === 'none' && motion.transition.split(',').every(n => parseFloat(n) <= .000011), `${record.id}: reduced-motion orb`, motion);
+    record.checks.push('Coach decorative actual idle state, keyboard starter draft/focus, reduced-motion orb');
+    await capture(page, record.id, 'coach'); await scan(page, record, 'coach', '.coach-page', axe);
+    await page.goto(url('/app/notebook')); await page.locator('#notebook-journal-content').waitFor();
+
+    await capture(page,record.id,'notebook-initial');await scan(page,record,'notebook-initial','.oda-notebook',axe);
+    const week=page.locator('.oda-notebook-week-strip button');verify(await week.count()===7,`${record.id}: seven actual week dates`);
+    await week.first().focus();await page.keyboard.press('Enter');verify(await week.first().getAttribute('aria-pressed')==='true',`${record.id}: compact week keyboard date selection`);
+    record.weekTargets=await week.evaluateAll(a=>a.map(e=>({width:e.getBoundingClientRect().width,height:e.getBoundingClientRect().height,label:e.getAttribute('aria-label')})));verify(record.weekTargets.every(t=>t.width>=43.9&&t.height>=43.9),`${record.id}: week44px date targets`,record.weekTargets);
+    await page.locator('.oda-notebook-week-strip button[aria-current="date"]').click();
+    await page.locator('#notebook-journal-content').fill('Synthetic unsaved reflection. Existing writing must remain intact when viewing the calendar.');
+    const calendarTrigger = page.locator('[aria-controls="notebook-calendar"]');
+    if (await calendarTrigger.getAttribute('aria-expanded') !== 'true') { await calendarTrigger.focus(); await page.keyboard.press('Enter'); }
+    await page.locator('.oda-notebook-calendar').waitFor();
+    await page.locator('.oda-notebook-calendar button[aria-current="date"]').focus(); await page.keyboard.press('Enter');
+    verify(await page.locator('.oda-notebook-calendar button[aria-current="date"]').getAttribute('aria-pressed') === 'false', `${record.id}: calendar keyboard deselects selected filter`);
+    await page.keyboard.press('Enter');
+    verify(await page.locator('.oda-notebook-calendar button[aria-current="date"]').getAttribute('aria-pressed') === 'true', `${record.id}: calendar keyboard reselects filter`);
+    verify((await page.locator('#notebook-journal-content').inputValue()).startsWith('Synthetic unsaved'), `${record.id}: Notebook draft retained`);
+    record.checks.push('Notebook visible calendar keyboard selection and unsaved editor continuity');
+    await capture(page, record.id, 'notebook'); await scan(page, record, 'notebook', '.oda-notebook', axe);
+    await capture(page, record.id, 'notebook-calendar', '.oda-notebook-calendar');
+    const scrollRegion = page.locator('.oda-notebook-calendar-scroll');
+    const calendarBefore = await scrollRegion.evaluate(el => ({ client: el.clientWidth, scroll: el.scrollWidth, left: el.scrollLeft, role: el.getAttribute('role'), tabIndex: el.tabIndex, label: el.getAttribute('aria-label') }));
+    const hint = page.locator('.oda-notebook-calendar-scroll-hint');
+    const hintVisible = await hint.isVisible();
+    const expectedHint = { en: 'Scroll sideways to see all dates', tr: 'Tüm tarihleri görmek için yana kaydırın', es: 'Desliza hacia los lados para ver todas las fechas' }[record.locale];
+    verify(await hint.innerText() === expectedHint, `${record.id}: localized calendar cue`, await hint.innerText());
+    verify(hintVisible === (calendarBefore.scroll > calendarBefore.client), `${record.id}: calendar scroll hint matches actual overflow`, { calendarBefore, hintVisible });
+    verify(calendarBefore.role === 'region' && calendarBefore.tabIndex === 0 && Boolean(calendarBefore.label), `${record.id}: calendar named focusable region`, calendarBefore);
+    if (calendarBefore.scroll > calendarBefore.client) {
+      await scrollRegion.evaluate(el => { el.scrollLeft = 0; });
+      const scrollBox = await scrollRegion.boundingBox();
+      await page.mouse.move(scrollBox.x + scrollBox.width / 2, scrollBox.y + scrollBox.height / 2); await page.mouse.wheel(160, 0); await page.waitForTimeout(150);
+      const wheelLeft = await scrollRegion.evaluate(el => el.scrollLeft);
+      verify(wheelLeft > 0, `${record.id}: trusted horizontal wheel reaches weekend columns`, wheelLeft);
+      await scrollRegion.evaluate(el => { el.scrollLeft = 0; });
+      await scrollRegion.focus(); await page.keyboard.press('ArrowRight'); await page.waitForTimeout(150);
+      const calendarAfter = await scrollRegion.evaluate(el => ({ left: el.scrollLeft, focusInside: el === document.activeElement, outline: getComputedStyle(el).outlineStyle, outlineWidth: getComputedStyle(el).outlineWidth, outlineColor: getComputedStyle(el).outlineColor }));
+      verify(calendarAfter.left > calendarBefore.left && calendarAfter.focusInside, `${record.id}: calendar region keyboard horizontal scrolling`, { calendarBefore, calendarAfter });
+      verify(calendarAfter.outline === 'solid' && parseFloat(calendarAfter.outlineWidth) >= 2, `${record.id}: calendar keyboard focus outline`, calendarAfter);
+      const sunday = page.locator('.oda-notebook-calendar tbody button').nth(3); await sunday.focus(); await page.keyboard.press('Enter');
+      verify(await sunday.getAttribute('aria-pressed') === 'true', `${record.id}: weekend keyboard date selection`);
+      await capture(page, record.id, 'notebook-weekend', '.oda-notebook-calendar');
+      record.checks.push('Localized visible scroll hint, focusable named scroll region, trusted horizontal wheel, keyboard scrolling/focus outline and weekend selection');
+    } else record.checks.push('Calendar fits all seven columns and scroll hint stays hidden');
+
+    await page.locator('.oda-notebook-week-strip button[aria-current="date"]').click();page.once('dialog',d=>d.accept());await page.locator('.oda-notebook-entry-list button').first().click();
+    const remove=page.getByRole('button',{name:{en:'Delete',tr:'Sil',es:'Eliminar'}[record.locale],exact:true}),deleteRect=await remove.boundingBox();record.compactTargets.push({name:'NotebookDelete',...deleteRect});verify(deleteRect.width>=43.9&&deleteRect.height>=43.9,`${record.id}:44px Notebook Delete`,deleteRect);await capture(page,record.id,'notebook-edit-targets','.oda-notebook-editor-actions');await scan(page,record,'notebook-edit-targets','.oda-notebook-editor',axe);
+    await page.goto(url('/app/focus')); await page.locator('#focus-timer-hub').waitFor();
+    record.focusArt=await page.locator('.oda-focus-illustration img').evaluateAll(a=>a.map(e=>({src:e.getAttribute('src'),naturalWidth:e.naturalWidth,naturalHeight:e.naturalHeight,rect:{width:e.getBoundingClientRect().width,height:e.getBoundingClientRect().height,x:e.getBoundingClientRect().x,y:e.getBoundingClientRect().y},fit:getComputedStyle(e).objectFit,position:getComputedStyle(e).objectPosition})));await capture(page,record.id,'focus-art');
+    await capture(page, record.id, 'focus-custom'); await scan(page, record, 'focus-custom', '#focus-timer-hub', axe);
+    verify(await page.locator('.oda-focus-duration').innerText()==='25:00',`${record.id}: real default25 duration`);await page.locator('.oda-focus-custom .grid.grid-cols-3 button').first().click();verify(await page.locator('.oda-focus-duration').innerText()==='07:00',`${record.id}: real7min preset updates duration`);
+
+    await page.locator('#focus-timer-hub > div:nth-child(2) button').nth(1).click(); await page.locator('[data-guided-session]').first().waitFor();
+    verify(await page.locator('[data-guided-session]').count() === 11, `${record.id}: eleven actual guided sessions`);
+    verify(await page.locator('[data-guidance-mode]').count() === 1, `${record.id}: truthful guidance mode visible`);
+    record.checks.push('FocusHub actual custom/guided controls and eleven recorded-guidance session mappings visible');
+    await capture(page, record.id, 'focus-guided', '#focus-timer-hub'); await scan(page, record, 'focus-guided', '#focus-timer-hub', axe);
+    const voice=page.locator('[data-guided-session] button[title]').first();if(await voice.count()){const label=await voice.getAttribute('aria-label');verify(await voice.locator('svg').count()===1,`${record.id}: voice preview speaker icon`);await voice.click();await page.waitForTimeout(400);record.guidancePreview={before:label,after:await voice.getAttribute('aria-label'),mode:await page.locator('[data-guidance-mode]').getAttribute('data-guidance-mode')};verify(record.guidancePreview.after!==label,`${record.id}: real guidance preview state`,record.guidancePreview);await voice.click();}
+
+  } catch (error) { report.failures.push({ message: `${record.id}: exception`, evidence: error.stack }); }
+  finally { report.cases.push(record); save(); await context.close(); console.log(`DONE ${record.id}: ${record.states.length} states`); }
+}
+try {
+  for (let index = 0; index < matrix.length; index += 2) await Promise.all(matrix.slice(index, index + 2).map(run));
+  report.sourceAfter = sourceSnapshot(); report.buildAfter = inventory(path.join(repo, 'dist'));
+  report.statusAfter = execFileSync('git', ['status', '--short'], { cwd: repo }).toString();
+  verify(JSON.stringify(report.sourceBefore) === JSON.stringify(report.sourceAfter), 'App source changed during independent visual QA');
+  verify(JSON.stringify(report.buildBefore) === JSON.stringify(report.buildAfter), 'Built bytes changed during independent visual QA');
+  verify(report.errors.length === 0, 'Unhandled page errors', report.errors);
+  verify(report.httpErrors.length === 0, 'Local preview HTTP errors', report.httpErrors);
+  report.finalDistMatchesReceipt=matches(report.buildAfter,parentReceipt.build);verify(report.finalDistMatchesReceipt,'Final compiled bytes match exact receipt');report.receiptSourceAfter=parentReceipt.source.map(x=>({...x,matches:fs.existsSync(repo+'/'+x.file)&&fs.statSync(repo+'/'+x.file).size===x.bytes&&hash(fs.readFileSync(repo+'/'+x.file))===x.sha256}));verify(report.receiptSourceAfter.every(x=>x.matches),'All receipt source files stable/equal');
+  report.completedAt = new Date().toISOString(); report.pass = report.failures.length === 0;
+  save(); console.log(JSON.stringify({ pass: report.pass, cases: report.cases.length, states: report.cases.reduce((n, c) => n + c.states.length, 0), screenshots: report.screenshots.length, failures: report.failures, errors: report.errors, sourceStable: JSON.stringify(report.sourceBefore) === JSON.stringify(report.sourceAfter), buildStable: JSON.stringify(report.buildBefore) === JSON.stringify(report.buildAfter) }));
+  if (!report.pass) process.exitCode = 1;
+} finally { save(); await browser.close(); }

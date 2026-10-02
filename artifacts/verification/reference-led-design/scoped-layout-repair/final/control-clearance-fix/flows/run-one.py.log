@@ -1,0 +1,23 @@
+from pathlib import Path
+import os, sys, subprocess, json, hashlib, time
+repo = Path('/workspace/oda-reference-redesign')
+out = Path('/workspace/scratch/oda-reference-redesign/scoped-layout-repair/final/control-clearance-fix/flows')
+if os.environ.get('ODA_SCOPED_REPAIR_GO') != '1':
+    raise SystemExit('Not executed: parent source/build GO required.')
+expected = os.environ['ODA_QA_SOURCE_COMMIT']
+assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=repo, text=True).strip() == expected
+assert json.loads((out / 'preflight-receipt.json').read_text())['sourceCommit'] == expected
+kind = sys.argv[1]
+jobs = {'sound-clearance': 'sound-clearance.mjs'}
+folder = out / kind
+folder.mkdir()
+overrides = {'ODA_QA_REPO': str(repo), 'ODA_QA_URL': os.environ['ODA_FIDELITY_PREVIEW_URL'].rstrip('/') + '/#', 'ODA_QA_OUT': str(folder), 'ODA_QA_SOURCE_COMMIT': expected, 'ODA_SCOPED_REPAIR_GO': '1'}
+command = ['node', '--import', 'tsx', str(out / 'harness' / jobs[kind])]
+start = time.time()
+log = folder / 'browser.log'
+with log.open('xb') as stream:
+    result = subprocess.run(command, cwd=repo, env={**os.environ, **overrides}, stdout=stream, stderr=subprocess.STDOUT)
+receipt = {'kind': kind, 'sourceCommit': expected, 'command': command, 'cwd': str(repo), 'environmentOverrides': overrides, 'startedAt': start, 'elapsedSeconds': time.time() - start, 'exitCode': result.returncode, 'log': {'file': str(log), 'bytes': log.stat().st_size, 'sha256': hashlib.sha256(log.read_bytes()).hexdigest()}, 'syntheticOnly': True, 'noBuildInstallSourceEditDeploy': True}
+(folder / 'command-receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
+print(json.dumps(receipt))
+sys.exit(result.returncode)

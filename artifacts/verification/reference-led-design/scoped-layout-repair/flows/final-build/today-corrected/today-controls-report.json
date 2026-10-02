@@ -1,0 +1,63 @@
+{
+  "syntheticFixtures": true,
+  "noProductionOrExternalWrites": true,
+  "base": "http://127.0.0.1:4183/one-decision-away/#",
+  "repo": "/workspace/oda-reference-redesign",
+  "at": "2026-10-02T21:50:33.290Z",
+  "buildIndex": "assets/index-Cvg2WzED.js",
+  "checks": [
+    "setting, reloading and returning to Today never automatically open obstacle planning after 700 ms",
+    "optional obstacle planning opens by explicit action and persists without reopening itself",
+    "Today optional planning 390: controls fit and no serious/critical axe findings",
+    "real two-minute timer is unfinished at 119 seconds and finished at 120 seconds without automatic completion or reward",
+    "three rapid confirmation taps produce exactly one completion, one reward and one leaf, retained after reload",
+    "44px kept-card targets save tomorrow draft explicitly, preserve it after reload and never replace an existing draft",
+    "Dismiss survives reload without changing one kept decision, tomorrow draft, reward or completion",
+    "One principal growth tree retains canonical count and its real evidence route without creating another completion"
+  ],
+  "screenshots": [
+    "en-today-optional-plan-390.png",
+    "en-two-minute-expired-390.png",
+    "en-real-kept-one-leaf-390.png",
+    "today-dismissed-preserved-390.png"
+  ],
+  "accessibility": [
+    {
+      "name": "Today optional planning 390",
+      "violations": []
+    }
+  ],
+  "layouts": [
+    {
+      "name": "Today optional planning 390",
+      "width": 390,
+      "scrollWidth": 390,
+      "outside": []
+    }
+  ],
+  "pageErrors": [],
+  "blockedExternalRequests": [],
+  "rewardEvidence": {
+    "missionId": "one-decision-1790977835286",
+    "beforeTimer": {
+      "completions": 0,
+      "decisionRewards": 0,
+      "kept": 0
+    },
+    "afterRepeatConfirm": {
+      "completions": 1,
+      "decisionRewards": 1,
+      "kept": 1
+    },
+    "afterReload": {
+      "completions": 1,
+      "decisionRewards": 1,
+      "kept": 1
+    },
+    "repeatConfirmClicks": 3,
+    "leaf": 1,
+    "timerSeconds": 120
+  },
+  "status": "passed",
+  "finishedAt": "2026-10-02T21:50:49.196Z"
+}

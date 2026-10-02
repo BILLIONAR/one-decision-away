@@ -1,0 +1,19 @@
+{
+  "sourceCommit": "8fed790187dd83f74acd8aec8af3f28981df22d6",
+  "synthetic": true,
+  "checks": [
+    "Keyboard preset changes real duration from7 to25 and exposes the correctly labelled44px Start25 control"
+  ],
+  "screenshots": [
+    "failure.png"
+  ],
+  "errors": [],
+  "blockedExternal": [],
+  "limits": [
+    "One focused native Chromium profile; unchanged broader suites are explicitly rebound separately.",
+    "Coach form only before engine load; no model, provider, account, microphone or purchase operation."
+  ],
+  "status": "failed",
+  "failure": "locator.isVisible: Error: strict mode violation: getByText('25:00', { exact: true }) resolved to 2 elements:\n    1) <p aria-label=\"25 min\" class=\"oda-focus-duration\">25:00</p> aka getByLabel('min')\n    2) <span class=\"text-5xl sm:text-6xl font-semibold tracking-tight tabular-nums\">25:00</span> aka locator('#focus-lock-viewport').getByText(':00')\n\nCall log:\n\u001b[2m    - checking visibility of getByText('25:00', { exact: true })\u001b[22m\n\n    at <anonymous> (/workspace/scratch/oda-reference-redesign/scoped-layout-repair/flows/final-build/harness/focus-coach-controls.mjs:49:60)",
+  "finishedAt": "2026-10-02T21:48:40.429Z"
+}

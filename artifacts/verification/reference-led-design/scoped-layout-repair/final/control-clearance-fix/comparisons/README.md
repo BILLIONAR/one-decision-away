@@ -1,0 +1,23 @@
+# Scoped layout repair: frozen synthetic comparisons
+
+Seven paired sheets compare actual isolated synthetic browser captures from **3ddb98b → 4c873b0**. Each side remains native **390 × 844**, inside a labeled **852 × 1020** sheet. Raw sources are unchanged; all capture hashes and pasted pixels were verified after PNG encode/decode. Matching routes/states are paired; layout and scroll offsets can differ and are recorded in the receipt. No crop or scaling simulates closer likeness.
+
+Before application source: `3ddb98b57669ceed6f220583aa01aa523d6b6a47`, immutable evidence commit `635209e1731ba53e2567c0f39b011183912d7ac8`. After application source: `4c873b0df32c4489a8b95260122ae3ae9efd936d`. Independent visual QA's sealed after report binds all **394 stable build hashes** to that exact source. Root reported the candidate aggregate at **597 passed / 0 failed**. This evidence worker did not rerun the application checks.
+
+**Artwork/reference fidelity remains HOLD.** All seven original inline reference images are visually available and inspected. Only local copies of the exact original user JPEG files are unavailable (**0/7**); no fabricated or substituted original-reference column appears. Public original presentation availability and clean standalone layers/reuse availability remain distinct. [Artwork HOLD status](reference-artwork-status.md) is carried byte-for-byte unchanged. No new artwork, download, provider action or repeated artwork permission question was performed.
+
+Independent visual QA issued capture GO after checking that the Breathe label no longer forms an initial clipped sliver and the expanded range wraps at 44px height. Its full 18-context matrix was still active when these sheets were composed; final scoped findings should use that matrix, not infer a full pass from the seven screenshots. Desktop Focus/Coach views, expanded/mini transitions and compact control target checks require their separate evidence. The art-dependent scene/3D differences remain unresolved.
+
+| Representative pair | Sheet | Findings visible / limit |
+| --- | --- | --- |
+| Sound Room - discovery | [sound-discovery-before-after.png](sound-discovery-before-after.png) | 2, 3: First viewport can show band proportions and scenic navigation. Complete Breathe reachability/keyboard access needs independent interaction evidence. |
+| Sound Room - selected track | [sound-detail-player-before-after.png](sound-detail-player-before-after.png) | 4: Selected track rows/cover can be compared. Expanded/mini handoff finding1 needs its dedicated expanded-player capture and transition checks; this representative pair alone does not prove it. |
+| Coach AI - mobile hierarchy | [coach-before-after.png](coach-before-after.png) | 6: 390px capture can show shortened orbit and tools hierarchy. Desktop navy sidebar/empty-height correction requires independent desktop evidence. |
+| Today - principal growth hierarchy | [today-before-after.png](today-before-after.png) | 7: Visible growth hierarchy can be compared; below-fold secondary-card content and repeat reward behavior need independent checks. |
+| Focus - mobile overview | [focus-before-after.png](focus-before-after.png) | Regression preview: The cited notebook+pencil crop defect is desktop-specific (finding5); this 390px pair is a regression preview and cannot prove the desktop crop repair. |
+| Notebook - journal overview | [notebook-before-after.png](notebook-before-after.png) | Regression preview: Empty journal preview is a regression view; it does not show the TR Delete control in finding8. Accessible sizes require populated/context-specific checks. |
+| Course overview - regression preview | [course-overview-before-after.png](course-overview-before-after.png) | Regression preview: No direct finding1–8 maps to this overview. Pairing preserves course presentation/regression evidence; functionality and minimum controls are assessed separately. |
+
+[Supplemental expanded-player after PNG](input-snapshot/after/sound-expanded-player.png) is a raw exact-source capture, not an eighth paired comparison. [Pairing labels](pairing-labels.md) and [parent findings1–8](parent-scope.md) retain the scope/evidence limits.
+
+[Comparison receipt](comparison-receipt.json) records revisions, native rectangles, PNG bytes/SHA256, scroll offsets and capture bindings. [Input receipt](input-snapshot-receipt.json) preserves seven before PNGs, eight after PNGs and both sealed reports. Root baseline/schema/HOLD materials and all historical comparison sets remain unchanged. No app edit, build, commit, push or deployment was performed by this evidence task.

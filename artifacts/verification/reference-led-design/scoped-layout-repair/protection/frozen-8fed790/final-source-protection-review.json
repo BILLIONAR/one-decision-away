@@ -1,0 +1,780 @@
+{
+  "kind": "sealed independent scoped-layout-repair source/protection/compiled audit",
+  "sealedAtUtc": "2026-10-02T21:50:25.398313+00:00",
+  "sourceCommit": "8fed790187dd83f74acd8aec8af3f28981df22d6",
+  "baselineCommit": "635209e1731ba53e2567c0f39b011183912d7ac8",
+  "testedHistoricalSourceCommit": "3ddb98b57669ceed6f220583aa01aa523d6b6a47",
+  "readiness": "No source/protection blocker found in bounded review; runtime/44px and visual gates remain separate.",
+  "findings": [],
+  "diffFileCount": 7,
+  "diffPaths": [
+    "src/pages/Focus.tsx",
+    "src/pages/SoundRoom.tsx",
+    "src/pages/Today.tsx",
+    "src/styles/coach.css",
+    "src/styles/notebook.css",
+    "src/styles/sound.css",
+    "src/styles/workingSurfaces.css"
+  ],
+  "sourceCount": 696,
+  "unchangedSourceCount": 689,
+  "allCurrentSourceEqualsGitAndFreshAggregateReceipt": true,
+  "protectedCount": 348,
+  "allProtectedBytesUnchanged": true,
+  "narrationMp3Count": 160,
+  "allNarrationMp3BytesUnchanged": true,
+  "publicAssetCount": 285,
+  "allPublicAssetBytesUnchanged": true,
+  "cspIndexThemeNativeCoreServicesStoreDataSecurityRuntimeUnchanged": true,
+  "tsxFiles": 105,
+  "unchangedTsxFiles": 102,
+  "controllersBefore": 192,
+  "controllersAfter": 194,
+  "controlAriaAttributesBefore": 3270,
+  "controlAriaAttributesAfter": 3272,
+  "controllerInventorySummary": "Only PlayerControls/playerStatus added. Focus/Today controller inventories unchanged; SoundCard parameters and PlayerBar/NowPlayingPanel/SoundRoom presentation-controller additions explicitly reviewed. Existing guarded control callbacks retained; sole volume callback delegates to equivalent lifted shared callback.",
+  "manualReviews": [
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "review": "SoundCard purchases.getState/identityConfirmed/free fallback/isSoundLocked upgrade guard and origin-bearing player.toggle callback are exact-token retained. Existing usePlayer/useTick/reduced-motion/readTab/BreathePanel controllers, Breathe subscriptions/timing and tab keyboard/storage handlers unchanged."
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "review": "Two presentations subscribe to the same soundRoomPlayer. Lifted volume callback retains setVolume(next) and soundRoomPlayer.setVolume(next); shared timer uses same TIMER_CHOICES/value/setTimer expression. Both toggle controls retain disabled/aria-label and existing pause/resume callbacks. Selected-but-paused styling is derived from the real track."
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "review": "All PlayerBar/NowPlaying hooks run before null return. New IntersectionObserver checks real control rectangle; initial requestAnimationFrame plus capturing scroll/resize fallback works without observer. Cleanup disconnects observer, cancels scheduled frame and removes both listeners. Primary visibility state never changes playback or service ownership; it determines mini presentation and timer repaint only. Focus moves to matching existing toggle/volume/timer controls on presentation changes, without scrolling. Browser transition evidence remains required."
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "review": "Existing descriptions stay aria-describedby on each play button. Existing rationale/headphone note move to native details/summary with localized accessible name and focus outline. No new provider, account, credentials, external requests or asset generation."
+    },
+    {
+      "file": "src/pages/Today.tsx",
+      "review": "All three controller bodies and parameters unchanged. Only duplicate decorative hero tree/evidence/circular week display removed; principal GrowthTreePanel/GrowthWeek and actual decision/weekly/course metadata remain unchanged. Eight removed ARIA/control attributes are solely the duplicate hero tree and its duplicate week progressbar."
+    },
+    {
+      "file": "src/pages/Focus.tsx",
+      "review": "Controller/ARIA unchanged; aria-hidden CourseCover switches to existing owned turning-day artwork, bounded landscape aspect and contain crop. Actual FocusTimerHub/FocusLock, timers/rewards/one-reward behavior unchanged."
+    },
+    {
+      "file": "src/styles/coach.css",
+      "review": "Only Coach route ancestor variables/sidebar surface and hero/orbit dimensions change. Existing Coach controller/AppShell byte-identical, all navigation destinations/handlers unchanged, logo asset unchanged. Route-scoped local palette is explicitly authorized; global tokens/theme/index remain unchanged."
+    },
+    {
+      "file": "src/styles/sound.css",
+      "review": "Available-height scene sizing, fully reachable subsequent Breathe, compact session row/details, shared player surfaces and Sound-route nav appearance only. Five AppShell destinations remain in byte-identical JSX. Existing 4a8 native timer width:auto/min-width118 and no109px mobile override preserved; reduced-motion and reduced-transparency rules retained."
+    },
+    {
+      "file": "src/styles/workingSurfaces.css",
+      "review": "Previously accepted saved-plan contrast and proof-text flex rules retained exactly; new scoped tomorrow input min-height44/flex and Dismiss min-width/min-height44 match actual untouched FirstSteps markup. Their actual computed dimensions require browser evidence."
+    },
+    {
+      "file": "src/styles/notebook.css",
+      "review": "Scoped direct editor-action button min-width/min-height44/flex-shrink0 matches untouched Journal action markup. JournalWorkspace/Notebook optional reflectionArtwork SSR boundary, draft/writing-date/calendar filtering/photo/save/read-aloud are byte-identical; 71 Calendar fix retained. Actual TR Delete measurement remains browser proof."
+    }
+  ],
+  "aggregate": {
+    "command": "VITE_BASE_PATH=/one-decision-away/ npm run check",
+    "exitCode": 0,
+    "passed": 597,
+    "failed": 0,
+    "rawLog": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/aggregate/aggregate-check.log",
+    "rawLogBytes": 76418,
+    "rawLogSha256": "75a60c1d508c657dd755763910f4fe0e3fb06d912e300697dcf77d269f35b553",
+    "buildCompleteConfirmedInActualLog": true
+  },
+  "compiled": {
+    "fileCount": 394,
+    "cssCount": 7,
+    "allPhysicalFileNamesBytesAndHashesMatchFreshAggregate": true,
+    "receipt": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/aggregate/build-receipt.json",
+    "receiptSha256": "be1cc1500bd9b32acd4f8f695e1044c06ab8fe13f203b0cd127e61d1502b9282"
+  },
+  "sealedEvidence": [
+    {
+      "file": "source-baseline.json",
+      "bytes": 223045,
+      "sha256": "7c707c18e5b656e01d8ffef558d9bf426f14608a127f3fdc3e243d989aab578d"
+    },
+    {
+      "file": "protected-proof.json",
+      "bytes": 97322,
+      "sha256": "3b114e9ca02ec695145ed84b672e13bd47d6c47fd57d209f3215c955f198670e"
+    },
+    {
+      "file": "compiled-binding.json",
+      "bytes": 75440,
+      "sha256": "d192cc9e732ad41300b4c2703565ca5355ea516c1c464a1c3b7acd28fcb4ec97"
+    },
+    {
+      "file": "controller-semantic-baseline.json",
+      "bytes": 1996896,
+      "sha256": "9a27b9033e0671c24106bdd2790abae373585b1a1f456bf51ccf5d7032176e37"
+    },
+    {
+      "file": "controller-preservation-proof.json",
+      "bytes": 3670,
+      "sha256": "64bbe7f848ffebb5ea4d372c2a5f0afc3c67544fcdf6acaa731113e5202fe453"
+    },
+    {
+      "file": "exact-source.diff.log",
+      "bytes": 49268,
+      "sha256": "ebbb6b19cbbdb02887108bd40c2e34c1723e04f7c52fb088b798c22275f7ba45"
+    },
+    {
+      "file": "parent-scope.md.log",
+      "bytes": 2802,
+      "sha256": "d1d1738a6cf267a31e7a39072ab762d6ae23e34de628f3c2fe5157162cc9455c"
+    },
+    {
+      "file": "generate-semantic-source.mjs",
+      "bytes": 4652,
+      "sha256": "a6867be046a4ff893451a5a9c9c98cc85131fab64721742d3dbe1fafc861a5c6"
+    },
+    {
+      "file": "review-controller-preservation.mjs",
+      "bytes": 6441,
+      "sha256": "650ca61c72b20dcb9b82a19957a2a359d5fc4123f6b468c483297e74a3fda194"
+    }
+  ],
+  "tsxSnapshotManifest": [
+    {
+      "file": "src/App.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/App.tsx",
+      "bytes": 6126,
+      "sha256": "5a26c5377532d754c334de1d77c2bcdaf4f884dde73d65a0593604081c802058"
+    },
+    {
+      "file": "src/components/AddVisionDreamModal.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/AddVisionDreamModal.tsx",
+      "bytes": 25620,
+      "sha256": "c6ea19070483f7f126d09111b7cbd7a8dbbcd570b9b49461217ac3eba132afc4"
+    },
+    {
+      "file": "src/components/AppErrorBoundary.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/AppErrorBoundary.tsx",
+      "bytes": 3788,
+      "sha256": "c49623c7531d5e172372c0338b35e5b80433aa096500633e7a269f62ff99ed2b"
+    },
+    {
+      "file": "src/components/ArchiveDreamModal.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/ArchiveDreamModal.tsx",
+      "bytes": 6173,
+      "sha256": "a32664f06fcc8f67957f39f9ac1bf8e456f07065e693eb860cdfe0fa0116384f"
+    },
+    {
+      "file": "src/components/ArchivedMarketHistory.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/ArchivedMarketHistory.tsx",
+      "bytes": 11525,
+      "sha256": "20deb6ee475f87c6b91c7d184cf946a83e219701ef886b36d98bb9d0f0087c28"
+    },
+    {
+      "file": "src/components/BackupAndCloudSettings.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/BackupAndCloudSettings.tsx",
+      "bytes": 10690,
+      "sha256": "c3be63b88cecb21e642d292a3783f13104c3d1bd9b51a3c373a58fc82d2e95bf"
+    },
+    {
+      "file": "src/components/BackupReminder.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/BackupReminder.tsx",
+      "bytes": 3557,
+      "sha256": "e9dc4a4122099409103674c525640afb0b6c27fe4e16d14d8b24ead4dad35ca1"
+    },
+    {
+      "file": "src/components/BackupRestoreReview.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/BackupRestoreReview.tsx",
+      "bytes": 2025,
+      "sha256": "1c6e9fb305734c64bc64347406ebed054e0aca046ce4fe4d00780aadd01d6beb"
+    },
+    {
+      "file": "src/components/CourseArtwork.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/CourseArtwork.tsx",
+      "bytes": 7949,
+      "sha256": "3de9ec822666decc6dae2dfbf426a1e5e4bf91c4af49447c71250b08f7d54a2b"
+    },
+    {
+      "file": "src/components/CourseCover.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/CourseCover.tsx",
+      "bytes": 1676,
+      "sha256": "cf4542df87f1a78c431784fded0de6332a092416d8c2254389090e5687acbb37"
+    },
+    {
+      "file": "src/components/CoursePhoto.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/CoursePhoto.tsx",
+      "bytes": 3318,
+      "sha256": "32c5d7ee5b7b66df5767d723aa465401ef8c7c57cf68bbe5f561b212f2fac198"
+    },
+    {
+      "file": "src/components/CoursePracticeStudio.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/CoursePracticeStudio.tsx",
+      "bytes": 11567,
+      "sha256": "19669c96d751005c062bf08ccf6f366bf85debc99ea77e056b72f593f40cea4a"
+    },
+    {
+      "file": "src/components/CourseVisual.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/CourseVisual.tsx",
+      "bytes": 5947,
+      "sha256": "20eb3d5cfd715a680037c9a9f0d5086b4c22d584faf1021aeab4265e8103f72b"
+    },
+    {
+      "file": "src/components/CustomCategoryModal.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/CustomCategoryModal.tsx",
+      "bytes": 11776,
+      "sha256": "98414380210791997391f40898dec280f1a6b8055559c5754a5874f8577d2bbe"
+    },
+    {
+      "file": "src/components/DailyAffirmationWidget.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/DailyAffirmationWidget.tsx",
+      "bytes": 9190,
+      "sha256": "d56901ec0ebcb09dbd101819a5bc287afab10ce4d7af518a376c4ed025d5a30c"
+    },
+    {
+      "file": "src/components/DailyCheckIn.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/DailyCheckIn.tsx",
+      "bytes": 18853,
+      "sha256": "2f6e58d61eb0bedf98f52c8610397cf6315c500ce2cd5509ff5204df3f170e37"
+    },
+    {
+      "file": "src/components/DailyDeepQuestion.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/DailyDeepQuestion.tsx",
+      "bytes": 6160,
+      "sha256": "77dc6090f399de6f85027def7de77d0bdf5c4a690989590bd6d8c44bf6eba66c"
+    },
+    {
+      "file": "src/components/DailyMicroHabits.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/DailyMicroHabits.tsx",
+      "bytes": 41692,
+      "sha256": "12298bda10cdb9533f863131e0de109b51bbe2b0d8d4ffbb0a2a4786bcca529c"
+    },
+    {
+      "file": "src/components/DailyNudgesSettings.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/DailyNudgesSettings.tsx",
+      "bytes": 9000,
+      "sha256": "813bc5681c9e00aafe2ac8ce53a7262b8b30164080af8a1e2ae51d77eb5b707c"
+    },
+    {
+      "file": "src/components/DailyPrimaryGoalsChart.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/DailyPrimaryGoalsChart.tsx",
+      "bytes": 36582,
+      "sha256": "9a6066c051d41708b0a5b3727e9fb9c8f9e2be8053649f24c47dbd1f65b271f2"
+    },
+    {
+      "file": "src/components/DefaultFutureStudio.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/DefaultFutureStudio.tsx",
+      "bytes": 21495,
+      "sha256": "9c5ff554aeb479d132a90c214ffcc98580cc1e7ac3a51d602d7e91c6c0f1648e"
+    },
+    {
+      "file": "src/components/DreamArt.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/DreamArt.tsx",
+      "bytes": 16965,
+      "sha256": "d6921771541dd62ac3dfdbc239942459fd5d5c14c30f623a28122b89c5100cb7"
+    },
+    {
+      "file": "src/components/DreamDollarChart.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/DreamDollarChart.tsx",
+      "bytes": 15979,
+      "sha256": "318c0091093b1dfb9524db12a75ec742b6eb6c8989f2fb5d9534375fecc9f862"
+    },
+    {
+      "file": "src/components/DreamJournal.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/DreamJournal.tsx",
+      "bytes": 29229,
+      "sha256": "17b82a3a5067e303241c9b143791d35a73166c559a4e61516e8e2b56a3c2caf0"
+    },
+    {
+      "file": "src/components/DreamReceipt.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/DreamReceipt.tsx",
+      "bytes": 7698,
+      "sha256": "afb85f8407154d0d60008069b841e7112b680584edb20384cb52d729aa95ab95"
+    },
+    {
+      "file": "src/components/EditMicroHabitModal.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/EditMicroHabitModal.tsx",
+      "bytes": 7324,
+      "sha256": "aa785a671a35055353083ca61ea9fc657a53097bc6f242f878ac12e36566395d"
+    },
+    {
+      "file": "src/components/ExportHabitHistoryModal.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/ExportHabitHistoryModal.tsx",
+      "bytes": 7011,
+      "sha256": "7910efe8683d38676240602ddb6dc28df48d01a09c7b6e205f0f5195666d74ce"
+    },
+    {
+      "file": "src/components/ExportProgressModal.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/ExportProgressModal.tsx",
+      "bytes": 7497,
+      "sha256": "cd8574f71defdd1e633eae29a6f1f5930e979c03161c705236709db6f009564c"
+    },
+    {
+      "file": "src/components/FocusLockView.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/FocusLockView.tsx",
+      "bytes": 25325,
+      "sha256": "d1bf8e2c0df5349bad8c7580e6c76a9b01b84353ddb896b1c5a64f93b41acfc1"
+    },
+    {
+      "file": "src/components/FocusTimerHub.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/FocusTimerHub.tsx",
+      "bytes": 26256,
+      "sha256": "eca351bf48077bac9e89e0e03182beccb5d3a0a09290747ec703ee3284299d1c"
+    },
+    {
+      "file": "src/components/GoalModal.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/GoalModal.tsx",
+      "bytes": 7231,
+      "sha256": "ec1bd661078782af8451e40d82811f16dcf2754295f2b6241dd2b48ca8d8b3bd"
+    },
+    {
+      "file": "src/components/LanguagePicker.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/LanguagePicker.tsx",
+      "bytes": 2934,
+      "sha256": "c536d540364c894a3ab6b771dfcd2e36f603319ff2c97cf3c9e94c7d53626a57"
+    },
+    {
+      "file": "src/components/Last7DaysSummary.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/Last7DaysSummary.tsx",
+      "bytes": 29243,
+      "sha256": "4c72e922a9fee68d8569beae7608aa04097a54a6f12145cf3cb8f633e60d58cd"
+    },
+    {
+      "file": "src/components/Logo.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/Logo.tsx",
+      "bytes": 875,
+      "sha256": "ea2e8fea1d2d78e96522300474543dc34d62897d7b8d646b54dddaf8a304f6aa"
+    },
+    {
+      "file": "src/components/MeditateNowWidget.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/MeditateNowWidget.tsx",
+      "bytes": 3177,
+      "sha256": "1b1c31463179e848ac8363279d98d4a517da62e8e3c324464e33eb0c8ebd8217"
+    },
+    {
+      "file": "src/components/MicroHabitCheckbox.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/MicroHabitCheckbox.tsx",
+      "bytes": 10128,
+      "sha256": "29303e2beb3480d94a3ecf3725c10b887020c761cd1d74799d242b2a52f4e58d"
+    },
+    {
+      "file": "src/components/MicroHabitsProgressIndicator.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/MicroHabitsProgressIndicator.tsx",
+      "bytes": 5067,
+      "sha256": "9480be43a0774bffc5b59e9cd7f17ea1aadef97cec46fcf178b471fc6583b3e0"
+    },
+    {
+      "file": "src/components/MissionFlows.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/MissionFlows.tsx",
+      "bytes": 14513,
+      "sha256": "c7b592b26e5d9a1bc6ed76e67763cf4162ccfd6d43cf1b702b70a03b087cf223"
+    },
+    {
+      "file": "src/components/MorningVision.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/MorningVision.tsx",
+      "bytes": 4627,
+      "sha256": "5aded8e5f00e8ee06b0806f0b92cb22996a1b221126161ea05e2711852052a71"
+    },
+    {
+      "file": "src/components/NaturalVoiceSettings.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/NaturalVoiceSettings.tsx",
+      "bytes": 8067,
+      "sha256": "be594eac7b058197e36a084ea74d9d15240d75b3f8a5f9d37739f85965e2ab6d"
+    },
+    {
+      "file": "src/components/Onboarding.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/Onboarding.tsx",
+      "bytes": 20388,
+      "sha256": "6c4ed805aac7b96df0f96982ae717ba31fc94eef0df81c1a7ee260c7c4fb3a43"
+    },
+    {
+      "file": "src/components/OneDecisionStreakCounter.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/OneDecisionStreakCounter.tsx",
+      "bytes": 9072,
+      "sha256": "87c8de9e22646ee660650bd6fdf8daa0ba03d117bdb5cfcc8ad1ac9d47c9048e"
+    },
+    {
+      "file": "src/components/ProgressRing.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/ProgressRing.tsx",
+      "bytes": 1731,
+      "sha256": "a73f65903ba8be58b60f20f23ded0859810a53a6fa0e15c65db3a01d8e6ac55a"
+    },
+    {
+      "file": "src/components/PurchaseReveal.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/PurchaseReveal.tsx",
+      "bytes": 3019,
+      "sha256": "256ffd67708ba01bfdc00adfd9e159a12c8a5e063a3fe07a21c5fd920f577d39"
+    },
+    {
+      "file": "src/components/QuickDreamJournalModal.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/QuickDreamJournalModal.tsx",
+      "bytes": 14405,
+      "sha256": "975c3c498b82fdcc5f6120d48b6babdb266b8790d7392ff3671f61ddbe4f048b"
+    },
+    {
+      "file": "src/components/SavingsMomentumChart.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/SavingsMomentumChart.tsx",
+      "bytes": 30341,
+      "sha256": "181131e900e3c9ad0355f1870f81729b14c8418cdce8a01df5d4b213dcaf4506"
+    },
+    {
+      "file": "src/components/ShareCards.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/ShareCards.tsx",
+      "bytes": 11339,
+      "sha256": "7873e90fe46253fc2ca4a6427495b122239c05ada6e25b1a34e16ee2f0bc58b7"
+    },
+    {
+      "file": "src/components/TwoFuturesPulseWidgets.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/TwoFuturesPulseWidgets.tsx",
+      "bytes": 5106,
+      "sha256": "5068b1ca2d26d159d28204d212600ee6b80edbc8a091981a751f48caa8827067"
+    },
+    {
+      "file": "src/components/WeeklyMicroHabitsSummary.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/WeeklyMicroHabitsSummary.tsx",
+      "bytes": 32187,
+      "sha256": "0ade5af7ce5d9730019705ce023ce2e02fe7c3403c091a1e1cee6023025b2f1d"
+    },
+    {
+      "file": "src/components/brand/LogoC4.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/brand/LogoC4.tsx",
+      "bytes": 919,
+      "sha256": "a9f5dcd6b3d737241057ba6310e977682b01622529ddad4d207721f16a37f359"
+    },
+    {
+      "file": "src/components/brand/LogoV2.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/brand/LogoV2.tsx",
+      "bytes": 1632,
+      "sha256": "76fcb85dbb6f3034e88920ab4744100448cdfecbbbfbc717904c91875217e756"
+    },
+    {
+      "file": "src/components/brand/LogoV3.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/brand/LogoV3.tsx",
+      "bytes": 1513,
+      "sha256": "aca926702abca7418c071819d251b89c11ea9a3abab910f0205c007635c400fb"
+    },
+    {
+      "file": "src/components/brand/LogoV4.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/brand/LogoV4.tsx",
+      "bytes": 1611,
+      "sha256": "84bc0dd4b893b6c266e1e3ace0e220f46ea99cdcd34aef800932acf72e67b447"
+    },
+    {
+      "file": "src/components/coach/CoachTools.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/coach/CoachTools.tsx",
+      "bytes": 24439,
+      "sha256": "ba6395bc6aca2efba46d2fbdcd9d005ce40c24f3cee8fe4032e1627de4b2c043"
+    },
+    {
+      "file": "src/components/me/MyProgress.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/me/MyProgress.tsx",
+      "bytes": 10406,
+      "sha256": "a69007d9694d606db475444a645747ec51d54378fd3d8ad340f1d24c21f2ffe5"
+    },
+    {
+      "file": "src/components/momentum/DecisionPlanModal.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/momentum/DecisionPlanModal.tsx",
+      "bytes": 5549,
+      "sha256": "07e37b78c331da65946f28eaf0f2d35fd2c969db23f83d4690e4a4b6bebf15e9"
+    },
+    {
+      "file": "src/components/momentum/DreamRealityCheck.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/momentum/DreamRealityCheck.tsx",
+      "bytes": 3922,
+      "sha256": "244246d5d2df09081f079387b17d36b425118abc7170edf41e075495ef23a3c3"
+    },
+    {
+      "file": "src/components/momentum/EvidenceTree.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/momentum/EvidenceTree.tsx",
+      "bytes": 2305,
+      "sha256": "54594d05524e4803a3c7c7163086038e19f06db0af2a910760ae20377d3c00fd"
+    },
+    {
+      "file": "src/components/momentum/FirstSteps.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/momentum/FirstSteps.tsx",
+      "bytes": 8166,
+      "sha256": "55e735b0c09d7ff20612cc300df5386ab0313c8c9a3c1fa258a9b042e2c01fa8"
+    },
+    {
+      "file": "src/components/momentum/GrowthDashboard.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/momentum/GrowthDashboard.tsx",
+      "bytes": 2284,
+      "sha256": "f7e28bc39b4bb2bd251a35e36ff0eb7cb82910eaa79f5dcbde4acd251382cbc2"
+    },
+    {
+      "file": "src/components/momentum/InteractiveTree.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/momentum/InteractiveTree.tsx",
+      "bytes": 13433,
+      "sha256": "42ff165dc6f47731f6424fb8fa8ebbcb18b83802369f31e9af8845e558b65d9f"
+    },
+    {
+      "file": "src/components/momentum/TodayMomentum.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/momentum/TodayMomentum.tsx",
+      "bytes": 13403,
+      "sha256": "a049eb6f9646375ba5682618080715e1cffb5da37e25c06df4b99d90fe7ba996"
+    },
+    {
+      "file": "src/components/momentum/TwoMinuteStart.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/momentum/TwoMinuteStart.tsx",
+      "bytes": 4126,
+      "sha256": "e156b3661636cc203018da2023b9813b0bcccf332c4c85ac313fbb33d354e050"
+    },
+    {
+      "file": "src/components/notebook/DailyPractices.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/notebook/DailyPractices.tsx",
+      "bytes": 10402,
+      "sha256": "afe55a06bc77b2b07159fc47e2c52b7d9594bf2a19af7e50bb0242797cd69105"
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/notebook/JournalWorkspace.tsx",
+      "bytes": 16834,
+      "sha256": "f6ef85df90ea5af194d7a8778a480c229fbdbe6dcf8ed16caecc59094d591c4c"
+    },
+    {
+      "file": "src/components/notebook/NotebookCalendar.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/notebook/NotebookCalendar.tsx",
+      "bytes": 3958,
+      "sha256": "9e05a127e9b90ded1a1f257289a2eee28b789172370e92d499557e785603da5f"
+    },
+    {
+      "file": "src/components/notebook/Practice369.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/notebook/Practice369.tsx",
+      "bytes": 11419,
+      "sha256": "f593535fd3fc53c9ac828e4b0fdb24a5ba9d1bf152bb17e7b366ca56bc265f94"
+    },
+    {
+      "file": "src/components/notebook/TodaysPrompt.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/notebook/TodaysPrompt.tsx",
+      "bytes": 940,
+      "sha256": "1f3474787c37341b2fb3239c52994796fda6391f2a5eb2df6e182881ebbdeb3c"
+    },
+    {
+      "file": "src/components/notebook/WrittenPractice.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/notebook/WrittenPractice.tsx",
+      "bytes": 8722,
+      "sha256": "85d430f1a578d5163f3e31cfced55c6c24919cf477c9ee0e14cf910581f5b983"
+    },
+    {
+      "file": "src/components/notebook/shared.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/notebook/shared.tsx",
+      "bytes": 8168,
+      "sha256": "1b6238327f391c2691136060ee8d8903fb115a873cb18fd6ac9c7784411d9410"
+    },
+    {
+      "file": "src/components/today/ArrivalCheckIn.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/today/ArrivalCheckIn.tsx",
+      "bytes": 8898,
+      "sha256": "a2733ff515674667a58ea594800a4338b7ad78f5c186afd65f337750337094e3"
+    },
+    {
+      "file": "src/components/today/CourseNextStep.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/today/CourseNextStep.tsx",
+      "bytes": 3387,
+      "sha256": "1e3fd909d5eeb4ce327e8b53b3b608676727ac1fc0179f3ae18be4d395d3a15f"
+    },
+    {
+      "file": "src/components/today/DailyPractice.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/today/DailyPractice.tsx",
+      "bytes": 6029,
+      "sha256": "9f1560683684a1c85abc11e4076d523500549a36d5a9b55e4db33862eefd622d"
+    },
+    {
+      "file": "src/components/today/EveningLine.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/today/EveningLine.tsx",
+      "bytes": 4348,
+      "sha256": "32dcb3aba796f0ec304a7aa6b6d917ccb71d6f7081b7bdc6ce9eb8c8c17c4880"
+    },
+    {
+      "file": "src/components/today/WeeklyOutcomeReview.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/today/WeeklyOutcomeReview.tsx",
+      "bytes": 5720,
+      "sha256": "615df293975b56150c0f1d57ca8119852a3fa8ced871a16d55862eaefb139eeb"
+    },
+    {
+      "file": "src/components/ui.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/components/ui.tsx",
+      "bytes": 19945,
+      "sha256": "26fcc938ee5d5a32106033b1e58055f70b12f053210388218d2931e666858b46"
+    },
+    {
+      "file": "src/layout/AppShell.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/layout/AppShell.tsx",
+      "bytes": 10695,
+      "sha256": "dfa27da9b5351954b113619f1f6013ce92e4f324914f680e1e6afda1f4db0b64"
+    },
+    {
+      "file": "src/main.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/main.tsx",
+      "bytes": 1755,
+      "sha256": "306b1a41d4c19ebb78304c3014867f1925afe2269a4030dd68ce0a63a073a0bc"
+    },
+    {
+      "file": "src/pages/Account.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/Account.tsx",
+      "bytes": 15549,
+      "sha256": "c2c68d5526171849c74a48e851caa9176b234ac0bd116383445125c044ec468b"
+    },
+    {
+      "file": "src/pages/Bank.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/Bank.tsx",
+      "bytes": 6408,
+      "sha256": "27a773372fc18781ea3df8c0b0334f66e44abc4d72a5ee8d7016dc4227743c1f"
+    },
+    {
+      "file": "src/pages/Bridge.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/Bridge.tsx",
+      "bytes": 9270,
+      "sha256": "52b266401770d502ccbbb3e05685f968496aa14c8f5b1ec284190820d603ea07"
+    },
+    {
+      "file": "src/pages/Budget.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/Budget.tsx",
+      "bytes": 6169,
+      "sha256": "0a32ca98441ee9e3a5779bab53d605d788364ed983d497cf3d7f682310c361f9"
+    },
+    {
+      "file": "src/pages/Coach.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/Coach.tsx",
+      "bytes": 24591,
+      "sha256": "8813ba7630205c142aeb273ca606ee07ee50e7e19662131d2c41c7ed4d810e89"
+    },
+    {
+      "file": "src/pages/Courses.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/Courses.tsx",
+      "bytes": 31384,
+      "sha256": "7535a230c309bffbd1476170ee9f25acbd2bfc0ec52635de77383ce55cfd4385"
+    },
+    {
+      "file": "src/pages/Dreams.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/Dreams.tsx",
+      "bytes": 32550,
+      "sha256": "138034ffdcb85e7ad661f034565696f23dab03ee70abcaae21f004e8aec57bc2"
+    },
+    {
+      "file": "src/pages/Evidence.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/Evidence.tsx",
+      "bytes": 6980,
+      "sha256": "315e3fde4d7fb92579b6ec08da47539192ddbe97908181cfe4cb48481af3e0fb"
+    },
+    {
+      "file": "src/pages/Focus.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/Focus.tsx",
+      "bytes": 975,
+      "sha256": "ee9ecfdc29078d534bcc26892a81af44b9c0dd820f16331f9b2ed94f766c70e5"
+    },
+    {
+      "file": "src/pages/FutureSelf.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/FutureSelf.tsx",
+      "bytes": 9233,
+      "sha256": "c357e51fc71e9bbd4a684218de0bd8237f3529e1c4cc77323ea2edb1c12017b0"
+    },
+    {
+      "file": "src/pages/Landing.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/Landing.tsx",
+      "bytes": 12224,
+      "sha256": "e21186fe0580526a2ca45c4f7079c13fd3dc09e02e08da8c3c06c92b08ff0096"
+    },
+    {
+      "file": "src/pages/Legal.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/Legal.tsx",
+      "bytes": 2567,
+      "sha256": "a593fec0f4aaf5e4874d1253e8357da45b95678ce8fd9cef72842f463cd6d9f1"
+    },
+    {
+      "file": "src/pages/LifeScore.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/LifeScore.tsx",
+      "bytes": 7977,
+      "sha256": "677d8e75723a9280629e173b5f938af1c76c55bbd6e92aae098fa2d67ac5d228"
+    },
+    {
+      "file": "src/pages/Me.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/Me.tsx",
+      "bytes": 9318,
+      "sha256": "24e39368b632ba6490adc58166cc6cbfe18a6b1f74628df26f95ea5ae97cb170"
+    },
+    {
+      "file": "src/pages/Missions.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/Missions.tsx",
+      "bytes": 8715,
+      "sha256": "1f98e652b4bab117bf5daed46461f51d6bd10beb4f62b99556628c707248a739"
+    },
+    {
+      "file": "src/pages/Notebook.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/Notebook.tsx",
+      "bytes": 5981,
+      "sha256": "b1f887b7d2aa0c16a691272d1942228f578feaae09e7613557bdfb0aad0893da"
+    },
+    {
+      "file": "src/pages/Progress.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/Progress.tsx",
+      "bytes": 9692,
+      "sha256": "0812fa310a2130e9b38f7076e1cd2f5ac271dd84dda60f950d3215e0be6c75df"
+    },
+    {
+      "file": "src/pages/PublicTwoFutures.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/PublicTwoFutures.tsx",
+      "bytes": 16346,
+      "sha256": "b2093361d5a896de4643b5c2229fad1b404dc204571cf62e04eb02890bafab81"
+    },
+    {
+      "file": "src/pages/Seasons.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/Seasons.tsx",
+      "bytes": 4912,
+      "sha256": "37041d26f70c14bcb5effd440fdce7db037ee6dd02b2dcc78a728134b7aebd28"
+    },
+    {
+      "file": "src/pages/Settings.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/Settings.tsx",
+      "bytes": 25646,
+      "sha256": "908bc57f4d9666ab7567f253a656b7b1c4118a47699320bcfc26870ecfc46572"
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/SoundRoom.tsx",
+      "bytes": 26025,
+      "sha256": "f0ce966b1b65d132b0d822a72f54738be86a4a3e18090660ad0dca4d5939d5f7"
+    },
+    {
+      "file": "src/pages/Support.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/Support.tsx",
+      "bytes": 4097,
+      "sha256": "4ba7fe505d9526ed19bc85b691731dccf64a2738af6c4e81a07b635c89af3a46"
+    },
+    {
+      "file": "src/pages/Today.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/Today.tsx",
+      "bytes": 28846,
+      "sha256": "3af86b1a987de90dcf63d343463fb8b039ccf39ae82f2d89c97ab3ab84efbc20"
+    },
+    {
+      "file": "src/pages/Tools.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/Tools.tsx",
+      "bytes": 4312,
+      "sha256": "fd7fe7a9765d70f04459576629087ecaaed3abc72be2a6b13fed2ca070b5fad1"
+    },
+    {
+      "file": "src/pages/TwoFutures.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/TwoFutures.tsx",
+      "bytes": 7049,
+      "sha256": "6d31f09ebeebd4ab4623430a778b907a5606936364e44c1a4838c9e2768560a8"
+    },
+    {
+      "file": "src/pages/Upgrade.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/pages/Upgrade.tsx",
+      "bytes": 22447,
+      "sha256": "5347a3452b252fce1050b0ffaa080e1429984b62e2b3365592309a44ceb78998"
+    },
+    {
+      "file": "src/store/useApp.tsx",
+      "snapshot": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/frozen-8fed790/committed-tsx/src/store/useApp.tsx",
+      "bytes": 96366,
+      "sha256": "0576b4a1b6c849049f88e8d9c043143c667e1aabf9357bbfba35fe79f5ac6497"
+    }
+  ],
+  "limits": [
+    "Read-only code/static and exact existing-log/source/compiled audit; no app edits, tests, builds, browser, network, art generation or publication by auditor.",
+    "Fresh 44px dimensions, primary/mini transition focus and clipping/axe proof are parent independent browser QA gates, not established by CSS declarations or this source receipt.",
+    "Original-art exact-reference visual hold remains; no visual approval, global WCAG/all-device or physical iPhone claim.",
+    "Existing aggregate 597/0 verified here, not rerun."
+  ]
+}

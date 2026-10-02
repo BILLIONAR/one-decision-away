@@ -1,0 +1,81 @@
+import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
+import { mkdirSync, writeFileSync } from 'node:fs';
+
+if (process.env.ODA_SCOPED_REPAIR_GO !== '1') throw new Error('Not executed: explicit root source/build GO required.');
+const repo = process.env.ODA_QA_REPO;
+const require = createRequire(`${repo}/package.json`);
+const { chromium } = require('playwright');
+const { getInitialDemoState } = await import(`${repo}/src/services/repository.ts`);
+const { readPersonalRecordFixture } = await import(`${repo}/scripts/qa-personal-record-fixtures.mjs`);
+const base = process.env.ODA_QA_URL, out = process.env.ODA_QA_OUT;
+mkdirSync(out, { recursive: true });
+const report = { sourceCommit: process.env.ODA_QA_SOURCE_COMMIT, synthetic: true, checks: [], screenshots: [], errors: [], blockedExternal: [], limits: ['One focused native Chromium profile; unchanged broader suites are explicitly rebound separately.', 'Coach form only before engine load; no model, provider, account, microphone or purchase operation.'] };
+const browser = await chromium.launch({ executablePath: '/usr/bin/chromium' });
+const context = await browser.newContext({ viewport: { width: 390, height: 844 }, timezoneId: 'UTC', reducedMotion: 'reduce', serviceWorkers: 'block' });
+const origin = new URL(base).origin;
+await context.route('**/*', route => {
+  if (new URL(route.request().url()).origin === origin && ['GET', 'HEAD'].includes(route.request().method())) return route.continue();
+  report.blockedExternal.push(route.request().url()); return route.abort();
+});
+const seed = getInitialDemoState();
+seed.profile = { ...seed.profile, displayName: 'Synthetic scoped Focus QA', locale: 'en', theme: 'light', onboardingStep: 'completed', nudgesEnabled: false, dailyWisdomEnabled: false };
+await context.addInitScript(({ seed }) => {
+  if (!localStorage.getItem('one_decision_away_app_data_v1')) localStorage.setItem('one_decision_away_app_data_v1', JSON.stringify(seed));
+  localStorage.setItem('oda_locale', 'en'); localStorage.setItem('oda_theme', 'light');
+}, { seed });
+const page = await context.newPage(); page.setDefaultTimeout(8000);
+page.on('pageerror', error => report.errors.push(error.message));
+const pass = name => { report.checks.push(name); console.log(`PASS ${name}`); };
+const capture = async name => { await page.screenshot({ path: `${out}/${name}.png`, animations: 'disabled' }); report.screenshots.push(`${name}.png`); };
+try {
+  await page.goto(`${base}/app/focus`);
+  await page.getByRole('heading', { name: 'Focus', exact: true, level: 1 }).waitFor();
+  const before = await readPersonalRecordFixture(page);
+  const hub = page.locator('#focus-timer-hub');
+  await hub.getByRole('button', { name: '7 min Meditation', exact: true }).focus(); await page.keyboard.press('Enter');
+  assert.equal(await hub.locator('.oda-focus-duration').innerText(), '07:00');
+  await hub.getByRole('button', { name: '25 min Pomodoro', exact: true }).focus(); await page.keyboard.press('Enter');
+  assert.equal(await hub.locator('.oda-focus-duration').innerText(), '25:00');
+  const start = hub.getByRole('button', { name: 'Start 25 min', exact: true });
+  const box = await start.boundingBox(); assert.ok(box.width >= 44 && box.height >= 44);
+  pass('Keyboard preset changes real duration from7 to25 and exposes the correctly labelled44px Start25 control');
+  await hub.getByRole('button', { name: 'Ambient', exact: true }).click();
+  await hub.getByRole('button', { name: /^Silence/ }).click();
+  await page.getByPlaceholder('What will you focus on? Optional').fill('Synthetic scoped silent25-minute session');
+  const now = Date.now(); await page.clock.install({ time: new Date(now) }); await page.clock.pauseAt(new Date(now + 100));
+  await start.click(); await page.clock.runFor(100);
+  await page.getByRole('button', { name: 'End early', exact: true }).waitFor();
+  assert.ok(await page.getByText('25:00', { exact: true }).isVisible());
+  pass('Actual focus session starts at25:00 with selected silent intention (controlled-clock boundary labelled simulation)');
+  await capture('focus-started25-390');
+  await page.getByRole('button', { name: 'End early', exact: true }).click();
+  const dialog = page.getByRole('dialog', { name: 'End early?', exact: true }); await dialog.waitFor();
+  for (const key of ['Tab', 'Tab', 'Shift+Tab']) {
+    await page.keyboard.press(key); assert.ok(await dialog.evaluate(element => element.contains(document.activeElement)));
+  }
+  await page.keyboard.press('Escape'); await dialog.waitFor({ state: 'hidden' });
+  assert.ok(await page.getByRole('button', { name: 'End early', exact: true }).evaluate(element => element === document.activeElement));
+  await page.getByRole('button', { name: 'End early', exact: true }).click();
+  await dialog.getByRole('button', { name: 'End session', exact: true }).click();
+  await page.getByRole('button', { name: 'Start 25 min', exact: true }).waitFor(); await page.clock.resume();
+  assert.deepEqual(await readPersonalRecordFixture(page), before);
+  pass('Scoped focus end dialog traps/restores keyboard focus and early exit preserves all canonical data/rewards');
+  await page.goto(`${base}/app/coach`); await page.locator('#coach-message').waitFor();
+  const send = page.locator('.coach-form button[type="submit"]');
+  assert.equal(await send.isDisabled(), true);
+  const text = 'Synthetic unsent words; do not load an engine or contact a provider.';
+  await page.locator('#coach-message').fill(text);
+  assert.equal(await page.locator('#coach-message').inputValue(), text); assert.equal(await send.isDisabled(), true);
+  const length = Number(await page.locator('#coach-message').getAttribute('maxlength')); assert.ok(length > 0);
+  assert.deepEqual(await readPersonalRecordFixture(page), before);
+  pass('Restyled signed-out Coach keeps exact unsent typing, maxlength and truthful disabled send without loading a model/provider');
+  await capture('coach-unsent-390');
+  assert.deepEqual(report.errors, []); assert.deepEqual(report.blockedExternal, []); report.status = 'passed';
+} catch (error) {
+  report.status = 'failed'; report.failure = String(error.stack || error); process.exitCode = 1;
+  await capture('failure').catch(() => {}); console.error(report.failure);
+} finally {
+  await browser.close(); report.finishedAt = new Date().toISOString();
+  writeFileSync(`${out}/focus-coach-report.json`, JSON.stringify(report, null, 2));
+}

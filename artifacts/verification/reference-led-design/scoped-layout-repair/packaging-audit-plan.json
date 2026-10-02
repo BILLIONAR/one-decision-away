@@ -1,0 +1,64 @@
+{
+  "kind": "independent bounded packaging audit plan; no repository or compiled reader started",
+  "preparedAtUtc": "2026-10-02T22:06:45.748459+00:00",
+  "sourceCommit": "4c873b0df32c4489a8b95260122ae3ae9efd936d",
+  "reviewTipBaseline": "635209e1731ba53e2567c0f39b011183912d7ac8",
+  "packet": "artifacts/verification/reference-led-design/scoped-layout-repair",
+  "priorSourceReview": {
+    "file": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/final/control-clearance-fix/protection/final-source-protection-review.json",
+    "sha256": "eefcb9d6e2a4898c4b50732a3aaeab846cfb76042a10ff9fdb987bb13cb602f3"
+  },
+  "executionGate": "Wait for parent staging and completed postpack normal-build GO before repository/index/dist reads.",
+  "expected": {
+    "sourceFiles": 696,
+    "compiledFiles": 394,
+    "cssFiles": 7,
+    "protectedFiles": 348,
+    "mp3Files": 160,
+    "aggregatePassed": 597,
+    "aggregateFailed": 0,
+    "aggregateExit": 0,
+    "actualAggregateBytes": 76416,
+    "actualAggregateSha256": "b6a7f90966aa143d24457802523053e0ff27cf009b1f9ba98f107c4fcbdd19d9"
+  },
+  "boundedChecks": [
+    {
+      "check": "Staged scope",
+      "method": "Inspect exact Git index diff against frozen4c. Permit only new packet evidence and explicitly updated top-level review README/manifest plus exact archived historical manifest; no staged app/config/public/runtime paths."
+    },
+    {
+      "check": "Immutable app and compiled binding",
+      "method": "Verify696 tracked source blobs and physical source against exact4c frozen aggregate receipt; verify all394 actual dist names/bytes/hash and7CSS match tested4c after one parent normal postpackbuild. Auditor runs no build/tests."
+    },
+    {
+      "check": "Raw aggregate and postpack build",
+      "method": "Read exact staged raw aggregate Git blob, byte count and SHA b6a7..., independent tests597/pass597/fail0/buildcomplete. Verify separate postpack build receipt/log exit0 and same source/build hashes; never substitute build-only proof for aggregate. Preserve8fed and5db raw logs/source audits and confirmed initial findings."
+    },
+    {
+      "check": "Exact scratch-to-packet copies and executable quarantine",
+      "method": "For each package mapping, decode original relative path and compare every copied byte. Confirm harness TS/TSX/MTS/MJS/PY/DIFF snapshots copied as.log as planned, private Library helpers/requests excluded, no accidental compiler source discovery. Verify inherited evidence-local .gitignore byte-identical and actual postpack build parity proves Tailwind classes do not change compiledCSS."
+    },
+    {
+      "check": "Manifests and links",
+      "method": "Decode root and packet manifests; compare every listed entry against actual staged Git blobs and physical copies, with documented self-manifest exclusion. Verify README cited relative links resolve to packet files. Check archive copy restores exact prior manifest from4c; all prior artifact blobs unchanged except explicitly top README/manifest."
+    },
+    {
+      "check": "Actual PNG dimensions and reference pairs",
+      "method": "Verify every artifact PNG signature/dimensions; compare current PNG bytes with scratch mappings. Inspect/decode7 requested reference/candidate pairs, verify real native320/390 screenshot dimensions and sheet dimensions/crops; paired candidate crop must decode to actual corresponding screenshot, with reference provenance explicit. Do not assume arbitrary chart/thumbnail size is native viewport proof."
+    },
+    {
+      "check": "Claim alignment and evidence limits",
+      "method": "Read sealed actual functional and visual reports before using counts18/270/412 or5checks as pass claims. Keep historical genuine initialBreathe9.23px/EN320range41.63px findings, earlierfailed37b aggregate and inherited diagnostic caveats. Final44px/nopeeking repaired proof must be fresh, not8fed rebind. Distinguish scoped layout repair acceptance from exact-reference artwork/uservisualapproval."
+    },
+    {
+      "check": "Synthetic and nonsensitive evidence",
+      "method": "Ensure screenshots/logs use synthetic QA data, no credentials/auth cookies/bearer tokens/private Library URLs or user messages. Test names mentioning tokens are not secret findings. Preserve7 inspected inline reference pixels vs0/7 localoriginalJPEG provenance and public flattening/license limits; Sound/material hold remains explicit."
+    }
+  ],
+  "closure": "Return bounded scratch packaging receipt with exact staged counts/hashes, any blockers/limitations and whether evidence-only commit scope is ready. Close readers before any subsequent build/mutation.",
+  "limits": [
+    "Preparation only; repository/index/dist/raw-current-build not read and no packaging verdict issued.",
+    "No tests/build/browser/installation/network/provider/art generation/source edits/publication.",
+    "696 is the verified source baseline. Do not invent698 from unknown packet file totals."
+  ]
+}

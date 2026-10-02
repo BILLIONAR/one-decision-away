@@ -1,0 +1,128 @@
+{
+  "sourceCommit": "4c873b0df32c4489a8b95260122ae3ae9efd936d",
+  "synthetic": true,
+  "viewport": {
+    "width": 320,
+    "height": 844
+  },
+  "checks": [
+    {
+      "name": "320px initial fold contains no Breathe label sliver behind fixed navigation",
+      "evidence": {
+        "label": {
+          "top": 917.15625,
+          "bottom": 931.234375
+        },
+        "nav": {
+          "top": 764,
+          "bottom": 830
+        },
+        "height": 844,
+        "width": 320,
+        "scrollWidth": 320
+      }
+    },
+    {
+      "name": "Subsequent Breathe action stays fully reachable by native End key and clear of fixed navigation"
+    },
+    {
+      "name": "Expanded320px range and paired controls meet44px bounds without duplicate mini controls",
+      "evidence": [
+        {
+          "name": "toggle",
+          "x": 128,
+          "y": 311.359375,
+          "width": 64,
+          "height": 64
+        },
+        {
+          "name": "volume",
+          "x": 76.59375,
+          "y": 402.328125,
+          "width": 190.8125,
+          "height": 44
+        },
+        {
+          "name": "timer",
+          "x": 74.1875,
+          "y": 455.921875,
+          "width": 118,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "name": "CSS-wrap handoff preserves track, shared volume, paused countdown and corresponding native focus",
+      "evidence": {
+        "graphStartsBefore": 2,
+        "graphStartsAfter": 2
+      }
+    },
+    {
+      "name": "Bounded Sound visibility probe leaves all canonical records unchanged and makes no external request"
+    }
+  ],
+  "screenshots": [
+    "sound-initial-clearance-en-320.png",
+    "sound-breathe-reached-en-320.png",
+    "sound-mini-paused-en-320.png",
+    "sound-expanded-paused-en-320.png"
+  ],
+  "errors": [],
+  "blockedExternal": [],
+  "geometry": [
+    {
+      "name": "initial fold",
+      "label": {
+        "top": 917.15625,
+        "bottom": 931.234375
+      },
+      "nav": {
+        "top": 764,
+        "bottom": 830
+      },
+      "height": 844,
+      "width": 320,
+      "scrollWidth": 320
+    },
+    {
+      "name": "expanded controls",
+      "boxes": [
+        {
+          "name": "toggle",
+          "x": 128,
+          "y": 311.359375,
+          "width": 64,
+          "height": 64
+        },
+        {
+          "name": "volume",
+          "x": 76.59375,
+          "y": 402.328125,
+          "width": 190.8125,
+          "height": 44
+        },
+        {
+          "name": "timer",
+          "x": 74.1875,
+          "y": 455.921875,
+          "width": 118,
+          "height": 44
+        }
+      ],
+      "volumeLabel": {
+        "x": 52.59375,
+        "y": 402.328125,
+        "width": 214.8125,
+        "height": 44
+      }
+    }
+  ],
+  "limits": [
+    "One bounded320px CSS-impact probe; prior20 checks retain their original8fed execution provenance.",
+    "Native Chromium audio graph observation and real paused display time; no altered audio clock, provider, billing or model operation.",
+    "No physical device or visual-material approval claim."
+  ],
+  "status": "passed",
+  "finishedAt": "2026-10-02T22:01:11.428Z"
+}

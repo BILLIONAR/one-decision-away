@@ -1,0 +1,9 @@
+PASS Keyboard preset changes real duration from7 to25 and exposes the correctly labelled44px Start25 control
+locator.isVisible: Error: strict mode violation: getByText('25:00', { exact: true }) resolved to 2 elements:
+    1) <p aria-label="25 min" class="oda-focus-duration">25:00</p> aka getByLabel('min')
+    2) <span class="text-5xl sm:text-6xl font-semibold tracking-tight tabular-nums">25:00</span> aka locator('#focus-lock-viewport').getByText(':00')
+
+Call log:
+[2m    - checking visibility of getByText('25:00', { exact: true })[22m
+
+    at <anonymous> (/workspace/scratch/oda-reference-redesign/scoped-layout-repair/flows/final-build/harness/focus-coach-controls.mjs:49:60)

@@ -1,0 +1,81 @@
+{
+  "source": "4c873b0df32c4489a8b95260122ae3ae9efd936d",
+  "receipt": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/final/control-clearance-fix/build-receipt.json",
+  "cwd": "/workspace/oda-reference-redesign",
+  "noAppEditsBuildOrInstall": true,
+  "commands": [
+    {
+      "label": "final representative",
+      "argv": [
+        "node",
+        "--import",
+        "tsx",
+        "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/visual/final-4c873/representative/capture-after.mjs"
+      ],
+      "log": "representative/capture.log",
+      "report": "representative/after/report.json"
+    },
+    {
+      "label": "final bounded smoke",
+      "argv": [
+        "node",
+        "--import",
+        "tsx",
+        "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/visual/run-scoped-final.mjs"
+      ],
+      "env": {
+        "ODA_SMOKE": "1",
+        "ODA_VISUAL_OUT": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/visual/final-4c873/smoke",
+        "ODA_VISUAL_SOURCE": "4c873b0df32c4489a8b95260122ae3ae9efd936d",
+        "ODA_VISUAL_RECEIPT": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/final/control-clearance-fix/build-receipt.json"
+      },
+      "log": "smoke.log",
+      "report": "smoke/report.json"
+    },
+    {
+      "label": "final18matrix",
+      "argv": [
+        "node",
+        "--import",
+        "tsx",
+        "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/visual/run-scoped-final.mjs"
+      ],
+      "env": {
+        "ODA_VISUAL_OUT": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/visual/final-4c873/diagnostics",
+        "ODA_VISUAL_SOURCE": "4c873b0df32c4489a8b95260122ae3ae9efd936d",
+        "ODA_VISUAL_RECEIPT": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/final/control-clearance-fix/build-receipt.json"
+      },
+      "log": "diagnostics.log",
+      "report": "diagnostics/report.json"
+    },
+    {
+      "label": "Breathe arrow/manual wheel supplemental",
+      "argv": [
+        "node",
+        "--import",
+        "tsx",
+        "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/visual/final-4c873/breathe-interaction-probe.mjs"
+      ],
+      "log": "breathe-interaction.log",
+      "report": "breathe-interaction/report.json"
+    }
+  ],
+  "harnesses": [
+    {
+      "file": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/visual/run-scoped-final.mjs",
+      "bytes": 44548,
+      "sha256": "f663a0d1ce4f910704821bd8972b219450ceb012ad400dee8e20cca2952687dc"
+    },
+    {
+      "file": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/visual/final-4c873/representative/capture-after.mjs",
+      "bytes": 6926,
+      "sha256": "4f41c0a8657dd0931f1d59ab6acf44768e79df308bef85825593f41be2d29814"
+    },
+    {
+      "file": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/visual/final-4c873/breathe-interaction-probe.mjs",
+      "bytes": 4542,
+      "sha256": "bda3c72b1411f23fa1c7ae80bb5e085069163ee8787b34d22817a03e3caff8a5"
+    }
+  ],
+  "allReadersAndWritersClosedAfterSeal": true
+}
