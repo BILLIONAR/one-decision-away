@@ -110,7 +110,7 @@
 .oda-sound-player-volume input { flex: 1; min-width: 0; width: 100%; height: 44px; accent-color: var(--sound-cyan); cursor: pointer; }
 .oda-sound-player-timer { display: flex; flex: none; align-items: center; gap: .35rem; color: #D2E6E8; }
 .oda-sound-player-timer svg { flex: none; }
-.oda-sound-player-timer select { width: 118px; max-width: 100%; min-height: 44px; padding: .3rem .4rem; border: 1px solid #71999F; border-radius: 11px; background: #25444F; color: #F1FCFB; font-size: .77rem; cursor: pointer; }
+.oda-sound-player-timer select { width: auto; min-width: 118px; max-width: 100%; min-height: 44px; padding: .3rem .4rem; border: 1px solid #71999F; border-radius: 11px; background: #25444F; color: #F1FCFB; font-size: .77rem; cursor: pointer; }
 .oda-sound-player button:focus-visible, .oda-sound-player input:focus-visible, .oda-sound-player select:focus-visible { outline-color: #D3F7F4; }
 
 @media (min-width: 560px) {
@@ -138,7 +138,6 @@
   .oda-sound-tab-copy { grid-template-columns: 32px minmax(0, 1fr); padding: 1.1rem .85rem; }
   .oda-sound-tab-icon { width: 32px; height: 32px; }
   .oda-sound-player-controls { gap: .5rem; }
-  .oda-sound-player-timer select { width: 109px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .oda-sound-tab, .oda-sound-card-button { transition: none; }
