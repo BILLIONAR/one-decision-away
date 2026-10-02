@@ -5,6 +5,7 @@ import { CoachTools } from '../components/coach/CoachTools';
 import { companionCopy } from '../i18n/companion';
 import { createAICoach, getCoachAvailability, setCoachFocus, MAX_COACH_MESSAGE_LENGTH, type CoachMessage } from '../services/aiCoach';
 import { INTENTS } from '../data/starterDecisions';
+import { OriginalSceneImage } from '../components/OriginalSceneImage';
 import { useApp } from '../store/useApp';
 import { useCloudState } from '../services/useCloudState';
 import { cloudSync } from '../services/cloudSync';
@@ -239,7 +240,7 @@ export const Coach: React.FC = () => {
           <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed max-w-xl">{c.coachIntro}</p>
         </div>
         <div className="coach-orbit" aria-hidden="true" data-state={replying ? 'replying' : listening ? 'listening' : phase === 'loading' ? 'loading' : 'idle'}>
-          <div className="coach-orb"><img src={`${import.meta.env.BASE_URL}assets/oda/reference-fidelity/coach-liquid-form.svg`} alt="" width={420} height={420} decoding="async" /></div>
+          <div className="coach-orb"><OriginalSceneImage asset="coach-orb" sizes="(min-width: 768px) 194px, 159px" eager fallback="assets/oda/reference-fidelity/coach-liquid-form.svg" /></div>
           <div className="coach-orbit-ring" />
         </div>
       </header>

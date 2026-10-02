@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight, AudioLines, Check, ChevronDown, ChevronRight, Leaf, Plus, MessageCircle, GraduationCap, Route, Share2, Waves } from 'lucide-react';
 import { GrowthTreePanel, GrowthWeek } from '../components/momentum/GrowthDashboard';
-import { CourseCover } from '../components/CourseCover';
+import { OriginalSceneImage } from '../components/OriginalSceneImage';
 import { growthCopy } from '../i18n/growth';
 import { courseCatalogFor } from '../data/courseCatalog';
 import { courseForIntent } from '../data/starterDecisions';
@@ -209,7 +209,7 @@ export const Today: React.FC = () => {
       <div className="oda-fidelity-command">
       {/* The quote has its own scene; the saved growth stage appears once in its evidence panel. */}
       <figure className="oda-quote oda-fidelity-hero">
-        <div className="oda-fidelity-scene" aria-hidden="true"><CourseCover courseId="meaning" eager /></div>
+        <div className="oda-fidelity-scene oda-fidelity-scene--original" aria-hidden="true"><OriginalSceneImage asset="today-scene" sizes="(max-width: 479px) calc(100vw - 40px), (max-width: 1179px) calc(100vw - 80px), 1024px" eager fallback="assets/oda/course-covers/oda-growth-values.png" /></div>
         <span aria-hidden="true" className="oda-quote-mark text-5xl">“</span>
         <div className="oda-fidelity-hero-copy min-w-0">
           <p className="oda-kicker text-[var(--fg-muted)] mb-2">{d.quote}</p>

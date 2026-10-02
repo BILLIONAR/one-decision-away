@@ -11,6 +11,7 @@ import {
 import { soundRoomPlayer } from '../services/soundRoomPlayer';
 import { BREATH_CYCLE_MS, breathPhase, formatRemaining, TIMER_CHOICES } from '../services/soundRoom';
 import { soundSynthesizer } from '../utils/soundSynthesizer';
+import { OriginalSceneImage } from '../components/OriginalSceneImage';
 import '../styles/sound.css';
 
 const TAB_KEY = 'oda_sound_tab_v1';
@@ -63,14 +64,14 @@ const SECTION_ICONS = { relax: Waves, sleep: Moon, focus: Headphones, breathe: W
 const SCENE_ASSETS: Record<Scene, string> = {
   dunes: 'sound-dunes.svg', leaves: 'sound-palms.svg', coast: 'sound-ocean.svg', night: 'sound-palms.svg',
 };
+const SCENE_ORIGINALS = { dunes: 'dunes', leaves: 'palms', coast: 'foam', night: 'palms' } as const;
 
-/** Original local landscape illustrations; unavailable art falls back to existing owned ODA art. */
-const SoundScene: React.FC<{ scene: Scene; className?: string; eager?: boolean }> = ({ scene, className = '', eager = false }) => {
-  const [failed, setFailed] = useState(false);
-  useEffect(() => setFailed(false), [scene]);
+/** Approved original local art, with responsive delivery and the prior owned scene fallback. */
+const SoundScene: React.FC<{ scene: Scene; className?: string; eager?: boolean; sculpture?: boolean; sizes?: string }> = ({ scene, className = '', eager = false, sculpture = false, sizes = '(min-width: 1000px) 450px, (min-width: 640px) calc(100vw - 64px), 100vw' }) => {
+  const asset = sculpture ? 'sound-sculpture' : SCENE_ORIGINALS[scene];
   return (
-    <span className={`oda-sound-scene ${className}`} data-scene={scene} data-artwork={failed ? 'owned-fallback' : scene} aria-hidden="true">
-      <img src={`${import.meta.env.BASE_URL}${failed ? 'assets/oda/delivery/course-covers/oda-growth-values-640.webp' : `assets/oda/reference-fidelity/${SCENE_ASSETS[scene]}`}`} alt="" loading={eager ? 'eager' : 'lazy'} decoding="async" onError={() => setFailed(true)} />
+    <span className={`oda-sound-scene ${className}`} data-scene={sculpture ? 'sculpture' : scene} data-artwork={asset} aria-hidden="true">
+      <OriginalSceneImage asset={asset} sizes={sizes} eager={eager} fallback={`assets/oda/reference-fidelity/${SCENE_ASSETS[scene]}`} />
     </span>
   );
 };
@@ -243,7 +244,7 @@ const PlayerBar: React.FC<PlayerControlProps & { visible: boolean }> = ({ volume
     <div className="oda-sound-player" data-sound-surface="mini" role="region" aria-label={t('Sound player')}>
       <div className="oda-sound-player-inner">
         <div className="oda-sound-player-now">
-          <SoundScene scene={scene} className="oda-sound-player-thumb" />
+          <SoundScene scene={scene} className="oda-sound-player-thumb" sizes="44px" />
           <div className="oda-sound-player-text">
             <p className="oda-sound-player-name">{sound ? t(sound.name) : t('Sound Room')}</p>
             <p className="oda-sound-player-status" aria-live="off">{playerStatus(player, t)}</p>
@@ -315,7 +316,7 @@ const NowPlayingPanel: React.FC<PlayerControlProps & { primary: boolean; onPrima
         <h2 className="oda-display">{sound ? t(sound.name) : t('Choose a sound to begin')}</h2>
         {sound && <p>{t(sound.description)}</p>}
       </div>
-      <SoundScene scene={scene} className="oda-sound-now-art" eager />
+      <SoundScene scene={scene} className="oda-sound-now-art" sculpture eager sizes="(min-width: 1000px) 440px, (min-width: 640px) calc(100vw - 96px), calc(100vw - 44px)" />
       <div className="oda-sound-now-control-surface" ref={controlsRef}>
       <div className="oda-sound-now-controls">
         <Headphones size={20} aria-hidden="true" />
@@ -458,7 +459,7 @@ export const SoundRoom: React.FC = () => {
         </div>
 
         <div className="oda-sound-panel-body">
-        <SoundScene key={section.id} scene={SECTION_SCENES[section.id]} className="oda-sound-detail-thumb" />
+        <SoundScene key={section.id} scene={SECTION_SCENES[section.id]} className="oda-sound-detail-thumb" sizes="120px" />
         <p className="oda-sound-detail-credit">ODA · {t('Sound Room')}</p>
         {section.id === 'breathe' ? (
           <BreathePanel sound={section.sounds[0]} soundPlaying={isPlaying('breath_pacer')} />
