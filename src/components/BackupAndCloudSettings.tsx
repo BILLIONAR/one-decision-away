@@ -9,12 +9,16 @@ import { backupCopy } from '../data/backupCopy';
 import { BackupRestoreReview } from './BackupRestoreReview';
 import { prepareBackupRestore, InvalidBackupError } from '../services/backup';
 import type { UserData } from '../types/models';
+import { isNative } from '../services/native';
+import { accountCopy } from '../i18n/account';
 
 export const BackupAndCloudSettings: React.FC = () => {
   const t = useT();
   const [locale] = useLocale();
   const copy = backupCopy(locale);
-  const { exportDataJson, importDataJson, syncFromCloud, data, showToast } = useApp();
+  const { exportDataJson, importDataJson, syncFromCloud, data, showToast, setActiveRoute } = useApp();
+  const native = isNative();
+  const signInCopy = accountCopy(locale);
   const fileRef = useRef<HTMLInputElement>(null);
   const [cloud, setCloud] = useState<CloudState>(cloudSync.getState());
   const [email, setEmail] = useState('');
@@ -81,7 +85,7 @@ export const BackupAndCloudSettings: React.FC = () => {
       </div>
 
       <p className="text-[14px] text-[var(--fg-muted)] leading-relaxed">
-        {t('Everything lives in this browser. Download a backup regularly, and sign in to sync across your phone and laptop.')}
+        {native ? signInCopy.backupLocal : t('Everything lives in this browser. Download a backup regularly, and sign in to sync across your phone and laptop.')}
         {lastBackup && (
           <>
             {' '}
@@ -161,6 +165,15 @@ export const BackupAndCloudSettings: React.FC = () => {
           </div>
         ) : !cloud.session ? (
           <div className="space-y-2">
+            {native ? (
+              <>
+                <p className="text-[14px] text-[var(--fg-muted)] leading-relaxed">{signInCopy.settingsHint}</p>
+                <Button variant="primary" size="sm" icon={Mail} onClick={() => setActiveRoute('/app/account')}>
+                  {signInCopy.continue}
+                </Button>
+              </>
+            ) : (
+              <>
             <Field id="cloud-email" label={t('Sign in with email')} helper={t("We'll send a magic link — no password to remember.")}>
               <div className="flex gap-2">
                 <Input
@@ -177,6 +190,8 @@ export const BackupAndCloudSettings: React.FC = () => {
               </div>
             </Field>
             {msg && <p className="text-[13px] text-[var(--fg-muted)]">{msg}</p>}
+              </>
+            )}
             <button type="button" onClick={() => setShowSetup(!showSetup)} className="h-9 text-[13px] text-[var(--fg-muted)] hover:text-[var(--fg)] cursor-pointer">
               {t('Change project keys')}
             </button>
