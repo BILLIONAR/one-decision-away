@@ -17,12 +17,13 @@ export const NotebookCalendar: React.FC<{
   const keyFor = (day: number) => `${month.getFullYear()}-${String(month.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
   const monthLabel = new Intl.DateTimeFormat(getSpeechLang(), { month: 'long', year: 'numeric' }).format(month);
   const navBtn = 'w-11 h-11 rounded-[var(--radius-sm)] flex items-center justify-center text-[var(--fg-muted)] hover:text-[var(--fg)] cursor-pointer';
-  return <div className="oda-card rounded-[var(--radius-lg)] p-3 space-y-2">
+  return <div className="oda-notebook-calendar oda-card rounded-[var(--radius-lg)] p-3 space-y-2">
     <div className="flex items-center justify-between gap-2">
       <button type="button" className={navBtn} aria-label={t('Previous month')} onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1, 12))}><ChevronLeft className="w-5 h-5" strokeWidth={1.8} /></button>
       <span className="text-sm font-semibold capitalize" aria-live="polite">{monthLabel}</span>
       <button type="button" className={navBtn} aria-label={t('Next month')} onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1, 12))}><ChevronRight className="w-5 h-5" strokeWidth={1.8} /></button>
     </div>
+    <div className="oda-notebook-calendar-scroll">
     <table className="w-full table-fixed text-center border-separate border-spacing-1">
       <caption className="sr-only">{t('Writing calendar')} — {monthLabel}</caption>
       <thead><tr>{Array.from({ length: 7 }, (_, i) => <th key={i} scope="col" className="text-xs font-medium text-[var(--fg-muted)] pb-1">{new Intl.DateTimeFormat(getSpeechLang(), { weekday: 'narrow' }).format(new Date(2024, 0, 1 + i))}</th>)}</tr></thead>
@@ -35,6 +36,7 @@ export const NotebookCalendar: React.FC<{
         </button></td>;
       })}</tr>)}</tbody>
     </table>
+    </div>
     <p className="text-xs text-[var(--fg-muted)] flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" aria-hidden="true" />{t('Days with entries')}</p>
   </div>;
 };

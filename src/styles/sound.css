@@ -1,179 +1,147 @@
-/* Sound Room — calm, editorial, photo-led. Uses the app's tokens only, so light and dark themes follow. */
-.oda-sound { color: var(--fg); padding-bottom: 7.5rem; }
+/* Sound Room: original scenic contours, light session rows and a local teal player atmosphere. */
+.oda-sound { --sound-cyan: #56E0DB; --sound-on-cyan: #12373A; color: var(--fg); padding-bottom: 9rem; }
 .oda-sound button, .oda-sound select, .oda-sound input { -webkit-tap-highlight-color: transparent; }
-.oda-sound button:focus-visible,
-.oda-sound select:focus-visible,
-.oda-sound input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.oda-sound button:focus-visible, .oda-sound select:focus-visible, .oda-sound input:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 
-/* Photos */
-.oda-sound-photo { display: block; position: relative; overflow: hidden; background: var(--bg-muted); }
-.oda-sound-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.oda-sound-photo-fallback { background: linear-gradient(135deg, var(--accent-soft), var(--bg-muted) 55%, var(--brand-burgundy-soft)); }
+/* Decorative landscapes: original contours, not photos or measured audio visualizations. */
+.oda-sound-scene { --scene-sky: #7CAAB4; --scene-back: #365D69; --scene-middle: #244955; --scene-front: #132D39; display: block; position: relative; isolation: isolate; overflow: hidden; background: linear-gradient(155deg, #C9D6D0, var(--scene-sky) 55%, var(--scene-back)); }
+.oda-sound-scene[data-scene="night"] { --scene-sky: #666A94; --scene-back: #3B476A; --scene-middle: #283D5A; --scene-front: #19233C; background: linear-gradient(150deg, #C6B8CA, #777391 40%, #28394E); }
+.oda-sound-scene[data-scene="dunes"] { --scene-sky: #BBA18C; --scene-back: #837080; --scene-middle: #4E465D; --scene-front: #292C42; background: linear-gradient(155deg, #E5CAB0, #B8A3AC 50%, #6D6381); }
+.oda-sound-scene[data-scene="leaves"] { --scene-sky: #8EBAAA; --scene-back: #466A65; --scene-middle: #2B565B; --scene-front: #183740; background: linear-gradient(145deg, #CCDDD3, #6EAEA3 50%, #224E57); }
+.oda-sound-scene-light { position: absolute; width: 16%; aspect-ratio: 1; top: 12%; right: 17%; border-radius: 50%; background: #FFF2D5; opacity: .7; box-shadow: 0 0 32px 12px rgb(255 240 209 / .15); }
+.oda-sound-scene[data-scene="night"] .oda-sound-scene-light { background: #E1EBF4; opacity: .8; width: 12%; }
+.oda-sound-scene-contour { position: absolute; display: block; width: 150%; height: 75%; left: -25%; border-radius: 50% 55% 0 0 / 50% 65% 0 0; }
+.oda-sound-scene-contour-back { bottom: -26%; background: var(--scene-back); transform: rotate(-10deg); }
+.oda-sound-scene-contour-middle { bottom: -43%; background: var(--scene-middle); transform: rotate(9deg); }
+.oda-sound-scene-contour-front { bottom: -59%; background: var(--scene-front); transform: rotate(-12deg); }
+.oda-sound-scene[data-scene="coast"] .oda-sound-scene-contour { border-radius: 50% 40% 0 0 / 65% 50% 0 0; }
+.oda-sound-scene-leaves { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .6; mix-blend-mode: luminosity; }
+.oda-sound-scene[data-scene="leaves"] .oda-sound-scene-light { display: none; }
 
-/* Intro */
-.oda-sound-intro { display: grid; gap: 1.5rem; padding-bottom: 1.75rem; border-bottom: 1px solid var(--border); }
-.oda-sound-title { margin-top: .6rem; font-size: clamp(2.1rem, 7vw, 3.4rem); line-height: 1.06; letter-spacing: -0.012em; max-width: 14ch; }
-.oda-sound-lede { margin-top: .9rem; max-width: 44ch; font-size: .95rem; line-height: 1.7; color: var(--fg-muted); }
-.oda-sound-hero { aspect-ratio: 16 / 10; border-radius: 12px 40px 12px 12px; }
+.oda-sound-intro { padding-bottom: 1.4rem; }
+.oda-sound-title { margin-top: .6rem; max-width: 20ch; font-size: clamp(2rem, 6.8vw, 3rem); line-height: 1.08; letter-spacing: -.035em; }
+.oda-sound-lede { margin-top: .85rem; max-width: 58ch; font-size: .92rem; line-height: 1.7; color: var(--fg-muted); }
 
-/* Tabs (segmented, scrolls sideways on narrow screens instead of overflowing the page) */
-.oda-sound-tabs {
-  display: flex; gap: .25rem; margin-top: 1.5rem; padding: .3rem; max-width: 100%;
-  overflow-x: auto; scrollbar-width: none; border-radius: 999px; background: var(--bg-muted);
-}
-.oda-sound-tabs::-webkit-scrollbar { display: none; }
-.oda-sound-tab {
-  flex: 1 0 auto; min-height: 40px; padding: .45rem .95rem; border-radius: 999px;
-  font-size: .84rem; font-weight: 550; color: var(--fg-muted); white-space: nowrap; cursor: pointer;
-  transition: background-color 160ms ease, color 160ms ease;
-}
-.oda-sound-tab:hover { color: var(--fg); }
-.oda-sound-tab[aria-selected="true"] { background: var(--bg-elevated); color: var(--accent); font-weight: 650; box-shadow: var(--shadow-md); }
-.oda-sound .oda-sound-tab:focus-visible { outline-offset: -2px; }
+/* Existing roving focus and persisted selection remain intact. */
+.oda-sound-tabs { display: grid; grid-template-columns: minmax(0, 1fr); gap: .65rem; padding: .25rem; max-width: 100%; }
+.oda-sound-tab { position: relative; isolation: isolate; min-width: 0; width: 100%; min-height: 140px; border: 2px solid transparent; border-radius: 24px 60px 24px 24px; overflow: hidden; text-align: left; cursor: pointer; transition: border-color 160ms ease, box-shadow 160ms ease; }
+.oda-sound-tab:nth-child(even) { border-radius: 60px 24px 24px 24px; }
+.oda-sound-tab > .oda-sound-scene { position: absolute; inset: 0; }
+.oda-sound-tab::after { content: ''; position: absolute; z-index: 0; inset: 0; background: linear-gradient(100deg, rgb(10 22 36 / .76), rgb(10 22 36 / .46) 65%, rgb(10 22 36 / .1)); }
+.oda-sound-tab-copy { position: relative; z-index: 1; display: grid; grid-template-columns: 38px minmax(0, 1fr); column-gap: .65rem; row-gap: .25rem; padding: 1.2rem 1.05rem; color: #FFFFFF; }
+.oda-sound-tab-icon { grid-row: span 2; display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; margin-top: .05rem; border: 1px solid rgb(255 255 255 / .32); border-radius: 50%; background: rgb(15 29 45 / .45); }
+.oda-sound-tab-name { font-size: 1.35rem; font-weight: 650; line-height: 1.15; letter-spacing: -.025em; }
+.oda-sound-tab-detail { max-width: 40ch; font-size: .77rem; line-height: 1.55; color: #F1F3F8; }
+.oda-sound-tab:hover { border-color: color-mix(in srgb, var(--accent) 60%, transparent); }
+.oda-sound-tab[aria-selected="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft), var(--shadow-md); }
+.oda-sound-tab[aria-selected="true"] .oda-sound-tab-icon { background: #DDE4F6; border-color: #DDE4F6; color: #26314E; }
+.oda-sound .oda-sound-tab:focus-visible { outline-offset: 2px; }
 
-.oda-sound-panel { padding-top: 1.25rem; }
-.oda-sound-section-intro { max-width: 52ch; font-size: .92rem; line-height: 1.65; color: var(--fg-muted); }
-
-/* Honest note for Frequencies */
-.oda-sound-honest {
-  display: flex; gap: .75rem; align-items: flex-start; margin-top: 1rem; padding: 1rem 1.1rem;
-  border-left: 3px solid var(--brand-burgundy); border-radius: 0 12px 12px 0; background: var(--brand-burgundy-soft);
-}
-.oda-sound-honest svg { flex: none; margin-top: .15rem; color: var(--brand-burgundy); }
-.oda-sound-honest p { font-size: .88rem; line-height: 1.65; color: var(--fg); }
-
-/* Cards */
-.oda-sound-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; margin-top: 1.1rem; }
+/* Dark scenic covers transition to a readable working surface with real catalog rows. */
+.oda-sound-panel { margin-top: 1.4rem; padding: 1.2rem 1rem; border: 1px solid var(--border); border-radius: 26px; background: var(--bg-elevated); box-shadow: var(--surface-shadow); }
+.oda-sound-panel-heading .oda-kicker { color: var(--fg-muted); }
+.oda-sound-section-title { margin-block: .45rem .55rem; font-size: clamp(1.6rem, 5vw, 2rem); line-height: 1.15; letter-spacing: -.025em; }
+.oda-sound-section-intro { max-width: 58ch; font-size: .88rem; line-height: 1.65; color: var(--fg-muted); }
+.oda-sound-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: .65rem; margin-top: 1.05rem; }
 .oda-sound-card { min-width: 0; }
-.oda-sound-card-button {
-  display: flex; flex-direction: column; width: 100%; height: 100%; text-align: left; cursor: pointer;
-  border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: var(--bg-elevated);
-  transition: border-color 160ms ease, box-shadow 160ms ease;
-}
-.oda-sound-card-button:hover { border-color: var(--border-strong); }
-.oda-sound-card-button[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
-.oda-sound-card-media { display: block; position: relative; }
-.oda-sound-card-media .oda-sound-photo { aspect-ratio: 16 / 9; }
-.oda-sound-card-play {
-  position: absolute; right: .75rem; bottom: .75rem; display: inline-flex; align-items: center; justify-content: center;
-  width: 44px; height: 44px; border-radius: 50%; color: #fff; background: rgb(18 24 20 / .5); backdrop-filter: blur(6px);
-}
-.oda-sound-card-button[aria-pressed="true"] .oda-sound-card-play { background: var(--accent); color: var(--on-accent); }
-.oda-sound-card-live { position: absolute; left: .75rem; bottom: .9rem; display: inline-flex; align-items: flex-end; gap: 3px; height: 16px; padding: 0 .1rem; }
-.oda-sound-card-live i { display: block; width: 3px; height: 100%; border-radius: 2px; background: #fff; transform-origin: bottom; animation: oda-sound-live 1.2s ease-in-out infinite; }
-.oda-sound-card-live i:nth-child(2) { animation-delay: -.4s; }
-.oda-sound-card-live i:nth-child(3) { animation-delay: -.8s; }
-@keyframes oda-sound-live { 0%, 100% { transform: scaleY(.35); } 50% { transform: scaleY(1); } }
-.oda-sound-card-body { display: flex; flex-direction: column; gap: .35rem; padding: 1rem 1.05rem 1.1rem; }
-.oda-sound-card-name { display: block; font-size: 1.08rem; font-weight: 650; line-height: 1.3; letter-spacing: -.01em; color: var(--fg); }
-.oda-sound-card-description { display: block; font-size: .86rem; line-height: 1.55; color: var(--fg); }
-.oda-sound-card-why { display: block; font-size: .8rem; line-height: 1.55; color: var(--fg-muted); }
-.oda-sound-card-note {
-  display: inline-flex; align-items: center; gap: .4rem; align-self: flex-start; margin-top: .3rem; padding: .25rem .6rem;
-  border-radius: 999px; font-size: .72rem; font-weight: 600; color: var(--accent); background: var(--accent-soft);
-}
+.oda-sound-card-button { position: relative; display: grid; grid-template-columns: 58px minmax(0, 1fr) 40px; align-items: start; gap: .75rem; width: 100%; height: 100%; padding: .9rem .75rem; text-align: left; cursor: pointer; border: 1px solid var(--border); border-radius: 17px; background: var(--bg-elevated); transition: border-color 160ms ease, background-color 160ms ease; }
+.oda-sound-card-button:hover { background: var(--bg-muted); border-color: var(--border-strong); }
+.oda-sound-card-button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.oda-sound-card-media { display: block; position: relative; width: 58px; height: 72px; border-radius: 13px 24px 13px 13px; overflow: hidden; }
+.oda-sound-card-media .oda-sound-scene { width: 100%; height: 100%; }
+.oda-sound-card-play { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 44px; border: 1px solid var(--border); border-radius: 50%; color: var(--fg); background: var(--bg-muted); }
+.oda-sound-card-button[aria-pressed="true"] .oda-sound-card-play { border-color: #285E64; background: #285E64; color: #FFFFFF; }
+.oda-sound-card-body { display: flex; min-width: 0; flex-direction: column; gap: .35rem; }
+.oda-sound-card-name { font-size: .96rem; font-weight: 650; line-height: 1.3; letter-spacing: -.015em; color: var(--fg); overflow-wrap: anywhere; }
+.oda-sound-card-description { font-size: .8rem; line-height: 1.55; color: var(--fg); }
+.oda-sound-card-why { font-size: .77rem; line-height: 1.55; color: var(--fg-muted); }
+.oda-sound-card-note { display: inline-flex; align-items: center; gap: .35rem; align-self: flex-start; margin-top: .2rem; padding: .3rem .5rem; border-radius: 12px; font-size: .71rem; font-weight: 600; line-height: 1.45; color: var(--fg); background: var(--accent-soft); }
 .oda-sound-card-note svg { flex: none; }
-
+.oda-sound-card-pro { position: absolute; bottom: 0; left: 0; right: 0; padding: 3px; background: rgb(16 23 40 / .88); color: #FFFFFF; text-align: center; font-size: .66rem; font-weight: 650; }
 .oda-sound-hint { display: flex; gap: .5rem; align-items: flex-start; margin-top: 1rem; font-size: .8rem; line-height: 1.55; color: var(--fg-muted); }
 .oda-sound-hint svg { flex: none; margin-top: .15rem; color: var(--accent); }
 
-/* Breathe */
-.oda-sound-breathe { display: flex; flex-direction: column; align-items: center; margin-top: 1.25rem; padding: 1.5rem 1rem 1.4rem; border: 1px solid var(--border); border-radius: 20px; background: var(--bg-elevated); text-align: center; }
-.oda-sound-breathe-stage { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; width: min(260px, 72vw); aspect-ratio: 1; }
+/* Breath timing remains synchronized to the existing audio clock. */
+.oda-sound-breathe { display: flex; flex-direction: column; align-items: center; margin-top: 1.25rem; padding: 1.5rem 1rem 1.4rem; border: 1px solid #477B7D; border-radius: 23px; background: radial-gradient(ellipse at 50% 0, #285A62, #15383F 70%); color: #F1FCFB; text-align: center; }
+.oda-sound-breathe-stage { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; width: min(260px, 65vw); aspect-ratio: 1; }
 .oda-sound-breathe-stage[data-reduced] { aspect-ratio: auto; padding-block: 2.5rem 1.5rem; }
-.oda-sound-breathe-circle {
-  position: absolute; inset: 0; border-radius: 50%;
-  background: radial-gradient(circle at 50% 45%, var(--accent-soft) 0%, color-mix(in srgb, var(--accent) 38%, var(--accent-soft)) 70%, color-mix(in srgb, var(--accent) 55%, var(--accent-soft)) 100%);
-  box-shadow: 0 0 0 10px color-mix(in srgb, var(--accent) 8%, transparent);
-  transform: scale(.6); will-change: transform;
-}
+.oda-sound-breathe-circle { position: absolute; inset: 0; border: 1px solid rgb(171 238 230 / .65); border-radius: 50%; background: radial-gradient(circle at 45% 35%, #537E7C, #2B686B 70%, #29515B); box-shadow: 0 0 0 10px rgb(154 229 224 / .07); transform: scale(.6); will-change: transform; }
 .oda-sound-breathe-circle[data-active] { animation-name: oda-sound-breath; animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
 @keyframes oda-sound-breath { 0% { transform: scale(.6); } 50% { transform: scale(1); } 100% { transform: scale(.6); } }
-.oda-sound-breathe-label { position: relative; display: flex; flex-direction: column; align-items: center; gap: .15rem; color: var(--fg); }
+.oda-sound-breathe-label { position: relative; display: flex; flex-direction: column; align-items: center; gap: .15rem; color: #FFFFFF; }
 .oda-sound-breathe-label .oda-display { font-size: 1.6rem; line-height: 1.2; }
-.oda-sound-breathe-label[data-reduced] .oda-display { font-size: 2.2rem; }
-.oda-sound-breathe-count { font-size: .85rem; font-variant-numeric: tabular-nums; color: var(--fg-muted); }
-.oda-sound-breathe-bar { position: relative; display: block; width: 70%; height: 6px; margin-top: 1rem; border-radius: 999px; background: var(--bg-muted); overflow: hidden; }
-.oda-sound-breathe-bar span { display: block; height: 100%; border-radius: inherit; background: var(--accent); transition: width 200ms linear; }
-.oda-sound-breathe-meta { margin-top: 1rem; font-size: .8rem; color: var(--fg-muted); }
+.oda-sound-breathe-label[data-reduced] .oda-display { font-size: 2rem; }
+.oda-sound-breathe-count { font-size: .85rem; font-variant-numeric: tabular-nums; color: #D5E8E8; }
+.oda-sound-breathe-bar { position: relative; display: block; width: 70%; height: 6px; margin-top: 1rem; border-radius: 999px; background: #366169; overflow: hidden; }
+.oda-sound-breathe-bar span { display: block; height: 100%; border-radius: inherit; background: var(--sound-cyan); transition: width 200ms linear; }
+.oda-sound-breathe-meta { margin-top: 1rem; font-size: .8rem; line-height: 1.5; color: #D5E8E8; }
 .oda-sound-breathe-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; margin-top: 1.1rem; }
-.oda-sound-breathe-tip { max-width: 44ch; margin-top: 1rem; font-size: .76rem; line-height: 1.55; color: var(--fg-muted); }
-.oda-sound-primary, .oda-sound-secondary {
-  display: inline-flex; align-items: center; justify-content: center; gap: .55rem; min-height: 46px; padding: .6rem 1.2rem;
-  border-radius: 999px; font-size: .86rem; font-weight: 650; cursor: pointer;
-}
-.oda-sound-primary { background: var(--brand-burgundy); color: var(--on-burgundy); }
-.oda-sound-secondary { border: 1px solid var(--border-strong); color: var(--fg); background: transparent; }
-.oda-sound-secondary[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.oda-sound-breathe-tip { max-width: 44ch; margin-top: 1rem; font-size: .76rem; line-height: 1.55; color: #D5E8E8; }
+.oda-sound-primary, .oda-sound-secondary { display: inline-flex; align-items: center; justify-content: center; gap: .55rem; min-height: 46px; padding: .6rem 1.05rem; border-radius: 999px; font-size: .86rem; font-weight: 650; cursor: pointer; }
+.oda-sound-primary { background: var(--sound-cyan); color: var(--sound-on-cyan); }
+.oda-sound-secondary { border: 1px solid #91B9BB; color: #F1FCFB; background: transparent; }
+.oda-sound-secondary[aria-pressed="true"] { background: #345F68; border-color: #BDE8E5; }
+.oda-sound-breathe button:focus-visible { outline-color: #D3F7F4; }
 
-/* Frequencies (own section, below the tabs) */
-.oda-sound-frequencies { margin-top: 2.75rem; padding-top: 2rem; border-top: 1px solid var(--border); }
-.oda-sound-section-title { margin-block: .5rem .6rem; font-size: clamp(1.6rem, 5vw, 2.1rem); line-height: 1.15; letter-spacing: -0.012em; }
-
-/* Evidence + safety */
-.oda-sound-evidence { margin-top: 2.5rem; padding: 1.3rem 1.25rem; border: 1px solid var(--border); border-radius: 16px; background: var(--bg-muted); }
-.oda-sound-evidence h2 { font-size: 1.35rem; line-height: 1.25; }
-.oda-sound-evidence ol { display: grid; gap: .75rem; margin-top: .9rem; padding-left: 1.1rem; list-style: decimal; }
+.oda-sound-frequencies { margin-top: 2.25rem; padding-top: 1.75rem; border-top: 1px solid var(--border); }
+.oda-sound-honest { display: flex; gap: .7rem; align-items: flex-start; margin-top: 1rem; padding: 1rem; border: 1px solid var(--border); border-radius: 17px; background: var(--accent-soft); }
+.oda-sound-honest svg { flex: none; margin-top: .15rem; color: var(--accent); }
+.oda-sound-honest p { font-size: .83rem; line-height: 1.65; color: var(--fg); }
+.oda-sound-evidence { margin-top: 2rem; padding: 1.2rem; border: 1px solid var(--border); border-radius: 23px; background: var(--bg-elevated); }
+.oda-sound-evidence h2 { font-size: 1.25rem; line-height: 1.3; }
+.oda-sound-evidence ol { display: grid; gap: .8rem; margin-top: .9rem; padding-left: 1.1rem; list-style: decimal; }
 .oda-sound-evidence li { font-size: .8rem; line-height: 1.65; color: var(--fg); padding-left: .2rem; }
 .oda-sound-evidence li::marker { color: var(--fg-muted); font-size: .75rem; }
-.oda-sound-evidence-note { margin-top: .9rem; font-size: .78rem; line-height: 1.6; color: var(--fg-muted); }
-.oda-sound-safety { margin-top: 1.25rem; font-size: .76rem; line-height: 1.6; color: var(--fg-muted); }
+.oda-sound-evidence-note, .oda-sound-safety { margin-top: 1rem; font-size: .77rem; line-height: 1.65; color: var(--fg-muted); }
 
-/* Player bar: fixed above the mobile tab bar; beside the sidebar on desktop */
-.oda-sound-player {
-  position: fixed; z-index: 20; left: .6rem; right: .6rem;
-  bottom: calc(4rem + env(safe-area-inset-bottom, 0px) + .5rem);
-}
-.oda-sound-player-inner {
-  display: flex; flex-direction: column; gap: .55rem; max-width: 760px; margin-inline: auto; padding: .6rem .7rem .65rem;
-  border: 1px solid var(--border); border-radius: 18px; background: color-mix(in srgb, var(--bg-elevated) 94%, transparent);
-  backdrop-filter: blur(12px); box-shadow: var(--shadow-lg);
-}
+/* Glass is localized to the real player. There is no fabricated waveform or listening claim. */
+.oda-sound-player { position: fixed; z-index: 20; left: .6rem; right: .6rem; bottom: calc(max(14px, env(safe-area-inset-bottom, 0px)) + 74px); }
+.oda-sound-player-inner { display: flex; flex-direction: column; gap: .5rem; max-width: 900px; margin-inline: auto; padding: .7rem .75rem; border: 1px solid #608F94; border-radius: 22px; background: linear-gradient(120deg, rgb(23 64 71 / .97), rgb(27 48 61 / .98)); color: #F1FCFB; backdrop-filter: blur(16px); box-shadow: 0 16px 40px -18px rgb(13 35 44 / .7), inset 0 1px 0 rgb(200 248 242 / .15); }
 .oda-sound-player-now { display: flex; align-items: center; gap: .7rem; min-width: 0; }
-.oda-sound-player-thumb { flex: none; width: 44px; height: 44px; border-radius: 10px; }
+.oda-sound-player-thumb { flex: none; width: 44px; height: 48px; border-radius: 10px 16px 10px 10px; }
 .oda-sound-player-text { flex: 1; min-width: 0; }
-.oda-sound-player-name { font-size: .88rem; font-weight: 650; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.oda-sound-player-status { font-size: .74rem; line-height: 1.35; color: var(--fg-muted); font-variant-numeric: tabular-nums; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.oda-sound-player-toggle {
-  flex: none; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%;
-  background: var(--accent); color: var(--on-accent); cursor: pointer;
-}
-.oda-sound-player-toggle:disabled { opacity: .4; cursor: not-allowed; }
+.oda-sound-player-name { font-size: .87rem; font-weight: 650; line-height: 1.3; overflow-wrap: anywhere; }
+.oda-sound-player-status { margin-top: .12rem; font-size: .74rem; line-height: 1.4; color: #D2E6E8; font-variant-numeric: tabular-nums; }
+.oda-sound-player-toggle { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 50%; background: var(--sound-cyan); color: var(--sound-on-cyan); cursor: pointer; box-shadow: 0 0 18px rgb(56 222 213 / .15); }
+.oda-sound-player-toggle:disabled { background: #52767D; color: #E0EBEC; cursor: not-allowed; box-shadow: none; }
 .oda-sound-player-controls { display: flex; align-items: center; gap: .75rem; min-width: 0; }
-.oda-sound-player-volume { display: flex; flex: 1; align-items: center; gap: .5rem; min-width: 0; color: var(--fg-muted); }
-.oda-sound-player-volume input { flex: 1; min-width: 0; height: 28px; accent-color: var(--accent); cursor: pointer; }
-.oda-sound-player-timer { display: flex; flex: none; align-items: center; gap: .35rem; color: var(--fg-muted); }
-.oda-sound-player-timer select {
-  min-height: 36px; padding: .3rem .5rem; border: 1px solid var(--border); border-radius: 10px;
-  background: var(--bg-elevated); color: var(--fg); font-size: .78rem; cursor: pointer;
-}
+.oda-sound-player-volume { display: flex; flex: 1; align-items: center; gap: .5rem; min-width: 0; color: #D2E6E8; }
+.oda-sound-player-volume svg { flex: none; }
+.oda-sound-player-volume input { flex: 1; min-width: 0; width: 100%; height: 44px; accent-color: var(--sound-cyan); cursor: pointer; }
+.oda-sound-player-timer { display: flex; flex: none; align-items: center; gap: .35rem; color: #D2E6E8; }
+.oda-sound-player-timer svg { flex: none; }
+.oda-sound-player-timer select { width: 118px; max-width: 100%; min-height: 44px; padding: .3rem .4rem; border: 1px solid #71999F; border-radius: 11px; background: #25444F; color: #F1FCFB; font-size: .77rem; cursor: pointer; }
+.oda-sound-player button:focus-visible, .oda-sound-player input:focus-visible, .oda-sound-player select:focus-visible { outline-color: #D3F7F4; }
 
 @media (min-width: 560px) {
-  .oda-sound-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .oda-sound-card-media .oda-sound-photo { aspect-ratio: 7 / 5; }
-}
-@media (min-width: 760px) {
-  .oda-sound-intro { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); align-items: end; gap: 2rem; padding-bottom: 2.25rem; }
-  .oda-sound-evidence { padding: 1.6rem 1.75rem; }
+  .oda-sound-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .85rem; }
+  .oda-sound-tab { min-height: 180px; }
+  .oda-sound-tab-copy { padding: 1.4rem 1.1rem; }
+  .oda-sound-tab-name { font-size: 1.65rem; }
+  .oda-sound-panel { padding: 1.4rem 1.35rem; }
+  .oda-sound-card-button { grid-template-columns: 76px minmax(0, 1fr) 44px; gap: 1rem; padding: 1rem; }
+  .oda-sound-card-media { width: 76px; height: 84px; }
+  .oda-sound-card-play { width: 44px; }
 }
 @media (min-width: 768px) {
-  .oda-sound { padding-bottom: 6rem; }
-  /* The desktop sidebar is 14rem wide (AppShell w-56). */
-  .oda-sound-player { left: calc(14rem + 1.25rem); right: 1.25rem; bottom: 1rem; }
-  /* Match the page column: 760px max minus the AppShell's 2rem side padding. */
-  .oda-sound-player-inner { flex-direction: row; align-items: center; gap: 1rem; max-width: calc(760px - 4rem); padding: .6rem .8rem; }
+  .oda-sound { padding-bottom: 7rem; }
+  /* AppShell has a 15rem sidebar; align within the remaining page column. */
+  .oda-sound-player { left: calc(15rem + 1.25rem); right: 1.25rem; bottom: 1rem; }
+  .oda-sound-player-inner { flex-direction: row; align-items: center; gap: 1rem; }
   .oda-sound-player-now { flex: 1; }
   .oda-sound-player-controls { flex: 0 1 320px; }
+  .oda-sound-evidence { padding: 1.5rem; }
 }
 @media (max-width: 359px) {
-  .oda-sound-tab { padding-inline: .75rem; font-size: .8rem; }
+  .oda-sound-card-button { grid-template-columns: minmax(0, 1fr) 40px; gap: .6rem; padding: .85rem .7rem; }
+  .oda-sound-card-media { display: none; }
+  .oda-sound-tab-copy { grid-template-columns: 32px minmax(0, 1fr); padding: 1.1rem .85rem; }
+  .oda-sound-tab-icon { width: 32px; height: 32px; }
   .oda-sound-player-controls { gap: .5rem; }
+  .oda-sound-player-timer select { width: 109px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .oda-sound-tab, .oda-sound-card-button { transition: none; }
-  .oda-sound-card-live i { animation: none; transform: scaleY(.7); }
   .oda-sound-breathe-circle[data-active] { animation: none; }
   .oda-sound-breathe-bar span { transition: none; }
 }
-
-.oda-sound-card-pro { position: absolute; top: 10px; left: 10px; padding: 2px 8px; border-radius: 99px; background: rgba(18,21,19,.72); color: #F6F4EE; font-size: 11.5px; font-weight: 600; }

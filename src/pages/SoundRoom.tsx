@@ -1,12 +1,12 @@
 import React, { useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { Headphones, Info, LockKeyhole, Pause, Play, Timer, Volume1, Volume2, Wind } from 'lucide-react';
+import { Headphones, Info, LockKeyhole, Moon, Pause, Play, Timer, Volume1, Volume2, Waves, Wind } from 'lucide-react';
 import { useApp } from '../store/useApp';
 import { purchases, usePro } from '../services/purchases';
 import { isSoundLocked } from '../services/entitlements';
 import { useT } from '../i18n';
 import {
-  SOUND_ROOM_HERO, SOUND_ROOM_SECTIONS, soundForTrack, unsplashUrl,
-  type SoundPhoto, type SoundRoomSectionId, type SoundRoomSound,
+  SOUND_ROOM_SECTIONS, soundForTrack,
+  type SoundRoomSectionId, type SoundRoomSound,
 } from '../data/soundRoom';
 import { soundRoomPlayer } from '../services/soundRoomPlayer';
 import { BREATH_CYCLE_MS, breathPhase, formatRemaining, TIMER_CHOICES } from '../services/soundRoom';
@@ -55,27 +55,21 @@ function useTick(active: boolean, ms: number) {
   }, [active, ms]);
 }
 
-/** A real photo; if it cannot load (offline, blocked) a soft gradient takes its place. */
-const SoundPhotoImg: React.FC<{ photo: SoundPhoto; width: number; height: number; className?: string; eager?: boolean; sizes?: string }> = ({
-  photo, width, height, className = '', eager, sizes,
-}) => {
-  const t = useT();
-  const [failed, setFailed] = useState(false);
-  if (failed) return <span className={`oda-sound-photo oda-sound-photo-fallback ${className}`} aria-hidden="true" />;
+type Scene = 'coast' | 'night' | 'dunes' | 'leaves';
+const SECTION_SCENES: Record<SoundRoomSectionId, Scene> = {
+  relax: 'coast', sleep: 'night', focus: 'dunes', breathe: 'leaves', frequencies: 'night',
+};
+const SECTION_ICONS = { relax: Waves, sleep: Moon, focus: Headphones, breathe: Wind };
+
+/** Original decorative landscape contours; the leaf photograph is an existing owned ODA asset. */
+const SoundScene: React.FC<{ scene: Scene; className?: string }> = ({ scene, className = '' }) => {
   return (
-    <span className={`oda-sound-photo ${className}`}>
-      <img
-        src={unsplashUrl(photo.id, width, height)}
-        srcSet={`${unsplashUrl(photo.id, Math.round(width / 2), Math.round(height / 2))} ${Math.round(width / 2)}w, ${unsplashUrl(photo.id, width, height)} ${width}w`}
-        sizes={sizes ?? `${width}px`}
-        alt={t(photo.alt)}
-        width={width}
-        height={height}
-        loading={eager ? 'eager' : 'lazy'}
-        decoding="async"
-        referrerPolicy="no-referrer"
-        onError={() => setFailed(true)}
-      />
+    <span className={`oda-sound-scene ${className}`} data-scene={scene} aria-hidden="true">
+      {scene === 'leaves' && <img className="oda-sound-scene-leaves" src={`${import.meta.env.BASE_URL}assets/oda/delivery/course-covers/oda-growth-values-640.webp`} alt="" width={640} height={360} loading="lazy" decoding="async" />}
+      <span className="oda-sound-scene-light" />
+      <span className="oda-sound-scene-contour oda-sound-scene-contour-back" />
+      <span className="oda-sound-scene-contour oda-sound-scene-contour-middle" />
+      <span className="oda-sound-scene-contour oda-sound-scene-contour-front" />
     </span>
   );
 };
@@ -104,12 +98,8 @@ const SoundCard: React.FC<{ sound: SoundRoomSound; sectionId: SoundRoomSectionId
         }}
       >
         <span className="oda-sound-card-media">
-          <SoundPhotoImg photo={sound.photo} width={560} height={400} sizes="(max-width: 559px) 92vw, 340px" />
-          <span className="oda-sound-card-play" aria-hidden="true">
-            {locked ? <LockKeyhole size={16} strokeWidth={2} /> : playing ? <Pause size={18} strokeWidth={2.2} /> : <Play size={18} strokeWidth={2.2} />}
-          </span>
+          <SoundScene scene={SECTION_SCENES[sectionId]} />
           {locked && <span className="oda-sound-card-pro">Pro</span>}
-          {playing && <span className="oda-sound-card-live" aria-hidden="true"><i /><i /><i /></span>}
         </span>
         <span className="oda-sound-card-body">
           <span id={nameId} className="oda-sound-card-name">{t(sound.name)}</span>
@@ -121,6 +111,9 @@ const SoundCard: React.FC<{ sound: SoundRoomSound; sectionId: SoundRoomSectionId
               {t('Use headphones for binaural sounds')}
             </span>
           )}
+        </span>
+        <span className="oda-sound-card-play" aria-hidden="true">
+          {locked ? <LockKeyhole size={17} strokeWidth={2} /> : playing ? <Pause size={19} strokeWidth={2.2} /> : <Play size={19} strokeWidth={2.2} />}
         </span>
       </button>
     </li>
@@ -203,6 +196,7 @@ const PlayerBar: React.FC = () => {
   const [volume, setVolume] = useState(() => soundRoomPlayer.getVolume());
   useTick(player.playing && player.endsAt !== null, 1000);
   const sound = soundForTrack(player.track);
+  const scene = SECTION_SCENES[SOUND_ROOM_SECTIONS.find((item) => item.sounds.some((entry) => entry.track === player.track))?.id ?? 'relax'];
   const volumeId = useId();
   const timerId = useId();
 
@@ -220,11 +214,7 @@ const PlayerBar: React.FC = () => {
     <div className="oda-sound-player" role="region" aria-label={t('Sound player')}>
       <div className="oda-sound-player-inner">
         <div className="oda-sound-player-now">
-          {sound ? (
-            <SoundPhotoImg photo={sound.photo} width={96} height={96} className="oda-sound-player-thumb" />
-          ) : (
-            <span className="oda-sound-photo oda-sound-photo-fallback oda-sound-player-thumb" aria-hidden="true" />
-          )}
+          <SoundScene scene={scene} className="oda-sound-player-thumb" />
           <div className="oda-sound-player-text">
             <p className="oda-sound-player-name">{sound ? t(sound.name) : t('Sound Room')}</p>
             <p className="oda-sound-player-status" aria-live="off">{status}</p>
@@ -329,7 +319,6 @@ export const SoundRoom: React.FC = () => {
             {t('Sound can help you relax, settle and fall asleep more easily. It is not a treatment.')}
           </p>
         </div>
-        <SoundPhotoImg photo={SOUND_ROOM_HERO} width={960} height={600} className="oda-sound-hero" eager sizes="(max-width: 759px) 100vw, 720px" />
       </header>
 
       <div
@@ -338,7 +327,9 @@ export const SoundRoom: React.FC = () => {
         className="oda-sound-tabs"
         onKeyDown={onTabKey}
       >
-        {TAB_SECTIONS.map((item) => (
+        {TAB_SECTIONS.map((item) => {
+          const Icon = SECTION_ICONS[item.id as keyof typeof SECTION_ICONS];
+          return (
           <button
             key={item.id}
             ref={(node) => { tabRefs.current[item.id] = node; }}
@@ -346,14 +337,22 @@ export const SoundRoom: React.FC = () => {
             role="tab"
             id={`${baseId}-tab-${item.id}`}
             aria-selected={tab === item.id}
+            aria-label={t(item.label)}
             aria-controls={`${baseId}-panel`}
             tabIndex={tab === item.id ? 0 : -1}
             className="oda-sound-tab"
+            data-section={item.id}
             onClick={() => choose(item.id)}
           >
-            {t(item.label)}
+            <SoundScene scene={SECTION_SCENES[item.id]} />
+            <span className="oda-sound-tab-copy">
+              <span className="oda-sound-tab-icon" aria-hidden="true"><Icon size={19} strokeWidth={1.8} /></span>
+              <span className="oda-sound-tab-name">{t(item.label)}</span>
+              <span className="oda-sound-tab-detail">{t(item.intro)}</span>
+            </span>
           </button>
-        ))}
+          );
+        })}
       </div>
 
       <section
@@ -362,7 +361,11 @@ export const SoundRoom: React.FC = () => {
         aria-labelledby={`${baseId}-tab-${section.id}`}
         className="oda-sound-panel"
       >
-        <p className="oda-sound-section-intro">{t(section.intro)}</p>
+        <div className="oda-sound-panel-heading">
+          <p className="oda-kicker">{t('Sound Room')}</p>
+          <h2 className="oda-display oda-sound-section-title">{t(section.label)}</h2>
+          <p className="oda-sound-section-intro">{t(section.intro)}</p>
+        </div>
 
         {section.id === 'breathe' ? (
           <BreathePanel sound={section.sounds[0]} soundPlaying={isPlaying('breath_pacer')} />

@@ -185,7 +185,7 @@ export const Today: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="oda-reference-today space-y-6">
       {/* 1. Header */}
       <header className="flex items-start justify-between gap-4">
         <div className="min-w-0">
@@ -222,7 +222,6 @@ export const Today: React.FC = () => {
       </figure>
 
       <div className="oda-growth-dashboard">
-        <GrowthTreePanel count={keptCount} onEvidence={() => setActiveRoute('/app/evidence')} />
         <div className="oda-growth-actions">
       {/* 2. One decision: a soft card with this week's ring, one clear action and a check. */}
       <section id="set-one-decision" className="oda-decision" aria-labelledby="today-decision-label">
@@ -308,6 +307,7 @@ export const Today: React.FC = () => {
       {decisionError && <p role="alert" className="oda-loop-error">{loop.saveError}</p>}
           <CourseNextStep />
         </div>
+        <GrowthTreePanel count={keptCount} onEvidence={() => setActiveRoute('/app/evidence')} />
       </div>
       <GrowthWeek summary={week} onEvidence={() => setActiveRoute('/app/evidence')} />
       <BackupReminder />

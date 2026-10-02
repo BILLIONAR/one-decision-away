@@ -7,6 +7,7 @@ import { JournalWorkspace } from '../components/notebook/JournalWorkspace';
 import { WrittenPractice } from '../components/notebook/WrittenPractice';
 import { Practice369 } from '../components/notebook/Practice369';
 import { AffirmationPractice, GratitudePractice } from '../components/notebook/DailyPractices';
+import '../styles/notebook.css';
 
 const SCRIPTING_PROMPTS = [
   { id: 'ordinary-day', label: N_('An ordinary day in my future'), question: N_('It is an ordinary day in the life I am building. Where am I, what do I do, and how do I feel?') },
@@ -34,17 +35,20 @@ export const Notebook: React.FC = () => {
   if (!data) return <p role="status" className="text-sm text-[var(--fg-muted)]">{t('Opening your notebook…')}</p>;
   const stats = getNotebookStats(data);
   const tabs = [{ id: 'journal' as const, label: t('Journal') }, { id: 'manifest' as const, label: t('Practices') }];
-  return <div className="space-y-6 text-[var(--fg)]">
-    <div>
+  return <div className="oda-notebook space-y-6 text-[var(--fg)]">
+    <header className="oda-notebook-heading">
+      <div>
       <h1 className="oda-display text-[32px] leading-tight text-[var(--fg)]">{t('Notebook')}</h1>
       <p className="text-sm text-[var(--fg-muted)] mt-1">{t('Write your days. Give your future a voice.')}</p>
-    </div>
+      </div>
+      <span className="oda-notebook-mark" aria-hidden="true"><Feather strokeWidth={1.5} /></span>
+    </header>
 
-    <div className="oda-card rounded-[var(--radius-lg)] px-4 min-h-[56px] py-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-sm">
-      <div className="flex flex-wrap gap-x-4 gap-y-1">
-        <span className="text-[var(--fg)]">{t('{n} day streak', { n: stats.currentStreak })}</span>
-        <span className="text-[var(--fg-muted)]">{t('{n} days written', { n: stats.totalWritingDays })}</span>
-        <span className="text-[var(--fg-muted)]">{t('Best {n}', { n: stats.bestStreak })}</span>
+    <div className="oda-notebook-stats oda-card rounded-[var(--radius-lg)] px-4 min-h-[56px] py-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-sm">
+      <div className="oda-notebook-stat-values flex flex-wrap gap-x-4 gap-y-1">
+        <span className="oda-notebook-stat text-[var(--fg)]">{t('{n} day streak', { n: stats.currentStreak })}</span>
+        <span className="oda-notebook-stat text-[var(--fg-muted)]">{t('{n} days written', { n: stats.totalWritingDays })}</span>
+        <span className="oda-notebook-stat text-[var(--fg-muted)]">{t('Best {n}', { n: stats.bestStreak })}</span>
       </div>
       <span className="flex items-center gap-1.5 text-[var(--fg-muted)]" role="status">
         {stats.writtenToday
@@ -54,12 +58,12 @@ export const Notebook: React.FC = () => {
     </div>
 
 
-    <nav aria-label={t('Notebook sections')} className="flex p-1 bg-[var(--bg-muted)] rounded-[var(--radius-sm)]">
+    <nav aria-label={t('Notebook sections')} className="oda-notebook-tabs flex p-1 bg-[var(--bg-muted)] rounded-[var(--radius-sm)]">
       {tabs.map(({ id, label }) => <button key={id} type="button" aria-pressed={section === id} aria-controls={`notebook-${id}-section`} onClick={() => setSection(id)} className={`flex-1 h-10 rounded-[var(--radius-xs)] text-sm font-medium cursor-pointer transition-colors focus-visible:outline focus-visible:outline-2 ${section === id ? 'bg-[var(--bg)] text-[var(--fg)]' : 'text-[var(--fg-muted)]'}`}>{label}</button>)}
     </nav>
 
     <section id="notebook-journal-section" hidden={section !== 'journal'} aria-label={t('Journal')}><JournalWorkspace today={today} /></section>
-    <section id="notebook-manifest-section" hidden={section !== 'manifest'} aria-label={t('Practices')}>
+    <section id="notebook-manifest-section" className="oda-notebook-practices" hidden={section !== 'manifest'} aria-label={t('Practices')}>
       <p className="text-sm text-[var(--fg-muted)] mb-6">{t('Five ways to write. Pick one, use your own words, come back when it helps.')}</p>
       <div className="space-y-6">
         <WrittenPractice kind="scripting" number="01" title={N_('Scripting')} description={N_('Write a scene from the life you want as if you are already living it. Begin with the details you can see and feel.')} icon={Feather} prompts={SCRIPTING_PROMPTS} />

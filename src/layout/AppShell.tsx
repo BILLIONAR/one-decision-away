@@ -78,7 +78,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   const handleNav = (path: string) => setActiveRoute(path);
 
   return (
-    <div className="min-h-screen text-[var(--fg)] flex flex-col md:flex-row">
+    <div className="oda-reference-app min-h-screen text-[var(--fg)] flex flex-col md:flex-row" data-app-route={activeRoute}>
       <a href="#oda-main" onClick={(event) => { event.preventDefault(); document.getElementById('oda-main')?.focus(); }} className="sr-only focus:not-sr-only focus:fixed focus:z-50 focus:top-3 focus:left-3 focus:p-3 focus:bg-[var(--bg-elevated)]">{c.skip}</a>
       {/* Toast */}
       {toast && (
@@ -113,6 +113,11 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           aria-label={t('One Decision Away')}
         >
           <LogoLockup className="w-12 h-18" /><span className="text-[11px] leading-relaxed tracking-[0.16em] font-medium">ONE DECISION<br />AWAY</span>
+        </button>
+
+        <button type="button" onClick={() => handleNav('/app/me')} className="oda-sidebar-profile">
+          <span className="oda-sidebar-avatar" aria-hidden="true"><User size={20} /></span>
+          <span className="min-w-0"><span className="block text-sm font-semibold break-words">{data?.profile.displayName || labels.me}</span><span className="block text-xs text-[var(--fg-muted)] mt-1">{labels.me}</span></span>
         </button>
 
         <nav className="flex flex-col gap-1" aria-label={t('Main')}>
@@ -177,7 +182,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
 
       {/* Content */}
       <main id="oda-main" tabIndex={-1} className="outline-none flex-1 min-w-0 overflow-y-auto pb-36 md:pb-12 min-h-screen">
-        <div key={activeRoute} className={`oda-page-enter ${activeRoute === '/app' ? 'max-w-[1160px]' : activeRoute === '/app/courses' || activeRoute === '/app/tools' ? 'max-w-[1040px]' : 'max-w-[760px]'} mx-auto px-5 sm:px-8 ${isSecondary ? 'pt-6' : 'pt-[calc(env(safe-area-inset-top,0px)+1.5rem)]'} md:pt-12`}>{children}</div>
+        <div key={activeRoute} className={`oda-page-enter ${activeRoute === '/app' ? 'max-w-[1160px]' : ['/app/courses', '/app/tools', '/app/notebook', '/app/coach', '/app/sound'].includes(activeRoute) ? 'max-w-[1040px]' : 'max-w-[760px]'} mx-auto px-5 sm:px-8 ${isSecondary ? 'pt-6' : 'pt-[calc(env(safe-area-inset-top,0px)+1.5rem)]'} md:pt-12`}>{children}</div>
       </main>
 
       {/* Mobile bottom tabs */}

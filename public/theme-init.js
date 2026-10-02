@@ -9,6 +9,6 @@
     if (dark) root.classList.add('dark');
     root.style.colorScheme = dark ? 'dark' : 'light';
     var meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', dark ? '#101E1A' : '#F7F3EA');
+    if (meta) meta.setAttribute('content', dark ? '#101728' : '#F5F4FA');
   } catch (e) {}
 })();

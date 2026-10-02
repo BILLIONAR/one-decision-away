@@ -383,24 +383,12 @@ body::before {
   background: var(--page-bg);
 }
 
-/* The architecture stays quiet around the work: ink navigation, paper content. */
+/* Navigation inherits the shared reference-led working palette. */
 .oda-sidebar {
-  --bg-elevated: #173E35;
-  --bg-muted: #214C40;
-  --bg-inset: #12332A;
-  --bg: #173E35;
-  --fg: #F7F3EA;
-  --fg-muted: #D3DDD0;
-  --fg-subtle: #C0D0BF;
-  --accent: #F7F3EA;
-  --accent-soft: #2D5547;
-  --border: #36584A;
-  --brand-burgundy: #E6ABB6;
   color: var(--fg);
 }
-.oda-sidebar .oda-brand-mark { filter: brightness(2.6) saturate(.65); }
-.oda-sidebar button:focus-visible { outline-color: #F7F3EA; }
-.oda-sidebar .oda-nav-active::before { background: #F7F3EA; width: 2px; }
+.oda-sidebar button:focus-visible { outline-color: var(--accent); }
+.oda-sidebar .oda-nav-active::before { background: var(--accent); width: 2px; }
 .oda-tabbar { background: var(--bg-elevated); border-color: var(--border); }
 @media (min-width: 768px) { .oda-tabbar { display: none; } }
 .oda-onboarding h1:focus { outline: none; }

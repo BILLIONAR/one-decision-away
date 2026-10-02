@@ -12,6 +12,7 @@ import {
   CloudCoachError, buildCoachContext, getCloudCoachStatus, readContextConsent, sendToCloudCoach, writeContextConsent,
   type CloudTier,
 } from '../services/cloudCoach';
+import '../styles/coach.css';
 
 interface Recognition {
   lang: string; continuous: boolean; interimResults: boolean;
@@ -230,17 +231,25 @@ export const Coach: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6 pb-2">
-      <header className="space-y-3">
-        <div className="flex items-center gap-2 text-[12px] font-medium text-[var(--accent)]"><MessageCircle size={16} /> ODA / {c.coach}</div>
-        <h1 className="text-[30px] sm:text-[36px] oda-display leading-[1.12]">{c.coachHeading}</h1>
-        <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed max-w-xl">{c.coachIntro}</p>
+    <div className="coach-page pb-2">
+      <header className="coach-hero">
+        <div className="coach-hero-copy space-y-3">
+          <div className="coach-eyebrow flex items-center gap-2 text-[12px] font-medium"><MessageCircle size={16} /> ODA / {c.coach}</div>
+          <h1 className="text-[30px] sm:text-[36px] oda-display leading-[1.12]">{c.coachHeading}</h1>
+          <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed max-w-xl">{c.coachIntro}</p>
+        </div>
+        <div className="coach-orbit" aria-hidden="true" data-state={replying ? 'replying' : listening ? 'listening' : phase === 'loading' ? 'loading' : 'idle'}>
+          <div className="coach-orb"><span /><span /><span /></div>
+          <div className="coach-orbit-ring" />
+        </div>
       </header>
 
-      <CoachTools />
+      <div className="coach-tools"><CoachTools /></div>
+
+      <div className={`coach-conversation space-y-5${messages.length === 0 ? ' coach-with-starters' : ''}`}>
 
       {!cloudReady && cloud.configured && (
-        <section aria-labelledby="cloud-coach-heading" className="oda-card rounded-[22px] p-5 space-y-3">
+        <section aria-labelledby="cloud-coach-heading" className="coach-provider oda-card rounded-[22px] p-5 space-y-3">
           <div className="flex items-center gap-2"><span className="oda-tile-icon oda-tint-blue" aria-hidden="true"><Cloud size={18} strokeWidth={1.8} /></span><h2 id="cloud-coach-heading" className="oda-kicker text-[var(--fg)]">{t('Use the cloud coach')}</h2></div>
           <p className="text-sm text-[var(--fg-muted)] leading-relaxed">{t('The cloud coach answers with a more capable AI and needs a free account, so we can count your monthly messages. The offline tools above and the on-device coach below stay available without one.')}</p>
           <button type="button" onClick={() => setActiveRoute('/app/account')} className="oda-btn-primary min-h-12 px-5 rounded-full inline-flex items-center text-sm font-semibold">{t('Open account')}</button>
@@ -248,7 +257,7 @@ export const Coach: React.FC = () => {
       )}
 
       {cloudReady && cloudStatus && useDevice && (
-        <section className="oda-card rounded-[22px] p-5 space-y-3">
+        <section className="coach-provider oda-card rounded-[22px] p-5 space-y-3">
           <p className="text-sm text-[var(--fg-muted)] leading-relaxed">{t('You are using the on-device coach.')}</p>
           <button type="button" onClick={() => chooseEngine(false)} className="min-h-11 px-4 rounded-full inline-flex items-center gap-2 text-sm font-medium border border-[var(--border)] hover:border-[var(--accent)] transition-colors"><Cloud size={16} strokeWidth={1.8} />{t('Use the cloud coach')}</button>
         </section>
@@ -257,8 +266,8 @@ export const Coach: React.FC = () => {
       {cloudChecking ? (
         <p role="status" className="text-sm text-[var(--fg-muted)]">{t('Checking the cloud coach')}</p>
       ) : cloudActive ? (
-        <section aria-label={t('Cloud coach')} className="space-y-3">
-          <div className="flex justify-between items-center gap-3 text-xs">
+        <section aria-label={t('Cloud coach')} className="coach-provider space-y-3">
+          <div className="coach-status flex justify-between items-center gap-3 text-xs">
             <span role="status" className="inline-flex gap-2 items-center text-[var(--fg-muted)]"><Cloud size={15} strokeWidth={1.8} />{replying ? c.thinking : t('{n} of {total} messages left this month', { n: cloudStatus.remaining, total: cloudStatus.limit })}</span>
             <button onClick={resetConversation} disabled={replying || messages.length === 0} className="inline-flex gap-2 items-center min-h-11 text-[var(--fg-muted)] disabled:opacity-40"><RotateCcw size={14} />{c.reset}</button>
           </div>
@@ -270,7 +279,7 @@ export const Coach: React.FC = () => {
           )}
         </section>
       ) : phase === 'idle' || phase === 'loading' ? (
-        <section className="p-5 sm:p-6 rounded-[var(--radius-lg)] bg-[var(--accent-soft)] border border-[var(--border)] space-y-4">
+        <section className="coach-setup p-5 sm:p-6 rounded-[var(--radius-lg)] bg-[var(--accent-soft)] border border-[var(--border)] space-y-4">
           <p className="text-[13px] font-semibold text-[var(--accent)]">{c.local}</p>
           <p className="text-sm leading-relaxed">{c.download}</p>
           <p className="text-xs text-[var(--fg-muted)] leading-relaxed">{c.privacy}</p>
@@ -280,40 +289,40 @@ export const Coach: React.FC = () => {
               <progress value={progress} max={100} aria-label={c.preparing} className="w-full h-2 accent-[var(--accent)]" />
               <button type="button" onClick={() => controller.current?.abort()} className="text-sm underline underline-offset-4 min-h-10">{c.stop}</button>
             </div>
-          ) : <button type="button" onClick={prepare} className="min-h-12 px-5 rounded-full bg-[var(--accent)] text-white inline-flex gap-2 items-center text-sm font-semibold"><Download size={17} />{c.start}</button>}
+          ) : <button type="button" onClick={prepare} className="coach-prepare min-h-12 px-5 rounded-full bg-[var(--accent)] text-white inline-flex gap-2 items-center text-sm font-semibold"><Download size={17} />{c.start}</button>}
         </section>
       ) : (
-        <div className="flex justify-between items-center gap-3 text-xs">
+        <div className="coach-status flex justify-between items-center gap-3 text-xs">
           <span className="inline-flex gap-2 items-center text-[var(--accent)]"><Check size={15} />{phase === 'replying' ? c.thinking : c.ready}</span>
           <button onClick={resetConversation} disabled={phase === 'replying' || messages.length === 0} className="inline-flex gap-2 items-center min-h-10 text-[var(--fg-muted)] disabled:opacity-40"><RotateCcw size={14} />{c.reset}</button>
         </div>
       )}
 
       {messages.length === 0 ? (
-        <section aria-labelledby="coach-starters-heading" className="space-y-3">
+        <section aria-labelledby="coach-starters-heading" className="coach-starters space-y-3">
           <h2 id="coach-starters-heading" className="oda-kicker text-[var(--fg-muted)]">{t('Conversation starters')}</h2>
           {[
             { label: t('Fear'), prompts: [c.fearPrompt, t('I keep putting this off because it has to be perfect.')] },
             { label: t('Overwhelm'), prompts: [c.overwhelmedPrompt, t('I have too many things on my plate and cannot tell which one matters.')] },
             { label: t('Hope and motivation'), prompts: [c.faithPrompt, t('I lost my momentum. Help me restart gently.')] },
-          ].map(group => <div key={group.label} role="group" aria-label={group.label} className="space-y-1.5">
+          ].map(group => <div key={group.label} role="group" aria-label={group.label} className="coach-starter-group space-y-2">
             <p className="text-[12px] font-medium text-[var(--fg-muted)]">{group.label}</p>
             <div className="flex flex-wrap gap-2">
-              {group.prompts.map(prompt => <button key={prompt} type="button" onClick={() => { setDraft(prompt); textarea.current?.focus(); }} className="min-h-11 px-4 py-2 text-left text-[13px] leading-snug border border-[var(--border)] rounded-[18px] hover:border-[var(--accent)] transition-colors max-w-full">{prompt}</button>)}
+              {group.prompts.map(prompt => <button key={prompt} type="button" onClick={() => { setDraft(prompt); textarea.current?.focus(); }} className="coach-starter min-h-11 px-4 py-2 text-left text-[13px] leading-snug border border-[var(--border)] rounded-[18px] hover:border-[var(--accent)] transition-colors max-w-full">{prompt}</button>)}
             </div>
           </div>)}
         </section>
-      ) : <div ref={log} role="log" aria-label={c.live} aria-live="off" tabIndex={0} onScroll={() => { const el = log.current; if (el) followOutput.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80; }} className="max-h-[52vh] min-h-40 overflow-y-auto space-y-5 pr-2 overscroll-contain">
-        {messages.map((message, index) => <article key={index} className={message.role === 'user' ? 'ml-8 p-4 bg-[var(--bg-muted)] rounded-[var(--radius-md)]' : 'mr-4 pl-4 border-l-2 border-[var(--accent)]'}>
+      ) : <div ref={log} role="log" aria-label={c.live} aria-live="off" tabIndex={0} onScroll={() => { const el = log.current; if (el) followOutput.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80; }} className="coach-log max-h-[52vh] min-h-40 overflow-y-auto space-y-5 pr-2 overscroll-contain">
+        {messages.map((message, index) => <article key={index} className={message.role === 'user' ? 'coach-message coach-message-user ml-8 p-4 bg-[var(--bg-muted)] rounded-[var(--radius-md)]' : 'coach-message coach-message-assistant mr-4 pl-4 border-l-2 border-[var(--accent)]'}>
           <p className="text-[12px] font-semibold text-[var(--fg-muted)] mb-2">{message.role === 'user' ? c.you : c.name}</p>
           <p className="text-[15px] leading-relaxed whitespace-pre-wrap break-words">{message.content || c.thinking}</p>
         </article>)}
       </div>}
 
-      {error && <div role="alert" className="p-3 bg-[var(--danger-soft)] text-[var(--danger)] rounded-[var(--radius-sm)] text-sm leading-relaxed">{error}</div>}
+      {error && <div role="alert" className="coach-error p-3 bg-[var(--danger-soft)] text-[var(--danger)] rounded-[var(--radius-sm)] text-sm leading-relaxed">{error}</div>}
 
       {outOfMessages && (
-        <section aria-labelledby="cloud-out-heading" className="oda-card rounded-[22px] p-5 space-y-3">
+        <section aria-labelledby="cloud-out-heading" className="coach-provider oda-card rounded-[22px] p-5 space-y-3">
           <h2 id="cloud-out-heading" className="oda-kicker text-[var(--fg)]">{t('That is all for this month')}</h2>
           <p className="text-sm text-[var(--fg-muted)] leading-relaxed">{cloudStatus.tier === 'coach'
             ? t('You have used this month’s cloud coach messages. They start again next month. The offline tools and the on-device coach are still here.')
@@ -325,13 +334,13 @@ export const Coach: React.FC = () => {
         </section>
       )}
 
-      <form onSubmit={send} className={outOfMessages ? 'hidden' : 'space-y-3'}>
-        <div className="border border-[var(--border-strong)] focus-within:border-[var(--accent)] rounded-[var(--radius-md)] p-3 bg-[var(--bg-elevated)]">
+      <form onSubmit={send} className={outOfMessages ? 'hidden' : 'coach-form space-y-3'}>
+        <div className="coach-composer border border-[var(--border-strong)] focus-within:border-[var(--accent)] rounded-[var(--radius-md)] p-3 bg-[var(--bg-elevated)]">
           <label htmlFor="coach-message" className="sr-only">{c.placeholder}</label>
           <textarea ref={textarea} id="coach-message" value={draft} onChange={event => setDraft(event.target.value)} maxLength={MAX_COACH_MESSAGE_LENGTH} rows={3} placeholder={c.placeholder} className="w-full resize-y min-h-20 max-h-60 bg-transparent text-[15px] leading-relaxed outline-none" onKeyDown={event => { if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); if (inputReady) event.currentTarget.form?.requestSubmit(); } }} />
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3"><button type="button" onClick={toggleMicrophone} disabled={!SpeechInput || replying} aria-pressed={listening} aria-label={listening ? c.stopListening : c.listen} className="w-11 h-11 flex items-center justify-center rounded-full bg-[var(--bg-muted)] disabled:opacity-35">{listening ? <MicOff size={19} className="text-[var(--danger)]" /> : <Mic size={19} />}</button><span className="text-[11px] text-[var(--fg-subtle)]">{draft.length}/{MAX_COACH_MESSAGE_LENGTH}</span></div>
-            {replying ? <button type="button" onClick={() => { controller.current?.abort(); if (cloudActive) { busy.current = false; setCloudBusy(false); setMessages(current => current.filter(m => m.content.trim())); } else engine.cancel(); }} aria-label={c.stop} className="w-11 h-11 bg-[var(--fg)] text-[var(--bg)] flex items-center justify-center rounded-full"><Square size={17} /></button> : <button type="submit" disabled={!inputReady || !draft.trim()} aria-label={c.send} className="w-11 h-11 bg-[var(--accent)] text-white disabled:opacity-35 flex items-center justify-center rounded-full"><ArrowUp size={20} /></button>}
+            {replying ? <button type="button" onClick={() => { controller.current?.abort(); if (cloudActive) { busy.current = false; setCloudBusy(false); setMessages(current => current.filter(m => m.content.trim())); } else engine.cancel(); }} aria-label={c.stop} className="w-11 h-11 bg-[var(--fg)] text-[var(--bg)] flex items-center justify-center rounded-full"><Square size={17} /></button> : <button type="submit" disabled={!inputReady || !draft.trim()} aria-label={c.send} className="coach-send w-11 h-11 bg-[var(--accent)] text-white disabled:opacity-35 flex items-center justify-center rounded-full"><ArrowUp size={20} /></button>}
           </div>
         </div>
         {!cloudActive && phase === 'idle' && <p className="text-xs text-[var(--fg-muted)]">{c.notLoaded}</p>}
@@ -344,6 +353,7 @@ export const Coach: React.FC = () => {
           </div>
         ) : <p className="text-[11px] text-[var(--fg-muted)]"><strong>{c.local}</strong> · {c.limit}</p>}
       </form>
+      </div>
     </div>
   );
 };
