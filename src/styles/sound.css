@@ -176,6 +176,10 @@
   .oda-sound-tab-name { font-size: 1.8rem; }
   .oda-sound-tab:nth-child(3) .oda-sound-tab-copy { padding-top: var(--sound-wave-overlap); }
 }
+/* The subsequent breathing action starts after the initial mobile scene viewport. */
+@media (max-width: 767px) {
+  .oda-sound-tab[data-section="breathe"] { margin-top: calc(92px + env(safe-area-inset-bottom, 0px)); }
+}
 /* Sound-only scenic navigation retains all five actual destinations and their labels. */
 .oda-reference-app[data-app-route="/app/sound"] .oda-tabbar { border-radius: 33px; border-color: #49666B; background: rgb(15 38 45 / .91); color: #DEEEEA; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); box-shadow: 0 8px 28px -14px #071E29; }
 .oda-reference-app[data-app-route="/app/sound"] .oda-tab { min-height: 44px; min-width: 0; border-radius: 50%; background: transparent; color: #DEEEEA; }
