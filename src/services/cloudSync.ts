@@ -11,7 +11,8 @@ import { createBackupSnapshot, prepareBackupRestore } from './backup';
 import { APP_DATA_STORAGE_KEY } from './storageKeys';
 import { REPLACEMENT_EPOCH_KEY } from './dataSnapshots';
 import { backupCopy } from '../data/backupCopy';
-import { isRemoteVersion, nextRemoteVersion, remoteDocumentFingerprint } from './cloudUploadReadiness';
+import { canonicalDocumentJson, isRemoteVersion, nextRemoteVersion, remoteDocumentFingerprint } from './cloudUploadReadiness';
+import { queueDataWrite, subscribeDataCommitted } from './dataWrites';
 
 const CFG_KEY = 'oda_cloud_cfg';
 const LAST_SYNC_KEY = 'oda_cloud_last_sync';
@@ -34,6 +35,8 @@ export interface CloudState {
   configured: boolean;
   session: Session | null;
   lastSyncAt: string | null;
+  currentDocumentConfirmed: boolean;
+  lastSuccessfulSyncAt: string | null;
   syncing: boolean;
   error: string | null;
   scopeRevision: number;
@@ -52,6 +55,10 @@ class CloudSync {
   private sessionHydrated = false;
   private pushQueue: Promise<boolean> = Promise.resolve(false);
   private scopeRevision = 0;
+  private confirmedLocalRecord: string | null | undefined;
+  private confirmedLocalFingerprint: string | undefined;
+  private confirmationProbe: { raw: string; owner: string } | null = null;
+  private confirmationBootstrap: Promise<void> | null = null;
   private authSubscription: { unsubscribe: () => void } | null = null;
   private pendingPulls = new WeakMap<UserData, { updatedAt: string; remoteFingerprint: string; userId: string; projectUrl: string; client: SupabaseClient; revision: number; restoreScope: string; localRecord: string | null; ownerRecord: string | null }>();
 
@@ -95,10 +102,12 @@ class CloudSync {
     } catch { return undefined; }
   }
 
-  private markLocalSyncScope(key: string, raw: string | null, updatedAt: string, remoteFingerprint: string, displayConfirmed = true): void {
+  private markLocalSyncScope(key: string, raw: string | null, updatedAt: string, remoteFingerprint: string, displayConfirmed = true, localFingerprint?: string): void {
     const epoch = this.localEpoch(raw);
     if (epoch === undefined) throw new Error('Invalid local record');
-    localStorage.setItem(LOCAL_SYNC_SCOPE_KEY, JSON.stringify({ key, epoch, updatedAt: displayConfirmed ? updatedAt : null, remoteVersion: updatedAt, remoteFingerprint }));
+    localStorage.setItem(LOCAL_SYNC_SCOPE_KEY, JSON.stringify({ key, epoch, updatedAt: displayConfirmed ? updatedAt : null, remoteVersion: updatedAt, remoteFingerprint, confirmedLocalFingerprint: localFingerprint }));
+    this.confirmedLocalRecord = displayConfirmed && localFingerprint ? raw : undefined;
+    this.confirmedLocalFingerprint = displayConfirmed ? localFingerprint : undefined;
   }
 
   /** A display timestamp or an earlier account's history is never upload permission. */
@@ -117,7 +126,7 @@ class CloudSync {
     return false;
   }
 
-  private lastSyncAt(): string | null {
+  private acknowledgedSyncAt(): string | null {
     if (!this.config || !this.session) return null;
     const key = this.syncKey(this.config.url, this.session.user.id);
     // Returning to A after B synchronized cannot use A's historical timestamp
@@ -126,12 +135,116 @@ class CloudSync {
       const owner = JSON.parse(localStorage.getItem(LOCAL_SYNC_SCOPE_KEY) || 'null');
       const epoch = this.localEpoch(localStorage.getItem(APP_DATA_STORAGE_KEY));
       const updatedAt = localStorage.getItem(key);
-      return epoch !== undefined && owner?.key === key && owner.epoch === epoch && owner.updatedAt === updatedAt ? updatedAt : null;
+      return epoch !== undefined && owner?.key === key && owner.epoch === epoch
+        && isRemoteVersion(owner.remoteVersion) && owner.remoteVersion === updatedAt ? updatedAt : null;
     } catch { return null; }
+  }
+
+  private lastSyncAt(): string | null {
+    try {
+      const raw = localStorage.getItem(APP_DATA_STORAGE_KEY);
+      const owner = JSON.parse(localStorage.getItem(LOCAL_SYNC_SCOPE_KEY) || 'null');
+      if (raw !== this.confirmedLocalRecord || !this.confirmedLocalFingerprint
+        || owner?.confirmedLocalFingerprint !== this.confirmedLocalFingerprint
+        || owner.updatedAt !== this.lastSuccessfulSyncAt()) return null;
+      return this.acknowledgedSyncAt();
+    } catch { return null; }
+  }
+
+  private lastSuccessfulSyncAt(): string | null {
+    if (!this.config || !this.session) return null;
+    try {
+      const stamp = localStorage.getItem(this.syncKey(this.config.url, this.session.user.id));
+      return isRemoteVersion(stamp) ? stamp : null;
+    } catch { return null; }
+  }
+
+  /** Dirty display metadata is not a change to the acknowledged remote baseline. */
+  private remoteOwnerIdentity(raw: string | null): string {
+    if (raw === null) return 'absent';
+    try {
+      const owner = JSON.parse(raw);
+      if (typeof owner?.key === 'string' && (owner.epoch === null || typeof owner.epoch === 'string')
+        && isRemoteVersion(owner.remoteVersion) && typeof owner.remoteFingerprint === 'string'
+        && /^[a-f0-9]{64}$/.test(owner.remoteFingerprint)) {
+        return canonicalDocumentJson({ key: owner.key, epoch: owner.epoch, remoteVersion: owner.remoteVersion, remoteFingerprint: owner.remoteFingerprint });
+      }
+    } catch { /* An invalid marker still has an exact identity. */ }
+    return `invalid:${raw}`;
+  }
+
+  private ownerIsCurrent(raw: string | null): boolean {
+    return this.remoteOwnerIdentity(localStorage.getItem(LOCAL_SYNC_SCOPE_KEY)) === this.remoteOwnerIdentity(raw);
+  }
+
+  /** Called only after durable commit/hydration; failed provisional writes never dirty a backup. */
+  private observeCommittedRecord(): void {
+    try {
+      const raw = localStorage.getItem(APP_DATA_STORAGE_KEY);
+      const ownerRecord = localStorage.getItem(LOCAL_SYNC_SCOPE_KEY);
+      if (raw === this.confirmedLocalRecord && this.confirmedLocalFingerprint) return;
+      const previousFingerprint = this.confirmedLocalFingerprint;
+      this.confirmedLocalRecord = undefined;
+      this.confirmedLocalFingerprint = undefined;
+      if (!raw || !ownerRecord) { this.confirmationProbe = null; this.emit(); return; }
+      const owner = JSON.parse(ownerRecord);
+      const knownChanged = (previousFingerprint !== undefined && previousFingerprint === owner?.confirmedLocalFingerprint)
+        || (this.confirmationProbe !== null && this.confirmationProbe.raw !== raw && this.confirmationProbe.owner === ownerRecord);
+      if (knownChanged && owner?.updatedAt) {
+        localStorage.setItem(LOCAL_SYNC_SCOPE_KEY, JSON.stringify({ ...owner, updatedAt: null }));
+        this.confirmationProbe = null;
+        this.emit();
+        return;
+      }
+      this.emit();
+      if (!this.config || !this.session || owner?.key !== this.syncKey(this.config.url, this.session.user.id)
+        || owner.epoch !== this.localEpoch(raw) || !isRemoteVersion(owner.updatedAt)
+        || typeof owner.confirmedLocalFingerprint !== 'string') return;
+      if (this.confirmationProbe?.raw === raw && this.confirmationProbe.owner === ownerRecord) return;
+      const snapshot = createBackupSnapshot(JSON.parse(raw));
+      prepareBackupRestore(snapshot);
+      const frozen = JSON.parse(canonicalDocumentJson(snapshot));
+      const probe = { raw, owner: ownerRecord };
+      this.confirmationProbe = probe;
+      const accountIsCurrent = this.currentAccountGuard();
+      const work = remoteDocumentFingerprint(frozen).then(fingerprint => {
+        if (this.confirmationProbe !== probe || !accountIsCurrent()
+          || localStorage.getItem(APP_DATA_STORAGE_KEY) !== raw || localStorage.getItem(LOCAL_SYNC_SCOPE_KEY) !== ownerRecord) return;
+        return queueDataWrite(() => {
+        if (this.confirmationProbe !== probe) return;
+        this.confirmationProbe = null;
+        if (!accountIsCurrent() || localStorage.getItem(APP_DATA_STORAGE_KEY) !== raw
+          || localStorage.getItem(LOCAL_SYNC_SCOPE_KEY) !== ownerRecord) return;
+        if (fingerprint === owner.confirmedLocalFingerprint) {
+          this.confirmedLocalRecord = raw;
+          this.confirmedLocalFingerprint = fingerprint;
+        } else localStorage.setItem(LOCAL_SYNC_SCOPE_KEY, JSON.stringify({ ...owner, updatedAt: null }));
+        this.emit();
+        });
+      }).catch(() => {
+        try {
+          if (this.confirmationProbe !== probe || !accountIsCurrent() || localStorage.getItem(APP_DATA_STORAGE_KEY) !== raw
+            || localStorage.getItem(LOCAL_SYNC_SCOPE_KEY) !== ownerRecord) return;
+          this.confirmationProbe = null;
+          localStorage.setItem(LOCAL_SYNC_SCOPE_KEY, JSON.stringify({ ...owner, updatedAt: null }));
+          this.emit();
+        } catch { /* An unreadable record stays unconfirmed. */ }
+      }).finally(() => {
+        if (this.confirmationProbe === probe) this.confirmationProbe = null;
+        if (this.confirmationBootstrap === work) this.confirmationBootstrap = null;
+      });
+      this.confirmationBootstrap = work;
+    } catch {
+      this.confirmedLocalRecord = undefined;
+      this.confirmedLocalFingerprint = undefined;
+      this.confirmationProbe = null;
+      this.emit();
+    }
   }
 
   constructor() {
     this.config = this.readConfig();
+    subscribeDataCommitted(() => this.observeCommittedRecord());
   }
 
   private readConfig(): CloudConfig | null {
@@ -226,6 +339,11 @@ class CloudSync {
       this.authSubscription = subscription;
       this.sessionHydrated = true;
       this.error = null;
+      // Verification reads the same durable authority as app readers. Its hash
+      // and final publication happen outside/inside separate short lock phases.
+      await queueDataWrite(() => undefined);
+      await this.confirmationBootstrap;
+      if (this.config !== config || this.client !== client || this.scopeRevision !== ownedRevision) return;
     } catch (e) {
       if (this.config !== config || this.scopeRevision !== ownedRevision) return;
       this.error = (e as Error).message;
@@ -239,10 +357,13 @@ class CloudSync {
   public isSessionReady(): boolean { return !this.config || this.sessionHydrated; }
 
   public getState(): CloudState {
+    const lastSyncAt = this.lastSyncAt();
     return {
       configured: this.isConfigured(),
       session: this.session,
-      lastSyncAt: this.lastSyncAt(),
+      lastSyncAt,
+      currentDocumentConfirmed: lastSyncAt !== null,
+      lastSuccessfulSyncAt: this.lastSuccessfulSyncAt(),
       syncing: this.syncing,
       error: this.error,
       scopeRevision: this.scopeRevision,
@@ -348,8 +469,9 @@ class CloudSync {
   public async push(data: UserData): Promise<boolean> {
     const originalAccount = this.currentAccountGuard();
     try {
-    const snapshot = createBackupSnapshot(data);
-    const localRecord = localStorage.getItem(APP_DATA_STORAGE_KEY);
+    // Freeze caller-owned objects before yielding; a later render/mutation is
+    // neither the user's original payload nor permission to upload another record.
+    const supplied = JSON.parse(JSON.stringify(data)) as UserData;
     // Capture account and restore identity now: an older queued upload cannot clear a newer import.
     const userId = this.session?.user.id;
     const projectUrl = this.config?.url;
@@ -357,6 +479,24 @@ class CloudSync {
     const client = this.client;
     const restoreScope = this.restoreScope();
     const restoreToken = localStorage.getItem(restoreScope);
+    const captured = await queueDataWrite(() => {
+      if (!originalAccount() || localStorage.getItem(restoreScope) !== restoreToken) return null;
+      const localRecord = localStorage.getItem(APP_DATA_STORAGE_KEY);
+      if (!localRecord) throw new Error('Missing saved document');
+      const parsed: unknown = JSON.parse(localRecord);
+      prepareBackupRestore(parsed);
+      const authoritative = createBackupSnapshot(parsed as UserData);
+      const snapshot = createBackupSnapshot(supplied);
+      prepareBackupRestore(authoritative);
+      prepareBackupRestore(snapshot);
+      const payloadJson = canonicalDocumentJson(snapshot);
+      if (payloadJson !== canonicalDocumentJson(authoritative)) {
+        this.pauseUpload('cloudUploadUnconfirmed'); this.emit(); return null;
+      }
+      return { snapshot: JSON.parse(payloadJson) as UserData, localRecord };
+    });
+    if (!captured || !originalAccount()) return false;
+    const { snapshot, localRecord } = captured;
     const run = async () => {
       if (!userId || !projectUrl || this.session?.user.id !== userId || this.config?.url !== projectUrl
         || this.scopeRevision !== revision || this.client !== client || localStorage.getItem(APP_DATA_STORAGE_KEY) !== localRecord) return false;
@@ -377,7 +517,7 @@ class CloudSync {
     const currentScope = () => this.client === client && this.session?.user.id === userId
       && this.config?.url === projectUrl && this.scopeRevision === revision;
     const currentRecord = () => currentScope() && localStorage.getItem(APP_DATA_STORAGE_KEY) === localRecord
-      && localStorage.getItem(restoreScope) === restoreToken && localStorage.getItem(LOCAL_SYNC_SCOPE_KEY) === ownerRecord;
+      && localStorage.getItem(restoreScope) === restoreToken && this.ownerIsCurrent(ownerRecord);
     if (!client || !currentRecord()) return false;
     this.syncing = true;
     this.error = null;
@@ -415,7 +555,7 @@ class CloudSync {
         if (!currentRecord()) return false;
         result = await client.from(TABLE).insert({ user_id: userId, data, updated_at: nextRemoteVersion() }).select('data, updated_at');
       }
-      if (!currentScope() || localStorage.getItem(LOCAL_SYNC_SCOPE_KEY) !== ownerRecord || localStorage.getItem(restoreScope) !== restoreToken) return false;
+      if (!currentScope() || !this.ownerIsCurrent(ownerRecord) || localStorage.getItem(restoreScope) !== restoreToken) return false;
       if (result.error) return currentRecord() ? this.pauseUpload(result.error.code === '23505' ? 'cloudUploadConflict' : 'cloudUploadUnconfirmed') : false;
       if (!Array.isArray(result.data) || result.data.length !== 1) return currentRecord() ? this.pauseUpload('cloudUploadConflict') : false;
       const written = result.data[0];
@@ -424,18 +564,24 @@ class CloudSync {
         || (previousVersion !== undefined && Date.parse(written.updated_at) <= Date.parse(previousVersion))) return currentRecord() ? this.pauseUpload('cloudUploadUnconfirmed') : false;
       prepareBackupRestore(written.data);
       const fingerprint = await remoteDocumentFingerprint(written.data);
-      if (!currentScope() || localStorage.getItem(LOCAL_SYNC_SCOPE_KEY) !== ownerRecord) return false;
+      if (!currentScope() || !this.ownerIsCurrent(ownerRecord)) return false;
       if (fingerprint !== payloadFingerprint) return currentRecord() ? this.pauseUpload('cloudUploadUnconfirmed') : false;
-      const currentRaw = localStorage.getItem(APP_DATA_STORAGE_KEY);
       // A later ordinary save still shares this dataset's acknowledged cloud
       // baseline, so its queued conditional upload can continue. A replacement
       // or newer import cannot inherit that permission or lose its barrier.
-      if (this.localEpoch(currentRaw) !== this.localEpoch(localRecord) || localStorage.getItem(restoreScope) !== restoreToken) return false;
-      const updatedAt = written.updated_at;
-      localStorage.setItem(key, updatedAt);
-      this.markLocalSyncScope(key, currentRaw, updatedAt, fingerprint, currentRaw === localRecord);
-      if (restoreToken && localStorage.getItem(restoreScope) === restoreToken) localStorage.removeItem(restoreScope);
-      return true;
+      return await queueDataWrite(() => {
+        const currentRaw = localStorage.getItem(APP_DATA_STORAGE_KEY);
+        if (!currentScope() || !this.ownerIsCurrent(ownerRecord)
+          || this.localEpoch(currentRaw) !== this.localEpoch(localRecord)
+          || localStorage.getItem(restoreScope) !== restoreToken) return false;
+        const currentSnapshot = currentRaw ? createBackupSnapshot(JSON.parse(currentRaw)) : null;
+        const displayConfirmed = currentSnapshot !== null && canonicalDocumentJson(currentSnapshot) === canonicalDocumentJson(data);
+        const updatedAt = written.updated_at;
+        localStorage.setItem(key, updatedAt);
+        this.markLocalSyncScope(key, currentRaw, updatedAt, fingerprint, displayConfirmed, payloadFingerprint);
+        if (restoreToken && localStorage.getItem(restoreScope) === restoreToken) localStorage.removeItem(restoreScope);
+        return true;
+      });
     } catch {
       try { if (currentRecord()) this.pauseUpload(failureCopy); } catch { /* A newer or unreadable device record is not this operation's status. */ }
       return false;
@@ -476,7 +622,7 @@ class CloudSync {
       const remoteTs = new Date(data.updated_at).getTime();
       // An unsynchronized device profile may belong to another account. Its opening
       // date and a legacy global sync date cannot establish this account's freshness.
-      const synchronizedAt = this.lastSyncAt();
+      const synchronizedAt = this.acknowledgedSyncAt();
       const localTs = local && synchronizedAt ? new Date(synchronizedAt).getTime() : 0;
       const fingerprint = await remoteDocumentFingerprint(remote);
       if (!currentScope()) return null;
@@ -505,27 +651,45 @@ class CloudSync {
       // after the async commit, while its own projection already contains new data.
       const localRecord = originalRecord === undefined ? localStorage.getItem(APP_DATA_STORAGE_KEY) : originalRecord;
       return !localStorage.getItem(pending.restoreScope) && localRecord === pending.localRecord
-        && localStorage.getItem(LOCAL_SYNC_SCOPE_KEY) === pending.ownerRecord;
+        && this.ownerIsCurrent(pending.ownerRecord);
     } catch { return false; }
   }
 
   /** A preview or cancelled restore is not a sync; record the timestamp only after the local commit. */
-  public markRemoteApplied(data: UserData): boolean {
+  public async markRemoteApplied(data: UserData): Promise<boolean> {
     const pending = this.pendingPulls.get(data);
     if (!pending || pending.userId !== this.session?.user.id || pending.projectUrl !== this.config?.url
       || pending.client !== this.client || pending.revision !== this.scopeRevision) return false;
     let confirmed = false;
+    let statusChanged = false;
+    const accountIsCurrent = this.currentAccountGuard();
+    let raw: string | undefined;
     try {
-      if (localStorage.getItem(pending.restoreScope) || localStorage.getItem(APP_DATA_STORAGE_KEY) !== JSON.stringify(data)
-        || localStorage.getItem(LOCAL_SYNC_SCOPE_KEY) !== pending.ownerRecord) return false;
-      const key = this.syncKey(pending.projectUrl, pending.userId);
-      localStorage.setItem(key, pending.updatedAt);
-      this.markLocalSyncScope(key, localStorage.getItem(APP_DATA_STORAGE_KEY), pending.updatedAt, pending.remoteFingerprint);
-      this.error = null;
-      confirmed = true;
-    } catch { this.pauseUpload('cloudUploadUnconfirmed'); /* The personal record is already committed. */ }
+      raw = JSON.stringify(data);
+      if (localStorage.getItem(pending.restoreScope) || localStorage.getItem(APP_DATA_STORAGE_KEY) !== raw
+        || !this.ownerIsCurrent(pending.ownerRecord)) return false;
+      const localFingerprint = await remoteDocumentFingerprint(createBackupSnapshot(data));
+      if (!accountIsCurrent() || localStorage.getItem(pending.restoreScope)
+        || localStorage.getItem(APP_DATA_STORAGE_KEY) !== raw || !this.ownerIsCurrent(pending.ownerRecord)) return false;
+      confirmed = await queueDataWrite(() => {
+        if (!accountIsCurrent() || localStorage.getItem(pending.restoreScope)
+          || localStorage.getItem(APP_DATA_STORAGE_KEY) !== raw || !this.ownerIsCurrent(pending.ownerRecord)) return false;
+        const key = this.syncKey(pending.projectUrl, pending.userId);
+        localStorage.setItem(key, pending.updatedAt);
+        this.markLocalSyncScope(key, raw, pending.updatedAt, pending.remoteFingerprint, true, localFingerprint);
+        this.error = null;
+        return true;
+      });
+    } catch {
+      try {
+        if (accountIsCurrent() && raw !== undefined && localStorage.getItem(APP_DATA_STORAGE_KEY) === raw
+          && this.ownerIsCurrent(pending.ownerRecord) && !localStorage.getItem(pending.restoreScope)) {
+          this.pauseUpload('cloudUploadUnconfirmed'); statusChanged = true;
+        }
+      } catch { /* An obsolete or unreadable record cannot publish backup status. */ }
+    }
     this.pendingPulls.delete(data);
-    this.emit();
+    if (accountIsCurrent() && (confirmed || statusChanged)) this.emit();
     return confirmed;
   }
 }

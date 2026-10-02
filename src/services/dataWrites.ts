@@ -7,6 +7,7 @@ let afterCommit: Array<() => void> | null = null;
 let commitValidations: Array<() => boolean> | null = null;
 let committedSnapshot: RecordSnapshot | undefined;
 const recoveryListeners = new Set<() => void>();
+const committedListeners = new Set<() => void>();
 const DATABASE_NAME = 'oda_personal_record_v1';
 const STORE_NAME = 'record';
 const RECORD_KEY = 'current';
@@ -163,6 +164,12 @@ export function subscribeDataWriteRecovery(listener: () => void): () => void {
   return () => { recoveryListeners.delete(listener); };
 }
 
+/** Observes durable writes and authoritative hydration, independently of cloud scheduling. */
+export function subscribeDataCommitted(listener: () => void): () => void {
+  committedListeners.add(listener);
+  return () => { committedListeners.delete(listener); };
+}
+
 function notifyRecovery(): void {
   for (const listener of recoveryListeners) {
     try { listener(); } catch { /* A subscriber cannot replace the storage failure. */ }
@@ -225,6 +232,9 @@ async function runOperation<T>(operation: () => Promise<T> | T): Promise<T> {
     }
     afterCommit = null;
     commitValidations = null;
+    for (const listener of committedListeners) {
+      try { listener(); } catch { /* Backup status cannot turn a durable save into a failure. */ }
+    }
     // Keep the cross-tab lock until publication/reset is complete. Consumer
     // refresh errors cannot turn an already durable write into a failed save.
     for (const callback of callbacks) {

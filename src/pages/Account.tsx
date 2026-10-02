@@ -108,7 +108,7 @@ export const Account: React.FC = () => {
     showToast(res.ok ? t('Your account and cloud backup are deleted. What is on this device stays until you reset it in Settings.') : (res.message ?? t('We couldn’t delete your account. Check your connection and try again.')), res.ok ? 'success' : 'error');
   };
 
-  const cloudConfirmed = !!cloud.session && !!cloud.lastSyncAt && !cloud.error;
+  const cloudConfirmed = !!cloud.session && cloud.currentDocumentConfirmed && !cloud.error;
   const header = (
     <header className="space-y-2">
       {native && <button type="button" onClick={() => setActiveRoute('/app/settings')} className="min-h-11 text-[14px] text-[var(--fg-muted)] underline underline-offset-4">{copy.back}</button>}
@@ -147,8 +147,8 @@ export const Account: React.FC = () => {
             </div>
           </div>
           <div className="oda-rule" />
-          {(cloud.syncing || cloud.lastSyncAt) && <p className="text-[14px] text-[var(--fg-muted)]">
-            {cloud.syncing ? t('Syncing…') : t('Last synced {date}', { date: formatDate(cloud.lastSyncAt!, { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }) })}
+          {(cloud.syncing || cloud.lastSuccessfulSyncAt) && <p className="text-[14px] text-[var(--fg-muted)]">
+            {cloud.syncing ? t('Syncing…') : t('Last synced {date}', { date: formatDate(cloud.lastSuccessfulSyncAt!, { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }) })}
           </p>}
           {cloud.error && <p role="alert" className="text-[13px] text-[var(--danger)]">{cloud.error}</p>}
           <div className="flex flex-wrap gap-2">

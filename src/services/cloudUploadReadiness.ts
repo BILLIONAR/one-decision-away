@@ -6,11 +6,16 @@ function canonicalJson(value: unknown): string {
   return `{${Object.keys(record).sort().map(key => `${JSON.stringify(key)}:${canonicalJson(record[key])}`).join(',')}}`;
 }
 
-/** A missing digest capability pauses backup; there is no weaker fallback. */
-export async function remoteDocumentFingerprint(value: unknown): Promise<string> {
+/** Freeze JSON serialization semantics and compare object keys without reordering arrays. */
+export function canonicalDocumentJson(value: unknown): string {
   const json = JSON.stringify(value);
   if (json === undefined) throw new Error('Invalid cloud document');
-  const bytes = new TextEncoder().encode(canonicalJson(JSON.parse(json)));
+  return canonicalJson(JSON.parse(json));
+}
+
+/** A missing digest capability pauses backup; there is no weaker fallback. */
+export async function remoteDocumentFingerprint(value: unknown): Promise<string> {
+  const bytes = new TextEncoder().encode(canonicalDocumentJson(value));
   const digest = await globalThis.crypto.subtle.digest('SHA-256', bytes);
   return Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, '0')).join('');
 }

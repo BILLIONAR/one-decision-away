@@ -88,7 +88,7 @@ for (const [name, mutate] of mutations) test(`a reviewed cloud restore is checke
   const previous = new Map(storage.values);
   release.resolve(); await lock;
   assert.equal(await replacement, false);
-  cloudSync.markRemoteApplied(reviewed);
+  await cloudSync.markRemoteApplied(reviewed);
   assert.equal(storage.getItem('oda_cloud_last_sync'), null);
   assert.deepEqual(storage.values, previous);
 });
@@ -99,7 +99,7 @@ test('an unchanged reviewed cloud record commits once and records its scoped syn
   await fixture.started.promise; fixture.respond();
   const reviewed = (await pending)!;
   assert.equal(await new LocalDemoRepository().replaceAll(reviewed, originalRecord => cloudSync.canApplyRemote(reviewed, originalRecord)), true);
-  cloudSync.markRemoteApplied(reviewed);
+  await cloudSync.markRemoteApplied(reviewed);
   assert.equal(JSON.parse(storage.getItem(APP_DATA_STORAGE_KEY)!).profile.displayName, fixture.remote.profile.displayName);
   assert.equal(cloudSync.getState().lastSyncAt, '2030-01-01T00:00:00Z');
 });
@@ -143,11 +143,12 @@ for (const error of [null, new Error('Account A upload failed')]) test(`an old u
   try {
     const pending = cloudSync.push(fixture.local);
     await started.promise;
-    assert.equal(notifications, 1);
+    assert.ok(notifications >= 1); // Capture/dirty status can publish before the provider write.
+    const beforeScopeChange = notifications;
     Object.assign(internal, { session: session('account-b'), config: config('https://project-b.example'), syncing: true, error: 'Current account status' });
     upload.resolve({ error });
     assert.equal(await pending, false);
-    assert.equal(notifications, 1);
+    assert.equal(notifications, beforeScopeChange, 'the obsolete completion must emit no new-scope status');
     assert.equal(cloudSync.getState().error, 'Current account status');
     assert.equal(cloudSync.getState().syncing, true);
     assert.equal(storage.getItem('oda_cloud_last_sync'), null);

@@ -19,7 +19,7 @@ const { BackupAndCloudSettings } = await import('../src/components/BackupAndClou
 const { Account } = await import('../src/pages/Account');
 css.deregister();
 
-const cloud: CloudState = { configured: true, session: null, lastSyncAt: null, syncing: false, error: null, scopeRevision: 0 };
+const cloud: CloudState = { configured: true, session: null, lastSyncAt: null, currentDocumentConfirmed: false, lastSuccessfulSyncAt: null, syncing: false, error: null, scopeRevision: 0 };
 function render(component: React.FC, native: boolean, state = cloud) {
   const previous = { native: Capacitor.isNativePlatform, state: cloudSync.getState, config: cloudSync.getConfig };
   Capacitor.isNativePlatform = () => native;

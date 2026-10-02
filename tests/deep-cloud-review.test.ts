@@ -245,7 +245,7 @@ test('returning to an earlier account cannot reuse its timestamp for another acc
   const remoteB = await cloudSync.pullIfNewer(recordA);
   assert.ok(remoteB);
   assert.equal(await new LocalDemoRepository().replaceAll(remoteB, originalRecord => cloudSync.canApplyRemote(remoteB, originalRecord)), true);
-  cloudSync.markRemoteApplied(remoteB);
+  await cloudSync.markRemoteApplied(remoteB);
   internal.setSession(session('A'));
   const remoteA = await cloudSync.pullIfNewer(remoteB);
   assert.equal(remoteA?.profile.displayName, recordA.profile.displayName);

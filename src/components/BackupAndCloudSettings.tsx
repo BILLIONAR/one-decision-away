@@ -210,7 +210,7 @@ export const BackupAndCloudSettings: React.FC = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div className="text-[14px] text-[var(--fg-muted)]">
               {t('Signed in as')} <span className="text-[var(--fg)] font-medium">{cloud.session.user.email}</span>.
-              {cloud.lastSyncAt && <> {t('Last sync {time}.', { time: new Date(cloud.lastSyncAt).toLocaleString() })}</>}
+              {cloud.lastSuccessfulSyncAt && <> {t('Last sync {time}.', { time: new Date(cloud.lastSuccessfulSyncAt).toLocaleString() })}</>}
               {cloud.error && <span className="text-[var(--danger)]"> {cloud.error}</span>}
             </div>
             <div className="flex flex-wrap gap-2">

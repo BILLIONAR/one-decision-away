@@ -240,7 +240,9 @@ test('same-version remote content changed at the fresh read cannot authorize ove
   const data = savedData(); data.profile.displayName = 'New local writing'; storeData(data);
   const raw = storage.getItem(APP_DATA_STORAGE_KEY)!;
   assert.equal(await cloudSync.push(data), false);
-  assertHeld(f, raw, changed); assert.deepEqual(owner(), acknowledged);
+  assertHeld(f, raw, changed); assert.deepEqual(owner(), { ...acknowledged, updatedAt: null });
+  assert.equal(cloudSync.getState().currentDocumentConfirmed, false);
+  assert.equal(cloudSync.getState().lastSuccessfulSyncAt, acknowledged.remoteVersion);
 });
 
 test('canonical acknowledgement treats reordered object keys as equal, but retains array order', async () => {
@@ -309,7 +311,7 @@ test('a legacy timestamp-only acknowledgement cannot authorize an existing-row u
 test('previewing or declining a cloud restore creates no acknowledgement and later saves remain held', async () => {
   const remote = row(); const f = fixture(remote); const raw = storage.getItem(APP_DATA_STORAGE_KEY)!;
   const preview = await forReview(savedData()); assert.ok(preview);
-  cloudSync.markRemoteApplied(preview); // A caller cannot acknowledge before commit.
+  await cloudSync.markRemoteApplied(preview); // A caller cannot acknowledge before commit.
   assertNoAcknowledgement();
   assert.equal(await cloudSync.push(savedData()), false);
   assertHeld(f, raw, remote); assertNoAcknowledgement();
@@ -470,7 +472,9 @@ test('a represented conditional write that fails to advance its version cannot b
     f.rows.set('A', represented); return { data: [represented], error: null };
   };
   assert.equal(await cloudSync.push(savedData()), false);
-  assert.deepEqual(owner(), acknowledged); assert.ok(cloudSync.getState().error);
+  assert.deepEqual(owner(), { ...acknowledged, updatedAt: null }); assert.ok(cloudSync.getState().error);
+  assert.equal(cloudSync.getState().currentDocumentConfirmed, false);
+  assert.equal(cloudSync.getState().lastSuccessfulSyncAt, acknowledged.remoteVersion);
 });
 
 test('an absent-row insert is not attempted when payload hashing is unavailable', async () => {

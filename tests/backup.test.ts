@@ -257,7 +257,7 @@ test('cloud previews do not change last-sync or local data until the reviewed re
     assert.ok(retry); // declining never makes the remote copy disappear on retry
     assert.deepEqual(storage.values, original);
     await new LocalDemoRepository().replaceAll(retry!);
-    cloudSync.markRemoteApplied(retry!);
+    await cloudSync.markRemoteApplied(retry!);
     assert.equal(cloudSync.getState().lastSyncAt, '2030-01-01T00:00:00Z');
     assert.equal(await cloudSync.pullIfNewer(await new LocalDemoRepository().load()), null);
     assert.deepEqual(readCourseProgress(), progress());
