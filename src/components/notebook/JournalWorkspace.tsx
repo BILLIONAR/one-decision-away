@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { CalendarDays, Plus, Search, Trash2, X } from 'lucide-react';
 import { useApp } from '../../store/useApp';
 import { N_, useT } from '../../i18n';
@@ -7,6 +7,7 @@ import type { DreamJournalEntry, NotebookMood } from '../../types/models';
 import { NotebookCalendar } from './NotebookCalendar';
 import { TodaysPrompt } from './TodaysPrompt';
 import { ActionNotice, dateLabel, quietButton, smallLabel, cardCls, NButton, NField, NInput, NSelect, NTextarea, useNotebookAction, useSessionDraft } from './shared';
+import { useDialogAccessibility } from '../../utils/useDialogAccessibility';
 
 const MOODS = [
   ['joyful', N_('Joyful')], ['calm', N_('Calm')], ['grateful', N_('Grateful')],
@@ -44,7 +45,11 @@ export const JournalWorkspace: React.FC<{ today: string }> = ({ today }) => {
   const [showCalendar, setShowCalendar] = useState(true);
   const [validation, setValidation] = useState(false);
   const [photoOpen, setPhotoOpen] = useState(false);
-  const photoDialog = useRef<HTMLDialogElement>(null);
+  const nativePhotoDialog = typeof window !== 'undefined' && typeof window.HTMLDialogElement !== 'undefined'
+    && typeof window.HTMLDialogElement.prototype.showModal === 'function'
+    && typeof window.HTMLDialogElement.prototype.close === 'function';
+  const photoDialog = useDialogAccessibility(photoOpen, () => setPhotoOpen(false), nativePhotoDialog);
+  const PhotoDialogRoot = nativePhotoDialog ? 'dialog' : 'div';
   const displayText = (entry: NotebookDisplayEntry, field: 'title' | 'content' | 'dreamName') => {
     const value = entry[field] || '';
     return entry.source === 'dream' && SEED_TEXT[entry.id]?.[field] === value ? t(value) : value;
@@ -59,10 +64,6 @@ export const JournalWorkspace: React.FC<{ today: string }> = ({ today }) => {
     window.addEventListener('beforeunload', warn);
     return () => window.removeEventListener('beforeunload', warn);
   }, [dirty]);
-  useEffect(() => {
-    if (photoOpen) photoDialog.current?.showModal();
-    else photoDialog.current?.close();
-  }, [photoOpen]);
 
   if (!data) return null;
   const reset = () => { setEditing(null); setTitle(''); setContent(''); setMood(''); setBaseline('\u0000\u0000'); setValidation(false); };
@@ -135,9 +136,11 @@ export const JournalWorkspace: React.FC<{ today: string }> = ({ today }) => {
         {(entry.photoDataUrl || entry.mood) && <span className="flex flex-wrap items-center gap-2 mt-2">{entry.photoDataUrl && <img src={entry.photoDataUrl} alt="" className="w-10 h-10 object-cover rounded-[var(--radius-xs)]" loading="lazy" />}{entry.mood && <span className="text-xs text-[var(--fg-muted)]">{t(moodLabel(entry.mood))}</span>}</span>}
       </button>)}</div>}
     </section>
-    <dialog ref={photoDialog} aria-label={t('Journal photo')} onClose={() => setPhotoOpen(false)} onClick={e => { if (e.target === e.currentTarget) setPhotoOpen(false); }} className="m-auto max-w-[95vw] max-h-[95vh] p-4 bg-[var(--bg)] text-[var(--fg)] rounded-[var(--radius-md)] backdrop:bg-black/85">
+    {photoOpen && <div className={nativePhotoDialog ? undefined : 'fixed inset-0 z-50 flex items-center justify-center'} style={nativePhotoDialog ? undefined : { backgroundColor: 'rgb(0 0 0 / .85)' }} onClick={e => { if (e.target === e.currentTarget) setPhotoOpen(false); }}>
+    <PhotoDialogRoot ref={element => { photoDialog.ref.current = element; }} role={nativePhotoDialog ? undefined : 'dialog'} aria-modal={nativePhotoDialog ? undefined : true} tabIndex={-1} aria-label={t('Journal photo')} onKeyDown={photoDialog.onKeyDown} onCancel={e => { e.preventDefault(); setPhotoOpen(false); }} onClose={() => setPhotoOpen(false)} onClick={e => { if (nativePhotoDialog && e.target === e.currentTarget) setPhotoOpen(false); }} className="m-auto max-w-[95vw] max-h-[95vh] p-4 bg-[var(--bg)] text-[var(--fg)] rounded-[var(--radius-md)] backdrop:bg-black/85">
       <div className="flex justify-end mb-2"><button autoFocus type="button" aria-label={t('Close photo')} onClick={() => setPhotoOpen(false)} className="w-11 h-11 flex items-center justify-center text-[var(--fg-muted)] cursor-pointer"><X className="w-5 h-5" strokeWidth={1.8} /></button></div>
       {editing?.photoDataUrl && <img src={editing.photoDataUrl} alt={t('Journal photo')} className="max-w-full max-h-[78vh] object-contain" />}
-    </dialog>
+    </PhotoDialogRoot>
+    </div>}
   </div>;
 };

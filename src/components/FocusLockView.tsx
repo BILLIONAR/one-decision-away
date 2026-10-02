@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useId } from 'react';
 import { useApp } from '../store/useApp';
 import {
   Play,
@@ -20,6 +20,7 @@ import { voiceGuide } from '../utils/voiceGuide';
 import { getGuidedMeditation, INTENT_LABELS } from '../data/guidedMeditations';
 import { useT, useLocale } from '../i18n';
 import { guidanceCopy } from '../i18n/guidance';
+import { useDialogAccessibility } from '../utils/useDialogAccessibility';
 
 /* Inverted monochrome palette: the lock screen paints with --fg as the surface and --bg as the ink. */
 const INK = 'text-[var(--bg)]';
@@ -57,7 +58,11 @@ export const FocusLockView: React.FC = () => {
 
   const [distractionInput, setDistractionInput] = useState('');
   const [showAbortModal, setShowAbortModal] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(() => typeof document !== 'undefined' && Boolean(document.fullscreenElement));
+  const fullscreenSupported = typeof document !== 'undefined' && typeof document.documentElement.requestFullscreen === 'function'
+    && typeof document.exitFullscreen === 'function' && document.fullscreenEnabled !== false;
+  const abortTitleId = useId();
+  const abortDialog = useDialogAccessibility(showAbortModal, () => setShowAbortModal(false));
   const [showBreathingGuide, setShowBreathingGuide] = useState(false);
   const [breathingPhase, setBreathingPhase] = useState<'inhale' | 'hold1' | 'exhale' | 'hold2'>('inhale');
   const [bowlRang, setBowlRang] = useState(false);
@@ -71,6 +76,11 @@ export const FocusLockView: React.FC = () => {
   useEffect(() => voiceGuide.onSpeakingChange(setIsSpeaking), []);
   useEffect(() => voiceGuide.onAvailabilityChange(setVoiceSupported), []);
   useEffect(() => voiceGuide.onPlaybackModeChange(setVoiceMode), []);
+  useEffect(() => {
+    const syncFullscreen = () => setIsFullscreen(Boolean(document.fullscreenElement));
+    document.addEventListener('fullscreenchange', syncFullscreen);
+    return () => document.removeEventListener('fullscreenchange', syncFullscreen);
+  }, []);
 
   const [completedSummary, setCompletedSummary] = useState('');
   const [resistanceNoticed, setResistanceNoticed] = useState('');
@@ -149,13 +159,17 @@ export const FocusLockView: React.FC = () => {
     setDistractionInput('');
   };
 
-  const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(() => {});
-      setIsFullscreen(true);
-    } else {
-      document.exitFullscreen().catch(() => {});
-      setIsFullscreen(false);
+  const toggleFullscreen = async () => {
+    try {
+      if (document.fullscreenElement) {
+        if (typeof document.exitFullscreen === 'function') await document.exitFullscreen();
+      } else if (fullscreenSupported) {
+        await document.documentElement.requestFullscreen();
+      }
+    } catch {
+      // A denied request leaves the timer usable and the label reflects actual state.
+    } finally {
+      setIsFullscreen(Boolean(document.fullscreenElement));
     }
   };
 
@@ -240,6 +254,7 @@ export const FocusLockView: React.FC = () => {
           <button
             type="button"
             onClick={toggleFullscreen}
+            disabled={!fullscreenSupported && !isFullscreen}
             title={isFullscreen ? t('Exit fullscreen') : t('Fullscreen')}
             aria-label={isFullscreen ? t('Exit fullscreen') : t('Fullscreen')}
             className={iconBtn}
@@ -511,8 +526,8 @@ export const FocusLockView: React.FC = () => {
 
       {showAbortModal && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-end sm:items-center justify-center p-4" onClick={() => setShowAbortModal(false)}>
-          <div className="w-full max-w-md bg-[var(--bg)] text-[var(--fg)] rounded-[var(--radius-lg)] p-5 space-y-4" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-lg font-semibold tracking-tight">{t('End early?')}</h3>
+          <div ref={element => { abortDialog.ref.current = element; }} role="dialog" aria-modal="true" aria-labelledby={abortTitleId} tabIndex={-1} onKeyDown={abortDialog.onKeyDown} className="w-full max-w-md bg-[var(--bg)] text-[var(--fg)] rounded-[var(--radius-lg)] p-5 space-y-4" onClick={(e) => e.stopPropagation()}>
+            <h3 id={abortTitleId} className="text-lg font-semibold tracking-tight">{t('End early?')}</h3>
             <p className="text-sm text-[var(--fg-muted)] leading-relaxed">
               {t('You have done {n} minutes. Ending now will not log a completion.', { n: Math.round(elapsedSeconds / 60) })}
             </p>
