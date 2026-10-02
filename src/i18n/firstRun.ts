@@ -7,6 +7,14 @@ const en = {
   privacy: 'Your space starts on this device. Export a backup to keep your notes safe.',
   help: 'Help and support',
   alreadyKept: 'This decision is already kept. Your evidence is saved.',
+  previewLabel: 'Preview · sample only',
+  previewHelp: 'A fast-forwarded example. It does not save a kept decision or earn Dream Dollars.',
+  previewStart: 'Preview the two-minute start',
+  previewFastForward: 'Preview: the two-minute step is fast-forwarded here.',
+  previewKept: 'Preview a kept decision',
+  previewTree: 'Preview tree: an example leaf',
+  previewProof: 'This is an example leaf. Your first real leaf appears after you keep a decision.',
+  optionalPlan: 'Plan for obstacles · optional',
 };
 const tr: typeof en = {
   resumed: 'Kurulumun bu cihazda kaydedildi. Kaldığın yerden devam et.',
@@ -17,6 +25,14 @@ const tr: typeof en = {
   privacy: 'Alanı bu cihazda başlar. Notlarını korumak için yedek dışa aktar.',
   help: 'Yardım ve destek',
   alreadyKept: 'Bu karar zaten tamamlandı. Kanıtın kayıtlı.',
+  previewLabel: 'Önizleme · yalnızca örnek',
+  previewHelp: 'Hızlandırılmış bir örnek. Tutulan bir karar kaydetmez ve Hayal Doları kazandırmaz.',
+  previewStart: 'İki dakikalık başlangıcı önizle',
+  previewFastForward: 'Önizleme: iki dakikalık adım burada hızlandırılır.',
+  previewKept: 'Tutulan bir kararı önizle',
+  previewTree: 'Önizleme ağacı: örnek bir yaprak',
+  previewProof: 'Bu örnek bir yaprak. İlk gerçek yaprağın, bir kararını tuttuktan sonra görünür.',
+  optionalPlan: 'Engelleri planla · isteğe bağlı',
 };
 const es: typeof en = {
   resumed: 'Tu configuración se guardó en este dispositivo. Continúa donde lo dejaste.',
@@ -27,5 +43,13 @@ const es: typeof en = {
   privacy: 'Tu espacio empieza en este dispositivo. Exporta una copia para proteger tus notas.',
   help: 'Ayuda y soporte',
   alreadyKept: 'Esta decisión ya está cumplida. Tu evidencia está guardada.',
+  previewLabel: 'Vista previa · solo un ejemplo',
+  previewHelp: 'Un ejemplo acelerado. No guarda una decisión cumplida ni da Dream Dollars.',
+  previewStart: 'Ver el inicio de dos minutos',
+  previewFastForward: 'Vista previa: aquí se acelera el paso de dos minutos.',
+  previewKept: 'Ver una decisión cumplida de ejemplo',
+  previewTree: 'Árbol de ejemplo: una hoja de muestra',
+  previewProof: 'Esta es una hoja de ejemplo. Tu primera hoja real aparece cuando cumples una decisión.',
+  optionalPlan: 'Planificar obstáculos · opcional',
 };
 export const firstRunCopy = (locale: string) => locale === 'tr' ? tr : locale === 'es' ? es : en;

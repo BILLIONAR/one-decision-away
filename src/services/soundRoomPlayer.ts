@@ -71,10 +71,10 @@ function followSynth() {
       return;
     }
     if (soundSynthesizer.isFadingOut()) return;
-    if (!state.playing || current !== state.track) {
-      // Another screen (Focus) started a sound: show it, without a timer.
-      set({ track: current, playing: true, sleep: false, endsAt: null, pausedRemainingMs: null });
-    }
+    // A non-silent external emission starts a new graph, even for the same track.
+    // The external controller owns that session; do not retain a Sound Room
+    // countdown or selected timer after the engine has replaced its envelope.
+    set({ track: current, playing: true, sleep: false, timerMinutes: null, endsAt: null, pausedRemainingMs: null });
   });
   const current = soundSynthesizer.getCurrentTrack();
   if (current !== 'silence' && !soundSynthesizer.hasFadeOutScheduled()) {

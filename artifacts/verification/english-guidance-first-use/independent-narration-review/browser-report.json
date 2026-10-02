@@ -1,0 +1,70 @@
+{
+  "at": "2026-10-02T00:39:05.890Z",
+  "base": "http://127.0.0.1:4182/one-decision-away/",
+  "kind": "Disposable Chromium context, actual AudioContext/SW on normal HTTP localhost; no real-device or auditory validation",
+  "checks": [
+    "Fresh installed service worker excludes narration asset bytes from shell cache",
+    "Back/Forward retains active global session without stopping or duplicating current recorded cue",
+    "Playback caches only requested current/upcoming clips in narration-owned cache"
+  ],
+  "errors": [],
+  "blockedExternal": [],
+  "requests": [
+    "http://127.0.0.1:4182/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+    "http://127.0.0.1:4182/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+    "http://127.0.0.1:4182/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-01.en-US.v1.mp3",
+    "http://127.0.0.1:4182/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-02.en-US.v1.mp3"
+  ],
+  "browser": "151.0.7922.173",
+  "serviceWorker": {
+    "controlled": true,
+    "script": "http://127.0.0.1:4182/one-decision-away/sw.js"
+  },
+  "cachesAfterRawFetch": [
+    {
+      "name": "oda:%2Fone-decision-away%2F:v6",
+      "narration": [],
+      "entries": 19
+    }
+  ],
+  "history": {
+    "before": {
+      "cue": {
+        "id": 1,
+        "duration": 6.5,
+        "channels": 1,
+        "time": 3524.800000000745
+      },
+      "starts": 1,
+      "stops": []
+    },
+    "after": {
+      "starts": [
+        {
+          "id": 1,
+          "duration": 6.5,
+          "channels": 1,
+          "time": 3524.800000000745
+        }
+      ],
+      "stops": []
+    }
+  },
+  "cachesAfterSession": [
+    {
+      "name": "oda:%2Fone-decision-away%2F:v6",
+      "narration": [],
+      "entries": 21
+    },
+    {
+      "name": "oda-narration:%2Fone-decision-away%2F:en-US:v1",
+      "narration": [
+        "http://127.0.0.1:4182/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+        "http://127.0.0.1:4182/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-02.en-US.v1.mp3",
+        "http://127.0.0.1:4182/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-01.en-US.v1.mp3"
+      ],
+      "entries": 3
+    }
+  ],
+  "status": "passed"
+}

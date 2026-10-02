@@ -11,6 +11,9 @@
 import { useSyncExternalStore } from 'react';
 import { isNative } from './native';
 import { tierAtLeast, type PaidTier, type Tier } from './entitlements';
+import type { PurchasesPlugin } from '@revenuecat/purchases-capacitor';
+import { purchaseErrorResult, trialEligibilityOf, type PurchaseResult, type RestoreResult, type TrialEligibility } from './purchaseStatus';
+export type { PurchaseResult, RestoreResult, TrialEligibility } from './purchaseStatus';
 
 export const PRO_ENTITLEMENT = 'pro';
 /** RevenueCat entitlement identifier per paid level. */
@@ -44,6 +47,8 @@ export type ProductPrice = {
   /** Localised price per month (annual products only). */
   perMonth: string | null;
   trialDays: number | null;
+  /** A free intro price alone does not establish this customer's eligibility. */
+  trialEligibility: TrialEligibility;
 };
 export type PurchasesState = {
   /** Subscriptions can be bought here (iPhone app with purchases configured). */
@@ -60,8 +65,6 @@ export type PurchasesState = {
   products: Partial<Record<ProductId, ProductPrice>>;
   error: string | null;
 };
-
-export type PurchaseResult = 'purchased' | 'cancelled' | 'failed';
 
 const apiKey = (): string => (import.meta.env?.VITE_REVENUECAT_IOS_KEY as string | undefined)?.trim() ?? '';
 
@@ -82,36 +85,64 @@ export function annualSavingPercent(monthly: number | null | undefined, annual: 
 }
 
 /** Trial length in days from an intro offer, when it is free. */
-export function trialDaysOf(intro: { price: number; periodUnit: string; periodNumberOfUnits: number } | null | undefined): number | null {
+export function trialDaysOf(intro: { price: number; periodUnit: string; periodNumberOfUnits: number; cycles?: number } | null | undefined): number | null {
   if (!intro || intro.price !== 0) return null;
-  const n = intro.periodNumberOfUnits;
+  const units = intro.periodNumberOfUnits; const cycles = intro.cycles ?? 1;
+  if (!Number.isInteger(units) || units <= 0 || !Number.isInteger(cycles) || cycles <= 0) return null;
+  const n = units * cycles;
   switch (intro.periodUnit) {
     case 'DAY': return n;
     case 'WEEK': return n * 7;
-    case 'MONTH': return n * 30;
+    // A calendar month is not necessarily 30 days; let the store state its duration.
     default: return null;
   }
 }
 
 type Listener = () => void;
-type RCIntro = { price: number; periodUnit: string; periodNumberOfUnits: number } | null;
+type RCIntro = { price: number; periodUnit: string; periodNumberOfUnits: number; cycles?: number } | null;
 type RCPackage = { packageType: string; identifier: string; product: { identifier: string; price?: number; priceString: string; pricePerMonthString: string | null; introPrice: RCIntro } };
 type RCOffering = { availablePackages?: RCPackage[]; annual?: RCPackage | null; monthly?: RCPackage | null };
 type RCCustomerInfo = { entitlements: { active: Record<string, { expirationDate: string | null } | undefined> } };
 
-class PurchasesService {
+export type PurchasesSDK = Pick<PurchasesPlugin, 'configure' | 'addCustomerInfoUpdateListener' | 'getCustomerInfo' | 'getOfferings' | 'checkTrialOrIntroductoryPriceEligibility' | 'purchasePackage' | 'restorePurchases' | 'logIn' | 'logOut' | 'isAnonymous'>;
+type PurchasesDependencies = { native: () => boolean; key: () => string; sdk: () => Promise<PurchasesSDK> };
+
+export class PurchasesService {
   private state: PurchasesState = { available: false, ready: true, tier: 'free', isPro: false, renewsAt: null, products: {}, error: null };
   private listeners = new Set<Listener>();
   private packages = new Map<ProductId, RCPackage>();
-  private started = false;
+  private configuredSDK: PurchasesSDK | null = null;
+  private customerListenerAttached = false;
+  private configuring: Promise<PurchasesSDK> | null = null;
+  private loading: Promise<void> | null = null;
+  private dependencies: PurchasesDependencies;
+
+  constructor(dependencies: Partial<PurchasesDependencies> = {}) {
+    this.dependencies = {
+      native: dependencies.native ?? isNative,
+      key: dependencies.key ?? apiKey,
+      sdk: dependencies.sdk ?? (async () => (await import('@revenuecat/purchases-capacitor')).Purchases),
+    };
+  }
 
   getState = (): PurchasesState => this.state;
   subscribe = (fn: Listener) => { this.listeners.add(fn); return () => { this.listeners.delete(fn); }; };
   private set(patch: Partial<PurchasesState>) { this.state = { ...this.state, ...patch }; this.listeners.forEach(fn => fn()); }
 
-  private async sdk() {
-    const { Purchases } = await import('@revenuecat/purchases-capacitor');
-    return Purchases;
+  /** Share setup across callers; only successfully completed setup is retained. */
+  private configureSDK(): Promise<PurchasesSDK> {
+    if (this.configuring) return this.configuring;
+    if (this.configuredSDK && this.customerListenerAttached) return Promise.resolve(this.configuredSDK);
+    this.configuring = (async () => {
+      const sdk = this.configuredSDK ?? await this.dependencies.sdk();
+      if (!this.configuredSDK) { await sdk.configure({ apiKey: this.dependencies.key() }); this.configuredSDK = sdk; }
+      if (!this.customerListenerAttached) {
+        await sdk.addCustomerInfoUpdateListener(info => this.applyCustomer(info as unknown as RCCustomerInfo));
+        this.customerListenerAttached = true;
+      }
+      return sdk;
+    })().finally(() => { this.configuring = null; });
+    return this.configuring;
   }
 
   private applyCustomer(info: RCCustomerInfo) {
@@ -137,38 +168,51 @@ class PurchasesService {
           amount: typeof pkg.product.price === 'number' ? pkg.product.price : null,
           perMonth: info.plan === 'annual' ? pkg.product.pricePerMonthString ?? null : null,
           trialDays: trialDaysOf(pkg.product.introPrice),
+          trialEligibility: 'unknown',
         };
       }
     }
     return products;
   }
 
-  /** Safe to call more than once; does nothing outside the iPhone app. */
-  async init(): Promise<void> {
-    if (this.started) return;
-    this.started = true;
-    if (!isNative() || !apiKey()) return;
-    this.set({ available: true, ready: false });
+  private async checkEligibility(sdk: PurchasesSDK, products: PurchasesState['products']): Promise<PurchasesState['products']> {
+    const unknownProducts: PurchasesState['products'] = Object.fromEntries(Object.entries(products).map(([id, product]) => [id, { ...product, trialEligibility: 'unknown' as const }]));
+    const identifiers = Object.values(unknownProducts).filter(product => product?.trialDays).map(product => product!.id);
+    if (!identifiers.length) return unknownProducts;
     try {
-      const Purchases = await this.sdk();
-      await Purchases.configure({ apiKey: apiKey() });
-      await Purchases.addCustomerInfoUpdateListener(info => this.applyCustomer(info as unknown as RCCustomerInfo));
+      const result = await sdk.checkTrialOrIntroductoryPriceEligibility({ productIdentifiers: identifiers });
+      return Object.fromEntries(Object.entries(unknownProducts).map(([id, product]) => [id, { ...product, trialEligibility: trialEligibilityOf(result[id]?.status) }]));
+    } catch { return unknownProducts; } // Unknown means regular pricing, never a promised free trial.
+  }
+
+  /** Failed plan loads may retry; concurrent calls share one SDK setup and load. */
+  init(): Promise<void> {
+    if (this.loading) return this.loading;
+    if (!this.dependencies.native() || !this.dependencies.key()) return Promise.resolve();
+    if (this.state.available && this.state.ready && !this.state.error) return Promise.resolve();
+    this.set({ available: true, ready: false });
+    this.loading = (async () => { try {
+      const Purchases = await this.configureSDK();
       const [{ customerInfo }, offerings] = await Promise.all([Purchases.getCustomerInfo(), Purchases.getOfferings()]);
       this.applyCustomer(customerInfo as unknown as RCCustomerInfo);
-      const products = this.collectProducts(offerings as unknown as { current: unknown; all?: Record<string, unknown> });
+      const products = await this.checkEligibility(Purchases, this.collectProducts(offerings as unknown as { current: unknown; all?: Record<string, unknown> }));
       this.set({ products, ready: true, error: Object.keys(products).length ? null : 'no-plans' });
     } catch {
-      this.set({ ready: true, error: 'unavailable' });
-    }
+      this.packages.clear(); this.set({ products: {}, ready: true, error: 'unavailable' });
+    } })().finally(() => { this.loading = null; });
+    return this.loading;
   }
 
   /** Ties purchases to the ODA account so the level follows the member to a new phone. */
   async identify(userId: string | null): Promise<void> {
     if (!this.state.available) return;
     try {
-      const Purchases = await this.sdk();
+      // An account transition must not keep a previous eligibility claim visible.
+      this.set({ products: Object.fromEntries(Object.entries(this.state.products).map(([id, product]) => [id, { ...product, trialEligibility: 'unknown' as const }])) });
+      const Purchases = await this.configureSDK();
       if (userId) this.applyCustomer((await Purchases.logIn({ appUserID: userId })).customerInfo as unknown as RCCustomerInfo);
       else if (!(await Purchases.isAnonymous()).isAnonymous) this.applyCustomer((await Purchases.logOut()).customerInfo as unknown as RCCustomerInfo);
+      this.set({ products: await this.checkEligibility(Purchases, this.state.products) });
     } catch { /* keep the current entitlement */ }
   }
 
@@ -177,26 +221,25 @@ class PurchasesService {
     const info = describeProduct(productId);
     if (!this.state.available || !pkg || !info) return 'failed';
     try {
-      const Purchases = await this.sdk();
+      const Purchases = await this.configureSDK();
       const { customerInfo } = await Purchases.purchasePackage({ aPackage: pkg as never });
       this.applyCustomer(customerInfo as unknown as RCCustomerInfo);
-      return tierAtLeast(this.state.tier, info.tier) ? 'purchased' : 'failed';
+      return tierAtLeast(this.state.tier, info.tier) ? 'purchased' : 'unconfirmed';
     } catch (error) {
-      const e = error as { code?: string | number; userCancelled?: boolean | null };
-      return e?.userCancelled || String(e?.code) === '1' || e?.code === 'PURCHASE_CANCELLED' ? 'cancelled' : 'failed';
+      return purchaseErrorResult(error);
     }
   }
 
-  /** Restores purchases; true when a paid level is active afterwards. */
-  async restore(): Promise<boolean> {
-    if (!this.state.available) return false;
+  /** Distinguish a successful check with no plan from a failed store check. */
+  async restore(): Promise<RestoreResult> {
+    if (!this.state.available) return 'failed';
     try {
-      const Purchases = await this.sdk();
+      const Purchases = await this.configureSDK();
       const { customerInfo } = await Purchases.restorePurchases();
       this.applyCustomer(customerInfo as unknown as RCCustomerInfo);
-      return this.state.tier !== 'free';
+      return this.state.tier !== 'free' ? 'restored' : 'not-found';
     } catch {
-      return false;
+      return 'failed';
     }
   }
 }

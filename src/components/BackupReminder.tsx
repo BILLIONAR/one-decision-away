@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { useApp } from '../store/useApp';
 import { Download, X } from 'lucide-react';
 import { Button } from './ui';
 import { cloudSync } from '../services/cloudSync';
-import { useT } from '../i18n';
+import { useLocale } from '../i18n';
+import { backupReminderCopy } from '../i18n/backupReminder';
+import { backupAgeDays, shouldShowBackupReminder } from '../services/backupReminder';
 
-const DAYS = 14;
-
-/** Gentle Home nudge: no backup in 14+ days and not signed in to cloud. */
+/** Quiet protection for saved work without a recently confirmed export or scoped cloud backup. */
 export const BackupReminder: React.FC = () => {
-  const t = useT();
+  const [locale] = useLocale();
+  const copy = backupReminderCopy(locale);
   const { exportDataJson, setActiveRoute, data } = useApp();
+  const [, refresh] = useReducer((version: number) => version + 1, 0);
   const [hidden, setHidden] = useState(() => {
     try {
       return sessionStorage.getItem('oda_backup_nudge_hidden') === '1';
@@ -18,7 +20,19 @@ export const BackupReminder: React.FC = () => {
       return false;
     }
   });
-  if (!data || hidden || cloudSync.isSignedIn()) return null;
+  useEffect(() => {
+    const unsubscribe = cloudSync.subscribe(() => refresh());
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === 'oda_last_backup' || event.key === null) refresh();
+    };
+    window.addEventListener('storage', onStorage);
+    window.addEventListener('focus', refresh);
+    return () => {
+      unsubscribe();
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('focus', refresh);
+    };
+  }, []);
 
   let last: string | null = null;
   try {
@@ -26,9 +40,17 @@ export const BackupReminder: React.FC = () => {
   } catch {
     /* ignore */
   }
-  const daysSince = last ? Math.floor((Date.now() - new Date(last).getTime()) / 86400000) : 999;
-  const enoughData = (data.completions?.length || 0) + (data.inVisionItemIds?.length || 0) + (data.dreamJournal?.length || 0) >= 3;
-  if (daysSince < DAYS || !enoughData) return null;
+  // Re-read on every render: a dataset replacement can invalidate cloud ownership between emissions.
+  const cloud = cloudSync.getState();
+  const now = Date.now();
+  const cloudStatus = { configured: cloud.configured, signedIn: Boolean(cloud.session), lastSyncAt: cloud.lastSyncAt, error: cloud.error };
+  if (!shouldShowBackupReminder({ data, dismissed: hidden, lastBackupAt: last, cloud: cloudStatus, now })) return null;
+  const daysSince = backupAgeDays(last, now);
+  const explanation = cloud.error !== null ? copy.cloudError : cloud.session ? copy.cloudUnconfirmed : copy.local;
+  const exportBackup = async () => {
+    await exportDataJson();
+    refresh();
+  };
 
   const dismiss = () => {
     setHidden(true);
@@ -40,23 +62,22 @@ export const BackupReminder: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-5 oda-card rounded-[var(--radius-lg)]">
+    <aside aria-label={copy.label} className="oda-backup-reminder flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-5 oda-card rounded-[var(--radius-lg)]">
       <p className="text-[14px] text-[var(--fg-muted)] leading-relaxed">
-        <span className="text-[var(--fg)] font-medium">{t('Your data lives only in this browser.')}</span>{' '}
-        {last ? t('Last backup was {n} days ago.', { n: daysSince }) : t('You have never made a backup.')}{' '}
-        {t('Download one, or sign in to sync to the cloud.')}
+        <span className="text-[var(--fg)] font-medium">{copy.title}</span>{' '}
+        {explanation}{daysSince !== null && <span className="block text-[12px] mt-1">{copy.lastExport(daysSince)}</span>}
       </p>
-      <div className="flex items-center gap-1.5 self-start sm:self-auto shrink-0">
-        <Button size="sm" variant="secondary" icon={Download} onClick={exportDataJson}>
-          {t('Back up')}
+      <div className="flex flex-wrap items-center gap-1.5 self-start sm:self-auto shrink-0">
+        <Button size="sm" variant="secondary" icon={Download} onClick={exportBackup}>
+          {copy.download}
         </Button>
         <Button size="sm" variant="ghost" onClick={() => setActiveRoute('/app/settings')}>
-          {t('Cloud sync')}
+          {copy.cloudSync}
         </Button>
-        <button type="button" onClick={dismiss} className="w-9 h-9 rounded-full flex items-center justify-center text-[var(--fg-muted)] hover:text-[var(--fg)] cursor-pointer" title={t('Not now')} aria-label={t('Not now')}>
+        <button type="button" onClick={dismiss} className="w-11 h-11 rounded-full flex items-center justify-center text-[var(--fg-muted)] hover:text-[var(--fg)] cursor-pointer" title={copy.dismiss} aria-label={copy.dismiss}>
           <X className="w-[18px] h-[18px]" strokeWidth={1.8} />
         </button>
       </div>
-    </div>
+    </aside>
   );
 };

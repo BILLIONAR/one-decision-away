@@ -44,7 +44,7 @@ export const Evidence: React.FC = () => {
       </header>
 
       <figure className="rounded-[var(--radius-lg)] oda-card px-4 pt-4 pb-3 flex flex-col items-center">
-        <EvidenceTree count={kept.length} className="w-full max-w-[320px] h-auto" label={copy.treeLabel(tree.total, tree.leaves, tree.blossoms)} />
+        <EvidenceTree count={kept.length} layout="evidence" className="w-full max-w-[320px] h-auto" label={copy.treeLabel(tree.total, tree.leaves, tree.blossoms)} />
         <figcaption className="text-[13px] text-center leading-relaxed text-[var(--fg-muted)] max-w-[40ch]">
           <span className="block font-medium text-[var(--accent)]">{copy.kept(tree.total)}</span>
           {tree.total === 0 ? copy.start : copy.ledger(tree.leaves, tree.blossoms)}

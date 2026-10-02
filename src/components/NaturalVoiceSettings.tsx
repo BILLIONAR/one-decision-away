@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Button, Field, Input } from './ui';
 import { Sparkles, Volume2 } from 'lucide-react';
 import { voiceGuide, VoiceEngine } from '../utils/voiceGuide';
@@ -6,8 +6,8 @@ import { GEMINI_TTS_VOICES } from '../utils/geminiVoice';
 import { useT } from '../i18n';
 
 /**
- * Settings card: choose between the free built-in browser voice and
- * a more natural Gemini voice (needs the user's own Gemini API key, stored only on this device).
+ * Settings card: choose a built-in device voice or optional Gemini narration
+ * (needs the user's own Gemini API key, stored only on this device).
  */
 export const NaturalVoiceSettings: React.FC = () => {
   const t = useT();
@@ -19,9 +19,13 @@ export const NaturalVoiceSettings: React.FC = () => {
   const [testResult, setTestResult] = useState<'ok' | 'fail' | null>(null);
   const [showKey, setShowKey] = useState(false);
 
-  const browserVoices = voiceGuide.getEnglishVoices();
+  const [browserVoices, setBrowserVoices] = useState(() => voiceGuide.getEnglishVoices());
   const selectedBrowserVoice = voiceGuide.getSelectedVoice();
   const [browserVoiceURI, setBrowserVoiceURI] = useState(selectedBrowserVoice?.voiceURI || '');
+  useEffect(() => voiceGuide.onAvailabilityChange(() => {
+    setBrowserVoices(voiceGuide.getEnglishVoices());
+    setBrowserVoiceURI(voiceGuide.getSelectedVoice()?.voiceURI || '');
+  }), []);
 
   const chooseEngine = (e: VoiceEngine) => {
     setEngine(e);
@@ -43,8 +47,8 @@ export const NaturalVoiceSettings: React.FC = () => {
         const ok = await voiceGuide.testNaturalVoice();
         setTestResult(ok ? 'ok' : 'fail');
       } else {
-        voiceGuide.speak(t('Welcome. Take a slow breath, and let the day soften.'));
-        setTestResult('ok');
+        const queued = voiceGuide.speak('Welcome. Take a slow breath, and let the day soften.');
+        setTestResult(queued ? 'ok' : 'fail');
       }
     } finally {
       setTesting(false);
@@ -61,13 +65,13 @@ export const NaturalVoiceSettings: React.FC = () => {
       </div>
 
       <p className="text-[14px] text-[var(--fg-muted)] leading-relaxed">
-        {t('Guided meditations are narrated by a voice. The built-in voice is free and works offline. For a warmer, more human narration you can use a Gemini voice with your own API key — the key stays on this device only.')}
+        {t('Guided narration stays in English. Built-in voices depend on your browser and installed voices; some need an internet connection. Gemini narration uses your own API key, stored on this device.')}
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         {(
           [
-            { id: 'browser', title: t('Built-in voice'), sub: t('Free · offline · instant'), icon: Volume2 },
+            { id: 'browser', title: t('Built-in voice'), sub: t('Device voice · no API key'), icon: Volume2 },
             { id: 'gemini', title: t('Natural voice (Gemini)'), sub: t('Warm, human-like · needs API key'), icon: Sparkles },
           ] as const
         ).map((opt) => {
@@ -182,7 +186,7 @@ export const NaturalVoiceSettings: React.FC = () => {
         <div className="text-[13px] min-w-0">
           {testResult === 'ok' && <span className="text-[var(--accent)] font-medium">{t('Voice is working.')}</span>}
           {testResult === 'fail' && (
-            <span className="text-[var(--danger)]">{t('Could not reach Gemini — check the key. Meditations will use the built-in voice meanwhile.')}</span>
+            <span className="text-[var(--danger)]">{engine === 'browser' ? t('Voice playback is not available in this browser.') : t('Could not reach Gemini — check the key. Meditations will use the built-in voice meanwhile.')}</span>
           )}
         </div>
         <Button

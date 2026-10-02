@@ -10,9 +10,11 @@ import {
   Cell,
   ReferenceLine,
 } from 'recharts';
-import { WalletTransaction } from '../types/models';
+import { Mission, WalletTransaction } from '../types/models';
 import { ECONOMY_CONSTANTS } from '../services/economy';
-import { getSpeechLang, useT } from '../i18n';
+import { getSpeechLang, useLocale, useT } from '../i18n';
+import { rewardsCopy } from '../i18n/rewards';
+import { bankPracticeSummary } from '../services/bankPractice';
 
 /* ----------------------------- Chart palette ----------------------------- */
 const readVar = (name: string, fallback: string): string => {
@@ -43,6 +45,7 @@ const useChartColors = () => {
 
 export interface DreamDollarChartProps {
   transactions: WalletTransaction[];
+  missions: Mission[];
   className?: string;
   dailyCap?: number;
 }
@@ -132,10 +135,14 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload }) => {
 
 export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
   transactions,
+  missions,
   className = '',
   dailyCap = ECONOMY_CONSTANTS.DAILY_REWARD_CAP,
 }) => {
   const t = useT();
+  const [locale] = useLocale();
+  const copy = rewardsCopy(locale);
+  const practice = bankPracticeSummary(missions);
   const colors = useChartColors();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
@@ -143,16 +150,16 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
   const chartData = useMemo<DayEarningsData[]>(() => {
     const result: DayEarningsData[] = [];
     const today = new Date();
-    today.setHours(23, 59, 59, 999);
+    today.setUTCHours(12, 0, 0, 0);
 
     for (let i = 6; i >= 0; i--) {
       const d = new Date(today);
-      d.setDate(d.getDate() - i);
+      d.setUTCDate(d.getUTCDate() - i);
       const dayKey = d.toISOString().slice(0, 10);
 
-      const weekdayShort = d.toLocaleDateString(getSpeechLang(), { weekday: 'short' });
-      const fullWeekday = d.toLocaleDateString(getSpeechLang(), { weekday: 'long' });
-      const dateFormatted = d.toLocaleDateString(getSpeechLang(), { month: 'short', day: 'numeric' });
+      const weekdayShort = d.toLocaleDateString(getSpeechLang(), { weekday: 'short', timeZone: 'UTC' });
+      const fullWeekday = d.toLocaleDateString(getSpeechLang(), { weekday: 'long', timeZone: 'UTC' });
+      const dateFormatted = d.toLocaleDateString(getSpeechLang(), { month: 'short', day: 'numeric', timeZone: 'UTC' });
 
       const dayTxs = transactions.filter((t) => t.dayKey === dayKey);
       const earnTxs = dayTxs.filter((t) => t.amount > 0);
@@ -212,7 +219,6 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
   const metrics = useMemo(() => {
     const totalEarned = chartData.reduce((sum, d) => sum + d.earnings, 0);
     const dailyAvg = Math.round(totalEarned / 7);
-    const activeDays = chartData.filter((d) => d.earnings > 0).length;
 
     let peakDay = chartData[0];
     chartData.forEach((d) => {
@@ -233,7 +239,6 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
     return {
       totalEarned,
       dailyAvg,
-      activeDays,
       peakDay,
       todayData,
       breakdown: {
@@ -281,11 +286,9 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
           <div className="text-[22px] font-semibold text-[var(--accent)] leading-none">
             +D$ {metrics.todayData.earnings.toLocaleString()}
           </div>
-          <div className="text-[12px] text-[var(--fg-muted)] mt-2">{t("Today's Output")}</div>
+          <div className="text-[12px] text-[var(--fg-muted)] mt-2">{copy.depositsToday}</div>
           <div className="text-[12px] text-[var(--fg-subtle)] mt-0.5">
-            {metrics.todayData.txCount === 1
-              ? t('1 action logged today')
-              : t('{n} actions logged today', { n: metrics.todayData.txCount })}
+            {copy.depositCount(metrics.todayData.txCount)}
           </div>
         </div>
 
@@ -311,11 +314,11 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
 
         <div className="bg-[var(--bg)] rounded-[var(--radius-sm)] p-4">
           <div className="text-[22px] font-semibold text-[var(--fg)] leading-none">
-            {t('{n} / 7 Days', { n: metrics.activeDays })}
+            {t('{n} / 7 Days', { n: practice.daysLast7 })}
           </div>
-          <div className="text-[12px] text-[var(--fg-muted)] mt-2">{t('Consistency')}</div>
+          <div className="text-[12px] text-[var(--fg-muted)] mt-2">{copy.keptDays}</div>
           <div className="text-[12px] text-[var(--fg-subtle)] mt-0.5">
-            {t('{pct}% weekly execution rate', { pct: Math.round((metrics.activeDays / 7) * 100) })}
+            {copy.practiceEvidence}
           </div>
         </div>
       </div>
@@ -366,7 +369,7 @@ export const DreamDollarChart: React.FC<DreamDollarChartProps> = ({
                         fontSize={10}
                         fontFamily="var(--font-sans)"
                       >
-                        {item.date.getDate()}
+                        {item.date.getUTCDate()}
                       </text>
                     )}
                   </g>

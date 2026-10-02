@@ -9,6 +9,9 @@ import { CourseCover } from '../components/CourseCover';
 import { CoursePracticeStudio } from '../components/CoursePracticeStudio';
 import { categoryForCourse, courseLearningCopy, type CourseCategory } from '../data/courseLearningCopy';
 import { courseCatalogueCopy, courseOutcomeFor } from '../data/coursePresentation';
+import { courseEntryCopy } from '../data/courseEntryCopy';
+import { courseEntryFor, hasCourseLearningProgress, sameCourseEntryScope, type CourseEntryScope } from '../services/courseEntry';
+import { REPLACEMENT_EPOCH_KEY } from '../services/dataSnapshots';
 import { getCourseExperiment, isCourseReviewDue } from '../services/courseLearning';
 import { useLocale, useT } from '../i18n';
 import { useApp } from '../store/useApp';
@@ -27,6 +30,7 @@ export const Courses: React.FC = () => {
   const t = useT();
   const copy = courseLearningCopy(locale);
   const catalogue = courseCatalogueCopy(locale);
+  const entryCopy = courseEntryCopy(locale);
   const courses = coursesFor(locale);
   const langOf = (item?: GuidedCourse) => (item?.lang && item.lang !== locale ? item.lang : undefined);
   const draft = getCourseProgressSession();
@@ -42,13 +46,20 @@ export const Courses: React.FC = () => {
   const [lastVisited, setLastVisited] = useState<string | null>(selected);
   const course = courses.find(item => item.id === selected);
   const content = langOf(course);
-  const [index, setIndex] = useState(() => course ? Math.min(nextLessonIndex(state, course), course.lessons.length - 1) : 0);
+  const entryScope: CourseEntryScope = { recordId: appData?.profile.id, replacementEpoch: appData && Object.hasOwn(appData, REPLACEMENT_EPOCH_KEY) ? Reflect.get(appData, REPLACEMENT_EPOCH_KEY) : undefined };
+  const entry = course ? courseEntryFor(course, state) : null;
+  const [entryRequest, setEntryRequest] = useState<{ courseId: string; scope: CourseEntryScope; mode: 'overview' | 'lesson'; resumeOnHydration?: boolean } | null>(null);
+  const requestedEntry = course && entryRequest?.courseId === course.id && sameCourseEntryScope(entryRequest.scope, entryScope) ? entryRequest : null;
+  const showOverview = Boolean(course && (requestedEntry ? requestedEntry.mode === 'overview' : entry?.mode === 'overview'));
+  const [index, setIndex] = useState(() => entry?.index ?? 0);
   const [storageError, setStorageError] = useState(draft.saveFailed);
   const [notice, setNotice] = useState('');
   const titleRef = useRef<HTMLHeadingElement>(null);
   const researchRef = useRef<HTMLElement>(null);
   const bibliographyRef = useRef<HTMLDetailsElement>(null);
   const didMount = useRef(false);
+  const manuallyEnteredLesson = useRef(false);
+  const resolvedEntry = useRef({ courseId: selected, scope: entryScope, started: entry?.started ?? false });
   useEffect(() => draft.subscribe((progress, failed) => {
     setState(progress);
     setStorageError(failed);
@@ -56,27 +67,35 @@ export const Courses: React.FC = () => {
   useEffect(() => {
     if (didMount.current) { titleRef.current?.focus(); titleRef.current?.scrollIntoView({ block: 'start' }); }
     didMount.current = true;
-  }, [selected, index]);
+  }, [selected, index, showOverview]);
   useEffect(() => {
-    if (!course) return;
+    if (!course) { resolvedEntry.current = { courseId: null, scope: entryScope, started: false }; return; }
     const availableIndex = Math.min(nextLessonIndex(state, course), course.lessons.length - 1);
-    if (index > availableIndex) setIndex(availableIndex);
-  }, [state, course, index]);
+    const replaced = !sameCourseEntryScope(resolvedEntry.current.scope, entryScope);
+    const changedCourse = resolvedEntry.current.courseId !== course.id;
+    // Durable progress can arrive after the initial cached read. Resume it once,
+    // while preserving a learner's deliberate visit to an earlier lesson.
+    const hydratedReturning = !resolvedEntry.current.started && entry!.started
+      && (requestedEntry?.resumeOnHydration || (!manuallyEnteredLesson.current && !requestedEntry));
+    if (replaced || changedCourse || hydratedReturning || index > availableIndex) setIndex(availableIndex);
+    if (replaced || changedCourse) manuallyEnteredLesson.current = requestedEntry?.mode === 'lesson';
+    if (replaced) { setEntryRequest(null); setNotice(''); }
+    resolvedEntry.current = { courseId: course.id, scope: entryScope, started: entry!.started };
+  }, [state, course, index, entryScope.recordId, entryScope.replacementEpoch]);
 
   // Each updater is replayed onto the latest stored copy under the shared data lock.
   const commit = (update: (current: typeof state) => typeof state) => draft.update(update);
-  const open = (item?: GuidedCourse) => {
+  const open = (item?: GuidedCourse, mode?: 'overview' | 'lesson') => {
     setSelected(item?.id ?? null);
+    setEntryRequest(item && mode ? { courseId: item.id, scope: entryScope, mode } : null);
+    manuallyEnteredLesson.current = mode === 'lesson';
     if (item) setLastVisited(item.id);
     setIndex(item ? Math.min(nextLessonIndex(state, item), item.lessons.length - 1) : 0);
     setNotice('');
     try { if (item) localStorage.setItem(SELECTION_KEY, item.id); else localStorage.removeItem(SELECTION_KEY); } catch { /* Course remains usable. */ }
   };
   const countCompleted = (item: GuidedCourse) => item.lessons.filter(lesson => getLessonProgress(state, lesson).completed).length;
-  const started = (item: GuidedCourse) => item.lessons.some(lesson => {
-    const progress = getLessonProgress(state, lesson);
-    return progress.completed || progress.checked.some(Boolean) || progress.answer !== null || progress.reflection.trim().length > 0;
-  });
+  const started = (item: GuidedCourse) => hasCourseLearningProgress(item.lessons.map(lesson => lesson.id), state);
   const inProgress = courses.filter(item => started(item) && countCompleted(item) < item.lessons.length);
   const resumeCourse = inProgress.find(item => item.id === lastVisited) ?? inProgress[0];
   const reviewCourse = courses.find(item => isCourseReviewDue(getCourseExperiment(state.experiments, item.id)));
@@ -109,7 +128,7 @@ export const Courses: React.FC = () => {
       <button type="button" onClick={() => open(resumeCourse)} className="oda-course-primary shrink-0">{t('Continue')}<ArrowRight size={16} aria-hidden="true" /></button>
     </section>}
 
-    {reviewCourse && <section className="oda-course-review-ready" aria-labelledby="course-return-title"><RotateCcw size={22} aria-hidden="true" /><div><p className="oda-course-eyebrow">{copy.returnTitle}</p><h2 id="course-return-title" className="oda-display">{reviewCourse.title}</h2><p>{copy.returnBody}</p></div><button type="button" onClick={() => open(reviewCourse)} className="oda-course-primary">{copy.openReview}<ArrowRight size={16} aria-hidden="true" /></button></section>}
+    {reviewCourse && <section className="oda-course-review-ready" aria-labelledby="course-return-title"><RotateCcw size={22} aria-hidden="true" /><div><p className="oda-course-eyebrow">{copy.returnTitle}</p><h2 id="course-return-title" className="oda-display">{reviewCourse.title}</h2><p>{copy.returnBody}</p></div><button type="button" onClick={() => open(reviewCourse, 'lesson')} className="oda-course-primary">{copy.openReview}<ArrowRight size={16} aria-hidden="true" /></button></section>}
 
     <section aria-labelledby="course-list-title">
       <div className="oda-course-section-heading"><h2 id="course-list-title" className="oda-display">{resumeCourse ? t('Explore the other paths too') : catalogue.explore}</h2><p>{t('Pick a topic. Start with one small step.')}</p></div>
@@ -128,7 +147,7 @@ export const Courses: React.FC = () => {
             <span className="oda-course-row-meta"><span>{t('{lessons} lessons · {minutes} min', { lessons: item.lessons.length, minutes: item.lessons.reduce((sum, lesson) => sum + lesson.minutes, 0) })}</span><span>{catalogue.pace}</span></span>
             <span className="oda-course-row-outcome"><span>{catalogue.outcome}</span><span>{courseOutcomeFor(item.id, locale) ?? item.outcome}</span></span>
             {completed > 0 && <span role="progressbar" aria-label={t('{title} progress', { title: item.title })} aria-valuenow={completed} aria-valuemin={0} aria-valuemax={item.lessons.length} className="oda-course-progress"><span className="oda-course-progress-fill" style={{ width: `${completed / item.lessons.length * 100}%` }} /></span>}
-            <span className="oda-course-row-footer"><span className="oda-course-row-state">{completed === item.lessons.length ? t('Completed · review again') : hasStarted ? t('{done}/{total} completed · continue', { done: completed, total: item.lessons.length }) : t('Start course')}</span><ArrowRight className="oda-course-row-arrow" size={22} aria-hidden="true" /></span>
+            <span className="oda-course-row-footer"><span className="oda-course-row-state">{completed === item.lessons.length ? t('Completed · review again') : hasStarted ? t('{done}/{total} completed · continue', { done: completed, total: item.lessons.length }) : entryCopy.previewCourse}</span><ArrowRight className="oda-course-row-arrow" size={22} aria-hidden="true" /></span>
           </span>
         </button>;
       })}</div>
@@ -140,17 +159,54 @@ export const Courses: React.FC = () => {
     </section>
   </div>;
 
+  if (showOverview) return <div className="oda-courses oda-course-lesson oda-course-overview space-y-7" data-course-overview={course.id}>
+    <button type="button" onClick={() => open()} className="inline-flex items-center gap-2 min-h-11 text-sm text-[var(--fg-muted)] cursor-pointer"><ArrowLeft size={16} aria-hidden="true" />{t('All courses')}</button>
+    <header>
+      <p className="oda-course-eyebrow">{entryCopy.overview}</p>
+      <h1 id="course-overview-title" lang={content} ref={titleRef} tabIndex={-1} className="oda-display oda-course-title outline-none scroll-mt-16">{course.title}</h1>
+      <p lang={content} className="text-sm leading-relaxed text-[var(--fg-muted)]">{course.subtitle}</p>
+      <p className="flex flex-wrap items-center gap-2 text-xs text-[var(--fg-muted)] mt-3"><Clock3 size={14} aria-hidden="true" />{t('{lessons} lessons · {minutes} min', { lessons: course.lessons.length, minutes: course.lessons.reduce((sum, lesson) => sum + lesson.minutes, 0) })} · {catalogue.pace}</p>
+      {languageNote}
+    </header>
+    <CourseCover courseId={course.id} eager layout="overview" className="rounded-[var(--radius-lg)]" />
+    <section aria-labelledby="course-overview-about">
+      <h2 id="course-overview-about" className="oda-display text-xl mb-3">{entryCopy.about}</h2>
+      <p lang={content} className="text-sm leading-relaxed">{course.description}</p>
+    </section>
+    <section className="oda-course-goal" aria-labelledby="course-overview-outcome">
+      <h2 id="course-overview-outcome" className="text-xs font-semibold text-[var(--accent)]">{entryCopy.outcome}</h2>
+      <p lang={content}>{course.outcome}</p>
+    </section>
+    <p lang={content} className="text-xs leading-relaxed text-[var(--fg-muted)]">{course.scope}</p>
+    <section className="oda-course-map" aria-labelledby="course-overview-lessons">
+      <h2 id="course-overview-lessons" className="oda-display text-xl pt-4">{entryCopy.lessons}</h2>
+      <ol>{course.lessons.map((lesson, i) => <li key={lesson.id} data-course-overview-lesson={lesson.id} className="flex items-start gap-3 py-3 text-sm leading-relaxed">
+        <span className="oda-course-map-number" aria-hidden="true">{i + 1}</span><span lang={content} className="flex-1 min-w-0">{lesson.title}</span><span className="shrink-0 text-xs text-[var(--fg-muted)] whitespace-nowrap">{lesson.minutes} min</span>
+      </li>)}</ol>
+    </section>
+    <button id="course-start-lesson" type="button" className="oda-course-primary w-full" onClick={() => {
+      manuallyEnteredLesson.current = true;
+      setIndex(entry!.index);
+      setEntryRequest({ courseId: course.id, scope: entryScope, mode: 'lesson', resumeOnHydration: !entry!.started });
+      setNotice('');
+    }}>{entry!.started ? entryCopy.continueLesson.replace('{number}', String(entry!.index + 1)) : entryCopy.startFirst}<ArrowRight size={16} aria-hidden="true" /></button>
+    {storageNote}
+  </div>;
+
   const lesson = course.lessons[index];
   const locked = isLessonLocked(course.id, index, { gating: pro.gating, tier: pro.tier });
   const progress = getLessonProgress(state, lesson);
   const completed = countCompleted(course);
   const eligible = canCompleteLesson(progress, lesson);
   const answerCorrect = progress.answer === lesson.correct;
-  const goNext = () => { setIndex(value => Math.min(value + 1, course.lessons.length - 1)); setNotice(''); };
+  const goNext = () => { manuallyEnteredLesson.current = true; setIndex(value => Math.min(value + 1, course.lessons.length - 1)); setNotice(''); };
   const patch = (value: Parameters<typeof updateLessonProgress>[2]) => { commit(current => updateLessonProgress(current, lesson, value)); setNotice(''); };
 
   return <div className="oda-courses oda-course-lesson space-y-7">
-    <button type="button" onClick={() => open()} className="inline-flex items-center gap-2 min-h-11 text-sm text-[var(--fg-muted)] cursor-pointer"><ArrowLeft size={16} aria-hidden="true" />{t('All courses')}</button>
+    <div className="flex flex-wrap items-center justify-between gap-2">
+      <button type="button" onClick={() => open()} className="inline-flex items-center gap-2 min-h-11 text-sm text-[var(--fg-muted)] cursor-pointer"><ArrowLeft size={16} aria-hidden="true" />{t('All courses')}</button>
+      <button type="button" onClick={() => { manuallyEnteredLesson.current = true; setEntryRequest({ courseId: course.id, scope: entryScope, mode: 'overview' }); }} className="min-h-11 text-sm text-[var(--accent)] underline underline-offset-4 cursor-pointer">{entryCopy.about}</button>
+    </div>
     <header className="oda-course-lesson-header">
       <div className="oda-course-lesson-header-copy"><p className="oda-course-eyebrow"><span lang={content}>{course.title}</span> / {t('Lesson {number} / {total}', { number: index + 1, total: course.lessons.length })}</p><h1 lang={content} ref={titleRef} tabIndex={-1} className="oda-display oda-course-lesson-title outline-none scroll-mt-16">{lesson.title}</h1><p className="flex items-center gap-2 text-xs text-[var(--fg-muted)]"><Clock3 size={14} aria-hidden="true" />{t('About {minutes} minutes · at your own pace', { minutes: lesson.minutes })}</p>{languageNote}</div>
     </header>
@@ -158,12 +214,12 @@ export const Courses: React.FC = () => {
     <nav aria-label={t('Lesson order')} className="oda-course-steps">{course.lessons.map((item, i) => {
       const done = getLessonProgress(state, item).completed;
       const unlocked = i === 0 || getLessonProgress(state, course.lessons[i - 1]).completed;
-      return <button key={item.id} type="button" disabled={!unlocked} data-completed={done} aria-current={i === index ? 'step' : undefined} aria-label={done ? t('Lesson {number}: {title}, completed', { number: i + 1, title: item.title }) : !unlocked ? t('Lesson {number}: {title}, complete the previous lesson first', { number: i + 1, title: item.title }) : t('Lesson {number}: {title}', { number: i + 1, title: item.title })} onClick={() => { setIndex(i); setNotice(''); }} className="oda-course-step">{done ? <Check size={15} aria-hidden="true" /> : !unlocked ? <LockKeyhole size={12} aria-hidden="true" /> : null}{i + 1}</button>;
+      return <button key={item.id} type="button" disabled={!unlocked} data-completed={done} aria-current={i === index ? 'step' : undefined} aria-label={done ? t('Lesson {number}: {title}, completed', { number: i + 1, title: item.title }) : !unlocked ? t('Lesson {number}: {title}, complete the previous lesson first', { number: i + 1, title: item.title }) : t('Lesson {number}: {title}', { number: i + 1, title: item.title })} onClick={() => { manuallyEnteredLesson.current = true; setIndex(i); setNotice(''); }} className="oda-course-step">{done ? <Check size={15} aria-hidden="true" /> : !unlocked ? <LockKeyhole size={12} aria-hidden="true" /> : null}{i + 1}</button>;
     })}</nav>
     <details className="oda-course-map"><summary>{copy.courseMap}<span>{completed}/{course.lessons.length}</span></summary><p>{copy.lessonMap}</p><ol>{course.lessons.map((item, i) => {
       const done = getLessonProgress(state, item).completed;
       const unlocked = i === 0 || getLessonProgress(state, course.lessons[i - 1]).completed;
-      return <li key={item.id}><button type="button" disabled={!unlocked} aria-current={i === index ? 'step' : undefined} onClick={() => { setIndex(i); setNotice(''); }}><span className="oda-course-map-number" aria-hidden="true">{done ? <Check size={16} /> : i + 1}</span><span lang={content}>{item.title}</span><span>{item.minutes} min</span>{!unlocked && <LockKeyhole size={13} aria-hidden="true" />}</button></li>;
+      return <li key={item.id}><button type="button" disabled={!unlocked} aria-current={i === index ? 'step' : undefined} onClick={() => { manuallyEnteredLesson.current = true; setIndex(i); setNotice(''); }}><span className="oda-course-map-number" aria-hidden="true">{done ? <Check size={16} /> : i + 1}</span><span lang={content}>{item.title}</span><span>{item.minutes} min</span>{!unlocked && <LockKeyhole size={13} aria-hidden="true" />}</button></li>;
     })}</ol></details>
     <p lang={content} className="text-xs leading-relaxed text-[var(--fg-muted)]">{course.scope}</p>
     <section className="oda-course-goal"><p className="text-xs font-semibold text-[var(--accent)]">{t("This lesson's small goal")}</p><p lang={content}>{lesson.goal}</p></section>

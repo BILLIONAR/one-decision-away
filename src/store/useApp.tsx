@@ -418,9 +418,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
     if (dueIndex !== activeGuidedCueIndex) {
       setActiveGuidedCueIndex(dueIndex);
-      if (dueIndex >= 0) voiceGuide.speak(t(meditation.cues[dueIndex].text));
+      if (dueIndex >= 0) voiceGuide.speak(meditation.cues[dueIndex].text, {
+        sessionId: meditation.id, cueIndex: dueIndex,
+        maxDurationSeconds: Math.max(0, (meditation.cues[dueIndex + 1]?.atSeconds ?? activeFocusSession.totalSeconds) - elapsed),
+      });
       // Keep the next two cues warm so natural-voice playback starts on time
-      voiceGuide.prefetch(meditation.cues.slice(dueIndex + 1, dueIndex + 3).map((c) => t(c.text)));
+      const upcoming = meditation.cues.slice(dueIndex + 1, dueIndex + 3);
+      voiceGuide.prefetch(upcoming.map((c) => c.text), upcoming.map((c, offset) => ({
+        sessionId: meditation.id, cueIndex: dueIndex + 1 + offset,
+        maxDurationSeconds: Math.max(0, (meditation.cues[dueIndex + 2 + offset]?.atSeconds ?? activeFocusSession.totalSeconds) - c.atSeconds),
+      })));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeFocusSession?.remainingSeconds, activeFocusSession?.isPaused, activeFocusSession?.guidedMeditationId]);
@@ -570,7 +577,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setActiveGuidedCueIndex(-1);
       if (params.guidedMeditationId) {
         const med = getGuidedMeditation(params.guidedMeditationId);
-        if (med) voiceGuide.prefetch(med.cues.slice(0, 3).map((c) => t(c.text)));
+        if (med) voiceGuide.prefetch(med.cues.slice(0, 3).map((c) => c.text), med.cues.slice(0, 3).map((c, cueIndex) => ({
+          sessionId: med.id, cueIndex,
+          maxDurationSeconds: Math.max(0, (med.cues[cueIndex + 1]?.atSeconds ?? totalSecs) - c.atSeconds),
+        })));
       }
       setActiveFocusSession(newSession);
       soundSynthesizer.setVolume(volume);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '../store/useApp';
 import { Play, Pause, Volume2, Mic, MicOff, ChevronDown } from 'lucide-react';
 import { FocusSoundTrack, Mission } from '../types/models';
@@ -6,7 +6,8 @@ import { getBaseReward } from '../services/economy';
 import { soundSynthesizer } from '../utils/soundSynthesizer';
 import { voiceGuide } from '../utils/voiceGuide';
 import { GUIDED_MEDITATIONS, GuidedMeditation, INTENT_LABELS } from '../data/guidedMeditations';
-import { useT } from '../i18n';
+import { useT, useLocale } from '../i18n';
+import { guidanceCopy } from '../i18n/guidance';
 
 interface FocusTimerHubProps {
   initialMission?: Mission | null;
@@ -34,6 +35,8 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
   onMissionSelected,
 }) => {
   const t = useT();
+  const [locale] = useLocale();
+  const guidance = guidanceCopy(locale);
   const { data, startFocusSession } = useApp();
 
   const [selectedMissionId, setSelectedMissionId] = useState<string>(
@@ -50,18 +53,23 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
   const [voiceEnabled, setVoiceEnabled] = useState<boolean>(voiceGuide.isEnabled());
   const [voiceSampleId, setVoiceSampleId] = useState<string | null>(null);
   const [section, setSection] = useState<'guided' | 'quick' | 'custom'>('custom');
-  const voiceSupported = voiceGuide.isAvailable();
+  const [voiceSupported, setVoiceSupported] = useState(() => voiceGuide.isAvailable());
+  const [voiceMode, setVoiceMode] = useState(() => voiceGuide.getPlaybackMode());
+  const previewVoiceOwned = useRef(false);
+  const previewAmbientOwned = useRef(false);
+  useEffect(() => voiceGuide.onAvailabilityChange(setVoiceSupported), []);
+  useEffect(() => voiceGuide.onPlaybackModeChange(setVoiceMode), []);
 
   useEffect(() => {
     return () => {
-      soundSynthesizer.stopAmbient();
-      voiceGuide.stop();
+      if (previewAmbientOwned.current) soundSynthesizer.stopAmbient();
+      if (previewVoiceOwned.current) voiceGuide.stop();
     };
   }, []);
 
   useEffect(() => {
     return voiceGuide.onSpeakingChange((speaking) => {
-      if (!speaking) setVoiceSampleId(null);
+      if (!speaking) { previewVoiceOwned.current = false; setVoiceSampleId(null); }
     });
   }, []);
 
@@ -163,10 +171,12 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
   const handleTogglePreview = (track: FocusSoundTrack) => {
     if (previewingTrack === track) {
       soundSynthesizer.stopAmbient();
+      previewAmbientOwned.current = false;
       setPreviewingTrack(null);
     } else {
       soundSynthesizer.stopAmbient();
       soundSynthesizer.playAmbient(track);
+      previewAmbientOwned.current = true;
       setPreviewingTrack(track);
     }
   };
@@ -187,6 +197,8 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
   };
 
   const handleStart = () => {
+    previewVoiceOwned.current = false;
+    previewAmbientOwned.current = false;
     soundSynthesizer.stopAmbient();
     setPreviewingTrack(null);
 
@@ -209,6 +221,8 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
   };
 
   const handleStartQuickMeditation = (session: MeditationQuickSession) => {
+    previewVoiceOwned.current = false;
+    previewAmbientOwned.current = false;
     soundSynthesizer.stopAmbient();
     setPreviewingTrack(null);
 
@@ -220,11 +234,14 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
   };
 
   const handleStartGuided = (meditation: GuidedMeditation) => {
+    previewVoiceOwned.current = false;
+    previewAmbientOwned.current = false;
     soundSynthesizer.stopAmbient();
     voiceGuide.stop();
     setPreviewingTrack(null);
     setVoiceSampleId(null);
 
+    void voiceGuide.unlockAudio();
     startFocusSession({
       missionTitle: t(meditation.title),
       durationMinutes: meditation.durationMinutes,
@@ -236,12 +253,14 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
   const handleToggleVoice = () => {
     const next = !voiceEnabled;
     voiceGuide.setEnabled(next);
+    previewVoiceOwned.current = false;
     setVoiceEnabled(next);
     setVoiceSampleId(null);
   };
 
   const handleVoiceSample = (meditation: GuidedMeditation) => {
     if (voiceSampleId === meditation.id) {
+      previewVoiceOwned.current = false;
       voiceGuide.stop();
       setVoiceSampleId(null);
       return;
@@ -251,7 +270,12 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
       setVoiceEnabled(true);
     }
     setVoiceSampleId(meditation.id);
-    voiceGuide.speak(t(meditation.cues[0]?.text || meditation.description));
+    previewVoiceOwned.current = true;
+    void voiceGuide.unlockAudio();
+    if (!voiceGuide.speak(meditation.cues[0]?.text || meditation.description, {
+      sessionId: meditation.id, cueIndex: 0,
+      maxDurationSeconds: Math.max(0, (meditation.cues[1]?.atSeconds ?? meditation.durationMinutes * 60) - (meditation.cues[0]?.atSeconds ?? 0)),
+    })) { previewVoiceOwned.current = false; setVoiceSampleId(null); }
   };
 
   const estimatedReward = selectedMission
@@ -323,7 +347,7 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
                 className={`h-9 px-3 rounded-full text-sm inline-flex items-center gap-1.5 cursor-pointer shrink-0 ${
                   voiceEnabled ? 'bg-[var(--fg)] text-[var(--bg)]' : 'bg-[var(--bg)] text-[var(--fg-muted)]'
                 }`}
-                title={t('Spoken guidance uses your device voice')}
+                title={voiceGuide.getAvailableGuidanceMode() === 'recorded' ? guidance.recorded : guidance.device}
               >
                 {voiceEnabled ? <Mic className="w-4 h-4" strokeWidth={1.8} /> : <MicOff className="w-4 h-4" strokeWidth={1.8} />}
                 <span>{voiceEnabled ? t('Voice on') : t('Voice off')}</span>
@@ -333,14 +357,22 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
             )}
           </div>
 
+          <p className="text-xs text-[var(--fg-muted)]" aria-live="polite" data-guidance-mode={voiceMode}>
+            {voiceMode === 'loading' ? guidance.loading : voiceMode === 'unavailable' ? guidance.unavailable
+              : voiceMode === 'device' ? guidance.device : voiceMode === 'recorded' ? guidance.recorded
+              : voiceGuide.getAvailableGuidanceMode() === 'recorded' ? guidance.recorded
+              : voiceGuide.getAvailableGuidanceMode() === 'device' ? guidance.device : guidance.unavailable}
+          </p>
+          <p className="text-xs text-[var(--fg-subtle)]">{guidance.fallback}</p>
+
           <div className="bg-[var(--bg)] rounded-[var(--radius-md)] divide-y divide-[var(--border)]">
             {GUIDED_MEDITATIONS.map((m) => {
               const isSampling = voiceSampleId === m.id;
               return (
-                <div key={m.id} className="px-4 min-h-[56px] py-2.5 flex items-center gap-3">
-                  <div className="flex-1 min-w-0">
-                    <div className="text-[15px] font-medium text-[var(--fg)] truncate">{t(m.title)}</div>
-                    <div className="text-xs text-[var(--fg-muted)] truncate">
+                <div key={m.id} className="px-4 min-h-[56px] py-2.5 flex flex-wrap items-center gap-2" data-guided-session={m.id}>
+                  <div className="w-full min-w-0">
+                    <div className="text-[15px] font-medium text-[var(--fg)]">{t(m.title)}</div>
+                    <div className="text-xs text-[var(--fg-muted)]">
                       {t(INTENT_LABELS[m.intent])} · {t('{n} min', { n: m.durationMinutes })} · {t(m.tagline)}
                     </div>
                   </div>
@@ -348,18 +380,19 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
                     <button
                       type="button"
                       onClick={() => handleVoiceSample(m)}
-                      title={isSampling ? t('Stop sample') : t('Hear the voice')}
-                      aria-label={isSampling ? t('Stop sample') : t('Hear the voice')}
-                      className={`${iconBtn} ${isSampling ? 'bg-[var(--accent)] text-white' : 'text-[var(--fg-muted)]'}`}
+                      title={isSampling ? guidance.stopPreview : guidance.preview}
+                      aria-label={`${isSampling ? guidance.stopPreview : guidance.preview}: ${t(m.title)}`}
+                      className={`min-h-11 px-2 rounded-[var(--radius-sm)] inline-flex items-center gap-2 text-sm cursor-pointer ${isSampling ? 'bg-[var(--accent)] text-white' : 'text-[var(--fg-muted)]'}`}
                     >
-                      {isSampling ? <Pause className="w-[18px] h-[18px]" strokeWidth={1.8} /> : <Mic className="w-[18px] h-[18px]" strokeWidth={1.8} />}
+                      {isSampling ? <Pause className="w-[18px] h-[18px] shrink-0" strokeWidth={1.8} /> : <Volume2 className="w-[18px] h-[18px] shrink-0" strokeWidth={1.8} />}
+                      <span>{isSampling ? guidance.stopPreview : guidance.preview}</span>
                     </button>
                   )}
                   <button
                     type="button"
                     onClick={() => handleStartGuided(m)}
-                    aria-label={t('Start')}
-                    className={`${iconBtn} bg-[var(--fg)] text-[var(--bg)]`}
+                    aria-label={`${t('Start')}: ${t(m.title)}`}
+                    className={`${iconBtn} ml-auto bg-[var(--fg)] text-[var(--bg)]`}
                   >
                     <Play className="w-[18px] h-[18px]" strokeWidth={1.8} />
                   </button>
