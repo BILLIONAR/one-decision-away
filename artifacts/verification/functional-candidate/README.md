@@ -8,6 +8,8 @@ Selected verified nonvisual work also includes ambient playback lifecycle fixes,
 
 Validation passed:
 
+Evidence correction: `9820134b5f9522700a869fb946622134cd853386` did not include the linked aggregate log because `.gitignore:6` excludes `*.log`. This evidence-only follow-up explicitly adds the original tested-build log without rerunning or replacing it. Its 57,403 bytes match the unchanged receipt's SHA256 `502216301ee25cde499cf8e6507455725f813a15840d8e9046e85d84a8ec7d9c` and the original scratch log byte-for-byte. Application source and publication status are unchanged.
+
 - Aggregate `VITE_BASE_PATH=/one-decision-away/ npm run check`: 419 tests, zero failures, plus translation/Notebook/routing checks and build. [Log](aggregate-check.log).
 - Actual cloud Chromium narration: 35 checks across 18 cases, zero exceptions/failures; real WebAudio decoding/nodes, trusted clicks and normal HTTP. [Report](../english-guidance-browser/lifecycle-report.json), [QA notes](../english-guidance-browser/README.md).
 - Independent first-use/course-entry: 46 checks, 28 scoped axe scans, 35 actual PNGs, zero exceptions. EN/TR/ES at 320×844, 390×844 and 1440×1000; the preview caption clipping found during review is fixed. [Evidence](../english-guidance-first-use/browser/independent-first-use/README.md).
