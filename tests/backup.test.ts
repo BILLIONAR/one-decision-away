@@ -8,6 +8,7 @@ import { queueDataWrite } from '../src/services/dataWrites';
 import { localDayKey } from '../src/services/momentum';
 import { createBackupSnapshot, InvalidBackupError, prepareBackupRestore, summarizeBackup } from '../src/services/backup';
 import type { UserData } from '../src/types/models';
+import { cloudCrudFixture } from './helpers/cloudCrudFixture';
 
 class MemoryStorage {
   values = new Map<string, string>();
@@ -222,10 +223,11 @@ test('cloud upload captures current courses and invalid cloud backups leave loca
   assert.equal(await saveCourseProgress(progress()), true);
   let uploaded: UserData | undefined;
   const invalid = { ...fixture(), courseProgress: { version: 9, lessons: {} } };
-  const mockClient = { from: () => ({
-    upsert: async (row: { data: UserData }) => { uploaded = row.data; return { error: null }; },
-    select: () => ({ eq: () => ({ maybeSingle: async () => ({ data: { data: invalid, updated_at: '2030-01-01T00:00:00Z' }, error: null }) }) }),
-  }) };
+  let hasUploaded = false;
+  const mockClient = cloudCrudFixture({
+    write: async row => { uploaded = row.data; hasUploaded = true; return { error: null }; },
+    read: async () => ({ data: hasUploaded ? { data: invalid, updated_at: '2030-01-01T00:00:00Z' } : null, error: null }),
+  }).client;
   const internal = cloudSync as unknown as Record<string, unknown>;
   const previous = { client: internal.client, session: internal.session, config: internal.config };
   Object.assign(internal, { client: mockClient, session: { user: { id: 'backup-user' } }, config: { url: 'https://project.example', anonKey: 'test' } });

@@ -71,7 +71,7 @@ export const BackupAndCloudSettings: React.FC = () => {
       if (!current()) { showToast(copy.cloudChanged, 'info'); return; }
       const ok = await cloudSync.push(data);
       if (!current()) { showToast(copy.cloudChanged, 'info'); return; }
-      showToast(ok ? t('Backed up to cloud.') : t('Cloud backup failed — check your connection.'), ok ? 'success' : 'error');
+      showToast(ok ? t('Backed up to cloud.') : cloudSync.getState().error || t('Cloud backup failed — check your connection.'), ok ? 'success' : 'error');
     }
   };
 
@@ -213,7 +213,7 @@ export const BackupAndCloudSettings: React.FC = () => {
               {cloud.lastSyncAt && <> {t('Last sync {time}.', { time: new Date(cloud.lastSyncAt).toLocaleString() })}</>}
               {cloud.error && <span className="text-[var(--danger)]"> {cloud.error}</span>}
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <Button variant="secondary" size="sm" icon={RefreshCw} onClick={handleSyncNow} disabled={cloud.syncing}>
                 {cloud.syncing ? t('Syncing…') : t('Sync now')}
               </Button>

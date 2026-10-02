@@ -78,7 +78,7 @@ export const Account: React.FC = () => {
       if (!current()) { showToast(backupCopy(getLocale()).cloudChanged, 'info'); return; }
       const ok = await cloudSync.push(data);
       if (!current()) { showToast(backupCopy(getLocale()).cloudChanged, 'info'); return; }
-      showToast(ok ? t('Backed up to cloud.') : t('Cloud backup failed — check your connection.'), ok ? 'success' : 'error');
+      showToast(ok ? t('Backed up to cloud.') : cloudSync.getState().error || t('Cloud backup failed — check your connection.'), ok ? 'success' : 'error');
     }
   };
 
@@ -108,14 +108,15 @@ export const Account: React.FC = () => {
     showToast(res.ok ? t('Your account and cloud backup are deleted. What is on this device stays until you reset it in Settings.') : (res.message ?? t('We couldn’t delete your account. Check your connection and try again.')), res.ok ? 'success' : 'error');
   };
 
+  const cloudConfirmed = !!cloud.session && !!cloud.lastSyncAt && !cloud.error;
   const header = (
     <header className="space-y-2">
       {native && <button type="button" onClick={() => setActiveRoute('/app/settings')} className="min-h-11 text-[14px] text-[var(--fg-muted)] underline underline-offset-4">{copy.back}</button>}
       <p className="oda-kicker text-[var(--accent)]">{t('Account')}</p>
-      <h1 className="oda-display text-[32px] sm:text-[40px] leading-tight tracking-tight">{cloud.session ? t('Your proof is safe') : t('Keep your proof with you')}</h1>
+      <h1 className="oda-display text-[32px] sm:text-[40px] leading-tight tracking-tight">{cloud.session ? cloudConfirmed ? t('Your proof is safe') : t('Account') : t('Keep your proof with you')}</h1>
       <p className="text-[15px] leading-relaxed text-[var(--fg-muted)] max-w-[52ch]">
         {cloud.session
-          ? t('Your decisions, evidence tree and notes are backed up and stay the same on every device where you sign in.')
+          ? cloudConfirmed ? t('Your decisions, evidence tree and notes are backed up and stay the same on every device where you sign in.') : backupCopy(getLocale()).cloudDeviceSaved
           : native ? copy.summary : t('Sign in and your decisions, evidence tree and notes are backed up and follow you to every device. No password: just tap the link we email you.')}
       </p>
     </header>
@@ -146,9 +147,9 @@ export const Account: React.FC = () => {
             </div>
           </div>
           <div className="oda-rule" />
-          <p className="text-[14px] text-[var(--fg-muted)]">
-            {cloud.syncing ? t('Syncing…') : cloud.lastSyncAt ? t('Last synced {date}', { date: formatDate(cloud.lastSyncAt, { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }) }) : t('Syncs automatically after every change.')}
-          </p>
+          {(cloud.syncing || cloud.lastSyncAt) && <p className="text-[14px] text-[var(--fg-muted)]">
+            {cloud.syncing ? t('Syncing…') : t('Last synced {date}', { date: formatDate(cloud.lastSyncAt!, { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }) })}
+          </p>}
           {cloud.error && <p role="alert" className="text-[13px] text-[var(--danger)]">{cloud.error}</p>}
           <div className="flex flex-wrap gap-2">
             <button type="button" onClick={() => void syncNow()} disabled={cloud.syncing} className="h-11 px-4 rounded-[var(--radius-sm)] bg-[var(--fg)] text-[var(--bg)] text-[14px] font-semibold inline-flex items-center gap-2 disabled:opacity-50"><RefreshCw size={16} />{t('Sync now')}</button>

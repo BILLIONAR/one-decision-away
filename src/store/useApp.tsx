@@ -695,7 +695,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         await cloudSync.init();
         const remote = options?.skipCloudPull ? null : await cloudSync.pullIfNewer(loaded);
         if (remote) {
-          if (await repository.replaceAll(remote, originalRecord => cloudSync.canApplyRemote(remote, originalRecord))) cloudSync.markRemoteApplied(remote);
+          if (await repository.replaceAll(remote, originalRecord => cloudSync.canApplyRemote(remote, originalRecord))) await cloudSync.markRemoteApplied(remote);
         }
         // A remote request can overlap a newer local save; render the latest record.
         loaded = await repository.load();
@@ -2457,8 +2457,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     // Repeated presses cannot create unresolved review promises or trigger an upload.
     if (cloudReviewActive.current) return true;
     cloudReviewActive.current = true;
+    const accountIsCurrent = cloudSync.currentAccountGuard();
     try {
-      const remote = await cloudSync.pullIfNewer(data);
+      const operationIsCurrent = cloudSync.currentOperationGuard();
+      const remote = await cloudSync.pullIfNewer(data, { forReview: true });
+      // A late read must not become an upload for another account or newer local work.
+      if (!operationIsCurrent()) return true;
       if (remote) {
         const accepted = await new Promise<boolean>(resolve => setCloudRestoreReview({ record: remote, resolve }));
         if (!accepted) return true;
@@ -2466,17 +2470,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           showToast(backupCopy(getLocale()).cloudChanged, 'info');
           return true;
         }
-        cloudSync.markRemoteApplied(remote);
-        await refreshData();
-        showToast(t('Synced from cloud.'), 'success');
+        const acknowledged = await cloudSync.markRemoteApplied(remote);
+        if (!accountIsCurrent()) return true;
+        // Show the reviewed commit without making a second, unreviewed cloud read.
+        await refreshData({ skipCloudPull: true });
+        if (!accountIsCurrent()) return true;
+        showToast(acknowledged ? t('Synced from cloud.') : backupCopy(getLocale()).cloudAppliedPaused, acknowledged ? 'success' : 'info');
         return true;
       }
-      if (cloudSync.getState().error) {
-        showToast(t('Cloud backup failed — check your connection.'), 'error');
+      const cloudError = cloudSync.getState().error;
+      if (cloudError) {
+        showToast(cloudError, 'error');
         return true;
       }
     } catch {
-      showToast(t('Cloud backup failed — check your connection.'), 'error');
+      if (accountIsCurrent()) showToast(t('Cloud backup failed — check your connection.'), 'error');
+      return true;
     } finally {
       cloudReviewActive.current = false;
     }

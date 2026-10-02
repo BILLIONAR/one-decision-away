@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { beforeEach, test } from 'node:test';
 import { APP_DATA_STORAGE_KEY } from '../src/services/storageKeys';
 import { queueDataWrite } from '../src/services/dataWrites';
+import { cloudCrudFixture } from './helpers/cloudCrudFixture';
 
 class MemoryStorage {
   values = new Map<string, string>();
@@ -36,15 +37,11 @@ function setup() {
   const read = deferred<any>();
   const started = deferred<void>();
   const uploads: any[] = [];
-  internal.client = {
-    auth: { signOut: async () => undefined },
-    from: () => ({
-      select: () => ({ eq: (_key: string, userId: string) => ({ maybeSingle: () => {
-        assert.equal(userId, 'account-a'); started.resolve(); return read.promise;
-      } }) }),
-      upsert: async (row: any) => { uploads.push(row); return { error: null }; },
-    }),
-  };
+  const crud = cloudCrudFixture({
+    read: async userId => { assert.equal(userId, 'account-a'); started.resolve(); return read.promise; },
+    write: async row => { uploads.push(row); return { error: null }; },
+  });
+  internal.client = { ...crud.client, auth: { signOut: async () => undefined } };
   const respond = () => read.resolve({ data: { data: remote, updated_at: '2030-01-01T00:00:00Z' }, error: null });
   return { local, remote, read, started, uploads, respond };
 }
@@ -140,7 +137,7 @@ for (const error of [null, new Error('Account A upload failed')]) test(`an old u
   const fixture = setup();
   const upload = deferred<any>();
   const started = deferred<void>();
-  internal.client.from = () => ({ upsert: () => { started.resolve(); return upload.promise; } });
+  internal.client = cloudCrudFixture({ write: async () => { started.resolve(); return upload.promise; } }).client;
   let notifications = 0;
   const unsubscribe = cloudSync.subscribe(() => { notifications++; });
   try {
