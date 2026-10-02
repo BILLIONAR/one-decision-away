@@ -1,0 +1,35 @@
+{
+  "method": "PostCSS AST selector+ancestor+occurrence comparison handles repeated selectors; exact rule removal independently verifies every other CSS byte",
+  "files": [
+    {
+      "path": "/workspace/oda-cloud-upload-current-record/dist/assets/index-D6Ptr9gO.css",
+      "bytes": 108090,
+      "sha256": "a5e714416151984e402601fc542cbea6426cec029d2a1f2d9619762421ecb336",
+      "ruleCount": 1292
+    },
+    {
+      "path": "/workspace/oda-soundroom-entitlement-fix/dist/assets/index-DU91_Q2l.css",
+      "bytes": 108126,
+      "sha256": "c31168aa6eee82f80beaabaee8bca668f1dd146ea26d7095b0db5812153f9d3e",
+      "ruleCount": 1293
+    }
+  ],
+  "added": [
+    {
+      "selector": ".lowercase",
+      "context": [
+        "@layer utilities"
+      ],
+      "occurrence": 0,
+      "body": "text-transform:lowercase"
+    }
+  ],
+  "removed": [],
+  "changed": [],
+  "exactInsertedRule": ".lowercase{text-transform:lowercase}",
+  "insertedBytes": 36,
+  "insertionOffset": 74339,
+  "allOtherBytesIdentical": true,
+  "bridgedSHA256": "a5e714416151984e402601fc542cbea6426cec029d2a1f2d9619762421ecb336",
+  "scope": "Only an additive lowercase utility class in the utilities layer; no existing selector/declaration/order/media/base/font/route rule changed."
+}

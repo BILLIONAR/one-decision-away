@@ -1,5 +1,5 @@
 {
-  "method": "All raw evidence bytes preserved, including generated fixture snapshots. JavaScript/TypeScript files have a .txt suffix to avoid app TypeScript scanning. PACKAGING maps original paths to preserved paths. Both production stylesheets are bound in report and aggregate build hashes.",
+  "method": "Raw evidence bytes preserved. JavaScript/TypeScript harness source uses .txt suffixes; the two generated fixture.js snapshots use git-ignored .log suffixes so Tailwind cannot scan their runtime strings. Force-added tracked artifacts remain accessible. Restore original names in scratch to run. Both production stylesheets and every build file match the reviewed source build.",
   "files": [
     {
       "source": "/workspace/scratch/oda-soundroom-entitlement-fix/README.md",
@@ -495,7 +495,7 @@
     },
     {
       "source": "/workspace/scratch/oda-soundroom-browser/fixture.js",
-      "artifact": "browser/fixture.js.txt",
+      "artifact": "browser/fixture.js.log",
       "bytes": 2673205,
       "sha256": "69fa5f7dd9238d429c96edcb0bbbde74acde6694af5f35b3191a9414a91ff36e"
     },
@@ -507,7 +507,7 @@
     },
     {
       "source": "/workspace/scratch/oda-soundroom-browser/before-route-css/fixture.js",
-      "artifact": "browser/before-route-css/fixture.js.txt",
+      "artifact": "browser/before-route-css/fixture.js.log",
       "bytes": 2673205,
       "sha256": "69fa5f7dd9238d429c96edcb0bbbde74acde6694af5f35b3191a9414a91ff36e"
     },

@@ -52,13 +52,13 @@
   "artifacts": [
     {
       "file": "PACKAGING.json",
-      "bytes": 22921,
-      "sha256": "82ef8d8c54a46da1800e70ce77a9649cb7a36b4e0c3fa7c16510aaaaf0ac4914"
+      "bytes": 23017,
+      "sha256": "c76e13fc443942825d0ba3bbcf82f74b95d6fcc787feddbe88be8c793b350165"
     },
     {
       "file": "README.md",
-      "bytes": 4623,
-      "sha256": "182d8a833683dc7f882d2079ac0ce4e0bccb8791db6c2dc7da92caf9c79dda4f"
+      "bytes": 5396,
+      "sha256": "cc56052370f2d872826360b56cc9dcde5de0ced39e6324d6f02410ae6609ef66"
     },
     {
       "file": "browser/README.md",
@@ -91,7 +91,7 @@
       "sha256": "d042224d002188a5386484911fb13e3679bd293e1804794cb4f9ce7e34ecbfcb"
     },
     {
-      "file": "browser/before-route-css/fixture.js.txt",
+      "file": "browser/before-route-css/fixture.js.log",
       "bytes": 2673205,
       "sha256": "69fa5f7dd9238d429c96edcb0bbbde74acde6694af5f35b3191a9414a91ff36e"
     },
@@ -181,7 +181,7 @@
       "sha256": "d042224d002188a5386484911fb13e3679bd293e1804794cb4f9ce7e34ecbfcb"
     },
     {
-      "file": "browser/fixture.js.txt",
+      "file": "browser/fixture.js.log",
       "bytes": 2673205,
       "sha256": "69fa5f7dd9238d429c96edcb0bbbde74acde6694af5f35b3191a9414a91ff36e"
     },
@@ -486,6 +486,36 @@
       "sha256": "c95883a5d799d04d92f0c3212b0d7cbf26939fa2db3488cdf43a685dc132097a"
     },
     {
+      "file": "packaging-build/before-correction-build.log",
+      "bytes": 12251,
+      "sha256": "92bb45481c7592ef5f0eae0b4dfbe7beca592b1d33ed00c42a851393ca057989"
+    },
+    {
+      "file": "packaging-build/before-correction-receipt.json",
+      "bytes": 518,
+      "sha256": "9c24e677a54f141ec154ce39d0895cc29ad0b1f2d7e722870d6fcd23fff06672"
+    },
+    {
+      "file": "packaging-build/corrected-probe-build.log",
+      "bytes": 12293,
+      "sha256": "6f7e6601e21664eaa38c537d67dfe62cb191971e306f83be4ec954a5564b6d77"
+    },
+    {
+      "file": "packaging-build/final-build.log",
+      "bytes": 12293,
+      "sha256": "ce758394bbb2a00dfcfebb1a24390b5431e48cdf55e0056e4aec762dbe99593e"
+    },
+    {
+      "file": "packaging-build/independent-css-delta.json.log",
+      "bytes": 1250,
+      "sha256": "cf9fb5be901b374e34a60c1f76ca149306e807ea60cd6047e5c692a404332c90"
+    },
+    {
+      "file": "packaging-build/receipt.json",
+      "bytes": 73779,
+      "sha256": "3c64df8a32d189df3b560608edd3ee6b5da9860439bf2c08ef95c07cece1553b"
+    },
+    {
       "file": "protected-appearance-parity.json",
       "bytes": 14148,
       "sha256": "36ddb7f3e6b26131a0be6f0b503c3eb979dba582d7ef8e398ec7f7ac835de530"
@@ -495,5 +525,13 @@
       "bytes": 2440,
       "sha256": "a08b7fa1746de077a163b7e1d1fca9b61360ed1e94dd016783bf88138eb22d6a"
     }
-  ]
+  ],
+  "packagingCorrection": {
+    "priorEvidenceTipPreserved": "f97e22e95a954c78147df151031604921b0c5fca",
+    "branch": "review/soundroom-evidence-packaging",
+    "onlyGeneratedSnapshotsRenamed": 2,
+    "rawBytesUnchanged": true,
+    "all386BuildFilesMatchReviewedSource": true,
+    "proof": "packaging-build/receipt.json"
+  }
 }
