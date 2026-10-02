@@ -9,11 +9,13 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import { getInitialDemoState } from '../src/services/repository.ts';
+import { appRouteHref } from '../src/utils/routing.ts';
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const base = (process.env.ODA_QA_URL || 'http://127.0.0.1:4173').replace(/\/$/, '');
 const output = path.resolve(process.env.ODA_MOBILE_CORE_QA_OUT || 'artifacts/mobile-core-quality');
 const origin = new URL(base).origin;
+const routeUrl = route => new URL(appRouteHref(route, new URL(base).pathname), origin).href;
 const key = 'one_decision_away_app_data_v1';
 const photoFixturePath = 'public/assets/oda/trees/tree-00-seedling-0.png';
 const photoFixture = fs.readFileSync(path.join(repo, photoFixturePath));
@@ -107,7 +109,7 @@ const trap = async (page, dialog) => {
   return positions;
 };
 const startFocus = async page => {
-  await page.goto(`${base}/app/focus`);
+  await page.goto(routeUrl('/app/focus'));
   await page.getByRole('heading', { name: 'Focus', exact: true, level: 1 }).waitFor();
   await page.getByRole('button', { name: 'Ambient', exact: true }).click();
   await page.getByRole('button', { name: /^Silence/ }).click();
@@ -180,10 +182,10 @@ try {
   ];
   for (const scenario of photos) {
     const { context, page } = await open(scenario.name, scenario);
-    await page.goto(`${base}/app`);
+    await page.goto(routeUrl('/app'));
     await page.locator('#set-one-decision').waitFor();
     const before = await saved(page);
-    await page.goto(`${base}/app/notebook`);
+    await page.goto(routeUrl('/app/notebook'));
     await page.getByRole('heading', { name: 'Notebook', exact: true }).waitFor();
     assert.equal(await page.getByRole('button', { name: 'Download a recovery copy', exact: true }).count(), 0);
     check(`${scenario.name}: Notebook mounts without whole-app recovery`);
