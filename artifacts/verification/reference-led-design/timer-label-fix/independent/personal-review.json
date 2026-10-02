@@ -1,0 +1,130 @@
+{
+  "sourceCommit": "4a8b5753dc7c1c676e5a2146ae1d4e63a4772b75",
+  "branch": "design/reference-led-oda",
+  "verdict": "Independent targeted QA passes; P3 native timer label truncation resolved in the checked12 mobile contexts.",
+  "scope": "EN/TR/ES320/390 light/dark; no broad visual matrix repeat.",
+  "personallyInspectedPngs": [
+    {
+      "file": "baseline/tr-light-320-no-timer.png",
+      "bytes": 148880,
+      "sha256": "5328dc0493126af2be5cea625d0b2fdfcf98e6a340b11e69be06ab839839250e"
+    },
+    {
+      "file": "baseline/tr-dark-320-no-timer.png",
+      "bytes": 147093,
+      "sha256": "c1b34974356b771a246534dcff25d9cc02b5b65c59bce4125ffc0386dd17f0d0"
+    },
+    {
+      "file": "final-4a8/en-light-320-no-timer.png",
+      "bytes": 151067,
+      "sha256": "f15110733094a88584c880d1d9b8a37a6c43560b2a9344d2cb70ff199115e709"
+    },
+    {
+      "file": "final-4a8/en-light-390-no-timer.png",
+      "bytes": 170543,
+      "sha256": "fde3731ee31fb155d0de7e8eacb2f55b8b23bcd132d9bdb85d9d8ac513ba0b9b"
+    },
+    {
+      "file": "final-4a8/en-dark-320-no-timer.png",
+      "bytes": 149152,
+      "sha256": "0fe5d0c264896bec38207520eb6f375340e2e978b4f4867f9083f8f37b4a8081"
+    },
+    {
+      "file": "final-4a8/en-dark-390-no-timer.png",
+      "bytes": 167440,
+      "sha256": "fdaa69196b3963f31f52e17497750e5e4598e3fe72d7b443fdc6a26094fabe45"
+    },
+    {
+      "file": "final-4a8/tr-light-320-no-timer.png",
+      "bytes": 148866,
+      "sha256": "0d27ad9108e3cc72edf2bd56590d90202239e03646629ee6c305b8fecf5f7cb8"
+    },
+    {
+      "file": "final-4a8/tr-light-390-no-timer.png",
+      "bytes": 174283,
+      "sha256": "9b85f97ee3158ae36f14df8757fefcfda4b5666e362f77bc48b9bddfd62666de"
+    },
+    {
+      "file": "final-4a8/tr-dark-320-no-timer.png",
+      "bytes": 147084,
+      "sha256": "a571e5e8b532b0012dfc72dc0b389ba56ed5b0840af881f861108a55b6f55845"
+    },
+    {
+      "file": "final-4a8/tr-dark-390-no-timer.png",
+      "bytes": 171341,
+      "sha256": "bdf06532bccfd6c52d0a12cf77cb55f4ab0f2e0af6a1c6fe1cd898657175f817"
+    },
+    {
+      "file": "final-4a8/es-light-320-no-timer.png",
+      "bytes": 147751,
+      "sha256": "53f8fca6aa0b2b4ce5130ba7f6d07898f6a8fb23d790b5ea38011052035bb332"
+    },
+    {
+      "file": "final-4a8/es-light-390-no-timer.png",
+      "bytes": 182029,
+      "sha256": "11404f0433bd7090274fe1c754ec88e88abdab8b533fa0807094ce5c7ae1c829"
+    },
+    {
+      "file": "final-4a8/es-dark-320-no-timer.png",
+      "bytes": 146602,
+      "sha256": "dcc5ad5586e7c18272f218694a5a72914ff9b121bbb8e373685a5799cdd1e17e"
+    },
+    {
+      "file": "final-4a8/es-dark-390-no-timer.png",
+      "bytes": 179379,
+      "sha256": "57b81c0eccf32ea53e26a169447305153ff0dfffa99c646211536b4803d318ab"
+    },
+    {
+      "file": "final-4a8/es-light-320-active.png",
+      "bytes": 103860,
+      "sha256": "5ba6bc019aa21794f717c7a7943eb86ad874c512e0477d9e93fefc56e7ea3697"
+    },
+    {
+      "file": "final-4a8/es-dark-390-active.png",
+      "bytes": 116129,
+      "sha256": "9ecc2a19d5c6d1f15edeaed984ac631f34776265783e38f620654cb5120a98ba"
+    }
+  ],
+  "actualPixelFinding": "Both original TR320 baseline PNGs visibly clipped Zamanlayıcı yok. All12 final no-timer PNGs visibly show the complete localized label; inspected active ES320/390 player labels also fit. Player styling and layout remain consistent.",
+  "baselineBuild": "All388 baseline files equal final71 reviewed build; preserved original PNGs and rawlog.",
+  "baselineMeasurementCaveat": "The original baseline computed CSS font shorthand was empty, so its canvas measurement used a default font and is invalid for selected-text fit. Actual saved TR320 PNGs visibly truncate the selected label; those pixels and388-build-file hash equality are the baseline evidence. The final harness explicitly constructs the font from computed longhands.",
+  "finalMeasurements": {
+    "contexts": 12,
+    "screenshots": 24,
+    "optionFits": 60,
+    "everyOptionFits": true,
+    "options": [
+      "No timer / localized equivalent",
+      "10min /10dk",
+      "20min /20dk",
+      "30min /30dk",
+      "60min /60dk"
+    ],
+    "selectWidths": {
+      "en": 118,
+      "tr": 123.78125,
+      "es": 129.78125
+    },
+    "minimumVolumeWidth": 91.4375,
+    "volumeHeight": 44,
+    "playerHeight": 124.375,
+    "originalRowAndPlayerHeightRetained": true,
+    "minimumPlayerNavClearance": 8,
+    "nativeKeyboardTimerVolumePlaybackAndTodayNavigation": "Pass",
+    "scopedAxeScans": 12,
+    "scopedAxeViolations": 0,
+    "pageErrors": [],
+    "failures": []
+  },
+  "binding": "evidence-receipt.json independently confirms source4a8 committed CSS, unchanged source/build during run, all388 build hashes against the exact aggregate receipt, and actual76225-byte aggregate log SHA511bbcfabdff03aa8af00150a13a113aeaa5b830e939dcc444bc07591e07e644.",
+  "limits": [
+    "Actual Chromium151.0.7922.173 in saved Linux cloud; native iOS/physical touch rendering remains untested.",
+    "Font-longhand canvas width plus explicit20px arrow reserve is supporting evidence; actualPNG inspection is the visible-label evidence.",
+    "Synthetic isolated profiles only; all externals blocked, no provider/model/account/payment/install/deploy.",
+    "No human audio-perception or full-app WCAG certification claim."
+  ],
+  "sourceEditsByThisReviewer": false,
+  "remainingFindings": [],
+  "publication": "Not deployed; production release remains with the existing approval boundary.",
+  "readersClosed": true
+}

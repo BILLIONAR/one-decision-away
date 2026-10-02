@@ -1,0 +1,67 @@
+{
+  "kind": "sealed independent final existing aggregate/source/build evidence receipt",
+  "verifiedAtUtc": "2026-10-02T18:52:18.328788+00:00",
+  "reviewedSourceCommit": "4a8b5753dc7c1c676e5a2146ae1d4e63a4772b75",
+  "worktree": "/workspace/oda-reference-redesign",
+  "before": {
+    "head": "4a8b5753dc7c1c676e5a2146ae1d4e63a4772b75",
+    "status": ""
+  },
+  "after": {
+    "head": "4a8b5753dc7c1c676e5a2146ae1d4e63a4772b75",
+    "status": ""
+  },
+  "sourceReview": {
+    "file": "/workspace/scratch/oda-reference-redesign/timer-label-fix/protection/source-review.json",
+    "sha256": "b3e713b08d93128ab73dada507d2828cd57de2bdbd987109c0c4219a43d10238",
+    "findingCounts": {
+      "P0": 0,
+      "P1": 0,
+      "P2": 0,
+      "P3": 0
+    }
+  },
+  "buildReceipt": {
+    "file": "/workspace/scratch/oda-reference-redesign/timer-label-fix/build-receipt.json",
+    "sha256": "8a0f587cc7ef00cd203924f53652f81e8baf8bc4641a61987fec87d86d52c5f3",
+    "command": "VITE_BASE_PATH=/one-decision-away/ npm run check",
+    "exitCode": 0,
+    "unchangedDuringRunAsRecorded": true
+  },
+  "aggregateLog": {
+    "file": "/workspace/scratch/oda-reference-redesign/timer-label-fix/aggregate-check.log",
+    "bytes": 76225,
+    "sha256": "511bbcfabdff03aa8af00150a13a113aeaa5b830e939dcc444bc07591e07e644",
+    "actualPass": 597,
+    "actualFail": 0,
+    "buildCompleteLines": [
+      "\u2713 built in 10.82s"
+    ]
+  },
+  "checks": {
+    "all691SourceHashesMatchActualCommittedSourceAndReceipt": true,
+    "all348ProtectedFilesAnd160NarrationMp3sUnchanged": true,
+    "all388CompiledFileNamesBytesAndHashesMatchReceipt": true,
+    "allSixCssHashesMatchReceipt": true,
+    "headAndWorktreeUnchangedDuringIndependentRebind": true
+  },
+  "sealedManifest": {
+    "file": "/workspace/scratch/oda-reference-redesign/timer-label-fix/protection/sealed-source-build-manifest.json",
+    "bytes": 327353,
+    "sha256": "06ec2a3062b4efd15df4561fdae71750fef1bd2c7802e47803d1a2f7786a3b18"
+  },
+  "findings": [],
+  "findingCounts": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0,
+    "P3": 0
+  },
+  "testsOrBuildRerunByReviewer": false,
+  "applicationEditsByReviewer": false,
+  "publicationPerformed": false,
+  "limits": [
+    "This seals existing aggregate/build evidence and source review. Actual TR320 native timer label readability and mobile-player geometry remain in separate browser QA evidence.",
+    "Parent visual/QA approval remains required before publication."
+  ]
+}

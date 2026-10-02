@@ -1,0 +1,51 @@
+{
+  "kind": "Root actual PNG visual inspection of narrow timer label repair",
+  "atUtc": "2026-10-02T18:54:16.678812+00:00",
+  "sourceCommit": "4a8b5753dc7c1c676e5a2146ae1d4e63a4772b75",
+  "beforeSourceCommit": "9adcd46084763c64579203b97902029e8bad0ef7",
+  "inspectedActualPixels": true,
+  "files": [
+    {
+      "file": "independent/baseline/tr-light-320-no-timer.png",
+      "bytes": 148880,
+      "sha256": "5328dc0493126af2be5cea625d0b2fdfcf98e6a340b11e69be06ab839839250e"
+    },
+    {
+      "file": "independent/final-4a8/tr-light-320-no-timer.png",
+      "bytes": 148866,
+      "sha256": "0d27ad9108e3cc72edf2bd56590d90202239e03646629ee6c305b8fecf5f7cb8"
+    },
+    {
+      "file": "independent/final-4a8/tr-dark-320-no-timer.png",
+      "bytes": 147084,
+      "sha256": "a571e5e8b532b0012dfc72dc0b389ba56ed5b0840af881f861108a55b6f55845"
+    },
+    {
+      "file": "independent/final-4a8/es-light-320-no-timer.png",
+      "bytes": 147751,
+      "sha256": "53f8fca6aa0b2b4ce5130ba7f6d07898f6a8fb23d790b5ea38011052035bb332"
+    },
+    {
+      "file": "independent/final-4a8/en-light-390-active.png",
+      "bytes": 130162,
+      "sha256": "8cb933bcb210d0da5cc73cc8a798ddf55d56cb6b290f9598fb42f8bc629359bf"
+    },
+    {
+      "file": "independent/final-4a8/tr-light-320-active.png",
+      "bytes": 100686,
+      "sha256": "727769e87163767fcba5658b9d92064a73eb7ad7a5a25f56691f3aea1e4232fd"
+    }
+  ],
+  "findings": [],
+  "assessment": [
+    "Before TR320 select visibly truncates Zamanlayıcı yok.",
+    "After TR320 in both light and dark, and ES320 light, selected no-timer label is fully visible.",
+    "TR320 and EN390 active screenshots retain usable volume controls, native timer and playback button with player clear of navigation.",
+    "No new theme, color, logo, scene or layout direction is introduced by this width-only repair."
+  ],
+  "limits": [
+    "Six PNGs personally inspected by root; all12contexts automated by independent reviewer.",
+    "Synthetic Chromium151 preview in selected saved Linux cloud; no physical-device or listening-quality claim.",
+    "Arrow reserve in canvas estimate is explicit20px estimate; actual PNG pixels establish visible-label result."
+  ]
+}

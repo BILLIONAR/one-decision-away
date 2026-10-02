@@ -1,3 +1,5 @@
+> Current follow-up: the [minimal Sound Room timer label repair](timer-label-fix/README.md) is bound to application source **`4a8b5753dc7c1c676e5a2146ae1d4e63a4772b75`**, with fresh 597/0 aggregate and independent EN/TR/ES mobile QA. The original parent-approved 9adcd46 / 71f1ce packet below remains historical; its logs are unchanged. No deployment.
+
 # ODA reference-led review candidate
 
 Branch: `design/reference-led-oda`. Final application source: **`71f1ce41f77bddb519cc9d18933303cc13336073`**, based on the previously verified candidate **`68ae8179c875b54ce8f200e34a6148259ae6cad1`**. Initial visual source was `cf95c6eda4264385a4f70b41f7df0dee7832ebe7`; the final four-file follow-up fixes a calendar discoverability finding. This is review evidence, not publication approval. No deployment, main merge, install or provider/account/billing/native-signing change occurred.
