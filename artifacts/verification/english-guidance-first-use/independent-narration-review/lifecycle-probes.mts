@@ -1,11 +1,15 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { readFileSync, writeFileSync } from 'node:fs';
-import { RecordedNarration } from '/workspace/one-decision-away/src/utils/recordedNarration.ts';
-import { VoiceGuide } from '/workspace/one-decision-away/src/utils/voiceGuide.ts';
-import { geminiVoice } from '/workspace/one-decision-away/src/utils/geminiVoice.ts';
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { RecordedNarration } from '../../../../src/utils/recordedNarration.ts';
+import { VoiceGuide } from '../../../../src/utils/voiceGuide.ts';
+import { geminiVoice } from '../../../../src/utils/geminiVoice.ts';
 
-const out = '/workspace/scratch/oda-narration-integration-review';
+const out = process.env.ODA_NARRATION_REVIEW_OUT ?? mkdtempSync(join(tmpdir(), 'oda-narration-lifecycle-'));
+mkdirSync(out, { recursive: true });
+const sourceRoot = new URL('../../../../', import.meta.url);
 const digest = (bytes: ArrayBuffer) => Promise.resolve(createHash('sha256').update(Buffer.from(bytes)).digest('hex'));
 const bytes = Uint8Array.of(21, 31, 41, 51);
 const asset = (cueIndex = 0, sessionId = 'review') => ({ sessionId, cueIndex, language: 'en-US' as const, version: 'v1', text: `Original English cue ${cueIndex}.`, file: `assets/oda/narration/en-US/v1/clips/${sessionId}-${cueIndex}.mp3`, bytes: bytes.length, checksum: createHash('sha256').update(bytes).digest('hex'), sourceTextHash: createHash('sha256').update(`Original English cue ${cueIndex}.`).digest('hex'), decodedDurationSeconds: 5, containerDurationSeconds: 5.04, scheduledStartSeconds: cueIndex * 20, slotSeconds: 20 });
@@ -133,6 +137,6 @@ await probe('No installed English voice never substitutes Turkish when recorded 
   assert.equal(spoken.length,0);assert.equal(guide.getPlaybackMode(),'unavailable');assert.equal(providerCalls,0);guide.stop();return {mode:'unavailable',spoken:0};
 });
 geminiVoice.speak=provider;for(const [name,descriptor]of original){if(descriptor)Object.defineProperty(globalThis,name,descriptor);else Reflect.deleteProperty(globalThis,name);}
-const sources=['src/utils/recordedNarration.ts','src/utils/voiceGuide.ts','public/sw.js'].map(file => ({file,sha256:createHash('sha256').update(readFileSync('/workspace/one-decision-away/'+file)).digest('hex')}));
+const sources=['src/utils/recordedNarration.ts','src/utils/voiceGuide.ts','public/sw.js'].map(file => ({file,sha256:createHash('sha256').update(readFileSync(new URL(file, sourceRoot))).digest('hex')}));
 const report={at:new Date().toISOString(),kind:'Independent controlled lifecycle probes, no network/provider',sources,results,passed:results.filter(r=>r.status==='passed').length,failed:results.filter(r=>r.status==='failed').length};
 writeFileSync(out+'/lifecycle-report.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));
