@@ -4,6 +4,8 @@ import { useApp } from '../store/useApp';
 import { N_, useT } from '../i18n';
 import { getNotebookDateKey, getNotebookStats } from '../services/notebook';
 import { JournalWorkspace } from '../components/notebook/JournalWorkspace';
+import { EvidenceTree } from '../components/momentum/EvidenceTree';
+import { keptDecisions } from '../services/momentum';
 import { WrittenPractice } from '../components/notebook/WrittenPractice';
 import { Practice369 } from '../components/notebook/Practice369';
 import { AffirmationPractice, GratitudePractice } from '../components/notebook/DailyPractices';
@@ -62,7 +64,7 @@ export const Notebook: React.FC = () => {
       {tabs.map(({ id, label }) => <button key={id} type="button" aria-pressed={section === id} aria-controls={`notebook-${id}-section`} onClick={() => setSection(id)} className={`flex-1 h-10 rounded-[var(--radius-xs)] text-sm font-medium cursor-pointer transition-colors focus-visible:outline focus-visible:outline-2 ${section === id ? 'bg-[var(--bg)] text-[var(--fg)]' : 'text-[var(--fg-muted)]'}`}>{label}</button>)}
     </nav>
 
-    <section id="notebook-journal-section" hidden={section !== 'journal'} aria-label={t('Journal')}><JournalWorkspace today={today} /></section>
+    <section id="notebook-journal-section" hidden={section !== 'journal'} aria-label={t('Journal')}><JournalWorkspace today={today} reflectionArtwork={<EvidenceTree count={keptDecisions(data.missions).length} label={t('Notebook')} />} /></section>
     <section id="notebook-manifest-section" className="oda-notebook-practices" hidden={section !== 'manifest'} aria-label={t('Practices')}>
       <p className="text-sm text-[var(--fg-muted)] mb-6">{t('Five ways to write. Pick one, use your own words, come back when it helps.')}</p>
       <div className="space-y-6">

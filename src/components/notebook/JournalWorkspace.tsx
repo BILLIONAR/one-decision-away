@@ -8,8 +8,6 @@ import { NotebookCalendar } from './NotebookCalendar';
 import { TodaysPrompt } from './TodaysPrompt';
 import { ActionNotice, dateLabel, quietButton, smallLabel, cardCls, NButton, NField, NInput, NSelect, NTextarea, useNotebookAction, useSessionDraft } from './shared';
 import { useDialogAccessibility } from '../../utils/useDialogAccessibility';
-import { EvidenceTree } from '../momentum/EvidenceTree';
-import { keptDecisions } from '../../services/momentum';
 
 const MOODS = [
   ['joyful', N_('Joyful')], ['calm', N_('Calm')], ['grateful', N_('Grateful')],
@@ -31,7 +29,7 @@ const SEED_TEXT: Record<string, Record<string, string>> = {
 };
 
 
-export const JournalWorkspace: React.FC<{ today: string }> = ({ today }) => {
+export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: React.ReactNode }> = ({ today, reflectionArtwork }) => {
   const t = useT();
   const { data, saveNotebookEntry, updateDreamJournalEntry, deleteNotebookEntry, deleteDreamJournalEntry } = useApp();
   const { busy, notice, run, setNotice } = useNotebookAction();
@@ -144,7 +142,7 @@ export const JournalWorkspace: React.FC<{ today: string }> = ({ today }) => {
       </form>
     </div>
     <div className="oda-notebook-reflection-hero">
-      <div className="oda-notebook-reflection-art" aria-hidden="true"><EvidenceTree count={keptDecisions(data.missions).length} label={t('Notebook')} /></div>
+      <div className="oda-notebook-reflection-art" aria-hidden="true">{reflectionArtwork}</div>
     <TodaysPrompt today={today} onUse={usePrompt} />
     </div>
     </div>
