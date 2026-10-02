@@ -1,5 +1,6 @@
 import type { Mission, NotebookEntry, UserData } from '../types/models';
 import { localDayKey } from './momentum';
+import { hasCourseLearningProgress } from './courseEntry';
 
 export const DAILY_REFLECTION_PROMPT = 'oda-daily-reflection-v1';
 
@@ -67,10 +68,7 @@ export function courseContinuation<T extends { id: string; lessonIds: string[]; 
   const items = courses.map(course => {
     const index = course.lessonIds.findIndex(id => progress.lessons[id]?.completed !== true);
     const completed = course.lessonIds.filter(id => progress.lessons[id]?.completed === true).length;
-    const started = course.lessonIds.some(id => {
-      const lesson = progress.lessons[id];
-      return Boolean(lesson && (lesson.completed || lesson.checked.some(Boolean) || lesson.answer !== null || lesson.reflection.trim()));
-    });
+    const started = hasCourseLearningProgress(course.lessonIds, progress);
     return { course, index, completed, started };
   }).filter(item => item.index >= 0);
   return items.find(item => item.started && item.course.id === selectedId)

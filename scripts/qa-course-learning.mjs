@@ -6,6 +6,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { getInitialDemoState } from '../src/services/repository.ts';
 import { coursesFor } from '../src/data/courses.ts';
 import { courseLearningCopy } from '../src/data/courseLearningCopy.ts';
+import { courseEntryCopy } from '../src/data/courseEntryCopy.ts';
 import { practiceGuideFor } from '../src/data/coursePracticeContent.ts';
 import { patchPersonalRecordFixture } from './qa-personal-record-fixtures.mjs';
 
@@ -45,6 +46,10 @@ try {
     const seed = getInitialDemoState();
     seed.profile = { ...seed.profile, displayName: 'Course QA', locale, onboardingStep: 'completed', theme: 'light', intent: 'finish', simpleModeOff: true, firstOpenedAt: '2026-08-01T00:00:00.000Z', createdAt: '2026-08-01T00:00:00.000Z' };
     const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce', timezoneId: 'Europe/Istanbul', serviceWorkers: 'block' });
+    if (process.env.ODA_QA_ISOLATE_EXTERNAL === '1') await context.route('**/*', route => {
+      const host = new URL(route.request().url()).hostname;
+      return ['localhost', '127.0.0.1', '[::1]'].includes(host) ? route.continue() : route.abort();
+    });
     await context.addInitScript(({ key, seed, locale }) => {
       if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify(seed));
       localStorage.setItem('oda_locale', locale);
@@ -61,8 +66,36 @@ try {
     const course = coursesFor(locale).find(item => item.id === 'procrastination');
     await page.locator('#course-search').fill(course.title);
     assert.equal(await page.locator('.oda-course-row').count(), 1);
+    const untouchedProgress = await page.evaluate(key => JSON.parse(localStorage.getItem(key)).courseProgress ?? null, key);
     await page.locator('.oda-course-row').click();
+    await page.locator('.oda-course-overview').waitFor();
+    assert.equal(await page.locator('.oda-course-lesson-title').count(), 0);
+    assert.equal(await page.locator('#course-overview-title').textContent(), course.title);
+    assert.ok(await page.getByText(course.description, { exact: true }).isVisible());
+    assert.ok(await page.getByText(course.outcome, { exact: true }).isVisible());
+    assert.equal(await page.locator('[data-course-overview-lesson]').count(), course.lessons.length);
+    for (const lesson of course.lessons) {
+      const row = page.locator(`[data-course-overview-lesson="${lesson.id}"]`);
+      assert.ok(await row.getByText(lesson.title, { exact: true }).isVisible());
+      assert.ok(await row.getByText(`${lesson.minutes} min`, { exact: true }).isVisible());
+    }
+    await layout(page, `${locale} course overview mobile`);
+    if (locale === 'en') {
+      await screenshot(page, 'overview-mobile', false);
+      await page.setViewportSize({ width: 320, height: 740 });
+      await layout(page, 'course overview 320px');
+      await screenshot(page, 'overview-320px', false);
+      await page.setViewportSize({ width: 390, height: 844 });
+    }
+    await page.reload(); await ready(page);
+    await page.locator('.oda-course-overview').waitFor();
+    assert.equal(await page.locator('.oda-course-lesson-title').count(), 0, 'selection alone must not count as learning');
+    assert.equal(await page.locator('#course-start-lesson').textContent(), courseEntryCopy(locale).startFirst);
+    await page.locator('#course-start-lesson').click();
     await page.locator('.oda-course-lesson-title').waitFor();
+    assert.equal(await page.locator('.oda-course-lesson-title').textContent(), course.lessons[0].title);
+    assert.deepEqual(await page.evaluate(key => JSON.parse(localStorage.getItem(key)).courseProgress ?? null, key), untouchedProgress, 'preview and explicit Start must not manufacture saved progress');
+    pass(`${locale}: untouched overview uses real description, outcome, ordered lessons and explicit Start without saving progress`);
     const studio = page.locator('#course-practice-studio');
     assert.equal(await studio.evaluate(el => el.open), false);
     await studio.locator('summary').first().focus(); await page.keyboard.press('Enter');
@@ -90,6 +123,8 @@ try {
         && experiment?.action === 'Write one sentence' && experiment?.attempts?.length === 1;
     }, { key, lessonId: course.lessons[0].id }, { timeout: 5000 });
     await page.reload(); await ready(page);
+    assert.equal(await page.locator('.oda-course-overview').count(), 0, 'saved learners resume without an overview gate');
+    assert.equal(await page.locator('.oda-course-lesson-title').textContent(), course.lessons[0].title);
     assert.equal(await page.locator('#course-reflection').inputValue(), 'A small visible start helped.');
     assert.equal(await page.locator('.oda-course-practice input').first().isChecked(), true);
     await page.locator('#course-practice-studio summary').first().click();
@@ -154,6 +189,18 @@ try {
       assert.equal(await page.locator('.oda-course-step[aria-current="step"]').innerText(), '2');
       assert.equal(await page.locator('#practice-procrastination-action').inputValue(), 'Unsaved action survives');
       pass('sequential lesson completion preserves course practice work');
+      await page.reload(); await ready(page);
+      assert.equal(await page.locator('.oda-course-overview').count(), 0);
+      assert.equal(await page.locator('.oda-course-lesson-title').textContent(), course.lessons[1].title);
+      await page.goto(`${base}/app`); await ready(page);
+      assert.equal(await page.locator('[data-next-lesson-title]').textContent(), course.lessons[1].title);
+      assert.equal(await page.locator('[data-next-lesson-goal]').textContent(), course.lessons[1].goal);
+      assert.ok((await page.locator('.oda-course-next-step').textContent()).includes(`${course.lessons[1].minutes} min`));
+      await page.locator('.oda-course-next-step button').click();
+      await page.locator('.oda-course-lesson-title').waitFor();
+      assert.equal(await page.locator('.oda-course-lesson-title').textContent(), course.lessons[1].title);
+      assert.equal(await page.locator('.oda-course-overview').count(), 0);
+      pass('Today exposes actual next lesson title, minutes and goal and resumes saved lesson 2');
       await page.getByRole('button', { name: 'All courses', exact: true }).click();
       await page.locator('#course-search').fill('');
       await layout(page, 'catalog desktop'); await screenshot(page, 'catalog-desktop');
@@ -169,11 +216,16 @@ try {
       pass('empty search recovery and research jump disclose the bibliography');
       await page.evaluate(() => localStorage.setItem('oda_course_selection_v1', 'focus'));
       await page.goto(`${base}/app/courses`); await ready(page);
+      await page.locator('.oda-course-overview').waitFor();
+      assert.equal(await page.locator('#course-overview-title').textContent(), coursesFor('en').find(item => item.id === 'focus').title);
+      assert.equal(await page.locator('.oda-course-lesson-title').count(), 0);
+      await page.locator('#course-start-lesson').click();
       assert.equal(await page.locator('.oda-course-lesson-title').textContent(), coursesFor('en').find(item => item.id === 'focus').lessons[0].title);
-      pass('landing/Today selection contract opens the intended course for an onboarded user');
+      pass('landing/Today selection contract previews the intended untouched course before explicit Start');
       await page.getByRole('button', { name: 'All courses', exact: true }).click();
       await page.route('https://images.unsplash.com/**', route => route.abort());
       await page.route('**/assets/oda/course-covers/*.png', route => route.abort());
+      await page.route('**/assets/oda/delivery/course-covers/*.webp', route => route.abort());
       await page.reload(); await ready(page);
       await page.locator('.oda-course-row').first().scrollIntoViewIfNeeded();
       await page.locator('.oda-course-row .oda-course-cover[data-image-failed="true"]').first().waitFor();

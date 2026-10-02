@@ -61,7 +61,9 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  if ((inScope(url) && url.pathname.startsWith(`${BASE.pathname}assets/`)) || SHELL.includes(url.href)) {
+  // The narration adapter owns its bounded, checksum-verified on-demand cache.
+  const narrationAsset = inScope(url) && url.pathname.startsWith(`${BASE.pathname}assets/oda/narration/`);
+  if ((inScope(url) && url.pathname.startsWith(`${BASE.pathname}assets/`) && !narrationAsset) || SHELL.includes(url.href)) {
     event.respondWith((async () => {
       const cache = await caches.open(SHELL_CACHE);
       const hit = await cache.match(request);

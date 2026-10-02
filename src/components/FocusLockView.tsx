@@ -18,7 +18,8 @@ import { getBaseReward } from '../services/economy';
 import { soundSynthesizer } from '../utils/soundSynthesizer';
 import { voiceGuide } from '../utils/voiceGuide';
 import { getGuidedMeditation, INTENT_LABELS } from '../data/guidedMeditations';
-import { useT } from '../i18n';
+import { useT, useLocale } from '../i18n';
+import { guidanceCopy } from '../i18n/guidance';
 
 /* Inverted monochrome palette: the lock screen paints with --fg as the surface and --bg as the ink. */
 const INK = 'text-[var(--bg)]';
@@ -36,6 +37,8 @@ const inputCls = `w-full h-11 px-3 text-sm rounded-[var(--radius-sm)] ${SURFACE}
 
 export const FocusLockView: React.FC = () => {
   const t = useT();
+  const [locale] = useLocale();
+  const guidance = guidanceCopy(locale);
   const {
     data,
     activeFocusSession,
@@ -61,11 +64,13 @@ export const FocusLockView: React.FC = () => {
   const [voiceEnabled, setVoiceEnabled] = useState<boolean>(voiceGuide.isEnabled());
   const [voiceVolume, setVoiceVolume] = useState<number>(voiceGuide.getVolume());
   const [voiceSupported, setVoiceSupported] = useState(() => voiceGuide.isAvailable());
+  const [voiceMode, setVoiceMode] = useState(() => voiceGuide.getPlaybackMode());
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [showSounds, setShowSounds] = useState(false);
 
   useEffect(() => voiceGuide.onSpeakingChange(setIsSpeaking), []);
   useEffect(() => voiceGuide.onAvailabilityChange(setVoiceSupported), []);
+  useEffect(() => voiceGuide.onPlaybackModeChange(setVoiceMode), []);
 
   const [completedSummary, setCompletedSummary] = useState('');
   const [resistanceNoticed, setResistanceNoticed] = useState('');
@@ -124,6 +129,7 @@ export const FocusLockView: React.FC = () => {
   };
 
   const handleReplayCue = () => {
+    void voiceGuide.unlockAudio();
     if (currentCue) voiceGuide.speak(currentCue.text, {
       sessionId: guidedMeditation!.id, cueIndex: activeGuidedCueIndex,
       maxDurationSeconds: Math.max(0, (nextCue?.atSeconds ?? totalSeconds) - elapsedSeconds),
@@ -317,6 +323,13 @@ export const FocusLockView: React.FC = () => {
                   {nextCue && !isPaused && <span>{t('Next in {n}s', { n: Math.max(0, nextCue.atSeconds - elapsedSeconds) })}</span>}
                 </div>
                 {voiceSupported ? (
+                  <>
+                  <p className={`text-xs ${INK_MUTED}`} aria-live="polite" data-guidance-mode={voiceMode}>
+                    {voiceMode === 'loading' ? guidance.loading : voiceMode === 'unavailable' ? guidance.unavailable
+                      : voiceMode === 'device' ? guidance.device : voiceMode === 'recorded' ? guidance.recorded
+                      : voiceGuide.getAvailableGuidanceMode() === 'recorded' ? guidance.recorded
+                      : voiceGuide.getAvailableGuidanceMode() === 'device' ? guidance.device : guidance.unavailable}
+                  </p>
                   <div className="flex flex-wrap items-center justify-center gap-2">
                     <button type="button" onClick={handleToggleVoice} className={chip(voiceEnabled)}>
                       {voiceEnabled ? <Mic className="w-4 h-4" strokeWidth={1.8} /> : <MicOff className="w-4 h-4" strokeWidth={1.8} />}
@@ -324,7 +337,7 @@ export const FocusLockView: React.FC = () => {
                     </button>
                     <input
                       type="range"
-                      min={0.1}
+                      min={0}
                       max={1}
                       step={0.05}
                       value={voiceVolume}
@@ -341,6 +354,7 @@ export const FocusLockView: React.FC = () => {
                       {t('Repeat')}
                     </button>
                   </div>
+                  </>
                 ) : (
                   <p className={`text-xs ${INK_SUBTLE}`}>{t('No spoken voice in this browser. Follow the text.')}</p>
                 )}
@@ -351,7 +365,7 @@ export const FocusLockView: React.FC = () => {
               {isPaused ? (
                 <button
                   type="button"
-                  onClick={resumeFocusSession}
+                  onClick={() => { void voiceGuide.unlockAudio(); resumeFocusSession(); }}
                   className="h-12 px-6 rounded-[var(--radius-sm)] bg-[var(--bg)] text-[var(--fg)] font-semibold text-[15px] inline-flex items-center gap-2 cursor-pointer"
                 >
                   <Play className="w-[18px] h-[18px]" strokeWidth={1.8} />

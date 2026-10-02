@@ -21,36 +21,54 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "turning-day-1",
+          "title": "Morning · Direction: mark today as a beginning",
+          "minutes": 7,
+          "goal": "This morning, mark today as a fresh start and choose one area of life plus a reason that matters to you.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "turning-day-2",
+          "title": "Midday · See the obstacle, build an if–then plan",
+          "minutes": 8,
+          "goal": "At midday, find a realistic inner obstacle for the area you chose this morning and write an if–then plan for it.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "turning-day-3",
+          "title": "Afternoon · First evidence: confidence follows the step",
+          "minutes": 8,
+          "goal": "This afternoon, take a two-minute first step in the area you chose and record it as the first evidence for your confidence.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "turning-day-4",
+          "title": "Late afternoon · Set up your space, tell one person",
+          "minutes": 7,
+          "goal": "In the late afternoon, make tomorrow’s step easier through your surroundings and tell one supportive person about your decision.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "turning-day-5",
+          "title": "Night · Write down the evidence, prepare tomorrow",
+          "minutes": 8,
+          "goal": "At night, write down the day’s evidence, look kindly at what went wrong, and make tomorrow’s first step clear.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "turning-day-6",
+          "title": "The next 7 days · Turn the beginning into evidence",
+          "minutes": 9,
+          "goal": "For the next 7 days, repeat the same small step daily, track it, return right away after a missed day, and look back on day 7.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -76,30 +94,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "procrastination-1",
+          "title": "The feeling behind putting things off",
+          "minutes": 7,
+          "goal": "Name the feeling that a task you have been putting off brings up in you.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "procrastination-2",
+          "title": "Shrink the task, find the first move",
+          "minutes": 6,
+          "goal": "Turn the task you are putting off into a first move so small and concrete that it does not feel heavy.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "procrastination-3",
+          "title": "Attach a plan to your real obstacle",
+          "minutes": 8,
+          "goal": "Apply wish, obstacle and an if–then plan to the task you are putting off.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "procrastination-4",
+          "title": "After procrastinating: forgive yourself",
+          "minutes": 7,
+          "goal": "After putting something off, form a sentence that is both forgiving and responsible instead of attacking yourself.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "procrastination-5",
+          "title": "Your own procrastination plan",
+          "minutes": 8,
+          "goal": "Set up a one-week experiment with a first move, a plan, a review and, if you like, interim deadlines.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -125,30 +158,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "confidence-1",
+          "title": "Name the fear, not yourself",
+          "minutes": 6,
+          "goal": "Separate a feeling from the verdict you pass on yourself.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "confidence-2",
+          "title": "The smallest form of courage",
+          "minutes": 7,
+          "goal": "Turn a goal that feels hard into a safe, doable experiment.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "confidence-3",
+          "title": "Separate the prediction from what happened",
+          "minutes": 8,
+          "goal": "Evaluate an experiment through observation rather than judgment.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "confidence-4",
+          "title": "A supportive sentence for your inner voice",
+          "minutes": 6,
+          "goal": "After a mistake, talk to yourself in a way that is both honest and helpful.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "confidence-5",
+          "title": "Your own courage plan",
+          "minutes": 8,
+          "goal": "Choose one experiment, one source of support and one review for the week ahead.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -174,30 +222,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "adhd-1",
+          "title": "Move the load from your head to paper",
+          "minutes": 7,
+          "goal": "Gather the tasks you are trying to remember into one place.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "adhd-2",
+          "title": "The first visible move",
+          "minutes": 6,
+          "goal": "Turn a big task into a physical movement you can start with.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "adhd-3",
+          "title": "Make time visible",
+          "minutes": 8,
+          "goal": "Try a short work-and-break interval that suits you.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "adhd-4",
+          "title": "Come back when your attention drifts",
+          "minutes": 7,
+          "goal": "Try a way to postpone a distracting thought without losing it.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "adhd-5",
+          "title": "Fit the system to yourself",
+          "minutes": 8,
+          "goal": "Choose the tools that work and decide what support you need.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
@@ -223,30 +286,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "motivation-1",
+          "title": "Why is this goal yours?",
+          "minutes": 6,
+          "goal": "Separate your own wish from other people’s expectations.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "motivation-2",
+          "title": "Shrink the start",
+          "minutes": 6,
+          "goal": "Prepare a low-effort first version of your behavior.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "motivation-3",
+          "title": "Link it to a cue",
+          "minutes": 7,
+          "goal": "Decide on the time or situation where your behavior will start.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "motivation-4",
+          "title": "Plan for the obstacle",
+          "minutes": 8,
+          "goal": "Build a workable backup plan for an obstacle you can foresee.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "motivation-5",
+          "title": "Come back after a miss",
+          "minutes": 7,
+          "goal": "Use information, not guilt, to set up your next attempt.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
@@ -272,30 +350,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "faith-1",
+          "title": "Return to your intention",
+          "minutes": 6,
+          "goal": "Notice the intention behind something you will do today.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "faith-2",
+          "title": "Let preparation go with trust",
+          "minutes": 7,
+          "goal": "Separate the preparation you can do from the outcome you cannot control.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "faith-3",
+          "title": "Carry your gratitude to a person",
+          "minutes": 7,
+          "goal": "Prepare a sincere expression of thanks.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "faith-4",
+          "title": "Something to hold on to in hard times",
+          "minutes": 6,
+          "goal": "Connect hope with one step of support or care today.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "faith-5",
+          "title": "Keep up a small kindness",
+          "minutes": 8,
+          "goal": "Bring intention, thanks and effort together in one daily action that suits you.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
@@ -321,30 +414,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "manifest-1",
+          "title": "Turn your wish into a behavior",
+          "minutes": 6,
+          "goal": "Separate the result you want from the work you can do today.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "manifest-2",
+          "title": "See the path, not only the result",
+          "minutes": 7,
+          "goal": "Do a short mental rehearsal of your first move.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "manifest-3",
+          "title": "Meet the real obstacle",
+          "minutes": 8,
+          "goal": "Clearly name one obstacle between what you want and where you are now.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "manifest-4",
+          "title": "If this happens, then I will…",
+          "minutes": 7,
+          "goal": "Link one small response to an obstacle signal.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "manifest-5",
+          "title": "Try, look, choose again",
+          "minutes": 8,
+          "goal": "Review your plan in real life and choose your next step.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -370,30 +478,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "focus-1",
+          "title": "Attention is limited, and switching has a price",
+          "minutes": 7,
+          "goal": "Notice how often you switch between things during the day and how it feels.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "focus-2",
+          "title": "How notifications pull at your attention",
+          "minutes": 7,
+          "goal": "Review your notifications and silence them for one work session.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "focus-3",
+          "title": "The phone on the desk: claim and evidence",
+          "minutes": 8,
+          "goal": "Tell the difference between a phone simply being near you and actually using it.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "focus-4",
+          "title": "Short breaks: what they promise and what they do not",
+          "minutes": 6,
+          "goal": "Try a short break and observe how it works for you.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "focus-5",
+          "title": "Your own focus plan",
+          "minutes": 8,
+          "goal": "Combine your decisions about notifications, your phone, a work block and a break into one personal experiment.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -419,30 +542,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "sleep-1",
+          "title": "How much sleep do you need?",
+          "minutes": 7,
+          "goal": "Plan your sleep opportunity by counting back from a fixed wake-up time.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "sleep-2",
+          "title": "Give light to the day, dimness to the evening",
+          "minutes": 6,
+          "goal": "Choose one change to your daylight or evening screen use.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "sleep-3",
+          "title": "Caffeine and evening habits",
+          "minutes": 8,
+          "goal": "Set your last caffeine time and one boundary for your evening habits.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "sleep-4",
+          "title": "Don’t wrestle with sleep in bed",
+          "minutes": 7,
+          "goal": "Prepare a calm plan to use when sleep won’t come.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "sleep-5",
+          "title": "When to ask for help",
+          "minutes": 8,
+          "goal": "Recognize sleep signs that may need professional support and choose your next step.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -468,30 +606,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "calm-1",
+          "title": "Notice stress, give it a name",
+          "minutes": 6,
+          "goal": "Notice how stress shows up in your body and mind, and give it a name.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "calm-2",
+          "title": "Lengthen your exhale",
+          "minutes": 7,
+          "goal": "Try cyclic sighing for about 5 minutes, within your own limits.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "calm-3",
+          "title": "Get your body moving",
+          "minutes": 7,
+          "goal": "Fit a short movement break that suits you into your day.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "calm-4",
+          "title": "Change the angle",
+          "minutes": 8,
+          "goal": "Instead of pushing a difficult situation away, try reading it from a different angle.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "calm-5",
+          "title": "Support, and when to get help",
+          "minutes": 8,
+          "goal": "Identify the people you trust and recognize the situations that call for professional help.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
@@ -519,42 +672,63 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "meditation-1",
+          "title": "Your first sit: attention on the breath",
+          "minutes": 8,
+          "goal": "Sit for five minutes and watch your breath; when your attention wanders, notice it and gently come back.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "meditation-2",
+          "title": "The body scan",
+          "minutes": 8,
+          "goal": "Move your attention through your body from your feet to your head and notice sensations without trying to change them.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "meditation-3",
+          "title": "The relaxation response: sit with a word",
+          "minutes": 7,
+          "goal": "Using Herbert Benson’s method, sit for 10 minutes repeating a word you have chosen.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "meditation-4",
+          "title": "Walking meditation",
+          "minutes": 7,
+          "goal": "Walk slowly and mindfully for a few minutes, matching your steps to your breath.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "meditation-5",
+          "title": "Loving-kindness (metta)",
+          "minutes": 8,
+          "goal": "Spend a few minutes directing short phrases of good wishes first to yourself, then to others.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "meditation-6",
+          "title": "Rehearse your new self",
+          "minutes": 9,
+          "goal": "With Dr. Joe Dispenza’s meditation, notice your old automatic state, let it go, and rehearse the person you want to be, together with how it feels.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "meditation-7",
+          "title": "Your own routine, and what to watch for",
+          "minutes": 8,
+          "goal": "Build a daily meditation routine that suits you and know when to stop and ask for help.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
@@ -582,42 +756,63 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "suggestion-1",
+          "title": "What suggestion is, and what it is not",
+          "minutes": 8,
+          "goal": "Tell apart what suggestion can change and what it cannot.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "suggestion-2",
+          "title": "The Coué formula",
+          "minutes": 8,
+          "goal": "Practice Coué’s daily formula morning and evening, without forcing it.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "suggestion-3",
+          "title": "Build sentences you can believe",
+          "minutes": 9,
+          "goal": "Turn forced affirmations into believable sentences that describe a process.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "suggestion-4",
+          "title": "Call yourself by name",
+          "minutes": 8,
+          "goal": "Before a hard moment, gain some distance by addressing yourself by name or as “you”.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "suggestion-5",
+          "title": "Give yourself instructions",
+          "minutes": 9,
+          "goal": "Choose short instructional and motivational cue words for a task and try them.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "suggestion-6",
+          "title": "Suggestion before sleep",
+          "minutes": 10,
+          "goal": "Practice Murphy’s pre-sleep technique together with an obstacle and a plan.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "suggestion-7",
+          "title": "Your own suggestion card",
+          "minutes": 10,
+          "goal": "Gather your sentence, image, plan and time on one card, and review it after 7 days.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -645,42 +840,63 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "identity-1",
+          "title": "Meet your old self",
+          "minutes": 8,
+          "goal": "Write an honest, kind portrait of the thoughts, feelings and reactions you repeat on most days.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "identity-2",
+          "title": "Memorized emotions",
+          "minutes": 9,
+          "goal": "Spot one feeling you have practiced so often that it now feels like part of your personality.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "identity-3",
+          "title": "Catch the autopilot",
+          "minutes": 8,
+          "goal": "Interrupt your old self at least once in the middle of an ordinary day.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "identity-4",
+          "title": "Every action is a vote",
+          "minutes": 9,
+          "goal": "Choose the identity you want to grow and cast your first small vote for it today.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "identity-5",
+          "title": "Rehearse the new self",
+          "minutes": 12,
+          "goal": "Practice a 10-minute morning rehearsal of the person you are becoming and link it to one real action.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "identity-6",
+          "title": "Cues and environment",
+          "minutes": 9,
+          "goal": "Set up your surroundings and three if-then plans so that your new self becomes the easy default.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "identity-7",
+          "title": "The 66-day road",
+          "minutes": 10,
+          "goal": "Plan how to keep going for the long run, including what you will do when you slip.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -708,42 +924,63 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "state-1",
+          "title": "State colors everything",
+          "minutes": 7,
+          "goal": "Notice the state you are in right now and name the three levers that shape it: body, focus and words.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "state-2",
+          "title": "The body goes first",
+          "minutes": 8,
+          "goal": "Use movement, posture and music to shift your energy in about two minutes, and know which body claims hold up.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "state-3",
+          "title": "Calm in two breaths",
+          "minutes": 8,
+          "goal": "Learn cyclic sighing and practice it for five minutes, stopping at once if you feel dizzy.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "state-4",
+          "title": "Change your focus and your questions",
+          "minutes": 8,
+          "goal": "Catch one draining question you keep asking yourself and swap it for one that points your attention somewhere useful.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "state-5",
+          "title": "Words and meaning",
+          "minutes": 9,
+          "goal": "Name what you feel in a word or two, then try one alternative meaning for the situation.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "state-6",
+          "title": "Morning priming and incantations",
+          "minutes": 10,
+          "goal": "Build a ten-minute morning priming and one honest, spoken incantation you can say without inner argument.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "state-7",
+          "title": "The Dickens process and new standards",
+          "minutes": 11,
+          "goal": "Use a short, kind version of the Dickens process to see what one old pattern costs, then set one new standard with a small daily action.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
@@ -770,36 +1007,54 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "optimism-1",
+          "title": "Learned helplessness, learned hope",
+          "minutes": 8,
+          "goal": "Understand why giving up after a setback is a normal default, and practice finding one piece of the situation you can still influence.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "optimism-2",
+          "title": "Your explanatory style",
+          "minutes": 9,
+          "goal": "Learn the three dimensions of how you explain bad events and spot your own style in a real example.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "optimism-3",
+          "title": "ABCDE: arguing with yourself, fairly",
+          "minutes": 10,
+          "goal": "Walk one real setback through Adversity, Belief, Consequence, Disputation and Energization.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "optimism-4",
+          "title": "Thinking traps and the thought record",
+          "minutes": 11,
+          "goal": "Recognize common thinking traps and complete one thought record, from situation to balanced response.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "optimism-5",
+          "title": "Four questions for a stressful thought",
+          "minutes": 9,
+          "goal": "Try Byron Katie’s four questions and turnaround on one thought that keeps hurting you.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "optimism-6",
+          "title": "Realistic optimism and three good things",
+          "minutes": 10,
+          "goal": "Tell realistic optimism apart from forced positivity, and start a nightly three good things habit.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
@@ -826,36 +1081,54 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "meaning-1",
+          "title": "Where meaning comes from",
+          "minutes": 8,
+          "goal": "Learn Frankl’s three broad sources of meaning and notice where each already shows up in your life.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "meaning-2",
+          "title": "Values are a direction, not a finish line",
+          "minutes": 9,
+          "goal": "Understand the difference between values and goals, and name a few values in your own words.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "meaning-3",
+          "title": "Whose values are these?",
+          "minutes": 9,
+          "goal": "Separate values you have truly chosen from ones driven by pressure, guilt or fear.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "meaning-4",
+          "title": "Meaning when things are hard",
+          "minutes": 10,
+          "goal": "Learn how to find the part you can still choose when you face a situation you cannot change.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "meaning-5",
+          "title": "Picture the life you are aiming for",
+          "minutes": 10,
+          "goal": "Use the Best Possible Self exercise to picture a future shaped by your values, and turn it into a first step.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "meaning-6",
+          "title": "One values-based decision a day",
+          "minutes": 8,
+          "goal": "Turn your values into one small, concrete decision each day, and keep it going.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -882,36 +1155,54 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "stoic-1",
+          "title": "What is up to you",
+          "minutes": 8,
+          "goal": "Sort a current worry into what is up to you and what is not, and move your energy to the first list.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "stoic-2",
+          "title": "The story between event and feeling",
+          "minutes": 9,
+          "goal": "Catch the judgment that sits between something that happens and how you feel about it.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "stoic-3",
+          "title": "Rehearse the hard day, gently",
+          "minutes": 9,
+          "goal": "Imagine a likely setback briefly and realistically, then plan your response, without sliding into worry.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "stoic-4",
+          "title": "The view from above",
+          "minutes": 9,
+          "goal": "Step back from a heated moment by changing your viewpoint, the words you use, or your sense of time.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "stoic-5",
+          "title": "The evening review",
+          "minutes": 8,
+          "goal": "Close the day with a short, fair review that turns mistakes into one lesson for tomorrow.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "stoic-6",
+          "title": "One decision today",
+          "minutes": 8,
+          "goal": "Turn the Stoic focus on what is up to you into one small, concrete decision you act on today.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
@@ -938,36 +1229,54 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "compassion-1",
+          "title": "Compassion is not weakness",
+          "minutes": 8,
+          "goal": "See why being kind to yourself after a failure can support, rather than undermine, doing better.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "compassion-2",
+          "title": "The three parts",
+          "minutes": 9,
+          "goal": "Learn Neff’s three components of self-compassion and spot the one you most often miss.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "compassion-3",
+          "title": "The self-compassion break",
+          "minutes": 8,
+          "goal": "Learn a two-minute practice for the moment something hurts.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "compassion-4",
+          "title": "Threat, drive and soothing",
+          "minutes": 10,
+          "goal": "Use Paul Gilbert’s three-systems model to notice which system is running you, and how to call on soothing.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "compassion-5",
+          "title": "Shame and guilt",
+          "minutes": 10,
+          "goal": "Tell shame from guilt, and use four steps to move through shame instead of hiding.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "compassion-6",
+          "title": "A letter to yourself, and compassionate accountability",
+          "minutes": 12,
+          "goal": "Write a compassionate letter about something you regret or dislike in yourself, and turn it into one accountable step.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
@@ -996,36 +1305,54 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "turning-day-1",
+          "title": "Sabah · Yön: bugünü başlangıç olarak işaretle",
+          "minutes": 7,
+          "goal": "Sabah bugünü yeni bir başlangıç olarak işaretle; tek bir alan ve o alan için sana önemli gelen bir neden seç.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "turning-day-2",
+          "title": "Öğle · Engeli gör, eğer/o zaman planını kur",
+          "minutes": 8,
+          "goal": "Öğle arasında sabah seçtiğin alan için gerçekçi bir iç engel bul ve ona karşı bir eğer/o zaman planı yaz.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "turning-day-3",
+          "title": "Öğleden sonra · İlk kanıt: özgüven adımdan sonra gelir",
+          "minutes": 8,
+          "goal": "Öğleden sonra seçtiğin alanda iki dakikalık ilk adımı at ve bunu özgüveninin ilk kanıtı olarak kaydet.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "turning-day-4",
+          "title": "Akşamüstü · Ortamı hazırla, bir kişiye söyle",
+          "minutes": 7,
+          "goal": "Akşamüstü yarınki adımı ortamında kolaylaştır ve seni destekleyecek bir kişiye kararını anlat.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "turning-day-5",
+          "title": "Gece · Kanıtı yaz, yarını hazırla",
+          "minutes": 8,
+          "goal": "Gece günün kanıtını yaz, aksayan yere nazik bir dille bak ve yarının ilk adımını netleştir.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "turning-day-6",
+          "title": "Sonraki 7 gün · Başlangıcı kanıta çevir",
+          "minutes": 9,
+          "goal": "Önümüzdeki 7 gün aynı küçük adımı her gün tekrarla, takip et, kaçırılan günden hemen dön ve 7. gün geriye bak.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -1051,30 +1378,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "procrastination-1",
+          "title": "Ertelemenin ardındaki his",
+          "minutes": 7,
+          "goal": "Ertelediğin bir işin sende uyandırdığı hissi adlandır.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "procrastination-2",
+          "title": "İşi küçült, ilk hareketi bul",
+          "minutes": 6,
+          "goal": "Ertelediğin işi, ağır gelmeyecek kadar küçük ve somut bir ilk harekete çevir.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "procrastination-3",
+          "title": "Gerçek engeline bir plan bağla",
+          "minutes": 8,
+          "goal": "Dilek, engel ve eğer/o zaman planını ertelediğin işe uygula.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "procrastination-4",
+          "title": "Erteledikten sonra: kendini affet",
+          "minutes": 7,
+          "goal": "Erteledikten sonra kendine saldırmak yerine hem affedici hem sorumlu bir cümle kur.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "procrastination-5",
+          "title": "Kendi erteleme planın",
+          "minutes": 8,
+          "goal": "Önümüzdeki hafta için ilk hareket, plan, gözden geçirme ve istersen ara tarihlerle bir deneme kur.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -1100,30 +1442,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "confidence-1",
+          "title": "Korkuya isim ver, kendine etiket değil",
+          "minutes": 6,
+          "goal": "Bir duyguyla kendin hakkında verdiğin hükmü ayır.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "confidence-2",
+          "title": "Cesaretin en küçük hâli",
+          "minutes": 7,
+          "goal": "Zor gelen hedefi güvenli ve yapılabilir bir denemeye çevir.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "confidence-3",
+          "title": "Tahmin ile olanı ayır",
+          "minutes": 8,
+          "goal": "Bir denemeyi yargı yerine gözlemle değerlendir.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "confidence-4",
+          "title": "İç sesine bir destek cümlesi",
+          "minutes": 6,
+          "goal": "Hata sonrasında kendine hem dürüst hem yardımcı konuş.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "confidence-5",
+          "title": "Kendi cesaret planın",
+          "minutes": 8,
+          "goal": "Önümüzdeki hafta için bir deneme, bir destek ve bir değerlendirme seç.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -1149,30 +1506,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "adhd-1",
+          "title": "Yükü zihninden kâğıda taşı",
+          "minutes": 7,
+          "goal": "Hatırlamaya çalıştığın işleri tek bir yerde topla.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "adhd-2",
+          "title": "İlk görünen hareket",
+          "minutes": 6,
+          "goal": "Büyük işi başlayabileceğin fiziksel bir harekete çevir.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "adhd-3",
+          "title": "Zamanı görünür kıl",
+          "minutes": 8,
+          "goal": "Sana uygun kısa bir çalışma ve mola aralığını dene.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "adhd-4",
+          "title": "Dikkat dağıldığında geri dön",
+          "minutes": 7,
+          "goal": "Dikkat dağıtan bir düşünceyi kaybedilmeden ertelemenin yolunu dene.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "adhd-5",
+          "title": "Sistemi kendine uydur",
+          "minutes": 8,
+          "goal": "İşe yarayan araçları seç ve destek ihtiyacını belirle.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
@@ -1198,30 +1570,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "motivation-1",
+          "title": "Bu hedef neden senin?",
+          "minutes": 6,
+          "goal": "Başkalarının beklentisiyle kendi isteğini ayır.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "motivation-2",
+          "title": "Başlangıcı küçült",
+          "minutes": 6,
+          "goal": "Davranışın az emek isteyen ilk sürümünü hazırla.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "motivation-3",
+          "title": "Bir işarete bağla",
+          "minutes": 7,
+          "goal": "Davranışın başlayacağı zamanı veya durumu belirle.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "motivation-4",
+          "title": "Engeli hesaba kat",
+          "minutes": 8,
+          "goal": "Öngörülebilir bir engel için uygulanabilir yedek plan kur.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "motivation-5",
+          "title": "Kaçırınca geri dön",
+          "minutes": 7,
+          "goal": "Suçluluk yerine bilgiyle bir sonraki denemeyi düzenle.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
@@ -1247,30 +1634,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "faith-1",
+          "title": "Niyetine dön",
+          "minutes": 6,
+          "goal": "Bugünkü bir işin arkasındaki niyeti fark et.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "faith-2",
+          "title": "Tevekküle hazırlık eşlik etsin",
+          "minutes": 7,
+          "goal": "Yapabileceğin hazırlıkla kontrol edemediğin sonucu ayır.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "faith-3",
+          "title": "Şükrü bir insana ulaştır",
+          "minutes": 7,
+          "goal": "İçten bir teşekkür ifadesi hazırla.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "faith-4",
+          "title": "Zorlukta bir dayanak",
+          "minutes": 6,
+          "goal": "Umudu bugünkü bir destek veya bakım adımıyla buluştur.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "faith-5",
+          "title": "Küçük iyiliğe devam",
+          "minutes": 8,
+          "goal": "Niyet, teşekkür ve emeği sana uygun bir günlük davranışta birleştir.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
@@ -1296,30 +1698,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "manifest-1",
+          "title": "Dileğini davranışa çevir",
+          "minutes": 6,
+          "goal": "İstediğin sonuçla bugün yapabileceğin işi ayır.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "manifest-2",
+          "title": "Sadece sonucu değil, yolu da gör",
+          "minutes": 7,
+          "goal": "İlk hareketin kısa zihinsel provasını yap.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "manifest-3",
+          "title": "Gerçek engelle karşılaş",
+          "minutes": 8,
+          "goal": "İsteğinle mevcut durum arasındaki bir engeli açıkça tanımla.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "manifest-4",
+          "title": "Eğer olursa, o zaman",
+          "minutes": 7,
+          "goal": "Bir engel işaretine küçük bir yanıt bağla.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "manifest-5",
+          "title": "Dene, bak, yeniden seç",
+          "minutes": 8,
+          "goal": "Planını gerçek hayatta değerlendirip sonraki adımını seç.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -1345,30 +1762,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "focus-1",
+          "title": "Dikkat sınırlı, geçişin bir bedeli var",
+          "minutes": 7,
+          "goal": "Gün içinde işler arasında ne sıklıkla geçtiğini ve bunun sana nasıl hissettirdiğini fark et.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "focus-2",
+          "title": "Bildirimler dikkatini nasıl çeker?",
+          "minutes": 7,
+          "goal": "Bildirimlerini gözden geçir ve bir çalışma süresi için sessize al.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "focus-3",
+          "title": "Masadaki telefon: iddia ve kanıt",
+          "minutes": 8,
+          "goal": "Telefonun yalnızca yanında durmasıyla onu kullanmayı birbirinden ayır.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "focus-4",
+          "title": "Kısa molalar: ne vaat eder, ne etmez?",
+          "minutes": 6,
+          "goal": "Kısa bir molayı dene ve sana nasıl geldiğini gözle.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "focus-5",
+          "title": "Kendi odak planın",
+          "minutes": 8,
+          "goal": "Bildirim, telefon, çalışma bloğu ve mola kararlarını tek bir kişisel denemede birleştir.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -1394,30 +1826,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "sleep-1",
+          "title": "Ne kadar uykuya ihtiyacın var?",
+          "minutes": 7,
+          "goal": "Uyku fırsatını sabit bir kalkış saatinden geriye sayarak planla.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "sleep-2",
+          "title": "Işığı güne, loşluğu akşama ver",
+          "minutes": 6,
+          "goal": "Gündüz ışığı ve akşam ekran kullanımında tek bir değişiklik seç.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "sleep-3",
+          "title": "Kafein ve akşam alışkanlıkları",
+          "minutes": 8,
+          "goal": "Son kafein saatini ve akşam için bir alışkanlık sınırını belirle.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "sleep-4",
+          "title": "Uyuyamadığında yatakta boğuşma",
+          "minutes": 7,
+          "goal": "Uyku gelmediğinde uygulayacağın sakin bir planı hazırla.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "sleep-5",
+          "title": "Ne zaman yardım istemeli?",
+          "minutes": 8,
+          "goal": "Uzman desteği gerektirebilecek uyku işaretlerini tanı ve bir sonraki adımını seç.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -1443,30 +1890,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "calm-1",
+          "title": "Stresi fark et, adını koy",
+          "minutes": 6,
+          "goal": "Stresin bedeninde ve zihninde nasıl göründüğünü fark edip ona bir ad ver.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "calm-2",
+          "title": "Nefes verişini uzat",
+          "minutes": 7,
+          "goal": "Döngüsel iç çekmeyi yaklaşık 5 dakika boyunca, kendi sınırlarını gözeterek dene.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "calm-3",
+          "title": "Bedenini harekete geçir",
+          "minutes": 7,
+          "goal": "Gününe sana uygun, kısa bir hareket molası yerleştir.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "calm-4",
+          "title": "Açıyı değiştir",
+          "minutes": 8,
+          "goal": "Zorlayan bir durumu bastırmak yerine farklı bir açıdan okumayı dene.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "calm-5",
+          "title": "Destek ve yardım zamanı",
+          "minutes": 8,
+          "goal": "Güvendiğin destekleri belirle ve profesyonel yardım gerektiren durumları tanı.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
@@ -1494,42 +1956,63 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "meditation-1",
+          "title": "İlk oturuş: nefese dikkat",
+          "minutes": 7,
+          "goal": "Beş dakika oturup nefesini izle; dikkatin dağıldığında bunu fark edip nazikçe geri dön.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "meditation-2",
+          "title": "Beden taraması",
+          "minutes": 8,
+          "goal": "Dikkatini ayaklarından başına doğru bedeninde gezdir ve duyumları değiştirmeye çalışmadan fark et.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "meditation-3",
+          "title": "Gevşeme tepkisi: bir kelimeyle otur",
+          "minutes": 7,
+          "goal": "Herbert Benson’ın yöntemiyle, seçtiğin bir kelimeyi tekrarlayarak 10 dakika otur.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "meditation-4",
+          "title": "Yürüyüş meditasyonu",
+          "minutes": 7,
+          "goal": "Adımlarını nefesinle eşleştirerek birkaç dakika yavaş ve farkında yürü.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "meditation-5",
+          "title": "Sevgi-şefkat (metta)",
+          "minutes": 8,
+          "goal": "Kısa iyi dilek cümlelerini önce kendine, sonra başkalarına yönelterek birkaç dakika uygula.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "meditation-6",
+          "title": "Yeni benliğini prova et",
+          "minutes": 9,
+          "goal": "Dr. Joe Dispenza’nın meditasyonuyla eski otomatik hâlini fark et, bırak ve olmak istediğin kişiyi duygusuyla birlikte zihninde prova et.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "meditation-7",
+          "title": "Kendi düzenin ve dikkat edilecekler",
+          "minutes": 8,
+          "goal": "Sana uygun, günlük bir meditasyon düzeni kur ve ne zaman durup yardım isteyeceğini bil.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
@@ -1557,42 +2040,63 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "suggestion-1",
+          "title": "Telkin nedir, ne değildir",
+          "minutes": 7,
+          "goal": "Telkinin neyi değiştirebileceğini ve neyi değiştiremeyeceğini ayırt et.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "suggestion-2",
+          "title": "Coué formülü",
+          "minutes": 7,
+          "goal": "Coué’nin günlük formülünü sabah ve akşam, zorlamadan uygula.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "suggestion-3",
+          "title": "İnanabileceğin cümleler kur",
+          "minutes": 8,
+          "goal": "Zorlayan olumlamaları inanabileceğin, süreci anlatan cümlelere çevir.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "suggestion-4",
+          "title": "Kendine adınla seslen",
+          "minutes": 7,
+          "goal": "Zor bir andan önce kendine adınla ya da “sen” diye seslenerek mesafe al.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "suggestion-5",
+          "title": "Kendine talimat ver",
+          "minutes": 8,
+          "goal": "Bir iş için kısa eğitsel ve motive edici ipucu kelimeleri seç ve dene.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "suggestion-6",
+          "title": "Uykudan önce telkin",
+          "minutes": 9,
+          "goal": "Murphy’nin uyku öncesi tekniğini engel ve planla birlikte uygula.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "suggestion-7",
+          "title": "Kendi telkin kartın",
+          "minutes": 9,
+          "goal": "Cümle, imge, plan ve zamanı tek bir karta topla ve 7 gün sonra gözden geçir.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -1620,42 +2124,63 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "identity-1",
+          "title": "Eski benliğinle tanış",
+          "minutes": 8,
+          "goal": "Çoğu gün tekrarladığın düşünce, duygu ve tepkilerin dürüst ve nazik bir portresini yaz.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "identity-2",
+          "title": "Ezberlenmiş duygular",
+          "minutes": 9,
+          "goal": "O kadar çok pratik ettiğin bir duyguyu fark et ki artık kişiliğinin parçası gibi geliyor.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "identity-3",
+          "title": "Otopilotu yakala",
+          "minutes": 8,
+          "goal": "Sıradan bir günün ortasında eski benliğini en az bir kez kes.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "identity-4",
+          "title": "Her eylem bir oydur",
+          "minutes": 9,
+          "goal": "Geliştirmek istediğin kimliği seç ve bugün ona ilk küçük oyunu ver.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "identity-5",
+          "title": "Yeni benliği prova et",
+          "minutes": 12,
+          "goal": "10 dakikalık bir sabah provasıyla olmakta olduğun kişiyi pratik et ve onu gerçek bir eyleme bağla.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "identity-6",
+          "title": "İpuçları ve çevre",
+          "minutes": 9,
+          "goal": "Yeni benliğin kolay varsayılan olsun diye çevreni ve üç eğer-öyleyse planını hazırla.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "identity-7",
+          "title": "66 günlük yol",
+          "minutes": 10,
+          "goal": "Uzun vadede nasıl devam edeceğini, aksadığında ne yapacağın dahil olmak üzere planla.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -1683,42 +2208,63 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "state-1",
+          "title": "Hal her şeyi renklendirir",
+          "minutes": 7,
+          "goal": "Şu an içinde olduğun hali fark et ve onu şekillendiren üç kaldıracı adlandır: beden, odak ve sözcükler.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "state-2",
+          "title": "Önce beden",
+          "minutes": 8,
+          "goal": "Hareketi, duruşu ve müziği kullanarak enerjini yaklaşık iki dakikada değiştir ve hangi beden iddialarının geçerli olduğunu bil.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "state-3",
+          "title": "İki nefeste sakinlik",
+          "minutes": 8,
+          "goal": "Döngüsel iç çekmeyi öğren ve beş dakika pratik et; baş dönmesi hissedersen hemen dur.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "state-4",
+          "title": "Odağını ve sorularını değiştir",
+          "minutes": 8,
+          "goal": "Kendine sorup durduğun, seni tüketen bir soruyu yakala ve dikkatini yararlı bir yere yönelten bir soruyla değiştir.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "state-5",
+          "title": "Sözcükler ve anlam",
+          "minutes": 9,
+          "goal": "Ne hissettiğini bir ya da iki sözcükle adlandır, sonra duruma alternatif bir anlam dene.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "state-6",
+          "title": "Sabah hazırlığı ve telkinler",
+          "minutes": 10,
+          "goal": "On dakikalık bir sabah hazırlığı ve içsel tartışma olmadan söyleyebileceğin, dürüst, sesli bir telkin oluştur.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "state-7",
+          "title": "Dickens süreci ve yeni standartlar",
+          "minutes": 11,
+          "goal": "Bir eski kalıbın sana neye mal olduğunu görmek için Dickens sürecinin kısa, nazik bir versiyonunu kullan, sonra küçük bir günlük eylemle bir yeni standart belirle.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
@@ -1745,36 +2291,54 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "optimism-1",
+          "title": "Öğrenilmiş çaresizlik, öğrenilmiş umut",
+          "minutes": 8,
+          "goal": "Bir aksilikten sonra pes etmenin neden olağan bir varsayılan tepki olduğunu anla ve durumun hâlâ etkileyebileceğin bir parçasını bulmayı dene.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "optimism-2",
+          "title": "Açıklama biçimin",
+          "minutes": 9,
+          "goal": "Kötü olayları açıklama biçiminin üç boyutunu öğren ve gerçek bir örnekte kendi biçimini fark et.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "optimism-3",
+          "title": "ABCDE: kendinle adilce tartışmak",
+          "minutes": 10,
+          "goal": "Gerçek bir aksiliği Adversity (Aksilik), Belief (İnanç), Consequence (Sonuç), Disputation (Karşı Çıkma) ve Energization (Enerji Toplama) adımlarından geçir.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "optimism-4",
+          "title": "Düşünme tuzakları ve düşünce kaydı",
+          "minutes": 11,
+          "goal": "Yaygın düşünme tuzaklarını tanı ve durumdan dengeli yanıta kadar bir düşünce kaydını tamamla.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "optimism-5",
+          "title": "Stres veren bir düşünce için dört soru",
+          "minutes": 9,
+          "goal": "Seni sürekli incitmeye devam eden bir düşünce üzerinde Byron Katie’nin dört sorusunu ve ters çevirmeyi dene.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "optimism-6",
+          "title": "Gerçekçi iyimserlik ve üç iyi şey",
+          "minutes": 10,
+          "goal": "Gerçekçi iyimserliği zorlama pozitiflikten ayır ve her akşam yapacağın üç iyi şey alışkanlığına başla.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
@@ -1801,36 +2365,54 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "meaning-1",
+          "title": "Anlam nereden gelir",
+          "minutes": 8,
+          "goal": "Frankl’ın üç geniş anlam kaynağını öğren ve her birinin hayatında zaten nerede göründüğünü fark et.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "meaning-2",
+          "title": "Değerler bir yöndür, bitiş çizgisi değil",
+          "minutes": 9,
+          "goal": "Değerlerle hedefler arasındaki farkı anla ve kendi sözcüklerinle birkaç değer adlandır.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "meaning-3",
+          "title": "Bu değerler kimin?",
+          "minutes": 9,
+          "goal": "Gerçekten seçtiğin değerleri baskı, suçluluk ya da korkunun yönlendirdiği değerlerden ayır.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "meaning-4",
+          "title": "İşler zorlaştığında anlam",
+          "minutes": 10,
+          "goal": "Değiştiremeyeceğin bir durumla karşılaştığında hâlâ seçebileceğin kısmı nasıl bulacağını öğren.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "meaning-5",
+          "title": "Hedeflediğin hayatı gözünde canlandır",
+          "minutes": 10,
+          "goal": "Değerlerinin biçimlendirdiği bir geleceği gözünde canlandırmak için En İyi Olası Ben egzersizini kullan ve onu ilk adıma dönüştür.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "meaning-6",
+          "title": "Günde bir değer temelli karar",
+          "minutes": 8,
+          "goal": "Değerlerini her gün küçük, somut bir karara dönüştür ve sürdür.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -1857,36 +2439,54 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "stoic-1",
+          "title": "Senin elinde olan",
+          "minutes": 8,
+          "goal": "Şu anki bir kaygıyı senin elinde olan ve olmayan diye ayır, enerjini ilk listeye kaydır.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "stoic-2",
+          "title": "Olayla duygu arasındaki hikâye",
+          "minutes": 9,
+          "goal": "Başına gelen bir şeyle ona dair hissin arasında duran yargıyı yakala.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "stoic-3",
+          "title": "Zor günü nazikçe prova et",
+          "minutes": 9,
+          "goal": "Olası bir aksiliği kısaca ve gerçekçi biçimde hayal et, sonra yanıtını planla; kaygıya kaymadan.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "stoic-4",
+          "title": "Yukarıdan bakış",
+          "minutes": 9,
+          "goal": "Bakış açını, kullandığın sözcükleri ya da zaman algını değiştirerek gergin bir andan geri çekil.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "stoic-5",
+          "title": "Akşam değerlendirmesi",
+          "minutes": 8,
+          "goal": "Günü kısa ve adil bir değerlendirmeyle kapat; hataları yarın için tek bir derse çevir.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "stoic-6",
+          "title": "Bugün tek bir karar",
+          "minutes": 8,
+          "goal": "Stoacı odağı, elinde olana, bugün harekete geçeceğin küçük ve somut bir karara çevir.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
@@ -1913,36 +2513,54 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "compassion-1",
+          "title": "Şefkat zayıflık değildir",
+          "minutes": 8,
+          "goal": "Başarısızlıktan sonra kendine nazik olmanın neden daha iyisini yapmayı baltalamak yerine desteklediğini gör.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "compassion-2",
+          "title": "Üç bileşen",
+          "minutes": 9,
+          "goal": "Neff’in öz şefkat için tanımladığı üç bileşeni öğren ve en sık kaçırdığın bileşeni fark et.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "compassion-3",
+          "title": "Öz şefkat molası",
+          "minutes": 8,
+          "goal": "Bir şey canını yaktığı anda uygulayabileceğin iki dakikalık bir alıştırma öğren.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "compassion-4",
+          "title": "Tehdit, dürtü ve yatışma",
+          "minutes": 10,
+          "goal": "Paul Gilbert’in üç sistem modelini kullanarak hangi sistemin seni yönettiğini ve yatışmayı nasıl çağıracağını fark et.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "compassion-5",
+          "title": "Utanç ve suçluluk",
+          "minutes": 10,
+          "goal": "Utancı suçluluktan ayır ve saklanmak yerine utançtan geçmek için dört adımı kullan.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "compassion-6",
+          "title": "Kendine bir mektup ve şefkatli hesap verebilirlik",
+          "minutes": 12,
+          "goal": "Pişman olduğun ya da kendinde sevmediğin bir şey hakkında şefkatli bir mektup yaz ve onu hesap verebilir tek bir adıma çevir.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
@@ -1971,36 +2589,54 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "turning-day-1",
+          "title": "Mañana · Dirección: marca hoy como un comienzo",
+          "minutes": 7,
+          "goal": "Esta mañana, marca hoy como un nuevo comienzo y elige un área de la vida junto con una razón que te importe.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "turning-day-2",
+          "title": "Mediodía · Ve el obstáculo, arma un plan «si… entonces…»",
+          "minutes": 8,
+          "goal": "Al mediodía, encuentra un obstáculo interno realista para el área que elegiste esta mañana y escribe un plan «si… entonces…» para él.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "turning-day-3",
+          "title": "Tarde · Primera evidencia: la confianza sigue al paso",
+          "minutes": 8,
+          "goal": "Esta tarde, da un primer paso de dos minutos en el área que elegiste y regístralo como la primera evidencia de tu confianza.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "turning-day-4",
+          "title": "Final de la tarde · Prepara tu espacio, cuéntaselo a una persona",
+          "minutes": 7,
+          "goal": "Al final de la tarde, haz más fácil el paso de mañana a través de tu entorno y cuéntale tu decisión a una persona que te apoye.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "turning-day-5",
+          "title": "Noche · Escribe la evidencia, prepara el mañana",
+          "minutes": 8,
+          "goal": "Por la noche, escribe la evidencia del día, mira con amabilidad lo que salió mal y deja claro el primer paso de mañana.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "turning-day-6",
+          "title": "Los próximos 7 días · Convierte el comienzo en evidencia",
+          "minutes": 9,
+          "goal": "Durante los próximos 7 días, repite cada día el mismo paso pequeño, regístralo, vuelve enseguida tras un día perdido y haz un balance el día 7.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -2026,30 +2662,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "procrastination-1",
+          "title": "El sentimiento detrás de dejar las cosas para después",
+          "minutes": 7,
+          "goal": "Nombra el sentimiento que te despierta una tarea que has estado postergando.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "procrastination-2",
+          "title": "Reduce la tarea, encuentra el primer movimiento",
+          "minutes": 6,
+          "goal": "Convierte la tarea que estás postergando en un primer movimiento tan pequeño y concreto que no se sienta pesado.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "procrastination-3",
+          "title": "Ata un plan a tu obstáculo real",
+          "minutes": 8,
+          "goal": "Aplica el deseo, el obstáculo y un plan «si… entonces…» a la tarea que estás postergando.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "procrastination-4",
+          "title": "Después de procrastinar: perdónate",
+          "minutes": 7,
+          "goal": "Después de postergar algo, forma una frase que sea a la vez indulgente y responsable en lugar de atacarte.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "procrastination-5",
+          "title": "Tu propio plan contra la procrastinación",
+          "minutes": 8,
+          "goal": "Arma un experimento de una semana con un primer movimiento, un plan, una revisión y, si quieres, plazos intermedios.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -2075,30 +2726,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "confidence-1",
+          "title": "Nombra el miedo, no a ti mismo",
+          "minutes": 6,
+          "goal": "Separa un sentimiento del veredicto que dictas sobre ti mismo.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "confidence-2",
+          "title": "La forma más pequeña de valentía",
+          "minutes": 7,
+          "goal": "Convierte una meta que se siente difícil en un experimento seguro y posible.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "confidence-3",
+          "title": "Separa la predicción de lo que pasó",
+          "minutes": 8,
+          "goal": "Evalúa un experimento con la observación y no con el juicio.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "confidence-4",
+          "title": "Una frase de apoyo para tu voz interior",
+          "minutes": 6,
+          "goal": "Después de un error, háblate de una manera que sea a la vez honesta y útil.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "confidence-5",
+          "title": "Tu propio plan de valentía",
+          "minutes": 8,
+          "goal": "Elige un experimento, una fuente de apoyo y una revisión para la semana que viene.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -2124,30 +2790,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "adhd-1",
+          "title": "Pasa la carga de tu cabeza al papel",
+          "minutes": 7,
+          "goal": "Reúne en un solo lugar las tareas que intentas recordar.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "adhd-2",
+          "title": "El primer movimiento visible",
+          "minutes": 6,
+          "goal": "Convierte una tarea grande en un movimiento físico con el que puedas empezar.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "adhd-3",
+          "title": "Haz visible el tiempo",
+          "minutes": 8,
+          "goal": "Prueba un intervalo corto de trabajo y descanso que te quede bien.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "adhd-4",
+          "title": "Vuelve cuando tu atención se disperse",
+          "minutes": 7,
+          "goal": "Prueba una forma de posponer un pensamiento que distrae sin perderlo.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "adhd-5",
+          "title": "Adapta el sistema a ti",
+          "minutes": 8,
+          "goal": "Elige las herramientas que funcionan y decide qué apoyo necesitas.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
@@ -2173,30 +2854,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "motivation-1",
+          "title": "¿Por qué esta meta es tuya?",
+          "minutes": 6,
+          "goal": "Separa tu propio deseo de las expectativas de los demás.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "motivation-2",
+          "title": "Reduce el comienzo",
+          "minutes": 6,
+          "goal": "Prepara una primera versión de poco esfuerzo de tu conducta.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "motivation-3",
+          "title": "Vincúlalo a una señal",
+          "minutes": 7,
+          "goal": "Decide la hora o la situación en que empezará tu conducta.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "motivation-4",
+          "title": "Planifica el obstáculo",
+          "minutes": 8,
+          "goal": "Construye un plan de respaldo viable para un obstáculo que puedas prever.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "motivation-5",
+          "title": "Vuelve después de una falla",
+          "minutes": 7,
+          "goal": "Usa información, no culpa, para preparar tu siguiente intento.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
@@ -2222,30 +2918,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "faith-1",
+          "title": "Vuelve a tu intención",
+          "minutes": 6,
+          "goal": "Fíjate en la intención que hay detrás de algo que harás hoy.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "faith-2",
+          "title": "Deja que la preparación vaya con la confianza",
+          "minutes": 7,
+          "goal": "Separa la preparación que puedes hacer del resultado que no puedes controlar.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "faith-3",
+          "title": "Lleva tu gratitud a una persona",
+          "minutes": 7,
+          "goal": "Prepara una expresión sincera de agradecimiento.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "faith-4",
+          "title": "Algo a lo que aferrarte en los momentos difíciles",
+          "minutes": 6,
+          "goal": "Conecta la esperanza con un paso de apoyo o de cuidado hoy.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "faith-5",
+          "title": "Mantén una pequeña amabilidad",
+          "minutes": 8,
+          "goal": "Reúne la intención, el agradecimiento y el esfuerzo en una acción diaria que te convenga.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
@@ -2271,30 +2982,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "manifest-1",
+          "title": "Convierte tu deseo en una conducta",
+          "minutes": 6,
+          "goal": "Separar el resultado que quieres del trabajo que puedes hacer hoy.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "manifest-2",
+          "title": "Mira el camino, no solo el resultado",
+          "minutes": 7,
+          "goal": "Hacer un breve ensayo mental de tu primer movimiento.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "manifest-3",
+          "title": "Conoce el obstáculo real",
+          "minutes": 8,
+          "goal": "Nombrar con claridad un obstáculo entre lo que quieres y dónde estás ahora.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "manifest-4",
+          "title": "Si esto pasa, entonces haré…",
+          "minutes": 7,
+          "goal": "Vincular una pequeña respuesta con una señal de obstáculo.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "manifest-5",
+          "title": "Intenta, mira, elige de nuevo",
+          "minutes": 8,
+          "goal": "Revisar tu plan en la vida real y elegir tu siguiente paso.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -2320,30 +3046,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "focus-1",
+          "title": "La atención es limitada, y cambiar de tarea tiene un precio",
+          "minutes": 7,
+          "goal": "Notar con qué frecuencia cambias de una cosa a otra durante el día y cómo se siente.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "focus-2",
+          "title": "Cómo las notificaciones tiran de tu atención",
+          "minutes": 7,
+          "goal": "Revisar tus notificaciones y silenciarlas durante una sesión de trabajo.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "focus-3",
+          "title": "El teléfono sobre el escritorio: afirmación y evidencia",
+          "minutes": 8,
+          "goal": "Distinguir entre que un teléfono esté cerca de ti y que de verdad lo uses.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "focus-4",
+          "title": "Descansos cortos: lo que prometen y lo que no",
+          "minutes": 6,
+          "goal": "Probar un descanso corto y observar cómo te funciona.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "focus-5",
+          "title": "Tu propio plan de enfoque",
+          "minutes": 8,
+          "goal": "Combinar tus decisiones sobre notificaciones, teléfono, un bloque de trabajo y un descanso en un único experimento personal.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -2369,30 +3110,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "sleep-1",
+          "title": "¿Cuánto sueño necesitas?",
+          "minutes": 7,
+          "goal": "Planificar tu oportunidad de dormir contando hacia atrás desde una hora fija de despertar.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "sleep-2",
+          "title": "Dale luz al día y penumbra a la noche",
+          "minutes": 6,
+          "goal": "Elegir un cambio en tu exposición a la luz del día o en el uso de pantallas por la noche.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "sleep-3",
+          "title": "Cafeína y hábitos de la noche",
+          "minutes": 8,
+          "goal": "Fijar tu última hora de cafeína y un límite para tus hábitos nocturnos.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "sleep-4",
+          "title": "No luches con el sueño en la cama",
+          "minutes": 7,
+          "goal": "Preparar un plan tranquilo para usar cuando el sueño no llega.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "sleep-5",
+          "title": "Cuándo pedir ayuda",
+          "minutes": 8,
+          "goal": "Reconocer señales de sueño que pueden necesitar apoyo profesional y elegir tu siguiente paso.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -2418,30 +3174,45 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "calm-1",
+          "title": "Reconoce el estrés y ponle nombre",
+          "minutes": 6,
+          "goal": "Notar cómo se manifiesta el estrés en tu cuerpo y en tu mente, y ponerle nombre.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "calm-2",
+          "title": "Alarga tu exhalación",
+          "minutes": 7,
+          "goal": "Probar el suspiro cíclico durante unos 5 minutos, dentro de tus propios límites.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "calm-3",
+          "title": "Pon el cuerpo en movimiento",
+          "minutes": 7,
+          "goal": "Incluir en tu día una breve pausa de movimiento que se adapte a ti.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "calm-4",
+          "title": "Cambia el ángulo",
+          "minutes": 8,
+          "goal": "En lugar de rechazar una situación difícil, probar a leerla desde un ángulo distinto.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "calm-5",
+          "title": "Apoyo, y cuándo buscar ayuda",
+          "minutes": 8,
+          "goal": "Identificar a las personas de confianza y reconocer las situaciones que requieren ayuda profesional.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
@@ -2469,42 +3240,63 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "meditation-1",
+          "title": "Tu primera sesión: la atención en la respiración",
+          "minutes": 8,
+          "goal": "Siéntate cinco minutos y observa tu respiración; cuando tu atención se vaya, nótalo y vuelve con suavidad.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "meditation-2",
+          "title": "El escaneo corporal",
+          "minutes": 8,
+          "goal": "Mover tu atención por el cuerpo, de los pies a la cabeza, y notar las sensaciones sin intentar cambiarlas.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "meditation-3",
+          "title": "La respuesta de relajación: siéntate con una palabra",
+          "minutes": 7,
+          "goal": "Con el método de Herbert Benson, siéntate 10 minutos repitiendo una palabra que hayas elegido.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "meditation-4",
+          "title": "Meditación caminando",
+          "minutes": 7,
+          "goal": "Caminar despacio y con atención durante unos minutos, acompasando tus pasos con la respiración.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "meditation-5",
+          "title": "Bondad amorosa (metta)",
+          "minutes": 8,
+          "goal": "Dedicar unos minutos a dirigir frases breves de buenos deseos primero hacia ti y luego hacia los demás.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "meditation-6",
+          "title": "Ensaya tu nuevo yo",
+          "minutes": 9,
+          "goal": "Con la meditación del Dr. Joe Dispenza, notar tu viejo estado automático, soltarlo y ensayar a la persona que quieres ser, junto con cómo se siente.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "meditation-7",
+          "title": "Tu propia rutina y a qué prestar atención",
+          "minutes": 8,
+          "goal": "Construir una rutina diaria de meditación que se ajuste a ti y saber cuándo detenerte y pedir ayuda.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
@@ -2532,42 +3324,63 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "suggestion-1",
+          "title": "Qué es la sugestión y qué no es",
+          "minutes": 8,
+          "goal": "Distinguir lo que la sugestión puede cambiar de lo que no puede.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "suggestion-2",
+          "title": "La fórmula de Coué",
+          "minutes": 8,
+          "goal": "Practicar la fórmula diaria de Coué por la mañana y por la noche, sin forzarla.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "suggestion-3",
+          "title": "Construye frases en las que puedas creer",
+          "minutes": 9,
+          "goal": "Convertir afirmaciones forzadas en frases creíbles que describan un proceso.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "suggestion-4",
+          "title": "Llámate por tu nombre",
+          "minutes": 8,
+          "goal": "Antes de un momento difícil, ganar distancia dirigiéndote a ti mismo por tu nombre o como «tú».",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "suggestion-5",
+          "title": "Date instrucciones",
+          "minutes": 9,
+          "goal": "Elegir palabras clave cortas, instructivas y motivacionales, para una tarea y probarlas.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "suggestion-6",
+          "title": "Sugestión antes de dormir",
+          "minutes": 10,
+          "goal": "Practicar la técnica de Murphy antes de dormir junto con un obstáculo y un plan.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "suggestion-7",
+          "title": "Tu propia tarjeta de sugestión",
+          "minutes": 10,
+          "goal": "Reunir en una tarjeta tu frase, tu imagen, tu plan y tu hora, y revisarla después de 7 días.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -2595,42 +3408,63 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "identity-1",
+          "title": "Conoce a tu viejo yo",
+          "minutes": 8,
+          "goal": "Escribir un retrato honesto y amable de los pensamientos, emociones y reacciones que repites casi todos los días.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "identity-2",
+          "title": "Emociones memorizadas",
+          "minutes": 9,
+          "goal": "Detectar una emoción que has practicado tantas veces que ya se siente como parte de tu personalidad.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "identity-3",
+          "title": "Atrapa el piloto automático",
+          "minutes": 8,
+          "goal": "Interrumpir a tu viejo yo al menos una vez en medio de un día cualquiera.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "identity-4",
+          "title": "Cada acción es un voto",
+          "minutes": 9,
+          "goal": "Elegir la identidad que quieres hacer crecer y emitir hoy tu primer pequeño voto a su favor.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "identity-5",
+          "title": "Ensaya el nuevo yo",
+          "minutes": 12,
+          "goal": "Practicar un ensayo matutino de 10 minutos de la persona en la que te estás convirtiendo y vincularlo con una acción real.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "identity-6",
+          "title": "Señales y entorno",
+          "minutes": 9,
+          "goal": "Preparar tu entorno y tres planes si-entonces para que tu nuevo yo se convierta en la opción fácil por defecto.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "identity-7",
+          "title": "El camino de los 66 días",
+          "minutes": 10,
+          "goal": "Planear cómo seguir a largo plazo, incluyendo qué harás cuando tropieces.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -2658,42 +3492,63 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "state-1",
+          "title": "El estado lo tiñe todo",
+          "minutes": 7,
+          "goal": "Notar el estado en el que estás ahora mismo y nombrar las tres palancas que lo moldean: cuerpo, foco y palabras.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "state-2",
+          "title": "El cuerpo va primero",
+          "minutes": 8,
+          "goal": "Usar el movimiento, la postura y la música para cambiar tu energía en unos dos minutos, y saber qué afirmaciones sobre el cuerpo resisten.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "state-3",
+          "title": "Calma en dos respiraciones",
+          "minutes": 8,
+          "goal": "Aprender el suspiro cíclico y practicarlo durante cinco minutos, deteniéndote de inmediato si sientes mareo.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "state-4",
+          "title": "Cambia tu foco y tus preguntas",
+          "minutes": 8,
+          "goal": "Atrapar una pregunta que te desgasta y que te haces una y otra vez, y cambiarla por una que dirija tu atención hacia algo útil.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "state-5",
+          "title": "Palabras y significado",
+          "minutes": 9,
+          "goal": "Nombrar lo que sientes con una o dos palabras y luego probar un significado alternativo para la situación.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "state-6",
+          "title": "Priming matutino e invocaciones",
+          "minutes": 10,
+          "goal": "Construir un priming matutino de diez minutos y una invocación honesta, dicha en voz alta, que puedas pronunciar sin discutir contigo.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "state-7",
+          "title": "El proceso Dickens y los nuevos estándares",
+          "minutes": 11,
+          "goal": "Usar una versión breve y amable del proceso Dickens para ver lo que te cuesta un viejo patrón y luego fijar un nuevo estándar con una pequeña acción diaria.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
@@ -2720,36 +3575,54 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "optimism-1",
+          "title": "Indefensión aprendida, esperanza aprendida",
+          "minutes": 8,
+          "goal": "Entender por qué rendirse después de un contratiempo es una respuesta por defecto normal, y practicar cómo encontrar una parte de la situación en la que todavía puedes influir.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "optimism-2",
+          "title": "Tu estilo explicativo",
+          "minutes": 9,
+          "goal": "Aprender las tres dimensiones de cómo explicas los sucesos malos y reconocer tu propio estilo en un ejemplo real.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "optimism-3",
+          "title": "ABCDE: discutir contigo, con justicia",
+          "minutes": 10,
+          "goal": "Recorrer un contratiempo real por Adversidad, Creencia, Consecuencia, Disputa y Energización.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "optimism-4",
+          "title": "Trampas del pensamiento y el registro de pensamientos",
+          "minutes": 11,
+          "goal": "Reconocer trampas comunes del pensamiento y completar un registro de pensamientos, desde la situación hasta una respuesta equilibrada.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "optimism-5",
+          "title": "Cuatro preguntas para un pensamiento estresante",
+          "minutes": 9,
+          "goal": "Probar las cuatro preguntas y la inversión de Byron Katie con un pensamiento que sigue haciéndote daño.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "optimism-6",
+          "title": "Optimismo realista y tres cosas buenas",
+          "minutes": 10,
+          "goal": "Distinguir el optimismo realista de la positividad forzada y empezar un hábito nocturno de tres cosas buenas.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
@@ -2776,36 +3649,54 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "meaning-1",
+          "title": "De dónde viene el sentido",
+          "minutes": 8,
+          "goal": "Conoce las tres grandes fuentes de sentido de Frankl y observa dónde aparece ya cada una en tu vida.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "meaning-2",
+          "title": "Los valores son una dirección, no una meta",
+          "minutes": 9,
+          "goal": "Comprende la diferencia entre valores y metas, y nombra algunos valores con tus propias palabras.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "meaning-3",
+          "title": "¿De quién son estos valores?",
+          "minutes": 9,
+          "goal": "Distingue los valores que has elegido de verdad de los que nacen de la presión, la culpa o el miedo.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "meaning-4",
+          "title": "El sentido cuando las cosas son difíciles",
+          "minutes": 10,
+          "goal": "Aprende a encontrar la parte que aún puedes elegir cuando enfrentas una situación que no puedes cambiar.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "meaning-5",
+          "title": "Imagina la vida a la que apuntas",
+          "minutes": 10,
+          "goal": "Usa el ejercicio del Mejor Yo Posible para imaginar un futuro guiado por tus valores y conviértelo en un primer paso.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "meaning-6",
+          "title": "Una decisión al día basada en tus valores",
+          "minutes": 8,
+          "goal": "Convierte tus valores en una pequeña decisión concreta cada día y mantenla en el tiempo.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
@@ -2832,36 +3723,54 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "stoic-1",
+          "title": "Lo que depende de ti",
+          "minutes": 8,
+          "goal": "Clasifica una preocupación actual entre lo que depende de ti y lo que no, y lleva tu energía a la primera lista.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "stoic-2",
+          "title": "La historia entre el hecho y el sentimiento",
+          "minutes": 9,
+          "goal": "Detecta el juicio que se sitúa entre algo que sucede y lo que sientes al respecto.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
         },
         {
           "id": "stoic-3",
+          "title": "Ensaya el día difícil, con suavidad",
+          "minutes": 9,
+          "goal": "Imagina brevemente y con realismo un contratiempo probable y planea tu respuesta, sin caer en la preocupación.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "stoic-4",
+          "title": "La visión desde lo alto",
+          "minutes": 9,
+          "goal": "Da un paso atrás en un momento acalorado cambiando tu punto de vista, las palabras que usas o tu sentido del tiempo.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "stoic-5",
+          "title": "El repaso de la noche",
+          "minutes": 8,
+          "goal": "Cierra el día con un repaso breve y justo que convierta los errores en una lección para mañana.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 1
         },
         {
           "id": "stoic-6",
+          "title": "Una decisión hoy",
+          "minutes": 8,
+          "goal": "Convierte el enfoque estoico en lo que depende de ti en una pequeña decisión concreta que pones en práctica hoy.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 2
@@ -2888,36 +3797,54 @@ const EDITIONS = {
       "lessons": [
         {
           "id": "compassion-1",
+          "title": "La compasión no es debilidad",
+          "minutes": 8,
+          "goal": "Descubre por qué ser amable contigo después de un fracaso puede ayudarte a hacerlo mejor, en lugar de socavarlo.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "compassion-2",
+          "title": "Las tres partes",
+          "minutes": 9,
+          "goal": "Conoce los tres componentes de la autocompasión según Neff e identifica el que más sueles pasar por alto.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "compassion-3",
+          "title": "La pausa de autocompasión",
+          "minutes": 8,
+          "goal": "Aprende una práctica de dos minutos para el momento en que algo duele.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "compassion-4",
+          "title": "Amenaza, impulso y calma",
+          "minutes": 10,
+          "goal": "Usa el modelo de tres sistemas de Paul Gilbert para notar qué sistema te está dirigiendo y cómo recurrir a la calma.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "compassion-5",
+          "title": "Vergüenza y culpa",
+          "minutes": 10,
+          "goal": "Distingue la vergüenza de la culpa y usa cuatro pasos para atravesar la vergüenza en lugar de esconderte.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0
         },
         {
           "id": "compassion-6",
+          "title": "Una carta para ti y la responsabilidad compasiva",
+          "minutes": 12,
+          "goal": "Escribe una carta compasiva sobre algo que lamentas o no te gusta de ti, y conviértela en un paso responsable.",
           "practiceCount": 3,
           "optionCount": 3,
           "correct": 0

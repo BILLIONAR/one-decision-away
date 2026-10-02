@@ -7,7 +7,7 @@ import { EXPLORE_DREAM_ITEMS, type ExploreDreamItem } from '../data/exploreDream
 import { ECONOMY_CONSTANTS } from '../services/economy';
 import { INTENTS, easyDecisions, type Intent } from '../data/starterDecisions';
 import { EasyDecisionChips } from './momentum/FirstSteps';
-import { readOnboardingDraft, writeOnboardingDraft, clearOnboardingDraft } from '../services/onboardingDraft';
+import { readOnboardingDraft, writeOnboardingDraft, clearOnboardingDraft, decisionFromPreview } from '../services/onboardingDraft';
 import { firstRunCopy } from '../i18n/firstRun';
 import { EvidenceTree } from './momentum/EvidenceTree';
 
@@ -35,6 +35,7 @@ export const Onboarding: React.FC = () => {
 
   const [savedDraft] = useState(readOnboardingDraft);
   const [resumed, setResumed] = useState(Boolean(savedDraft));
+  const [protectSavedDraft, setProtectSavedDraft] = useState(Boolean(savedDraft));
   const mainRef = useRef<HTMLElement>(null);
   const c = firstRunCopy(locale);
   const [step, setStep] = useState<Step>(savedDraft?.step ?? 0);
@@ -55,7 +56,7 @@ export const Onboarding: React.FC = () => {
   useEffect(() => { mainRef.current?.querySelector<HTMLElement>('h1')?.focus(); }, [step]);
 
   const restart = () => {
-    clearOnboardingDraft(); setResumed(false); setName(''); setIntent(null); setDreamId(null); setDecision(''); setDemo('pick'); setStep(0);
+    clearOnboardingDraft(); setResumed(false); setProtectSavedDraft(false); setName(''); setIntent(null); setDreamId(null); setDecision(''); setDemoChoice(''); setDemo('pick'); setStep(0);
   };
 
   const starterDreams = useMemo<ExploreDreamItem[]>(
@@ -226,33 +227,33 @@ export const Onboarding: React.FC = () => {
               ))}
             </div>
             <div className="space-y-2">
-              <p className="text-[13px] font-semibold text-[var(--accent)]">{t('Try it in 20 seconds')}</p>
+              <p className="text-[13px] font-semibold text-[var(--accent)]">{c.previewLabel}</p>
               <h1 tabIndex={-1} className="text-[32px] sm:text-[36px] oda-display leading-tight">{t('One decision. A small start. Proof.')}</h1>
-              <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed">{t('This is how every day in ODA works. Try one round before we set anything up.')}</p>
+              <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed">{c.previewHelp}</p>
             </div>
-            <div className="rounded-[var(--radius-lg)] oda-card p-5 space-y-4" aria-live="polite">
+            <div className="rounded-[var(--radius-lg)] oda-card p-5 space-y-4" aria-live="polite" data-onboarding-preview={demo}>
               {demo === 'pick' && (
-                <EasyDecisionChips options={easyDecisions(null)} onPick={(title) => { setDemoChoice(title); setDemo('start'); }} label={t('1. Pick a decision for today:')} />
+                <EasyDecisionChips options={easyDecisions(null)} onPick={(title) => { setDemoChoice(title); setDecision(current => decisionFromPreview(current, t(title), protectSavedDraft)); setDemo('start'); }} label={t('1. Pick a decision for today:')} />
               )}
               {demo !== 'pick' && <p className="text-[18px] font-semibold leading-snug">{t(demoChoice)}</p>}
               {demo === 'start' && (
                 <button type="button" onClick={() => { setDemo('running'); }} className={primaryButton}>
-                  {t('2. Start · just 2 minutes')}
+                  {c.previewStart}
                 </button>
               )}
               {demo === 'running' && (
                 <div className="space-y-2">
                   <div className="h-2 rounded-full bg-[var(--border)] overflow-hidden"><div className="oda-demo-bar h-full bg-[var(--accent)]" /></div>
-                  <p className="text-[13px] text-[var(--fg-muted)]">{t('Here the two minutes pass in a few seconds.')}</p>
+                  <p className="text-[13px] text-[var(--fg-muted)]">{c.previewFastForward}</p>
                 </div>
               )}
               {demo === 'keep' && (
-                <button type="button" onClick={() => setDemo('proof')} className={primaryButton}>{t('3. I did it')}</button>
+                <button type="button" onClick={() => setDemo('proof')} className={primaryButton}>{c.previewKept}</button>
               )}
               {demo === 'proof' && (
                 <div className="flex items-center gap-4">
-                  <EvidenceTree count={1} className="w-24 h-20 shrink-0" label={t('Your evidence tree: {n} leaves', { n: 1 })} />
-                  <p className="text-[15px] leading-relaxed">{t('That’s proof #1. Every kept decision adds a leaf to your tree. Small promises, kept, change how you see yourself.')}</p>
+                  <EvidenceTree count={1} className="w-24 h-20 shrink-0" label={c.previewTree} />
+                  <p className="text-[15px] leading-relaxed">{c.previewProof}</p>
                 </div>
               )}
             </div>

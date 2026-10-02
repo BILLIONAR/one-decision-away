@@ -1,0 +1,45 @@
+{
+  "base": "http://127.0.0.1:4182/one-decision-away/#",
+  "at": "2026-10-02T00:40:19.626Z",
+  "checks": [
+    "en catalog mobile: no horizontal overflow or serious/critical axe findings",
+    "en course overview mobile: no horizontal overflow or serious/critical axe findings",
+    "course overview 320px: no horizontal overflow or serious/critical axe findings",
+    "en: untouched overview uses real description, outcome, ordered lessons and explicit Start without saving progress",
+    "en: course filters/search and keyboard workbook opening",
+    "en: example starter preserves the reader's existing field",
+    "en: plan, entry, reflection and partial practice survive reload",
+    "en: review and portable notes download",
+    "en open workbook mobile: no horizontal overflow or serious/critical axe findings"
+  ],
+  "accessibility": [
+    {
+      "name": "en catalog mobile",
+      "violations": []
+    },
+    {
+      "name": "en course overview mobile",
+      "violations": []
+    },
+    {
+      "name": "course overview 320px",
+      "violations": []
+    },
+    {
+      "name": "en open workbook mobile",
+      "violations": []
+    }
+  ],
+  "screenshots": [
+    "catalog-mobile.png",
+    "catalog-mobile-top.png",
+    "overview-mobile.png",
+    "overview-320px.png",
+    "workbook-mobile.png",
+    "workbook-mobile-plan.png",
+    "failure.png"
+  ],
+  "errors": [],
+  "status": "failed",
+  "failure": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Try saving again', exact: true })\u001b[22m\n\u001b[2m    - locator resolved to <button type=\"button\">Try saving again</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m  - element was detached from the DOM, retrying\u001b[22m\n\n    at /workspace/one-decision-away/scripts/qa-course-learning.mjs:173:77"
+}

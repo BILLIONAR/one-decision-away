@@ -42,6 +42,7 @@ import { shareDecision } from '../components/momentum/shareDecision';
 import { decisionChain, evidenceSummary, isSimpleMode, keptDecisions, localDayKey, twoWeekCheckInDue } from '../services/momentum';
 import { EasyDecisionChips, KeptMomentCard } from '../components/momentum/FirstSteps';
 import { easyDecisions } from '../data/starterDecisions';
+import { firstRunCopy } from '../i18n/firstRun';
 
 const RITUALS_KEY = 'oda_rituals_open';
 
@@ -87,22 +88,6 @@ export const Today: React.FC = () => {
   const [plan, setPlan] = useState<{ open: boolean; justSet?: boolean; smaller?: boolean }>({ open: false });
   const [startOpen, setStartOpen] = useState(false);
 
-  // The offer is consumed only when it opens, so interrupted navigation can retry.
-  const selectedDecision = data ? todayDecision(data.missions, now) : undefined;
-  const firstPlanCandidate = selectedDecision?.status === 'active' && !selectedDecision.plan ? selectedDecision : undefined;
-  const firstWeek = data ? isSimpleMode(data) : false;
-  useEffect(() => {
-    if (!firstPlanCandidate || !firstWeek) return;
-    const markOpened = () => { try { localStorage.setItem('oda_plan_prompted', firstPlanCandidate.id); } catch { /* The offer can still open without storage. */ } };
-    if (plan.open) { markOpened(); return; }
-    // Defer the automatic sheet while another task is open. Closing that task
-    // rechecks the offer, so it is never consumed by an overlapping dialog.
-    if (completingMission || startOpen || habitsModalOpen) return;
-    try { if (localStorage.getItem('oda_plan_prompted') === firstPlanCandidate.id) return; } catch { /* Optional reminder memory. */ }
-    const timer = window.setTimeout(() => { markOpened(); setPlan({ open: true, justSet: true }); }, 700);
-    return () => window.clearTimeout(timer);
-  }, [firstPlanCandidate?.id, firstWeek, plan.open, completingMission?.id, startOpen, habitsModalOpen]);
-
   if (!data) return null;
 
   const balance = computeLedgerBalance(data.transactions);
@@ -143,8 +128,6 @@ export const Today: React.FC = () => {
     try {
       await setOneDecision(title);
       setNewDecisionTitle('');
-      // Right after choosing is the best moment to plan for the obstacle.
-      setPlan({ open: true, justSet: true });
     } catch {
       setDecisionError(true);
     } finally {
@@ -294,6 +277,7 @@ export const Today: React.FC = () => {
                   </button>
                 </div>
                 <p className="text-[12.5px] text-[var(--fg-muted)] px-1">{t('Did it? Tap the check · +D$ {amount}', { amount: ECONOMY_CONSTANTS.ONE_DECISION_REWARD.toLocaleString() })}</p>
+                {!decisionPlan?.ifThen && <button type="button" onClick={() => setPlan({ open: true })} className="min-h-11 inline-flex items-center gap-2 text-[13px] text-[var(--fg-muted)] underline underline-offset-4"><Route size={16} aria-hidden="true" />{firstRunCopy(locale).optionalPlan}</button>}
               </div>
             )}
           </>

@@ -35,3 +35,8 @@ export function writeOnboardingDraft(draft: OnboardingDraft): void {
 export function clearOnboardingDraft(): void {
   try { localStorage.removeItem(ONBOARDING_DRAFT_KEY); } catch { /* Optional draft storage. */ }
 }
+
+/** A fresh preview may seed setup; restored or already typed text always wins. */
+export function decisionFromPreview(current: string, chosen: string, hasSavedDraft: boolean): string {
+  return hasSavedDraft || current.length > 0 ? current : chosen;
+}

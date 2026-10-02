@@ -16,6 +16,10 @@ const browser = await chromium.launch({ executablePath: process.env.ODA_CHROMIUM
 const check = (name) => { report.checks.push(name); console.log(`PASS ${name}`); };
 const createPage = async (options = {}) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce', timezoneId: 'Europe/Istanbul', serviceWorkers: 'block', ...options });
+  if (process.env.ODA_QA_ISOLATE_EXTERNAL === '1') await context.route('**/*', route => {
+    const host = new URL(route.request().url()).hostname;
+    return ['localhost', '127.0.0.1', '[::1]'].includes(host) ? route.continue() : route.abort();
+  });
   const page = await context.newPage();
   page.on('pageerror', error => report.errors.push(error.message));
   return { page, context };
@@ -81,7 +85,9 @@ try {
   await page.getByRole('button', { name: 'Start my day', exact: true }).click();
   await page.locator('#set-one-decision').waitFor();
   await page.waitForTimeout(850);
-  if (!await page.getByRole('dialog').count()) await page.getByRole('button', { name: /Plan for obstacles/ }).click();
+  assert.equal(await page.getByRole('dialog').count(), 0);
+  check('first decision does not automatically open obstacle planning');
+  await page.getByRole('button', { name: 'Plan for obstacles · optional', exact: true }).click();
   const dialog = page.getByRole('dialog');
   if (await dialog.count()) {
     const before = await page.evaluate(() => document.activeElement?.tagName);
@@ -125,7 +131,12 @@ try {
   await page.locator('#course-search').fill('procrastination');
   assert.equal(await page.locator('.oda-course-row').count(), 1);
   await page.locator('.oda-course-row').click();
+  await page.locator('.oda-course-overview').waitFor();
+  assert.equal(await page.locator('.oda-course-lesson-title').count(), 0);
+  assert.equal(await page.locator('#course-overview-title').textContent(), courseCatalogFor('en').find(course => course.id === 'procrastination').title);
+  await page.locator('#course-start-lesson').click();
   await page.locator('.oda-course-lesson-title').waitFor();
+  check('untouched course previews its contents before explicit Start lesson 1');
   const studio = page.locator('.oda-practice details').first();
   if (!await studio.getAttribute('open')) await studio.locator('summary').first().click();
   await page.locator('#practice-procrastination-cue').fill('After I make my morning tea');
@@ -140,6 +151,7 @@ try {
   await page.reload(); await stable(page);
   // Selection is intentionally not stored in the URL; the catalog offers real continuation.
   if (await page.locator('.oda-course-row').count()) await page.locator('.oda-course-resume button').click();
+  assert.equal(await page.locator('.oda-course-overview').count(), 0, 'saved progress resumes without the first-use overview');
   await page.locator('#course-reflection').waitFor();
   assert.equal(await page.locator('#course-reflection').inputValue(), 'An observable small start is useful to me.');
   assert.ok(await page.locator('.oda-course-practice input[type=checkbox]').first().isChecked());

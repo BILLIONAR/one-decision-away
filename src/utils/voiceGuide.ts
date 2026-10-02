@@ -6,8 +6,12 @@
 
 import { geminiVoice } from './geminiVoice';
 import { getSpeechLang } from '../i18n';
+import { RecordedNarration } from './recordedNarration';
+import { ENGLISH_NARRATION_ASSETS } from '../data/englishNarrationAssets';
 
 export type VoiceEngine = 'browser' | 'gemini';
+export type GuidanceMode = 'recorded' | 'device' | 'unavailable';
+export type PlaybackMode = GuidanceMode | 'idle' | 'loading';
 
 export interface GuidedCueContext {
   sessionId: string;
@@ -33,9 +37,13 @@ export interface EnglishRecordedNarration {
   hasCue(text: string, context?: GuidedCueContext): boolean;
   speak(text: string, volume: number, onStart: () => void, onEnd: () => void, context?: GuidedCueContext): Promise<boolean>;
   prefetch?(texts: string[], contexts?: GuidedCueContext[]): void;
+  setVolume?(volume: number): void;
+  unlockAudio?(): Promise<boolean>;
+  interrupt?(): void;
+  getResumeFallback?(): { text: string; context: GuidedCueContext } | null;
   isPlaying(): boolean;
   pause(): void;
-  resume(): void;
+  resume(): void | Promise<void | boolean>;
   stop(): void;
 }
 
@@ -71,27 +79,27 @@ export class VoiceGuide {
   private currentUtterance: SpeechSynthesisUtterance | null = null;
   private listeners = new Set<(speaking: boolean) => void>();
   private availabilityListeners = new Set<(available: boolean) => void>();
+  private playbackMode: PlaybackMode = 'idle';
+  private playbackModeListeners = new Set<(mode: PlaybackMode) => void>();
 
   constructor() {
     if (this.isSupported()) {
       this.loadVoices();
       window.speechSynthesis.addEventListener?.('voiceschanged', () => this.loadVoices());
-      try {
-        const saved = localStorage.getItem('oda_voice_prefs');
-        if (saved) {
-          const p = JSON.parse(saved);
-          if (typeof p.enabled === 'boolean') this.enabled = p.enabled;
-          if (typeof p.volume === 'number') this.volume = p.volume;
-          if (typeof p.rate === 'number') this.rate = p.rate;
-          if (typeof p.voiceURI === 'string') this.preferredVoiceURI = p.voiceURI;
-          if (p.engine === 'gemini' || p.engine === 'browser') this.engine = p.engine;
-          if (typeof p.geminiApiKey === 'string') this.geminiApiKey = p.geminiApiKey;
-          if (typeof p.geminiVoiceName === 'string') this.geminiVoiceName = p.geminiVoiceName;
-        }
-      } catch {
-        /* ignore */
-      }
     }
+    try {
+      const saved = localStorage.getItem('oda_voice_prefs');
+      if (saved) {
+        const p = JSON.parse(saved);
+        if (typeof p.enabled === 'boolean') this.enabled = p.enabled;
+        if (typeof p.volume === 'number') this.volume = Math.max(0, Math.min(1, p.volume));
+        if (typeof p.rate === 'number') this.rate = p.rate;
+        if (typeof p.voiceURI === 'string') this.preferredVoiceURI = p.voiceURI;
+        if (p.engine === 'gemini' || p.engine === 'browser') this.engine = p.engine;
+        if (typeof p.geminiApiKey === 'string') this.geminiApiKey = p.geminiApiKey;
+        if (typeof p.geminiVoiceName === 'string') this.geminiVoiceName = p.geminiVoiceName;
+      }
+    } catch { /* Device storage can be unavailable. */ }
   }
 
   public isSupported(): boolean {
@@ -100,8 +108,30 @@ export class VoiceGuide {
 
   /** Guided English voice availability; browser API support alone is insufficient. */
   public isAvailable(): boolean {
-    return this.recordedNarration?.isAvailable() === true || this.isNaturalVoiceActive()
+    return this.recordedNarration ? this.getAvailableGuidanceMode() !== 'unavailable' : this.isNaturalVoiceActive()
       || (this.isSupported() && this.getEnglishVoices().length > 0);
+  }
+
+  public getAvailableGuidanceMode(): GuidanceMode {
+    if (this.recordedNarration?.isAvailable()) return 'recorded';
+    return this.isSupported() && this.getEnglishVoices().length > 0 ? 'device' : 'unavailable';
+  }
+
+  public getPlaybackMode(): PlaybackMode { return this.playbackMode; }
+
+  public onPlaybackModeChange(listener: (mode: PlaybackMode) => void): () => void {
+    this.playbackModeListeners.add(listener);
+    listener(this.playbackMode);
+    return () => this.playbackModeListeners.delete(listener);
+  }
+
+  private emitPlaybackMode(mode: PlaybackMode) {
+    this.playbackMode = mode;
+    this.playbackModeListeners.forEach(listener => listener(mode));
+  }
+
+  public async unlockAudio(): Promise<boolean> {
+    return this.recordedNarration?.unlockAudio ? this.recordedNarration.unlockAudio() : this.isSupported();
   }
 
   private loadVoices() {
@@ -118,7 +148,7 @@ export class VoiceGuide {
   }
 
   private emitAvailability() {
-    const available = this.recordedNarration?.isAvailable() === true || this.isNaturalVoiceActive()
+    const available = this.recordedNarration ? this.recordedNarration.isAvailable() || this.voices.some(isEnglishVoice) : this.isNaturalVoiceActive()
       || (this.isSupported() && this.voices.some(isEnglishVoice));
     this.availabilityListeners.forEach(listener => listener(available));
   }
@@ -131,10 +161,11 @@ export class VoiceGuide {
     return () => this.availabilityListeners.delete(listener);
   }
 
-  /** Explicit future asset registration only; no recorded narration is enabled by default. */
+  /** Register an admitted asset set without loading any audio. */
   public setRecordedNarration(player: EnglishRecordedNarration | null) {
     this.stop();
     this.recordedNarration = player;
+    player?.setVolume?.(this.volume);
     this.emitAvailability();
   }
 
@@ -236,6 +267,7 @@ export class VoiceGuide {
   public setVolume(volume: number) {
     this.volume = Math.max(0, Math.min(1, volume));
     geminiVoice.setVolume(this.volume);
+    this.recordedNarration?.setVolume?.(this.volume);
     // Device engines do not reliably apply live utterance-volume changes.
     // Zero cancels our current utterance; nonzero applies to the next cue/replay.
     if (this.volume === 0 && this.currentUtterance) {
@@ -281,10 +313,15 @@ export class VoiceGuide {
     if (!this.enabled || this.paused || !text.trim()) return false;
     const seq = ++this.speakSeq;
     this.activePlaybackSeq = seq;
-    const onStart = () => { if (this.activePlaybackSeq === seq && this.speakSeq === seq && !this.paused) this.emit(true); };
+    const onStart = () => {
+      if (this.activePlaybackSeq === seq && this.speakSeq === seq && !this.paused) {
+        this.emitPlaybackMode('recorded'); this.emit(true);
+      }
+    };
     const onEnd = () => {
       if (this.activePlaybackSeq !== seq) return;
       this.activePlaybackSeq = null;
+      this.emitPlaybackMode('idle');
       this.emit(false);
     };
     const fallback = (ok: boolean) => {
@@ -296,7 +333,8 @@ export class VoiceGuide {
     };
     if (this.recordedNarration) {
       geminiVoice.stop();
-      this.recordedNarration.stop();
+      if (this.recordedNarration.interrupt) this.recordedNarration.interrupt();
+      else this.recordedNarration.stop();
       if (this.isSupported() && !this.stopBrowser()) { this.activePlaybackSeq = null; this.emit(false); return false; }
       const asset = context && this.recordedNarration.assets.find(asset => asset.sessionId === context.sessionId && asset.cueIndex === context.cueIndex);
       const fitsSlot = asset && context.sessionId.length > 0 && Number.isInteger(context.cueIndex) && context.cueIndex >= 0
@@ -309,6 +347,7 @@ export class VoiceGuide {
         this.activePlaybackSeq = null;
         return this.speakBrowser(text, true);
       }
+      this.emitPlaybackMode('loading');
       try {
         this.recordedNarration.speak(text, this.volume, onStart, onEnd, context).then(fallback, () => fallback(false));
       } catch { return fallback(false); }
@@ -347,10 +386,10 @@ export class VoiceGuide {
   }
 
   private speakBrowser(text: string, guidedEnglish: boolean): boolean {
-    if (!this.isSupported()) return false;
+    if (!this.isSupported()) { this.emitPlaybackMode('unavailable'); this.emit(false); return false; }
     const voice = guidedEnglish ? this.getSelectedVoice() : this.getNotebookVoice();
     // Never let the browser silently choose a non-English voice for guided cues.
-    if (guidedEnglish && !voice) { this.stopBrowser(); this.emit(false); return false; }
+    if (guidedEnglish && !voice) { this.stopBrowser(); this.emitPlaybackMode('unavailable'); this.emit(false); return false; }
     if (!this.stopBrowser()) { this.emit(false); return false; }
     try {
       const utterance = new SpeechSynthesisUtterance(text);
@@ -363,23 +402,27 @@ export class VoiceGuide {
       utterance.rate = this.rate;
       utterance.pitch = this.pitch;
       utterance.volume = this.volume;
-      utterance.onstart = () => { if (this.currentUtterance === utterance && !this.paused) this.emit(true); };
+      utterance.onstart = () => { if (this.currentUtterance === utterance && !this.paused) { this.emitPlaybackMode('device'); this.emit(true); } };
       utterance.onend = () => {
         if (this.currentUtterance !== utterance) return;
         this.currentUtterance = null;
+        this.emitPlaybackMode('idle');
         this.emit(false);
       };
       utterance.onerror = () => {
         if (this.currentUtterance !== utterance) return;
         this.currentUtterance = null;
+        this.emitPlaybackMode('unavailable');
         this.emit(false);
       };
       this.currentUtterance = utterance;
+      this.emitPlaybackMode('loading');
       if (!this.paused && window.speechSynthesis.paused) window.speechSynthesis.resume();
       window.speechSynthesis.speak(utterance);
       return true;
     } catch {
       this.stopBrowser();
+      this.emitPlaybackMode('unavailable');
       this.emit(false);
       return false;
     }
@@ -416,7 +459,18 @@ export class VoiceGuide {
 
   public resume() {
     this.paused = false;
-    this.recordedNarration?.resume();
+    const resumeSeq = this.speakSeq;
+    const resumed = this.recordedNarration?.resume();
+    if (resumed) void resumed.then(result => {
+      if (!this.paused && this.speakSeq === resumeSeq && this.recordedNarration?.isPlaying()) {
+        this.emitPlaybackMode('recorded'); this.emit(true);
+      } else if (result === false && !this.paused && this.speakSeq === resumeSeq) {
+        const fallback = this.recordedNarration?.getResumeFallback?.();
+        this.activePlaybackSeq = null;
+        if (fallback && fallback.context.maxDurationSeconds > 0) this.speakBrowser(fallback.text, true);
+        else { this.emitPlaybackMode('unavailable'); this.emit(false); }
+      }
+    }).catch(() => {});
     geminiVoice.resume();
     if (!this.isSupported()) { if (this.isSpeaking()) this.emit(true); return; }
     try {
@@ -434,8 +488,12 @@ export class VoiceGuide {
     this.recordedNarration?.stop();
     geminiVoice.stop();
     this.stopBrowser();
+    this.emitPlaybackMode('idle');
     this.emit(false);
   }
 }
 
 export const voiceGuide = new VoiceGuide();
+// Asset admission: 160 source mappings/hashes/checksums and FFmpeg durations verified.
+// Creating the adapter fetches no clip and creates no audio context.
+if (typeof window !== 'undefined') voiceGuide.setRecordedNarration(new RecordedNarration(ENGLISH_NARRATION_ASSETS));
