@@ -18,7 +18,7 @@ export const Focus: React.FC = () => {
         </div>
       </header>
       <div className="oda-focus-workbench">
-        <figure className="oda-focus-illustration" aria-hidden="true"><CourseCover courseId="focus" eager /><span>“</span></figure>
+        <figure className="oda-focus-illustration" aria-hidden="true"><CourseCover courseId="turning-day" eager /></figure>
         <FocusTimerHub />
       </div>
     </div>

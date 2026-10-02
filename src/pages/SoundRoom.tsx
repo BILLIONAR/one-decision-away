@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import React, { useCallback, useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Headphones, Info, LockKeyhole, Moon, Pause, Play, Timer, Volume1, Volume2, Waves, Wind } from 'lucide-react';
 import { useApp } from '../store/useApp';
 import { purchases, usePro } from '../services/purchases';
@@ -81,13 +81,13 @@ const CoverWave: React.FC = () => (
   </svg>
 );
 
-const SoundCard: React.FC<{ sound: SoundRoomSound; sectionId: SoundRoomSectionId; indexInCategory: number; playing: boolean; locked?: boolean }> = ({ sound, sectionId, indexInCategory, playing, locked }) => {
+const SoundCard: React.FC<{ sound: SoundRoomSound; sectionId: SoundRoomSectionId; indexInCategory: number; playing: boolean; selected: boolean; locked?: boolean }> = ({ sound, sectionId, indexInCategory, playing, selected, locked }) => {
   const t = useT();
   const { setActiveRoute } = useApp();
   const nameId = useId();
   const descriptionId = useId();
   return (
-    <li className="oda-sound-card" data-playing={playing || undefined}>
+    <li className="oda-sound-card" data-playing={playing || undefined} data-selected={selected || undefined}>
       <button
         type="button"
         className="oda-sound-card-button"
@@ -111,18 +111,16 @@ const SoundCard: React.FC<{ sound: SoundRoomSound; sectionId: SoundRoomSectionId
         <span className="oda-sound-card-body">
           <span id={nameId} className="oda-sound-card-name">{t(sound.name)}</span>
           <span id={descriptionId} className="oda-sound-card-description">{t(sound.description)}</span>
-          <span className="oda-sound-card-why">{t(sound.why)}</span>
-          {sound.binaural && (
-            <span className="oda-sound-card-note">
-              <Headphones size={14} aria-hidden="true" />
-              {t('Use headphones for binaural sounds')}
-            </span>
-          )}
         </span>
         <span className="oda-sound-card-play" aria-hidden="true">
           {locked ? <LockKeyhole size={17} strokeWidth={2} /> : playing ? <Pause size={19} strokeWidth={2.2} /> : <Play size={19} strokeWidth={2.2} />}
         </span>
       </button>
+      <details className="oda-sound-card-rationale">
+        <summary aria-label={`${t('Why it matters')}: ${t(sound.name)}`} title={t('Why it matters')}><Info size={16} aria-hidden="true" /><span className="sr-only">{t('Why it matters')}</span></summary>
+        <p className="oda-sound-card-why">{t(sound.why)}</p>
+        {sound.binaural && <p className="oda-sound-card-note"><Headphones size={14} aria-hidden="true" />{t('Use headphones for binaural sounds')}</p>}
+      </details>
     </li>
   );
 };
@@ -197,40 +195,63 @@ const BreathePanel: React.FC<{ sound: SoundRoomSound; soundPlaying: boolean }> =
   );
 };
 
-const PlayerBar: React.FC = () => {
+type PlayerControlProps = { volume: number; onVolumeChange: (volume: number) => void };
+
+/** Both presentations use the same volume value and the existing guarded player methods. */
+const PlayerControls: React.FC<PlayerControlProps> = ({ volume, onVolumeChange }) => {
   const t = useT();
   const player = usePlayer();
-  const [volume, setVolume] = useState(() => soundRoomPlayer.getVolume());
-  useTick(player.playing && player.endsAt !== null, 1000);
-  const sound = soundForTrack(player.track);
-  const scene = SECTION_SCENES[SOUND_ROOM_SECTIONS.find((item) => item.sounds.some((entry) => entry.track === player.track))?.id ?? 'relax'];
   const volumeId = useId();
   const timerId = useId();
+  return (
+    <div className="oda-sound-player-controls">
+      <label htmlFor={volumeId} className="oda-sound-player-volume">
+        <span className="sr-only">{t('Volume')}</span>
+        {volume < 0.5 ? <Volume1 size={16} aria-hidden="true" /> : <Volume2 size={16} aria-hidden="true" />}
+        <input id={volumeId} data-sound-control="volume" type="range" min={0} max={1} step={0.01} value={volume} onChange={(event) => onVolumeChange(Number(event.target.value))} />
+      </label>
+      <label htmlFor={timerId} className="oda-sound-player-timer">
+        <Timer size={16} aria-hidden="true" />
+        <span className="sr-only">{t('Timer')}</span>
+        <select id={timerId} data-sound-control="timer" value={player.timerMinutes ?? ''} onChange={(event) => soundRoomPlayer.setTimer(event.target.value ? Number(event.target.value) : null)}>
+          <option value="">{t('No timer')}</option>
+          {TIMER_CHOICES.map((minutes) => <option key={minutes} value={minutes}>{t('{n} min', { n: minutes })}</option>)}
+        </select>
+      </label>
+    </div>
+  );
+};
 
+function playerStatus(player: ReturnType<typeof usePlayer>, t: ReturnType<typeof useT>): string {
   const remaining = player.playing && player.endsAt !== null
     ? player.endsAt - Date.now()
     : player.pausedRemainingMs;
+  if (!player.track) return t('Choose a sound to begin');
+  if (remaining !== null && remaining > 0) return t('{time} left', { time: formatRemaining(remaining) });
+  return player.playing ? t('Playing · no timer') : t('Paused');
+}
 
-  let status: string;
-  if (!sound) status = t('Choose a sound to begin');
-  else if (remaining !== null && remaining > 0) status = t('{time} left', { time: formatRemaining(remaining) });
-  else if (player.playing) status = t('Playing · no timer');
-  else status = t('Paused');
-
-  if (!player.track) return null;
+const PlayerBar: React.FC<PlayerControlProps & { visible: boolean }> = ({ volume, onVolumeChange, visible }) => {
+  const t = useT();
+  const player = usePlayer();
+  useTick(visible && player.playing && player.endsAt !== null, 1000);
+  const sound = soundForTrack(player.track);
+  const scene = SECTION_SCENES[SOUND_ROOM_SECTIONS.find((item) => item.sounds.some((entry) => entry.track === player.track))?.id ?? 'relax'];
+  if (!player.track || !visible) return null;
 
   return (
-    <div className="oda-sound-player" role="region" aria-label={t('Sound player')}>
+    <div className="oda-sound-player" data-sound-surface="mini" role="region" aria-label={t('Sound player')}>
       <div className="oda-sound-player-inner">
         <div className="oda-sound-player-now">
           <SoundScene scene={scene} className="oda-sound-player-thumb" />
           <div className="oda-sound-player-text">
             <p className="oda-sound-player-name">{sound ? t(sound.name) : t('Sound Room')}</p>
-            <p className="oda-sound-player-status" aria-live="off">{status}</p>
+            <p className="oda-sound-player-status" aria-live="off">{playerStatus(player, t)}</p>
           </div>
           <button
             type="button"
             className="oda-sound-player-toggle"
+            data-sound-control="toggle"
             disabled={!sound}
             aria-label={player.playing ? t('Pause') : t('Play')}
             onClick={() => (player.playing ? soundRoomPlayer.pause() : soundRoomPlayer.resume())}
@@ -238,65 +259,73 @@ const PlayerBar: React.FC = () => {
             {player.playing ? <Pause size={20} strokeWidth={2.2} /> : <Play size={20} strokeWidth={2.2} />}
           </button>
         </div>
-        <div className="oda-sound-player-controls">
-          <label htmlFor={volumeId} className="oda-sound-player-volume">
-            <span className="sr-only">{t('Volume')}</span>
-            {volume < 0.5 ? <Volume1 size={16} aria-hidden="true" /> : <Volume2 size={16} aria-hidden="true" />}
-            <input
-              id={volumeId}
-              type="range"
-              min={0}
-              max={1}
-              step={0.01}
-              value={volume}
-              onChange={(event) => {
-                const next = Number(event.target.value);
-                setVolume(next);
-                soundRoomPlayer.setVolume(next);
-              }}
-            />
-          </label>
-          <label htmlFor={timerId} className="oda-sound-player-timer">
-            <Timer size={16} aria-hidden="true" />
-            <span className="sr-only">{t('Timer')}</span>
-            <select
-              id={timerId}
-              value={player.timerMinutes ?? ''}
-              onChange={(event) => soundRoomPlayer.setTimer(event.target.value ? Number(event.target.value) : null)}
-            >
-              <option value="">{t('No timer')}</option>
-              {TIMER_CHOICES.map((minutes) => (
-                <option key={minutes} value={minutes}>{t('{n} min', { n: minutes })}</option>
-              ))}
-            </select>
-          </label>
-        </div>
+        <PlayerControls volume={volume} onVolumeChange={onVolumeChange} />
       </div>
     </div>
   );
 };
 
 /** The same real player state, given the reference's larger teal-glass presentation. */
-const NowPlayingPanel: React.FC = () => {
+const NowPlayingPanel: React.FC<PlayerControlProps & { primary: boolean; onPrimaryVisible: (visible: boolean) => void }> = ({ volume, onVolumeChange, primary, onPrimaryVisible }) => {
   const t = useT();
   const player = usePlayer();
   const sound = soundForTrack(player.track);
   const scene = SECTION_SCENES[SOUND_ROOM_SECTIONS.find((item) => item.sounds.some((entry) => entry.track === player.track))?.id ?? 'relax'];
+  const controlsRef = useRef<HTMLDivElement>(null);
+  useTick(primary && player.playing && player.endsAt !== null, 1000);
+  const hasSound = !!sound;
+  useEffect(() => {
+    const controls = controlsRef.current;
+    if (!hasSound || !controls) { onPrimaryVisible(false); return; }
+    let observer: IntersectionObserver | undefined;
+    let frame = 0;
+    const margins = () => window.matchMedia('(min-width: 768px)').matches ? [24, 24] : [64, 96];
+    const check = () => {
+      const rect = controls.getBoundingClientRect();
+      const [top, bottom] = margins();
+      onPrimaryVisible(rect.height > 0 && rect.top >= top && rect.bottom <= window.innerHeight - bottom);
+    };
+    const schedule = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(check); };
+    const observe = () => {
+      observer?.disconnect();
+      if (typeof IntersectionObserver !== 'undefined') {
+        const [top, bottom] = margins();
+        observer = new IntersectionObserver(check, { rootMargin: `-${top}px 0px -${bottom}px 0px`, threshold: [0, .99, 1] });
+        observer.observe(controls);
+      }
+      schedule();
+    };
+    observe();
+    window.addEventListener('resize', observe);
+    // Capture nested scrolling too; this also supports browsers without IntersectionObserver.
+    window.addEventListener('scroll', schedule, true);
+    return () => {
+      observer?.disconnect();
+      cancelAnimationFrame(frame);
+      window.removeEventListener('resize', observe);
+      window.removeEventListener('scroll', schedule, true);
+      onPrimaryVisible(false);
+    };
+  }, [hasSound, onPrimaryVisible]);
   if (!sound) return null;
   return (
-    <section className="oda-sound-now-panel" aria-label={t('Sound player')}>
+    <section className="oda-sound-now-panel" data-sound-surface="expanded" data-primary={primary || undefined} aria-label={t('Sound player')}>
       <div className="oda-sound-now-heading">
         <p className="oda-kicker">{t('Sound Room')}</p>
         <h2 className="oda-display">{sound ? t(sound.name) : t('Choose a sound to begin')}</h2>
         {sound && <p>{t(sound.description)}</p>}
       </div>
       <SoundScene scene={scene} className="oda-sound-now-art" eager />
+      <div className="oda-sound-now-control-surface" ref={controlsRef}>
       <div className="oda-sound-now-controls">
         <Headphones size={20} aria-hidden="true" />
-        <button type="button" className="oda-sound-now-toggle" disabled={!sound} aria-label={player.playing ? t('Pause') : t('Play')} onClick={() => (player.playing ? soundRoomPlayer.pause() : soundRoomPlayer.resume())}>
+        <button type="button" className="oda-sound-now-toggle" data-sound-control="toggle" disabled={!sound} aria-label={player.playing ? t('Pause') : t('Play')} onClick={() => (player.playing ? soundRoomPlayer.pause() : soundRoomPlayer.resume())}>
           {player.playing ? <Pause size={27} strokeWidth={2.2} /> : <Play size={27} strokeWidth={2.2} />}
         </button>
         <Timer size={20} aria-hidden="true" />
+      </div>
+      <p className="oda-sound-now-status" aria-live="off">{playerStatus(player, t)}</p>
+      <PlayerControls volume={volume} onVolumeChange={onVolumeChange} />
       </div>
       <p className="oda-sound-now-note">{sound ? t(sound.why) : t('Sound for calm, sleep and focus')}</p>
     </section>
@@ -314,6 +343,30 @@ export const SoundRoom: React.FC = () => {
   const pro = usePro();
   const tier = pro.identityConfirmed ? pro.tier : 'free';
   const [tab, setTab] = useState<SoundRoomSectionId>(readTab);
+  const [volume, setVolume] = useState(() => soundRoomPlayer.getVolume());
+  const [expandedPrimary, setExpandedPrimary] = useState(false);
+  const expandedPrimaryRef = useRef(false);
+  const pendingFocus = useRef<string | null>(null);
+  const soundRootRef = useRef<HTMLDivElement>(null);
+  const onPrimaryVisible = useCallback((visible: boolean) => {
+    if (expandedPrimaryRef.current === visible) return;
+    const focused = document.activeElement as HTMLElement | null;
+    const previousSurface = visible ? 'mini' : 'expanded';
+    if (focused?.closest(`[data-sound-surface="${previousSurface}"]`)) {
+      pendingFocus.current = focused.dataset.soundControl ?? null;
+    }
+    expandedPrimaryRef.current = visible;
+    setExpandedPrimary(visible);
+  }, []);
+  useEffect(() => {
+    const control = pendingFocus.current;
+    pendingFocus.current = null;
+    if (control) soundRootRef.current?.querySelector<HTMLElement>(`[data-sound-surface="${expandedPrimary ? 'expanded' : 'mini'}"] [data-sound-control="${control}"]`)?.focus({ preventScroll: true });
+  }, [expandedPrimary]);
+  const onVolumeChange = useCallback((next: number) => {
+    setVolume(next);
+    soundRoomPlayer.setVolume(next);
+  }, []);
   const tabRefs = useRef<Partial<Record<SoundRoomSectionId, HTMLButtonElement | null>>>({});
   const baseId = useId();
   const section = TAB_SECTIONS.find((item) => item.id === tab) ?? TAB_SECTIONS[0];
@@ -346,7 +399,7 @@ export const SoundRoom: React.FC = () => {
   const isPlaying = (track: SoundRoomSound['track']) => player.playing && player.track === track;
 
   return (
-    <div className="oda-sound">
+    <div className="oda-sound" ref={soundRootRef}>
       <header className="oda-sound-intro">
         <div className="oda-sound-intro-copy">
           <h1 className="oda-display oda-sound-title">{t('Sound Room')}</h1>
@@ -412,7 +465,7 @@ export const SoundRoom: React.FC = () => {
         ) : (
           <ul className="oda-sound-grid">
             {section.sounds.map((sound, i) => (
-              <SoundCard key={`${section.id}-${sound.track}`} sound={sound} sectionId={section.id} indexInCategory={i} playing={isPlaying(sound.track)} locked={isSoundLocked(i, { gating: pro.gating, tier })} />
+              <SoundCard key={`${section.id}-${sound.track}`} sound={sound} sectionId={section.id} indexInCategory={i} playing={isPlaying(sound.track)} selected={player.track === sound.track} locked={isSoundLocked(i, { gating: pro.gating, tier })} />
             ))}
           </ul>
         )}
@@ -425,7 +478,7 @@ export const SoundRoom: React.FC = () => {
         )}
         </div>
       </section>
-      <NowPlayingPanel />
+      <NowPlayingPanel volume={volume} onVolumeChange={onVolumeChange} primary={expandedPrimary} onPrimaryVisible={onPrimaryVisible} />
       </div>
       </div>
 
@@ -447,7 +500,7 @@ export const SoundRoom: React.FC = () => {
         </aside>
         <ul className="oda-sound-grid">
           {FREQUENCIES.sounds.map((sound, i) => (
-            <SoundCard key={`frequencies-${sound.track}`} sound={sound} sectionId="frequencies" indexInCategory={i} playing={isPlaying(sound.track)} locked={isSoundLocked(i, { gating: pro.gating, tier })} />
+            <SoundCard key={`frequencies-${sound.track}`} sound={sound} sectionId="frequencies" indexInCategory={i} playing={isPlaying(sound.track)} selected={player.track === sound.track} locked={isSoundLocked(i, { gating: pro.gating, tier })} />
           ))}
         </ul>
       </section>
@@ -466,7 +519,7 @@ export const SoundRoom: React.FC = () => {
         {t('Keep the volume low. Do not use binaural or sleep sounds while driving or doing anything that needs your full attention. Stop if you feel any discomfort.')}
       </p>
 
-      <PlayerBar />
+      <PlayerBar volume={volume} onVolumeChange={onVolumeChange} visible={!expandedPrimary} />
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight, AudioLines, Check, ChevronDown, ChevronRight, Leaf, Plus, MessageCircle, GraduationCap, Route, Share2, Waves } from 'lucide-react';
 import { GrowthTreePanel, GrowthWeek } from '../components/momentum/GrowthDashboard';
-import { EvidenceTree } from '../components/momentum/EvidenceTree';
 import { CourseCover } from '../components/CourseCover';
 import { growthCopy } from '../i18n/growth';
 import { courseCatalogFor } from '../data/courseCatalog';
@@ -208,10 +207,9 @@ export const Today: React.FC = () => {
       </header>
 
       <div className="oda-fidelity-command">
-      {/* The saved growth stage supplies the illustration; the daily quote stays real. */}
+      {/* The quote has its own scene; the saved growth stage appears once in its evidence panel. */}
       <figure className="oda-quote oda-fidelity-hero">
         <div className="oda-fidelity-scene" aria-hidden="true"><CourseCover courseId="meaning" eager /></div>
-        <div className="oda-fidelity-hero-art" aria-hidden="true"><EvidenceTree count={keptCount} label={growth.growth} /></div>
         <span aria-hidden="true" className="oda-quote-mark text-5xl">“</span>
         <div className="oda-fidelity-hero-copy min-w-0">
           <p className="oda-kicker text-[var(--fg-muted)] mb-2">{d.quote}</p>
@@ -224,7 +222,6 @@ export const Today: React.FC = () => {
               {quote.kind && <span className="block mt-1 font-normal">{quote.kind === 'adaptation' ? c.adaptation : c.translation}</span>}
             </figcaption>
           )}
-          <div className="oda-fidelity-live-evidence"><p>{growth.kept(keptCount)}</p><div className="oda-fidelity-week-fact"><span className="oda-fidelity-week-ring" role="progressbar" aria-label={growth.week} aria-valuenow={week.last7} aria-valuemin={0} aria-valuemax={7} style={{ background: `conic-gradient(var(--accent) ${week.last7 / 7 * 360}deg, var(--border) 0deg)` }}><i>{week.last7}/7</i></span><p>{growth.days(week.last7)}</p></div></div>
         </div>
       </figure>
 

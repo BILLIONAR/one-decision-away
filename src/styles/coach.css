@@ -1,5 +1,27 @@
 /* Reference4 navy assistant composition and reference5 liquid material.
    The large form is original decorative SVG; lighting is never a fake audio meter. */
+.oda-reference-app[data-app-route="/app/coach"] {
+  --bg: #040B1C; --fg: #F2F5FF; --fg-muted: #B7C4DC; --fg-subtle: #A5B4D0;
+  --bg-elevated: #0B1630; --bg-muted: #142242; --bg-inset: #050D21;
+  --border: #243757; --border-strong: #597195;
+  --accent: #9EA3FF; --accent-soft: #192744; --on-accent: #081128;
+  --surface: #0B1630; --surface-border: #263A5D;
+  --surface-shadow: 0 10px 30px -20px #000;
+  --primary-grad: linear-gradient(135deg, #6868E8, #395CDF); --on-primary: #FFF;
+  --danger: #FFB4C5; --danger-soft: #382237;
+  color: var(--fg);
+}
+.oda-reference-app[data-app-route="/app/coach"] .oda-sidebar {
+  background: var(--surface); border-color: var(--border);
+  box-shadow: 0 8px 28px -18px #000;
+}
+.oda-reference-app[data-app-route="/app/coach"] .oda-sidebar-avatar {
+  background: #142242; color: #B7C4DC; border-color: #3A5275;
+}
+/* Keep the user's original transparent logo readable without recoloring it. */
+.oda-reference-app[data-app-route="/app/coach"] .oda-sidebar > button:first-child .oda-brand-mark {
+  background: #F4F6FB; border-radius: 8px;
+}
 .coach-page {
   --bg: #040B1C; --fg: #F2F5FF; --fg-muted: #B7C4DC; --fg-subtle: #A5B4D0;
   --bg-elevated: #0B1630; --bg-muted: #142242; --bg-inset: #050D21;
@@ -29,15 +51,15 @@
 .coach-page textarea::placeholder { color: #A5B4D0; opacity: 1; }
 .coach-page input[type="checkbox"] { accent-color: #A6B1FF; }
 .coach-hero {
-  grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) 310px;
-  align-items: center; min-height: 320px; gap: 18px; padding: 12px 14px 22px;
+  grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) 220px;
+  align-items: center; min-height: 236px; gap: 16px; padding: 4px 8px 16px;
   border-bottom: 1px solid #223454;
 }
 .coach-eyebrow { color: #94BDFA; font-size: 11px; text-transform: uppercase; letter-spacing: .12em; }
 .coach-hero h1 { max-width: 410px; font-size: 34px; font-weight: 500; letter-spacing: -.025em; }
 .coach-hero-copy > p { max-width: 420px; font-size: 14px; line-height: 1.75; }
 .coach-orbit {
-  position: relative; width: 300px; aspect-ratio: 1; display: grid; place-items: center;
+  position: relative; width: 220px; aspect-ratio: 1; display: grid; place-items: center;
   background: radial-gradient(circle, #1856AC60 0, #154A8540 38%, transparent 65%);
 }
 .coach-orbit::before {
@@ -100,12 +122,12 @@
 }
 @media (max-width: 599px) {
   .coach-page { padding: 14px; gap: 14px; border-radius: 18px; }
-  .coach-hero { grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 0 2px 18px; }
+  .coach-hero { grid-template-columns: minmax(0, 1fr); min-height: 0; gap: 6px; padding: 0 2px 14px; }
   .coach-hero-copy { grid-row: 2; text-align: center; }
   .coach-eyebrow { justify-content: center; font-size: 10px; }
   .coach-hero h1 { font-size: 25px; line-height: 1.16; margin-inline: auto; }
   .coach-hero-copy > p { font-size: 13px; line-height: 1.65; }
-  .coach-orbit { grid-row: 1; width: min(100%, 264px); justify-self: center; }
+  .coach-orbit { grid-row: 1; width: min(100%, 180px); justify-self: center; }
   .coach-tools { padding: 12px; }
   .coach-tools .oda-tile { padding: 11px; min-height: 90px; }
   .coach-tools .oda-tile span.text-sm { font-size: 12px; }
