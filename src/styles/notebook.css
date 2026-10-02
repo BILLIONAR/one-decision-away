@@ -139,3 +139,26 @@
   .oda-notebook-reflection-art::before { width: 240px; height: 285px; }
   .oda-notebook-reflection-art::after { width: 200px; top: 285px; }
 }
+
+/* Date-led correction: a real seven-day archive filter, with the full month optional. */
+.oda-notebook-fidelity { gap: 12px; }
+.oda-notebook-fidelity .oda-notebook-heading h1 { font-size: 1.5rem; }
+.oda-notebook-fidelity .oda-notebook-heading p { font-size: .78rem; }
+.oda-notebook-fidelity .oda-notebook-stats { padding: 8px 12px; gap: 5px; min-height: 0; }
+.oda-notebook-fidelity .oda-notebook-stat { padding-block: .2rem; font-size: .7rem; }
+.oda-notebook-fidelity .oda-notebook-stats [role="status"] { padding-top: 5px; font-size: .68rem; }
+.oda-notebook-fidelity .oda-notebook-tabs { max-width: 270px; }
+.oda-notebook-fidelity .oda-notebook-calendar-lead { padding: 12px; container-type: inline-size; container-name: oda-notebook-week; }
+.oda-notebook-week-region { min-width: 0; width: 100%; overflow-x: auto; scrollbar-width: thin; }
+.oda-notebook-week-region:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 12px; }
+.oda-notebook-week-strip { display: grid; grid-template-columns: repeat(7, minmax(44px, 1fr)); gap: 2px; min-width: 320px; }
+.oda-notebook-week-strip button { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 62px; min-width: 44px; gap: 3px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--fg); }
+.oda-notebook-week-strip button > span { font-size: .68rem; color: var(--fg-muted); }
+.oda-notebook-week-strip button > strong { font-size: 1rem; font-variant-numeric: tabular-nums; }
+.oda-notebook-week-strip button[aria-current="date"] { border-color: var(--accent); background: var(--accent-soft); }
+.oda-notebook-week-strip button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.oda-notebook-week-strip button[aria-pressed="true"] > span { color: var(--on-accent); }
+.oda-notebook-week-strip button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.oda-notebook-week-strip i { position: absolute; width: 4px; height: 4px; border-radius: 50%; bottom: 3px; background: currentColor; }
+.oda-notebook-week-hint { display: none; }
+@container oda-notebook-week (max-width: 319px) { .oda-notebook-week-hint { display: block; } }

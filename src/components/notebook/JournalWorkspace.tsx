@@ -44,7 +44,7 @@ export const JournalWorkspace: React.FC<{ today: string }> = ({ today }) => {
   const [baseline, setBaseline] = useSessionDraft('journal:baseline', '\u0000\u0000');
   const [query, setQuery] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
-  const [showCalendar, setShowCalendar] = useState(true);
+  const [showCalendar, setShowCalendar] = useState(false);
   const [validation, setValidation] = useState(false);
   const [photoOpen, setPhotoOpen] = useState(false);
   const nativePhotoDialog = typeof window !== 'undefined' && typeof window.HTMLDialogElement !== 'undefined'
@@ -106,6 +106,18 @@ export const JournalWorkspace: React.FC<{ today: string }> = ({ today }) => {
   return <div className="oda-notebook-workspace">
     <section className="oda-notebook-calendar-lead min-w-0 space-y-3" aria-label={t('Journal archive')}>
       <div className="flex justify-between items-center"><h2 className="text-[15px] font-semibold">{t('Entries')} <span className="text-[var(--fg-muted)] font-normal">({entries.length})</span></h2><NButton type="button" variant="ghost" icon={CalendarDays} aria-expanded={showCalendar} aria-controls="notebook-calendar" onClick={() => setShowCalendar(!showCalendar)}>{t('Calendar')}</NButton></div>
+      <div className="oda-notebook-week-region" role="region" aria-label={t('Journal archive')} tabIndex={0}>
+        <div className="oda-notebook-week-strip">
+          {Array.from({ length: 7 }, (_, index) => {
+            const day = new Date(`${today}T12:00:00`); day.setDate(day.getDate() - 6 + index);
+            const key = `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}`;
+            return <button key={key} type="button" aria-pressed={selectedDate === key} aria-current={key === today ? 'date' : undefined} aria-label={`${dateLabel(key)}${dates.has(key) ? ` — ${t('Has entries')}` : ''}`} onClick={() => setSelectedDate(selectedDate === key ? '' : key)}>
+              <span>{dateLabel(key, { weekday: 'short' })}</span><strong>{day.getDate()}</strong>{dates.has(key) && <i aria-hidden="true" />}
+            </button>;
+          })}
+        </div>
+      </div>
+      <p className="oda-notebook-week-hint text-xs text-[var(--fg-muted)]">{t('Scroll sideways to see all dates')}</p>
       <div className="relative"><Search className="absolute left-3 top-3.5 w-4 h-4 text-[var(--fg-muted)]" aria-hidden="true" strokeWidth={1.8} /><label htmlFor="notebook-journal-search" className="sr-only">{t('Search entries')}</label><NInput id="notebook-journal-search" type="search" className="pl-9 !bg-[var(--bg-muted)] !border-transparent" value={query} onChange={e => setQuery(e.target.value)} placeholder={t('Search')} /></div>
       {showCalendar && <div id="notebook-calendar"><NotebookCalendar today={today} selected={selectedDate} dates={dates} onSelect={setSelectedDate} /></div>}
       {selectedDate && <div className="flex gap-2 justify-between items-center text-sm"><span>{dateLabel(selectedDate)}</span><button type="button" className={quietButton} onClick={() => setSelectedDate('')}>{t('All dates')}</button></div>}

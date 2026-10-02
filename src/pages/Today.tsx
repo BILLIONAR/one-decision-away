@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight, AudioLines, Check, ChevronDown, ChevronRight, Leaf, Plus, MessageCircle, GraduationCap, Route, Share2, Waves } from 'lucide-react';
 import { GrowthTreePanel, GrowthWeek } from '../components/momentum/GrowthDashboard';
 import { EvidenceTree } from '../components/momentum/EvidenceTree';
+import { CourseCover } from '../components/CourseCover';
 import { growthCopy } from '../i18n/growth';
 import { courseCatalogFor } from '../data/courseCatalog';
 import { courseForIntent } from '../data/starterDecisions';
@@ -209,6 +210,7 @@ export const Today: React.FC = () => {
       <div className="oda-fidelity-command">
       {/* The saved growth stage supplies the illustration; the daily quote stays real. */}
       <figure className="oda-quote oda-fidelity-hero">
+        <div className="oda-fidelity-scene" aria-hidden="true"><CourseCover courseId="meaning" eager /></div>
         <div className="oda-fidelity-hero-art" aria-hidden="true"><EvidenceTree count={keptCount} label={growth.growth} /></div>
         <span aria-hidden="true" className="oda-quote-mark text-5xl">“</span>
         <div className="oda-fidelity-hero-copy min-w-0">
@@ -222,12 +224,14 @@ export const Today: React.FC = () => {
               {quote.kind && <span className="block mt-1 font-normal">{quote.kind === 'adaptation' ? c.adaptation : c.translation}</span>}
             </figcaption>
           )}
+          <div className="oda-fidelity-live-evidence"><p>{growth.kept(keptCount)}</p><div className="oda-fidelity-week-fact"><span className="oda-fidelity-week-ring" role="progressbar" aria-label={growth.week} aria-valuenow={week.last7} aria-valuemin={0} aria-valuemax={7} style={{ background: `conic-gradient(var(--accent) ${week.last7 / 7 * 360}deg, var(--border) 0deg)` }}><i>{week.last7}/7</i></span><p>{growth.days(week.last7)}</p></div></div>
         </div>
       </figure>
 
       <div className="oda-growth-dashboard">
         <div className="oda-growth-actions">
       {/* 2. One decision: a soft card with this week's ring, one clear action and a check. */}
+      <div className="oda-fidelity-decision-module">
       <section id="set-one-decision" className="oda-decision" aria-labelledby="today-decision-label">
         <div className="flex items-center gap-4">
           <div className="min-w-0 flex-1 space-y-1">
@@ -309,11 +313,12 @@ export const Today: React.FC = () => {
         )}
       </section>
       {decisionError && <p role="alert" className="oda-loop-error">{loop.saveError}</p>}
+      </div>
+          <GrowthWeek summary={week} onEvidence={() => setActiveRoute('/app/evidence')} />
+          <GrowthTreePanel count={keptCount} onEvidence={() => setActiveRoute('/app/evidence')} />
           <CourseNextStep />
         </div>
-        <GrowthTreePanel count={keptCount} onEvidence={() => setActiveRoute('/app/evidence')} />
       </div>
-      <GrowthWeek summary={week} onEvidence={() => setActiveRoute('/app/evidence')} />
       </div>
       <BackupReminder />
 

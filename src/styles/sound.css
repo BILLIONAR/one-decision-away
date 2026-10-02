@@ -71,13 +71,14 @@
 .oda-sound-hint svg { flex: none; margin-top: .15rem; color: var(--accent); }
 
 /* Reference 3: real player state inside a tall cyan-edge atmospheric glass panel. */
-.oda-sound-now-panel { position: relative; margin-top: 1.5rem; padding: 1.6rem 1.1rem 1.3rem; border: 2px solid #45BFC6; border-radius: 30px; overflow: hidden; background: linear-gradient(140deg, #40666B, #1C414A 58%, #283D4A); color: #F1FCFB; box-shadow: inset 0 1px 0 rgb(199 251 242 / .25), 0 18px 44px -24px #163946; }
+.oda-sound-now-panel { position: relative; margin-top: 1.5rem; padding: 1.6rem 1.1rem 1.3rem; border: 2px solid #61C6C7; border-radius: 30px; overflow: hidden; background: radial-gradient(ellipse at 12% 5%, rgb(137 216 201 / .29), transparent 44%), radial-gradient(ellipse at 100% 90%, rgb(156 111 136 / .13), transparent 50%), linear-gradient(140deg, rgb(28 65 71 / .93), rgb(17 48 57 / .96) 58%, rgb(34 54 67 / .95)); color: #F1FCFB; backdrop-filter: blur(18px) saturate(1.15); box-shadow: inset 1px 1px 0 rgb(218 255 247 / .38), inset -1px -1px 0 rgb(9 35 45 / .8), 0 0 18px -9px rgb(71 214 210 / .26), 0 18px 44px -24px #163946; }
+.oda-sound-now-panel::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(115deg, rgb(226 255 248 / .065), transparent 22%, transparent 67%, rgb(199 232 244 / .025)); }
 .oda-sound-now-heading { position: relative; z-index: 1; }
 .oda-sound-now-heading .oda-kicker { color: #D5EEEB; }
 .oda-sound-now-heading h2 { margin-top: .5rem; font-size: 1.5rem; letter-spacing: -.03em; line-height: 1.15; }
 .oda-sound-now-heading > p:last-child { margin-top: .7rem; max-width: 36ch; font-size: .8rem; line-height: 1.6; color: #E4F4F0; }
 .oda-sound-now-art { width: calc(100% + 2.2rem); height: 300px; margin: 1.4rem -1.1rem 0; border-radius: 0 0 45% 15% / 0 0 18% 6%; }
-.oda-sound-now-art img { object-position: center 65%; mix-blend-mode: luminosity; }
+.oda-sound-now-art img { object-position: center 65%; opacity: .92; }
 .oda-sound-now-controls { display: flex; justify-content: space-around; align-items: center; width: min(100%, 270px); margin: -18px auto 0; padding: .7rem; position: relative; border: 1px solid rgb(194 245 239 / .22); border-radius: 26px; background: rgb(50 99 106 / .8); backdrop-filter: blur(14px); color: #D9EEEA; }
 .oda-sound-now-toggle { display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 50%; color: var(--sound-on-cyan); background: var(--sound-cyan); cursor: pointer; box-shadow: 0 0 22px rgb(71 218 217 / .2); }
 .oda-sound-now-toggle:disabled { background: #587C80; color: #E3F0ED; cursor: not-allowed; box-shadow: none; }

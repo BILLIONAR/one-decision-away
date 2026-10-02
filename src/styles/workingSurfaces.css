@@ -104,3 +104,48 @@
 @media (prefers-reduced-motion: reduce) {
   .oda-fidelity-today *, .oda-fidelity-focus * { scroll-behavior: auto; }
 }
+
+/* Reference 6 contrast: the real action and evidence sit in compact navy modules. */
+.oda-fidelity-scene { position: absolute; inset: 0; z-index: -2; overflow: hidden; }
+.oda-fidelity-scene .oda-course-cover, .oda-fidelity-scene picture, .oda-fidelity-scene img { display: block; width: 100%; height: 100%; }
+.oda-fidelity-scene img { object-fit: cover; object-position: 34% 45%; filter: hue-rotate(145deg) saturate(.55); opacity: .5; }
+.oda-fidelity-scene::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--surface) 45%, transparent) 35%, var(--surface) 80%); }
+.oda-fidelity-hero-copy::before { background: linear-gradient(transparent, color-mix(in srgb, var(--surface) 92%, transparent) 38%); }
+.oda-fidelity-live-evidence { display: grid; gap: 5px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-strong); font-size: .75rem; line-height: 1.5; }
+.oda-fidelity-live-evidence p:first-child { color: var(--accent); font-weight: 650; }
+.oda-fidelity-live-evidence p:last-child { color: var(--fg-muted); }
+.oda-fidelity-today .oda-growth-actions { display: contents; }
+.oda-fidelity-decision-module { display: grid; min-width: 0; gap: 8px; }
+.oda-fidelity-today .oda-growth-actions .oda-decision, .oda-fidelity-today .oda-growth-week, .oda-fidelity-today .oda-growth-panel {
+  --bg: #101728; --bg-elevated: #141C31; --bg-muted: #212A43; --surface: #141C31; --fg: #F3F0FA; --fg-muted: #C9C6DA; --fg-subtle: #BAB6CC; --accent: #C0AEFF; --on-accent: #15182B; --accent-soft: #302A50; --border: #46506F; --border-strong: #747B96; --surface-border: #46506F; --brand-burgundy: #D8B6E8; --primary-grad: linear-gradient(135deg, #C7B5FF, #B6A0F5); --on-primary: #15182B;
+  background: var(--surface); border: 1px solid var(--border); color: var(--fg);
+}
+.oda-fidelity-today .oda-decision-input { border-color: var(--border); background: var(--bg); color: var(--fg); }
+.oda-fidelity-today .oda-decision-input::placeholder { color: var(--fg-muted); }
+.oda-fidelity-today .oda-decision-action:disabled { opacity: 1; background: #514D73; color: #F3F0FA; }
+.oda-fidelity-today .oda-decision-done { background: var(--accent-soft); color: var(--accent); border-color: var(--border); }
+.oda-fidelity-today .oda-growth-count { background: var(--bg); color: var(--accent); }
+@container oda-working-today (min-width: 900px) {
+  .oda-fidelity-today .oda-growth-actions { display: contents; }
+  .oda-fidelity-command .oda-fidelity-decision-module { grid-column: 2; grid-row: 1; }
+  .oda-fidelity-command .oda-growth-week { grid-column: 3; grid-row: 1; }
+  .oda-fidelity-command .oda-growth-panel { grid-column: 2; grid-row: 2; }
+  .oda-fidelity-command .oda-course-next-step { grid-column: 3; grid-row: 2; }
+}
+@media (max-width: 479px) {
+  .oda-fidelity-today .oda-fidelity-hero { min-height: 280px; padding: 18px; }
+  .oda-fidelity-scene img { opacity: .68; }
+  .oda-fidelity-hero-art { height: 150px; padding: 0 12px; }
+  .oda-fidelity-hero-art .oda-evidence-tree { width: 150px; margin: 0 0 0 auto; }
+  .oda-fidelity-hero-art::before { width: 115px; height: 130px; left: auto; right: 24px; top: 5px; transform: none; }
+  .oda-fidelity-hero-art::after { width: 108px; height: 12px; left: auto; right: 26px; top: 128px; transform: none; }
+  .oda-fidelity-hero-copy { margin-top: 110px; }
+  .oda-fidelity-today .oda-fidelity-hero blockquote { font-size: 1.3rem; }
+  .oda-fidelity-live-evidence { margin-top: 10px; padding-top: 8px; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 12px; font-size: .68rem; }
+  .oda-fidelity-today .oda-growth-actions .oda-decision { padding: 16px; }
+  .oda-fidelity-today .oda-growth-actions .oda-decision-text { font-size: 1.35rem; }
+}
+.oda-fidelity-week-fact { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.oda-fidelity-week-ring { width: 32px; height: 32px; flex: none; display: grid; place-items: center; border-radius: 50%; }
+.oda-fidelity-week-ring > i { width: 25px; height: 25px; display: grid; place-items: center; border-radius: 50%; background: var(--surface); color: var(--fg); font-size: 10px; font-style: normal; font-variant-numeric: tabular-nums; }
+:root[data-theme="dark"] .oda-fidelity-scene img, html.dark .oda-fidelity-scene img { opacity: .3; }
