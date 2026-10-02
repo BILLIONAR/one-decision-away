@@ -1,0 +1,74 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import { chromium } from '/workspace/oda-reference-redesign/node_modules/playwright/index.mjs';
+import AxeBuilder from '/workspace/oda-reference-redesign/node_modules/@axe-core/playwright/dist/index.js';
+import { getInitialDemoState } from '/workspace/oda-reference-redesign/src/services/repository.ts';
+
+const out = '/workspace/scratch/oda-reference-redesign/coach-focused-qa-reviewed';
+const base = 'http://127.0.0.1:4181';
+fs.mkdirSync(out, { recursive: true });
+const report = { base, at: new Date().toISOString(), limits: ['Focused Coach development preview on an in-progress shared source tree; root will independently test the final build.', 'Synthetic local records only; external requests blocked; no model download, provider use, speech transmission or production release.', 'Readiness in Chromium is the actual available browser state; no cloud or AI response is fabricated.'], contexts: [], errors: [], externalBlocked: [], screenshots: [] };
+const browser = await chromium.launch({ executablePath: '/usr/bin/chromium' });
+report.browser = browser.version();
+try {
+  for (const locale of ['en', 'tr', 'es']) for (const theme of ['light', 'dark']) for (const width of [320, 390, 1440]) {
+    const name = `${locale}-${theme}-${width}`;
+    const seed = getInitialDemoState();
+    Object.assign(seed.profile, { displayName: 'Synthetic Coach review', onboardingStep: 'completed', locale, theme, firstOpenedAt: new Date().toISOString(), soundMuted: true, nudgesEnabled: false, dailyWisdomEnabled: false, focusTabBlinkEnabled: false, focusScreenPulseEnabled: false });
+    const context = await browser.newContext({ viewport: { width, height: width === 1440 ? 1000 : 844 }, reducedMotion: 'reduce', serviceWorkers: 'block' });
+    await context.route('**/*', route => {
+      if (new URL(route.request().url()).origin === base) return route.continue();
+      report.externalBlocked.push({ context: name, url: route.request().url() });
+      return route.abort();
+    });
+    await context.addInitScript(({ seed, locale }) => {
+      localStorage.setItem('one_decision_away_app_data_v1', JSON.stringify(seed));
+      localStorage.setItem('oda_locale', locale);
+    }, { seed, locale });
+    const page = await context.newPage();
+    page.on('pageerror', error => report.errors.push({ context: name, error: error.message }));
+    await page.goto(`${base}/app/coach`);
+    await page.locator('.coach-page h1').waitFor();
+    await page.evaluate(() => document.fonts.ready);
+    const dimensions = await page.evaluate(() => ({ width: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
+    assert.ok(dimensions.scroll <= dimensions.width + 1, `${name}: overflow ${JSON.stringify(dimensions)}`);
+    assert.equal(await page.locator('.coach-orbit[aria-hidden="true"]').count(), 1);
+    assert.equal(await page.locator('.coach-orbit').getAttribute('data-state'), 'idle');
+    assert.equal(await page.locator('#coach-message').count(), 1);
+    assert.equal(await page.locator('.coach-tools .oda-tile').count(), 4);
+    const prompt = page.locator('.coach-starter').first();
+    const selected = await prompt.innerText();
+    await prompt.click();
+    assert.equal(await page.locator('#coach-message').inputValue(), selected);
+    assert.equal(await page.locator('#coach-message').evaluate(el => el === document.activeElement), true);
+    const axe = await new AxeBuilder({ page }).include('.coach-page').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+    const violations = axe.violations.map(v => ({ id: v.id, impact: v.impact, targets: v.nodes.map(n => n.target), summaries: v.nodes.map(n => n.failureSummary) }));
+    report.contexts.push({ name, dimensions, promptSelected: true, violations });
+    assert.equal(violations.length, 0, `${name}: axe ${JSON.stringify(violations)}`);
+    if ((locale === 'en' && theme === 'light') || (width === 390 && theme === 'dark')) {
+      await page.screenshot({ path: `${out}/${name}.png`, fullPage: true, animations: 'disabled' });
+      report.screenshots.push(`${name}.png`);
+    }
+    if (locale === 'en' && theme === 'light' && width === 320) {
+      const trigger = page.locator('.coach-tools .oda-tile').first();
+      await trigger.click();
+      const title = page.locator('.coach-tools h3');
+      assert.equal(await title.evaluate(el => el === document.activeElement), true);
+      await page.getByRole('button', { name: 'Begin', exact: true }).waitFor();
+      const toolAxe = await new AxeBuilder({ page }).include('.coach-tools').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+      const toolViolations = toolAxe.violations.map(v => ({ id: v.id, impact: v.impact, targets: v.nodes.map(n => n.target) }));
+      report.contexts.push({ name: 'en-light-320-exercise', headingFocused: true, violations: toolViolations });
+      assert.equal(toolViolations.length, 0, JSON.stringify(toolViolations));
+      await page.screenshot({ path: `${out}/en-light-320-exercise.png`, fullPage: true, animations: 'disabled' });
+      report.screenshots.push('en-light-320-exercise.png');
+      await page.getByRole('button', { name: 'Close exercise', exact: true }).click();
+      assert.equal(await trigger.evaluate(el => el === document.activeElement), true);
+      assert.equal(await page.locator('#coach-message').inputValue(), selected);
+    }
+    console.log(`PASS ${name}: no overflow, decorative idle orb, actual controls, starter draft/focus, focused axe`);
+    await context.close();
+  }
+  assert.equal(report.errors.length, 0, JSON.stringify(report.errors));
+  report.pass = true;
+} catch (error) { report.pass = false; report.failure = error.stack; throw error; }
+finally { fs.writeFileSync(`${out}/report.json`, JSON.stringify(report, null, 2)); await browser.close(); }

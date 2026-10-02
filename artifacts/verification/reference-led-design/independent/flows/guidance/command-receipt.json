@@ -1,0 +1,27 @@
+{
+  "kind": "guidance",
+  "command": [
+    "node",
+    "--import",
+    "tsx",
+    "/workspace/scratch/oda-reference-redesign/independent/flows/harness/guidance.mjs"
+  ],
+  "cwd": "/workspace/oda-reference-redesign",
+  "environmentOverrides": {
+    "ODA_GUIDANCE_URL": "http://127.0.0.1:4183/one-decision-away/",
+    "ODA_GUIDANCE_OUT": "/workspace/scratch/oda-reference-redesign/independent/flows/guidance",
+    "ODA_GUIDANCE_REPO": "/workspace/oda-reference-redesign",
+    "ODA_FLOW_BUILD_RECEIPT": "/workspace/scratch/oda-reference-redesign/independent/flows/preflight-receipt.json",
+    "ODA_QA_REPO": "/workspace/oda-reference-redesign"
+  },
+  "startedAt": 1790964099.3261564,
+  "elapsedSeconds": 40.12962341308594,
+  "exitCode": 0,
+  "log": {
+    "file": "/workspace/scratch/oda-reference-redesign/independent/flows/guidance/browser.log",
+    "bytes": 2347,
+    "sha256": "d666ce31196ac3b18895d359c5ec582ac8fb99044b5aa5de6b41a77283434552"
+  },
+  "syntheticOnly": true,
+  "noInstallNoDeploy": true
+}

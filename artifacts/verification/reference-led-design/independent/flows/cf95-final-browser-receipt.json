@@ -1,0 +1,109 @@
+{
+  "atUtc": "2026-10-02T18:06:21.920206+00:00",
+  "sourceCommit": "cf95c6eda4264385a4f70b41f7df0dee7832ebe7",
+  "all691SourcesUnchanged": true,
+  "all388BuildFilesUnchanged": true,
+  "gitStatus": "",
+  "runs": [
+    {
+      "case": "first-use",
+      "report": "first-use/independent-first-use-report.json",
+      "status": "passed",
+      "checks": 46,
+      "contexts": 0,
+      "screenshots": 35,
+      "log": {
+        "file": "/workspace/scratch/oda-reference-redesign/independent/flows/first-use/browser.log",
+        "bytes": 3666,
+        "sha256": "4718f76d6dc21cdca44a3f18768531125328c7d388e63fa62ba4241de7a75d76"
+      }
+    },
+    {
+      "case": "courses",
+      "report": "courses/course-browser-report.json",
+      "status": "passed",
+      "checks": 36,
+      "contexts": 0,
+      "screenshots": 12,
+      "log": {
+        "file": "/workspace/scratch/oda-reference-redesign/independent/flows/courses/browser.log",
+        "bytes": 2806,
+        "sha256": "5d0b6571300622d45b9cafd3e3b935a3354e55f2a21f5a1b1dc5d7a3c7046ea4"
+      }
+    },
+    {
+      "case": "guidance",
+      "report": "guidance/lifecycle-report.json",
+      "status": "passed",
+      "checks": 35,
+      "contexts": 18,
+      "screenshots": 11,
+      "log": {
+        "file": "/workspace/scratch/oda-reference-redesign/independent/flows/guidance/browser.log",
+        "bytes": 2347,
+        "sha256": "d666ce31196ac3b18895d359c5ec582ac8fb99044b5aa5de6b41a77283434552"
+      }
+    },
+    {
+      "case": "dialogs",
+      "report": "dialogs/report.json",
+      "status": "passed",
+      "checks": 61,
+      "contexts": 9,
+      "screenshots": 10,
+      "log": {
+        "file": "/workspace/scratch/oda-reference-redesign/independent/flows/dialogs/browser.log",
+        "bytes": 4572,
+        "sha256": "1f3c434f35a11de6ddefeb0abd65f3532ba2aa31a67a1385c85f7f66952da05a"
+      }
+    },
+    {
+      "case": "notebook-corrected",
+      "report": "notebook-corrected/notebook-report.json",
+      "status": "passed",
+      "checks": 18,
+      "contexts": 0,
+      "screenshots": 12,
+      "log": {
+        "file": "/workspace/scratch/oda-reference-redesign/independent/flows/notebook-corrected/browser.log",
+        "bytes": 1428,
+        "sha256": "7ba3c28eeedc74c5c173d1ded2f87dc818a3ac402ff6ed88c473f13fb540436d"
+      }
+    },
+    {
+      "case": "localized-preview",
+      "report": "localized-preview/localized-preview-report.json",
+      "status": "passed",
+      "checks": 6,
+      "contexts": 6,
+      "screenshots": 6,
+      "log": {
+        "file": "/workspace/scratch/oda-reference-redesign/independent/flows/localized-preview/browser.log",
+        "bytes": 545,
+        "sha256": "be912bc824de59e8b8ea80742cf517d01af46f9865ab288b10a59ae4b87854ed"
+      }
+    }
+  ],
+  "guidanceServedJavaScript": {
+    "responses": 131,
+    "mismatches": []
+  },
+  "all160NarrationClips": {
+    "unchangedFromBase": true,
+    "distBytesMatchPublic": true
+  },
+  "findings": {
+    "P0": [],
+    "P1": [],
+    "P2": [],
+    "P3": []
+  },
+  "timerLimit": "Actual application handlers tested with Playwright controlled browser clock at 119/120 seconds, a labelled simulation rather than a 120-second wall-clock or physical-device test.",
+  "knownVisualFinding": "Independent visual agent reports calendar weekend discoverability P2; functional date selectors remained usable. Separate bounded root fix planned after this source/build seal.",
+  "initialNotebookHarnessFailure": "The first Notebook custom assertion wrongly expected trimmed writing. App correctly preserved user trailing spaces. Exact log/report retained in notebook/; corrected run is notebook-corrected/. No app fix involved.",
+  "reviewLimits": [
+    "Synthetic signed-out disposable profiles; no real user data, provider/account/payment or production deployment.",
+    "Cloud Chromium viewport/capability simulations do not establish physical iPhone/native iOS or listening/transcription quality.",
+    "First-use and course axe scopes do not constitute whole-app accessibility certification."
+  ]
+}

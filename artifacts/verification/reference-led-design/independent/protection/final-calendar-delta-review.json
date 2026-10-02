@@ -1,0 +1,164 @@
+{
+  "kind": "independent final narrow calendar delta source audit and build rebinding",
+  "originalBaseCommit": "68ae8179c875b54ce8f200e34a6148259ae6cad1",
+  "priorReviewedCommit": "cf95c6eda4264385a4f70b41f7df0dee7832ebe7",
+  "reviewedFinalSourceCommit": "71f1ce41f77bddb519cc9d18933303cc13336073",
+  "worktree": "/workspace/oda-reference-redesign",
+  "finalHead": "71f1ce41f77bddb519cc9d18933303cc13336073",
+  "gitStatusPorcelain": "",
+  "changedFileCount": 4,
+  "changedFiles": [
+    {
+      "file": "src/components/notebook/NotebookCalendar.tsx",
+      "priorBytes": 3705,
+      "priorSha256": "b2f89bde0cc5b5ae9c33c0c09d5df83209a4795356901fd011dfb43707c0641c",
+      "currentBytes": 3958,
+      "currentSha256": "9e05a127e9b90ded1a1f257289a2eee28b789172370e92d499557e785603da5f",
+      "matchesCommittedSource": true
+    },
+    {
+      "file": "src/i18n/locales/es.ts",
+      "priorBytes": 602484,
+      "priorSha256": "0ec442fcf4f450a4342524b8ed8d3200ed29b8229298d8e7a76a083fbe2790c9",
+      "currentBytes": 602575,
+      "currentSha256": "9cd7b56ac504e8d56a18faedb0e2772ca928cf566d879d13c74304d4088cd81c",
+      "matchesCommittedSource": true
+    },
+    {
+      "file": "src/i18n/locales/tr.ts",
+      "priorBytes": 590034,
+      "priorSha256": "4664d5a84df013e75844a8d34f2542df8d8077563f59039f7f30f5b411586802",
+      "currentBytes": 590120,
+      "currentSha256": "d79e692b66d436cda233d4c0a45cfc89e87910ae6841b531043cfce299ebcf33",
+      "matchesCommittedSource": true
+    },
+    {
+      "file": "src/styles/notebook.css",
+      "priorBytes": 6553,
+      "priorSha256": "8a1b36f1ee5c8c0cbdd0e3515487e029705aa471b66967eb1c8f14f88c0e2748",
+      "currentBytes": 7086,
+      "currentSha256": "e38797e8c1bf0410c535d29ee78cfcc96162c3924aa27cb3eddd6b89e663ffc3",
+      "matchesCommittedSource": true
+    }
+  ],
+  "controllerAndAllExistingHandlerAndControlAttributesUnchanged": true,
+  "intentionalAdditions": [
+    "Decorative ArrowLeftRight icon and localized sideways-scroll hint.",
+    "Keyboard-focusable named Writing calendar overflow region.",
+    "Scoped inline-size container query shows hint only below352px table width, with visible focus outline."
+  ],
+  "translationChecks": {
+    "es": {
+      "exactlyOneNewKey": true,
+      "allPriorBytesUnchangedAfterRemovingKnownKey": true,
+      "line": "\"Scroll sideways to see all dates\": \"Desliza hacia los lados para ver todas las fechas\","
+    },
+    "tr": {
+      "exactlyOneNewKey": true,
+      "allPriorBytesUnchangedAfterRemovingKnownKey": true,
+      "line": "\"Scroll sideways to see all dates\": \"T\u00fcm tarihleri g\u00f6rmek i\u00e7in yana kayd\u0131r\u0131n\","
+    }
+  },
+  "protectedFileCount": 348,
+  "allProtectedFilesUnchanged": true,
+  "all160NarrationMp3sUnchanged": true,
+  "cspManifestThemeNativeServicesUnchangedFromCf95": true,
+  "originalCf95Receipt": {
+    "file": "/workspace/scratch/oda-reference-redesign/independent/protection/final-review-receipt.json",
+    "sha256": "af2267d4c9b8670afa743286dd6ab81e4611971b075e02e12e848e0b42e2fdb2",
+    "unchanged": true,
+    "evidence": [
+      {
+        "file": "protected-source-parity.json",
+        "bytes": 145512,
+        "sha256": "6df36ee9ccb194f21dc032f46dac528363009b2925896d2d0f45461df8a812f5",
+        "matchesOriginalCf95Receipt": true
+      },
+      {
+        "file": "presentation-static-final.json",
+        "bytes": 7609,
+        "sha256": "f65485c9ed5429f6f257f6ef8e169c0ebe4d6e5d0f0e7bf60591a0eeeaf5b59e",
+        "matchesOriginalCf95Receipt": true
+      },
+      {
+        "file": "reviewed-fixes-css-final.json",
+        "bytes": 2130,
+        "sha256": "0b94a11274ac61b2e446838eafddb99bad219165ba9ebe6fb01eda2903b95b25",
+        "matchesOriginalCf95Receipt": true
+      },
+      {
+        "file": "reviewed-source-manifest.json",
+        "bytes": 4110,
+        "sha256": "e1bb25701cc08da31563051bfc2fb058d6d0c0bea24f600cb1360c8945734d27",
+        "matchesOriginalCf95Receipt": true
+      },
+      {
+        "file": "build-evidence-rebinding.json",
+        "bytes": 1227,
+        "sha256": "082bce5b7268ccf560c1b175934acb95669a655b07968a4253115afe451e8c92",
+        "matchesOriginalCf95Receipt": true
+      },
+      {
+        "file": "reviewed-source.diff",
+        "bytes": 128438,
+        "sha256": "6b2589fbbd666dfa8ef14cb88493708a0b96109d5bcc2b5570987ce6b9ad01c3",
+        "matchesOriginalCf95Receipt": true
+      },
+      {
+        "file": "compare-presentation.mjs",
+        "bytes": 5206,
+        "sha256": "f685ef2c7a263d3a7454e5f3e3495198233082fc7c6f3dae0238a22e4ef3e27c",
+        "matchesOriginalCf95Receipt": true
+      }
+    ]
+  },
+  "finalBuildEvidence": {
+    "sourceHashes": 691,
+    "buildHashes": 388,
+    "passed": 597,
+    "failed": 0,
+    "buildComplete": true,
+    "aggregateLogBytes": 76227,
+    "aggregateLogSha256": "c406039aaff39d515e6156e6f27a592025399488f16318f067d2e3db731c2397"
+  },
+  "findings": [],
+  "findingCounts": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0,
+    "P3": 0
+  },
+  "testsRerunByReviewer": false,
+  "publicationPerformed": false,
+  "limits": [
+    "Static source/a11y review and independent existing test/build evidence rebinding. Mobile weekend discovery, keyboard native scrolling and visual focus rendering still rely on separately bound browser QA.",
+    "Original cf95 receipts remain intact; this delta receipt extends them to the final source commit. Parent visual/QA approval remains required before publication."
+  ],
+  "evidence": [
+    {
+      "file": "calendar-controller-attributes.json",
+      "bytes": 1343,
+      "sha256": "1c10bea20f0cc4e60af6fb3c74c4b833d6a7553a367afcfb7ef83c6fb1536868"
+    },
+    {
+      "file": "protected-source-rebinding.json",
+      "bytes": 79611,
+      "sha256": "92abd6768a798f4f638ff07fe8c7419bd7a5d3d18019f1ce1d4f1ab7cab6f1c7"
+    },
+    {
+      "file": "final-build-evidence-rebinding.json",
+      "bytes": 989,
+      "sha256": "63d13d6ed92cb885e8498aee66c95c740b7ffe6263ced04b768b7f5f2b2e2d09"
+    },
+    {
+      "file": "reviewed-calendar-delta.diff",
+      "bytes": 4909,
+      "sha256": "9c25670dd0a99053df82031578bbc4e367a732cf60240d44357867c0e389d8c5"
+    },
+    {
+      "file": "compare-calendar.mjs",
+      "bytes": 5053,
+      "sha256": "11fe69d5db864887bd9a2958e9c617f2dda3f794f61774f4cd7792ed9620832b"
+    }
+  ]
+}

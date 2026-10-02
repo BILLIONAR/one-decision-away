@@ -1,0 +1,1851 @@
+diff --git a/index.html b/index.html
+index 63bfed7..244979a 100644
+--- a/index.html
++++ b/index.html
+@@ -5,7 +5,7 @@
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+     <title>ODA — Designed by Yahya</title>
+     <meta name="description" content="Choose one small decision, apply a guided lesson, and reflect on what helps. A private daily practice with ODA — One Decision Away." />
+-    <meta name="theme-color" content="#F7F3EA" />
++    <meta name="theme-color" content="#F5F4FA" />
+     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com; font-src 'self' data:; media-src 'self' data: blob:; connect-src 'self' data: blob: https://*.supabase.co wss://*.supabase.co https://huggingface.co https://*.huggingface.co https://*.hf.co https://raw.githubusercontent.com https://generativelanguage.googleapis.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests" />
+     <meta name="referrer" content="strict-origin-when-cross-origin" />
+     <script src="%BASE_URL%theme-init.js"></script>
+diff --git a/public/manifest.webmanifest b/public/manifest.webmanifest
+index 149989b..8ec449e 100644
+--- a/public/manifest.webmanifest
++++ b/public/manifest.webmanifest
+@@ -6,8 +6,8 @@
+   "scope": "./",
+   "display": "standalone",
+   "orientation": "portrait",
+-  "background_color": "#F7F3EA",
+-  "theme_color": "#F7F3EA",
++  "background_color": "#F5F4FA",
++  "theme_color": "#F5F4FA",
+   "icons": [
+     {
+       "src": "./brand/oda-app-c4-v1-192.png",
+diff --git a/public/theme-init.js b/public/theme-init.js
+index 6372f60..59ba943 100644
+--- a/public/theme-init.js
++++ b/public/theme-init.js
+@@ -9,6 +9,6 @@
+     if (dark) root.classList.add('dark');
+     root.style.colorScheme = dark ? 'dark' : 'light';
+     var meta = document.querySelector('meta[name="theme-color"]');
+-    if (meta) meta.setAttribute('content', dark ? '#101E1A' : '#F7F3EA');
++    if (meta) meta.setAttribute('content', dark ? '#101728' : '#F5F4FA');
+   } catch (e) {}
+ })();
+diff --git a/src/components/FocusTimerHub.tsx b/src/components/FocusTimerHub.tsx
+index 8ce666a..8467268 100644
+--- a/src/components/FocusTimerHub.tsx
++++ b/src/components/FocusTimerHub.tsx
+@@ -301,7 +301,7 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
+     'h-11 px-4 inline-flex items-center justify-center gap-2 rounded-[var(--radius-sm)] bg-[var(--fg)] text-[var(--bg)] text-sm font-semibold cursor-pointer shrink-0';
+ 
+   return (
+-    <div id="focus-timer-hub" className="oda-card rounded-[var(--radius-lg)] p-5 space-y-5">
++    <div id="focus-timer-hub" className="oda-reference-focus oda-card rounded-[var(--radius-lg)] p-5 space-y-5">
+       <div className="flex items-start justify-between gap-3">
+         <div>
+           <h2 className="text-[15px] font-semibold text-[var(--fg)]">{t('Focus')}</h2>
+@@ -382,7 +382,7 @@ export const FocusTimerHub: React.FC<FocusTimerHubProps> = ({
+                       onClick={() => handleVoiceSample(m)}
+                       title={isSampling ? guidance.stopPreview : guidance.preview}
+                       aria-label={`${isSampling ? guidance.stopPreview : guidance.preview}: ${t(m.title)}`}
+-                      className={`min-h-11 px-2 rounded-[var(--radius-sm)] inline-flex items-center gap-2 text-sm cursor-pointer ${isSampling ? 'bg-[var(--accent)] text-white' : 'text-[var(--fg-muted)]'}`}
++                      className={`min-h-11 px-2 rounded-[var(--radius-sm)] inline-flex items-center gap-2 text-sm cursor-pointer ${isSampling ? 'bg-[var(--accent)] text-[var(--on-accent)]' : 'text-[var(--fg-muted)]'}`}
+                     >
+                       {isSampling ? <Pause className="w-[18px] h-[18px] shrink-0" strokeWidth={1.8} /> : <Volume2 className="w-[18px] h-[18px] shrink-0" strokeWidth={1.8} />}
+                       <span>{isSampling ? guidance.stopPreview : guidance.preview}</span>
+diff --git a/src/components/notebook/JournalWorkspace.tsx b/src/components/notebook/JournalWorkspace.tsx
+index 1328192..41ba469 100644
+--- a/src/components/notebook/JournalWorkspace.tsx
++++ b/src/components/notebook/JournalWorkspace.tsx
+@@ -101,14 +101,15 @@ export const JournalWorkspace: React.FC<{ today: string }> = ({ today }) => {
+     if (result) reset();
+   };
+ 
+-  return <div className="space-y-6">
++  return <div className="oda-notebook-workspace">
++    <div className="oda-notebook-writing-column">
+     <TodaysPrompt today={today} onUse={usePrompt} />
+-    <div className={cardCls}>
+-      <div className="p-5 flex items-start justify-between gap-3">
++    <div className={`${cardCls} oda-notebook-editor`}>
++      <div className="oda-notebook-editor-heading p-5 flex items-start justify-between gap-3">
+         <div><p className={smallLabel}>{editing ? dateLabel(editing.dateKey) : dateLabel(today)}</p><h2 className="text-lg font-semibold tracking-tight text-[var(--fg)] mt-0.5">{editing ? t('Edit entry') : t('Today')}</h2></div>
+         <NButton type="button" variant="ghost" icon={Plus} disabled={busy} onClick={() => { if (canReplace()) { reset(); setNotice(null); } }}>{t('New')}</NButton>
+       </div>
+-      <form onSubmit={save} className="px-5 pb-5 space-y-4">
++      <form onSubmit={save} className="oda-notebook-editor-form px-5 pb-5 space-y-4">
+         {editing?.source === 'dream' && <p className="text-xs text-[var(--fg-muted)]">{t('From dream journal')}{editing.dreamName ? ` · ${displayText(editing, 'dreamName')}` : ''}</p>}
+         <NField id="notebook-journal-title" label={t('Title')}><NInput id="notebook-journal-title" value={title} onChange={e => setTitle(e.target.value)} placeholder={t('Optional')} disabled={busy} maxLength={200} /></NField>
+         <NField id="notebook-journal-content" label={t('Your writing')} error={validation && !content.trim() ? t('Write a few words before saving.') : undefined} required>
+@@ -117,19 +118,20 @@ export const JournalWorkspace: React.FC<{ today: string }> = ({ today }) => {
+         <div className="sm:max-w-xs"><NField id="notebook-journal-mood" label={t('Mood')}><NSelect id="notebook-journal-mood" value={mood} onChange={e => setMood(e.target.value)} disabled={busy} options={[{ value: '', label: t('None') }, ...(editing?.source === 'dream' ? LEGACY_MOODS : MOODS).map(([value, label]) => ({ value, label: t(label) }))]} /></NField></div>
+         {editing?.photoDataUrl && <div><button type="button" onClick={() => setPhotoOpen(true)} className="block max-w-full rounded-[var(--radius-sm)] overflow-hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4" aria-label={t('View journal photo')}><img src={editing.photoDataUrl} alt={t('Journal photo')} className="max-h-48 max-w-full object-contain" /></button><p className="text-xs text-[var(--fg-muted)] mt-2">{t('Your original photo and dream link stay with this entry.')}</p></div>}
+         <ActionNotice notice={notice} />
+-        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[var(--border)]">
++        <div className="oda-notebook-editor-actions flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[var(--border)]">
+           <div className="flex flex-wrap gap-2"><NButton type="submit" isLoading={busy}>{editing ? t('Save') : t('Save entry')}</NButton>{editing && <NButton type="button" variant="ghost" disabled={busy} onClick={() => { if (canReplace()) { reset(); setNotice(null); } }}>{t('Cancel')}</NButton>}</div>
+           {editing ? <button type="button" className={`${quietButton} !text-[var(--danger)] gap-1.5`} onClick={remove} disabled={busy}><Trash2 className="w-4 h-4" strokeWidth={1.8} />{t('Delete')}</button> : <span className="text-xs text-[var(--fg-muted)]">{dirty ? t('Unsaved') : t('Just for you')}</span>}
+         </div>
+       </form>
+     </div>
++    </div>
+ 
+-    <section className="min-w-0 space-y-3" aria-label={t('Journal archive')}>
++    <section className="oda-notebook-archive min-w-0 space-y-3" aria-label={t('Journal archive')}>
+       <div className="flex justify-between items-center"><h2 className="text-[15px] font-semibold">{t('Entries')} <span className="text-[var(--fg-muted)] font-normal">({entries.length})</span></h2><NButton type="button" variant="ghost" icon={CalendarDays} aria-expanded={showCalendar} aria-controls="notebook-calendar" onClick={() => setShowCalendar(!showCalendar)}>{t('Calendar')}</NButton></div>
+       <div className="relative"><Search className="absolute left-3 top-3.5 w-4 h-4 text-[var(--fg-muted)]" aria-hidden="true" strokeWidth={1.8} /><label htmlFor="notebook-journal-search" className="sr-only">{t('Search entries')}</label><NInput id="notebook-journal-search" type="search" className="pl-9 !bg-[var(--bg-muted)] !border-transparent" value={query} onChange={e => setQuery(e.target.value)} placeholder={t('Search')} /></div>
+       {showCalendar && <div id="notebook-calendar"><NotebookCalendar today={today} selected={selectedDate} dates={dates} onSelect={setSelectedDate} /></div>}
+       {selectedDate && <div className="flex gap-2 justify-between items-center text-sm"><span>{dateLabel(selectedDate)}</span><button type="button" className={quietButton} onClick={() => setSelectedDate('')}>{t('All dates')}</button></div>}
+-      {entries.length === 0 ? <div className="oda-card rounded-[var(--radius-lg)] p-5 text-center"><p className="text-[15px] font-semibold">{query || selectedDate ? t('No entries match.') : t('Nothing written yet')}</p><p className="text-sm text-[var(--fg-muted)] mt-1">{query || selectedDate ? t('Try another word or choose all dates.') : t('Your first entry will appear here.')}</p>{(query || selectedDate) && <button type="button" className={`${quietButton} mt-2`} onClick={() => { setQuery(''); setSelectedDate(''); }}>{t('Clear filters')}</button>}</div> : <div className="bg-[var(--bg-muted)] rounded-[var(--radius-md)] divide-y divide-[var(--border)] max-h-[650px] overflow-y-auto">{entries.map(entry => <button type="button" key={entry.viewId} disabled={busy} aria-current={editing?.viewId === entry.viewId ? 'true' : undefined} onClick={() => openEntry(entry)} className={`w-full text-left px-4 py-3 min-h-[56px] cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset disabled:opacity-50 ${editing?.viewId === entry.viewId ? 'bg-[var(--bg-inset)]' : ''}`}>
++      {entries.length === 0 ? <div className="oda-card rounded-[var(--radius-lg)] p-5 text-center"><p className="text-[15px] font-semibold">{query || selectedDate ? t('No entries match.') : t('Nothing written yet')}</p><p className="text-sm text-[var(--fg-muted)] mt-1">{query || selectedDate ? t('Try another word or choose all dates.') : t('Your first entry will appear here.')}</p>{(query || selectedDate) && <button type="button" className={`${quietButton} mt-2`} onClick={() => { setQuery(''); setSelectedDate(''); }}>{t('Clear filters')}</button>}</div> : <div className="oda-notebook-entry-list bg-[var(--bg-muted)] rounded-[var(--radius-md)] divide-y divide-[var(--border)] max-h-[650px] overflow-y-auto">{entries.map(entry => <button type="button" key={entry.viewId} disabled={busy} aria-current={editing?.viewId === entry.viewId ? 'true' : undefined} onClick={() => openEntry(entry)} className={`w-full text-left px-4 py-3 min-h-[56px] cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset disabled:opacity-50 ${editing?.viewId === entry.viewId ? 'bg-[var(--bg-inset)]' : ''}`}>
+         <span className="flex justify-between gap-2 text-xs text-[var(--fg-muted)]"><span>{dateLabel(entry.dateKey, { month: 'short', day: 'numeric', year: 'numeric' })}</span>{entry.source === 'dream' && <span>{t('Dream journal')}</span>}</span>
+         <span className="text-[15px] font-medium leading-snug block break-words mt-0.5">{displayText(entry, 'title') || t('Untitled')}</span>
+         <span className="text-sm text-[var(--fg-muted)] line-clamp-2 block mt-0.5 break-words">{displayText(entry, 'content')}</span>
+diff --git a/src/components/notebook/NotebookCalendar.tsx b/src/components/notebook/NotebookCalendar.tsx
+index 2a80d3d..bb42dd9 100644
+--- a/src/components/notebook/NotebookCalendar.tsx
++++ b/src/components/notebook/NotebookCalendar.tsx
+@@ -1,5 +1,5 @@
+ import React, { useState } from 'react';
+-import { ChevronLeft, ChevronRight } from 'lucide-react';
++import { ArrowLeftRight, ChevronLeft, ChevronRight } from 'lucide-react';
+ import { useT, getSpeechLang } from '../../i18n';
+ import { dateLabel, localDate } from './shared';
+ 
+@@ -17,12 +17,13 @@ export const NotebookCalendar: React.FC<{
+   const keyFor = (day: number) => `${month.getFullYear()}-${String(month.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+   const monthLabel = new Intl.DateTimeFormat(getSpeechLang(), { month: 'long', year: 'numeric' }).format(month);
+   const navBtn = 'w-11 h-11 rounded-[var(--radius-sm)] flex items-center justify-center text-[var(--fg-muted)] hover:text-[var(--fg)] cursor-pointer';
+-  return <div className="oda-card rounded-[var(--radius-lg)] p-3 space-y-2">
++  return <div className="oda-notebook-calendar oda-card rounded-[var(--radius-lg)] p-3 space-y-2">
+     <div className="flex items-center justify-between gap-2">
+       <button type="button" className={navBtn} aria-label={t('Previous month')} onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1, 12))}><ChevronLeft className="w-5 h-5" strokeWidth={1.8} /></button>
+       <span className="text-sm font-semibold capitalize" aria-live="polite">{monthLabel}</span>
+       <button type="button" className={navBtn} aria-label={t('Next month')} onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1, 12))}><ChevronRight className="w-5 h-5" strokeWidth={1.8} /></button>
+     </div>
++    <div className="oda-notebook-calendar-scroll" role="region" aria-label={t('Writing calendar')} tabIndex={0}>
+     <table className="w-full table-fixed text-center border-separate border-spacing-1">
+       <caption className="sr-only">{t('Writing calendar')} — {monthLabel}</caption>
+       <thead><tr>{Array.from({ length: 7 }, (_, i) => <th key={i} scope="col" className="text-xs font-medium text-[var(--fg-muted)] pb-1">{new Intl.DateTimeFormat(getSpeechLang(), { weekday: 'narrow' }).format(new Date(2024, 0, 1 + i))}</th>)}</tr></thead>
+@@ -35,6 +36,8 @@ export const NotebookCalendar: React.FC<{
+         </button></td>;
+       })}</tr>)}</tbody>
+     </table>
++    </div>
++    <p className="oda-notebook-calendar-scroll-hint"><ArrowLeftRight size={16} strokeWidth={1.8} aria-hidden="true" /><span>{t('Scroll sideways to see all dates')}</span></p>
+     <p className="text-xs text-[var(--fg-muted)] flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" aria-hidden="true" />{t('Days with entries')}</p>
+   </div>;
+ };
+diff --git a/src/i18n/locales/es.ts b/src/i18n/locales/es.ts
+index 9ad773f..261d9e8 100644
+--- a/src/i18n/locales/es.ts
++++ b/src/i18n/locales/es.ts
+@@ -4922,6 +4922,7 @@ const dict: Record<string, string> = {
+   "Dream journal": "Diario de sueños",
+   "Untitled": "Sin título",
+   "Days with entries": "Días con entradas",
++  "Scroll sideways to see all dates": "Desliza hacia los lados para ver todas las fechas",
+   "3-6-9": "3-6-9",
+   "One intention, written three times in the morning, six at midday, nine in the evening. For 33 days.": "Una intención, escrita tres veces por la mañana, seis al mediodía y nueve por la noche. Durante 33 días.",
+   "{n} / 33 days": "{n} / 33 días",
+diff --git a/src/i18n/locales/tr.ts b/src/i18n/locales/tr.ts
+index 8c4c7be..37d7539 100644
+--- a/src/i18n/locales/tr.ts
++++ b/src/i18n/locales/tr.ts
+@@ -4922,6 +4922,7 @@ const dict: Record<string, string> = {
+   "Dream journal": "Hayal günlüğü",
+   "Untitled": "Başlıksız",
+   "Days with entries": "Kayıtlı günler",
++  "Scroll sideways to see all dates": "Tüm tarihleri görmek için yana kaydırın",
+   "3-6-9": "3-6-9",
+   "One intention, written three times in the morning, six at midday, nine in the evening. For 33 days.": "Tek bir niyet; sabah üç, öğlen altı, akşam dokuz kez yazılır. 33 gün boyunca.",
+   "{n} / 33 days": "{n} / 33 gün",
+diff --git a/src/index.css b/src/index.css
+index c79e429..25d57a9 100644
+--- a/src/index.css
++++ b/src/index.css
+@@ -383,24 +383,12 @@ body::before {
+   background: var(--page-bg);
+ }
+ 
+-/* The architecture stays quiet around the work: ink navigation, paper content. */
++/* Navigation inherits the shared reference-led working palette. */
+ .oda-sidebar {
+-  --bg-elevated: #173E35;
+-  --bg-muted: #214C40;
+-  --bg-inset: #12332A;
+-  --bg: #173E35;
+-  --fg: #F7F3EA;
+-  --fg-muted: #D3DDD0;
+-  --fg-subtle: #C0D0BF;
+-  --accent: #F7F3EA;
+-  --accent-soft: #2D5547;
+-  --border: #36584A;
+-  --brand-burgundy: #E6ABB6;
+   color: var(--fg);
+ }
+-.oda-sidebar .oda-brand-mark { filter: brightness(2.6) saturate(.65); }
+-.oda-sidebar button:focus-visible { outline-color: #F7F3EA; }
+-.oda-sidebar .oda-nav-active::before { background: #F7F3EA; width: 2px; }
++.oda-sidebar button:focus-visible { outline-color: var(--accent); }
++.oda-sidebar .oda-nav-active::before { background: var(--accent); width: 2px; }
+ .oda-tabbar { background: var(--bg-elevated); border-color: var(--border); }
+ @media (min-width: 768px) { .oda-tabbar { display: none; } }
+ .oda-onboarding h1:focus { outline: none; }
+diff --git a/src/layout/AppShell.tsx b/src/layout/AppShell.tsx
+index 5abcf01..78ba06e 100644
+--- a/src/layout/AppShell.tsx
++++ b/src/layout/AppShell.tsx
+@@ -78,7 +78,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
+   const handleNav = (path: string) => setActiveRoute(path);
+ 
+   return (
+-    <div className="min-h-screen text-[var(--fg)] flex flex-col md:flex-row">
++    <div className="oda-reference-app min-h-screen text-[var(--fg)] flex flex-col md:flex-row" data-app-route={activeRoute}>
+       <a href="#oda-main" onClick={(event) => { event.preventDefault(); document.getElementById('oda-main')?.focus(); }} className="sr-only focus:not-sr-only focus:fixed focus:z-50 focus:top-3 focus:left-3 focus:p-3 focus:bg-[var(--bg-elevated)]">{c.skip}</a>
+       {/* Toast */}
+       {toast && (
+@@ -115,6 +115,11 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
+           <LogoLockup className="w-12 h-18" /><span className="text-[11px] leading-relaxed tracking-[0.16em] font-medium">ONE DECISION<br />AWAY</span>
+         </button>
+ 
++        <button type="button" onClick={() => handleNav('/app/me')} className="oda-sidebar-profile">
++          <span className="oda-sidebar-avatar" aria-hidden="true"><User size={20} /></span>
++          <span className="min-w-0"><span className="block text-sm font-semibold break-words">{data?.profile.displayName || labels.me}</span><span className="block text-xs text-[var(--fg-muted)] mt-1">{labels.me}</span></span>
++        </button>
++
+         <nav className="flex flex-col gap-1" aria-label={t('Main')}>
+           {PRIMARY_TABS.map((item) => {
+             const Icon = item.icon;
+@@ -177,7 +182,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
+ 
+       {/* Content */}
+       <main id="oda-main" tabIndex={-1} className="outline-none flex-1 min-w-0 overflow-y-auto pb-36 md:pb-12 min-h-screen">
+-        <div key={activeRoute} className={`oda-page-enter ${activeRoute === '/app' ? 'max-w-[1160px]' : activeRoute === '/app/courses' || activeRoute === '/app/tools' ? 'max-w-[1040px]' : 'max-w-[760px]'} mx-auto px-5 sm:px-8 ${isSecondary ? 'pt-6' : 'pt-[calc(env(safe-area-inset-top,0px)+1.5rem)]'} md:pt-12`}>{children}</div>
++        <div key={activeRoute} className={`oda-page-enter ${activeRoute === '/app' ? 'max-w-[1160px]' : ['/app/courses', '/app/tools', '/app/notebook', '/app/coach', '/app/sound'].includes(activeRoute) ? 'max-w-[1040px]' : 'max-w-[760px]'} mx-auto px-5 sm:px-8 ${isSecondary ? 'pt-6' : 'pt-[calc(env(safe-area-inset-top,0px)+1.5rem)]'} md:pt-12`}>{children}</div>
+       </main>
+ 
+       {/* Mobile bottom tabs */}
+diff --git a/src/main.tsx b/src/main.tsx
+index 54efa13..49a8f84 100644
+--- a/src/main.tsx
++++ b/src/main.tsx
+@@ -2,6 +2,7 @@ import {StrictMode} from 'react';
+ import {createRoot} from 'react-dom/client';
+ import App from './App.tsx';
+ import './index.css';
++import './styles/reference.css';
+ import { getAppBase, publicAssetPath } from './utils/routing';
+ 
+ createRoot(document.getElementById('root')!).render(
+diff --git a/src/pages/Coach.tsx b/src/pages/Coach.tsx
+index 9faefc4..392e764 100644
+--- a/src/pages/Coach.tsx
++++ b/src/pages/Coach.tsx
+@@ -12,6 +12,7 @@ import {
+   CloudCoachError, buildCoachContext, getCloudCoachStatus, readContextConsent, sendToCloudCoach, writeContextConsent,
+   type CloudTier,
+ } from '../services/cloudCoach';
++import '../styles/coach.css';
+ 
+ interface Recognition {
+   lang: string; continuous: boolean; interimResults: boolean;
+@@ -230,17 +231,25 @@ export const Coach: React.FC = () => {
+   }
+ 
+   return (
+-    <div className="space-y-6 pb-2">
+-      <header className="space-y-3">
+-        <div className="flex items-center gap-2 text-[12px] font-medium text-[var(--accent)]"><MessageCircle size={16} /> ODA / {c.coach}</div>
+-        <h1 className="text-[30px] sm:text-[36px] oda-display leading-[1.12]">{c.coachHeading}</h1>
+-        <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed max-w-xl">{c.coachIntro}</p>
++    <div className="coach-page pb-2">
++      <header className="coach-hero">
++        <div className="coach-hero-copy space-y-3">
++          <div className="coach-eyebrow flex items-center gap-2 text-[12px] font-medium"><MessageCircle size={16} /> ODA / {c.coach}</div>
++          <h1 className="text-[30px] sm:text-[36px] oda-display leading-[1.12]">{c.coachHeading}</h1>
++          <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed max-w-xl">{c.coachIntro}</p>
++        </div>
++        <div className="coach-orbit" aria-hidden="true" data-state={replying ? 'replying' : listening ? 'listening' : phase === 'loading' ? 'loading' : 'idle'}>
++          <div className="coach-orb"><span /><span /><span /></div>
++          <div className="coach-orbit-ring" />
++        </div>
+       </header>
+ 
+-      <CoachTools />
++      <div className="coach-tools"><CoachTools /></div>
++
++      <div className={`coach-conversation space-y-5${messages.length === 0 ? ' coach-with-starters' : ''}`}>
+ 
+       {!cloudReady && cloud.configured && (
+-        <section aria-labelledby="cloud-coach-heading" className="oda-card rounded-[22px] p-5 space-y-3">
++        <section aria-labelledby="cloud-coach-heading" className="coach-provider oda-card rounded-[22px] p-5 space-y-3">
+           <div className="flex items-center gap-2"><span className="oda-tile-icon oda-tint-blue" aria-hidden="true"><Cloud size={18} strokeWidth={1.8} /></span><h2 id="cloud-coach-heading" className="oda-kicker text-[var(--fg)]">{t('Use the cloud coach')}</h2></div>
+           <p className="text-sm text-[var(--fg-muted)] leading-relaxed">{t('The cloud coach answers with a more capable AI and needs a free account, so we can count your monthly messages. The offline tools above and the on-device coach below stay available without one.')}</p>
+           <button type="button" onClick={() => setActiveRoute('/app/account')} className="oda-btn-primary min-h-12 px-5 rounded-full inline-flex items-center text-sm font-semibold">{t('Open account')}</button>
+@@ -248,7 +257,7 @@ export const Coach: React.FC = () => {
+       )}
+ 
+       {cloudReady && cloudStatus && useDevice && (
+-        <section className="oda-card rounded-[22px] p-5 space-y-3">
++        <section className="coach-provider oda-card rounded-[22px] p-5 space-y-3">
+           <p className="text-sm text-[var(--fg-muted)] leading-relaxed">{t('You are using the on-device coach.')}</p>
+           <button type="button" onClick={() => chooseEngine(false)} className="min-h-11 px-4 rounded-full inline-flex items-center gap-2 text-sm font-medium border border-[var(--border)] hover:border-[var(--accent)] transition-colors"><Cloud size={16} strokeWidth={1.8} />{t('Use the cloud coach')}</button>
+         </section>
+@@ -257,8 +266,8 @@ export const Coach: React.FC = () => {
+       {cloudChecking ? (
+         <p role="status" className="text-sm text-[var(--fg-muted)]">{t('Checking the cloud coach')}</p>
+       ) : cloudActive ? (
+-        <section aria-label={t('Cloud coach')} className="space-y-3">
+-          <div className="flex justify-between items-center gap-3 text-xs">
++        <section aria-label={t('Cloud coach')} className="coach-provider space-y-3">
++          <div className="coach-status flex justify-between items-center gap-3 text-xs">
+             <span role="status" className="inline-flex gap-2 items-center text-[var(--fg-muted)]"><Cloud size={15} strokeWidth={1.8} />{replying ? c.thinking : t('{n} of {total} messages left this month', { n: cloudStatus.remaining, total: cloudStatus.limit })}</span>
+             <button onClick={resetConversation} disabled={replying || messages.length === 0} className="inline-flex gap-2 items-center min-h-11 text-[var(--fg-muted)] disabled:opacity-40"><RotateCcw size={14} />{c.reset}</button>
+           </div>
+@@ -270,7 +279,7 @@ export const Coach: React.FC = () => {
+           )}
+         </section>
+       ) : phase === 'idle' || phase === 'loading' ? (
+-        <section className="p-5 sm:p-6 rounded-[var(--radius-lg)] bg-[var(--accent-soft)] border border-[var(--border)] space-y-4">
++        <section className="coach-setup p-5 sm:p-6 rounded-[var(--radius-lg)] bg-[var(--accent-soft)] border border-[var(--border)] space-y-4">
+           <p className="text-[13px] font-semibold text-[var(--accent)]">{c.local}</p>
+           <p className="text-sm leading-relaxed">{c.download}</p>
+           <p className="text-xs text-[var(--fg-muted)] leading-relaxed">{c.privacy}</p>
+@@ -280,40 +289,40 @@ export const Coach: React.FC = () => {
+               <progress value={progress} max={100} aria-label={c.preparing} className="w-full h-2 accent-[var(--accent)]" />
+               <button type="button" onClick={() => controller.current?.abort()} className="text-sm underline underline-offset-4 min-h-10">{c.stop}</button>
+             </div>
+-          ) : <button type="button" onClick={prepare} className="min-h-12 px-5 rounded-full bg-[var(--accent)] text-white inline-flex gap-2 items-center text-sm font-semibold"><Download size={17} />{c.start}</button>}
++          ) : <button type="button" onClick={prepare} className="coach-prepare min-h-12 px-5 rounded-full bg-[var(--accent)] text-white inline-flex gap-2 items-center text-sm font-semibold"><Download size={17} />{c.start}</button>}
+         </section>
+       ) : (
+-        <div className="flex justify-between items-center gap-3 text-xs">
++        <div className="coach-status flex justify-between items-center gap-3 text-xs">
+           <span className="inline-flex gap-2 items-center text-[var(--accent)]"><Check size={15} />{phase === 'replying' ? c.thinking : c.ready}</span>
+           <button onClick={resetConversation} disabled={phase === 'replying' || messages.length === 0} className="inline-flex gap-2 items-center min-h-10 text-[var(--fg-muted)] disabled:opacity-40"><RotateCcw size={14} />{c.reset}</button>
+         </div>
+       )}
+ 
+       {messages.length === 0 ? (
+-        <section aria-labelledby="coach-starters-heading" className="space-y-3">
++        <section aria-labelledby="coach-starters-heading" className="coach-starters space-y-3">
+           <h2 id="coach-starters-heading" className="oda-kicker text-[var(--fg-muted)]">{t('Conversation starters')}</h2>
+           {[
+             { label: t('Fear'), prompts: [c.fearPrompt, t('I keep putting this off because it has to be perfect.')] },
+             { label: t('Overwhelm'), prompts: [c.overwhelmedPrompt, t('I have too many things on my plate and cannot tell which one matters.')] },
+             { label: t('Hope and motivation'), prompts: [c.faithPrompt, t('I lost my momentum. Help me restart gently.')] },
+-          ].map(group => <div key={group.label} role="group" aria-label={group.label} className="space-y-1.5">
++          ].map(group => <div key={group.label} role="group" aria-label={group.label} className="coach-starter-group space-y-2">
+             <p className="text-[12px] font-medium text-[var(--fg-muted)]">{group.label}</p>
+             <div className="flex flex-wrap gap-2">
+-              {group.prompts.map(prompt => <button key={prompt} type="button" onClick={() => { setDraft(prompt); textarea.current?.focus(); }} className="min-h-11 px-4 py-2 text-left text-[13px] leading-snug border border-[var(--border)] rounded-[18px] hover:border-[var(--accent)] transition-colors max-w-full">{prompt}</button>)}
++              {group.prompts.map(prompt => <button key={prompt} type="button" onClick={() => { setDraft(prompt); textarea.current?.focus(); }} className="coach-starter min-h-11 px-4 py-2 text-left text-[13px] leading-snug border border-[var(--border)] rounded-[18px] hover:border-[var(--accent)] transition-colors max-w-full">{prompt}</button>)}
+             </div>
+           </div>)}
+         </section>
+-      ) : <div ref={log} role="log" aria-label={c.live} aria-live="off" tabIndex={0} onScroll={() => { const el = log.current; if (el) followOutput.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80; }} className="max-h-[52vh] min-h-40 overflow-y-auto space-y-5 pr-2 overscroll-contain">
+-        {messages.map((message, index) => <article key={index} className={message.role === 'user' ? 'ml-8 p-4 bg-[var(--bg-muted)] rounded-[var(--radius-md)]' : 'mr-4 pl-4 border-l-2 border-[var(--accent)]'}>
++      ) : <div ref={log} role="log" aria-label={c.live} aria-live="off" tabIndex={0} onScroll={() => { const el = log.current; if (el) followOutput.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80; }} className="coach-log max-h-[52vh] min-h-40 overflow-y-auto space-y-5 pr-2 overscroll-contain">
++        {messages.map((message, index) => <article key={index} className={message.role === 'user' ? 'coach-message coach-message-user ml-8 p-4 bg-[var(--bg-muted)] rounded-[var(--radius-md)]' : 'coach-message coach-message-assistant mr-4 pl-4 border-l-2 border-[var(--accent)]'}>
+           <p className="text-[12px] font-semibold text-[var(--fg-muted)] mb-2">{message.role === 'user' ? c.you : c.name}</p>
+           <p className="text-[15px] leading-relaxed whitespace-pre-wrap break-words">{message.content || c.thinking}</p>
+         </article>)}
+       </div>}
+ 
+-      {error && <div role="alert" className="p-3 bg-[var(--danger-soft)] text-[var(--danger)] rounded-[var(--radius-sm)] text-sm leading-relaxed">{error}</div>}
++      {error && <div role="alert" className="coach-error p-3 bg-[var(--danger-soft)] text-[var(--danger)] rounded-[var(--radius-sm)] text-sm leading-relaxed">{error}</div>}
+ 
+       {outOfMessages && (
+-        <section aria-labelledby="cloud-out-heading" className="oda-card rounded-[22px] p-5 space-y-3">
++        <section aria-labelledby="cloud-out-heading" className="coach-provider oda-card rounded-[22px] p-5 space-y-3">
+           <h2 id="cloud-out-heading" className="oda-kicker text-[var(--fg)]">{t('That is all for this month')}</h2>
+           <p className="text-sm text-[var(--fg-muted)] leading-relaxed">{cloudStatus.tier === 'coach'
+             ? t('You have used this month’s cloud coach messages. They start again next month. The offline tools and the on-device coach are still here.')
+@@ -325,13 +334,13 @@ export const Coach: React.FC = () => {
+         </section>
+       )}
+ 
+-      <form onSubmit={send} className={outOfMessages ? 'hidden' : 'space-y-3'}>
+-        <div className="border border-[var(--border-strong)] focus-within:border-[var(--accent)] rounded-[var(--radius-md)] p-3 bg-[var(--bg-elevated)]">
++      <form onSubmit={send} className={outOfMessages ? 'hidden' : 'coach-form space-y-3'}>
++        <div className="coach-composer border border-[var(--border-strong)] focus-within:border-[var(--accent)] rounded-[var(--radius-md)] p-3 bg-[var(--bg-elevated)]">
+           <label htmlFor="coach-message" className="sr-only">{c.placeholder}</label>
+           <textarea ref={textarea} id="coach-message" value={draft} onChange={event => setDraft(event.target.value)} maxLength={MAX_COACH_MESSAGE_LENGTH} rows={3} placeholder={c.placeholder} className="w-full resize-y min-h-20 max-h-60 bg-transparent text-[15px] leading-relaxed outline-none" onKeyDown={event => { if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); if (inputReady) event.currentTarget.form?.requestSubmit(); } }} />
+           <div className="flex items-center justify-between gap-3">
+             <div className="flex items-center gap-3"><button type="button" onClick={toggleMicrophone} disabled={!SpeechInput || replying} aria-pressed={listening} aria-label={listening ? c.stopListening : c.listen} className="w-11 h-11 flex items-center justify-center rounded-full bg-[var(--bg-muted)] disabled:opacity-35">{listening ? <MicOff size={19} className="text-[var(--danger)]" /> : <Mic size={19} />}</button><span className="text-[11px] text-[var(--fg-subtle)]">{draft.length}/{MAX_COACH_MESSAGE_LENGTH}</span></div>
+-            {replying ? <button type="button" onClick={() => { controller.current?.abort(); if (cloudActive) { busy.current = false; setCloudBusy(false); setMessages(current => current.filter(m => m.content.trim())); } else engine.cancel(); }} aria-label={c.stop} className="w-11 h-11 bg-[var(--fg)] text-[var(--bg)] flex items-center justify-center rounded-full"><Square size={17} /></button> : <button type="submit" disabled={!inputReady || !draft.trim()} aria-label={c.send} className="w-11 h-11 bg-[var(--accent)] text-white disabled:opacity-35 flex items-center justify-center rounded-full"><ArrowUp size={20} /></button>}
++            {replying ? <button type="button" onClick={() => { controller.current?.abort(); if (cloudActive) { busy.current = false; setCloudBusy(false); setMessages(current => current.filter(m => m.content.trim())); } else engine.cancel(); }} aria-label={c.stop} className="w-11 h-11 bg-[var(--fg)] text-[var(--bg)] flex items-center justify-center rounded-full"><Square size={17} /></button> : <button type="submit" disabled={!inputReady || !draft.trim()} aria-label={c.send} className="coach-send w-11 h-11 bg-[var(--accent)] text-white disabled:opacity-35 flex items-center justify-center rounded-full"><ArrowUp size={20} /></button>}
+           </div>
+         </div>
+         {!cloudActive && phase === 'idle' && <p className="text-xs text-[var(--fg-muted)]">{c.notLoaded}</p>}
+@@ -344,6 +353,7 @@ export const Coach: React.FC = () => {
+           </div>
+         ) : <p className="text-[11px] text-[var(--fg-muted)]"><strong>{c.local}</strong> · {c.limit}</p>}
+       </form>
++      </div>
+     </div>
+   );
+ };
+diff --git a/src/pages/Notebook.tsx b/src/pages/Notebook.tsx
+index 8d5371c..804fb15 100644
+--- a/src/pages/Notebook.tsx
++++ b/src/pages/Notebook.tsx
+@@ -7,6 +7,7 @@ import { JournalWorkspace } from '../components/notebook/JournalWorkspace';
+ import { WrittenPractice } from '../components/notebook/WrittenPractice';
+ import { Practice369 } from '../components/notebook/Practice369';
+ import { AffirmationPractice, GratitudePractice } from '../components/notebook/DailyPractices';
++import '../styles/notebook.css';
+ 
+ const SCRIPTING_PROMPTS = [
+   { id: 'ordinary-day', label: N_('An ordinary day in my future'), question: N_('It is an ordinary day in the life I am building. Where am I, what do I do, and how do I feel?') },
+@@ -34,17 +35,20 @@ export const Notebook: React.FC = () => {
+   if (!data) return <p role="status" className="text-sm text-[var(--fg-muted)]">{t('Opening your notebook…')}</p>;
+   const stats = getNotebookStats(data);
+   const tabs = [{ id: 'journal' as const, label: t('Journal') }, { id: 'manifest' as const, label: t('Practices') }];
+-  return <div className="space-y-6 text-[var(--fg)]">
+-    <div>
++  return <div className="oda-notebook space-y-6 text-[var(--fg)]">
++    <header className="oda-notebook-heading">
++      <div>
+       <h1 className="oda-display text-[32px] leading-tight text-[var(--fg)]">{t('Notebook')}</h1>
+       <p className="text-sm text-[var(--fg-muted)] mt-1">{t('Write your days. Give your future a voice.')}</p>
+-    </div>
++      </div>
++      <span className="oda-notebook-mark" aria-hidden="true"><Feather strokeWidth={1.5} /></span>
++    </header>
+ 
+-    <div className="oda-card rounded-[var(--radius-lg)] px-4 min-h-[56px] py-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-sm">
+-      <div className="flex flex-wrap gap-x-4 gap-y-1">
+-        <span className="text-[var(--fg)]">{t('{n} day streak', { n: stats.currentStreak })}</span>
+-        <span className="text-[var(--fg-muted)]">{t('{n} days written', { n: stats.totalWritingDays })}</span>
+-        <span className="text-[var(--fg-muted)]">{t('Best {n}', { n: stats.bestStreak })}</span>
++    <div className="oda-notebook-stats oda-card rounded-[var(--radius-lg)] px-4 min-h-[56px] py-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-sm">
++      <div className="oda-notebook-stat-values flex flex-wrap gap-x-4 gap-y-1">
++        <span className="oda-notebook-stat text-[var(--fg)]">{t('{n} day streak', { n: stats.currentStreak })}</span>
++        <span className="oda-notebook-stat text-[var(--fg-muted)]">{t('{n} days written', { n: stats.totalWritingDays })}</span>
++        <span className="oda-notebook-stat text-[var(--fg-muted)]">{t('Best {n}', { n: stats.bestStreak })}</span>
+       </div>
+       <span className="flex items-center gap-1.5 text-[var(--fg-muted)]" role="status">
+         {stats.writtenToday
+@@ -54,12 +58,12 @@ export const Notebook: React.FC = () => {
+     </div>
+ 
+ 
+-    <nav aria-label={t('Notebook sections')} className="flex p-1 bg-[var(--bg-muted)] rounded-[var(--radius-sm)]">
++    <nav aria-label={t('Notebook sections')} className="oda-notebook-tabs flex p-1 bg-[var(--bg-muted)] rounded-[var(--radius-sm)]">
+       {tabs.map(({ id, label }) => <button key={id} type="button" aria-pressed={section === id} aria-controls={`notebook-${id}-section`} onClick={() => setSection(id)} className={`flex-1 h-10 rounded-[var(--radius-xs)] text-sm font-medium cursor-pointer transition-colors focus-visible:outline focus-visible:outline-2 ${section === id ? 'bg-[var(--bg)] text-[var(--fg)]' : 'text-[var(--fg-muted)]'}`}>{label}</button>)}
+     </nav>
+ 
+     <section id="notebook-journal-section" hidden={section !== 'journal'} aria-label={t('Journal')}><JournalWorkspace today={today} /></section>
+-    <section id="notebook-manifest-section" hidden={section !== 'manifest'} aria-label={t('Practices')}>
++    <section id="notebook-manifest-section" className="oda-notebook-practices" hidden={section !== 'manifest'} aria-label={t('Practices')}>
+       <p className="text-sm text-[var(--fg-muted)] mb-6">{t('Five ways to write. Pick one, use your own words, come back when it helps.')}</p>
+       <div className="space-y-6">
+         <WrittenPractice kind="scripting" number="01" title={N_('Scripting')} description={N_('Write a scene from the life you want as if you are already living it. Begin with the details you can see and feel.')} icon={Feather} prompts={SCRIPTING_PROMPTS} />
+diff --git a/src/pages/SoundRoom.tsx b/src/pages/SoundRoom.tsx
+index 7369775..dffb55e 100644
+--- a/src/pages/SoundRoom.tsx
++++ b/src/pages/SoundRoom.tsx
+@@ -1,12 +1,12 @@
+ import React, { useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+-import { Headphones, Info, LockKeyhole, Pause, Play, Timer, Volume1, Volume2, Wind } from 'lucide-react';
++import { Headphones, Info, LockKeyhole, Moon, Pause, Play, Timer, Volume1, Volume2, Waves, Wind } from 'lucide-react';
+ import { useApp } from '../store/useApp';
+ import { purchases, usePro } from '../services/purchases';
+ import { isSoundLocked } from '../services/entitlements';
+ import { useT } from '../i18n';
+ import {
+-  SOUND_ROOM_HERO, SOUND_ROOM_SECTIONS, soundForTrack, unsplashUrl,
+-  type SoundPhoto, type SoundRoomSectionId, type SoundRoomSound,
++  SOUND_ROOM_SECTIONS, soundForTrack,
++  type SoundRoomSectionId, type SoundRoomSound,
+ } from '../data/soundRoom';
+ import { soundRoomPlayer } from '../services/soundRoomPlayer';
+ import { BREATH_CYCLE_MS, breathPhase, formatRemaining, TIMER_CHOICES } from '../services/soundRoom';
+@@ -55,27 +55,21 @@ function useTick(active: boolean, ms: number) {
+   }, [active, ms]);
+ }
+ 
+-/** A real photo; if it cannot load (offline, blocked) a soft gradient takes its place. */
+-const SoundPhotoImg: React.FC<{ photo: SoundPhoto; width: number; height: number; className?: string; eager?: boolean; sizes?: string }> = ({
+-  photo, width, height, className = '', eager, sizes,
+-}) => {
+-  const t = useT();
+-  const [failed, setFailed] = useState(false);
+-  if (failed) return <span className={`oda-sound-photo oda-sound-photo-fallback ${className}`} aria-hidden="true" />;
++type Scene = 'coast' | 'night' | 'dunes' | 'leaves';
++const SECTION_SCENES: Record<SoundRoomSectionId, Scene> = {
++  relax: 'coast', sleep: 'night', focus: 'dunes', breathe: 'leaves', frequencies: 'night',
++};
++const SECTION_ICONS = { relax: Waves, sleep: Moon, focus: Headphones, breathe: Wind };
++
++/** Original decorative landscape contours; the leaf photograph is an existing owned ODA asset. */
++const SoundScene: React.FC<{ scene: Scene; className?: string }> = ({ scene, className = '' }) => {
+   return (
+-    <span className={`oda-sound-photo ${className}`}>
+-      <img
+-        src={unsplashUrl(photo.id, width, height)}
+-        srcSet={`${unsplashUrl(photo.id, Math.round(width / 2), Math.round(height / 2))} ${Math.round(width / 2)}w, ${unsplashUrl(photo.id, width, height)} ${width}w`}
+-        sizes={sizes ?? `${width}px`}
+-        alt={t(photo.alt)}
+-        width={width}
+-        height={height}
+-        loading={eager ? 'eager' : 'lazy'}
+-        decoding="async"
+-        referrerPolicy="no-referrer"
+-        onError={() => setFailed(true)}
+-      />
++    <span className={`oda-sound-scene ${className}`} data-scene={scene} aria-hidden="true">
++      {scene === 'leaves' && <img className="oda-sound-scene-leaves" src={`${import.meta.env.BASE_URL}assets/oda/delivery/course-covers/oda-growth-values-640.webp`} alt="" width={640} height={360} loading="lazy" decoding="async" />}
++      <span className="oda-sound-scene-light" />
++      <span className="oda-sound-scene-contour oda-sound-scene-contour-back" />
++      <span className="oda-sound-scene-contour oda-sound-scene-contour-middle" />
++      <span className="oda-sound-scene-contour oda-sound-scene-contour-front" />
+     </span>
+   );
+ };
+@@ -104,12 +98,8 @@ const SoundCard: React.FC<{ sound: SoundRoomSound; sectionId: SoundRoomSectionId
+         }}
+       >
+         <span className="oda-sound-card-media">
+-          <SoundPhotoImg photo={sound.photo} width={560} height={400} sizes="(max-width: 559px) 92vw, 340px" />
+-          <span className="oda-sound-card-play" aria-hidden="true">
+-            {locked ? <LockKeyhole size={16} strokeWidth={2} /> : playing ? <Pause size={18} strokeWidth={2.2} /> : <Play size={18} strokeWidth={2.2} />}
+-          </span>
++          <SoundScene scene={SECTION_SCENES[sectionId]} />
+           {locked && <span className="oda-sound-card-pro">Pro</span>}
+-          {playing && <span className="oda-sound-card-live" aria-hidden="true"><i /><i /><i /></span>}
+         </span>
+         <span className="oda-sound-card-body">
+           <span id={nameId} className="oda-sound-card-name">{t(sound.name)}</span>
+@@ -122,6 +112,9 @@ const SoundCard: React.FC<{ sound: SoundRoomSound; sectionId: SoundRoomSectionId
+             </span>
+           )}
+         </span>
++        <span className="oda-sound-card-play" aria-hidden="true">
++          {locked ? <LockKeyhole size={17} strokeWidth={2} /> : playing ? <Pause size={19} strokeWidth={2.2} /> : <Play size={19} strokeWidth={2.2} />}
++        </span>
+       </button>
+     </li>
+   );
+@@ -203,6 +196,7 @@ const PlayerBar: React.FC = () => {
+   const [volume, setVolume] = useState(() => soundRoomPlayer.getVolume());
+   useTick(player.playing && player.endsAt !== null, 1000);
+   const sound = soundForTrack(player.track);
++  const scene = SECTION_SCENES[SOUND_ROOM_SECTIONS.find((item) => item.sounds.some((entry) => entry.track === player.track))?.id ?? 'relax'];
+   const volumeId = useId();
+   const timerId = useId();
+ 
+@@ -220,11 +214,7 @@ const PlayerBar: React.FC = () => {
+     <div className="oda-sound-player" role="region" aria-label={t('Sound player')}>
+       <div className="oda-sound-player-inner">
+         <div className="oda-sound-player-now">
+-          {sound ? (
+-            <SoundPhotoImg photo={sound.photo} width={96} height={96} className="oda-sound-player-thumb" />
+-          ) : (
+-            <span className="oda-sound-photo oda-sound-photo-fallback oda-sound-player-thumb" aria-hidden="true" />
+-          )}
++          <SoundScene scene={scene} className="oda-sound-player-thumb" />
+           <div className="oda-sound-player-text">
+             <p className="oda-sound-player-name">{sound ? t(sound.name) : t('Sound Room')}</p>
+             <p className="oda-sound-player-status" aria-live="off">{status}</p>
+@@ -329,7 +319,6 @@ export const SoundRoom: React.FC = () => {
+             {t('Sound can help you relax, settle and fall asleep more easily. It is not a treatment.')}
+           </p>
+         </div>
+-        <SoundPhotoImg photo={SOUND_ROOM_HERO} width={960} height={600} className="oda-sound-hero" eager sizes="(max-width: 759px) 100vw, 720px" />
+       </header>
+ 
+       <div
+@@ -338,7 +327,9 @@ export const SoundRoom: React.FC = () => {
+         className="oda-sound-tabs"
+         onKeyDown={onTabKey}
+       >
+-        {TAB_SECTIONS.map((item) => (
++        {TAB_SECTIONS.map((item) => {
++          const Icon = SECTION_ICONS[item.id as keyof typeof SECTION_ICONS];
++          return (
+           <button
+             key={item.id}
+             ref={(node) => { tabRefs.current[item.id] = node; }}
+@@ -346,14 +337,22 @@ export const SoundRoom: React.FC = () => {
+             role="tab"
+             id={`${baseId}-tab-${item.id}`}
+             aria-selected={tab === item.id}
++            aria-label={t(item.label)}
+             aria-controls={`${baseId}-panel`}
+             tabIndex={tab === item.id ? 0 : -1}
+             className="oda-sound-tab"
++            data-section={item.id}
+             onClick={() => choose(item.id)}
+           >
+-            {t(item.label)}
++            <SoundScene scene={SECTION_SCENES[item.id]} />
++            <span className="oda-sound-tab-copy">
++              <span className="oda-sound-tab-icon" aria-hidden="true"><Icon size={19} strokeWidth={1.8} /></span>
++              <span className="oda-sound-tab-name">{t(item.label)}</span>
++              <span className="oda-sound-tab-detail">{t(item.intro)}</span>
++            </span>
+           </button>
+-        ))}
++          );
++        })}
+       </div>
+ 
+       <section
+@@ -362,7 +361,11 @@ export const SoundRoom: React.FC = () => {
+         aria-labelledby={`${baseId}-tab-${section.id}`}
+         className="oda-sound-panel"
+       >
+-        <p className="oda-sound-section-intro">{t(section.intro)}</p>
++        <div className="oda-sound-panel-heading">
++          <p className="oda-kicker">{t('Sound Room')}</p>
++          <h2 className="oda-display oda-sound-section-title">{t(section.label)}</h2>
++          <p className="oda-sound-section-intro">{t(section.intro)}</p>
++        </div>
+ 
+         {section.id === 'breathe' ? (
+           <BreathePanel sound={section.sounds[0]} soundPlaying={isPlaying('breath_pacer')} />
+diff --git a/src/pages/Today.tsx b/src/pages/Today.tsx
+index 2b0c21d..efdadf0 100644
+--- a/src/pages/Today.tsx
++++ b/src/pages/Today.tsx
+@@ -185,7 +185,7 @@ export const Today: React.FC = () => {
+   };
+ 
+   return (
+-    <div className="space-y-6">
++    <div className="oda-reference-today space-y-6">
+       {/* 1. Header */}
+       <header className="flex items-start justify-between gap-4">
+         <div className="min-w-0">
+@@ -222,7 +222,6 @@ export const Today: React.FC = () => {
+       </figure>
+ 
+       <div className="oda-growth-dashboard">
+-        <GrowthTreePanel count={keptCount} onEvidence={() => setActiveRoute('/app/evidence')} />
+         <div className="oda-growth-actions">
+       {/* 2. One decision: a soft card with this week's ring, one clear action and a check. */}
+       <section id="set-one-decision" className="oda-decision" aria-labelledby="today-decision-label">
+@@ -308,6 +307,7 @@ export const Today: React.FC = () => {
+       {decisionError && <p role="alert" className="oda-loop-error">{loop.saveError}</p>}
+           <CourseNextStep />
+         </div>
++        <GrowthTreePanel count={keptCount} onEvidence={() => setActiveRoute('/app/evidence')} />
+       </div>
+       <GrowthWeek summary={week} onEvidence={() => setActiveRoute('/app/evidence')} />
+       <BackupReminder />
+diff --git a/src/styles/coach.css b/src/styles/coach.css
+new file mode 100644
+index 0000000..ab89b2c
+--- /dev/null
++++ b/src/styles/coach.css
+@@ -0,0 +1,170 @@
++/* The assistant has its own calm navy atmosphere within ODA's shared shell.
++   The orb is original decorative CSS, not a person, audio meter or AI capability. */
++.coach-page {
++  --bg: #101728;
++  --fg: #f5f3ff;
++  --fg-muted: #c1c8df;
++  --fg-subtle: #b3bed7;
++  --bg-elevated: #172238;
++  --bg-muted: #22304b;
++  --bg-inset: #0d1424;
++  --border: #34435f;
++  --border-strong: #66779a;
++  --accent: #c2b2ff;
++  --accent-soft: #1c2741;
++  --on-accent: #17152a;
++  --surface: #172238;
++  --surface-border: #34435f;
++  --surface-shadow: 0 10px 28px -20px rgb(0 0 0 / 55%);
++  --primary-grad: linear-gradient(135deg, #7859df, #6443c9);
++  --on-primary: #ffffff;
++  --primary-glow: 0 5px 18px -8px rgb(125 89 236 / 55%);
++  --danger: #ffb7c4;
++  --danger-soft: #422a3b;
++  --tint-blue: #263b56;
++  --ink-blue: #9edfeb;
++  --tint-sage: #233f43;
++  --ink-sage: #a3e5d7;
++  --tint-rose: #44304c;
++  --ink-rose: #edbddf;
++  --tint-sand: #423b37;
++  --ink-sand: #f3cba7;
++  display: grid;
++  grid-template-columns: minmax(0, 1fr);
++  align-items: start;
++  gap: 24px;
++  padding: 24px;
++  border: 1px solid #303c56;
++  border-radius: 30px;
++  background:
++    radial-gradient(ellipse at 88% 0%, rgb(117 81 221 / 15%), transparent 36%),
++    #101728;
++  color: var(--fg);
++  isolation: isolate;
++}
++
++.coach-page > *, .coach-page section, .coach-page form { min-width: 0; }
++.coach-page p, .coach-page button, .coach-page label { overflow-wrap: anywhere; }
++.coach-page button:focus-visible, .coach-page input:focus-visible, .coach-page [role="log"]:focus-visible {
++  outline: 2px solid #b6a1ff;
++  outline-offset: 4px;
++}
++.coach-page textarea::placeholder { color: #b3bed7; opacity: 1; }
++.coach-page input[type="checkbox"] { accent-color: #ab90fa; }
++
++.coach-hero {
++  grid-column: 1 / -1;
++  display: grid;
++  grid-template-columns: minmax(0, 1fr) 186px;
++  align-items: center;
++  gap: 28px;
++  padding: 8px 10px 24px;
++  border-bottom: 1px solid var(--border);
++}
++.coach-eyebrow { color: #c7b8ff; letter-spacing: .035em; }
++.coach-hero h1 { max-width: 510px; letter-spacing: -.035em; }
++.coach-hero-copy > p { max-width: 520px; }
++
++.coach-orbit { position: relative; width: 186px; aspect-ratio: 1; display: grid; place-items: center; }
++.coach-orbit::before {
++  content: "";
++  position: absolute;
++  inset: 10%;
++  border-radius: 50%;
++  background: radial-gradient(circle, rgb(74 208 225 / 26%), rgb(126 88 234 / 14%) 45%, transparent 70%);
++  filter: blur(16px);
++}
++.coach-orb {
++  position: relative;
++  width: 74%;
++  aspect-ratio: 1;
++  overflow: hidden;
++  border-radius: 46% 54% 57% 43% / 51% 42% 58% 49%;
++  transform: rotate(-18deg);
++  background:
++    radial-gradient(ellipse at 28% 16%, #d7fff2 0, transparent 24%),
++    radial-gradient(ellipse at 83% 22%, #f6a1d4 0, transparent 32%),
++    conic-gradient(from 20deg at 55% 42%, #d485e2, #6b4ecc 14%, #55d0e1 27%, #a97ceb 38%, #6548b8 52%, #ea84c8 68%, #74dee4 84%, #d485e2);
++  box-shadow: inset -10px -12px 24px rgb(33 22 76 / 52%), inset 4px 5px 14px rgb(236 255 255 / 48%), 0 10px 28px rgb(59 38 117 / 40%);
++}
++.coach-orb::before, .coach-orb::after, .coach-orb > span {
++  content: "";
++  position: absolute;
++  border: 5px solid rgb(176 243 252 / 78%);
++  border-right-color: rgb(203 118 231 / 65%);
++  border-bottom-color: rgb(101 54 180 / 88%);
++  border-radius: 42% 58% 64% 36%;
++  box-shadow: 2px 3px 4px rgb(40 25 108 / 50%), inset 2px 2px 5px rgb(227 255 255 / 45%);
++}
++.coach-orb::before { inset: 9% -20% 36% 15%; transform: rotate(31deg); }
++.coach-orb::after { inset: 29% 18% -21% -12%; transform: rotate(-33deg); }
++.coach-orb > span:nth-child(1) { inset: -13% 39% 50% -12%; transform: rotate(24deg); }
++.coach-orb > span:nth-child(2) { inset: 17% -15% 2% 62%; transform: rotate(-16deg); }
++.coach-orb > span:nth-child(3) { inset: 52% -7% -6% 18%; transform: rotate(32deg); }
++.coach-orbit-ring { position: absolute; inset: 3%; border: 1px solid rgb(183 168 242 / 28%); border-radius: 50%; }
++.coach-orbit[data-state="listening"] .coach-orbit-ring { border-color: #83e0e6; box-shadow: 0 0 0 5px rgb(83 213 224 / 10%); }
++.coach-orbit[data-state="replying"] .coach-orbit-ring,
++.coach-orbit[data-state="loading"] .coach-orbit-ring { border-color: #c2b2ff; box-shadow: 0 0 0 5px rgb(176 142 255 / 10%); }
++
++.coach-tools { padding: 3px 0; }
++.coach-tools .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
++.coach-tools .oda-kicker { color: #e1daf8; }
++.coach-tools .oda-tile {
++  align-items: flex-start;
++  padding: 17px 14px;
++  border-color: var(--border);
++  background: #172238;
++  box-shadow: none;
++}
++.coach-tools .oda-tile:hover { border-color: #9384c0; background: #1d2a42; }
++.coach-tools .oda-tile-icon { flex-shrink: 0; }
++.coach-tools .oda-card { background: #172238; box-shadow: none; }
++.coach-conversation { padding: 18px; border: 1px solid var(--border); border-radius: 24px; background: #131d31; }
++.coach-with-starters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 24px; }
++.coach-with-starters > * { grid-column: 1; margin-block: 0; }
++.coach-with-starters .coach-starters { grid-column: 2; grid-row: 1 / span 2; }
++.coach-provider { border: 1px solid var(--border); border-radius: 20px; padding: 18px; background: #172238; }
++.coach-setup { background: linear-gradient(135deg, #202c48, #19233b); }
++.coach-status { flex-wrap: wrap; }
++.coach-status > span { flex: 1 1 180px; }
++.coach-status > button { flex-shrink: 0; }
++.coach-starter-group { padding: 13px 0; border-bottom: 1px solid var(--border); }
++.coach-starter-group:last-child { border-bottom: 0; }
++.coach-starter-group > p { color: #dfd8f5; }
++.coach-starter { background: #1a263e; }
++.coach-starter:hover { background: #23304c; }
++.coach-log { scrollbar-color: #7e70ab #172238; padding: 6px 4px; }
++.coach-message { overflow-wrap: anywhere; }
++.coach-message-user { background: #26334f; border: 1px solid #435071; }
++.coach-message-assistant { border-color: #b29af5; }
++.coach-error { border: 1px solid #916174; }
++.coach-composer { box-shadow: 0 8px 20px -16px rgb(0 0 0 / 75%); }
++.coach-composer:focus-within { box-shadow: 0 0 0 3px rgb(179 154 246 / 15%); }
++.coach-prepare, .coach-send { background: var(--primary-grad); color: #fff; }
++.coach-form > label { color: #e1daf5; }
++
++@media (max-width: 900px) {
++  .coach-page { grid-template-columns: minmax(0, 1fr); gap: 22px; padding: 20px; }
++  .coach-tools .oda-tile { flex-direction: column; gap: 12px; }
++}
++@media (max-width: 599px) {
++  .coach-page { padding: 16px 12px; border-radius: 24px; gap: 20px; }
++  .coach-hero { grid-template-columns: minmax(0, 1fr); position: relative; padding: 2px 2px 20px; }
++  .coach-hero h1 { font-size: 28px; padding-right: 80px; }
++  .coach-eyebrow { padding-right: 78px; }
++  .coach-orbit { position: absolute; width: 84px; right: -2px; top: -2px; }
++  .coach-hero-copy > p { font-size: 14px; }
++  .coach-tools .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
++  .coach-tools .oda-tile { padding: 15px 12px; }
++  .coach-conversation { padding: 14px 12px; border-radius: 20px; }
++  .coach-with-starters { display: block; }
++  .coach-with-starters > * + * { margin-top: 20px; }
++  .coach-provider, .coach-setup { padding: 16px 13px; }
++  .coach-starter { width: 100%; padding: 12px; }
++  .coach-message-user { margin-left: 14px; padding: 13px; }
++  .coach-message-assistant { margin-right: 0; padding-left: 12px; }
++}
++
++@media (prefers-reduced-motion: reduce) {
++  .coach-page *, .coach-page *::before, .coach-page *::after { transition: none; }
++}
+diff --git a/src/styles/courses.css b/src/styles/courses.css
+index 455631f..2f54fef 100644
+--- a/src/styles/courses.css
++++ b/src/styles/courses.css
+@@ -1,89 +1,88 @@
+-.oda-courses { --course-gap: 2rem; color: var(--fg); }
++.oda-courses { --course-gap: 2rem; min-width: 0; color: var(--fg); }
+ .oda-courses button, .oda-courses summary, .oda-courses a { -webkit-tap-highlight-color: transparent; }
+ .oda-courses button:focus-visible, .oda-courses summary:focus-visible, .oda-courses a:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+ .oda-course-eyebrow { font-family: var(--font-editorial); font-style: italic; font-size: .95rem; line-height: 1.4; font-weight: 400; color: var(--accent); }
+-.oda-course-intro { padding-block: .5rem 1.5rem; border-bottom: 1px solid var(--border); }
+-.oda-course-title { font-size: clamp(2.6rem, 6vw, 4.5rem); line-height: 1.06; letter-spacing: -0.025em; margin-block: .85rem 1rem; max-width: 20ch; color: var(--accent); }
++.oda-course-intro { display: grid; gap: 1.5rem; padding: clamp(1.25rem, 3vw, 2.1rem); border: 1px solid var(--surface-border); border-radius: 26px; background: linear-gradient(135deg, var(--surface), var(--accent-soft)); box-shadow: var(--surface-shadow); }
++.oda-course-title { font-size: clamp(2.3rem, 5vw, 3.8rem); line-height: 1.1; letter-spacing: -0.025em; margin-block: .85rem 1rem; max-width: 20ch; color: var(--fg); overflow-wrap: anywhere; }
+ .oda-course-intro-copy { max-width: 48ch; font-size: clamp(.98rem, 2vw, 1.15rem); line-height: 1.65; color: var(--fg); }
+-.oda-course-method { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.5rem; margin-top: 1.35rem; }
++.oda-course-method { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.5rem; padding: 1rem 1.15rem; border: 1px solid var(--border); border-radius: 20px; background: var(--surface); }
+ .oda-course-method .oda-course-method-path { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; margin-top: 0; font-size: .9rem; font-weight: 650; color: var(--accent); }
+ .oda-course-method p { font-size: .8rem; line-height: 1.65; color: var(--fg-muted); }
+ .oda-course-research-link { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; font-size: .74rem; text-decoration: underline; text-underline-offset: 4px; color: var(--accent); cursor: pointer; }
+-.oda-course-resume { display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; padding: 1.5rem; margin-top: 1.5rem; border: 1px solid var(--border); border-radius: 16px; background: var(--accent-soft); }
++.oda-course-resume { display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; padding: 1.5rem; margin-top: 1.5rem; border: 1px solid var(--border); border-radius: 24px; background: var(--accent-soft); box-shadow: var(--surface-shadow); }
+ .oda-course-resume h2 { font-size: 1.5rem; line-height: 1.25; margin-block: .35rem; }
+-.oda-course-primary { display: inline-flex; justify-content: center; align-items: center; gap: .65rem; min-height: 48px; padding: .7rem 1.3rem; border-radius: 999px; background: var(--brand-burgundy); color: var(--on-burgundy); font-size: .85rem; font-weight: 650; cursor: pointer; }
++.oda-course-primary { display: inline-flex; justify-content: center; align-items: center; gap: .65rem; min-height: 48px; padding: .7rem 1.3rem; border-radius: 999px; background: var(--accent); color: var(--on-accent); font-size: .85rem; font-weight: 650; line-height: 1.5; cursor: pointer; }
+ .oda-course-primary:disabled { opacity: .5; cursor: not-allowed; }
+ .oda-course-section-heading { display: flex; align-items: baseline; flex-wrap: wrap; justify-content: space-between; gap: .5rem 1rem; padding-block: 2rem 1rem; }
+ .oda-course-section-heading h2 { font-size: 1.7rem; line-height: 1.2; }
+ .oda-course-section-heading p { font-size: .78rem; color: var(--fg-muted); }
+ .oda-course-list { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.2rem; }
+-.oda-course-row { display: flex; flex-direction: column; align-items: stretch; min-width: 0; width: 100%; padding: 0; overflow: hidden; text-align: left; border: 1px solid var(--border); border-radius: 16px; background: var(--bg-elevated); cursor: pointer; transition: border-color 160ms ease; }
++.oda-course-row { display: flex; flex-direction: column; align-items: stretch; min-width: 0; width: 100%; padding: 0; overflow: hidden; text-align: left; border: 1px solid var(--surface-border); border-radius: 26px; background: var(--surface); box-shadow: var(--surface-shadow); cursor: pointer; transition: border-color 160ms ease; }
+ .oda-course-row:hover { border-color: color-mix(in srgb, var(--accent) 48%, var(--border)); }
+ .oda-course-cover { display: block; width: 100%; aspect-ratio: 16 / 9; flex: none; overflow: hidden; background: var(--bg-muted); }
+ .oda-course-cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
+ .oda-course-art { display: block; width: 100%; height: auto; overflow: visible; }
+ .oda-course-row-content { display: flex; flex: 1; flex-direction: column; align-items: flex-start; min-width: 0; padding: 1.25rem; }
+ .oda-course-row-heading { display: flex; align-items: baseline; justify-content: space-between; gap: .75rem; width: 100%; margin-bottom: .6rem; }
+-.oda-course-row-category { color: var(--brand-burgundy); font-size: .64rem; font-weight: 650; line-height: 1.6; letter-spacing: .09em; text-transform: uppercase; }
+-.oda-course-row-number { flex: none; font-size: .75rem; color: var(--fg-muted); font-variant-numeric: tabular-nums; }
+-.oda-course-row-title { display: block; font-size: 1.85rem; line-height: 1.13; letter-spacing: -0.018em; font-weight: 500; color: var(--accent); overflow-wrap: anywhere; }
++.oda-course-row-category { padding: .3rem .65rem; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: .66rem; font-weight: 650; line-height: 1.6; letter-spacing: .06em; text-transform: uppercase; }
++.oda-course-row-number { display: grid; place-items: center; width: 32px; height: 32px; flex: none; border-radius: 50%; background: var(--bg-muted); font-size: .75rem; color: var(--fg-muted); font-variant-numeric: tabular-nums; }
++.oda-course-row-title { display: block; font-size: 1.85rem; line-height: 1.16; letter-spacing: -0.018em; font-weight: 500; color: var(--fg); overflow-wrap: anywhere; }
+ .oda-course-row-subtitle { display: block; margin-top: .45rem; font-size: .8rem; line-height: 1.6; color: var(--fg-muted); }
+ .oda-course-row-meta { display: flex; align-items: center; flex-wrap: wrap; gap: .3rem .9rem; margin-top: .75rem; font-size: .72rem; line-height: 1.5; color: var(--fg-muted); }
+ .oda-course-row-footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; width: 100%; margin-top: auto; padding-top: 1.1rem; }
+ .oda-course-row-state { font-family: var(--font-editorial); font-size: 1.13rem; line-height: 1.3; font-weight: 550; color: var(--accent); }
+-.oda-course-row-arrow { color: var(--accent); transition: transform 160ms ease; }
++.oda-course-row-arrow { width: 36px; height: 36px; flex: none; padding: 8px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); transition: transform 160ms ease; }
+ .oda-course-row:hover .oda-course-row-arrow { transform: translateX(3px); }
+-.oda-course-progress { display: block; width: 100%; height: 3px; margin-top: .9rem; border-radius: 999px; background: var(--bg-muted); overflow: hidden; }
++.oda-course-progress { display: block; width: 100%; height: 6px; margin-top: .9rem; border-radius: 999px; background: var(--bg-muted); overflow: hidden; }
+ .oda-course-progress-fill { display: block; height: 100%; border-radius: inherit; background: var(--accent); }
+ .oda-course-storage { margin-top: 1.5rem; }
+-.oda-course-research { margin-top: 3rem; padding: 1.5rem; border: 1px solid var(--border); border-radius: 16px; background: var(--bg-elevated); scroll-margin-top: 5rem; }
++.oda-course-research { margin-top: 3rem; padding: 1.5rem; border: 1px solid var(--surface-border); border-radius: 24px; background: var(--surface); scroll-margin-top: 5rem; }
+ .oda-course-research-intro { max-width: 70ch; }
+ .oda-course-research h2 { font-size: 1.6rem; line-height: 1.25; }
+ .oda-course-research details { border-bottom: 1px solid var(--border); }
+ .oda-course-research details:last-child { border-bottom: 0; }
+-.oda-course-lesson { max-width: 700px; margin-inline: auto; }
+-.oda-course-lesson-header { display: flex; gap: 1.25rem; align-items: center; }
++.oda-course-lesson { max-width: 780px; margin-inline: auto; }
++.oda-course-lesson-header { display: flex; gap: 1.25rem; align-items: center; padding: clamp(1.15rem, 3vw, 1.6rem); border: 1px solid var(--surface-border); border-radius: 24px; background: var(--surface); box-shadow: var(--surface-shadow); }
+ .oda-course-lesson-header-copy { flex: 1; min-width: 0; }
+ .oda-course-lesson-header .oda-course-art { width: 124px; flex: none; }
+ .oda-course-lesson-title { margin-block: .6rem .8rem; font-size: clamp(2rem, 4.5vw, 3rem); line-height: 1.12; letter-spacing: -0.012em; }
+-.oda-course-steps { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: .5rem; }
+-.oda-course-step { display: flex; justify-content: center; align-items: center; gap: .4rem; min-height: 44px; border: 1px solid var(--border); border-radius: 9px; font-size: .82rem; background: var(--bg-elevated); color: var(--fg-muted); cursor: pointer; }
++.oda-course-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(44px, 1fr)); gap: .55rem; padding: .5rem; border: 1px solid var(--border); border-radius: 22px; background: var(--surface); }
++.oda-course-step { display: flex; justify-content: center; align-items: center; gap: .3rem; min-width: 44px; min-height: 44px; border: 1px solid var(--border); border-radius: 999px; font-size: .82rem; background: var(--bg-muted); color: var(--fg-muted); cursor: pointer; }
+ .oda-course-step[data-completed="true"] { background: var(--accent-soft); color: var(--accent); }
+ .oda-course-step[aria-current="step"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 650; }
+ .oda-course-step:disabled { cursor: not-allowed; }
+ .oda-course-step:disabled svg { opacity: .7; }
+-.oda-course-goal { padding: 1rem 1.25rem; border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 0 12px 12px 0; }
++.oda-course-goal { padding: 1.2rem 1.35rem; border: 1px solid var(--border); background: var(--accent-soft); border-radius: 22px; }
+ .oda-course-goal p:last-child { font-size: 1.06rem; line-height: 1.6; margin-top: .3rem; }
+ .oda-course-stage { padding-top: .5rem; }
+ .oda-course-stage-title { display: flex; align-items: center; gap: .7rem; font-size: 1.35rem; font-weight: 600; }
+-.oda-course-stage-number { display: inline-flex; width: 30px; height: 30px; flex: none; align-items: center; justify-content: center; border: 1px solid var(--border); border-radius: 50%; font-size: .7rem; font-family: inherit; font-weight: 650; color: var(--accent); }
++.oda-course-stage-number { display: inline-flex; width: 36px; height: 36px; flex: none; align-items: center; justify-content: center; border: 1px solid var(--border); border-radius: 50%; background: var(--accent-soft); font-size: .7rem; font-family: inherit; font-weight: 650; color: var(--accent); }
+ .oda-course-reading { margin-top: 1.2rem; }
+ .oda-course-reading p { font-size: 1rem; line-height: 1.8; }
+ .oda-course-reading p + p { margin-top: 1rem; }
+-.oda-course-practice { margin-top: 1.1rem; padding-inline: 1rem; border: 1px solid var(--border); border-radius: 14px; background: var(--bg-elevated); }
++.oda-course-practice { margin-top: 1.1rem; padding-inline: 1.15rem; border: 1px solid var(--border); border-radius: 22px; background: var(--surface); }
+ .oda-course-practice-step { display: flex; align-items: flex-start; gap: .8rem; padding-block: 1rem; cursor: pointer; }
+ .oda-course-practice-step + .oda-course-practice-step { border-top: 1px solid var(--border); }
+ .oda-course-practice-step[data-checked="true"] { color: var(--accent); }
+ .oda-course-practice-step input { flex: none; width: 20px; height: 20px; margin-top: .2rem; accent-color: var(--accent); }
+ .oda-course-practice-step span { font-size: .88rem; line-height: 1.75; }
+-.oda-course-reflection { padding: 1.25rem; background: var(--bg-muted); border-radius: 14px; }
+-.oda-course-reflection textarea { display: block; width: 100%; margin-top: .85rem; padding: .85rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-elevated); color: var(--fg); font-size: .88rem; line-height: 1.7; resize: vertical; }
++.oda-course-reflection { padding: 1.25rem; border: 1px solid var(--border); background: var(--accent-soft); border-radius: 22px; }
++.oda-course-reflection textarea { display: block; width: 100%; margin-top: .85rem; padding: .85rem; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); color: var(--fg); font-size: 1rem; line-height: 1.7; resize: vertical; }
+ .oda-course-reflection textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+ .oda-course-quiz { min-width: 0; padding-top: 1rem; border-top: 1px solid var(--border); }
+-.oda-course-option { display: flex; align-items: flex-start; gap: .8rem; padding: 1rem; border: 1px solid var(--border); border-radius: 10px; cursor: pointer; background: var(--bg-elevated); }
++.oda-course-option { display: flex; align-items: flex-start; gap: .8rem; min-height: 52px; padding: 1rem; border: 1px solid var(--border); border-radius: 18px; cursor: pointer; background: var(--surface); }
+ .oda-course-option[data-selected="true"] { border-color: var(--accent); background: var(--accent-soft); }
+ .oda-course-option input { flex: none; width: 17px; height: 17px; margin-top: .2rem; accent-color: var(--accent); }
+ .oda-course-option span { font-size: .88rem; line-height: 1.65; }
+ .oda-course-finish { padding: 1.5rem; border-radius: 14px; border: 1px solid var(--border); background: var(--accent-soft); }
+ @media (min-width: 760px) {
+-  .oda-course-intro { padding-block: .5rem 1.75rem; }
+   .oda-course-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.4rem; }
+   .oda-course-row-content { padding: 1.4rem; }
+   .oda-course-row-title { font-size: 2rem; }
+   .oda-course-research { padding: 2rem; }
+ }
+ @media (max-width: 479px) {
+-  .oda-course-title { font-size: clamp(2.5rem, 10.5vw, 3.1rem); }
++  .oda-course-title { font-size: clamp(2rem, 9vw, 2.6rem); }
+   .oda-course-row-content { padding: 1rem; }
+   .oda-course-row-title { font-size: 1.75rem; }
+   .oda-course-resume { flex-wrap: wrap; padding: 1.2rem; }
+@@ -185,11 +184,11 @@
+ 
+ /* A course is a practice path: make the intended outcome and next visit visible. */
+ .oda-course-discovery { display: grid; gap: 1rem; margin-bottom: 1.25rem; }
+-.oda-course-search { display: flex; align-items: center; gap: .75rem; min-height: 50px; padding: .7rem 1rem; border: 1px solid var(--border); border-radius: 14px; background: var(--bg-elevated); color: var(--fg-muted); }
+-.oda-course-search input { width: 100%; min-width: 0; border: 0; outline: 0; color: var(--fg); background: transparent; font-size: .88rem; }
++.oda-course-search { display: flex; align-items: center; gap: .75rem; min-height: 52px; padding: .7rem 1rem; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); color: var(--fg-muted); }
++.oda-course-search input { width: 100%; min-width: 0; border: 0; outline: 0; color: var(--fg); background: transparent; font-size: 1rem; }
+ .oda-course-search:focus-within { outline: 2px solid var(--accent); outline-offset: 3px; }
+ .oda-course-filters { display: flex; flex-wrap: wrap; gap: .5rem; }
+-.oda-course-filters button { min-height: 44px; padding: .55rem .9rem; border: 1px solid var(--border); border-radius: 999px; color: var(--fg-muted); font-size: .76rem; cursor: pointer; }
++.oda-course-filters button { min-height: 44px; padding: .6rem 1rem; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); color: var(--fg-muted); font-size: .8rem; cursor: pointer; }
+ .oda-course-filters button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+ .oda-course-results { color: var(--fg-muted); font-size: .73rem; }
+ .oda-course-row-outcome { display: grid; gap: .45rem; width: 100%; margin-top: 1rem; padding-top: .9rem; border-top: 1px solid var(--border); font-size: .86rem; line-height: 1.65; color: var(--fg); }
+@@ -205,30 +204,31 @@
+ .oda-course-bibliography > summary span { color: var(--fg-muted); font-weight: 400; }
+ .oda-course-bibliography > div { padding-top: .5rem; }
+ .oda-course-save-note button { min-height: 44px; margin-top: .5rem; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font-size: .8rem; }
+-.oda-course-map { border: 1px solid var(--border); border-radius: 14px; padding: .4rem 1rem; }
++.oda-course-map { border: 1px solid var(--surface-border); border-radius: 24px; padding: .55rem 1.15rem; background: var(--surface); box-shadow: var(--surface-shadow); }
+ .oda-course-map summary { min-height: 44px; padding-block: .75rem; cursor: pointer; font-size: .84rem; font-weight: 650; }
+ .oda-course-map summary > span { float: right; color: var(--accent); font-size: .75rem; }
+ .oda-course-map > p { font-size: .75rem; color: var(--fg-muted); line-height: 1.6; }
+ .oda-course-map ol { padding: .6rem 0; list-style: none; }
+-.oda-course-map li + li { border-top: 1px solid var(--border); }
+-.oda-course-map li button { display: flex; align-items: center; gap: .7rem; min-height: 52px; width: 100%; text-align: left; font-size: .8rem; line-height: 1.5; cursor: pointer; }
++.oda-course-map li + li { margin-top: .45rem; border-top: 0; }
++.oda-course-map li { border-radius: 15px; background: var(--bg-muted); }
++.oda-course-map li button { display: flex; align-items: center; gap: .7rem; min-height: 60px; width: 100%; padding: .6rem; border-radius: inherit; text-align: left; font-size: .82rem; line-height: 1.5; cursor: pointer; }
+ .oda-course-map li button:disabled { color: var(--fg-muted); cursor: not-allowed; }
+-.oda-course-map li button[aria-current="step"] { color: var(--accent); font-weight: 650; }
+-.oda-course-map li button > span:nth-child(2) { flex: 1; }
++.oda-course-map li button[aria-current="step"] { background: var(--accent-soft); color: var(--accent); font-weight: 650; }
++.oda-course-map li button > span:nth-child(2) { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+ .oda-course-map li button > span:nth-child(3) { flex: none; font-size: .68rem; color: var(--fg-muted); }
+-.oda-course-map-number { flex: none; width: 24px; text-align: center; }
++.oda-course-map-number { display: inline-flex; align-items: center; justify-content: center; flex: none; width: 32px; height: 32px; border: 1px solid var(--border); border-radius: 50%; background: var(--surface); color: var(--accent); font-size: .75rem; font-variant-numeric: tabular-nums; text-align: center; }
+ .oda-course-map-number svg { margin-inline: auto; }
+ 
+ .oda-practice { border-block: 1px solid var(--border); padding-block: 1.5rem; }
+ .oda-practice-heading h2 { margin-top: .4rem; font-size: 1.6rem; line-height: 1.25; }
+ .oda-practice-heading > p:last-child { margin-top: .7rem; max-width: 64ch; font-size: .85rem; line-height: 1.7; color: var(--fg-muted); }
+-.oda-practice-roadmap { display: grid; gap: .85rem; margin-top: 1.25rem; list-style: none; padding: 0; }
++.oda-practice-roadmap { display: grid; gap: .85rem; margin-top: 1.25rem; list-style: none; padding: 1.15rem; border: 1px solid var(--border); border-radius: 22px; background: var(--surface); }
+ .oda-practice-roadmap li { display: flex; gap: .7rem; align-items: flex-start; }
+ .oda-practice-roadmap li > span { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; flex: none; font-size: .65rem; font-weight: 650; color: var(--accent); background: var(--accent-soft); border: 1px solid var(--border); border-radius: 50%; }
+ .oda-practice-roadmap li[data-current="true"] > span { color: var(--on-accent); background: var(--accent); border-color: var(--accent); }
+ .oda-practice-roadmap h3 { padding-top: .1rem; font-size: .82rem; font-weight: 650; }
+ .oda-practice-roadmap p { margin-top: .25rem; font-size: .76rem; line-height: 1.65; color: var(--fg-muted); }
+-.oda-practice-workbook { margin-top: 1.35rem; border: 1px solid var(--border); border-radius: 16px; background: var(--bg-elevated); scroll-margin-top: 6rem; }
++.oda-practice-workbook { margin-top: 1.35rem; border: 1px solid var(--surface-border); border-radius: 24px; background: var(--surface); scroll-margin-top: 6rem; box-shadow: var(--surface-shadow); }
+ .oda-practice-workbook > summary { display: flex; align-items: center; gap: .85rem; padding: 1rem; cursor: pointer; }
+ .oda-practice-workbook > summary::-webkit-details-marker { display: none; }
+ .oda-practice-workbook > summary > svg:first-child { flex: none; color: var(--accent); }
+@@ -279,7 +279,7 @@
+ .oda-practice-sources article a { display: inline-flex; align-items: center; gap: .4rem; min-height: 44px; font-size: .75rem; line-height: 1.6; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+ @media (min-width: 700px) {
+   .oda-course-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+-  .oda-course-row { padding: 1.3rem; }
++  .oda-course-row { padding: 0; }
+   .oda-practice-roadmap { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.1rem; }
+   .oda-practice-roadmap li { display: block; }
+   .oda-practice-roadmap li > span { margin-bottom: .65rem; }
+@@ -295,3 +295,23 @@
+   .oda-practice textarea, .oda-practice input, .oda-practice select { font-size: 1rem; }
+ }
+ @media (prefers-reduced-motion: reduce) { .oda-course-row { transition: none; } }
++
++/* Pearl working shell and real lesson milestones, shared with Notebook. */
++.oda-course-overview > header { padding: clamp(1.15rem, 3vw, 1.6rem); border: 1px solid var(--surface-border); border-radius: 24px; background: linear-gradient(135deg, var(--surface), var(--accent-soft)); }
++.oda-course-overview .oda-course-cover { border-radius: 24px; }
++.oda-course-overview [data-course-overview-lesson] { align-items: center; padding: .8rem; }
++.oda-course-overview [data-course-overview-lesson] > span:last-child { white-space: nowrap; }
++.oda-courses .oda-course-photo-hero { border-radius: 24px; }
++.oda-courses .oda-course-finish { border-radius: 24px; }
++.oda-courses .oda-practice-fields input, .oda-courses .oda-practice-fields textarea, .oda-courses .oda-practice-fields select { border-radius: 14px; }
++@media (min-width: 960px) {
++  .oda-course-intro { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); align-items: center; }
++  .oda-course-method { align-items: flex-start; flex-direction: column; gap: .8rem; }
++}
++@media (max-width: 479px) {
++  .oda-course-intro { padding: 1.15rem; border-radius: 22px; }
++  .oda-course-method { padding: .9rem; gap: .6rem; }
++  .oda-course-map { padding-inline: .8rem; }
++  .oda-course-overview [data-course-overview-lesson] { column-gap: .6rem; }
++  .oda-course-overview [data-course-overview-lesson] > span:last-child { font-size: .68rem; }
++}
+diff --git a/src/styles/notebook.css b/src/styles/notebook.css
+new file mode 100644
+index 0000000..d0ca43a
+--- /dev/null
++++ b/src/styles/notebook.css
+@@ -0,0 +1,82 @@
++/* Reference-led working surfaces. All content and calendar selection stay local. */
++.oda-notebook { min-width: 0; container-type: inline-size; container-name: oda-notebook; }
++.oda-notebook-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .35rem 0; }
++.oda-notebook-heading > div { min-width: 0; }
++.oda-notebook-heading h1 { font-size: clamp(2rem, 4vw, 2.8rem); }
++.oda-notebook-heading p { line-height: 1.65; max-width: 48ch; }
++.oda-notebook-mark { display: grid; place-items: center; width: 56px; height: 56px; flex: none; border: 1px solid var(--border); border-radius: 20px; color: var(--accent); background: var(--accent-soft); }
++.oda-notebook-mark svg { width: 25px; height: 25px; }
++.oda-notebook-stats { gap: .85rem 1.25rem; padding: 1rem 1.15rem; border-radius: 22px; }
++.oda-notebook-stat-values { gap: .55rem; }
++.oda-notebook-stat { padding: .5rem .8rem; border-radius: 999px; background: var(--bg-muted); font-size: .8rem; line-height: 1.45; font-variant-numeric: tabular-nums; }
++.oda-notebook-stat:first-child { background: var(--accent-soft); color: var(--accent); font-weight: 650; }
++.oda-notebook-stats [role="status"] { font-size: .78rem; line-height: 1.6; }
++.oda-notebook-tabs { max-width: 440px; gap: .35rem; padding: .35rem; border: 1px solid var(--border); border-radius: 999px; }
++.oda-notebook-tabs button { min-height: 44px; height: auto; padding: .65rem 1rem; border-radius: 999px; }
++.oda-notebook-tabs button[aria-pressed="true"] { background: var(--surface); color: var(--accent); box-shadow: var(--surface-shadow); font-weight: 650; }
++.oda-notebook-tabs button:focus-visible { outline-color: var(--accent); outline-offset: 3px; }
++.oda-notebook-workspace { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; align-items: start; }
++.oda-notebook-writing-column { display: grid; gap: 1.25rem; min-width: 0; }
++.oda-notebook-writing-column > section { border-radius: 24px; padding: clamp(1.15rem, 2.5vw, 1.6rem); background: linear-gradient(135deg, var(--surface), var(--accent-soft)); }
++.oda-notebook-writing-column > section .oda-display { font-size: clamp(1.3rem, 2.5vw, 1.6rem); line-height: 1.4; }
++.oda-notebook-writing-column > section button { border-color: var(--border); background: var(--surface); border-radius: 999px; white-space: normal; height: auto; min-height: 44px; padding-block: .6rem; }
++.oda-notebook-editor { border: 1px solid var(--surface-border); border-radius: 24px; background: var(--surface); box-shadow: var(--surface-shadow); }
++.oda-notebook-editor-heading { padding: 1.25rem 1.4rem 1rem; }
++.oda-notebook-editor-heading h2 { font-size: 1.2rem; }
++.oda-notebook-editor-heading > button { flex: none; border-radius: 999px; color: var(--accent); background: var(--accent-soft); }
++.oda-notebook-editor-form { padding: 0 1.4rem 1.4rem; }
++.oda-notebook input, .oda-notebook textarea, .oda-notebook select { border-radius: 14px; background: var(--bg); font-size: 1rem; }
++.oda-notebook textarea { line-height: 1.8; }
++.oda-notebook input:focus-visible, .oda-notebook textarea:focus-visible, .oda-notebook select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-color: var(--accent); }
++.oda-notebook-editor-actions { padding-top: 1rem; }
++.oda-notebook-editor-actions button { height: auto; min-height: 44px; padding-block: .65rem; border-radius: 999px; white-space: normal; }
++.oda-notebook-editor-actions button[type="submit"] { background: var(--accent); color: var(--on-accent); }
++.oda-notebook-archive { min-width: 0; }
++.oda-notebook-archive > div:first-child { gap: .6rem; }
++.oda-notebook-archive > div:first-child h2 { font-size: 1rem; }
++.oda-notebook-archive > div:first-child button { border-radius: 999px; }
++.oda-notebook-archive input[type="search"] { min-height: 48px; }
++.oda-notebook-calendar { border-radius: 22px; box-shadow: none; container-type: inline-size; container-name: oda-notebook-calendar; }
++.oda-notebook-calendar > div:first-child button { border-radius: 999px; background: var(--bg-muted); }
++.oda-notebook-calendar-scroll { width: 100%; min-width: 0; overflow-x: auto; padding-block: 2px; scrollbar-width: thin; }
++.oda-notebook-calendar-scroll:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 12px; }
++.oda-notebook-calendar-scroll-hint { display: none; align-items: flex-start; gap: .5rem; color: var(--fg-muted); font-size: .75rem; line-height: 1.5; }
++.oda-notebook-calendar-scroll-hint > svg { flex: none; margin-top: .05rem; }
++@container oda-notebook-calendar (max-width: 351px) {
++  .oda-notebook-calendar-scroll-hint { display: flex; }
++}
++.oda-notebook-calendar table { min-width: 352px; }
++.oda-notebook-calendar th { padding-block: .4rem; font-size: .65rem; }
++.oda-notebook-calendar td button { width: 100%; min-width: 44px; min-height: 44px; aspect-ratio: auto; border-radius: 15px; }
++.oda-notebook-calendar td button[aria-current="date"] { background: var(--accent-soft); color: var(--accent); }
++.oda-notebook-calendar td button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); font-weight: 650; }
++.oda-notebook-calendar td button[aria-pressed="true"] > span { background: var(--on-accent); }
++.oda-notebook-calendar td button:focus-visible { outline-color: var(--accent); outline-offset: -2px; }
++.oda-notebook-calendar > p { padding: .4rem .25rem .1rem; line-height: 1.5; }
++.oda-notebook-entry-list { border: 1px solid var(--border); border-radius: 22px; background: var(--surface); }
++.oda-notebook-entry-list > button { padding: 1rem; }
++.oda-notebook-entry-list > button:hover { background: var(--bg-muted); }
++.oda-notebook-entry-list > button[aria-current="true"] { background: var(--accent-soft); box-shadow: inset 3px 0 0 var(--accent); }
++.oda-notebook-entry-list > button:focus-visible { outline-color: var(--accent); }
++.oda-notebook-entry-list > button > span:first-child { line-height: 1.5; }
++.oda-notebook-entry-list > button > span:nth-child(2) { margin-top: .4rem; }
++.oda-notebook-entry-list > button > span:nth-child(3) { margin-top: .35rem; line-height: 1.65; }
++.oda-notebook-practices > div > section, .oda-notebook-practices > div > div { border-radius: 24px; }
++.oda-notebook-practices button { height: auto; min-height: 44px; padding-block: .65rem; white-space: normal; }
++@container oda-notebook (min-width: 850px) {
++  .oda-notebook-workspace { grid-template-columns: minmax(0, 1fr) minmax(0, 380px); gap: 1.5rem; }
++}
++@media (max-width: 479px) {
++  .oda-notebook-heading { align-items: flex-start; }
++  .oda-notebook-mark { width: 48px; height: 48px; border-radius: 17px; }
++  .oda-notebook-stats { padding: .95rem; }
++  .oda-notebook-stat { padding-inline: .65rem; }
++  .oda-notebook-editor-heading { padding: 1rem 1rem .8rem; }
++  .oda-notebook-editor-form { padding: 0 1rem 1rem; }
++  .oda-notebook-editor-actions { align-items: flex-start; }
++  .oda-notebook-editor-actions > div { max-width: 100%; }
++}
++@media (prefers-reduced-motion: reduce) {
++  .oda-notebook button { transition: none; }
++  .oda-notebook-calendar-scroll { scroll-behavior: auto; }
++}
+diff --git a/src/styles/reference.css b/src/styles/reference.css
+new file mode 100644
+index 0000000..ca95ac5
+--- /dev/null
++++ b/src/styles/reference.css
+@@ -0,0 +1,168 @@
++/* One shared working shell; category atmospheres stay local to their screens. */
++.oda-reference-app .oda-display {
++  font-family: var(--font-sans);
++  font-weight: 650;
++  letter-spacing: -.025em;
++}
++.oda-reference-app .oda-kicker {
++  font-family: var(--font-sans);
++  font-style: normal;
++  font-size: 12px;
++  font-weight: 650;
++  letter-spacing: .035em;
++}
++.oda-reference-app .oda-sidebar {
++  margin: 14px 0 14px 14px;
++  height: calc(100vh - 28px);
++  top: 14px;
++  gap: 20px;
++  border: 1px solid var(--border);
++  border-radius: 24px;
++  box-shadow: var(--surface-shadow);
++}
++.oda-sidebar-profile {
++  display: flex;
++  align-items: center;
++  gap: 12px;
++  padding: 14px 10px;
++  border-block: 1px solid var(--border);
++  text-align: left;
++  min-height: 70px;
++}
++.oda-sidebar-avatar {
++  display: grid;
++  place-items: center;
++  width: 42px;
++  height: 42px;
++  flex-shrink: 0;
++  border-radius: 50%;
++  background: var(--accent-soft);
++  color: var(--accent);
++  box-shadow: inset 0 0 0 1px var(--border);
++}
++.oda-reference-app .oda-nav-active {
++  box-shadow: inset 0 0 0 1px var(--border), 0 4px 12px -8px var(--accent);
++}
++.oda-reference-app .oda-tabbar {
++  box-shadow: var(--glass-shadow);
++  border: 1px solid var(--border);
++  background: var(--surface);
++}
++.oda-reference-app .oda-tab[aria-current="page"] {
++  background: var(--accent-soft);
++  color: var(--accent);
++}
++.oda-reference-app input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
++.oda-reference-app textarea {
++  font-family: var(--font-sans);
++}
++.oda-reference-app [role="status"] button { min-height: 44px; min-width: 44px; }
++.oda-reference-today > header { align-items: center; }
++.oda-reference-today .oda-today-headline { font-size: clamp(1.8rem, 3.3vw, 2.8rem); }
++.oda-reference-today > .oda-quote {
++  padding: clamp(20px, 3vw, 30px);
++  border: 1px solid var(--border);
++  border-radius: 24px;
++  background: linear-gradient(115deg, var(--surface) 35%, var(--accent-soft));
++  box-shadow: var(--surface-shadow);
++}
++.oda-reference-today > .oda-quote blockquote {
++  font-family: var(--font-editorial);
++  font-weight: 400;
++  font-size: clamp(1.2rem, 2vw, 1.55rem);
++}
++.oda-reference-today .oda-growth-dashboard { align-items: start; gap: 20px; }
++.oda-reference-today .oda-growth-actions { gap: 20px; }
++.oda-reference-today .oda-growth-panel {
++  padding: 24px;
++  display: flex;
++  flex-direction: column;
++  border-radius: 26px;
++  border: 1px solid var(--border);
++  background: radial-gradient(ellipse at 50% 45%, var(--accent-soft), transparent 65%), var(--surface);
++  box-shadow: var(--surface-shadow);
++  max-width: none;
++}
++.oda-reference-today .oda-growth-panel .oda-evidence-tree {
++  width: min(100%, 340px);
++  margin: 0 auto;
++  flex-shrink: 0;
++}
++.oda-reference-today .oda-growth-heading h2 { font-size: 1.2rem; }
++.oda-reference-today .oda-growth-caption { margin-top: 0; }
++.oda-reference-today .oda-growth-actions .oda-decision {
++  --bg: #1A243A;
++  --bg-elevated: #172039;
++  --bg-muted: #26324B;
++  --fg: #FFFFFF;
++  --fg-muted: #CCD2E5;
++  --fg-subtle: #CBD0E1;
++  --accent: #CAB7FF;
++  --on-accent: #251540;
++  --accent-soft: #352C50;
++  --border: #46506E;
++  --surface-border: #46506E;
++  --brand-burgundy: #D7C6FF;
++  --tint-rose: #372D50;
++  --tint-sage: #314844;
++  --ink-sage: #AFF0D9;
++  --primary-grad: linear-gradient(120deg, #E9D9FF, #BBA4FF);
++  --on-primary: #251540;
++  color: var(--fg);
++  border-radius: 26px;
++  background: radial-gradient(ellipse at 95% 0, #443363, transparent 55%), #101728;
++  box-shadow: 0 15px 28px -20px #101728;
++}
++.oda-reference-today .oda-growth-actions .oda-decision-text {
++  font-family: var(--font-sans);
++  font-weight: 600;
++  font-size: clamp(1.4rem, 2.5vw, 2rem);
++  line-height: 1.3;
++}
++.oda-reference-today .oda-decision-input {
++  font-family: var(--font-sans);
++  font-size: 16px;
++  border-color: var(--border);
++}
++.oda-reference-today .oda-growth-week {
++  padding: 24px;
++  border: 1px solid var(--border);
++  border-radius: 24px;
++  background: var(--surface);
++  box-shadow: var(--surface-shadow);
++}
++.oda-reference-today .oda-growth-day { width: 36px; height: 36px; }
++.oda-reference-today .oda-tile-icon { border-radius: 50%; }
++.oda-reference-focus {
++  --bg: #1D2940;
++  --bg-muted: #26354D;
++  --bg-elevated: #18243A;
++  --bg-inset: #26354D;
++  --fg: #F8FAFF;
++  --fg-muted: #C8D4E6;
++  --fg-subtle: #BDCBE0;
++  --accent: #7358DF;
++  --on-accent: #FFFFFF;
++  --accent-soft: #31334F;
++  --border: #46526A;
++  --surface-border: #46526A;
++  background: radial-gradient(ellipse at 100% 0%, #244851, transparent 65%), #101728;
++  border-radius: 26px;
++  color: var(--fg);
++}
++.oda-reference-focus button { min-height: 44px; }
++.oda-reference-focus input:not([type="range"]), .oda-reference-focus select { border: 1px solid var(--border); }
++@media (min-width: 1024px) {
++  .oda-reference-today .oda-growth-dashboard { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
++}
++@media (max-width: 479px) {
++  .oda-reference-today > header { gap: 8px; align-items: flex-start; }
++  .oda-reference-today > header > button { padding-inline: 10px; font-size: 12px; }
++  .oda-reference-today > .oda-quote, .oda-reference-today .oda-growth-panel,
++  .oda-reference-today .oda-growth-week { padding: 18px; border-radius: 22px; }
++  .oda-reference-today .oda-growth-panel .oda-evidence-tree { width: min(100%, 250px); }
++  .oda-reference-today .oda-growth-day { width: 29px; height: 29px; }
++}
++@media (prefers-reduced-transparency: reduce) {
++  .oda-reference-app .oda-tabbar { backdrop-filter: none; -webkit-backdrop-filter: none; }
++}
+diff --git a/src/styles/sound.css b/src/styles/sound.css
+index d471341..401b22c 100644
+--- a/src/styles/sound.css
++++ b/src/styles/sound.css
+@@ -1,179 +1,147 @@
+-/* Sound Room — calm, editorial, photo-led. Uses the app's tokens only, so light and dark themes follow. */
+-.oda-sound { color: var(--fg); padding-bottom: 7.5rem; }
++/* Sound Room: original scenic contours, light session rows and a local teal player atmosphere. */
++.oda-sound { --sound-cyan: #56E0DB; --sound-on-cyan: #12373A; color: var(--fg); padding-bottom: 9rem; }
+ .oda-sound button, .oda-sound select, .oda-sound input { -webkit-tap-highlight-color: transparent; }
+-.oda-sound button:focus-visible,
+-.oda-sound select:focus-visible,
+-.oda-sound input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
++.oda-sound button:focus-visible, .oda-sound select:focus-visible, .oda-sound input:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+ 
+-/* Photos */
+-.oda-sound-photo { display: block; position: relative; overflow: hidden; background: var(--bg-muted); }
+-.oda-sound-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+-.oda-sound-photo-fallback { background: linear-gradient(135deg, var(--accent-soft), var(--bg-muted) 55%, var(--brand-burgundy-soft)); }
++/* Decorative landscapes: original contours, not photos or measured audio visualizations. */
++.oda-sound-scene { --scene-sky: #7CAAB4; --scene-back: #365D69; --scene-middle: #244955; --scene-front: #132D39; display: block; position: relative; isolation: isolate; overflow: hidden; background: linear-gradient(155deg, #C9D6D0, var(--scene-sky) 55%, var(--scene-back)); }
++.oda-sound-scene[data-scene="night"] { --scene-sky: #666A94; --scene-back: #3B476A; --scene-middle: #283D5A; --scene-front: #19233C; background: linear-gradient(150deg, #C6B8CA, #777391 40%, #28394E); }
++.oda-sound-scene[data-scene="dunes"] { --scene-sky: #BBA18C; --scene-back: #837080; --scene-middle: #4E465D; --scene-front: #292C42; background: linear-gradient(155deg, #E5CAB0, #B8A3AC 50%, #6D6381); }
++.oda-sound-scene[data-scene="leaves"] { --scene-sky: #8EBAAA; --scene-back: #466A65; --scene-middle: #2B565B; --scene-front: #183740; background: linear-gradient(145deg, #CCDDD3, #6EAEA3 50%, #224E57); }
++.oda-sound-scene-light { position: absolute; width: 16%; aspect-ratio: 1; top: 12%; right: 17%; border-radius: 50%; background: #FFF2D5; opacity: .7; box-shadow: 0 0 32px 12px rgb(255 240 209 / .15); }
++.oda-sound-scene[data-scene="night"] .oda-sound-scene-light { background: #E1EBF4; opacity: .8; width: 12%; }
++.oda-sound-scene-contour { position: absolute; display: block; width: 150%; height: 75%; left: -25%; border-radius: 50% 55% 0 0 / 50% 65% 0 0; }
++.oda-sound-scene-contour-back { bottom: -26%; background: var(--scene-back); transform: rotate(-10deg); }
++.oda-sound-scene-contour-middle { bottom: -43%; background: var(--scene-middle); transform: rotate(9deg); }
++.oda-sound-scene-contour-front { bottom: -59%; background: var(--scene-front); transform: rotate(-12deg); }
++.oda-sound-scene[data-scene="coast"] .oda-sound-scene-contour { border-radius: 50% 40% 0 0 / 65% 50% 0 0; }
++.oda-sound-scene-leaves { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .6; mix-blend-mode: luminosity; }
++.oda-sound-scene[data-scene="leaves"] .oda-sound-scene-light { display: none; }
+ 
+-/* Intro */
+-.oda-sound-intro { display: grid; gap: 1.5rem; padding-bottom: 1.75rem; border-bottom: 1px solid var(--border); }
+-.oda-sound-title { margin-top: .6rem; font-size: clamp(2.1rem, 7vw, 3.4rem); line-height: 1.06; letter-spacing: -0.012em; max-width: 14ch; }
+-.oda-sound-lede { margin-top: .9rem; max-width: 44ch; font-size: .95rem; line-height: 1.7; color: var(--fg-muted); }
+-.oda-sound-hero { aspect-ratio: 16 / 10; border-radius: 12px 40px 12px 12px; }
++.oda-sound-intro { padding-bottom: 1.4rem; }
++.oda-sound-title { margin-top: .6rem; max-width: 20ch; font-size: clamp(2rem, 6.8vw, 3rem); line-height: 1.08; letter-spacing: -.035em; }
++.oda-sound-lede { margin-top: .85rem; max-width: 58ch; font-size: .92rem; line-height: 1.7; color: var(--fg-muted); }
+ 
+-/* Tabs (segmented, scrolls sideways on narrow screens instead of overflowing the page) */
+-.oda-sound-tabs {
+-  display: flex; gap: .25rem; margin-top: 1.5rem; padding: .3rem; max-width: 100%;
+-  overflow-x: auto; scrollbar-width: none; border-radius: 999px; background: var(--bg-muted);
+-}
+-.oda-sound-tabs::-webkit-scrollbar { display: none; }
+-.oda-sound-tab {
+-  flex: 1 0 auto; min-height: 40px; padding: .45rem .95rem; border-radius: 999px;
+-  font-size: .84rem; font-weight: 550; color: var(--fg-muted); white-space: nowrap; cursor: pointer;
+-  transition: background-color 160ms ease, color 160ms ease;
+-}
+-.oda-sound-tab:hover { color: var(--fg); }
+-.oda-sound-tab[aria-selected="true"] { background: var(--bg-elevated); color: var(--accent); font-weight: 650; box-shadow: var(--shadow-md); }
+-.oda-sound .oda-sound-tab:focus-visible { outline-offset: -2px; }
+-
+-.oda-sound-panel { padding-top: 1.25rem; }
+-.oda-sound-section-intro { max-width: 52ch; font-size: .92rem; line-height: 1.65; color: var(--fg-muted); }
+-
+-/* Honest note for Frequencies */
+-.oda-sound-honest {
+-  display: flex; gap: .75rem; align-items: flex-start; margin-top: 1rem; padding: 1rem 1.1rem;
+-  border-left: 3px solid var(--brand-burgundy); border-radius: 0 12px 12px 0; background: var(--brand-burgundy-soft);
+-}
+-.oda-sound-honest svg { flex: none; margin-top: .15rem; color: var(--brand-burgundy); }
+-.oda-sound-honest p { font-size: .88rem; line-height: 1.65; color: var(--fg); }
++/* Existing roving focus and persisted selection remain intact. */
++.oda-sound-tabs { display: grid; grid-template-columns: minmax(0, 1fr); gap: .65rem; padding: .25rem; max-width: 100%; }
++.oda-sound-tab { position: relative; isolation: isolate; min-width: 0; width: 100%; min-height: 140px; border: 2px solid transparent; border-radius: 24px 60px 24px 24px; overflow: hidden; text-align: left; cursor: pointer; transition: border-color 160ms ease, box-shadow 160ms ease; }
++.oda-sound-tab:nth-child(even) { border-radius: 60px 24px 24px 24px; }
++.oda-sound-tab > .oda-sound-scene { position: absolute; inset: 0; }
++.oda-sound-tab::after { content: ''; position: absolute; z-index: 0; inset: 0; background: linear-gradient(100deg, rgb(10 22 36 / .76), rgb(10 22 36 / .46) 65%, rgb(10 22 36 / .1)); }
++.oda-sound-tab-copy { position: relative; z-index: 1; display: grid; grid-template-columns: 38px minmax(0, 1fr); column-gap: .65rem; row-gap: .25rem; padding: 1.2rem 1.05rem; color: #FFFFFF; }
++.oda-sound-tab-icon { grid-row: span 2; display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; margin-top: .05rem; border: 1px solid rgb(255 255 255 / .32); border-radius: 50%; background: rgb(15 29 45 / .45); }
++.oda-sound-tab-name { font-size: 1.35rem; font-weight: 650; line-height: 1.15; letter-spacing: -.025em; }
++.oda-sound-tab-detail { max-width: 40ch; font-size: .77rem; line-height: 1.55; color: #F1F3F8; }
++.oda-sound-tab:hover { border-color: color-mix(in srgb, var(--accent) 60%, transparent); }
++.oda-sound-tab[aria-selected="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft), var(--shadow-md); }
++.oda-sound-tab[aria-selected="true"] .oda-sound-tab-icon { background: #DDE4F6; border-color: #DDE4F6; color: #26314E; }
++.oda-sound .oda-sound-tab:focus-visible { outline-offset: 2px; }
+ 
+-/* Cards */
+-.oda-sound-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; margin-top: 1.1rem; }
++/* Dark scenic covers transition to a readable working surface with real catalog rows. */
++.oda-sound-panel { margin-top: 1.4rem; padding: 1.2rem 1rem; border: 1px solid var(--border); border-radius: 26px; background: var(--bg-elevated); box-shadow: var(--surface-shadow); }
++.oda-sound-panel-heading .oda-kicker { color: var(--fg-muted); }
++.oda-sound-section-title { margin-block: .45rem .55rem; font-size: clamp(1.6rem, 5vw, 2rem); line-height: 1.15; letter-spacing: -.025em; }
++.oda-sound-section-intro { max-width: 58ch; font-size: .88rem; line-height: 1.65; color: var(--fg-muted); }
++.oda-sound-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: .65rem; margin-top: 1.05rem; }
+ .oda-sound-card { min-width: 0; }
+-.oda-sound-card-button {
+-  display: flex; flex-direction: column; width: 100%; height: 100%; text-align: left; cursor: pointer;
+-  border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: var(--bg-elevated);
+-  transition: border-color 160ms ease, box-shadow 160ms ease;
+-}
+-.oda-sound-card-button:hover { border-color: var(--border-strong); }
+-.oda-sound-card-button[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+-.oda-sound-card-media { display: block; position: relative; }
+-.oda-sound-card-media .oda-sound-photo { aspect-ratio: 16 / 9; }
+-.oda-sound-card-play {
+-  position: absolute; right: .75rem; bottom: .75rem; display: inline-flex; align-items: center; justify-content: center;
+-  width: 44px; height: 44px; border-radius: 50%; color: #fff; background: rgb(18 24 20 / .5); backdrop-filter: blur(6px);
+-}
+-.oda-sound-card-button[aria-pressed="true"] .oda-sound-card-play { background: var(--accent); color: var(--on-accent); }
+-.oda-sound-card-live { position: absolute; left: .75rem; bottom: .9rem; display: inline-flex; align-items: flex-end; gap: 3px; height: 16px; padding: 0 .1rem; }
+-.oda-sound-card-live i { display: block; width: 3px; height: 100%; border-radius: 2px; background: #fff; transform-origin: bottom; animation: oda-sound-live 1.2s ease-in-out infinite; }
+-.oda-sound-card-live i:nth-child(2) { animation-delay: -.4s; }
+-.oda-sound-card-live i:nth-child(3) { animation-delay: -.8s; }
+-@keyframes oda-sound-live { 0%, 100% { transform: scaleY(.35); } 50% { transform: scaleY(1); } }
+-.oda-sound-card-body { display: flex; flex-direction: column; gap: .35rem; padding: 1rem 1.05rem 1.1rem; }
+-.oda-sound-card-name { display: block; font-size: 1.08rem; font-weight: 650; line-height: 1.3; letter-spacing: -.01em; color: var(--fg); }
+-.oda-sound-card-description { display: block; font-size: .86rem; line-height: 1.55; color: var(--fg); }
+-.oda-sound-card-why { display: block; font-size: .8rem; line-height: 1.55; color: var(--fg-muted); }
+-.oda-sound-card-note {
+-  display: inline-flex; align-items: center; gap: .4rem; align-self: flex-start; margin-top: .3rem; padding: .25rem .6rem;
+-  border-radius: 999px; font-size: .72rem; font-weight: 600; color: var(--accent); background: var(--accent-soft);
+-}
++.oda-sound-card-button { position: relative; display: grid; grid-template-columns: 58px minmax(0, 1fr) 40px; align-items: start; gap: .75rem; width: 100%; height: 100%; padding: .9rem .75rem; text-align: left; cursor: pointer; border: 1px solid var(--border); border-radius: 17px; background: var(--bg-elevated); transition: border-color 160ms ease, background-color 160ms ease; }
++.oda-sound-card-button:hover { background: var(--bg-muted); border-color: var(--border-strong); }
++.oda-sound-card-button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
++.oda-sound-card-media { display: block; position: relative; width: 58px; height: 72px; border-radius: 13px 24px 13px 13px; overflow: hidden; }
++.oda-sound-card-media .oda-sound-scene { width: 100%; height: 100%; }
++.oda-sound-card-play { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 44px; border: 1px solid var(--border); border-radius: 50%; color: var(--fg); background: var(--bg-muted); }
++.oda-sound-card-button[aria-pressed="true"] .oda-sound-card-play { border-color: #285E64; background: #285E64; color: #FFFFFF; }
++.oda-sound-card-body { display: flex; min-width: 0; flex-direction: column; gap: .35rem; }
++.oda-sound-card-name { font-size: .96rem; font-weight: 650; line-height: 1.3; letter-spacing: -.015em; color: var(--fg); overflow-wrap: anywhere; }
++.oda-sound-card-description { font-size: .8rem; line-height: 1.55; color: var(--fg); }
++.oda-sound-card-why { font-size: .77rem; line-height: 1.55; color: var(--fg-muted); }
++.oda-sound-card-note { display: inline-flex; align-items: center; gap: .35rem; align-self: flex-start; margin-top: .2rem; padding: .3rem .5rem; border-radius: 12px; font-size: .71rem; font-weight: 600; line-height: 1.45; color: var(--fg); background: var(--accent-soft); }
+ .oda-sound-card-note svg { flex: none; }
+-
++.oda-sound-card-pro { position: absolute; bottom: 0; left: 0; right: 0; padding: 3px; background: rgb(16 23 40 / .88); color: #FFFFFF; text-align: center; font-size: .66rem; font-weight: 650; }
+ .oda-sound-hint { display: flex; gap: .5rem; align-items: flex-start; margin-top: 1rem; font-size: .8rem; line-height: 1.55; color: var(--fg-muted); }
+ .oda-sound-hint svg { flex: none; margin-top: .15rem; color: var(--accent); }
+ 
+-/* Breathe */
+-.oda-sound-breathe { display: flex; flex-direction: column; align-items: center; margin-top: 1.25rem; padding: 1.5rem 1rem 1.4rem; border: 1px solid var(--border); border-radius: 20px; background: var(--bg-elevated); text-align: center; }
+-.oda-sound-breathe-stage { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; width: min(260px, 72vw); aspect-ratio: 1; }
++/* Breath timing remains synchronized to the existing audio clock. */
++.oda-sound-breathe { display: flex; flex-direction: column; align-items: center; margin-top: 1.25rem; padding: 1.5rem 1rem 1.4rem; border: 1px solid #477B7D; border-radius: 23px; background: radial-gradient(ellipse at 50% 0, #285A62, #15383F 70%); color: #F1FCFB; text-align: center; }
++.oda-sound-breathe-stage { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; width: min(260px, 65vw); aspect-ratio: 1; }
+ .oda-sound-breathe-stage[data-reduced] { aspect-ratio: auto; padding-block: 2.5rem 1.5rem; }
+-.oda-sound-breathe-circle {
+-  position: absolute; inset: 0; border-radius: 50%;
+-  background: radial-gradient(circle at 50% 45%, var(--accent-soft) 0%, color-mix(in srgb, var(--accent) 38%, var(--accent-soft)) 70%, color-mix(in srgb, var(--accent) 55%, var(--accent-soft)) 100%);
+-  box-shadow: 0 0 0 10px color-mix(in srgb, var(--accent) 8%, transparent);
+-  transform: scale(.6); will-change: transform;
+-}
++.oda-sound-breathe-circle { position: absolute; inset: 0; border: 1px solid rgb(171 238 230 / .65); border-radius: 50%; background: radial-gradient(circle at 45% 35%, #537E7C, #2B686B 70%, #29515B); box-shadow: 0 0 0 10px rgb(154 229 224 / .07); transform: scale(.6); will-change: transform; }
+ .oda-sound-breathe-circle[data-active] { animation-name: oda-sound-breath; animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
+ @keyframes oda-sound-breath { 0% { transform: scale(.6); } 50% { transform: scale(1); } 100% { transform: scale(.6); } }
+-.oda-sound-breathe-label { position: relative; display: flex; flex-direction: column; align-items: center; gap: .15rem; color: var(--fg); }
++.oda-sound-breathe-label { position: relative; display: flex; flex-direction: column; align-items: center; gap: .15rem; color: #FFFFFF; }
+ .oda-sound-breathe-label .oda-display { font-size: 1.6rem; line-height: 1.2; }
+-.oda-sound-breathe-label[data-reduced] .oda-display { font-size: 2.2rem; }
+-.oda-sound-breathe-count { font-size: .85rem; font-variant-numeric: tabular-nums; color: var(--fg-muted); }
+-.oda-sound-breathe-bar { position: relative; display: block; width: 70%; height: 6px; margin-top: 1rem; border-radius: 999px; background: var(--bg-muted); overflow: hidden; }
+-.oda-sound-breathe-bar span { display: block; height: 100%; border-radius: inherit; background: var(--accent); transition: width 200ms linear; }
+-.oda-sound-breathe-meta { margin-top: 1rem; font-size: .8rem; color: var(--fg-muted); }
++.oda-sound-breathe-label[data-reduced] .oda-display { font-size: 2rem; }
++.oda-sound-breathe-count { font-size: .85rem; font-variant-numeric: tabular-nums; color: #D5E8E8; }
++.oda-sound-breathe-bar { position: relative; display: block; width: 70%; height: 6px; margin-top: 1rem; border-radius: 999px; background: #366169; overflow: hidden; }
++.oda-sound-breathe-bar span { display: block; height: 100%; border-radius: inherit; background: var(--sound-cyan); transition: width 200ms linear; }
++.oda-sound-breathe-meta { margin-top: 1rem; font-size: .8rem; line-height: 1.5; color: #D5E8E8; }
+ .oda-sound-breathe-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; margin-top: 1.1rem; }
+-.oda-sound-breathe-tip { max-width: 44ch; margin-top: 1rem; font-size: .76rem; line-height: 1.55; color: var(--fg-muted); }
+-.oda-sound-primary, .oda-sound-secondary {
+-  display: inline-flex; align-items: center; justify-content: center; gap: .55rem; min-height: 46px; padding: .6rem 1.2rem;
+-  border-radius: 999px; font-size: .86rem; font-weight: 650; cursor: pointer;
+-}
+-.oda-sound-primary { background: var(--brand-burgundy); color: var(--on-burgundy); }
+-.oda-sound-secondary { border: 1px solid var(--border-strong); color: var(--fg); background: transparent; }
+-.oda-sound-secondary[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+-
+-/* Frequencies (own section, below the tabs) */
+-.oda-sound-frequencies { margin-top: 2.75rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+-.oda-sound-section-title { margin-block: .5rem .6rem; font-size: clamp(1.6rem, 5vw, 2.1rem); line-height: 1.15; letter-spacing: -0.012em; }
++.oda-sound-breathe-tip { max-width: 44ch; margin-top: 1rem; font-size: .76rem; line-height: 1.55; color: #D5E8E8; }
++.oda-sound-primary, .oda-sound-secondary { display: inline-flex; align-items: center; justify-content: center; gap: .55rem; min-height: 46px; padding: .6rem 1.05rem; border-radius: 999px; font-size: .86rem; font-weight: 650; cursor: pointer; }
++.oda-sound-primary { background: var(--sound-cyan); color: var(--sound-on-cyan); }
++.oda-sound-secondary { border: 1px solid #91B9BB; color: #F1FCFB; background: transparent; }
++.oda-sound-secondary[aria-pressed="true"] { background: #345F68; border-color: #BDE8E5; }
++.oda-sound-breathe button:focus-visible { outline-color: #D3F7F4; }
+ 
+-/* Evidence + safety */
+-.oda-sound-evidence { margin-top: 2.5rem; padding: 1.3rem 1.25rem; border: 1px solid var(--border); border-radius: 16px; background: var(--bg-muted); }
+-.oda-sound-evidence h2 { font-size: 1.35rem; line-height: 1.25; }
+-.oda-sound-evidence ol { display: grid; gap: .75rem; margin-top: .9rem; padding-left: 1.1rem; list-style: decimal; }
++.oda-sound-frequencies { margin-top: 2.25rem; padding-top: 1.75rem; border-top: 1px solid var(--border); }
++.oda-sound-honest { display: flex; gap: .7rem; align-items: flex-start; margin-top: 1rem; padding: 1rem; border: 1px solid var(--border); border-radius: 17px; background: var(--accent-soft); }
++.oda-sound-honest svg { flex: none; margin-top: .15rem; color: var(--accent); }
++.oda-sound-honest p { font-size: .83rem; line-height: 1.65; color: var(--fg); }
++.oda-sound-evidence { margin-top: 2rem; padding: 1.2rem; border: 1px solid var(--border); border-radius: 23px; background: var(--bg-elevated); }
++.oda-sound-evidence h2 { font-size: 1.25rem; line-height: 1.3; }
++.oda-sound-evidence ol { display: grid; gap: .8rem; margin-top: .9rem; padding-left: 1.1rem; list-style: decimal; }
+ .oda-sound-evidence li { font-size: .8rem; line-height: 1.65; color: var(--fg); padding-left: .2rem; }
+ .oda-sound-evidence li::marker { color: var(--fg-muted); font-size: .75rem; }
+-.oda-sound-evidence-note { margin-top: .9rem; font-size: .78rem; line-height: 1.6; color: var(--fg-muted); }
+-.oda-sound-safety { margin-top: 1.25rem; font-size: .76rem; line-height: 1.6; color: var(--fg-muted); }
++.oda-sound-evidence-note, .oda-sound-safety { margin-top: 1rem; font-size: .77rem; line-height: 1.65; color: var(--fg-muted); }
+ 
+-/* Player bar: fixed above the mobile tab bar; beside the sidebar on desktop */
+-.oda-sound-player {
+-  position: fixed; z-index: 20; left: .6rem; right: .6rem;
+-  bottom: calc(4rem + env(safe-area-inset-bottom, 0px) + .5rem);
+-}
+-.oda-sound-player-inner {
+-  display: flex; flex-direction: column; gap: .55rem; max-width: 760px; margin-inline: auto; padding: .6rem .7rem .65rem;
+-  border: 1px solid var(--border); border-radius: 18px; background: color-mix(in srgb, var(--bg-elevated) 94%, transparent);
+-  backdrop-filter: blur(12px); box-shadow: var(--shadow-lg);
+-}
++/* Glass is localized to the real player. There is no fabricated waveform or listening claim. */
++.oda-sound-player { position: fixed; z-index: 20; left: .6rem; right: .6rem; bottom: calc(max(14px, env(safe-area-inset-bottom, 0px)) + 74px); }
++.oda-sound-player-inner { display: flex; flex-direction: column; gap: .5rem; max-width: 900px; margin-inline: auto; padding: .7rem .75rem; border: 1px solid #608F94; border-radius: 22px; background: linear-gradient(120deg, rgb(23 64 71 / .97), rgb(27 48 61 / .98)); color: #F1FCFB; backdrop-filter: blur(16px); box-shadow: 0 16px 40px -18px rgb(13 35 44 / .7), inset 0 1px 0 rgb(200 248 242 / .15); }
+ .oda-sound-player-now { display: flex; align-items: center; gap: .7rem; min-width: 0; }
+-.oda-sound-player-thumb { flex: none; width: 44px; height: 44px; border-radius: 10px; }
++.oda-sound-player-thumb { flex: none; width: 44px; height: 48px; border-radius: 10px 16px 10px 10px; }
+ .oda-sound-player-text { flex: 1; min-width: 0; }
+-.oda-sound-player-name { font-size: .88rem; font-weight: 650; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+-.oda-sound-player-status { font-size: .74rem; line-height: 1.35; color: var(--fg-muted); font-variant-numeric: tabular-nums; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+-.oda-sound-player-toggle {
+-  flex: none; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%;
+-  background: var(--accent); color: var(--on-accent); cursor: pointer;
+-}
+-.oda-sound-player-toggle:disabled { opacity: .4; cursor: not-allowed; }
++.oda-sound-player-name { font-size: .87rem; font-weight: 650; line-height: 1.3; overflow-wrap: anywhere; }
++.oda-sound-player-status { margin-top: .12rem; font-size: .74rem; line-height: 1.4; color: #D2E6E8; font-variant-numeric: tabular-nums; }
++.oda-sound-player-toggle { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 50%; background: var(--sound-cyan); color: var(--sound-on-cyan); cursor: pointer; box-shadow: 0 0 18px rgb(56 222 213 / .15); }
++.oda-sound-player-toggle:disabled { background: #52767D; color: #E0EBEC; cursor: not-allowed; box-shadow: none; }
+ .oda-sound-player-controls { display: flex; align-items: center; gap: .75rem; min-width: 0; }
+-.oda-sound-player-volume { display: flex; flex: 1; align-items: center; gap: .5rem; min-width: 0; color: var(--fg-muted); }
+-.oda-sound-player-volume input { flex: 1; min-width: 0; height: 28px; accent-color: var(--accent); cursor: pointer; }
+-.oda-sound-player-timer { display: flex; flex: none; align-items: center; gap: .35rem; color: var(--fg-muted); }
+-.oda-sound-player-timer select {
+-  min-height: 36px; padding: .3rem .5rem; border: 1px solid var(--border); border-radius: 10px;
+-  background: var(--bg-elevated); color: var(--fg); font-size: .78rem; cursor: pointer;
+-}
++.oda-sound-player-volume { display: flex; flex: 1; align-items: center; gap: .5rem; min-width: 0; color: #D2E6E8; }
++.oda-sound-player-volume svg { flex: none; }
++.oda-sound-player-volume input { flex: 1; min-width: 0; width: 100%; height: 44px; accent-color: var(--sound-cyan); cursor: pointer; }
++.oda-sound-player-timer { display: flex; flex: none; align-items: center; gap: .35rem; color: #D2E6E8; }
++.oda-sound-player-timer svg { flex: none; }
++.oda-sound-player-timer select { width: 118px; max-width: 100%; min-height: 44px; padding: .3rem .4rem; border: 1px solid #71999F; border-radius: 11px; background: #25444F; color: #F1FCFB; font-size: .77rem; cursor: pointer; }
++.oda-sound-player button:focus-visible, .oda-sound-player input:focus-visible, .oda-sound-player select:focus-visible { outline-color: #D3F7F4; }
+ 
+ @media (min-width: 560px) {
+-  .oda-sound-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+-  .oda-sound-card-media .oda-sound-photo { aspect-ratio: 7 / 5; }
+-}
+-@media (min-width: 760px) {
+-  .oda-sound-intro { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); align-items: end; gap: 2rem; padding-bottom: 2.25rem; }
+-  .oda-sound-evidence { padding: 1.6rem 1.75rem; }
++  .oda-sound-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .85rem; }
++  .oda-sound-tab { min-height: 180px; }
++  .oda-sound-tab-copy { padding: 1.4rem 1.1rem; }
++  .oda-sound-tab-name { font-size: 1.65rem; }
++  .oda-sound-panel { padding: 1.4rem 1.35rem; }
++  .oda-sound-card-button { grid-template-columns: 76px minmax(0, 1fr) 44px; gap: 1rem; padding: 1rem; }
++  .oda-sound-card-media { width: 76px; height: 84px; }
++  .oda-sound-card-play { width: 44px; }
+ }
+ @media (min-width: 768px) {
+-  .oda-sound { padding-bottom: 6rem; }
+-  /* The desktop sidebar is 14rem wide (AppShell w-56). */
+-  .oda-sound-player { left: calc(14rem + 1.25rem); right: 1.25rem; bottom: 1rem; }
+-  /* Match the page column: 760px max minus the AppShell's 2rem side padding. */
+-  .oda-sound-player-inner { flex-direction: row; align-items: center; gap: 1rem; max-width: calc(760px - 4rem); padding: .6rem .8rem; }
++  .oda-sound { padding-bottom: 7rem; }
++  /* AppShell has a 15rem sidebar; align within the remaining page column. */
++  .oda-sound-player { left: calc(15rem + 1.25rem); right: 1.25rem; bottom: 1rem; }
++  .oda-sound-player-inner { flex-direction: row; align-items: center; gap: 1rem; }
+   .oda-sound-player-now { flex: 1; }
+   .oda-sound-player-controls { flex: 0 1 320px; }
++  .oda-sound-evidence { padding: 1.5rem; }
+ }
+ @media (max-width: 359px) {
+-  .oda-sound-tab { padding-inline: .75rem; font-size: .8rem; }
++  .oda-sound-card-button { grid-template-columns: minmax(0, 1fr) 40px; gap: .6rem; padding: .85rem .7rem; }
++  .oda-sound-card-media { display: none; }
++  .oda-sound-tab-copy { grid-template-columns: 32px minmax(0, 1fr); padding: 1.1rem .85rem; }
++  .oda-sound-tab-icon { width: 32px; height: 32px; }
+   .oda-sound-player-controls { gap: .5rem; }
++  .oda-sound-player-timer select { width: 109px; }
+ }
+ @media (prefers-reduced-motion: reduce) {
+   .oda-sound-tab, .oda-sound-card-button { transition: none; }
+-  .oda-sound-card-live i { animation: none; transform: scaleY(.7); }
+   .oda-sound-breathe-circle[data-active] { animation: none; }
+   .oda-sound-breathe-bar span { transition: none; }
+ }
+-
+-.oda-sound-card-pro { position: absolute; top: 10px; left: 10px; padding: 2px 8px; border-radius: 99px; background: rgba(18,21,19,.72); color: #F6F4EE; font-size: 11.5px; font-weight: 600; }
+diff --git a/src/styles/tokens.css b/src/styles/tokens.css
+index 6976bc5..ca028d7 100644
+--- a/src/styles/tokens.css
++++ b/src/styles/tokens.css
+@@ -1,40 +1,40 @@
+ :root {
+-  /* ODA: quiet paper, warm ink, forest green used sparingly; burgundy only for the brand mark and small moments. */
+-  --bg: #F7F3EA;
+-  --ink: #1C201D;
+-  --fg: #1C201D;
+-  --fg-muted: #62645D;
+-  --fg-subtle: #6B6D65;
+-  --ink-faint: #6B6D65;
+-  --bg-elevated: #FFFDFA;
+-  --bg-muted: #F0ECE2;
+-  --bg-inset: #E8E3D8;
+-  --border: #E5DFD2;
+-  --border-strong: #B4B0A4;
+-  --accent: #173E35;
+-  --on-accent: #FFFDF8;
+-  --accent-soft: #E8EEE7;
+-  --brand-burgundy: #8A3042;
+-  --brand-burgundy-soft: #F3E5E8;
+-  --on-burgundy: #FFFDF8;
+-  --forest: #173E35;
+-  --logo-ink: #173E35;
+-  --logo-accent: #8A3042;
+-  --logo-chosen: #D9864F;
+-  --on-forest: #F7F3EA;
+-  --color-coral: #8A3042;
+-  --color-sage: #173E35;
+-  --color-slate: #1C201D;
+-  --color-sand: #62645D;
+-  --color-navy: #173E35;
+-  --success: #173E35;
+-  --success-soft: #E7ECE3;
+-  --danger: #AC2C25;
+-  --danger-soft: #FCEBEA;
+-  --money: #173E35;
+-  --money-soft: #E7ECE3;
+-  --future-building: #173E35;
+-  --future-allowing: #B4B0A4;
++  /* User-authorized reference direction: pearl/lavender working surfaces and violet actions. */
++  --bg: #F5F4FA;
++  --ink: #202131;
++  --fg: #202131;
++  --fg-muted: #67657A;
++  --fg-subtle: #6E6B80;
++  --ink-faint: #6E6B80;
++  --bg-elevated: #FFFFFF;
++  --bg-muted: #ECEAF4;
++  --bg-inset: #E2DFF0;
++  --border: #E3E0EF;
++  --border-strong: #ACA5C2;
++  --accent: #674DCE;
++  --on-accent: #FFFFFF;
++  --accent-soft: #EDE8FA;
++  --brand-burgundy: #8F3F87;
++  --brand-burgundy-soft: #F5E8F4;
++  --on-burgundy: #FFFFFF;
++  --forest: #101728;
++  --logo-ink: #674DCE;
++  --logo-accent: #8F3F87;
++  --logo-chosen: #E9A164;
++  --on-forest: #F5F4FA;
++  --color-coral: #8F3F87;
++  --color-sage: #674DCE;
++  --color-slate: #202131;
++  --color-sand: #67657A;
++  --color-navy: #101728;
++  --success: #20745F;
++  --success-soft: #E0F1EB;
++  --danger: #B8333C;
++  --danger-soft: #FCEBED;
++  --money: #20745F;
++  --money-soft: #E0F1EB;
++  --future-building: #674DCE;
++  --future-allowing: #ACA5C2;
+   --font-display: var(--font-sans);
+   --font-editorial: 'Newsreader Variable', 'New York', ui-serif, Georgia, serif;
+   /* Native SF Pro on Apple devices (the iOS app), Hanken Grotesk elsewhere. */
+@@ -46,93 +46,93 @@
+   --radius-lg: 24px;
+   --radius-xl: 28px;
+   --radius-full: 9999px;
+-  --shadow-sm: 0 1px 2px rgb(35 79 62 / 5%);
+-  --shadow-md: 0 22px 44px -26px rgb(35 79 62 / 32%), 0 2px 6px rgb(35 79 62 / 5%), inset 0 1px 0 #FFFFFF;
+-  --shadow-lg: 0 30px 60px -30px rgb(35 79 62 / 40%), 0 4px 10px rgb(35 79 62 / 6%), inset 0 1px 0 #FFFFFF;
+-  /* A restrained brass for small premium details (rules, numerals, badges). */
+-  --gold: #9C7A45;
+-  --gold-soft: #F3EBDD;
++  --shadow-sm: 0 1px 2px rgb(59 42 112 / 5%);
++  --shadow-md: 0 22px 44px -26px rgb(59 42 112 / 32%), 0 2px 6px rgb(59 42 112 / 5%), inset 0 1px 0 #FFFFFF;
++  --shadow-lg: 0 30px 60px -30px rgb(59 42 112 / 40%), 0 4px 10px rgb(59 42 112 / 6%), inset 0 1px 0 #FFFFFF;
++  /* A restrained warm accent for small milestones. */
++  --gold: #8A5E26;
++  --gold-soft: #FAEBD7;
+   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+-  /* Quiet ivory surfaces with depth reserved for focused actions. */
+-  --page-bg: linear-gradient(180deg, #F7F3EA, #F3EFE5);
+-  --surface: #FFFDFA;
+-  --surface-border: #E5DFD2;
+-  --surface-shadow: 0 8px 26px -14px rgb(23 62 53 / 16%), 0 1px 2px rgb(23 62 53 / 3%);
++  /* Soft lavender depth with readable white working surfaces. */
++  --page-bg: linear-gradient(180deg, #F5F4FA, #EFEDF8);
++  --surface: #FFFFFF;
++  --surface-border: #E3E0EF;
++  --surface-shadow: 0 8px 26px -14px rgb(59 42 112 / 16%), 0 1px 2px rgb(59 42 112 / 3%);
+   --glass: rgba(255, 255, 255, 0.74);
+   --glass-border: rgba(255, 255, 255, 0.85);
+-  --glass-shadow: 0 18px 40px -18px rgb(20 24 22 / 28%), inset 0 1px 0 rgb(255 255 255 / 90%);
++  --glass-shadow: 0 18px 40px -18px rgb(41 32 70 / 28%), inset 0 1px 0 rgb(255 255 255 / 90%);
+   --nav-active: rgba(35, 79, 62, 0.10);
+-  --primary-grad: linear-gradient(135deg, #214F43, #173E35);
+-  --on-primary: #F7F3EA;
+-  --primary-glow: 0 4px 12px -6px rgb(23 62 53 / 30%), inset 0 1px 0 rgb(255 255 255 / 10%);
+-  --ring-a: #6FA283;
+-  --ring-b: #173E35;
+-  --ring-track: #E3ECE5;
+-  /* Tinted tiles: sage, rosewood, dusty blue, warm beige. */
+-  --tint-sage: #E8EEE7;   --ink-sage: #173E35;
+-  --tint-rose: #F4E1E1;   --ink-rose: #8A3042;
+-  --tint-blue: #E1E8EF;   --ink-blue: #4D6479;
+-  --tint-sand: #F1E7D7;   --ink-sand: #8A6A3E;
++  --primary-grad: linear-gradient(135deg, #7655D5, #674DCE);
++  --on-primary: #F5F4FA;
++  --primary-glow: 0 4px 12px -6px rgb(59 42 112 / 30%), inset 0 1px 0 rgb(255 255 255 / 10%);
++  --ring-a: #B89FF0;
++  --ring-b: #674DCE;
++  --ring-track: #E7E2F4;
++  /* Compatible semantic aliases: violet, orchid, teal and warm accent. */
++  --tint-sage: #EDE8FA;   --ink-sage: #674DCE;
++  --tint-rose: #F5E8F4;   --ink-rose: #8F3F87;
++  --tint-blue: #E2F2F3;   --ink-blue: #21656C;
++  --tint-sand: #FAEBD7;   --ink-sand: #8A5E26;
+ }
+ 
+ :root[data-theme="dark"], html.dark {
+-  --bg: #101E1A;
+-  --ink: #EDE6DA;
+-  --fg: #EDE6DA;
+-  --fg-muted: #B4BEB1;
+-  --fg-subtle: #A6B2A4;
+-  --ink-faint: #A6B2A4;
+-  --bg-elevated: #172A24;
+-  --bg-muted: #21372F;
+-  --bg-inset: #0C1713;
+-  --border: #31483D;
+-  --border-strong: #6A7C70;
+-  --accent: #B8D9C2;
+-  --on-accent: #10251B;
+-  --accent-soft: #243E32;
+-  --brand-burgundy: #E4A4AC;
+-  --logo-ink: #DCE7D8;
+-  --logo-accent: #E4A4AC;
+-  --logo-chosen: #E9C98F;
+-  --brand-burgundy-soft: #432A31;
+-  --on-burgundy: #3D1722;
+-  --color-coral: #E4A4AC;
+-  --color-sage: #ACC9A3;
+-  --color-slate: #EDE6DA;
+-  --color-sand: #A39A8C;
+-  --color-navy: #ACC9A3;
+-  --success: #ACC9A3;
+-  --success-soft: #223027;
+-  --danger: #FFADA5;
+-  --danger-soft: #482B28;
+-  --money: #ACC9A3;
+-  --money-soft: #223027;
+-  --future-building: #ACC9A3;
+-  --future-allowing: #5A4E3E;
++  --bg: #101728;
++  --ink: #F0EDF8;
++  --fg: #F0EDF8;
++  --fg-muted: #C0BED0;
++  --fg-subtle: #B1ADC3;
++  --ink-faint: #B1ADC3;
++  --bg-elevated: #1A2237;
++  --bg-muted: #252E47;
++  --bg-inset: #0B1020;
++  --border: #39415A;
++  --border-strong: #7C7896;
++  --accent: #BDAAF8;
++  --on-accent: #201633;
++  --accent-soft: #33284B;
++  --brand-burgundy: #E7AFE3;
++  --logo-ink: #EAE3FF;
++  --logo-accent: #E7AFE3;
++  --logo-chosen: #F3BD7C;
++  --brand-burgundy-soft: #452D45;
++  --on-burgundy: #351432;
++  --color-coral: #E7AFE3;
++  --color-sage: #91DCC5;
++  --color-slate: #F0EDF8;
++  --color-sand: #B1ADC3;
++  --color-navy: #91DCC5;
++  --success: #91DCC5;
++  --success-soft: #1C3935;
++  --danger: #FFAFB7;
++  --danger-soft: #482B36;
++  --money: #91DCC5;
++  --money-soft: #1C3935;
++  --future-building: #91DCC5;
++  --future-allowing: #7C7896;
+   --shadow-sm: 0 1px 2px rgb(0 0 0 / 30%);
+-  --shadow-md: 0 24px 48px -28px rgb(0 0 0 / 90%), inset 0 1px 0 rgb(255 236 200 / 5%);
+-  --shadow-lg: 0 30px 60px -28px rgb(0 0 0 / 95%), inset 0 1px 0 rgb(255 236 200 / 6%);
+-  --forest: #173E35;
+-  --on-forest: #EDE6DA;
+-  --gold: #D6B77E;
+-  --gold-soft: #2B251C;
+-  /* Forest at night, with readable sage and wine accents. */
+-  --page-bg: linear-gradient(180deg, #14261F, #101E1A);
+-  --surface: #172A24;
+-  --surface-border: #31483D;
+-  --surface-shadow: 0 24px 48px -28px rgb(0 0 0 / 90%), inset 0 1px 0 rgb(255 236 200 / 5%);
+-  --glass: rgba(23, 42, 36, 0.96);
+-  --glass-border: rgba(214, 183, 126, 0.18);
++  --shadow-md: 0 24px 48px -28px rgb(0 0 0 / 90%), inset 0 1px 0 rgb(189 170 248 / 5%);
++  --shadow-lg: 0 30px 60px -28px rgb(0 0 0 / 95%), inset 0 1px 0 rgb(189 170 248 / 6%);
++  --forest: #101728;
++  --on-forest: #F0EDF8;
++  --gold: #F3BD7C;
++  --gold-soft: #392D27;
++  /* A coordinated navy night system with lavender and teal accents. */
++  --page-bg: linear-gradient(180deg, #17213B, #101728);
++  --surface: #1A2237;
++  --surface-border: #39415A;
++  --surface-shadow: 0 24px 48px -28px rgb(0 0 0 / 90%), inset 0 1px 0 rgb(189 170 248 / 5%);
++  --glass: rgba(26, 34, 55, 0.96);
++  --glass-border: rgba(189, 170, 248, 0.18);
+   --glass-shadow: 0 18px 40px -18px rgb(0 0 0 / 70%), inset 0 1px 0 rgb(255 255 255 / 6%);
+-  --nav-active: rgba(184, 217, 194, 0.12);
+-  --primary-grad: linear-gradient(135deg, #C3DECA, #A9C9B1);
+-  --on-primary: #10251B;
+-  --primary-glow: 0 14px 28px -14px rgb(214 183 126 / 60%), inset 0 1px 0 rgb(255 255 255 / 35%);
+-  --ring-a: #E9C98F;
+-  --ring-b: #9C7A45;
+-  --ring-track: rgba(237, 230, 218, 0.08);
+-  --tint-sage: rgba(214, 183, 126, 0.12); --ink-sage: #B8D9C2;
+-  --tint-rose: rgba(228, 164, 172, 0.12); --ink-rose: #E4A4AC;
+-  --tint-blue: rgba(160, 182, 204, 0.12); --ink-blue: #A9BCCF;
+-  --tint-sand: rgba(214, 183, 126, 0.12); --ink-sand: #E9C98F;
++  --nav-active: rgba(189, 170, 248, 0.12);
++  --primary-grad: linear-gradient(135deg, #D0BEFF, #BDAAF8);
++  --on-primary: #201633;
++  --primary-glow: 0 14px 28px -14px rgb(189 170 248 / 60%), inset 0 1px 0 rgb(255 255 255 / 35%);
++  --ring-a: #F3BD7C;
++  --ring-b: #9B7CEB;
++  --ring-track: rgba(240, 237, 248, 0.08);
++  --tint-sage: rgba(189, 170, 248, 0.12); --ink-sage: #BDAAF8;
++  --tint-rose: rgba(231, 175, 227, 0.12); --ink-rose: #E7AFE3;
++  --tint-blue: rgba(150, 218, 220, 0.12); --ink-blue: #96DADC;
++  --tint-sand: rgba(189, 170, 248, 0.12); --ink-sand: #F3BD7C;
+ }
+diff --git a/src/utils/theme.ts b/src/utils/theme.ts
+index 912257a..799eb1e 100644
+--- a/src/utils/theme.ts
++++ b/src/utils/theme.ts
+@@ -7,7 +7,7 @@ export type ThemePref = 'light' | 'dark' | 'system';
+ export const THEME_KEY = 'oda_theme';
+ import { syncStatusBar } from '../services/native';
+ 
+-const BAR = { light: '#F7F3EA', dark: '#101E1A' } as const;
++const BAR = { light: '#F5F4FA', dark: '#101728' } as const;
+ 
+ const media = () => (typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null);
+ 

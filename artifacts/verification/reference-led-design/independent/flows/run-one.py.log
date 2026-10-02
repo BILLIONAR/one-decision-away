@@ -1,0 +1,29 @@
+from pathlib import Path
+import subprocess, os, json, time, hashlib, sys
+
+root=Path('/workspace/oda-reference-redesign')
+out=Path('/workspace/scratch/oda-reference-redesign/independent/flows')
+kind=sys.argv[1]
+jobs={
+ 'first-use':('harness/first-use.mjs', {'ODA_QA_URL':'http://127.0.0.1:4183/one-decision-away/#','ODA_QA_OUT':str(out/'first-use')}),
+ 'courses':('harness/courses.mjs', {'ODA_QA_URL':'http://127.0.0.1:4183/one-decision-away/#','ODA_COURSE_QA_OUT':str(out/'courses'),'ODA_QA_ISOLATE_EXTERNAL':'1'}),
+ 'guidance':('harness/guidance.mjs', {'ODA_GUIDANCE_URL':'http://127.0.0.1:4183/one-decision-away/','ODA_GUIDANCE_OUT':str(out/'guidance'),'ODA_GUIDANCE_REPO':str(root),'ODA_FLOW_BUILD_RECEIPT':str(out/'preflight-receipt.json')}),
+ 'notebook':('harness/notebook.mjs', {'ODA_QA_URL':'http://127.0.0.1:4183/one-decision-away/#','ODA_QA_OUT':str(out/'notebook')}),
+ 'notebook-corrected':('harness/notebook.mjs', {'ODA_QA_URL':'http://127.0.0.1:4183/one-decision-away/#','ODA_QA_OUT':str(out/'notebook-corrected')}),
+ 'localized-preview':('harness/localized-preview.mjs', {'ODA_GUIDANCE_URL':'http://127.0.0.1:4183/one-decision-away/','ODA_GUIDANCE_OUT':str(out/'localized-preview'),'ODA_GUIDANCE_REPO':str(root)}),
+ 'dialogs':('scripts/qa-mobile-core-quality.mjs', {'ODA_QA_URL':'http://127.0.0.1:4183/one-decision-away/','ODA_MOBILE_CORE_QA_OUT':str(out/'dialogs')}),
+}
+script,extra=jobs[kind]
+script=str(out/script) if script.startswith('harness/') else script
+command=['node','--import','tsx',script]
+env={**os.environ,**extra,'ODA_QA_REPO':str(root)}
+folder=out/kind
+folder.mkdir(parents=True,exist_ok=True)
+log=folder/'browser.log'
+begin=time.time()
+with log.open('xb') as stream:
+ result=subprocess.run(command,cwd=root,env=env,stdout=stream,stderr=subprocess.STDOUT)
+receipt={'kind':kind,'command':command,'cwd':str(root),'environmentOverrides':{**extra,'ODA_QA_REPO':str(root)},'startedAt':begin,'elapsedSeconds':time.time()-begin,'exitCode':result.returncode,'log':{'file':str(log),'bytes':log.stat().st_size,'sha256':hashlib.sha256(log.read_bytes()).hexdigest()},'syntheticOnly':True,'noInstallNoDeploy':True}
+(folder/'command-receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
+print(json.dumps(receipt))
+sys.exit(result.returncode)

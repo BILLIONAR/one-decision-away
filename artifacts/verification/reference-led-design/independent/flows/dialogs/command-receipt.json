@@ -1,0 +1,25 @@
+{
+  "kind": "dialogs",
+  "command": [
+    "node",
+    "--import",
+    "tsx",
+    "scripts/qa-mobile-core-quality.mjs"
+  ],
+  "cwd": "/workspace/oda-reference-redesign",
+  "environmentOverrides": {
+    "ODA_QA_URL": "http://127.0.0.1:4183/one-decision-away/",
+    "ODA_MOBILE_CORE_QA_OUT": "/workspace/scratch/oda-reference-redesign/independent/flows/dialogs",
+    "ODA_QA_REPO": "/workspace/oda-reference-redesign"
+  },
+  "startedAt": 1790964099.3269472,
+  "elapsedSeconds": 28.725751161575317,
+  "exitCode": 0,
+  "log": {
+    "file": "/workspace/scratch/oda-reference-redesign/independent/flows/dialogs/browser.log",
+    "bytes": 4572,
+    "sha256": "1f3c434f35a11de6ddefeb0abd65f3532ba2aa31a67a1385c85f7f66952da05a"
+  },
+  "syntheticOnly": true,
+  "noInstallNoDeploy": true
+}

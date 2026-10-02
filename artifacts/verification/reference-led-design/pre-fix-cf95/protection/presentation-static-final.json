@@ -1,0 +1,214 @@
+{
+  "kind": "final independent presentation/controller static audit",
+  "base": "68ae8179c875b54ce8f200e34a6148259ae6cad1",
+  "cwd": "/workspace/oda-reference-redesign",
+  "head": "cf95c6eda4264385a4f70b41f7df0dee7832ebe7",
+  "branch": "design/reference-led-oda",
+  "sourceFrozen": true,
+  "testsRun": false,
+  "findings": [],
+  "limits": [
+    "Static code review and exact commit-bound source comparison only; browser geometry, contrast, hit tests and real browser/device behavior remain separate QA evidence."
+  ],
+  "files": [
+    {
+      "file": "src/layout/AppShell.tsx",
+      "baseSha256": "ddaf1d367c4852f9ff300e7ee9f84686ab100f7f97c80394461184f7cb8af80e",
+      "currentSha256": "dfa27da9b5351954b113619f1f6013ce92e4f324914f680e1e6afda1f4db0b64",
+      "controllers": [
+        {
+          "component": "AppShell",
+          "unchanged": true,
+          "afterKnownDecorativeStatementRemovalUnchanged": true
+        }
+      ],
+      "semanticAttributeChanges": [
+        {
+          "component": "AppShell",
+          "removed": [],
+          "added": [
+            "onClick={() => handleNav('/app/me')}",
+            "type=\"button\""
+          ]
+        }
+      ],
+      "removedPresentationFunctions": [],
+      "addedPresentationFunctions": []
+    },
+    {
+      "file": "src/pages/Today.tsx",
+      "baseSha256": "13791aac306dc07068353b6fd8754936f4771c6833dc033c70cffafbd8b8cfa6",
+      "currentSha256": "f48b20a7e01b57c017b65800c3547f546a7181a59b9e9bf9fbcc12f065c718ee",
+      "controllers": [
+        {
+          "component": "readRitualsOpen",
+          "unchanged": true,
+          "afterKnownDecorativeStatementRemovalUnchanged": true
+        },
+        {
+          "component": "writeRitualsOpen",
+          "unchanged": true,
+          "afterKnownDecorativeStatementRemovalUnchanged": true
+        },
+        {
+          "component": "Today",
+          "unchanged": true,
+          "afterKnownDecorativeStatementRemovalUnchanged": true
+        }
+      ],
+      "semanticAttributeChanges": [],
+      "removedPresentationFunctions": [],
+      "addedPresentationFunctions": []
+    },
+    {
+      "file": "src/components/FocusTimerHub.tsx",
+      "baseSha256": "c34e772510efcb0bff9628aa141e8286abb31a623fc7cee6cfc8d34e20b0730b",
+      "currentSha256": "32a10d4ef52d659bcc5580eae42bc8311982ddf9598c6c1fe989b2bd17d7325a",
+      "controllers": [
+        {
+          "component": "FocusTimerHub",
+          "unchanged": true,
+          "afterKnownDecorativeStatementRemovalUnchanged": true
+        }
+      ],
+      "semanticAttributeChanges": [],
+      "removedPresentationFunctions": [],
+      "addedPresentationFunctions": []
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "baseSha256": "83fd4ed46bf8ae85facd20d791cbeb66558b36ff1d9021febb038d2964530238",
+      "currentSha256": "e7ac3e6eaa6dc75bd83255a6bd760613064702ddd2a60fdc9266b508ecb8b7df",
+      "controllers": [
+        {
+          "component": "readTab",
+          "unchanged": true,
+          "afterKnownDecorativeStatementRemovalUnchanged": true
+        },
+        {
+          "component": "usePlayer",
+          "unchanged": true,
+          "afterKnownDecorativeStatementRemovalUnchanged": true
+        },
+        {
+          "component": "useReducedMotion",
+          "unchanged": true,
+          "afterKnownDecorativeStatementRemovalUnchanged": true
+        },
+        {
+          "component": "useTick",
+          "unchanged": true,
+          "afterKnownDecorativeStatementRemovalUnchanged": true
+        },
+        {
+          "component": "SoundCard",
+          "unchanged": true,
+          "afterKnownDecorativeStatementRemovalUnchanged": true
+        },
+        {
+          "component": "BreathePanel",
+          "unchanged": true,
+          "afterKnownDecorativeStatementRemovalUnchanged": true
+        },
+        {
+          "component": "PlayerBar",
+          "unchanged": false,
+          "afterKnownDecorativeStatementRemovalUnchanged": true
+        },
+        {
+          "component": "SoundRoom",
+          "unchanged": true,
+          "afterKnownDecorativeStatementRemovalUnchanged": true
+        }
+      ],
+      "semanticAttributeChanges": [
+        {
+          "component": "SoundRoom",
+          "removed": [],
+          "added": [
+            "aria-label={t(item.label)}"
+          ]
+        }
+      ],
+      "removedPresentationFunctions": [
+        "SoundPhotoImg"
+      ],
+      "addedPresentationFunctions": [
+        "SoundScene"
+      ]
+    },
+    {
+      "file": "src/pages/Coach.tsx",
+      "baseSha256": "5c26eecebef44a6d7859d74d18bf0df97ae28eda921da115829c0d1a533d11dc",
+      "currentSha256": "e8075ab437c354bdc2af21e8fe67139bc9101ed87306ddeaba6ab5a5ac20f467",
+      "controllers": [
+        {
+          "component": "Coach",
+          "unchanged": true,
+          "afterKnownDecorativeStatementRemovalUnchanged": true
+        }
+      ],
+      "semanticAttributeChanges": [],
+      "removedPresentationFunctions": [],
+      "addedPresentationFunctions": []
+    },
+    {
+      "file": "src/pages/Notebook.tsx",
+      "baseSha256": "3313462f8f66af16d8fdd49eb98ef773d194b086e0413550827ae107c741d2d5",
+      "currentSha256": "ab74050eadfcaaef79a0a0fbd6f9ca34874deac06cf3707fda0219c0605d1889",
+      "controllers": [
+        {
+          "component": "Notebook",
+          "unchanged": true,
+          "afterKnownDecorativeStatementRemovalUnchanged": true
+        }
+      ],
+      "semanticAttributeChanges": [],
+      "removedPresentationFunctions": [],
+      "addedPresentationFunctions": []
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "baseSha256": "20219d8ca48e826efdf754666cc8d9f57b0a48cb065be9e39719d1f49552c602",
+      "currentSha256": "a0008e1343fafca6665edd6d247831a2bb26f8f5fbf39abe356e8ee142c7bdd7",
+      "controllers": [
+        {
+          "component": "JournalWorkspace",
+          "unchanged": true,
+          "afterKnownDecorativeStatementRemovalUnchanged": true
+        }
+      ],
+      "semanticAttributeChanges": [],
+      "removedPresentationFunctions": [],
+      "addedPresentationFunctions": []
+    },
+    {
+      "file": "src/components/notebook/NotebookCalendar.tsx",
+      "baseSha256": "6eca787ddb94127daa82bb4085ab8c88ffc23d10c6cf509e664351fdf12636ed",
+      "currentSha256": "b2f89bde0cc5b5ae9c33c0c09d5df83209a4795356901fd011dfb43707c0641c",
+      "controllers": [
+        {
+          "component": "NotebookCalendar",
+          "unchanged": true,
+          "afterKnownDecorativeStatementRemovalUnchanged": true
+        }
+      ],
+      "semanticAttributeChanges": [],
+      "removedPresentationFunctions": [],
+      "addedPresentationFunctions": []
+    }
+  ],
+  "expectedSourceCommit": "cf95c6eda4264385a4f70b41f7df0dee7832ebe7",
+  "gitStatusPorcelain": "",
+  "rawControllerMatches": 16,
+  "rawControllerCount": 17,
+  "allFunctionalControllersPreservedAfterExplicitDecorativeAddition": true,
+  "allExistingHandlerAndControlAttributeValuesPreserved": true,
+  "permittedControllerAddition": {
+    "file": "src/pages/SoundRoom.tsx",
+    "component": "PlayerBar",
+    "addedStatement": "const scene = SECTION_SCENES[SOUND_ROOM_SECTIONS.find((item) => item.sounds.some((entry) => entry.track === player.track))?.id ?? 'relax';",
+    "assessment": "Pure read-only lookup of decorative thumbnail scene; remaining controller tokens are unchanged. Playback/timer/volume state, effects and action logic are preserved."
+  },
+  "journalWorkspacePrecision": "Full file changed through authorized wrappers/classes; controller tokens and all existing handler/control/ARIA attributes match the base. Native photo dialog logic is preserved."
+}

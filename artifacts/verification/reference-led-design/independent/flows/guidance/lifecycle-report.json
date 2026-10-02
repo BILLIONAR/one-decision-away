@@ -1,0 +1,2333 @@
+{
+  "at": "2026-10-02T18:01:39.874Z",
+  "base": "http://127.0.0.1:4183/one-decision-away/",
+  "phase": "reference-led final built preview",
+  "sourceHashes": {
+    "src/utils/recordedNarration.ts": "9bacb11df80eea39cc677afd9660450c24a06ee765b2063730cb849d2586ecca",
+    "src/utils/voiceGuide.ts": "f087d6c852415be301e04518e560dabe73cf6f5b4e91b217b936cd69502a547c",
+    "src/data/englishNarrationAssets.ts": "498b9f951d20359f347052fbf7208a895355a56a166e486db671c4e3ef44ac45",
+    "src/components/FocusTimerHub.tsx": "32a10d4ef52d659bcc5580eae42bc8311982ddf9598c6c1fe989b2bd17d7325a",
+    "src/components/FocusLockView.tsx": "d1bf8e2c0df5349bad8c7580e6c76a9b01b84353ddb896b1c5a64f93b41acfc1"
+  },
+  "buildFiles": {
+    "index.html": "136bf73275f496fbf9a46d3a48e38dd329d84e3b2f719488addc641cb1ec9de0",
+    "assets/Account-BUtpmQCt.js": "e9d1425ab11dfe25da4ddc83c67a32fa02daa95bb9346bbdab42732277455daf",
+    "assets/Bank-B4fHeHe9.js": "1f9286aef05361eeceab2946d1f4a29a729ca6dc5cd36f94211bfbc8e8034aa2",
+    "assets/Bridge-BFzwybNU.js": "91926d0ccacf0aa194a56b462b9390c8c950cc27d885e1c5baecdc5f84efc35c",
+    "assets/Budget-mF0lDrRO.js": "84283c67b227cf6176199ac5622c3c122f5fb17b2b74774840388d8f9ddec09f",
+    "assets/Coach-DhfyC5Qc.js": "f5e4966ca0dda500200deb198034bd76c407e6183bf10dfade180141a8a18cd5",
+    "assets/Courses-P1l8XnpS.js": "be763ea0ed231a2e92a1bcebc447fabbe179b23daed6bfe2783852119979e0e8",
+    "assets/DailyMicroHabits-BCTXc6ot.js": "8757678d921305f3bb16af6cbc36574af871e0e7766ca4ef59f2e64fa8418b14",
+    "assets/DreamArt-DtY52jYN.js": "7ceb508f87a69fb6abe0b31c4a4dd49ed2cc691c1ac9c21cbdd26b73e4d45ba0",
+    "assets/Dreams-DrjXl75v.js": "89d4864c65d064b7f0234dea26cbbb1fc3f4a28c202ae7fd9713effffdb89adc",
+    "assets/Evidence-YchR-cre.js": "48726978287a9417b644d2f39cde962a8551d0066cad62c592454a450f10a4e4",
+    "assets/Focus-D7mrEKfA.js": "8f4095167c2483d58d5efe28f9509ddc2ad737e94c8b34e86b33e7a8e72ce7e3",
+    "assets/FocusTimerHub-Bq1-D6uK.js": "31d8e821280d64181e146a2fa4b766abb4eec1cccc108038687e74b3641cfe5c",
+    "assets/FutureSelf-DYJ4CTaV.js": "e0cb2f9d46e2147a542afb8d03d1ffc36345aa6c09520623d221cae200b83a29",
+    "assets/Legal-ukR_Yoi3.js": "6d262b087e348ba4aa199f7284839bf6cd9c9c6f8f4186119839592920f3bf75",
+    "assets/LifeScore-luPe2HA2.js": "5095d8ed31f53512e792edf167c4621ebffbba564293eac35a9e3ed169229ee0",
+    "assets/Me-DqQQ0xJf.js": "7e447006f40816749728071f2d857fc2cd731249200896d3997137b2e785e173",
+    "assets/MissionFlows-BUvE3mx3.js": "2d34b4c91e6a700e8e26e5851dfa431594fe91153cf9cb17f90330dd6f8db0f2",
+    "assets/Missions-BXOA9I-7.js": "99e42ecebb213d599dbfe30b1ebfdc5da543ed05be3d4fed5c1758ffceba9c52",
+    "assets/Notebook-u2yAuwXw.js": "1a82602efaaba153171d522fa8e06471456f50950831492b113caf65deea1813",
+    "assets/Progress-DKEF5pmA.js": "845c14ddba2ddc100768b6fd2bb1df6ba25d05634643544b608886fd97244bc2",
+    "assets/PublicTwoFutures-CUbtcsHl.js": "6445a9edd9cd601631e9923bf893f774dd8796fe74aa1a5320e0ad0e95db63e5",
+    "assets/Seasons-cpxtnu2f.js": "6063aa3c8faabdd272064f12f56ed0bdad3d53a894d9d5ab57bae258d188561d",
+    "assets/Settings-D-u70Lji.js": "cef023bf4a64c2a15d72221f7c7fe488b64ebc55614c1258c2cd57ed7f3c4028",
+    "assets/SoundRoom-CVt4Apmv.js": "3df84d4c618001f41065c547ee5bf03ad0659a4891c0883938bfa82f70f6afa9",
+    "assets/Support-DJnDP6Bo.js": "18e0b6ebc4e42522fa8feaf4c23bfa02cd0fd44aadf277f31662afa3fcbb277c",
+    "assets/Today-BKLgSgkZ.js": "ad1ef37910108d16fae2844a9783c9ee1f2501881187fc7a98508bb9bb99992d",
+    "assets/Tools-D_hpay-q.js": "d4b8f15c951b9d371dc32c8bc9534b4ddde6a5c9fdd6abf92eebf3f80ca35a61",
+    "assets/TwoFutures-ExdUrXga.js": "39456835d3d46ce393cfddabb81a8687a165970bf91621aa02f735fb8704b608",
+    "assets/Upgrade-B6J7yFhl.js": "343e7a52389efb40191212ef6fb27e7a3446c3488a9fc4aacf0ce37df68049ee",
+    "assets/account-Cdg53s9l.js": "fa9219536cec4edc85a688922677efd4fe83306b8594c4037a9d0a190892029d",
+    "assets/aiCoach.worker-C60CQ1Xm.js": "2911a3e0a34aff2f379a4c39914cd5321e83b48fb0c190e04e9813dd9d19559a",
+    "assets/archive-Bj41JcrI.js": "ddca8777f7608a9db9e2c53b6c4c8151d0327e85cdfb428f8f1b49a38821c9d1",
+    "assets/arrow-up-right-DiER40K2.js": "a2edd1101dcd2c0499734d33968bd3775a535b1e54ec05105e4941fa9577b2dc",
+    "assets/calendar-days-lSOd8VwH.js": "5df3de1fe44d7d2ac20cc113ed8d09e985eefcfdcae0c22800b3c272403c03cd",
+    "assets/charts-Bzd-XkHo.js": "2d7b9b31411e27fb1b9b31b24e3ed0884969780d21dbe5da936cf583f3e7f820",
+    "assets/chevron-right-CoCgN_Aj.js": "d6396f6ae9256b08fd94b35209442c038fb8837c1d6538d17e819b28b4f35ace",
+    "assets/circle-check-BqOuhhGw.js": "2223336193077e89ad1309b5944079b40b0147a1cd2a097ee07e83d992ad9d06",
+    "assets/courseEntryCopy-ClIZWujk.js": "5c956cd2c43cf451c4bbe07a796a00e2623cc2d01d9fdad99afc9976c6462d4e",
+    "assets/courses-CKtnra3s.js": "065e50aeb656d6a99eba1fb1ea1091bd330fdf9be272670136d23a158ce49d6b",
+    "assets/de-FmFgRqLi.js": "49751e83c2dabf8a8ead01b84ca4a250f0f305b4845f33a0cd4ffe880e409d63",
+    "assets/es-D_dh5elY.js": "eac1e65c2e0e1c64bacd16a9f3d108852a3d1da14522408a183162437b5f13e4",
+    "assets/fr-FmFgRqLi.js": "49751e83c2dabf8a8ead01b84ca4a250f0f305b4845f33a0cd4ffe880e409d63",
+    "assets/genai-DNIGCYRr.js": "8a6e1b7ad484e6f05eb9a1a9c350f45654173834e8a5954adcb6822f390bc2b4",
+    "assets/growth-CtfcX3mW.js": "18302f2287d962e3923bb4a8924f7e79d99b1a95f0bae11a29dc54e4174ecf63",
+    "assets/headphones-CIGwFwYg.js": "63b823587be742b7f8c2b449d3c239862330c10d4042a31fcf4f17f4a7f3e2bb",
+    "assets/index-B8I4rwjl.js": "6e8e0aca579bff6190fcdb5404057026ebf1263e0b8d12ad849bc6b019493563",
+    "assets/index-BMm9S-UO.js": "fdea32eebf4492e73dd3c40dd045456a6cb22e10ef2d522a1c6769b1644782cd",
+    "assets/index-Bv89n1gz.js": "8d7e2bad5b3ab1d27b68497283d868eca70d301cf95c3cd01c56697880972411",
+    "assets/index-C9T6-ZQe.js": "4930d944cc24fefc2561e8ded6c48676838ea264117f909f6084951fed05abe4",
+    "assets/index-D8kpQV7Y.js": "2ee25cf79deb5c6fae43d0041c819d1da328832baf77b6c3a665fc2a22fb7613",
+    "assets/index-K8807UBl.js": "8e2e9b0281c62c6e34bc580e438614650a23d307d4078e14c98139145d134a02",
+    "assets/index-MQdpGVg6.js": "b634c21f5d01961777c6dfbde249e7502eeee9bc0109150fa37d3433fe642ce6",
+    "assets/index-mkXUpFut.js": "8a0d3ea36662b15a950b52a928df25253db0331f6ab91867118b9e72f6b55c08",
+    "assets/it-FmFgRqLi.js": "49751e83c2dabf8a8ead01b84ca4a250f0f305b4845f33a0cd4ffe880e409d63",
+    "assets/lock-keyhole-C7rYGV-f.js": "6e2a8a72d43d3321c87d5b175de7adb49c545efda4eb32710e32fbd162b9637f",
+    "assets/mail-s8sf2tew.js": "c683fdafe5df3293fc441b1ccebce84f3306d1c031f890d612bc081a3ee67a75",
+    "assets/media-2mgEiOLR.js": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a",
+    "assets/moon-DVa7WISQ.js": "44bb12e54a8fc048bb7ff4f546c774218235f46559bc19ed98654bfe61c961f5",
+    "assets/motion-HNvQpnN_.js": "3b8beefe6f5abed46ca686013afdcd2ea9c013557b337d8e606719a91894be70",
+    "assets/music-wTH8IY-O.js": "8bec2c20522453acbf5b1858f762ea25ea495fa35e3d15b8c5235e35402bf707",
+    "assets/pen-line-CrVmcPAz.js": "5dde1b9ed6ca8633abf2934a6f790f769c3b8a0bb15acb36eb9aca3b9903d5ef",
+    "assets/pencil-BPIFqBI_.js": "2ff42dc4c12a4f24d55ba64c0ead8f5ead72b81a8b55cef4f0e01b40c03207ba",
+    "assets/purchaseIdentityBinding-tFcjnp2u.js": "0be60da02104ddc2cf5c35fd01c384f90c63a4ca056336be444d1aae5dc7c6a9",
+    "assets/purchases-DH0EKhX5.js": "8277a4e5e3bc2a2cc5182c0ab04348e51b1e901ecd523ea86e220968dca05c6c",
+    "assets/react-5GCfeWye.js": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f",
+    "assets/refresh-cw-CCEyaKSE.js": "a03233402eb53921708960e9275e05ab5ca06200f1cb26f560afa641b7728be4",
+    "assets/rewards-yw8vENDZ.js": "d7c708e08087472c0c62a6f3b270ad4479e7e96458bc89312a2574f2b0e728cc",
+    "assets/rotate-ccw-LJMMB2_V.js": "49e1b80ae9e7862de87d4c0fbbaa168533fb504b67a8f467be5effceeab52782",
+    "assets/route-DkC7TBpe.js": "017e69ad8d5ea2ded61a4d8042d97de476403649fc78ff78e1dc29c6692a1c78",
+    "assets/ru-FmFgRqLi.js": "49751e83c2dabf8a8ead01b84ca4a250f0f305b4845f33a0cd4ffe880e409d63",
+    "assets/search-BGdRaMTj.js": "deb2cb86be53592fe86fa538c29584e9978380ede8c125f881f6e06e08282904",
+    "assets/share-2-BsQcQY3Y.js": "ea11018b04712486a4ffb3de95a906e65feb0950c135c851158ce88dce26deea",
+    "assets/shuffle-DXs-4Odm.js": "cf1ab83457df1ee885100a733778fff94acb4372aea2483ef98a353f6188bd19",
+    "assets/sparkles-DzERVaVl.js": "56f29da42b729a2efa7b90ab71e4b0f4d2e9ce532e554317573b70d7e02ba62c",
+    "assets/square-CVnF-TCv.js": "69d0e9a4cece334c7e7f0475f3582a676a42b5f027ce507cc8f2a6257bca268c",
+    "assets/sun-moon-C8QRyRkN.js": "958b5260e80be8d1ed25da8690e9e416214d6a8b318a82db69dd6e3162c2996b",
+    "assets/supabase--wUpN4Ei.js": "4eabff7c823396ed92c53d7ef1e3048817d69196726a12688e7e62483013d1dd",
+    "assets/support-DlYYkNf6.js": "53b90f57df31c266a46bfc99d13bd74d8f4eb89e6f1e1cb08cbd62b04cce16f0",
+    "assets/timer-WJvgy-_5.js": "6d007351dc98c786d57610a4f19ac61584a670a17d3068380d087da0aed1cbce",
+    "assets/tr-Bxmf0hre.js": "fdc833e2f7ec386e09186b898a60fc533a8f1d3d1cc174d236a3d6e00d590edf",
+    "assets/trash-2-D0Bk6dBH.js": "ce9ccd85d9c705e5e3ddc758c06835e9c82eef291ed195b665f73814d607db12",
+    "assets/trending-up-BOwCrrp0.js": "5fc4e2dbe93cd4d3b741a9d55f81b6b71d10c91d916ff89b2e89c46388e94c3c",
+    "assets/useCloudState-CK7ljgQU.js": "e9f0e4e3895b268d2c800d3149bf32b87bd1bdd555d6dfcacf280481d4a795c4",
+    "assets/user-round-CjDQGeXf.js": "12f9d3893e2ebd6762e8cfd984b51b223d5388ade9640268f241df6a1663ee05",
+    "assets/waves-D0_crkm-.js": "58a6761299738e3fbb77858d6c45601bfa3712db77537e32d4d66135da9bdfb0",
+    "assets/web-28UQUrJN.js": "c02b74ff1fa4bb34cf7f70f53adbc30bf578b142dd53a04ad416c2184684290c",
+    "assets/web-ADHw7QMS.js": "77cdd52cd3aecc3e29dec3ff075bc0632b4273a8e1a458d30514ccd3ea28ca14",
+    "assets/web-BRQY5o3N.js": "e715c7d40bb72ecce5cd5f282d8ae78b5dac512f7f60d289e194c101642bb278",
+    "assets/web-_5BKAEjT.js": "36cf69ba83c2b6f90ccc2a36803af72f8a3ed273cc961c04c1624809664c49cb",
+    "assets/web-ma2D2fGR.js": "ab817d67377af39707100fdd3a13347332713cbea33ba707b64deea4c8849a2b",
+    "assets/wind-DPWkDUyC.js": "1478f82ff7f005fe07c374df14829219e22638a3f244d41edd76a54f44d77518"
+  },
+  "assetManifestSHA256": "2ba3d11b087b8678c5c574c0a5437de4cc6a222a6733cc9155061dde2e54523e",
+  "checks": [
+    {
+      "case": "normal-service-worker-first-load-no-mp3",
+      "label": "Normal service-worker-enabled first use requests zero MP3",
+      "serviceWorkers": {
+        "supported": true,
+        "registrations": [
+          {
+            "scope": "http://127.0.0.1:4183/one-decision-away/",
+            "active": "http://127.0.0.1:4183/one-decision-away/sw.js"
+          }
+        ],
+        "controller": "http://127.0.0.1:4183/one-decision-away/sw.js"
+      }
+    },
+    {
+      "case": "start-pause-resume-replay-mute-stop",
+      "label": "Final build first app load requests zero MP3"
+    },
+    {
+      "case": "start-pause-resume-replay-mute-stop",
+      "label": "Start fetches only current and next two cues",
+      "unique": [
+        "gm-relax-00.en-US.v1.mp3",
+        "gm-relax-01.en-US.v1.mp3",
+        "gm-relax-02.en-US.v1.mp3"
+      ],
+      "requestCount": 3
+    },
+    {
+      "case": "start-pause-resume-replay-mute-stop",
+      "label": "Pause stops and disconnects the recorded source"
+    },
+    {
+      "case": "start-pause-resume-replay-mute-stop",
+      "label": "Resume starts from measured playback offset",
+      "offset": 0.40054421768707504,
+      "duration": 6.5
+    },
+    {
+      "case": "start-pause-resume-replay-mute-stop",
+      "label": "Repeat retires the resumed source and restarts the current cue"
+    },
+    {
+      "case": "start-pause-resume-replay-mute-stop",
+      "label": "Keyboard Home sets visible voice volume to zero"
+    },
+    {
+      "case": "start-pause-resume-replay-mute-stop",
+      "label": "Volume zero sets the active real GainNode to zero"
+    },
+    {
+      "case": "start-pause-resume-replay-mute-stop",
+      "label": "Muted repeat creates only a gain-zero recorded source",
+      "source": {
+        "index": 0,
+        "duration": 6.5,
+        "channels": 1,
+        "sampleRate": 44100,
+        "samples": 286650,
+        "decodeMs": 22.200000002980232,
+        "at": 4344.5,
+        "offset": 0,
+        "gainAtStart": 0,
+        "gainIndex": 0,
+        "contextState": "running",
+        "stopped": false,
+        "disconnected": false
+      }
+    },
+    {
+      "case": "start-pause-resume-replay-mute-stop",
+      "label": "Keyboard volume update reaches the active recorded GainNode"
+    },
+    {
+      "case": "start-pause-resume-replay-mute-stop",
+      "label": "End session stops and disconnects all started recorded sources"
+    },
+    {
+      "case": "start-pause-resume-replay-mute-stop",
+      "label": "No late source or fallback utterance after end"
+    },
+    {
+      "case": "preview-stop-during-delayed-load",
+      "label": "Current recording request is held before decode/start"
+    },
+    {
+      "case": "preview-stop-during-delayed-load",
+      "label": "stop: delayed old cue never starts or invokes fallback",
+      "sources": [],
+      "modes": [
+        {
+          "value": "idle",
+          "at": 1561.5
+        },
+        {
+          "value": "loading",
+          "at": 1632.7000000029802
+        },
+        {
+          "value": "idle",
+          "at": 1742.5
+        }
+      ]
+    },
+    {
+      "case": "preview-switch-during-delayed-load",
+      "label": "Current recording request is held before decode/start"
+    },
+    {
+      "case": "preview-switch-during-delayed-load",
+      "label": "switch: delayed old cue never starts or invokes fallback",
+      "sources": [
+        {
+          "index": 0,
+          "duration": 9.199977324263038,
+          "channels": 1,
+          "sampleRate": 44100,
+          "samples": 405719,
+          "decodeMs": 27.19999998807907,
+          "at": 1516.0999999940395,
+          "offset": 0,
+          "gainAtStart": 1,
+          "gainIndex": 0,
+          "contextState": "running",
+          "stopped": false,
+          "disconnected": false
+        }
+      ],
+      "modes": [
+        {
+          "value": "idle",
+          "at": 1300.7999999970198
+        },
+        {
+          "value": "loading",
+          "at": 1376.7999999970198
+        },
+        {
+          "value": "recorded",
+          "at": 1518.0999999940395
+        }
+      ]
+    },
+    {
+      "case": "pause-resume-during-delayed-load",
+      "label": "Guided current cue load is pending before Pause"
+    },
+    {
+      "case": "pause-resume-during-delayed-load",
+      "label": "Paused pending load cannot start recorded or device output"
+    },
+    {
+      "case": "pause-resume-during-delayed-load",
+      "label": "Resume retries the pending current cue in the real audio context",
+      "requests": [
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+          "at": 1790964114775,
+          "serviceWorker": false
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-01.en-US.v1.mp3",
+          "at": 1790964114775,
+          "serviceWorker": false
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-02.en-US.v1.mp3",
+          "at": 1790964114776,
+          "serviceWorker": false
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+          "at": 1790964117130,
+          "serviceWorker": false
+        }
+      ],
+      "state": {
+        "sources": [
+          {
+            "index": 2,
+            "duration": 6.5,
+            "channels": 1,
+            "sampleRate": 44100,
+            "samples": 286650,
+            "decodeMs": 20.100000008940697,
+            "at": 3671.2000000029802,
+            "offset": 0,
+            "gainAtStart": 1,
+            "gainIndex": 0,
+            "contextState": "running",
+            "stopped": false,
+            "disconnected": false
+          }
+        ],
+        "decodes": [
+          {
+            "index": 0,
+            "duration": 7.949977324263038,
+            "channels": 1,
+            "sampleRate": 44100,
+            "samples": 350594,
+            "decodeMs": 23.399999991059303
+          },
+          {
+            "index": 1,
+            "duration": 7.449977324263038,
+            "channels": 1,
+            "sampleRate": 44100,
+            "samples": 328544,
+            "decodeMs": 24.400000005960464
+          },
+          {
+            "index": 2,
+            "duration": 6.5,
+            "channels": 1,
+            "sampleRate": 44100,
+            "samples": 286650,
+            "decodeMs": 20.100000008940697
+          }
+        ],
+        "speech": [],
+        "events": [
+          {
+            "action": "recorded-start",
+            "at": 3671.2000000029802,
+            "index": 0
+          }
+        ],
+        "modes": [
+          {
+            "value": "idle",
+            "at": 1177.4000000059605
+          },
+          {
+            "value": "loading",
+            "at": 3263.7000000029802
+          },
+          {
+            "value": "recorded",
+            "at": 3677.4000000059605
+          }
+        ],
+        "gains": [
+          1,
+          0.14000000059604645,
+          0.0014570323983207345,
+          0.001171282259747386,
+          0.0010253052460029721,
+          0.0007691924693062901,
+          1,
+          1,
+          0.25,
+          0.25,
+          140,
+          0.04076847806572914,
+          0.026686182245612144,
+          0.018694709986448288,
+          0.011060300283133984,
+          0.005526255816221237,
+          0.40305832028388977,
+          1,
+          0.25,
+          0.25,
+          140
+        ],
+        "speechVoices": []
+      }
+    },
+    {
+      "case": "offline-verified-cache-replay-after-session-switch",
+      "label": "First playback writes verified current-cue bytes to native CacheStorage",
+      "cacheEntries": [
+        {
+          "name": "oda-narration:%2Fone-decision-away%2F:en-US:v1",
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3"
+        }
+      ]
+    },
+    {
+      "case": "offline-verified-cache-replay-after-session-switch",
+      "label": "Offline replay re-decodes CacheStorage after another session cleared memory, with zero network requests",
+      "before": 2,
+      "after": 2,
+      "decodes": [
+        {
+          "index": 0,
+          "duration": 6.5,
+          "channels": 1,
+          "sampleRate": 44100,
+          "samples": 286650,
+          "decodeMs": 31.299999997019768
+        },
+        {
+          "index": 1,
+          "duration": 6.5,
+          "channels": 1,
+          "sampleRate": 44100,
+          "samples": 286650,
+          "decodeMs": 35.20000000298023
+        }
+      ]
+    },
+    {
+      "case": "missing-file-no-english-fixture",
+      "label": "Missing MP3 admits only the requested strict English device fallback",
+      "state": {
+        "sources": [],
+        "decodes": [],
+        "speech": [],
+        "events": [],
+        "modes": [
+          {
+            "value": "idle",
+            "at": 918.4000000059605
+          },
+          {
+            "value": "loading",
+            "at": 1148.800000011921
+          },
+          {
+            "value": "unavailable",
+            "at": 1201.2000000029802
+          }
+        ],
+        "gains": [
+          1
+        ],
+        "speechVoices": [
+          {
+            "lang": "tr-TR",
+            "name": "QA Turkish fixture"
+          }
+        ]
+      }
+    },
+    {
+      "case": "missing-file-no-english-fixture",
+      "label": "No English fixture leaves explicit localized unavailable caption"
+    },
+    {
+      "case": "missing-file-english-device-fixture",
+      "label": "Missing MP3 admits only the requested strict English device fallback",
+      "state": {
+        "sources": [],
+        "decodes": [],
+        "speech": [
+          {
+            "text": "Welcome. Find a comfortable position, and let your eyes gently close.",
+            "lang": "en-US",
+            "voiceLang": "en-US",
+            "voiceName": "QA English fixture",
+            "volume": 1
+          }
+        ],
+        "events": [],
+        "modes": [
+          {
+            "value": "idle",
+            "at": 1170.4000000059605
+          },
+          {
+            "value": "loading",
+            "at": 1342
+          },
+          {
+            "value": "device",
+            "at": 1507.1000000089407
+          }
+        ],
+        "gains": [
+          1
+        ],
+        "speechVoices": [
+          {
+            "lang": "tr-TR",
+            "name": "QA Turkish fixture"
+          },
+          {
+            "lang": "en-US",
+            "name": "QA English fixture"
+          }
+        ]
+      }
+    },
+    {
+      "case": "missing-file-english-device-fixture",
+      "label": "Fallback preserves English source text despite Turkish display locale",
+      "utterance": {
+        "text": "Welcome. Find a comfortable position, and let your eyes gently close.",
+        "lang": "en-US",
+        "voiceLang": "en-US",
+        "voiceName": "QA English fixture",
+        "volume": 1
+      }
+    },
+    {
+      "case": "notebook-en-device-locale-preserved",
+      "label": "Notebook words remain verbatim in the display-locale device voice with zero MP3",
+      "utterance": {
+        "text": "I keep one small promise each day.",
+        "lang": "en-US",
+        "voiceLang": "en-US",
+        "voiceName": "QA English fixture",
+        "volume": 1
+      }
+    },
+    {
+      "case": "notebook-tr-device-locale-preserved",
+      "label": "Notebook words remain verbatim in the display-locale device voice with zero MP3",
+      "utterance": {
+        "text": "Kendime verdiğim sözü tutuyorum.",
+        "lang": "tr-TR",
+        "voiceLang": "tr-TR",
+        "voiceName": "QA Turkish fixture",
+        "volume": 1
+      }
+    },
+    {
+      "case": "notebook-es-device-locale-preserved",
+      "label": "Notebook words remain verbatim in the display-locale device voice with zero MP3",
+      "utterance": {
+        "text": "Cumplo una promesa pequeña cada día.",
+        "lang": "es-ES",
+        "voiceLang": "es-ES",
+        "voiceName": "QA Spanish fixture",
+        "volume": 1
+      }
+    },
+    {
+      "case": "final-layout-en-320",
+      "label": "Final guidance list retains localized fit and no MP3 preload",
+      "width": 320,
+      "scroll": 320,
+      "lang": "en",
+      "rows": 11
+    },
+    {
+      "case": "final-layout-en-390",
+      "label": "Final guidance list retains localized fit and no MP3 preload",
+      "width": 390,
+      "scroll": 390,
+      "lang": "en",
+      "rows": 11
+    },
+    {
+      "case": "final-layout-en-1440",
+      "label": "Final guidance list retains localized fit and no MP3 preload",
+      "width": 1440,
+      "scroll": 1440,
+      "lang": "en",
+      "rows": 11
+    },
+    {
+      "case": "final-layout-tr-320",
+      "label": "Final guidance list retains localized fit and no MP3 preload",
+      "width": 320,
+      "scroll": 320,
+      "lang": "tr",
+      "rows": 11
+    },
+    {
+      "case": "final-layout-tr-390",
+      "label": "Final guidance list retains localized fit and no MP3 preload",
+      "width": 390,
+      "scroll": 390,
+      "lang": "tr",
+      "rows": 11
+    },
+    {
+      "case": "final-layout-es-320",
+      "label": "Final guidance list retains localized fit and no MP3 preload",
+      "width": 320,
+      "scroll": 320,
+      "lang": "es",
+      "rows": 11
+    },
+    {
+      "case": "final-layout-es-390",
+      "label": "Final guidance list retains localized fit and no MP3 preload",
+      "width": 390,
+      "scroll": 390,
+      "lang": "es",
+      "rows": 11
+    }
+  ],
+  "failures": [],
+  "errors": [],
+  "blockedRequests": [],
+  "cases": [
+    {
+      "name": "normal-service-worker-first-load-no-mp3",
+      "passed": true,
+      "elapsedMs": 3040,
+      "evidence": {
+        "requests": [],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/index-mkXUpFut.js",
+            "status": 200,
+            "sha256": "8a0d3ea36662b15a950b52a928df25253db0331f6ab91867118b9e72f6b55c08"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/Focus-D7mrEKfA.js",
+            "status": 200,
+            "sha256": "8f4095167c2483d58d5efe28f9509ddc2ad737e94c8b34e86b33e7a8e72ce7e3"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/FocusTimerHub-Bq1-D6uK.js",
+            "status": 200,
+            "sha256": "31d8e821280d64181e146a2fa4b766abb4eec1cccc108038687e74b3641cfe5c"
+          }
+        ],
+        "pageErrors": [],
+        "serviceWorkers": {
+          "supported": true,
+          "registrations": [
+            {
+              "scope": "http://127.0.0.1:4183/one-decision-away/",
+              "active": "http://127.0.0.1:4183/one-decision-away/sw.js"
+            }
+          ],
+          "controller": "http://127.0.0.1:4183/one-decision-away/sw.js"
+        },
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [],
+          "events": [],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1256.5999999940395
+            }
+          ],
+          "gains": [],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "start-pause-resume-replay-mute-stop",
+      "passed": true,
+      "elapsedMs": 5002,
+      "evidence": {
+        "requests": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+            "at": 1790964105263,
+            "serviceWorker": false
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-01.en-US.v1.mp3",
+            "at": 1790964105263,
+            "serviceWorker": false
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-02.en-US.v1.mp3",
+            "at": 1790964105263,
+            "serviceWorker": false
+          }
+        ],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/index-mkXUpFut.js",
+            "status": 200,
+            "sha256": "8a0d3ea36662b15a950b52a928df25253db0331f6ab91867118b9e72f6b55c08"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/Focus-D7mrEKfA.js",
+            "status": 200,
+            "sha256": "8f4095167c2483d58d5efe28f9509ddc2ad737e94c8b34e86b33e7a8e72ce7e3"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/FocusTimerHub-Bq1-D6uK.js",
+            "status": 200,
+            "sha256": "31d8e821280d64181e146a2fa4b766abb4eec1cccc108038687e74b3641cfe5c"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [
+            {
+              "index": 0,
+              "duration": 6.5,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 286650,
+              "decodeMs": 22.200000002980232,
+              "at": 3539.2000000029802,
+              "offset": 0,
+              "gainAtStart": 1,
+              "gainIndex": 0,
+              "contextState": "running",
+              "stopped": true,
+              "disconnected": true,
+              "stoppedAt": 3943.0999999940395
+            },
+            {
+              "index": 0,
+              "duration": 6.5,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 286650,
+              "decodeMs": 22.200000002980232,
+              "at": 4191.79999999702,
+              "offset": 0.40054421768707504,
+              "gainAtStart": 1,
+              "gainIndex": 0,
+              "contextState": "running",
+              "stopped": true,
+              "disconnected": true,
+              "stoppedAt": 4270.70000000298
+            },
+            {
+              "index": 0,
+              "duration": 6.5,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 286650,
+              "decodeMs": 22.200000002980232,
+              "at": 4272.70000000298,
+              "offset": 0,
+              "gainAtStart": 1,
+              "gainIndex": 0,
+              "contextState": "running",
+              "stopped": true,
+              "disconnected": true,
+              "stoppedAt": 4341.5
+            },
+            {
+              "index": 0,
+              "duration": 6.5,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 286650,
+              "decodeMs": 22.200000002980232,
+              "at": 4344.5,
+              "offset": 0,
+              "gainAtStart": 0,
+              "gainIndex": 0,
+              "contextState": "running",
+              "stopped": true,
+              "disconnected": true,
+              "stoppedAt": 4472.0999999940395
+            }
+          ],
+          "decodes": [
+            {
+              "index": 0,
+              "duration": 6.5,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 286650,
+              "decodeMs": 22.200000002980232
+            },
+            {
+              "index": 1,
+              "duration": 7.449977324263038,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 328544,
+              "decodeMs": 26.700000002980232
+            },
+            {
+              "index": 2,
+              "duration": 7.949977324263038,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 350594,
+              "decodeMs": 38.70000000298023
+            }
+          ],
+          "speech": [],
+          "events": [
+            {
+              "action": "recorded-start",
+              "at": 3539.2000000029802,
+              "index": 0
+            },
+            {
+              "action": "recorded-stop",
+              "at": 3943.0999999940395
+            },
+            {
+              "action": "recorded-start",
+              "at": 4191.79999999702,
+              "index": 1
+            },
+            {
+              "action": "recorded-stop",
+              "at": 4270.70000000298
+            },
+            {
+              "action": "recorded-start",
+              "at": 4272.70000000298,
+              "index": 2
+            },
+            {
+              "action": "recorded-stop",
+              "at": 4341.5
+            },
+            {
+              "action": "recorded-start",
+              "at": 4344.5,
+              "index": 3
+            },
+            {
+              "action": "recorded-stop",
+              "at": 4472.0999999940395
+            }
+          ],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1275.3999999910593
+            },
+            {
+              "value": "recorded",
+              "at": 3541.5
+            },
+            {
+              "value": "loading",
+              "at": 4272.5999999940395
+            },
+            {
+              "value": "recorded",
+              "at": 4273.5
+            },
+            {
+              "value": "loading",
+              "at": 4344.29999999702
+            },
+            {
+              "value": "recorded",
+              "at": 4346.29999999702
+            },
+            {
+              "value": "idle",
+              "at": 4474.70000000298
+            }
+          ],
+          "gains": [
+            0.05000000074505806,
+            0.14000000059604645,
+            0.00013825585483573377,
+            0.00013465412484947592,
+            0.00013250419578980654,
+            0.0001279784773942083,
+            1,
+            1,
+            0.25,
+            0.25,
+            140,
+            0.024433361366391182,
+            0.016581397503614426,
+            0.011973445303738117,
+            0.007407704833894968,
+            0.00392658356577158,
+            1,
+            1,
+            0.25,
+            0.25,
+            140,
+            0.2778085470199585,
+            0.15883569419384003,
+            0.09931851178407669,
+            0.04969334602355957,
+            0.01989537477493286
+          ],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "preview-stop-during-delayed-load",
+      "passed": true,
+      "elapsedMs": 2439,
+      "evidence": {
+        "requests": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+            "at": 1790964110468,
+            "serviceWorker": false
+          }
+        ],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/index-mkXUpFut.js",
+            "status": 200,
+            "sha256": "8a0d3ea36662b15a950b52a928df25253db0331f6ab91867118b9e72f6b55c08"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/Focus-D7mrEKfA.js",
+            "status": 200,
+            "sha256": "8f4095167c2483d58d5efe28f9509ddc2ad737e94c8b34e86b33e7a8e72ce7e3"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/FocusTimerHub-Bq1-D6uK.js",
+            "status": 200,
+            "sha256": "31d8e821280d64181e146a2fa4b766abb4eec1cccc108038687e74b3641cfe5c"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [],
+          "events": [],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1561.5
+            },
+            {
+              "value": "loading",
+              "at": 1632.7000000029802
+            },
+            {
+              "value": "idle",
+              "at": 1742.5
+            }
+          ],
+          "gains": [
+            1
+          ],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "preview-switch-during-delayed-load",
+      "passed": true,
+      "elapsedMs": 2193,
+      "evidence": {
+        "requests": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+            "at": 1790964112592,
+            "serviceWorker": false
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-dopamine-00.en-US.v1.mp3",
+            "at": 1790964112679,
+            "serviceWorker": false
+          }
+        ],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/index-mkXUpFut.js",
+            "status": 200,
+            "sha256": "8a0d3ea36662b15a950b52a928df25253db0331f6ab91867118b9e72f6b55c08"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/Focus-D7mrEKfA.js",
+            "status": 200,
+            "sha256": "8f4095167c2483d58d5efe28f9509ddc2ad737e94c8b34e86b33e7a8e72ce7e3"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/FocusTimerHub-Bq1-D6uK.js",
+            "status": 200,
+            "sha256": "31d8e821280d64181e146a2fa4b766abb4eec1cccc108038687e74b3641cfe5c"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [
+            {
+              "index": 0,
+              "duration": 9.199977324263038,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 405719,
+              "decodeMs": 27.19999998807907,
+              "at": 1516.0999999940395,
+              "offset": 0,
+              "gainAtStart": 1,
+              "gainIndex": 0,
+              "contextState": "running",
+              "stopped": true,
+              "disconnected": true,
+              "stoppedAt": 2016.2000000029802
+            }
+          ],
+          "decodes": [
+            {
+              "index": 0,
+              "duration": 9.199977324263038,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 405719,
+              "decodeMs": 27.19999998807907
+            }
+          ],
+          "speech": [],
+          "events": [
+            {
+              "action": "recorded-start",
+              "at": 1516.0999999940395,
+              "index": 0
+            },
+            {
+              "action": "recorded-stop",
+              "at": 2016.2000000029802
+            }
+          ],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1300.7999999970198
+            },
+            {
+              "value": "loading",
+              "at": 1376.7999999970198
+            },
+            {
+              "value": "recorded",
+              "at": 1518.0999999940395
+            },
+            {
+              "value": "idle",
+              "at": 2018.2000000029802
+            }
+          ],
+          "gains": [
+            1
+          ],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "pause-resume-during-delayed-load",
+      "passed": true,
+      "elapsedMs": 4053,
+      "evidence": {
+        "requests": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+            "at": 1790964114775,
+            "serviceWorker": false
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-01.en-US.v1.mp3",
+            "at": 1790964114775,
+            "serviceWorker": false
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-02.en-US.v1.mp3",
+            "at": 1790964114776,
+            "serviceWorker": false
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+            "at": 1790964117130,
+            "serviceWorker": false
+          }
+        ],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/index-mkXUpFut.js",
+            "status": 200,
+            "sha256": "8a0d3ea36662b15a950b52a928df25253db0331f6ab91867118b9e72f6b55c08"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/Focus-D7mrEKfA.js",
+            "status": 200,
+            "sha256": "8f4095167c2483d58d5efe28f9509ddc2ad737e94c8b34e86b33e7a8e72ce7e3"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/FocusTimerHub-Bq1-D6uK.js",
+            "status": 200,
+            "sha256": "31d8e821280d64181e146a2fa4b766abb4eec1cccc108038687e74b3641cfe5c"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [
+            {
+              "index": 2,
+              "duration": 6.5,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 286650,
+              "decodeMs": 20.100000008940697,
+              "at": 3671.2000000029802,
+              "offset": 0,
+              "gainAtStart": 1,
+              "gainIndex": 0,
+              "contextState": "running",
+              "stopped": true,
+              "disconnected": true,
+              "stoppedAt": 3796.7000000029802
+            }
+          ],
+          "decodes": [
+            {
+              "index": 0,
+              "duration": 7.949977324263038,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 350594,
+              "decodeMs": 23.399999991059303
+            },
+            {
+              "index": 1,
+              "duration": 7.449977324263038,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 328544,
+              "decodeMs": 24.400000005960464
+            },
+            {
+              "index": 2,
+              "duration": 6.5,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 286650,
+              "decodeMs": 20.100000008940697
+            }
+          ],
+          "speech": [],
+          "events": [
+            {
+              "action": "recorded-start",
+              "at": 3671.2000000029802,
+              "index": 0
+            },
+            {
+              "action": "recorded-stop",
+              "at": 3796.7000000029802
+            }
+          ],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1177.4000000059605
+            },
+            {
+              "value": "loading",
+              "at": 3263.7000000029802
+            },
+            {
+              "value": "recorded",
+              "at": 3677.4000000059605
+            },
+            {
+              "value": "idle",
+              "at": 3801.6000000089407
+            }
+          ],
+          "gains": [
+            1,
+            0.14000000059604645,
+            0.0010529197752475739,
+            0.0008691272232681513,
+            0.0007731867954134941,
+            0.000600621453486383,
+            1,
+            1,
+            0.25,
+            0.25,
+            140,
+            0.04076847806572914,
+            0.026686182245612144,
+            0.018694709986448288,
+            0.011060300283133984,
+            0.005526255816221237,
+            0.999621570110321,
+            1,
+            0.25,
+            0.25,
+            140
+          ],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "offline-verified-cache-replay-after-session-switch",
+      "passed": true,
+      "elapsedMs": 2502,
+      "evidence": {
+        "requests": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+            "at": 1790964118987,
+            "serviceWorker": false
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-dopamine-00.en-US.v1.mp3",
+            "at": 1790964119218,
+            "serviceWorker": false
+          }
+        ],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/index-mkXUpFut.js",
+            "status": 200,
+            "sha256": "8a0d3ea36662b15a950b52a928df25253db0331f6ab91867118b9e72f6b55c08"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/Focus-D7mrEKfA.js",
+            "status": 200,
+            "sha256": "8f4095167c2483d58d5efe28f9509ddc2ad737e94c8b34e86b33e7a8e72ce7e3"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/FocusTimerHub-Bq1-D6uK.js",
+            "status": 200,
+            "sha256": "31d8e821280d64181e146a2fa4b766abb4eec1cccc108038687e74b3641cfe5c"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [
+            {
+              "index": 0,
+              "duration": 6.5,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 286650,
+              "decodeMs": 31.299999997019768,
+              "at": 1494.0999999940395,
+              "offset": 0,
+              "gainAtStart": 1,
+              "gainIndex": 0,
+              "contextState": "running",
+              "stopped": true,
+              "disconnected": true,
+              "stoppedAt": 1592
+            },
+            {
+              "index": 1,
+              "duration": 6.5,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 286650,
+              "decodeMs": 35.20000000298023,
+              "at": 1824.4000000059605,
+              "offset": 0,
+              "gainAtStart": 1,
+              "gainIndex": 0,
+              "contextState": "running",
+              "stopped": true,
+              "disconnected": true,
+              "stoppedAt": 2289.5999999940395
+            }
+          ],
+          "decodes": [
+            {
+              "index": 0,
+              "duration": 6.5,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 286650,
+              "decodeMs": 31.299999997019768
+            },
+            {
+              "index": 1,
+              "duration": 6.5,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 286650,
+              "decodeMs": 35.20000000298023
+            }
+          ],
+          "speech": [],
+          "events": [
+            {
+              "action": "recorded-start",
+              "at": 1494.0999999940395,
+              "index": 0
+            },
+            {
+              "action": "recorded-stop",
+              "at": 1592
+            },
+            {
+              "action": "recorded-start",
+              "at": 1824.4000000059605,
+              "index": 1
+            },
+            {
+              "action": "recorded-stop",
+              "at": 2289.5999999940395
+            }
+          ],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1313.7000000029802
+            },
+            {
+              "value": "loading",
+              "at": 1427.7999999970198
+            },
+            {
+              "value": "recorded",
+              "at": 1498.2000000029802
+            },
+            {
+              "value": "idle",
+              "at": 1593.2999999970198
+            },
+            {
+              "value": "loading",
+              "at": 1658.7999999970198
+            },
+            {
+              "value": "unavailable",
+              "at": 1691.7999999970198
+            },
+            {
+              "value": "loading",
+              "at": 1775.5999999940395
+            },
+            {
+              "value": "recorded",
+              "at": 1829.9000000059605
+            },
+            {
+              "value": "idle",
+              "at": 2291.7000000029802
+            }
+          ],
+          "gains": [
+            1
+          ],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "missing-file-no-english-fixture",
+      "passed": true,
+      "elapsedMs": 1778,
+      "evidence": {
+        "requests": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+            "at": 1790964121397,
+            "serviceWorker": false
+          }
+        ],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/index-mkXUpFut.js",
+            "status": 200,
+            "sha256": "8a0d3ea36662b15a950b52a928df25253db0331f6ab91867118b9e72f6b55c08"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/tr-Bxmf0hre.js",
+            "status": 200,
+            "sha256": "fdc833e2f7ec386e09186b898a60fc533a8f1d3d1cc174d236a3d6e00d590edf"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/Focus-D7mrEKfA.js",
+            "status": 200,
+            "sha256": "8f4095167c2483d58d5efe28f9509ddc2ad737e94c8b34e86b33e7a8e72ce7e3"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/FocusTimerHub-Bq1-D6uK.js",
+            "status": 200,
+            "sha256": "31d8e821280d64181e146a2fa4b766abb4eec1cccc108038687e74b3641cfe5c"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [],
+          "events": [],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 918.4000000059605
+            },
+            {
+              "value": "loading",
+              "at": 1148.800000011921
+            },
+            {
+              "value": "unavailable",
+              "at": 1201.2000000029802
+            }
+          ],
+          "gains": [
+            1
+          ],
+          "speechVoices": [
+            {
+              "lang": "tr-TR",
+              "name": "QA Turkish fixture"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "missing-file-english-device-fixture",
+      "passed": true,
+      "elapsedMs": 2266,
+      "evidence": {
+        "requests": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+            "at": 1790964123336,
+            "serviceWorker": false
+          }
+        ],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/index-mkXUpFut.js",
+            "status": 200,
+            "sha256": "8a0d3ea36662b15a950b52a928df25253db0331f6ab91867118b9e72f6b55c08"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/tr-Bxmf0hre.js",
+            "status": 200,
+            "sha256": "fdc833e2f7ec386e09186b898a60fc533a8f1d3d1cc174d236a3d6e00d590edf"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/Focus-D7mrEKfA.js",
+            "status": 200,
+            "sha256": "8f4095167c2483d58d5efe28f9509ddc2ad737e94c8b34e86b33e7a8e72ce7e3"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/FocusTimerHub-Bq1-D6uK.js",
+            "status": 200,
+            "sha256": "31d8e821280d64181e146a2fa4b766abb4eec1cccc108038687e74b3641cfe5c"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [
+            {
+              "text": "Welcome. Find a comfortable position, and let your eyes gently close.",
+              "lang": "en-US",
+              "voiceLang": "en-US",
+              "voiceName": "QA English fixture",
+              "volume": 1
+            }
+          ],
+          "events": [],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1170.4000000059605
+            },
+            {
+              "value": "loading",
+              "at": 1342
+            },
+            {
+              "value": "device",
+              "at": 1507.1000000089407
+            }
+          ],
+          "gains": [
+            1
+          ],
+          "speechVoices": [
+            {
+              "lang": "tr-TR",
+              "name": "QA Turkish fixture"
+            },
+            {
+              "lang": "en-US",
+              "name": "QA English fixture"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "notebook-en-device-locale-preserved",
+      "passed": true,
+      "elapsedMs": 1791,
+      "evidence": {
+        "requests": [],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/index-mkXUpFut.js",
+            "status": 200,
+            "sha256": "8a0d3ea36662b15a950b52a928df25253db0331f6ab91867118b9e72f6b55c08"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/chevron-right-CoCgN_Aj.js",
+            "status": 200,
+            "sha256": "d6396f6ae9256b08fd94b35209442c038fb8837c1d6538d17e819b28b4f35ace"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/pen-line-CrVmcPAz.js",
+            "status": 200,
+            "sha256": "5dde1b9ed6ca8633abf2934a6f790f769c3b8a0bb15acb36eb9aca3b9903d5ef"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/trash-2-D0Bk6dBH.js",
+            "status": 200,
+            "sha256": "ce9ccd85d9c705e5e3ddc758c06835e9c82eef291ed195b665f73814d607db12"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/search-BGdRaMTj.js",
+            "status": 200,
+            "sha256": "deb2cb86be53592fe86fa538c29584e9978380ede8c125f881f6e06e08282904"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/calendar-days-lSOd8VwH.js",
+            "status": 200,
+            "sha256": "5df3de1fe44d7d2ac20cc113ed8d09e985eefcfdcae0c22800b3c272403c03cd"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/Notebook-u2yAuwXw.js",
+            "status": 200,
+            "sha256": "1a82602efaaba153171d522fa8e06471456f50950831492b113caf65deea1813"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/arrow-up-right-DiER40K2.js",
+            "status": 200,
+            "sha256": "a2edd1101dcd2c0499734d33968bd3775a535b1e54ec05105e4941fa9577b2dc"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/moon-DVa7WISQ.js",
+            "status": 200,
+            "sha256": "44bb12e54a8fc048bb7ff4f546c774218235f46559bc19ed98654bfe61c961f5"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/archive-Bj41JcrI.js",
+            "status": 200,
+            "sha256": "ddca8777f7608a9db9e2c53b6c4c8151d0327e85cdfb428f8f1b49a38821c9d1"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/square-CVnF-TCv.js",
+            "status": 200,
+            "sha256": "69d0e9a4cece334c7e7f0475f3582a676a42b5f027ce507cc8f2a6257bca268c"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/headphones-CIGwFwYg.js",
+            "status": 200,
+            "sha256": "63b823587be742b7f8c2b449d3c239862330c10d4042a31fcf4f17f4a7f3e2bb"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/pencil-BPIFqBI_.js",
+            "status": 200,
+            "sha256": "2ff42dc4c12a4f24d55ba64c0ead8f5ead72b81a8b55cef4f0e01b40c03207ba"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/mail-s8sf2tew.js",
+            "status": 200,
+            "sha256": "c683fdafe5df3293fc441b1ccebce84f3306d1c031f890d612bc081a3ee67a75"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [
+            {
+              "text": "I keep one small promise each day.",
+              "lang": "en-US",
+              "voiceLang": "en-US",
+              "voiceName": "QA English fixture",
+              "volume": 1
+            }
+          ],
+          "events": [],
+          "modes": [],
+          "gains": [],
+          "speechVoices": [
+            {
+              "lang": "en-US",
+              "name": "QA English fixture"
+            },
+            {
+              "lang": "tr-TR",
+              "name": "QA Turkish fixture"
+            },
+            {
+              "lang": "es-ES",
+              "name": "QA Spanish fixture"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "notebook-tr-device-locale-preserved",
+      "passed": true,
+      "elapsedMs": 1214,
+      "evidence": {
+        "requests": [],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/index-mkXUpFut.js",
+            "status": 200,
+            "sha256": "8a0d3ea36662b15a950b52a928df25253db0331f6ab91867118b9e72f6b55c08"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/tr-Bxmf0hre.js",
+            "status": 200,
+            "sha256": "fdc833e2f7ec386e09186b898a60fc533a8f1d3d1cc174d236a3d6e00d590edf"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/chevron-right-CoCgN_Aj.js",
+            "status": 200,
+            "sha256": "d6396f6ae9256b08fd94b35209442c038fb8837c1d6538d17e819b28b4f35ace"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/pen-line-CrVmcPAz.js",
+            "status": 200,
+            "sha256": "5dde1b9ed6ca8633abf2934a6f790f769c3b8a0bb15acb36eb9aca3b9903d5ef"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/trash-2-D0Bk6dBH.js",
+            "status": 200,
+            "sha256": "ce9ccd85d9c705e5e3ddc758c06835e9c82eef291ed195b665f73814d607db12"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/calendar-days-lSOd8VwH.js",
+            "status": 200,
+            "sha256": "5df3de1fe44d7d2ac20cc113ed8d09e985eefcfdcae0c22800b3c272403c03cd"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/Notebook-u2yAuwXw.js",
+            "status": 200,
+            "sha256": "1a82602efaaba153171d522fa8e06471456f50950831492b113caf65deea1813"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/search-BGdRaMTj.js",
+            "status": 200,
+            "sha256": "deb2cb86be53592fe86fa538c29584e9978380ede8c125f881f6e06e08282904"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/arrow-up-right-DiER40K2.js",
+            "status": 200,
+            "sha256": "a2edd1101dcd2c0499734d33968bd3775a535b1e54ec05105e4941fa9577b2dc"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/moon-DVa7WISQ.js",
+            "status": 200,
+            "sha256": "44bb12e54a8fc048bb7ff4f546c774218235f46559bc19ed98654bfe61c961f5"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/square-CVnF-TCv.js",
+            "status": 200,
+            "sha256": "69d0e9a4cece334c7e7f0475f3582a676a42b5f027ce507cc8f2a6257bca268c"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/archive-Bj41JcrI.js",
+            "status": 200,
+            "sha256": "ddca8777f7608a9db9e2c53b6c4c8151d0327e85cdfb428f8f1b49a38821c9d1"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/pencil-BPIFqBI_.js",
+            "status": 200,
+            "sha256": "2ff42dc4c12a4f24d55ba64c0ead8f5ead72b81a8b55cef4f0e01b40c03207ba"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/mail-s8sf2tew.js",
+            "status": 200,
+            "sha256": "c683fdafe5df3293fc441b1ccebce84f3306d1c031f890d612bc081a3ee67a75"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/headphones-CIGwFwYg.js",
+            "status": 200,
+            "sha256": "63b823587be742b7f8c2b449d3c239862330c10d4042a31fcf4f17f4a7f3e2bb"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [
+            {
+              "text": "Kendime verdiğim sözü tutuyorum.",
+              "lang": "tr-TR",
+              "voiceLang": "tr-TR",
+              "voiceName": "QA Turkish fixture",
+              "volume": 1
+            }
+          ],
+          "events": [],
+          "modes": [],
+          "gains": [],
+          "speechVoices": [
+            {
+              "lang": "en-US",
+              "name": "QA English fixture"
+            },
+            {
+              "lang": "tr-TR",
+              "name": "QA Turkish fixture"
+            },
+            {
+              "lang": "es-ES",
+              "name": "QA Spanish fixture"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "notebook-es-device-locale-preserved",
+      "passed": true,
+      "elapsedMs": 1718,
+      "evidence": {
+        "requests": [],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/index-mkXUpFut.js",
+            "status": 200,
+            "sha256": "8a0d3ea36662b15a950b52a928df25253db0331f6ab91867118b9e72f6b55c08"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/es-D_dh5elY.js",
+            "status": 200,
+            "sha256": "eac1e65c2e0e1c64bacd16a9f3d108852a3d1da14522408a183162437b5f13e4"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/chevron-right-CoCgN_Aj.js",
+            "status": 200,
+            "sha256": "d6396f6ae9256b08fd94b35209442c038fb8837c1d6538d17e819b28b4f35ace"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/pen-line-CrVmcPAz.js",
+            "status": 200,
+            "sha256": "5dde1b9ed6ca8633abf2934a6f790f769c3b8a0bb15acb36eb9aca3b9903d5ef"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/Notebook-u2yAuwXw.js",
+            "status": 200,
+            "sha256": "1a82602efaaba153171d522fa8e06471456f50950831492b113caf65deea1813"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/trash-2-D0Bk6dBH.js",
+            "status": 200,
+            "sha256": "ce9ccd85d9c705e5e3ddc758c06835e9c82eef291ed195b665f73814d607db12"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/arrow-up-right-DiER40K2.js",
+            "status": 200,
+            "sha256": "a2edd1101dcd2c0499734d33968bd3775a535b1e54ec05105e4941fa9577b2dc"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/moon-DVa7WISQ.js",
+            "status": 200,
+            "sha256": "44bb12e54a8fc048bb7ff4f546c774218235f46559bc19ed98654bfe61c961f5"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/calendar-days-lSOd8VwH.js",
+            "status": 200,
+            "sha256": "5df3de1fe44d7d2ac20cc113ed8d09e985eefcfdcae0c22800b3c272403c03cd"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/search-BGdRaMTj.js",
+            "status": 200,
+            "sha256": "deb2cb86be53592fe86fa538c29584e9978380ede8c125f881f6e06e08282904"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/archive-Bj41JcrI.js",
+            "status": 200,
+            "sha256": "ddca8777f7608a9db9e2c53b6c4c8151d0327e85cdfb428f8f1b49a38821c9d1"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/square-CVnF-TCv.js",
+            "status": 200,
+            "sha256": "69d0e9a4cece334c7e7f0475f3582a676a42b5f027ce507cc8f2a6257bca268c"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/headphones-CIGwFwYg.js",
+            "status": 200,
+            "sha256": "63b823587be742b7f8c2b449d3c239862330c10d4042a31fcf4f17f4a7f3e2bb"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/pencil-BPIFqBI_.js",
+            "status": 200,
+            "sha256": "2ff42dc4c12a4f24d55ba64c0ead8f5ead72b81a8b55cef4f0e01b40c03207ba"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/mail-s8sf2tew.js",
+            "status": 200,
+            "sha256": "c683fdafe5df3293fc441b1ccebce84f3306d1c031f890d612bc081a3ee67a75"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [
+            {
+              "text": "Cumplo una promesa pequeña cada día.",
+              "lang": "es-ES",
+              "voiceLang": "es-ES",
+              "voiceName": "QA Spanish fixture",
+              "volume": 1
+            }
+          ],
+          "events": [],
+          "modes": [],
+          "gains": [],
+          "speechVoices": [
+            {
+              "lang": "en-US",
+              "name": "QA English fixture"
+            },
+            {
+              "lang": "tr-TR",
+              "name": "QA Turkish fixture"
+            },
+            {
+              "lang": "es-ES",
+              "name": "QA Spanish fixture"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "final-layout-en-320",
+      "passed": true,
+      "elapsedMs": 1638,
+      "evidence": {
+        "requests": [],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/index-mkXUpFut.js",
+            "status": 200,
+            "sha256": "8a0d3ea36662b15a950b52a928df25253db0331f6ab91867118b9e72f6b55c08"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/Focus-D7mrEKfA.js",
+            "status": 200,
+            "sha256": "8f4095167c2483d58d5efe28f9509ddc2ad737e94c8b34e86b33e7a8e72ce7e3"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/FocusTimerHub-Bq1-D6uK.js",
+            "status": 200,
+            "sha256": "31d8e821280d64181e146a2fa4b766abb4eec1cccc108038687e74b3641cfe5c"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [],
+          "events": [],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1251.5999999940395
+            }
+          ],
+          "gains": [],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "final-layout-en-390",
+      "passed": true,
+      "elapsedMs": 1642,
+      "evidence": {
+        "requests": [],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/index-mkXUpFut.js",
+            "status": 200,
+            "sha256": "8a0d3ea36662b15a950b52a928df25253db0331f6ab91867118b9e72f6b55c08"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/Focus-D7mrEKfA.js",
+            "status": 200,
+            "sha256": "8f4095167c2483d58d5efe28f9509ddc2ad737e94c8b34e86b33e7a8e72ce7e3"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/FocusTimerHub-Bq1-D6uK.js",
+            "status": 200,
+            "sha256": "31d8e821280d64181e146a2fa4b766abb4eec1cccc108038687e74b3641cfe5c"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [],
+          "events": [],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1249.0999999940395
+            }
+          ],
+          "gains": [],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "final-layout-en-1440",
+      "passed": true,
+      "elapsedMs": 1457,
+      "evidence": {
+        "requests": [],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/index-mkXUpFut.js",
+            "status": 200,
+            "sha256": "8a0d3ea36662b15a950b52a928df25253db0331f6ab91867118b9e72f6b55c08"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/Focus-D7mrEKfA.js",
+            "status": 200,
+            "sha256": "8f4095167c2483d58d5efe28f9509ddc2ad737e94c8b34e86b33e7a8e72ce7e3"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/FocusTimerHub-Bq1-D6uK.js",
+            "status": 200,
+            "sha256": "31d8e821280d64181e146a2fa4b766abb4eec1cccc108038687e74b3641cfe5c"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [],
+          "events": [],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1119.300000011921
+            }
+          ],
+          "gains": [],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "final-layout-tr-320",
+      "passed": true,
+      "elapsedMs": 1303,
+      "evidence": {
+        "requests": [],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/index-mkXUpFut.js",
+            "status": 200,
+            "sha256": "8a0d3ea36662b15a950b52a928df25253db0331f6ab91867118b9e72f6b55c08"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/tr-Bxmf0hre.js",
+            "status": 200,
+            "sha256": "fdc833e2f7ec386e09186b898a60fc533a8f1d3d1cc174d236a3d6e00d590edf"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/Focus-D7mrEKfA.js",
+            "status": 200,
+            "sha256": "8f4095167c2483d58d5efe28f9509ddc2ad737e94c8b34e86b33e7a8e72ce7e3"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/FocusTimerHub-Bq1-D6uK.js",
+            "status": 200,
+            "sha256": "31d8e821280d64181e146a2fa4b766abb4eec1cccc108038687e74b3641cfe5c"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [],
+          "events": [],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1066.7999999970198
+            }
+          ],
+          "gains": [],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "final-layout-tr-390",
+      "passed": true,
+      "elapsedMs": 1533,
+      "evidence": {
+        "requests": [],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/index-mkXUpFut.js",
+            "status": 200,
+            "sha256": "8a0d3ea36662b15a950b52a928df25253db0331f6ab91867118b9e72f6b55c08"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/tr-Bxmf0hre.js",
+            "status": 200,
+            "sha256": "fdc833e2f7ec386e09186b898a60fc533a8f1d3d1cc174d236a3d6e00d590edf"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/Focus-D7mrEKfA.js",
+            "status": 200,
+            "sha256": "8f4095167c2483d58d5efe28f9509ddc2ad737e94c8b34e86b33e7a8e72ce7e3"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/FocusTimerHub-Bq1-D6uK.js",
+            "status": 200,
+            "sha256": "31d8e821280d64181e146a2fa4b766abb4eec1cccc108038687e74b3641cfe5c"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [],
+          "events": [],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1147.6000000089407
+            }
+          ],
+          "gains": [],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "final-layout-es-320",
+      "passed": true,
+      "elapsedMs": 1508,
+      "evidence": {
+        "requests": [],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/index-mkXUpFut.js",
+            "status": 200,
+            "sha256": "8a0d3ea36662b15a950b52a928df25253db0331f6ab91867118b9e72f6b55c08"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/es-D_dh5elY.js",
+            "status": 200,
+            "sha256": "eac1e65c2e0e1c64bacd16a9f3d108852a3d1da14522408a183162437b5f13e4"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/Focus-D7mrEKfA.js",
+            "status": 200,
+            "sha256": "8f4095167c2483d58d5efe28f9509ddc2ad737e94c8b34e86b33e7a8e72ce7e3"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/FocusTimerHub-Bq1-D6uK.js",
+            "status": 200,
+            "sha256": "31d8e821280d64181e146a2fa4b766abb4eec1cccc108038687e74b3641cfe5c"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [],
+          "events": [],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1039.1000000089407
+            }
+          ],
+          "gains": [],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "final-layout-es-390",
+      "passed": true,
+      "elapsedMs": 1415,
+      "evidence": {
+        "requests": [],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/index-mkXUpFut.js",
+            "status": 200,
+            "sha256": "8a0d3ea36662b15a950b52a928df25253db0331f6ab91867118b9e72f6b55c08"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/es-D_dh5elY.js",
+            "status": 200,
+            "sha256": "eac1e65c2e0e1c64bacd16a9f3d108852a3d1da14522408a183162437b5f13e4"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/Focus-D7mrEKfA.js",
+            "status": 200,
+            "sha256": "8f4095167c2483d58d5efe28f9509ddc2ad737e94c8b34e86b33e7a8e72ce7e3"
+          },
+          {
+            "url": "http://127.0.0.1:4183/one-decision-away/assets/FocusTimerHub-Bq1-D6uK.js",
+            "status": 200,
+            "sha256": "31d8e821280d64181e146a2fa4b766abb4eec1cccc108038687e74b3641cfe5c"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [],
+          "events": [],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1095.7000000029802
+            }
+          ],
+          "gains": [],
+          "speechVoices": []
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "lock-recorded-en-390.png",
+    "offline-cache-recorded-en-390.png",
+    "missing-file-unavailable-tr-390.png",
+    "missing-file-device-tr-390.png",
+    "final-guided-en-320.png",
+    "final-guided-en-390.png",
+    "final-guided-en-1440.png",
+    "final-guided-tr-320.png",
+    "final-guided-tr-390.png",
+    "final-guided-es-320.png",
+    "final-guided-es-390.png"
+  ],
+  "limitations": [
+    "Real cloud Chromium WebAudio MP3 playback nodes with normal HTTP and trusted clicks; no autoplay-policy override or permissions.",
+    "Audible output and speech naturalness were not independently listened to; source count, offset, gain and native decoding are instrumented evidence.",
+    "Installed device voice fixtures are explicitly mocked, while recorded playback uses the real decoder and AudioContext.",
+    "Viewport screenshots are emulation, not real iPhone/native iOS testing."
+  ],
+  "buildReceipt": {
+    "path": "/workspace/scratch/oda-reference-redesign/independent/flows/preflight-receipt.json",
+    "sha256": "ba41a8fe2576d64e0570d9634022f5d536c3c52163c4de5fc504bc2d9bd0b9ca"
+  },
+  "buildReceiptReviewedSourcesMatch": true,
+  "browserVersion": "151.0.7922.173",
+  "finishedAt": "2026-10-02T18:02:19.433Z"
+}

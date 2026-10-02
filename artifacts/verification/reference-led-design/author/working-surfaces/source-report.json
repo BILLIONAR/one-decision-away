@@ -1,0 +1,49 @@
+{
+  "base": "68ae8179c875b54ce8f200e34a6148259ae6cad1",
+  "branch": "design/reference-led-oda",
+  "files": [
+    {
+      "path": "src/pages/Notebook.tsx",
+      "bytes": 5744,
+      "sha256": "ab74050eadfcaaef79a0a0fbd6f9ca34874deac06cf3707fda0219c0605d1889"
+    },
+    {
+      "path": "src/components/notebook/JournalWorkspace.tsx",
+      "bytes": 15441,
+      "sha256": "a0008e1343fafca6665edd6d247831a2bb26f8f5fbf39abe356e8ee142c7bdd7"
+    },
+    {
+      "path": "src/components/notebook/NotebookCalendar.tsx",
+      "bytes": 3705,
+      "sha256": "b2f89bde0cc5b5ae9c33c0c09d5df83209a4795356901fd011dfb43707c0641c"
+    },
+    {
+      "path": "src/styles/courses.css",
+      "bytes": 32698,
+      "sha256": "2067ae72995db6a3bbde1a71120ca501724a48a937be9bc4ce8d5ceb5c62a93c"
+    },
+    {
+      "path": "src/styles/notebook.css",
+      "bytes": 6553,
+      "sha256": "8a1b36f1ee5c8c0cbdd0e3515487e029705aa471b66967eb1c8f14f88c0e2748"
+    }
+  ],
+  "unchanged_logic_evidence": {
+    "src/components/notebook/JournalWorkspace.tsx": {
+      "state_and_handlers_before_presentation_unchanged": true,
+      "photo_dialog_presentation_and_handlers_unchanged": true
+    },
+    "src/components/notebook/NotebookCalendar.tsx": {
+      "state_and_handlers_before_presentation_unchanged": true
+    },
+    "src/pages/Courses.tsx": {
+      "entire_file_unchanged": true
+    }
+  },
+  "ownership": "Notebook and course presentation only; root owns shared shell/tokens.",
+  "limits": [
+    "Focused checks are on a shared evolving dev preview, not the final reviewed commit/build.",
+    "Independent root visual QA and aggregate regression still pending.",
+    "Calendar preserves the full month; at narrow widths it scrolls inside its card to retain 44px date controls."
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "kind": "final independent reviewed functional fixes and accessibility CSS parity",
+  "base": "68ae8179c875b54ce8f200e34a6148259ae6cad1",
+  "sourceCommit": "cf95c6eda4264385a4f70b41f7df0dee7832ebe7",
+  "sourceFrozen": true,
+  "gitStatusPorcelain": "",
+  "checks": {
+    "globalCssBeforeSidebarOverrideUnchanged": true,
+    "globalCssAfterSidebarOverrideIncludingModalRulesUnchanged": true
+  },
+  "files": [
+    {
+      "file": "src/components/FocusLockView.tsx",
+      "byteIdenticalToBase": true,
+      "sha256": "d1bf8e2c0df5349bad8c7580e6c76a9b01b84353ddb896b1c5a64f93b41acfc1"
+    },
+    {
+      "file": "src/utils/useDialogAccessibility.ts",
+      "byteIdenticalToBase": true,
+      "sha256": "5b068c627b873c7da369502937470a45704cd748d1d4e22a70015ef9e66cf027"
+    },
+    {
+      "file": "src/components/ui.tsx",
+      "byteIdenticalToBase": true,
+      "sha256": "26fcc938ee5d5a32106033b1e58055f70b12f053210388218d2931e666858b46"
+    },
+    {
+      "file": "src/components/Onboarding.tsx",
+      "byteIdenticalToBase": true,
+      "sha256": "6c4ed805aac7b96df0f96982ae717ba31fc94eef0df81c1a7ee260c7c4fb3a43"
+    },
+    {
+      "file": "src/components/momentum/TwoMinuteStart.tsx",
+      "byteIdenticalToBase": true,
+      "sha256": "e156b3661636cc203018da2023b9813b0bcccf332c4c85ac313fbb33d354e050"
+    },
+    {
+      "file": "src/components/today/CourseNextStep.tsx",
+      "byteIdenticalToBase": true,
+      "sha256": "1e3fd909d5eeb4ce327e8b53b3b608676727ac1fc0179f3ae18be4d395d3a15f"
+    },
+    {
+      "file": "src/components/momentum/EvidenceTree.tsx",
+      "byteIdenticalToBase": true,
+      "sha256": "54594d05524e4803a3c7c7163086038e19f06db0af2a910760ae20377d3c00fd"
+    },
+    {
+      "file": "src/pages/Courses.tsx",
+      "byteIdenticalToBase": true,
+      "sha256": "a42d95ca0c02e51ffcb12ac9cd1bd6c971c37765214c94092e724550629a462a"
+    }
+  ],
+  "findings": [],
+  "limits": [
+    "JournalWorkspace full file is modified by authorized styling wrappers; its controller and photo logic are preserved in presentation-static-final.json.",
+    "Browser contrast/clipping/hit tests remain separate evidence."
+  ]
+}

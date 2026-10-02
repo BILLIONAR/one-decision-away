@@ -1,0 +1,25 @@
+import fs from 'node:fs';
+import { chromium } from '/workspace/oda-reference-redesign/node_modules/playwright/index.mjs';
+import { getInitialDemoState } from '/workspace/oda-reference-redesign/src/services/repository.ts';
+const out='/workspace/scratch/oda-reference-redesign/independent/visual/calendar-probe'; fs.mkdirSync(out,{recursive:true});
+const base='http://127.0.0.1:4183/one-decision-away/'; const origin=new URL(base).origin;
+const report={base,sourceCommit:'cf95c6eda4264385a4f70b41f7df0dee7832ebe7',kind:'Actual built UI, synthetic isolated profile only',cases:[],errors:[]};
+const browser=await chromium.launch({executablePath:'/usr/bin/chromium'});
+for(const width of [320,390]){
+ const seed=getInitialDemoState();Object.assign(seed.profile,{displayName:'Synthetic calendar QA',onboardingStep:'completed',locale:'en',theme:'light',firstOpenedAt:new Date().toISOString(),soundMuted:true,nudgesEnabled:false,dailyWisdomEnabled:false});
+ const ctx=await browser.newContext({viewport:{width,height:844},reducedMotion:'reduce',serviceWorkers:'block'});
+ await ctx.route('**/*',r=>new URL(r.request().url()).origin===origin?r.continue():r.abort());
+ await ctx.addInitScript(seed=>{if(!localStorage.getItem('one_decision_away_app_data_v1'))localStorage.setItem('one_decision_away_app_data_v1',JSON.stringify(seed));localStorage.setItem('oda_locale','en');},seed);
+ const page=await ctx.newPage();page.on('pageerror',e=>report.errors.push(e.message));
+ await page.goto(base+'#/app/notebook');await page.locator('#notebook-journal-content').waitFor();
+ const trigger=page.locator('[aria-controls="notebook-calendar"]');if(await trigger.getAttribute('aria-expanded')!=='true')await trigger.click();
+ await page.locator('.oda-notebook-calendar').scrollIntoViewIfNeeded();await page.evaluate(()=>document.fonts.ready);
+ const measure=()=>page.locator('.oda-notebook-calendar-scroll').evaluate(el=>({client:el.clientWidth,scroll:el.scrollWidth,left:el.scrollLeft,overflowX:getComputedStyle(el).overflowX,scrollbarWidth:getComputedStyle(el).scrollbarWidth,ariaLabel:el.getAttribute('aria-label'),text:el.parentElement.innerText,tableClient:el.querySelector('table').clientWidth,dayWidths:[...el.querySelectorAll('tbody button')].map(b=>({text:b.innerText,width:b.getBoundingClientRect().width,height:b.getBoundingClientRect().height})),columnRects:[...el.querySelectorAll('thead th')].map(h=>({day:h.innerText,x:h.getBoundingClientRect().x,right:h.getBoundingClientRect().right})),containerRect:{left:el.getBoundingClientRect().left,right:el.getBoundingClientRect().right}}));
+ const before=await measure();await page.screenshot({path:`${out}/calendar-${width}-initial.png`,animations:'disabled'});
+ const sunday=page.locator('.oda-notebook-calendar tbody button').nth(3);await sunday.focus();await page.keyboard.press('Enter');
+ const after=await measure();const sundaySelected=await sunday.getAttribute('aria-pressed');await page.screenshot({path:`${out}/calendar-${width}-keyboard-sunday.png`,animations:'disabled'});
+ await page.locator('.oda-notebook-calendar-scroll').evaluate(el=>{el.scrollLeft=el.scrollWidth;});
+ const right=await measure();await page.screenshot({path:`${out}/calendar-${width}-right.png`,animations:'disabled'});
+ report.cases.push({width,before,afterKeyboard:after,sundaySelected,right});await ctx.close();
+}
+await browser.close();fs.writeFileSync(out+'/report.json',JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));

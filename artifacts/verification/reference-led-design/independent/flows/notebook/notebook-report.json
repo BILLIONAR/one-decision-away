@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-02T18:02:43.640Z",
+  "base": "http://127.0.0.1:4183/one-decision-away/#",
+  "synthetic": true,
+  "checks": [
+    {
+      "name": "en-320: unsubmitted title, writing and mood survive reload exactly"
+    }
+  ],
+  "errors": [],
+  "blockedExternal": [],
+  "screenshots": [
+    "notebook-draft-en-320.png"
+  ],
+  "limits": [
+    "Disposable synthetic signed-out Chromium profiles; no physical iPhone, real account/provider or listening-quality claim."
+  ],
+  "browser": "151.0.7922.173",
+  "status": "failed",
+  "failure": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'Synthetic en-320: my existing words remain.  '\n- 'Synthetic en-320: my existing words remain.'\n\n    at <anonymous> (/workspace/scratch/oda-reference-redesign/independent/flows/harness/notebook.mjs:60:12)",
+  "finishedAt": "2026-10-02T18:02:46.995Z"
+}

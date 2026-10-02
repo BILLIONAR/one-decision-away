@@ -1,0 +1,3244 @@
+{
+  "status": "final-frozen-protection-parity-pass",
+  "base": "68ae8179c875b54ce8f200e34a6148259ae6cad1",
+  "reviewedCommit": "cf95c6eda4264385a4f70b41f7df0dee7832ebe7",
+  "worktree": "/workspace/oda-reference-redesign",
+  "before": {
+    "head": "cf95c6eda4264385a4f70b41f7df0dee7832ebe7",
+    "porcelain": "",
+    "capturedAtUTC": "2026-10-02T18:02:22.858364+00:00"
+  },
+  "after": {
+    "head": "cf95c6eda4264385a4f70b41f7df0dee7832ebe7",
+    "porcelain": "",
+    "capturedAtUTC": "2026-10-02T18:02:23.115200+00:00"
+  },
+  "protectedFileCount": 348,
+  "byteIdenticalCount": 348,
+  "protectedGroupCounts": {
+    ".github/": 2,
+    "root config/security/SW": 8,
+    "ios/": 20,
+    "public/assets/oda/narration/": 165,
+    "src/data/": 104,
+    "src/services/": 35,
+    "src/store/": 2,
+    "src/utils/": 12
+  },
+  "narrationMp3Count": 160,
+  "newProtectedFiles": [],
+  "secretLikePathsNotRead": [],
+  "metadataBoundaryChecks": {
+    "cspMetaByteIdentical": true,
+    "referrerMetaByteIdentical": true,
+    "indexExceptThemeColorByteIdentical": true,
+    "manifestChangedKeys": [
+      "background_color",
+      "theme_color"
+    ],
+    "manifestOnlyAuthorizedColors": true,
+    "themeUtilityExceptBARByteIdentical": true,
+    "themeInitExceptColorsByteIdentical": true,
+    "mainExceptReferenceCSSImportByteIdentical": true
+  },
+  "allowedFileHashBindings": [
+    {
+      "path": "index.html",
+      "baseSha256": "1e0b407c125a27c1ffd2f3be18c7d7843b7acf8a10d1205e596f12b4b8443ac4",
+      "reviewedSha256": "6d5632dc240496fd4aff7f5db775b26f8eacedcd2860859a839d54d08f500323",
+      "baseBytes": 3062,
+      "reviewedBytes": 3062
+    },
+    {
+      "path": "public/manifest.webmanifest",
+      "baseSha256": "7593caefc5b58b72ff7b923145cdde9ca7da1c3f85d9d623c9c3c9eb61daae5e",
+      "reviewedSha256": "20c90f215e66ac90c51754d9253e1bb33b66397e6b14f9d79ad31e768fee8dc1",
+      "baseBytes": 924,
+      "reviewedBytes": 924
+    },
+    {
+      "path": "public/theme-init.js",
+      "baseSha256": "e83df9d54a76a2c6b50663452ea6da3a287b326c9d3ef256c0907a1de80f9bd0",
+      "reviewedSha256": "bcfb6eb36d90eb505920c80e174d179045456b548e1accff53bf56b19a44caa5",
+      "baseBytes": 740,
+      "reviewedBytes": 740
+    },
+    {
+      "path": "src/utils/theme.ts",
+      "baseSha256": "2d3d99b91690f90dc6b7867338dfef6128ba44063320bf273e2f90193efe9380",
+      "reviewedSha256": "a1d9e18263448b91563a42a0f608c6445afe8e0fc0d4338388f9aad615cde599",
+      "baseBytes": 1749,
+      "reviewedBytes": 1749
+    },
+    {
+      "path": "src/main.tsx",
+      "baseSha256": "0814637533b0ea42e813e4275a3602a7ea0ff2367ad3bf75a27201a4ce2c2cbc",
+      "reviewedSha256": "306b1a41d4c19ebb78304c3014867f1925afe2269a4030dd68ce0a63a073a0bc",
+      "baseBytes": 1722,
+      "reviewedBytes": 1755
+    }
+  ],
+  "trackedChangeScope": [
+    "M\tindex.html",
+    "M\tpublic/manifest.webmanifest",
+    "M\tpublic/theme-init.js",
+    "M\tsrc/components/FocusTimerHub.tsx",
+    "M\tsrc/components/notebook/JournalWorkspace.tsx",
+    "M\tsrc/components/notebook/NotebookCalendar.tsx",
+    "M\tsrc/index.css",
+    "M\tsrc/layout/AppShell.tsx",
+    "M\tsrc/main.tsx",
+    "M\tsrc/pages/Coach.tsx",
+    "M\tsrc/pages/Notebook.tsx",
+    "M\tsrc/pages/SoundRoom.tsx",
+    "M\tsrc/pages/Today.tsx",
+    "A\tsrc/styles/coach.css",
+    "M\tsrc/styles/courses.css",
+    "A\tsrc/styles/notebook.css",
+    "A\tsrc/styles/reference.css",
+    "M\tsrc/styles/sound.css",
+    "M\tsrc/styles/tokens.css",
+    "M\tsrc/utils/theme.ts"
+  ],
+  "files": [
+    {
+      "path": ".github/dependabot.yml",
+      "baseBlob": "0063a7250158cd4f25cb0c9ea4fb3327f4690780",
+      "baseBytes": 368,
+      "baseSha256": "b2e2fb1f830cf44e2962986acfa47bd6fd90e63c97de9029f09e366fe9dc4720",
+      "reviewedBytes": 368,
+      "reviewedSha256": "b2e2fb1f830cf44e2962986acfa47bd6fd90e63c97de9029f09e366fe9dc4720",
+      "byteIdentical": true
+    },
+    {
+      "path": ".github/workflows/deploy-pages.yml",
+      "baseBlob": "9e3fb631f6a25df1486b4a86a6143891f24c3239",
+      "baseBytes": 2024,
+      "baseSha256": "bfa989f1cd1384bf74b6f8b821cb615dba6fa0a3aa95b195bd0565c0284503a6",
+      "reviewedBytes": 2024,
+      "reviewedSha256": "bfa989f1cd1384bf74b6f8b821cb615dba6fa0a3aa95b195bd0565c0284503a6",
+      "byteIdentical": true
+    },
+    {
+      "path": "capacitor.config.ts",
+      "baseBlob": "1abb1f72d0075f13456dbd2731548dbe99beb87f",
+      "baseBytes": 1028,
+      "baseSha256": "b64297d25851f3a62400040d4f1fb52f6c7cac6e240d7e9f41f31d44de41c152",
+      "reviewedBytes": 1028,
+      "reviewedSha256": "b64297d25851f3a62400040d4f1fb52f6c7cac6e240d7e9f41f31d44de41c152",
+      "byteIdentical": true
+    },
+    {
+      "path": "ios/.gitignore",
+      "baseBlob": "f47029973b442a32c7ce8a83195f29d70661f124",
+      "baseBytes": 206,
+      "baseSha256": "2b7132a9943d2622e51e656897ca5162f56b121b40b423dedce1fbc699dba88a",
+      "reviewedBytes": 206,
+      "reviewedSha256": "2b7132a9943d2622e51e656897ca5162f56b121b40b423dedce1fbc699dba88a",
+      "byteIdentical": true
+    },
+    {
+      "path": "ios/App/App.xcodeproj/project.pbxproj",
+      "baseBlob": "e0675af0ae1d133921953869052fc51e0a1e6980",
+      "baseBytes": 14945,
+      "baseSha256": "bacd361440fb7fd05f5ca9ded5d649c594cb12c53d0866f495289e51cdd44892",
+      "reviewedBytes": 14945,
+      "reviewedSha256": "bacd361440fb7fd05f5ca9ded5d649c594cb12c53d0866f495289e51cdd44892",
+      "byteIdentical": true
+    },
+    {
+      "path": "ios/App/App.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist",
+      "baseBlob": "18d981003d68d0546c4804ac2ff47dd97c6e7921",
+      "baseBytes": 238,
+      "baseSha256": "dfa0f9bb85b95ccba9c6811adadf8cb407fb5d52088e89db83ebc308ec448542",
+      "reviewedBytes": 238,
+      "reviewedSha256": "dfa0f9bb85b95ccba9c6811adadf8cb407fb5d52088e89db83ebc308ec448542",
+      "byteIdentical": true
+    },
+    {
+      "path": "ios/App/App/AppDelegate.swift",
+      "baseBlob": "fec95acae17e22de69075aa1be2f76c3d5030e5a",
+      "baseBytes": 2504,
+      "baseSha256": "481e2ad8672b14acbd3e3df65acdc6d046526ae542b7bec903cf842fc68d9e49",
+      "reviewedBytes": 2504,
+      "reviewedSha256": "481e2ad8672b14acbd3e3df65acdc6d046526ae542b7bec903cf842fc68d9e49",
+      "byteIdentical": true
+    },
+    {
+      "path": "ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png",
+      "baseBlob": "f27abac6623ad8a507a3623dc1cbe6d943c92479",
+      "baseBytes": 111072,
+      "baseSha256": "7720d317a6b1080637f64eef24510ea9e84f80413be46c7f5bdbd4221c399956",
+      "reviewedBytes": 111072,
+      "reviewedSha256": "7720d317a6b1080637f64eef24510ea9e84f80413be46c7f5bdbd4221c399956",
+      "byteIdentical": true
+    },
+    {
+      "path": "ios/App/App/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "baseBlob": "9b7d382dcecca887eac19d7f1c4c8dc57abe00e4",
+      "baseBytes": 218,
+      "baseSha256": "5c09bec6eede599b14fa9e4c44b03e7febebc930615a0cd70f02981c09dfe48a",
+      "reviewedBytes": 218,
+      "reviewedSha256": "5c09bec6eede599b14fa9e4c44b03e7febebc930615a0cd70f02981c09dfe48a",
+      "byteIdentical": true
+    },
+    {
+      "path": "ios/App/App/Assets.xcassets/Contents.json",
+      "baseBlob": "da4a164c918651cdd1e11dca5cc62c333f097601",
+      "baseBytes": 62,
+      "baseSha256": "972ec1fd42325872438eb085ac29e94f51c10788ec18ec5549439950866c541d",
+      "reviewedBytes": 62,
+      "reviewedSha256": "972ec1fd42325872438eb085ac29e94f51c10788ec18ec5549439950866c541d",
+      "byteIdentical": true
+    },
+    {
+      "path": "ios/App/App/Assets.xcassets/Splash.imageset/Contents.json",
+      "baseBlob": "d7d96a67c0d764a2ddfc9545441c627e6d5fa1fc",
+      "baseBytes": 403,
+      "baseSha256": "041481917eb249533ac6dd63d283bc6190b2d0642a93deda11b2ed0f6f7b605a",
+      "reviewedBytes": 403,
+      "reviewedSha256": "041481917eb249533ac6dd63d283bc6190b2d0642a93deda11b2ed0f6f7b605a",
+      "byteIdentical": true
+    },
+    {
+      "path": "ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732-1.png",
+      "baseBlob": "183971c389fcaa11bb5d2c380d9e44ce0fa1bb75",
+      "baseBytes": 81780,
+      "baseSha256": "5582e41575bde0b04c0229e99d56a0ee8e4cebd0e97a4a4ec26bce5b3392536e",
+      "reviewedBytes": 81780,
+      "reviewedSha256": "5582e41575bde0b04c0229e99d56a0ee8e4cebd0e97a4a4ec26bce5b3392536e",
+      "byteIdentical": true
+    },
+    {
+      "path": "ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732-2.png",
+      "baseBlob": "183971c389fcaa11bb5d2c380d9e44ce0fa1bb75",
+      "baseBytes": 81780,
+      "baseSha256": "5582e41575bde0b04c0229e99d56a0ee8e4cebd0e97a4a4ec26bce5b3392536e",
+      "reviewedBytes": 81780,
+      "reviewedSha256": "5582e41575bde0b04c0229e99d56a0ee8e4cebd0e97a4a4ec26bce5b3392536e",
+      "byteIdentical": true
+    },
+    {
+      "path": "ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732.png",
+      "baseBlob": "183971c389fcaa11bb5d2c380d9e44ce0fa1bb75",
+      "baseBytes": 81780,
+      "baseSha256": "5582e41575bde0b04c0229e99d56a0ee8e4cebd0e97a4a4ec26bce5b3392536e",
+      "reviewedBytes": 81780,
+      "reviewedSha256": "5582e41575bde0b04c0229e99d56a0ee8e4cebd0e97a4a4ec26bce5b3392536e",
+      "byteIdentical": true
+    },
+    {
+      "path": "ios/App/App/Base.lproj/LaunchScreen.storyboard",
+      "baseBlob": "05e87bee9231f2c060772cca91780bad12b1826c",
+      "baseBytes": 2023,
+      "baseSha256": "510ebf6761909f2abb8c8ac454101a6020b3b2eaf1729b0d64264a30ce2c3256",
+      "reviewedBytes": 2023,
+      "reviewedSha256": "510ebf6761909f2abb8c8ac454101a6020b3b2eaf1729b0d64264a30ce2c3256",
+      "byteIdentical": true
+    },
+    {
+      "path": "ios/App/App/Base.lproj/Main.storyboard",
+      "baseBlob": "b44df7be8f82acfcd747fd8d77fcd7a87b788f6f",
+      "baseBytes": 1019,
+      "baseSha256": "7b7dc7acc67134bfaa80e5ce9c9068ba53db5369b9b70248aa7439fc2b09daae",
+      "reviewedBytes": 1019,
+      "reviewedSha256": "7b7dc7acc67134bfaa80e5ce9c9068ba53db5369b9b70248aa7439fc2b09daae",
+      "byteIdentical": true
+    },
+    {
+      "path": "ios/App/App/Info.plist",
+      "baseBlob": "1b6fc4fd69581c040ab6e178045b132f34c3a254",
+      "baseBytes": 2411,
+      "baseSha256": "2326bc826d51e5556d532f634f99815e22db6334494f8c2050984b90ce684832",
+      "reviewedBytes": 2411,
+      "reviewedSha256": "2326bc826d51e5556d532f634f99815e22db6334494f8c2050984b90ce684832",
+      "byteIdentical": true
+    },
+    {
+      "path": "ios/App/App/SceneDelegate.swift",
+      "baseBlob": "f61daac3c77993128da4f1deab3458018a8bc79d",
+      "baseBytes": 1094,
+      "baseSha256": "3f8d5ec52656e0a30d2c4c5e102e1f211434ed54cb1d295652307cd6f0a3a665",
+      "reviewedBytes": 1094,
+      "reviewedSha256": "3f8d5ec52656e0a30d2c4c5e102e1f211434ed54cb1d295652307cd6f0a3a665",
+      "byteIdentical": true
+    },
+    {
+      "path": "ios/App/CapApp-SPM/.gitignore",
+      "baseBlob": "3b29812086f28a2b21884e57ead495ffd9434178",
+      "baseBytes": 165,
+      "baseSha256": "4b958e2b4dd57319aadef2551153c74b9cb5ffe9f89d6e3e491122a94913f016",
+      "reviewedBytes": 165,
+      "reviewedSha256": "4b958e2b4dd57319aadef2551153c74b9cb5ffe9f89d6e3e491122a94913f016",
+      "byteIdentical": true
+    },
+    {
+      "path": "ios/App/CapApp-SPM/Package.swift",
+      "baseBlob": "88e20f1ba451d2a6be36f8bccd785a8265a5c2ba",
+      "baseBytes": 1856,
+      "baseSha256": "085ae1d74f75a3cf09494d8c8f5880cf35fc4d85583b6928fa26c1dada1b8010",
+      "reviewedBytes": 1856,
+      "reviewedSha256": "085ae1d74f75a3cf09494d8c8f5880cf35fc4d85583b6928fa26c1dada1b8010",
+      "byteIdentical": true
+    },
+    {
+      "path": "ios/App/CapApp-SPM/README.md",
+      "baseBlob": "03964db900841d8d1125314f12ace8394c755b3b",
+      "baseBytes": 162,
+      "baseSha256": "42c535861f4a866e35f85764ed6af1ea046d6a409bf9852ecb00e5d292a1626e",
+      "reviewedBytes": 162,
+      "reviewedSha256": "42c535861f4a866e35f85764ed6af1ea046d6a409bf9852ecb00e5d292a1626e",
+      "byteIdentical": true
+    },
+    {
+      "path": "ios/App/CapApp-SPM/Sources/CapApp-SPM/CapApp-SPM.swift",
+      "baseBlob": "945afec8c778e227bfd9892d58cc9b43a3b45ce3",
+      "baseBytes": 33,
+      "baseSha256": "70bf9dafddc35e3877dfb133a996f5be7ccd1e132897a98fdbf4869ff605ece9",
+      "reviewedBytes": 33,
+      "reviewedSha256": "70bf9dafddc35e3877dfb133a996f5be7ccd1e132897a98fdbf4869ff605ece9",
+      "byteIdentical": true
+    },
+    {
+      "path": "ios/debug.xcconfig",
+      "baseBlob": "53ce18dead86a04b15c04ccc23da732642cfcc6a",
+      "baseBytes": 23,
+      "baseSha256": "4838938a72b913b99cfda54a43bbe73f05893071dc6e3702b0adc44794b64272",
+      "reviewedBytes": 23,
+      "reviewedSha256": "4838938a72b913b99cfda54a43bbe73f05893071dc6e3702b0adc44794b64272",
+      "byteIdentical": true
+    },
+    {
+      "path": "package-lock.json",
+      "baseBlob": "20f397f37594874dabb0c08cdf07ea44413d980d",
+      "baseBytes": 239295,
+      "baseSha256": "d08110baa951e3a716d06e24009dd278eca19a85eea967d0dd1d1c6dcf2eab22",
+      "reviewedBytes": 239295,
+      "reviewedSha256": "d08110baa951e3a716d06e24009dd278eca19a85eea967d0dd1d1c6dcf2eab22",
+      "byteIdentical": true
+    },
+    {
+      "path": "package.json",
+      "baseBlob": "ea5d60fb36eb9d5a6d894ebe78b7617c0db3e537",
+      "baseBytes": 2837,
+      "baseSha256": "614199dd79f59c8b11a3dfc9b9a7ff4c8206666a92b8e1ec9da611647aa4d8f1",
+      "reviewedBytes": 2837,
+      "reviewedSha256": "614199dd79f59c8b11a3dfc9b9a7ff4c8206666a92b8e1ec9da611647aa4d8f1",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/LICENSE-APACHE-2.0.txt",
+      "baseBlob": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+      "baseBytes": 11358,
+      "baseSha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "reviewedBytes": 11358,
+      "reviewedSha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/NOTICE.txt",
+      "baseBlob": "ac8537eaee2a74731bfe45380ba80678b75af5b0",
+      "baseBytes": 449,
+      "baseSha256": "595413fd51f8a0f69b7ad04f043818ebb044b5864627810d3e4595ed6537062e",
+      "reviewedBytes": 449,
+      "reviewedSha256": "595413fd51f8a0f69b7ad04f043818ebb044b5864627810d3e4595ed6537062e",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/README.md",
+      "baseBlob": "a11eab6e8877777b2cb3c719fc41a2299cfc9749",
+      "baseBytes": 3231,
+      "baseSha256": "cf69253c847634a2d323b8066185bfa89bcc59c0a62dd7e11eedc12ceb5e80e2",
+      "reviewedBytes": 3231,
+      "reviewedSha256": "cf69253c847634a2d323b8066185bfa89bcc59c0a62dd7e11eedc12ceb5e80e2",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-belief-00.en-US.v1.mp3",
+      "baseBlob": "b90a9f8932cf5d6417d0d7f05036c69ec44216a5",
+      "baseBytes": 128300,
+      "baseSha256": "9538650c8693f48e25939a9cd0aea4cd673b100f730f32fc796d9cd4ff1a90c6",
+      "reviewedBytes": 128300,
+      "reviewedSha256": "9538650c8693f48e25939a9cd0aea4cd673b100f730f32fc796d9cd4ff1a90c6",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-belief-01.en-US.v1.mp3",
+      "baseBlob": "5b8bc8c0aef08af7b1ae9261a4f2231d3f52bcc8",
+      "baseBytes": 137516,
+      "baseSha256": "57cd7f49bb3f7cfda166270af45058b7d1661e4e15a995ee3600341b25807853",
+      "reviewedBytes": 137516,
+      "reviewedSha256": "57cd7f49bb3f7cfda166270af45058b7d1661e4e15a995ee3600341b25807853",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-belief-02.en-US.v1.mp3",
+      "baseBlob": "00d58e6d86e4a2b68b1fdd12ea7cf1aeee161724",
+      "baseBytes": 162092,
+      "baseSha256": "fe4df715cc11239247d98015ef1a5156f39a5d2191ca926f7092d32deeece801",
+      "reviewedBytes": 162092,
+      "reviewedSha256": "fe4df715cc11239247d98015ef1a5156f39a5d2191ca926f7092d32deeece801",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-belief-03.en-US.v1.mp3",
+      "baseBlob": "cfb9529ab65399569ed56a41fe44490affd4ce55",
+      "baseBytes": 134060,
+      "baseSha256": "8861f75c87e5f1db36a6d16c4647f446976242a7ed5b308ec7540ff3d7929a95",
+      "reviewedBytes": 134060,
+      "reviewedSha256": "8861f75c87e5f1db36a6d16c4647f446976242a7ed5b308ec7540ff3d7929a95",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-belief-04.en-US.v1.mp3",
+      "baseBlob": "37efa21d646c5a69deacfbbfb575ae6249aa8234",
+      "baseBytes": 136364,
+      "baseSha256": "a143022472b7f85988b08436deaaf2aa518318db57c7d342d9f7a6da59f3d6f7",
+      "reviewedBytes": 136364,
+      "reviewedSha256": "a143022472b7f85988b08436deaaf2aa518318db57c7d342d9f7a6da59f3d6f7",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-belief-05.en-US.v1.mp3",
+      "baseBlob": "9be925a1737f552c795e10d2afe3e4d4ff30e7f8",
+      "baseBytes": 152876,
+      "baseSha256": "1ae28415e09e3277bbeb2cffd12a2beec40350df0422afd6803a73e8bc67cc59",
+      "reviewedBytes": 152876,
+      "reviewedSha256": "1ae28415e09e3277bbeb2cffd12a2beec40350df0422afd6803a73e8bc67cc59",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-belief-06.en-US.v1.mp3",
+      "baseBlob": "8b496ab6cb4a91ca02a68872408447429d82a790",
+      "baseBytes": 136748,
+      "baseSha256": "984a3f9b7f30f85b18f1e3333bd1370eb843d753b6b05f3d96c55cefd067feab",
+      "reviewedBytes": 136748,
+      "reviewedSha256": "984a3f9b7f30f85b18f1e3333bd1370eb843d753b6b05f3d96c55cefd067feab",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-belief-07.en-US.v1.mp3",
+      "baseBlob": "f3514be03544cce44140bd9523c837c6b73a0a33",
+      "baseBytes": 123692,
+      "baseSha256": "9ce4ef95b1d006d5538e4049bfa94f0a60630c8e50409700572df877bf8776c6",
+      "reviewedBytes": 123692,
+      "reviewedSha256": "9ce4ef95b1d006d5538e4049bfa94f0a60630c8e50409700572df877bf8776c6",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-belief-08.en-US.v1.mp3",
+      "baseBlob": "509a20a2b0c4832efe64750198c9742c8f093ab5",
+      "baseBytes": 145196,
+      "baseSha256": "6c543b0c40aec8ce7f0b64cb5134697c65c34bfb6f68d515449ffb84dbcb6b56",
+      "reviewedBytes": 145196,
+      "reviewedSha256": "6c543b0c40aec8ce7f0b64cb5134697c65c34bfb6f68d515449ffb84dbcb6b56",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-belief-09.en-US.v1.mp3",
+      "baseBlob": "ddd704ed4a561f1c589809a0e27a3a8f469b18b6",
+      "baseBytes": 137132,
+      "baseSha256": "55fd5ba996a881aed4171f0a0f21497fd1ca30dd6106671eecaf7cdf11e9816f",
+      "reviewedBytes": 137132,
+      "reviewedSha256": "55fd5ba996a881aed4171f0a0f21497fd1ca30dd6106671eecaf7cdf11e9816f",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-belief-10.en-US.v1.mp3",
+      "baseBlob": "86a30f8be81479f9859ad0893891d2ff8d81dea1",
+      "baseBytes": 134060,
+      "baseSha256": "97a7f300e520947873f6e8cbdc1a95e87b4101ef37766edb82fd88620cef3506",
+      "reviewedBytes": 134060,
+      "reviewedSha256": "97a7f300e520947873f6e8cbdc1a95e87b4101ef37766edb82fd88620cef3506",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-belief-11.en-US.v1.mp3",
+      "baseBlob": "4646a475ef2de82ad84c823f35bb2075dd07f095",
+      "baseBytes": 76076,
+      "baseSha256": "9ac2d487b93d11be35c312ea504fb9ce72fde52b13de54170abfb50ba7617775",
+      "reviewedBytes": 76076,
+      "reviewedSha256": "9ac2d487b93d11be35c312ea504fb9ce72fde52b13de54170abfb50ba7617775",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-belief-12.en-US.v1.mp3",
+      "baseBlob": "535b222ffd3385e090d1969f204d16c1326cb203",
+      "baseBytes": 129068,
+      "baseSha256": "7899eb92b16ade12894cd7f4586fb9b7c68f89cfaf6b452d39871b79655a3f6b",
+      "reviewedBytes": 129068,
+      "reviewedSha256": "7899eb92b16ade12894cd7f4586fb9b7c68f89cfaf6b452d39871b79655a3f6b",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-belief-13.en-US.v1.mp3",
+      "baseBlob": "7c835010fd077c9b8a0add34e38bf9247aaedb46",
+      "baseBytes": 83372,
+      "baseSha256": "be64166424f82d7b7e1c738d5ddb6a8de739099cff211f64963704df8a306662",
+      "reviewedBytes": 83372,
+      "reviewedSha256": "be64166424f82d7b7e1c738d5ddb6a8de739099cff211f64963704df8a306662",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-belief-14.en-US.v1.mp3",
+      "baseBlob": "360ace44e6d26762107b8181e6a321b16147a4bd",
+      "baseBytes": 89516,
+      "baseSha256": "0075b6f70f95055d7d515e2e562ac59785a99e3c761baad186d70343f85c9f9d",
+      "reviewedBytes": 89516,
+      "reviewedSha256": "0075b6f70f95055d7d515e2e562ac59785a99e3c761baad186d70343f85c9f9d",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-confidence-00.en-US.v1.mp3",
+      "baseBlob": "ebb8d23fba6cd6f7d1623fd81ae01756db72da02",
+      "baseBytes": 143660,
+      "baseSha256": "add27af33bc235c36cf2cb16b7227110471e38ffd60b9120ad2501010344d6f1",
+      "reviewedBytes": 143660,
+      "reviewedSha256": "add27af33bc235c36cf2cb16b7227110471e38ffd60b9120ad2501010344d6f1",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-confidence-01.en-US.v1.mp3",
+      "baseBlob": "e9dfe9b4fe2edeb8bfe57efc000b92e063ffeeb6",
+      "baseBytes": 139052,
+      "baseSha256": "b7691999a41cb62f11063e081f7efc814efba655191811344b9ef236b11846a0",
+      "reviewedBytes": 139052,
+      "reviewedSha256": "b7691999a41cb62f11063e081f7efc814efba655191811344b9ef236b11846a0",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-confidence-02.en-US.v1.mp3",
+      "baseBlob": "17a32cc43839f18226dc86372aa0d7f0e22bc5f6",
+      "baseBytes": 143660,
+      "baseSha256": "17d35c3cf5282feba20304c95d419b490a485c8036270e834289015f77edcfa4",
+      "reviewedBytes": 143660,
+      "reviewedSha256": "17d35c3cf5282feba20304c95d419b490a485c8036270e834289015f77edcfa4",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-confidence-03.en-US.v1.mp3",
+      "baseBlob": "9fb2f22318f6144615da29d51bdaf58c193f7cff",
+      "baseBytes": 154796,
+      "baseSha256": "02a63f04a7a85625d9c9126fc88e967c6c8615dc2682b1bc2c2caed76a53e567",
+      "reviewedBytes": 154796,
+      "reviewedSha256": "02a63f04a7a85625d9c9126fc88e967c6c8615dc2682b1bc2c2caed76a53e567",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-confidence-04.en-US.v1.mp3",
+      "baseBlob": "7c02cb9ffc1a32880cdcc371f7bd818b20512e30",
+      "baseBytes": 124076,
+      "baseSha256": "b81496efbfd66e22f2bbc66dffee3f7e838cd3ff3fd7e5aa35efe8dc4bf7a1f2",
+      "reviewedBytes": 124076,
+      "reviewedSha256": "b81496efbfd66e22f2bbc66dffee3f7e838cd3ff3fd7e5aa35efe8dc4bf7a1f2",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-confidence-05.en-US.v1.mp3",
+      "baseBlob": "ae2d5a6bebc993ea0228fc1e745603250fe86d42",
+      "baseBytes": 137516,
+      "baseSha256": "e4c988d533ed4486f613090a437612f5ad59489b64edd35240ebe8371a4225cc",
+      "reviewedBytes": 137516,
+      "reviewedSha256": "e4c988d533ed4486f613090a437612f5ad59489b64edd35240ebe8371a4225cc",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-confidence-06.en-US.v1.mp3",
+      "baseBlob": "4939a9dcbb08ff6f7de1d23abea6b3f19fb6ad9a",
+      "baseBytes": 109868,
+      "baseSha256": "bc388e41d178abaee2af17eff69a9bef15264db6ecf26f5db9228375a9d21381",
+      "reviewedBytes": 109868,
+      "reviewedSha256": "bc388e41d178abaee2af17eff69a9bef15264db6ecf26f5db9228375a9d21381",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-confidence-07.en-US.v1.mp3",
+      "baseBlob": "aaaed40dd90705def9c3786813e09756faaf1361",
+      "baseBytes": 147500,
+      "baseSha256": "801dff8f66f8674d5e068db9c6496af82ade3ab8881f9f7ff3b5d1e3670f4cea",
+      "reviewedBytes": 147500,
+      "reviewedSha256": "801dff8f66f8674d5e068db9c6496af82ade3ab8881f9f7ff3b5d1e3670f4cea",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-confidence-08.en-US.v1.mp3",
+      "baseBlob": "ced68890e6fd9dd78a5e5fd4926e6ce348210c88",
+      "baseBytes": 162860,
+      "baseSha256": "ef773b1c6cf2b582e9942f3488bd6c62c868d7eda22c7fa73767d5cf650d873a",
+      "reviewedBytes": 162860,
+      "reviewedSha256": "ef773b1c6cf2b582e9942f3488bd6c62c868d7eda22c7fa73767d5cf650d873a",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-confidence-09.en-US.v1.mp3",
+      "baseBlob": "6c88aeec790549d44257a0b5112c5a6d02176183",
+      "baseBytes": 117932,
+      "baseSha256": "6046c1fa2c8f832564aea290f85659521dc7898991708fb034dd297a0e4f8049",
+      "reviewedBytes": 117932,
+      "reviewedSha256": "6046c1fa2c8f832564aea290f85659521dc7898991708fb034dd297a0e4f8049",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-confidence-10.en-US.v1.mp3",
+      "baseBlob": "94afcf4529cd27b425d197e15fbb23f49763cd7a",
+      "baseBytes": 106412,
+      "baseSha256": "f0c6f2764abda4d72ac048e5f9b439583a70a5ab49e168eccee998d6a82a4291",
+      "reviewedBytes": 106412,
+      "reviewedSha256": "f0c6f2764abda4d72ac048e5f9b439583a70a5ab49e168eccee998d6a82a4291",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-confidence-11.en-US.v1.mp3",
+      "baseBlob": "0faf04d02c1851c9ff7df7ec3050349a2a34cce1",
+      "baseBytes": 99116,
+      "baseSha256": "587c2838c7694ad48d14099515324ee26d6b142176ea1fc0f7fb75786a55954b",
+      "reviewedBytes": 99116,
+      "reviewedSha256": "587c2838c7694ad48d14099515324ee26d6b142176ea1fc0f7fb75786a55954b",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-confidence-12.en-US.v1.mp3",
+      "baseBlob": "24c7b83e72e30cddf27c9ca6b58843e904ceda3f",
+      "baseBytes": 77996,
+      "baseSha256": "73550066a3a50bab8bb33c2229ddd690bfd104898abae17930fbad7fa941ba45",
+      "reviewedBytes": 77996,
+      "reviewedSha256": "73550066a3a50bab8bb33c2229ddd690bfd104898abae17930fbad7fa941ba45",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-confidence-13.en-US.v1.mp3",
+      "baseBlob": "765c596c21136fc9754e669d4b981dff1bfbe62b",
+      "baseBytes": 84524,
+      "baseSha256": "718739f4df2ab1facf914e65f684d78a08092be1751016e8aa8d2e5fb74dfd06",
+      "reviewedBytes": 84524,
+      "reviewedSha256": "718739f4df2ab1facf914e65f684d78a08092be1751016e8aa8d2e5fb74dfd06",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-dopamine-00.en-US.v1.mp3",
+      "baseBlob": "98fa2f6f3c0ce1a479bb10302a56c862b8704f70",
+      "baseBytes": 148652,
+      "baseSha256": "bb93d82ab653a380aa02e282ffdb9b1c1a8acc95ac2cb075275081982b45f578",
+      "reviewedBytes": 148652,
+      "reviewedSha256": "bb93d82ab653a380aa02e282ffdb9b1c1a8acc95ac2cb075275081982b45f578",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-dopamine-01.en-US.v1.mp3",
+      "baseBlob": "b7a449b2d3938935228735e66476b1e3e717d2fd",
+      "baseBytes": 130604,
+      "baseSha256": "b6bdf68109156552b15256e96b361d565f5dbd733e0f3eeb35df0b1f88125171",
+      "reviewedBytes": 130604,
+      "reviewedSha256": "b6bdf68109156552b15256e96b361d565f5dbd733e0f3eeb35df0b1f88125171",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-dopamine-02.en-US.v1.mp3",
+      "baseBlob": "be77c35fd62d2050b65eb6d46ca01ea26b0119e5",
+      "baseBytes": 158636,
+      "baseSha256": "483405c7030c193ca926ee11340ca1395821ba43def42a2eff819507b7ae08e6",
+      "reviewedBytes": 158636,
+      "reviewedSha256": "483405c7030c193ca926ee11340ca1395821ba43def42a2eff819507b7ae08e6",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-dopamine-03.en-US.v1.mp3",
+      "baseBlob": "0af2d91ec4312969eb8febef7a4670b2d2accfe3",
+      "baseBytes": 147500,
+      "baseSha256": "1b9cdb5b02c7fff771b215f571322e833b723daade19e69b89a9e805ce1e1a17",
+      "reviewedBytes": 147500,
+      "reviewedSha256": "1b9cdb5b02c7fff771b215f571322e833b723daade19e69b89a9e805ce1e1a17",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-dopamine-04.en-US.v1.mp3",
+      "baseBlob": "7d7b9fb9f38865e0fc5da414cc2b8f5885354ca9",
+      "baseBytes": 147500,
+      "baseSha256": "748bb226523d66db33ecdac61dcee7caee14ce3af3a4db77a6818cf46a1c9214",
+      "reviewedBytes": 147500,
+      "reviewedSha256": "748bb226523d66db33ecdac61dcee7caee14ce3af3a4db77a6818cf46a1c9214",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-dopamine-05.en-US.v1.mp3",
+      "baseBlob": "4205ceb04fb86839047822d890495151c7084324",
+      "baseBytes": 140204,
+      "baseSha256": "c56b5d6554104d0005ecf3b1e1eba034fae5c203a5d03f0581df62eb11b3da9d",
+      "reviewedBytes": 140204,
+      "reviewedSha256": "c56b5d6554104d0005ecf3b1e1eba034fae5c203a5d03f0581df62eb11b3da9d",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-dopamine-06.en-US.v1.mp3",
+      "baseBlob": "d1b83dcb14cf250b238525295359d560d4494ed8",
+      "baseBytes": 140588,
+      "baseSha256": "4e9ea515cd627242e37b7bb63024e38afbaa2adc7aa395f8b16037ed9c141e47",
+      "reviewedBytes": 140588,
+      "reviewedSha256": "4e9ea515cd627242e37b7bb63024e38afbaa2adc7aa395f8b16037ed9c141e47",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-dopamine-07.en-US.v1.mp3",
+      "baseBlob": "70620e22a0707a2a3728c8411261ab46fa9cccb2",
+      "baseBytes": 120620,
+      "baseSha256": "37b007c48a82a77b6c708eadd7e8544f43a1d8fe6abb7347cfccf0362cdc1f14",
+      "reviewedBytes": 120620,
+      "reviewedSha256": "37b007c48a82a77b6c708eadd7e8544f43a1d8fe6abb7347cfccf0362cdc1f14",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-dopamine-08.en-US.v1.mp3",
+      "baseBlob": "327ae56be1771244913d9bd6664322312555da74",
+      "baseBytes": 138668,
+      "baseSha256": "33ccc978161580b874d692e9db04383707371205522663f4cb7b217457522f8b",
+      "reviewedBytes": 138668,
+      "reviewedSha256": "33ccc978161580b874d692e9db04383707371205522663f4cb7b217457522f8b",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-dopamine-09.en-US.v1.mp3",
+      "baseBlob": "40a4fd331851563c439715b1432f69494600bb98",
+      "baseBytes": 135596,
+      "baseSha256": "337ab7384490ee3d766976a3d3ae8b1d6b95e8542864de2268c5c56dbbcbf65c",
+      "reviewedBytes": 135596,
+      "reviewedSha256": "337ab7384490ee3d766976a3d3ae8b1d6b95e8542864de2268c5c56dbbcbf65c",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-dopamine-10.en-US.v1.mp3",
+      "baseBlob": "2b75ed485385cc385bdd5e2f41ff53b430d7bd1a",
+      "baseBytes": 114092,
+      "baseSha256": "4b611eb89cfa9514ff289dff4e1b2cf2bddcf248edb140a68915d3a1d7e8a8a9",
+      "reviewedBytes": 114092,
+      "reviewedSha256": "4b611eb89cfa9514ff289dff4e1b2cf2bddcf248edb140a68915d3a1d7e8a8a9",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-dopamine-11.en-US.v1.mp3",
+      "baseBlob": "6c35b04d5efafd437bc6044d497da101aa1b0085",
+      "baseBytes": 99116,
+      "baseSha256": "7f56a05ad7c3321b8d3e7ce3d3da8b18dd032135dfbe1418652d39247dc5c1e8",
+      "reviewedBytes": 99116,
+      "reviewedSha256": "7f56a05ad7c3321b8d3e7ce3d3da8b18dd032135dfbe1418652d39247dc5c1e8",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-dopamine-12.en-US.v1.mp3",
+      "baseBlob": "54f8f4d023c8b58d84fee3efa89f5b06131c3c2d",
+      "baseBytes": 136364,
+      "baseSha256": "62e8bcb7ab221ebf90ff6a18bda383c2c679f6927a0cc1f730fd553230a61953",
+      "reviewedBytes": 136364,
+      "reviewedSha256": "62e8bcb7ab221ebf90ff6a18bda383c2c679f6927a0cc1f730fd553230a61953",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-dopamine-13.en-US.v1.mp3",
+      "baseBlob": "dd27fe1f6b98a7b990ee3a9ec29ea582cd042107",
+      "baseBytes": 70316,
+      "baseSha256": "2cf9c6a7c3b9fa3f31d129be60a0d1b53ae0d8d5089e330f210ee1e109f03907",
+      "reviewedBytes": 70316,
+      "reviewedSha256": "2cf9c6a7c3b9fa3f31d129be60a0d1b53ae0d8d5089e330f210ee1e109f03907",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-feel-good-00.en-US.v1.mp3",
+      "baseBlob": "b628c1cdd594b55ad443d29b29db0d02a8d1862c",
+      "baseBytes": 145964,
+      "baseSha256": "8ee8cbcc00ec84ef23a374b14b581e331275a354a86e0f270af9ba7c83519383",
+      "reviewedBytes": 145964,
+      "reviewedSha256": "8ee8cbcc00ec84ef23a374b14b581e331275a354a86e0f270af9ba7c83519383",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-feel-good-01.en-US.v1.mp3",
+      "baseBlob": "f1abf6a42f051ee3801c519ff0a7f75295bf8c1c",
+      "baseBytes": 135596,
+      "baseSha256": "11d456c577dedf2b2b5571c1a54ff39bbdd5e3a70fb19d6bd11896817a6f8b20",
+      "reviewedBytes": 135596,
+      "reviewedSha256": "11d456c577dedf2b2b5571c1a54ff39bbdd5e3a70fb19d6bd11896817a6f8b20",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-feel-good-02.en-US.v1.mp3",
+      "baseBlob": "606abc980786e247fde1407898ddbf2afdfe52bf",
+      "baseBytes": 135212,
+      "baseSha256": "8aee2003b833668b80aed793d7f428d24e0089d340bb1646a8b5c9fb8aa68160",
+      "reviewedBytes": 135212,
+      "reviewedSha256": "8aee2003b833668b80aed793d7f428d24e0089d340bb1646a8b5c9fb8aa68160",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-feel-good-03.en-US.v1.mp3",
+      "baseBlob": "aa2d43040850936c2bf4437274edeffd0bfb9bba",
+      "baseBytes": 112172,
+      "baseSha256": "721d9e6b99c3c39d61aa4fe07e0f10298311cad2b15b3a61ab15133eaa89b55b",
+      "reviewedBytes": 112172,
+      "reviewedSha256": "721d9e6b99c3c39d61aa4fe07e0f10298311cad2b15b3a61ab15133eaa89b55b",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-feel-good-04.en-US.v1.mp3",
+      "baseBlob": "7d84ca1a43de2d3f71415fd3b2ad5b03749d8d2b",
+      "baseBytes": 152492,
+      "baseSha256": "b0750e09a3b6a7e1edc63bc2a4286f592e9da72fcbfbbcd5ec930900d7974267",
+      "reviewedBytes": 152492,
+      "reviewedSha256": "b0750e09a3b6a7e1edc63bc2a4286f592e9da72fcbfbbcd5ec930900d7974267",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-feel-good-05.en-US.v1.mp3",
+      "baseBlob": "3cd0842e6e83b20f9436aa29576088e0c71d2ff3",
+      "baseBytes": 135596,
+      "baseSha256": "b32fb7df9339e930ebca509fdd2a57206ae7bd5a8dbd500bad1043eb180110ad",
+      "reviewedBytes": 135596,
+      "reviewedSha256": "b32fb7df9339e930ebca509fdd2a57206ae7bd5a8dbd500bad1043eb180110ad",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-feel-good-06.en-US.v1.mp3",
+      "baseBlob": "59a084c4d1777e762ad47f813b54c3288aaf6e7f",
+      "baseBytes": 117164,
+      "baseSha256": "38b1e621a30cd1b3b9ddc554ffd50a5856211a0e611da23e1e1a2a964224853d",
+      "reviewedBytes": 117164,
+      "reviewedSha256": "38b1e621a30cd1b3b9ddc554ffd50a5856211a0e611da23e1e1a2a964224853d",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-feel-good-07.en-US.v1.mp3",
+      "baseBlob": "ab263a4a6a75c0edca9ba5d2c44998bac4e1a583",
+      "baseBytes": 119852,
+      "baseSha256": "a1d2a171b768ca7db70275628f634aa7d4293a91075baa637629031282953135",
+      "reviewedBytes": 119852,
+      "reviewedSha256": "a1d2a171b768ca7db70275628f634aa7d4293a91075baa637629031282953135",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-feel-good-08.en-US.v1.mp3",
+      "baseBlob": "26177f473a1c93353bef189d639894827f6309dc",
+      "baseBytes": 150956,
+      "baseSha256": "68a42a7d77a537b56758b02ae9b79564b7b347f1da8e1ffe79735608e54bc8bd",
+      "reviewedBytes": 150956,
+      "reviewedSha256": "68a42a7d77a537b56758b02ae9b79564b7b347f1da8e1ffe79735608e54bc8bd",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-feel-good-09.en-US.v1.mp3",
+      "baseBlob": "7ecc00798890d3bd24384bf448f7e06d9d2748a5",
+      "baseBytes": 101804,
+      "baseSha256": "af9f7eaed95d405ef6b591eef5c8f78f192bb3154811bc84a0c58b86255b81d4",
+      "reviewedBytes": 101804,
+      "reviewedSha256": "af9f7eaed95d405ef6b591eef5c8f78f192bb3154811bc84a0c58b86255b81d4",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-feel-good-10.en-US.v1.mp3",
+      "baseBlob": "93f78f7a804e077616c86e84444f865c5b9d8ca7",
+      "baseBytes": 95276,
+      "baseSha256": "ecbb4f805cf28f3c2f6e5db09c73db4b0f470e38f965b6b7d03a21df48831c68",
+      "reviewedBytes": 95276,
+      "reviewedSha256": "ecbb4f805cf28f3c2f6e5db09c73db4b0f470e38f965b6b7d03a21df48831c68",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-feel-good-11.en-US.v1.mp3",
+      "baseBlob": "00c7e4aeb8f503ff98829b3a8096b4f631b0f0f0",
+      "baseBytes": 90284,
+      "baseSha256": "78fde1f79c01013231948783981fb7f9ec31d016dcdeaaab7b8d50fea1295255",
+      "reviewedBytes": 90284,
+      "reviewedSha256": "78fde1f79c01013231948783981fb7f9ec31d016dcdeaaab7b8d50fea1295255",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-feel-good-12.en-US.v1.mp3",
+      "baseBlob": "f8d9095891e4dcaf8bda858d5bd53e9aa577b0c0",
+      "baseBytes": 76076,
+      "baseSha256": "4bd8aa04f5cb9396f8bac63726cf0c4c2217b4d6b65a3cb2a5076dda42bacf74",
+      "reviewedBytes": 76076,
+      "reviewedSha256": "4bd8aa04f5cb9396f8bac63726cf0c4c2217b4d6b65a3cb2a5076dda42bacf74",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-focus-00.en-US.v1.mp3",
+      "baseBlob": "197143ec0951879ed5e04983749ca44d3d203dcb",
+      "baseBytes": 147500,
+      "baseSha256": "bf76952fbff8df2899fd7ddfea9f29c710ba6c77d08c6f238975356a474fc6e3",
+      "reviewedBytes": 147500,
+      "reviewedSha256": "bf76952fbff8df2899fd7ddfea9f29c710ba6c77d08c6f238975356a474fc6e3",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-focus-01.en-US.v1.mp3",
+      "baseBlob": "c47e316df3cad8d3227d21f9d077cdd5a20e6379",
+      "baseBytes": 109484,
+      "baseSha256": "45c4381aff6dc332f3132aff07ea4f8d5368a998214c91b95a9045d6f3c76ddd",
+      "reviewedBytes": 109484,
+      "reviewedSha256": "45c4381aff6dc332f3132aff07ea4f8d5368a998214c91b95a9045d6f3c76ddd",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-focus-02.en-US.v1.mp3",
+      "baseBlob": "ee2c2e79b27eba69195f28532c9fd33dba2d8e8b",
+      "baseBytes": 139820,
+      "baseSha256": "a8d04cf943b48bc6f6b954145c8024ea9bdaa2fb4b15911cffc558424646ee35",
+      "reviewedBytes": 139820,
+      "reviewedSha256": "a8d04cf943b48bc6f6b954145c8024ea9bdaa2fb4b15911cffc558424646ee35",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-focus-03.en-US.v1.mp3",
+      "baseBlob": "c7331cf702718c3c87b0833313fda89150f5d585",
+      "baseBytes": 143276,
+      "baseSha256": "a61b304285796c9ea8b4c440843e10dff2ef951d6121a32cfb1205cad2cd956e",
+      "reviewedBytes": 143276,
+      "reviewedSha256": "a61b304285796c9ea8b4c440843e10dff2ef951d6121a32cfb1205cad2cd956e",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-focus-04.en-US.v1.mp3",
+      "baseBlob": "594d90f4b67f01a51786f63ec75aa2c2b3a47dd1",
+      "baseBytes": 106412,
+      "baseSha256": "b66a218efaacfa560b9459d82957f63c389c18c66bdf533125ac61f01ff83251",
+      "reviewedBytes": 106412,
+      "reviewedSha256": "b66a218efaacfa560b9459d82957f63c389c18c66bdf533125ac61f01ff83251",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-focus-05.en-US.v1.mp3",
+      "baseBlob": "11d359fa2d9a539ce2f11e408227186eb3c368f8",
+      "baseBytes": 138284,
+      "baseSha256": "0e4d70a28ab8aba6036f0a6a97bd702353eb1ce755e97e5c52f9a82b1bd82fb5",
+      "reviewedBytes": 138284,
+      "reviewedSha256": "0e4d70a28ab8aba6036f0a6a97bd702353eb1ce755e97e5c52f9a82b1bd82fb5",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-focus-06.en-US.v1.mp3",
+      "baseBlob": "f4ea5f7751a6f95744b8c278d2bec9b6eab92137",
+      "baseBytes": 114860,
+      "baseSha256": "62fb5c8f80bd26a26113cecaa61e091294a6753acac0db65d10db2bbc1a74763",
+      "reviewedBytes": 114860,
+      "reviewedSha256": "62fb5c8f80bd26a26113cecaa61e091294a6753acac0db65d10db2bbc1a74763",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-focus-07.en-US.v1.mp3",
+      "baseBlob": "9694f9d1bd9ff71e18a12b7c7023ad73b0165868",
+      "baseBytes": 112940,
+      "baseSha256": "e156e9fb7157184d9386d0bb4e4457f6f23d8267deff3e5b683ad53b0af91fc8",
+      "reviewedBytes": 112940,
+      "reviewedSha256": "e156e9fb7157184d9386d0bb4e4457f6f23d8267deff3e5b683ad53b0af91fc8",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-focus-08.en-US.v1.mp3",
+      "baseBlob": "44ec7f718f457fc98e59ddb662e0c83c499431c3",
+      "baseBytes": 116396,
+      "baseSha256": "d213723bc1d436b019b89910c64506b935684747d73d07fd6e408f29261204a3",
+      "reviewedBytes": 116396,
+      "reviewedSha256": "d213723bc1d436b019b89910c64506b935684747d73d07fd6e408f29261204a3",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-focus-09.en-US.v1.mp3",
+      "baseBlob": "5dc76e5e3c07e93b90061fb37a8066454edc305d",
+      "baseBytes": 129836,
+      "baseSha256": "a214812f3170f980bafa2b6f997fe90baac94359557215a6e0a6c005286eb620",
+      "reviewedBytes": 129836,
+      "reviewedSha256": "a214812f3170f980bafa2b6f997fe90baac94359557215a6e0a6c005286eb620",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-focus-10.en-US.v1.mp3",
+      "baseBlob": "b8e6545cc393deb2b4a5909a8e5967a69c6076c5",
+      "baseBytes": 105260,
+      "baseSha256": "960500ef489af0f3494d8eaccf73718f7ccf7a315ada283d0024f309f848f973",
+      "reviewedBytes": 105260,
+      "reviewedSha256": "960500ef489af0f3494d8eaccf73718f7ccf7a315ada283d0024f309f848f973",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-focus-11.en-US.v1.mp3",
+      "baseBlob": "23aaea10d9b3c7ea072ca8030db08a5b3b859652",
+      "baseBytes": 121772,
+      "baseSha256": "3122b6bfa17cbaa26344497ce670a4133ba5e65adb6c6a93a58809d8e300afde",
+      "reviewedBytes": 121772,
+      "reviewedSha256": "3122b6bfa17cbaa26344497ce670a4133ba5e65adb6c6a93a58809d8e300afde",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-focus-12.en-US.v1.mp3",
+      "baseBlob": "ef0991d48f0b33077360602006f4022c6122a44f",
+      "baseBytes": 32300,
+      "baseSha256": "ab86cdf2e24bce584004b05b0360756c4475e021f60da1322aeacfbb07abd281",
+      "reviewedBytes": 32300,
+      "reviewedSha256": "ab86cdf2e24bce584004b05b0360756c4475e021f60da1322aeacfbb07abd281",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-gratitude-00.en-US.v1.mp3",
+      "baseBlob": "f4e6b0da636d86a63b465680e3a703e4f35b712e",
+      "baseBytes": 143276,
+      "baseSha256": "a1bcd76273480c4a3810e90c9bd60ba86c7335c0e07a6c81f0d83fbd02369101",
+      "reviewedBytes": 143276,
+      "reviewedSha256": "a1bcd76273480c4a3810e90c9bd60ba86c7335c0e07a6c81f0d83fbd02369101",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-gratitude-01.en-US.v1.mp3",
+      "baseBlob": "aa2901b132ff380e32e80d0abc33ac11f9f4b973",
+      "baseBytes": 135212,
+      "baseSha256": "f254dfdd8eccd4c2637579dfdac0f43182a13aad2954e49936b14d524714c3e1",
+      "reviewedBytes": 135212,
+      "reviewedSha256": "f254dfdd8eccd4c2637579dfdac0f43182a13aad2954e49936b14d524714c3e1",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-gratitude-02.en-US.v1.mp3",
+      "baseBlob": "a78ff4f598d4f8ed49343883774799453dbad224",
+      "baseBytes": 139436,
+      "baseSha256": "64fa4c9c2b6a22a5afddb9c34b96a18a086816d63ba2c707904988487f634f5a",
+      "reviewedBytes": 139436,
+      "reviewedSha256": "64fa4c9c2b6a22a5afddb9c34b96a18a086816d63ba2c707904988487f634f5a",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-gratitude-03.en-US.v1.mp3",
+      "baseBlob": "478f3f62c4d2dd5dca637285f31d3ab06d9ad166",
+      "baseBytes": 129836,
+      "baseSha256": "ae1a1a999eee730d430668e012e0c3890b7c8247f826dc4d718e29ef1d986daf",
+      "reviewedBytes": 129836,
+      "reviewedSha256": "ae1a1a999eee730d430668e012e0c3890b7c8247f826dc4d718e29ef1d986daf",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-gratitude-04.en-US.v1.mp3",
+      "baseBlob": "7023014552725a287cda20ccc458ce6300526a16",
+      "baseBytes": 118316,
+      "baseSha256": "cc664350498275aec013ab11ae2bbbcf6e15a9f47a730a0ede2eca3fcd2fc3be",
+      "reviewedBytes": 118316,
+      "reviewedSha256": "cc664350498275aec013ab11ae2bbbcf6e15a9f47a730a0ede2eca3fcd2fc3be",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-gratitude-05.en-US.v1.mp3",
+      "baseBlob": "2d1ecc1708944fa215810012ff2670f48932fe27",
+      "baseBytes": 125228,
+      "baseSha256": "e044a18895dce6f3234c807c8a723f83c15c99494d00afe469a8c5685a2c378f",
+      "reviewedBytes": 125228,
+      "reviewedSha256": "e044a18895dce6f3234c807c8a723f83c15c99494d00afe469a8c5685a2c378f",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-gratitude-06.en-US.v1.mp3",
+      "baseBlob": "4751a55941a2af28562a4a3b8889be6e3f0737bc",
+      "baseBytes": 142892,
+      "baseSha256": "b8f5ae0514e999aabbd29be54f4dc7a4910ecf3d7dfc10c9fe000d50a5c852af",
+      "reviewedBytes": 142892,
+      "reviewedSha256": "b8f5ae0514e999aabbd29be54f4dc7a4910ecf3d7dfc10c9fe000d50a5c852af",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-gratitude-07.en-US.v1.mp3",
+      "baseBlob": "054682cdcdab4f6b62edfc297c5625d6e067db68",
+      "baseBytes": 147116,
+      "baseSha256": "03c6148acf867f3fddb09dc3de996b3d77334ebf85dc88a2f68d2381e3dda669",
+      "reviewedBytes": 147116,
+      "reviewedSha256": "03c6148acf867f3fddb09dc3de996b3d77334ebf85dc88a2f68d2381e3dda669",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-gratitude-08.en-US.v1.mp3",
+      "baseBlob": "49b2aa0349568e4cafb5ec9b178079aea2672af4",
+      "baseBytes": 105260,
+      "baseSha256": "d1e21b47e4a3e807857e9fe52297991caa08b8a4576a3dfd5a05a897e39f7e3b",
+      "reviewedBytes": 105260,
+      "reviewedSha256": "d1e21b47e4a3e807857e9fe52297991caa08b8a4576a3dfd5a05a897e39f7e3b",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-gratitude-09.en-US.v1.mp3",
+      "baseBlob": "2204a470eb2cfa3d019cf8e8e8ebd1a961892d28",
+      "baseBytes": 90668,
+      "baseSha256": "907a796663fa3b32e39c63023e9213df9581a5ff42c852ccac18465cea5fac1a",
+      "reviewedBytes": 90668,
+      "reviewedSha256": "907a796663fa3b32e39c63023e9213df9581a5ff42c852ccac18465cea5fac1a",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-gratitude-10.en-US.v1.mp3",
+      "baseBlob": "5163009025880396e6ee852f53dc5367fa9904dc",
+      "baseBytes": 68012,
+      "baseSha256": "0537323f6c1208189cba58ec2ec792e4bf9b8e4c5d0e760da570b88218b83682",
+      "reviewedBytes": 68012,
+      "reviewedSha256": "0537323f6c1208189cba58ec2ec792e4bf9b8e4c5d0e760da570b88218b83682",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-gratitude-11.en-US.v1.mp3",
+      "baseBlob": "a78d89f4681c2bccfea8a9f4a0def3304769d210",
+      "baseBytes": 128300,
+      "baseSha256": "9f2e9908b9dae2f2a9df26a4e93051bd08d87e2a888e3ae5f4ec3eb504e6d2de",
+      "reviewedBytes": 128300,
+      "reviewedSha256": "9f2e9908b9dae2f2a9df26a4e93051bd08d87e2a888e3ae5f4ec3eb504e6d2de",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-gratitude-12.en-US.v1.mp3",
+      "baseBlob": "24486baf342ecdade466393a7cfa4596358ad7a7",
+      "baseBytes": 74540,
+      "baseSha256": "4a6e518c541de7056e877667e6ac35e6d571985309c16fbd7f5473f7176df419",
+      "reviewedBytes": 74540,
+      "reviewedSha256": "4a6e518c541de7056e877667e6ac35e6d571985309c16fbd7f5473f7176df419",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-gratitude-13.en-US.v1.mp3",
+      "baseBlob": "d1d0d207a42b0d696327bd90d02ab2548c7bae97",
+      "baseBytes": 113708,
+      "baseSha256": "87289b6a59c05e8307698fc5ba736046090d81499824089e71bf09cd4e18ac76",
+      "reviewedBytes": 113708,
+      "reviewedSha256": "87289b6a59c05e8307698fc5ba736046090d81499824089e71bf09cd4e18ac76",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-manifest-00.en-US.v1.mp3",
+      "baseBlob": "18d1e01ecef9d096dd21088a1f5ea447feaf5f81",
+      "baseBytes": 131372,
+      "baseSha256": "4936a7b39d252c5facd5762eac5711b28480839735880ee111d7f80fdbadf463",
+      "reviewedBytes": 131372,
+      "reviewedSha256": "4936a7b39d252c5facd5762eac5711b28480839735880ee111d7f80fdbadf463",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-manifest-01.en-US.v1.mp3",
+      "baseBlob": "e5364417cc821851ac65c3522b189ffa30bce761",
+      "baseBytes": 151724,
+      "baseSha256": "2993b31b9d342adb33ed99d4bd90ac4509382b6adaa24104d8ccc8f6416d1a44",
+      "reviewedBytes": 151724,
+      "reviewedSha256": "2993b31b9d342adb33ed99d4bd90ac4509382b6adaa24104d8ccc8f6416d1a44",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-manifest-02.en-US.v1.mp3",
+      "baseBlob": "2b32b58e11251c3faf026758f61e371b9f2cfc89",
+      "baseBytes": 155948,
+      "baseSha256": "b39ed650f2a2b475f129ea9d8fc5dacfd3363a3154b2b3645dc19f1675265109",
+      "reviewedBytes": 155948,
+      "reviewedSha256": "b39ed650f2a2b475f129ea9d8fc5dacfd3363a3154b2b3645dc19f1675265109",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-manifest-03.en-US.v1.mp3",
+      "baseBlob": "b66648e0a08b314c3d7480f8d6e3c50051ade0b6",
+      "baseBytes": 123692,
+      "baseSha256": "cf30aa74cd7f7ddb6e15eaf31377c0de26f0d997be84e215b4972060ff154943",
+      "reviewedBytes": 123692,
+      "reviewedSha256": "cf30aa74cd7f7ddb6e15eaf31377c0de26f0d997be84e215b4972060ff154943",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-manifest-04.en-US.v1.mp3",
+      "baseBlob": "4584694e2737073395d95d611b0e190f0629cc10",
+      "baseBytes": 151340,
+      "baseSha256": "a5ff5c7cdd9b326c6a7f6879704f6381c4987b7516bed3d28711f0ea3ab7c777",
+      "reviewedBytes": 151340,
+      "reviewedSha256": "a5ff5c7cdd9b326c6a7f6879704f6381c4987b7516bed3d28711f0ea3ab7c777",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-manifest-05.en-US.v1.mp3",
+      "baseBlob": "0e5dd941dc8c5f584420ac86dab3f5ed5ec81ad5",
+      "baseBytes": 103724,
+      "baseSha256": "781c487908a4f287d85329c12d2f9e2749248956f0fcece57c356f01f6b71071",
+      "reviewedBytes": 103724,
+      "reviewedSha256": "781c487908a4f287d85329c12d2f9e2749248956f0fcece57c356f01f6b71071",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-manifest-06.en-US.v1.mp3",
+      "baseBlob": "fb23077a97ffc0a903b75ed21097201efb3f422d",
+      "baseBytes": 96044,
+      "baseSha256": "b7952774a3e967bab887cafd51ab52aa29af409d960b60f14dd93851445662f3",
+      "reviewedBytes": 96044,
+      "reviewedSha256": "b7952774a3e967bab887cafd51ab52aa29af409d960b60f14dd93851445662f3",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-manifest-07.en-US.v1.mp3",
+      "baseBlob": "acedd41e2266fb07874473f6755f36f3f25e9628",
+      "baseBytes": 115628,
+      "baseSha256": "0fd8b26cbf98ce9e94763235832ee0cf665261505d4443585d5ea4fced79f4e5",
+      "reviewedBytes": 115628,
+      "reviewedSha256": "0fd8b26cbf98ce9e94763235832ee0cf665261505d4443585d5ea4fced79f4e5",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-manifest-08.en-US.v1.mp3",
+      "baseBlob": "d27635ed5a466b72a25758af224fe3a53403a130",
+      "baseBytes": 156716,
+      "baseSha256": "aaaf07567fd94d4dd6cbfa9091811daff6e61fe5dd1fb0fa331a1f6f886242c8",
+      "reviewedBytes": 156716,
+      "reviewedSha256": "aaaf07567fd94d4dd6cbfa9091811daff6e61fe5dd1fb0fa331a1f6f886242c8",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-manifest-09.en-US.v1.mp3",
+      "baseBlob": "f75ec6aaf952c8889216552de1de542504783c35",
+      "baseBytes": 120620,
+      "baseSha256": "a581eedfed1ce2e94c05629ecb42d882175a00b7874ba8d2aec3234dea968404",
+      "reviewedBytes": 120620,
+      "reviewedSha256": "a581eedfed1ce2e94c05629ecb42d882175a00b7874ba8d2aec3234dea968404",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-manifest-10.en-US.v1.mp3",
+      "baseBlob": "eb83530a4cf9821803c67eb0f45b7b9cb11ba615",
+      "baseBytes": 141356,
+      "baseSha256": "0c6048a5a819384a852de990200779bd5a8584f46300474acdb61a32274635c9",
+      "reviewedBytes": 141356,
+      "reviewedSha256": "0c6048a5a819384a852de990200779bd5a8584f46300474acdb61a32274635c9",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-manifest-11.en-US.v1.mp3",
+      "baseBlob": "8c636d7ef5382d11505d1366cccfed6265007ac1",
+      "baseBytes": 129452,
+      "baseSha256": "3245a2bf21091b3f5cc8fc4033528244bccee119f8fa7495d2cb3a63396f02d7",
+      "reviewedBytes": 129452,
+      "reviewedSha256": "3245a2bf21091b3f5cc8fc4033528244bccee119f8fa7495d2cb3a63396f02d7",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-manifest-12.en-US.v1.mp3",
+      "baseBlob": "d325ce9027abc8301c582b51e1d8eef2bd62fa40",
+      "baseBytes": 92204,
+      "baseSha256": "0ccabc5445d652847a60ac5145d1044795350afb1ff59dc7a84088e68251c3bc",
+      "reviewedBytes": 92204,
+      "reviewedSha256": "0ccabc5445d652847a60ac5145d1044795350afb1ff59dc7a84088e68251c3bc",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-manifest-13.en-US.v1.mp3",
+      "baseBlob": "1d5a815927873756fdf03ac13efdc0257c19dfde",
+      "baseBytes": 131372,
+      "baseSha256": "96448260fd41174990e6a804a67ad1691a3c93651cb133f6d0c7e822820e5e9a",
+      "reviewedBytes": 131372,
+      "reviewedSha256": "96448260fd41174990e6a804a67ad1691a3c93651cb133f6d0c7e822820e5e9a",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-manifest-14.en-US.v1.mp3",
+      "baseBlob": "7681ba9893462a4b85aa74b4862bdf41eaf465da",
+      "baseBytes": 111788,
+      "baseSha256": "e8101bc27b74dca8e7970039229dfde48828943b9793d0db647e9eb4ab43375b",
+      "reviewedBytes": 111788,
+      "reviewedSha256": "e8101bc27b74dca8e7970039229dfde48828943b9793d0db647e9eb4ab43375b",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-manifest-15.en-US.v1.mp3",
+      "baseBlob": "3dfaadd23a8476eed17dbe1f060583f8f577afcb",
+      "baseBytes": 124844,
+      "baseSha256": "f3889265f61c5825c01fbb14d0b855e33caf3423645526b9938aa8f6fb9e2d23",
+      "reviewedBytes": 124844,
+      "reviewedSha256": "f3889265f61c5825c01fbb14d0b855e33caf3423645526b9938aa8f6fb9e2d23",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-manifest-16.en-US.v1.mp3",
+      "baseBlob": "758edc01fe883af08fc3fa6921d20c6df99e95dc",
+      "baseBytes": 139820,
+      "baseSha256": "e03e0334f2b423fc56d6ac5d1b5eaa0fe68763256e53bf64041efd9738faf2cf",
+      "reviewedBytes": 139820,
+      "reviewedSha256": "e03e0334f2b423fc56d6ac5d1b5eaa0fe68763256e53bf64041efd9738faf2cf",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-motivation-00.en-US.v1.mp3",
+      "baseBlob": "a57b75fbf4b4401cf2499b3cab28a71dad3244de",
+      "baseBytes": 149420,
+      "baseSha256": "74e52d82f2df00850ecc19a3b5f5923e3bf1832967558399b3530ed6e8596bec",
+      "reviewedBytes": 149420,
+      "reviewedSha256": "74e52d82f2df00850ecc19a3b5f5923e3bf1832967558399b3530ed6e8596bec",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-motivation-01.en-US.v1.mp3",
+      "baseBlob": "fc32153dd6f4c851bd7da769d21b3e6ae39edd18",
+      "baseBytes": 119468,
+      "baseSha256": "1c489a08f92f2f58f60ad358b1a0cff27cae173282fa3e309575798d99c6649e",
+      "reviewedBytes": 119468,
+      "reviewedSha256": "1c489a08f92f2f58f60ad358b1a0cff27cae173282fa3e309575798d99c6649e",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-motivation-02.en-US.v1.mp3",
+      "baseBlob": "144406a3889e7ecd9bdfe9e6cf457ee8c18ad792",
+      "baseBytes": 157484,
+      "baseSha256": "3b57e82a4bf7014375b685dc8f169783be619a0898a84a6e1572e0a22044c885",
+      "reviewedBytes": 157484,
+      "reviewedSha256": "3b57e82a4bf7014375b685dc8f169783be619a0898a84a6e1572e0a22044c885",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-motivation-03.en-US.v1.mp3",
+      "baseBlob": "52a4e85ee8007186bdb85216a99f2b161d2102d1",
+      "baseBytes": 114860,
+      "baseSha256": "6cccfe9783f4d60ca9bdb4f4f51e5bbc4eac7a1548ee447f8dee8d73b9ee4283",
+      "reviewedBytes": 114860,
+      "reviewedSha256": "6cccfe9783f4d60ca9bdb4f4f51e5bbc4eac7a1548ee447f8dee8d73b9ee4283",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-motivation-04.en-US.v1.mp3",
+      "baseBlob": "a73238f0afbb86707d7d004bf6ae506017e3b619",
+      "baseBytes": 168620,
+      "baseSha256": "614d8e2b02b229b52ca2d6ffd8b03280cf7da47efa95967767ed4e6a4c22cf5d",
+      "reviewedBytes": 168620,
+      "reviewedSha256": "614d8e2b02b229b52ca2d6ffd8b03280cf7da47efa95967767ed4e6a4c22cf5d",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-motivation-05.en-US.v1.mp3",
+      "baseBlob": "d5696b23c85dd5e29d736468184e336fdf2b6f63",
+      "baseBytes": 161708,
+      "baseSha256": "1c6287a258ada4ee092a5bdd2ca156c4a4846ea35ab0d351fa2adc9b03a6d212",
+      "reviewedBytes": 161708,
+      "reviewedSha256": "1c6287a258ada4ee092a5bdd2ca156c4a4846ea35ab0d351fa2adc9b03a6d212",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-motivation-06.en-US.v1.mp3",
+      "baseBlob": "ec34eb0ff9229351964e72c2c426400f7c100038",
+      "baseBytes": 114092,
+      "baseSha256": "682f8a80002886008f1fe5de6fdd8f3fa1b744ef6affae92298244f5988e6307",
+      "reviewedBytes": 114092,
+      "reviewedSha256": "682f8a80002886008f1fe5de6fdd8f3fa1b744ef6affae92298244f5988e6307",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-motivation-07.en-US.v1.mp3",
+      "baseBlob": "56a4bd1e4929d259f6c770878f1f4a3d87dc1d1a",
+      "baseBytes": 150572,
+      "baseSha256": "0917a349f70d60aa057aa1cdb1382575f87462e105ecf781372b454fa72f043b",
+      "reviewedBytes": 150572,
+      "reviewedSha256": "0917a349f70d60aa057aa1cdb1382575f87462e105ecf781372b454fa72f043b",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-motivation-08.en-US.v1.mp3",
+      "baseBlob": "4975ab2e53e5b4f0504f0545c152051de987d0b2",
+      "baseBytes": 134444,
+      "baseSha256": "2db32a02d1ca67d6ab76c995b5e8cc08c829c11e39949dc6f09b2ae537bbaa4e",
+      "reviewedBytes": 134444,
+      "reviewedSha256": "2db32a02d1ca67d6ab76c995b5e8cc08c829c11e39949dc6f09b2ae537bbaa4e",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-motivation-09.en-US.v1.mp3",
+      "baseBlob": "4b7e6750b8dc7a4d0bdd4a80a619614e0593ba17",
+      "baseBytes": 151340,
+      "baseSha256": "7d8af549d787debc4de63d5ade6c0717f72d181b0a7ff565e9ebff75140746a0",
+      "reviewedBytes": 151340,
+      "reviewedSha256": "7d8af549d787debc4de63d5ade6c0717f72d181b0a7ff565e9ebff75140746a0",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-motivation-10.en-US.v1.mp3",
+      "baseBlob": "20b66762f78652ffe3ab24b8e16187bbe03ef9d5",
+      "baseBytes": 108332,
+      "baseSha256": "61c0803b620b19d51f6bef89b0005d83c51423be4a84ecf81c8d1b5c6e63e90d",
+      "reviewedBytes": 108332,
+      "reviewedSha256": "61c0803b620b19d51f6bef89b0005d83c51423be4a84ecf81c8d1b5c6e63e90d",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-motivation-11.en-US.v1.mp3",
+      "baseBlob": "acd631b6077405ec7709f37afd33b813b2a6a233",
+      "baseBytes": 96044,
+      "baseSha256": "0204e06814661b8cc97ed3e582a8ab3bfd95bb97c325598018b53d3b93f46b52",
+      "reviewedBytes": 96044,
+      "reviewedSha256": "0204e06814661b8cc97ed3e582a8ab3bfd95bb97c325598018b53d3b93f46b52",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-motivation-12.en-US.v1.mp3",
+      "baseBlob": "559e2e96a40e2a44ccee686e9c775a5a03503363",
+      "baseBytes": 129452,
+      "baseSha256": "0d57aad0c866b3486fcc74a2828941e7cb63959e30c0b8432437014ad42960f1",
+      "reviewedBytes": 129452,
+      "reviewedSha256": "0d57aad0c866b3486fcc74a2828941e7cb63959e30c0b8432437014ad42960f1",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-motivation-13.en-US.v1.mp3",
+      "baseBlob": "fcc5bb9a6e20f542502c3fe8c41c4e3123f44a6f",
+      "baseBytes": 53036,
+      "baseSha256": "fc1bca39185ce728e38f901a096e55ecdd8383d0aaa3f24331cef8738432a40b",
+      "reviewedBytes": 53036,
+      "reviewedSha256": "fc1bca39185ce728e38f901a096e55ecdd8383d0aaa3f24331cef8738432a40b",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+      "baseBlob": "7095bceb8b75709d673d4c53c03e04343338b1c8",
+      "baseBytes": 105260,
+      "baseSha256": "ef95e5eef613307f261021ca45ce6d2823602c44d33bed35570931f3a8ae4851",
+      "reviewedBytes": 105260,
+      "reviewedSha256": "ef95e5eef613307f261021ca45ce6d2823602c44d33bed35570931f3a8ae4851",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-relax-01.en-US.v1.mp3",
+      "baseBlob": "f6b3575f6a299d577a82ff672cc1401be772035a",
+      "baseBytes": 120620,
+      "baseSha256": "583d89be9836473b4fea4eb4dbad00c6be21d1933de07ab55ea857680153c1fd",
+      "reviewedBytes": 120620,
+      "reviewedSha256": "583d89be9836473b4fea4eb4dbad00c6be21d1933de07ab55ea857680153c1fd",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-relax-02.en-US.v1.mp3",
+      "baseBlob": "4dda305314f3ff607222a9ce56bf998e663a81de",
+      "baseBytes": 128684,
+      "baseSha256": "301c02e9c4b73d37f8bfc7fa05b2633f5b1365a1d2f15eb03faf893ad22cc4e1",
+      "reviewedBytes": 128684,
+      "reviewedSha256": "301c02e9c4b73d37f8bfc7fa05b2633f5b1365a1d2f15eb03faf893ad22cc4e1",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-relax-03.en-US.v1.mp3",
+      "baseBlob": "1bc2f4d67d26756cf592f154f855efa3f7283420",
+      "baseBytes": 128300,
+      "baseSha256": "d3a0f037aeaf018009cadefc413cd878c87460c47e2bc7e38b77ab54bd7fa360",
+      "reviewedBytes": 128300,
+      "reviewedSha256": "d3a0f037aeaf018009cadefc413cd878c87460c47e2bc7e38b77ab54bd7fa360",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-relax-04.en-US.v1.mp3",
+      "baseBlob": "cd425636e363769f9bee7660a575208e8e670f42",
+      "baseBytes": 119852,
+      "baseSha256": "7ad9299973ce2b7e90b64c997a284e4bc5234e9fbe62c89c6fd6c32fe19d5da4",
+      "reviewedBytes": 119852,
+      "reviewedSha256": "7ad9299973ce2b7e90b64c997a284e4bc5234e9fbe62c89c6fd6c32fe19d5da4",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-relax-05.en-US.v1.mp3",
+      "baseBlob": "acbdeba551d8b848c0a334fd213fbf255ba8b185",
+      "baseBytes": 99500,
+      "baseSha256": "b9d2bb1ed66fb9a590804d54bbe1626a9c03554f1997cd7eda15d5a3d86b1eec",
+      "reviewedBytes": 99500,
+      "reviewedSha256": "b9d2bb1ed66fb9a590804d54bbe1626a9c03554f1997cd7eda15d5a3d86b1eec",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-relax-06.en-US.v1.mp3",
+      "baseBlob": "09c20eac466957fa5c1a5612b0fd283c3030e35a",
+      "baseBytes": 113324,
+      "baseSha256": "df1394821651cccc8623ca1cac893f868512588a633008cff80b6efc1379e876",
+      "reviewedBytes": 113324,
+      "reviewedSha256": "df1394821651cccc8623ca1cac893f868512588a633008cff80b6efc1379e876",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-relax-07.en-US.v1.mp3",
+      "baseBlob": "5cf139d082ffd70ace772a1ef3374a163aff1be9",
+      "baseBytes": 132524,
+      "baseSha256": "49717cf769e760ccfc53d5fcea1ae3d8359020e59e22c9e51261b856d8aace2b",
+      "reviewedBytes": 132524,
+      "reviewedSha256": "49717cf769e760ccfc53d5fcea1ae3d8359020e59e22c9e51261b856d8aace2b",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-relax-08.en-US.v1.mp3",
+      "baseBlob": "2441e58a27ae47647c471eb311a61f1b8649bc25",
+      "baseBytes": 112556,
+      "baseSha256": "e68d66877b54184cd3382dc0aff07b8282b2a6e3e5b2328ae8950c2523e18314",
+      "reviewedBytes": 112556,
+      "reviewedSha256": "e68d66877b54184cd3382dc0aff07b8282b2a6e3e5b2328ae8950c2523e18314",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-relax-09.en-US.v1.mp3",
+      "baseBlob": "8392800b665e9d39f0c482ab2e4c405a0e6a09e4",
+      "baseBytes": 134444,
+      "baseSha256": "3dc2b5f259ea088214f4741d3fe7376b308cb83ce3ae32a12c8b6c018e98ae5f",
+      "reviewedBytes": 134444,
+      "reviewedSha256": "3dc2b5f259ea088214f4741d3fe7376b308cb83ce3ae32a12c8b6c018e98ae5f",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-relax-10.en-US.v1.mp3",
+      "baseBlob": "6c80b5d8da8cb5b9125c00f65cef61e944957c02",
+      "baseBytes": 133292,
+      "baseSha256": "60e604966436cb7d049b19f745b8d10807a9015dc326f923ab4b34b92f30bef1",
+      "reviewedBytes": 133292,
+      "reviewedSha256": "60e604966436cb7d049b19f745b8d10807a9015dc326f923ab4b34b92f30bef1",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-relax-11.en-US.v1.mp3",
+      "baseBlob": "b4f6772f68ec4360ba22bc59e346e72ae7cb9454",
+      "baseBytes": 130988,
+      "baseSha256": "b66d0d2dec5bd8b2fdd846af11297dca58951806a88338e5277b7056ea826d08",
+      "reviewedBytes": 130988,
+      "reviewedSha256": "b66d0d2dec5bd8b2fdd846af11297dca58951806a88338e5277b7056ea826d08",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-relax-12.en-US.v1.mp3",
+      "baseBlob": "56f384d145bcc6da657d08b8dcf0ace75cf8b871",
+      "baseBytes": 77228,
+      "baseSha256": "e4f20a0dec4db31ab24d41d33b4ee625ef49b282e6b04f3ff01901fa49c27028",
+      "reviewedBytes": 77228,
+      "reviewedSha256": "e4f20a0dec4db31ab24d41d33b4ee625ef49b282e6b04f3ff01901fa49c27028",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-relax-13.en-US.v1.mp3",
+      "baseBlob": "3daa855dc41c9f96d64c6c7951a8a2d5f5c3aac0",
+      "baseBytes": 80684,
+      "baseSha256": "57486d510eef1a7e854bf47fa553f68807bb1a1445bc6d71c64cb3d4d5fc6ec6",
+      "reviewedBytes": 80684,
+      "reviewedSha256": "57486d510eef1a7e854bf47fa553f68807bb1a1445bc6d71c64cb3d4d5fc6ec6",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-relax-14.en-US.v1.mp3",
+      "baseBlob": "586bca4007c36f950e3ab116ef48219860f92849",
+      "baseBytes": 132908,
+      "baseSha256": "23192db5b8a300318708de5ca1904670cd4584a44a070e6c39cfd685860d8933",
+      "reviewedBytes": 132908,
+      "reviewedSha256": "23192db5b8a300318708de5ca1904670cd4584a44a070e6c39cfd685860d8933",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-sleep-00.en-US.v1.mp3",
+      "baseBlob": "08757587f09f859f134094da139b0b49c6492f55",
+      "baseBytes": 122540,
+      "baseSha256": "e9a3de9b653eec507ef5d0a6f12913e1e9c68e55a4117efba88d7e46eaca662e",
+      "reviewedBytes": 122540,
+      "reviewedSha256": "e9a3de9b653eec507ef5d0a6f12913e1e9c68e55a4117efba88d7e46eaca662e",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-sleep-01.en-US.v1.mp3",
+      "baseBlob": "e4c49df4dcfaa064c452236011280ed665ce266d",
+      "baseBytes": 153260,
+      "baseSha256": "03608bdc2b04dd5935d1fbee79a2a8d4fcb9bb831dfb302e7a9fd2557988d5b4",
+      "reviewedBytes": 153260,
+      "reviewedSha256": "03608bdc2b04dd5935d1fbee79a2a8d4fcb9bb831dfb302e7a9fd2557988d5b4",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-sleep-02.en-US.v1.mp3",
+      "baseBlob": "113fdd34630a709413a14a8a9a8285acc67832ae",
+      "baseBytes": 144812,
+      "baseSha256": "77614bd9f7a5cd234ab3cc248b791016520f1d025c8c7f6253a8482c88cfba42",
+      "reviewedBytes": 144812,
+      "reviewedSha256": "77614bd9f7a5cd234ab3cc248b791016520f1d025c8c7f6253a8482c88cfba42",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-sleep-03.en-US.v1.mp3",
+      "baseBlob": "15668de91b7c44bc123715e6dc76f8d4f2c863a7",
+      "baseBytes": 116396,
+      "baseSha256": "dc35e0d0afee3bdef7cbe705cc8db3e34ab39942a0c64c70ba936004ab01a679",
+      "reviewedBytes": 116396,
+      "reviewedSha256": "dc35e0d0afee3bdef7cbe705cc8db3e34ab39942a0c64c70ba936004ab01a679",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-sleep-04.en-US.v1.mp3",
+      "baseBlob": "774f15a82da2576a3e6eca8d21973de21abccd54",
+      "baseBytes": 97964,
+      "baseSha256": "468378db419cfa65b4e7671e08fb3835c9d29c9ef5618a1a9d9b01c5e4adebe6",
+      "reviewedBytes": 97964,
+      "reviewedSha256": "468378db419cfa65b4e7671e08fb3835c9d29c9ef5618a1a9d9b01c5e4adebe6",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-sleep-05.en-US.v1.mp3",
+      "baseBlob": "6c7a5ac026d8795d882d37aa5e9f281eae6e64ad",
+      "baseBytes": 116396,
+      "baseSha256": "d65067da097a026d518261399eb589365d52de03f2c1e22948b352ec18b07a4e",
+      "reviewedBytes": 116396,
+      "reviewedSha256": "d65067da097a026d518261399eb589365d52de03f2c1e22948b352ec18b07a4e",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-sleep-06.en-US.v1.mp3",
+      "baseBlob": "607a299924b483e4e38870bb9520eaa4faff4e1f",
+      "baseBytes": 135596,
+      "baseSha256": "fc4db94079958ac50018731e003fe6b1a4de6adf702780115c9a15b150369f87",
+      "reviewedBytes": 135596,
+      "reviewedSha256": "fc4db94079958ac50018731e003fe6b1a4de6adf702780115c9a15b150369f87",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-sleep-07.en-US.v1.mp3",
+      "baseBlob": "9ac4d0aef21d3a25a159826de5cfdd3acfab4e2d",
+      "baseBytes": 107948,
+      "baseSha256": "ccb34484e6d7277447b49c14bef44d956f51f7bb209fbf92f64acccb8b668e86",
+      "reviewedBytes": 107948,
+      "reviewedSha256": "ccb34484e6d7277447b49c14bef44d956f51f7bb209fbf92f64acccb8b668e86",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-sleep-08.en-US.v1.mp3",
+      "baseBlob": "90f4f6db9ca7f21a94d4929cfb25dea75967e4da",
+      "baseBytes": 129836,
+      "baseSha256": "4376f8be856d342d1d4dc5b96afdd65744d46ad339936d0322fcd0b9d8e830fe",
+      "reviewedBytes": 129836,
+      "reviewedSha256": "4376f8be856d342d1d4dc5b96afdd65744d46ad339936d0322fcd0b9d8e830fe",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-sleep-09.en-US.v1.mp3",
+      "baseBlob": "8e89a8faafc84df24d64fcb103b57a1c0e852ade",
+      "baseBytes": 101420,
+      "baseSha256": "82d827549829efa76e8ad66457152d562087ba8baa3f9c5ebb5ecbeee2d4e561",
+      "reviewedBytes": 101420,
+      "reviewedSha256": "82d827549829efa76e8ad66457152d562087ba8baa3f9c5ebb5ecbeee2d4e561",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-sleep-10.en-US.v1.mp3",
+      "baseBlob": "f327764a85d4a2ae67c7d7484326ff86c0a5b4ba",
+      "baseBytes": 81068,
+      "baseSha256": "e0caf325f8f099659b0c86cbfe8efec03498cd388c21edfdd31c225a10b7aa2f",
+      "reviewedBytes": 81068,
+      "reviewedSha256": "e0caf325f8f099659b0c86cbfe8efec03498cd388c21edfdd31c225a10b7aa2f",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-sleep-11.en-US.v1.mp3",
+      "baseBlob": "93f74de61f21dedfa434a2147eee4a14419009ae",
+      "baseBytes": 42668,
+      "baseSha256": "70403d35cbc715e9294744ec95180e1f1d8bb7a34486d086e08b81d79b9a79a7",
+      "reviewedBytes": 42668,
+      "reviewedSha256": "70403d35cbc715e9294744ec95180e1f1d8bb7a34486d086e08b81d79b9a79a7",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-sleep-12.en-US.v1.mp3",
+      "baseBlob": "5caafe4a2e9a9743830fc68405b8b3d5d75d9931",
+      "baseBytes": 57260,
+      "baseSha256": "958417733c9129dbe607db7dfce1bb29e7222ff62b63c9a8a948717cf177c57c",
+      "reviewedBytes": 57260,
+      "reviewedSha256": "958417733c9129dbe607db7dfce1bb29e7222ff62b63c9a8a948717cf177c57c",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-sleep-13.en-US.v1.mp3",
+      "baseBlob": "57055e5e0c29b7ad76887ec6b4f308bd50547198",
+      "baseBytes": 48044,
+      "baseSha256": "37d495c0c7a61c36098e92b32437d3f8f574b41eb97a04b203cea9e4fee29948",
+      "reviewedBytes": 48044,
+      "reviewedSha256": "37d495c0c7a61c36098e92b32437d3f8f574b41eb97a04b203cea9e4fee29948",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-two-futures-00.en-US.v1.mp3",
+      "baseBlob": "41e840fba363fb61f138fa6fad7e915167eeefc7",
+      "baseBytes": 154412,
+      "baseSha256": "c9840a32f68e0218db6ef14f994a659f36002e7d36b27ff77f59379e6957a2ec",
+      "reviewedBytes": 154412,
+      "reviewedSha256": "c9840a32f68e0218db6ef14f994a659f36002e7d36b27ff77f59379e6957a2ec",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-two-futures-01.en-US.v1.mp3",
+      "baseBlob": "35e1f952ce004a4fa1c2ca0351221ae3c6e8af63",
+      "baseBytes": 119852,
+      "baseSha256": "0435cfd8ec449de2f5cb7d4c03c16ab414d1221a07326714e5a881f1f4cadc3d",
+      "reviewedBytes": 119852,
+      "reviewedSha256": "0435cfd8ec449de2f5cb7d4c03c16ab414d1221a07326714e5a881f1f4cadc3d",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-two-futures-02.en-US.v1.mp3",
+      "baseBlob": "6049a2da02ab7aa2b500f109061e56ac8f4942d1",
+      "baseBytes": 153644,
+      "baseSha256": "9cf4052d86896b79349648229e30600e7a304254a6a5058ddf2026135f431045",
+      "reviewedBytes": 153644,
+      "reviewedSha256": "9cf4052d86896b79349648229e30600e7a304254a6a5058ddf2026135f431045",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-two-futures-03.en-US.v1.mp3",
+      "baseBlob": "89a64d27d4f708ba42313415021350b46692e648",
+      "baseBytes": 192428,
+      "baseSha256": "508190169da09fd624b67368ba2abd77fe3bc873e57b13894d8e445b0b025cd4",
+      "reviewedBytes": 192428,
+      "reviewedSha256": "508190169da09fd624b67368ba2abd77fe3bc873e57b13894d8e445b0b025cd4",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-two-futures-04.en-US.v1.mp3",
+      "baseBlob": "b6dd277fd5cbeac8f41908932ff4210e48d7b340",
+      "baseBytes": 171308,
+      "baseSha256": "bc89459efb186f9f744ee558f2944b76208952507ec9059fea06e35c0c6b3079",
+      "reviewedBytes": 171308,
+      "reviewedSha256": "bc89459efb186f9f744ee558f2944b76208952507ec9059fea06e35c0c6b3079",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-two-futures-05.en-US.v1.mp3",
+      "baseBlob": "102939f7f7c00062c2a3f1700fcb64fc33093adc",
+      "baseBytes": 168620,
+      "baseSha256": "c4c2b73d8684722ca82b355e423c9fd9e3c8735689f4d1eb8d2b8443127f2351",
+      "reviewedBytes": 168620,
+      "reviewedSha256": "c4c2b73d8684722ca82b355e423c9fd9e3c8735689f4d1eb8d2b8443127f2351",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-two-futures-06.en-US.v1.mp3",
+      "baseBlob": "5f3fe5603f5575702eaeb0f3c853caeaf1e8999c",
+      "baseBytes": 159020,
+      "baseSha256": "e35a87cd46d1a1dec0c0bdd6f75782a9656f23d1241b1cba55d440a5171b976f",
+      "reviewedBytes": 159020,
+      "reviewedSha256": "e35a87cd46d1a1dec0c0bdd6f75782a9656f23d1241b1cba55d440a5171b976f",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-two-futures-07.en-US.v1.mp3",
+      "baseBlob": "4ff9240ab5e64e9fc367c0fa27944cfba0dbb144",
+      "baseBytes": 128300,
+      "baseSha256": "73a1ea23b2f5bb47ccfea15f32384c73ffa9b1dd9f81c0b6918c79349de3b3da",
+      "reviewedBytes": 128300,
+      "reviewedSha256": "73a1ea23b2f5bb47ccfea15f32384c73ffa9b1dd9f81c0b6918c79349de3b3da",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-two-futures-08.en-US.v1.mp3",
+      "baseBlob": "024e0fed32cfeca26f85061e6d7714395d1e37e4",
+      "baseBytes": 106028,
+      "baseSha256": "0e980768596f97ec740b53e91b40940d8480c59bb0df6dbf17872e58446662c9",
+      "reviewedBytes": 106028,
+      "reviewedSha256": "0e980768596f97ec740b53e91b40940d8480c59bb0df6dbf17872e58446662c9",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-two-futures-09.en-US.v1.mp3",
+      "baseBlob": "0d8cb21c59017329385d72db6b11b5dedc27bab1",
+      "baseBytes": 104108,
+      "baseSha256": "0a68f438ff8ac8f43d004e5c5c6d960ba2e151aff35f3272a6be93b0abebaa47",
+      "reviewedBytes": 104108,
+      "reviewedSha256": "0a68f438ff8ac8f43d004e5c5c6d960ba2e151aff35f3272a6be93b0abebaa47",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-two-futures-10.en-US.v1.mp3",
+      "baseBlob": "fd18db9e5391da458dadcf0975640581f189dbc1",
+      "baseBytes": 160556,
+      "baseSha256": "d1e77cd4f6700ebf8152ee50db50c884f51e9e1670066f93beca575d721f30dd",
+      "reviewedBytes": 160556,
+      "reviewedSha256": "d1e77cd4f6700ebf8152ee50db50c884f51e9e1670066f93beca575d721f30dd",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-two-futures-11.en-US.v1.mp3",
+      "baseBlob": "97d997922ce4abfa4e373e039226d4c4d85e04e3",
+      "baseBytes": 159788,
+      "baseSha256": "24763a96729a5bd57630fc09e5607628aef9cab4df8ede6b3c8967a2da9bd57c",
+      "reviewedBytes": 159788,
+      "reviewedSha256": "24763a96729a5bd57630fc09e5607628aef9cab4df8ede6b3c8967a2da9bd57c",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-two-futures-12.en-US.v1.mp3",
+      "baseBlob": "2e8d543cf9a2b6358707748e3e648c782da2e4e0",
+      "baseBytes": 157868,
+      "baseSha256": "f27178edee80761364f3570dffe58c1915158917be5f8fca955b9ab0bd996fc2",
+      "reviewedBytes": 157868,
+      "reviewedSha256": "f27178edee80761364f3570dffe58c1915158917be5f8fca955b9ab0bd996fc2",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-two-futures-13.en-US.v1.mp3",
+      "baseBlob": "ce7959b8e23caadbf2a7c1bde33a34fb14bfc605",
+      "baseBytes": 144428,
+      "baseSha256": "a01ac5c00c4775cbb33e5705ea339039a38ab1ae2815c16279d687f2e4061be6",
+      "reviewedBytes": 144428,
+      "reviewedSha256": "a01ac5c00c4775cbb33e5705ea339039a38ab1ae2815c16279d687f2e4061be6",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-two-futures-14.en-US.v1.mp3",
+      "baseBlob": "138b73d3c5de5328785acda19e47faebe389040d",
+      "baseBytes": 142124,
+      "baseSha256": "88a4511528d4cb3627f78dfde729606954140c9f7a2f57bb5dd8eabc009d1ce8",
+      "reviewedBytes": 142124,
+      "reviewedSha256": "88a4511528d4cb3627f78dfde729606954140c9f7a2f57bb5dd8eabc009d1ce8",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-two-futures-15.en-US.v1.mp3",
+      "baseBlob": "e9fbe26e0b911f1d26b0f0f9e43d03b01f2a4e5a",
+      "baseBytes": 97196,
+      "baseSha256": "2563f202cb46429dbe87e6fd566fd3c1b184a1def4dc21e059c67fee750cccb5",
+      "reviewedBytes": 97196,
+      "reviewedSha256": "2563f202cb46429dbe87e6fd566fd3c1b184a1def4dc21e059c67fee750cccb5",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/clips/gm-two-futures-16.en-US.v1.mp3",
+      "baseBlob": "82b6e7147b196646190a9c6a4afb29a50f3c5c65",
+      "baseBytes": 99884,
+      "baseSha256": "27ebf0df9c471c2fcd9e9610290be2de3f551a124e18e8ff12f829748a40d9c0",
+      "reviewedBytes": 99884,
+      "reviewedSha256": "27ebf0df9c471c2fcd9e9610290be2de3f551a124e18e8ff12f829748a40d9c0",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/manifest.json",
+      "baseBlob": "f5b3d485ba4b74016b17f4f9d7b94c6fba75d4c7",
+      "baseBytes": 565132,
+      "baseSha256": "2ba3d11b087b8678c5c574c0a5437de4cc6a222a6733cc9155061dde2e54523e",
+      "reviewedBytes": 565132,
+      "reviewedSha256": "2ba3d11b087b8678c5c574c0a5437de4cc6a222a6733cc9155061dde2e54523e",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/assets/oda/narration/en-US/v1/validation-summary.json",
+      "baseBlob": "c226baa5080f98078f394caa0507bedefa9cb42d",
+      "baseBytes": 2333,
+      "baseSha256": "e7bf51b69574eb8f4ae860d74709d270271182f7b5429b4150cf3a8bee141e90",
+      "reviewedBytes": 2333,
+      "reviewedSha256": "e7bf51b69574eb8f4ae860d74709d270271182f7b5429b4150cf3a8bee141e90",
+      "byteIdentical": true
+    },
+    {
+      "path": "public/sw.js",
+      "baseBlob": "401b6c3040bf8ad0c693814bdf1c5dacd2c7e901",
+      "baseBytes": 6485,
+      "baseSha256": "51e9575be78bfaa1cf9d2de7a461d819c6fae141cbfe196b4985c34aa04511ef",
+      "reviewedBytes": 6485,
+      "reviewedSha256": "51e9575be78bfaa1cf9d2de7a461d819c6fae141cbfe196b4985c34aa04511ef",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/affirmations.ts",
+      "baseBlob": "6b1e248c81e46e001cf682aa7250bc8550e5a27d",
+      "baseBytes": 10500,
+      "baseSha256": "2c06eef711126746ae6abf189f51bc16d1dc8e1467736c56cc45f765b40a6df6",
+      "reviewedBytes": 10500,
+      "reviewedSha256": "2c06eef711126746ae6abf189f51bc16d1dc8e1467736c56cc45f765b40a6df6",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/backupCopy.ts",
+      "baseBlob": "3b2723c2e078fd6b4530aad5e29a17df1afb9ad3",
+      "baseBytes": 7406,
+      "baseSha256": "92dffa5dab22201491cad85c29d8cc48f65b8b083324a04e00d95d57a8cbdf6e",
+      "reviewedBytes": 7406,
+      "reviewedSha256": "92dffa5dab22201491cad85c29d8cc48f65b8b083324a04e00d95d57a8cbdf6e",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/contact.ts",
+      "baseBlob": "9da753310752e77250ee296bdb1ae286cea7bcfd",
+      "baseBytes": 148,
+      "baseSha256": "1ecf6f7f4170a83ec36a88a2512945a1223598f696149928d5e96517f690c99c",
+      "reviewedBytes": 148,
+      "reviewedSha256": "1ecf6f7f4170a83ec36a88a2512945a1223598f696149928d5e96517f690c99c",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseCatalog.ts",
+      "baseBlob": "d6872b1d7b239e67de2d92cdf3655fb540cc93b6",
+      "baseBytes": 141553,
+      "baseSha256": "a79ccef04d5d264b4f7fb3a02da47cc71f3c15b3a842e2c5b8aebdbc6decc6c3",
+      "reviewedBytes": 141553,
+      "reviewedSha256": "a79ccef04d5d264b4f7fb3a02da47cc71f3c15b3a842e2c5b8aebdbc6decc6c3",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/calm.ts",
+      "baseBlob": "6439009ba2c10251c85f891a67cc0ce621324d81",
+      "baseBytes": 19662,
+      "baseSha256": "a9b8b362ccaca464676f6e0784b5f7581b4d8d707facff842ebd14995a65cc83",
+      "reviewedBytes": 19662,
+      "reviewedSha256": "a9b8b362ccaca464676f6e0784b5f7581b4d8d707facff842ebd14995a65cc83",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/en/adhd.ts",
+      "baseBlob": "368d93ae7571811692e1fd7c76b86f7843c25031",
+      "baseBytes": 38802,
+      "baseSha256": "4df3356b2269471d334ac2c789e55d87fb37799d52113904bbd40e8499e8d35f",
+      "reviewedBytes": 38802,
+      "reviewedSha256": "4df3356b2269471d334ac2c789e55d87fb37799d52113904bbd40e8499e8d35f",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/en/calm.ts",
+      "baseBlob": "6b4346d1f507b62c93a2b921a5acaa10d8993ff8",
+      "baseBytes": 38618,
+      "baseSha256": "73e98a31ad04896cae053269e0b84f015e85aa8e1354b2d2ce2a5aaf0340b7cc",
+      "reviewedBytes": 38618,
+      "reviewedSha256": "73e98a31ad04896cae053269e0b84f015e85aa8e1354b2d2ce2a5aaf0340b7cc",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/en/compassion.ts",
+      "baseBlob": "f0f46ef93046cd940de04988ec10eef93e637ec2",
+      "baseBytes": 52427,
+      "baseSha256": "7fcf2566608999ff04ae67924b88847f9e291f996d58454e39014a328d9a155d",
+      "reviewedBytes": 52427,
+      "reviewedSha256": "7fcf2566608999ff04ae67924b88847f9e291f996d58454e39014a328d9a155d",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/en/confidence.ts",
+      "baseBlob": "1d733d58830c8bc0b753c3be1d663a0810ea67ed",
+      "baseBytes": 32713,
+      "baseSha256": "c473b38acf69e2e81aa5319cda829feb2ee22af550b3ad04b0ac06ece14178e4",
+      "reviewedBytes": 32713,
+      "reviewedSha256": "c473b38acf69e2e81aa5319cda829feb2ee22af550b3ad04b0ac06ece14178e4",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/en/faith.ts",
+      "baseBlob": "5639b2d9c4ed8132c027085ad7ae42fb550595f4",
+      "baseBytes": 35877,
+      "baseSha256": "5b86d77ecd3e38dc011d9539f826019afbe9430cbdfff1a608a0e9ad35878660",
+      "reviewedBytes": 35877,
+      "reviewedSha256": "5b86d77ecd3e38dc011d9539f826019afbe9430cbdfff1a608a0e9ad35878660",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/en/focus.ts",
+      "baseBlob": "94f7cdefd8c8fe1d5ef671c07df0fc4972ede2a8",
+      "baseBytes": 40638,
+      "baseSha256": "f0f0f52dee55992498b66aa1cfd38fd0b7a8c9dc29705a64d291e155e227a084",
+      "reviewedBytes": 40638,
+      "reviewedSha256": "f0f0f52dee55992498b66aa1cfd38fd0b7a8c9dc29705a64d291e155e227a084",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/en/identity.ts",
+      "baseBlob": "70d7a991e03bcd70c36a0b2c0a77f015ddbcc1a9",
+      "baseBytes": 71087,
+      "baseSha256": "6723d465f18585692831dab7ff0afcacc43f145d66e624fc56506388ed2ca197",
+      "reviewedBytes": 71087,
+      "reviewedSha256": "6723d465f18585692831dab7ff0afcacc43f145d66e624fc56506388ed2ca197",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/en/index.ts",
+      "baseBlob": "351d1e3143f58ef3cc7b8929a74ad9712d5ff1cc",
+      "baseBytes": 1419,
+      "baseSha256": "1a0440b27e8c80ae5cec436957de8592cb64c77008b3e9f8298710a7fc441864",
+      "reviewedBytes": 1419,
+      "reviewedSha256": "1a0440b27e8c80ae5cec436957de8592cb64c77008b3e9f8298710a7fc441864",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/en/manifest.ts",
+      "baseBlob": "f450011e7d262bac988eeab6d6848c37a0e94d6d",
+      "baseBytes": 36747,
+      "baseSha256": "591d19175522998449cef8754b64b0167222e5957178609bbd6a551e580b6988",
+      "reviewedBytes": 36747,
+      "reviewedSha256": "591d19175522998449cef8754b64b0167222e5957178609bbd6a551e580b6988",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/en/meaning.ts",
+      "baseBlob": "1ed22b8ad4ff7fc415d45f889f16db5820ae9f6a",
+      "baseBytes": 47843,
+      "baseSha256": "5c9b87c45c6b5f22c06b84dd3992c32fb0ba72142b489778b1c8823d53bb9f3f",
+      "reviewedBytes": 47843,
+      "reviewedSha256": "5c9b87c45c6b5f22c06b84dd3992c32fb0ba72142b489778b1c8823d53bb9f3f",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/en/meditation.ts",
+      "baseBlob": "c714090c45f2a32f3228c95de9a9c95009a934bd",
+      "baseBytes": 62436,
+      "baseSha256": "f8ee95619c65d25ef5d34f587c257c3f9cdcfc4e89ccfe09a69a52d14c6c9add",
+      "reviewedBytes": 62436,
+      "reviewedSha256": "f8ee95619c65d25ef5d34f587c257c3f9cdcfc4e89ccfe09a69a52d14c6c9add",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/en/motivation.ts",
+      "baseBlob": "027c97bb0ea3ac398827be4414499e688970e3bc",
+      "baseBytes": 36028,
+      "baseSha256": "28c40c2aa300e4fa41f556958e29f17887d4edd653b7f66287d57c6f7568613c",
+      "reviewedBytes": 36028,
+      "reviewedSha256": "28c40c2aa300e4fa41f556958e29f17887d4edd653b7f66287d57c6f7568613c",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/en/optimism.ts",
+      "baseBlob": "5b75e1c25b21a6252b18088bc7cc9577857a0d1e",
+      "baseBytes": 61919,
+      "baseSha256": "b29558cb045cfd614fed8d5c2d77637dc7b6f3a4d316d413b6ee5a03ac09ce9d",
+      "reviewedBytes": 61919,
+      "reviewedSha256": "b29558cb045cfd614fed8d5c2d77637dc7b6f3a4d316d413b6ee5a03ac09ce9d",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/en/procrastination.ts",
+      "baseBlob": "a1c3116e9441851f93d0f9082cb5392de82094f1",
+      "baseBytes": 39093,
+      "baseSha256": "dbd1f746cb97bb0dee27e8d903de34b4172f68f8f82e1d982d93acbd6fd927f5",
+      "reviewedBytes": 39093,
+      "reviewedSha256": "dbd1f746cb97bb0dee27e8d903de34b4172f68f8f82e1d982d93acbd6fd927f5",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/en/sleep.ts",
+      "baseBlob": "afac781efa86399521bc93f912b4c032af8e2a17",
+      "baseBytes": 37601,
+      "baseSha256": "7ff29ead13b9cebb33d67259455d9798efd0c5dcf1023475911508371ff365f1",
+      "reviewedBytes": 37601,
+      "reviewedSha256": "7ff29ead13b9cebb33d67259455d9798efd0c5dcf1023475911508371ff365f1",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/en/state.ts",
+      "baseBlob": "57a46d0658c0444d7c039e2adc0f828ff1de925b",
+      "baseBytes": 76396,
+      "baseSha256": "a281f873e8ca3c7640900d69ff628218b8c114f8e0dfcf3342eeb07bfc0a3e2a",
+      "reviewedBytes": 76396,
+      "reviewedSha256": "a281f873e8ca3c7640900d69ff628218b8c114f8e0dfcf3342eeb07bfc0a3e2a",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/en/stoic.ts",
+      "baseBlob": "1f44ff0e6d029088b04d8bdd041ef01d49279e85",
+      "baseBytes": 49952,
+      "baseSha256": "853bed3bc713fe9a4e0f4d33182d02b0cc555a7293b7fc1695946cb186486a23",
+      "reviewedBytes": 49952,
+      "reviewedSha256": "853bed3bc713fe9a4e0f4d33182d02b0cc555a7293b7fc1695946cb186486a23",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/en/suggestion.ts",
+      "baseBlob": "53491ca88e2c5916b3775f945ed12ae92dd7a4d0",
+      "baseBytes": 66633,
+      "baseSha256": "166c69f634967db679f5d5ce877964913c44229348c7fe335d5f456113cab9a2",
+      "reviewedBytes": 66633,
+      "reviewedSha256": "166c69f634967db679f5d5ce877964913c44229348c7fe335d5f456113cab9a2",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/en/turning-day.ts",
+      "baseBlob": "b11488d4e2e87d32925fba2e7705e9a6665b916f",
+      "baseBytes": 53113,
+      "baseSha256": "7916c44d8f8790f7877586b78414059d838114ff8dbd284dabff7e646c6aeb5b",
+      "reviewedBytes": 53113,
+      "reviewedSha256": "7916c44d8f8790f7877586b78414059d838114ff8dbd284dabff7e646c6aeb5b",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/es/adhd.ts",
+      "baseBlob": "f8af447cebb5353215a330c0197d54b7d3e46e96",
+      "baseBytes": 43108,
+      "baseSha256": "cf91faa40b923372afe9ca1219b8c6bbb36a713d2338d9f811d3e67e4fb73a70",
+      "reviewedBytes": 43108,
+      "reviewedSha256": "cf91faa40b923372afe9ca1219b8c6bbb36a713d2338d9f811d3e67e4fb73a70",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/es/calm.ts",
+      "baseBlob": "181681baa3d07ca2cff077c7a20038084d1f1ec4",
+      "baseBytes": 42762,
+      "baseSha256": "c8f83cbfdf6a2bc406676ed6ee97a55e52586a57caea085660faddedbd1b9c4f",
+      "reviewedBytes": 42762,
+      "reviewedSha256": "c8f83cbfdf6a2bc406676ed6ee97a55e52586a57caea085660faddedbd1b9c4f",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/es/compassion.ts",
+      "baseBlob": "91e4ccaa229f5d3c9a58c3e4d96ac20ae5a6aeb2",
+      "baseBytes": 56160,
+      "baseSha256": "bc81e8ec73e53bc4253c79e7a8987c82b66a52e0ee1ecb88f94929a537ddefb7",
+      "reviewedBytes": 56160,
+      "reviewedSha256": "bc81e8ec73e53bc4253c79e7a8987c82b66a52e0ee1ecb88f94929a537ddefb7",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/es/confidence.ts",
+      "baseBlob": "952cc23cab62f36e02fc57259327945a94d884a1",
+      "baseBytes": 35143,
+      "baseSha256": "ed030a4999ca7a87c2ec9c35ffc5b88ea907cf4cbe5e5d359ee5539b6f1ea064",
+      "reviewedBytes": 35143,
+      "reviewedSha256": "ed030a4999ca7a87c2ec9c35ffc5b88ea907cf4cbe5e5d359ee5539b6f1ea064",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/es/faith.ts",
+      "baseBlob": "1137c6413481a84e335bdb507845a35b164ca6d1",
+      "baseBytes": 38624,
+      "baseSha256": "7f6eb476bca7a066f4756f3391428b5549bdc4d764dc2e65c635d12b67fa13a7",
+      "reviewedBytes": 38624,
+      "reviewedSha256": "7f6eb476bca7a066f4756f3391428b5549bdc4d764dc2e65c635d12b67fa13a7",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/es/focus.ts",
+      "baseBlob": "b3b6e6ba9739652e762d6141d57a8b3f06207398",
+      "baseBytes": 44376,
+      "baseSha256": "debf92b2201c2a66779b49d41c9c7c977220c1200c5df5c12968463d17f8e186",
+      "reviewedBytes": 44376,
+      "reviewedSha256": "debf92b2201c2a66779b49d41c9c7c977220c1200c5df5c12968463d17f8e186",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/es/identity.ts",
+      "baseBlob": "ba89ee34a8ba0a564a1442663aa967bacba0ef82",
+      "baseBytes": 78713,
+      "baseSha256": "b41db4c5f2dfcfeac4144ae82076bf67e0c7e5a8bc74ec32366fce020f451509",
+      "reviewedBytes": 78713,
+      "reviewedSha256": "b41db4c5f2dfcfeac4144ae82076bf67e0c7e5a8bc74ec32366fce020f451509",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/es/index.ts",
+      "baseBlob": "2b670e62b7dccb07384534a950419cae8f32dc9d",
+      "baseBytes": 1260,
+      "baseSha256": "19994fe3c45a60bef44d6062314bef314fc28eebbae09a364cd28d94293fc319",
+      "reviewedBytes": 1260,
+      "reviewedSha256": "19994fe3c45a60bef44d6062314bef314fc28eebbae09a364cd28d94293fc319",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/es/manifest.ts",
+      "baseBlob": "d7189ebd5a27a03fbc29812c9769e88d455c4d1c",
+      "baseBytes": 39969,
+      "baseSha256": "2a77d8d15314bec7b1cd34b1c3e7acd2a4d07ed7d19fce0a6952487f68017672",
+      "reviewedBytes": 39969,
+      "reviewedSha256": "2a77d8d15314bec7b1cd34b1c3e7acd2a4d07ed7d19fce0a6952487f68017672",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/es/meaning.ts",
+      "baseBlob": "e0b285c435a0b465d4184bdd5958468d80b19a1c",
+      "baseBytes": 50431,
+      "baseSha256": "f4e5e28bcefc3d219db052c15ed313009752f909b49d4eaea461360547b44985",
+      "reviewedBytes": 50431,
+      "reviewedSha256": "f4e5e28bcefc3d219db052c15ed313009752f909b49d4eaea461360547b44985",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/es/meditation.ts",
+      "baseBlob": "2b1e110d0862af63eca336c93bf3bb292f75cd1a",
+      "baseBytes": 68370,
+      "baseSha256": "ae4ac3f6f2d4401efdf2bde0cdec5edef094ae579d84366a257117657f0baeba",
+      "reviewedBytes": 68370,
+      "reviewedSha256": "ae4ac3f6f2d4401efdf2bde0cdec5edef094ae579d84366a257117657f0baeba",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/es/motivation.ts",
+      "baseBlob": "44593255471c53892e8b785f892f421546f2b565",
+      "baseBytes": 39478,
+      "baseSha256": "3b7d0734edf668ac050b70fda926b3615e73bc84138601617c363f02057771a7",
+      "reviewedBytes": 39478,
+      "reviewedSha256": "3b7d0734edf668ac050b70fda926b3615e73bc84138601617c363f02057771a7",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/es/optimism.ts",
+      "baseBlob": "e363ffbd404ce55bf0bef16b031afb2426227c23",
+      "baseBytes": 68725,
+      "baseSha256": "cb2f7654df53751e1dbe63bee074ecf53a15ea822f17945498c1ffb2e782ce73",
+      "reviewedBytes": 68725,
+      "reviewedSha256": "cb2f7654df53751e1dbe63bee074ecf53a15ea822f17945498c1ffb2e782ce73",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/es/procrastination.ts",
+      "baseBlob": "69f35bc28fd30ea50ca25ec58d926d684d58ca47",
+      "baseBytes": 42534,
+      "baseSha256": "878264cdf627514f0488d82d1173019edc874351fa8dc222b0cc921a1a75ff1c",
+      "reviewedBytes": 42534,
+      "reviewedSha256": "878264cdf627514f0488d82d1173019edc874351fa8dc222b0cc921a1a75ff1c",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/es/sleep.ts",
+      "baseBlob": "12245eb1535d61d0dc037c87612b8823f14a76fd",
+      "baseBytes": 41933,
+      "baseSha256": "a24a07b8b929ab08b4c47d1a58fc1be97317483272b942a1e5176ec19e19cfa2",
+      "reviewedBytes": 41933,
+      "reviewedSha256": "a24a07b8b929ab08b4c47d1a58fc1be97317483272b942a1e5176ec19e19cfa2",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/es/state.ts",
+      "baseBlob": "d659c4ac40d870f4a81c4419ce8c7322464f8da4",
+      "baseBytes": 85110,
+      "baseSha256": "ad9028c8a45197c3b125cfa21455c69de923c1f33a5a24e22686c7a686294fe9",
+      "reviewedBytes": 85110,
+      "reviewedSha256": "ad9028c8a45197c3b125cfa21455c69de923c1f33a5a24e22686c7a686294fe9",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/es/stoic.ts",
+      "baseBlob": "3aa9a3dd0b4a3aa89ba7439c11eaba3f1e4b8e7e",
+      "baseBytes": 53278,
+      "baseSha256": "92b22d8f867c35a608d0609e556da96ad6ac1cd05fcb0cc36f8ac3603436eb36",
+      "reviewedBytes": 53278,
+      "reviewedSha256": "92b22d8f867c35a608d0609e556da96ad6ac1cd05fcb0cc36f8ac3603436eb36",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/es/suggestion.ts",
+      "baseBlob": "361b01784fefd0fcf138f3c73692a22900d2512e",
+      "baseBytes": 71753,
+      "baseSha256": "00df077ac376dc044678c565132c260c24c6791b2d0907b45aee98021d45972a",
+      "reviewedBytes": 71753,
+      "reviewedSha256": "00df077ac376dc044678c565132c260c24c6791b2d0907b45aee98021d45972a",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/es/turning-day.ts",
+      "baseBlob": "b9356f978590728a302481274d0ae1e0222d9958",
+      "baseBytes": 57817,
+      "baseSha256": "a754cc2bf16babec61be9c5e5b4249c339ab0cfba5c00590a895f048709d2c4c",
+      "reviewedBytes": 57817,
+      "reviewedSha256": "a754cc2bf16babec61be9c5e5b4249c339ab0cfba5c00590a895f048709d2c4c",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/existingVisuals.ts",
+      "baseBlob": "12bc5d1e2745f1edfe7e2f54074403a777128c7a",
+      "baseBytes": 14087,
+      "baseSha256": "f76d0bdc844a292df180caf28412826056540d7d535589583d438c4b584f409f",
+      "reviewedBytes": 14087,
+      "reviewedSha256": "f76d0bdc844a292df180caf28412826056540d7d535589583d438c4b584f409f",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/focus.ts",
+      "baseBlob": "9c24d0de799e06f7c88c038bf5ee110f55b7bb06",
+      "baseBytes": 17249,
+      "baseSha256": "5ccc1b6df772d7dfc54f884f9af8bc822c495d4528f0f8cba0e9d76502a41279",
+      "reviewedBytes": 17249,
+      "reviewedSha256": "5ccc1b6df772d7dfc54f884f9af8bc822c495d4528f0f8cba0e9d76502a41279",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/meditation.ts",
+      "baseBlob": "6b67fcc4a77b7997f7a2c6b40414c2b7fbef837f",
+      "baseBytes": 38964,
+      "baseSha256": "7bce53b1c060dccbbc7e58edd0e32b8bce9f0b86ddf6875c78f1f81413997c3d",
+      "reviewedBytes": 38964,
+      "reviewedSha256": "7bce53b1c060dccbbc7e58edd0e32b8bce9f0b86ddf6875c78f1f81413997c3d",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/photosA.ts",
+      "baseBlob": "b470db1ecad19839827e3d3b136e35eb4999b2bb",
+      "baseBytes": 3056,
+      "baseSha256": "92ac1f3911b25a0cf84ae2446e6adce87f52adc5850340433fd28ddbec824f0d",
+      "reviewedBytes": 3056,
+      "reviewedSha256": "92ac1f3911b25a0cf84ae2446e6adce87f52adc5850340433fd28ddbec824f0d",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/photosB.ts",
+      "baseBlob": "47e5967ea512b2b9a8b7b46919a05df4553a20b9",
+      "baseBytes": 3067,
+      "baseSha256": "606e9a93377b8659b22e76871d728d418e06477bfb7ab92a421454beaef9eb3c",
+      "reviewedBytes": 3067,
+      "reviewedSha256": "606e9a93377b8659b22e76871d728d418e06477bfb7ab92a421454beaef9eb3c",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/photosC.ts",
+      "baseBlob": "328e1135a66f5293e5a38e92871f3b9e42f77000",
+      "baseBytes": 3000,
+      "baseSha256": "6f231138a8b282c4af0c5955b71d4169d7a0530a2e9d238db000d03e98fcb8a9",
+      "reviewedBytes": 3000,
+      "reviewedSha256": "6f231138a8b282c4af0c5955b71d4169d7a0530a2e9d238db000d03e98fcb8a9",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/procrastination.ts",
+      "baseBlob": "4b4d54de5174392b96defcae3c2932c4d2de7e14",
+      "baseBytes": 16673,
+      "baseSha256": "3599ace324b6a0fd83858ef429c817d3f32c517dcb048ff6a27e28ea9b6a16ad",
+      "reviewedBytes": 16673,
+      "reviewedSha256": "3599ace324b6a0fd83858ef429c817d3f32c517dcb048ff6a27e28ea9b6a16ad",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/sleep.ts",
+      "baseBlob": "a355929a4dbd23157847e97b6a85c6b96efba8b4",
+      "baseBytes": 19130,
+      "baseSha256": "825a24781fe4ba4e63560256b7ce644425bae8b0a99df5680c4d0d7f7991fa6b",
+      "reviewedBytes": 19130,
+      "reviewedSha256": "825a24781fe4ba4e63560256b7ce644425bae8b0a99df5680c4d0d7f7991fa6b",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/suggestion.ts",
+      "baseBlob": "82bc645ceffc25f4e63a8d23dc6f2cb561645dd4",
+      "baseBytes": 42280,
+      "baseSha256": "25d4f29e7a73d45ce2eb25f94e0bd591d2a32a23cb9db8744cdf00a2c7aa9d9c",
+      "reviewedBytes": 42280,
+      "reviewedSha256": "25d4f29e7a73d45ce2eb25f94e0bd591d2a32a23cb9db8744cdf00a2c7aa9d9c",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/tr/compassion.ts",
+      "baseBlob": "675bf3f4f903e8e754dc4c0508ef1c921bd35d1e",
+      "baseBytes": 54363,
+      "baseSha256": "7a66e2cc3f42b462719e372de994d874307afbe1a348e9c78e7aada25e9eed92",
+      "reviewedBytes": 54363,
+      "reviewedSha256": "7a66e2cc3f42b462719e372de994d874307afbe1a348e9c78e7aada25e9eed92",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/tr/deeper/adhd.ts",
+      "baseBlob": "46a4237509a7b9425b8d7fbdee93df7df264c6ef",
+      "baseBytes": 23102,
+      "baseSha256": "8ffca39c1db9f2b25781bb3e4d4756e346fac00dadef57695d9a22f0ca2bcfb4",
+      "reviewedBytes": 23102,
+      "reviewedSha256": "8ffca39c1db9f2b25781bb3e4d4756e346fac00dadef57695d9a22f0ca2bcfb4",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/tr/deeper/calm.ts",
+      "baseBlob": "75939a079fc5683c5fcbc0b6e6d4643ea64a5ce2",
+      "baseBytes": 18155,
+      "baseSha256": "7f9d47d9b51ca54f688c49ee0f38c5466e5327fc7c26952e79328369402133dd",
+      "reviewedBytes": 18155,
+      "reviewedSha256": "7f9d47d9b51ca54f688c49ee0f38c5466e5327fc7c26952e79328369402133dd",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/tr/deeper/confidence.ts",
+      "baseBlob": "4e4aabdc911739b5fb0d5002d1f48d5dc595fbd1",
+      "baseBytes": 18282,
+      "baseSha256": "023eb8b6a2bbe8ae0b1be1e48bac49b930979ae5b1c7479d496ab461e4a20e2c",
+      "reviewedBytes": 18282,
+      "reviewedSha256": "023eb8b6a2bbe8ae0b1be1e48bac49b930979ae5b1c7479d496ab461e4a20e2c",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/tr/deeper/faith.ts",
+      "baseBlob": "91dd9655be958f4c341300db5f779fa71afa5803",
+      "baseBytes": 21124,
+      "baseSha256": "fa87872d62797af425596488dc5c87d6b8bf1501310061bc801b1348e7949392",
+      "reviewedBytes": 21124,
+      "reviewedSha256": "fa87872d62797af425596488dc5c87d6b8bf1501310061bc801b1348e7949392",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/tr/deeper/focus.ts",
+      "baseBlob": "2cea65484576fa064206add28b057b39ccf29d1b",
+      "baseBytes": 20117,
+      "baseSha256": "fc760b9cdf1a3cea58e542e0a8823ee072bdb9318934703d85211eca189c8e7e",
+      "reviewedBytes": 20117,
+      "reviewedSha256": "fc760b9cdf1a3cea58e542e0a8823ee072bdb9318934703d85211eca189c8e7e",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/tr/deeper/index.ts",
+      "baseBlob": "966a05cb26f5c531109bc29b6e93618f83785cac",
+      "baseBytes": 948,
+      "baseSha256": "ff0457a0517763e498943af53aca8ca266bdd13180b97a7cefed9ff3122e8aca",
+      "reviewedBytes": 948,
+      "reviewedSha256": "ff0457a0517763e498943af53aca8ca266bdd13180b97a7cefed9ff3122e8aca",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/tr/deeper/manifest.ts",
+      "baseBlob": "be8c1d36f21d6f819f754cd1cfe0a7ef250e4a1c",
+      "baseBytes": 22310,
+      "baseSha256": "534caf6505b8ef2fbe43b5024115f313cf0659668e4ebbc89cbef991359607b0",
+      "reviewedBytes": 22310,
+      "reviewedSha256": "534caf6505b8ef2fbe43b5024115f313cf0659668e4ebbc89cbef991359607b0",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/tr/deeper/meditation.ts",
+      "baseBlob": "1b0dfacfca847c5c383eeb7ed17a6559c943959a",
+      "baseBytes": 23842,
+      "baseSha256": "f01d0c81f895a42c05d90f349763940ed6afbcd0923e0719fd850bacfcdf8a72",
+      "reviewedBytes": 23842,
+      "reviewedSha256": "f01d0c81f895a42c05d90f349763940ed6afbcd0923e0719fd850bacfcdf8a72",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/tr/deeper/motivation.ts",
+      "baseBlob": "01104346d9af66685311c9436a752b977e37f3eb",
+      "baseBytes": 21216,
+      "baseSha256": "6b0b9980921ace4e5aec7e12394231881d0028ebecb7ac3a91900b52843e5986",
+      "reviewedBytes": 21216,
+      "reviewedSha256": "6b0b9980921ace4e5aec7e12394231881d0028ebecb7ac3a91900b52843e5986",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/tr/deeper/procrastination.ts",
+      "baseBlob": "4d0304c1f8fc9a186c1f7992a77ef1a5efd59226",
+      "baseBytes": 20196,
+      "baseSha256": "11bb14e568356d69f9fe527f25ed9ad12be93da557ac2ea723e60ee7b19d0aee",
+      "reviewedBytes": 20196,
+      "reviewedSha256": "11bb14e568356d69f9fe527f25ed9ad12be93da557ac2ea723e60ee7b19d0aee",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/tr/deeper/sleep.ts",
+      "baseBlob": "ad193310dfb60cf23c16f23ca753faad36765ffe",
+      "baseBytes": 17676,
+      "baseSha256": "2f440292adc59986c11d0a0887620ebdbbb037b536b8522bc43e3ca9ec423ba3",
+      "reviewedBytes": 17676,
+      "reviewedSha256": "2f440292adc59986c11d0a0887620ebdbbb037b536b8522bc43e3ca9ec423ba3",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/tr/deeper/suggestion.ts",
+      "baseBlob": "5f2f1f751e41025889451c6d895fe1996a842788",
+      "baseBytes": 26130,
+      "baseSha256": "1a904b5456d8c4ed24abd7a5965a7a43f05672bc4847323de7f66b2257c8b52b",
+      "reviewedBytes": 26130,
+      "reviewedSha256": "1a904b5456d8c4ed24abd7a5965a7a43f05672bc4847323de7f66b2257c8b52b",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/tr/deeper/turning_day.ts",
+      "baseBlob": "8616220391281420c8ccec86c7d724ed5e945519",
+      "baseBytes": 20826,
+      "baseSha256": "2b594911f12a185545d6c8bcb82acb522fac53867a94bf02ffc310178d4f729b",
+      "reviewedBytes": 20826,
+      "reviewedSha256": "2b594911f12a185545d6c8bcb82acb522fac53867a94bf02ffc310178d4f729b",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/tr/deeper/types.ts",
+      "baseBlob": "a6b4452239867fb2a8a31a07f312ef70d737c5af",
+      "baseBytes": 354,
+      "baseSha256": "74924fde58f6f9e8a6cac1be679ba7c67c2a7c49f2295d1efc41728da02f4848",
+      "reviewedBytes": 354,
+      "reviewedSha256": "74924fde58f6f9e8a6cac1be679ba7c67c2a7c49f2295d1efc41728da02f4848",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/tr/identity.ts",
+      "baseBlob": "bd850cad1821713baaaf0249eef4a50fe33a4056",
+      "baseBytes": 78344,
+      "baseSha256": "ce5cdcc85fe4f9292126e201a56da8fe24dcfad1d112ce1c890b8df4b2b441a2",
+      "reviewedBytes": 78344,
+      "reviewedSha256": "ce5cdcc85fe4f9292126e201a56da8fe24dcfad1d112ce1c890b8df4b2b441a2",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/tr/index.ts",
+      "baseBlob": "7a73c8ff0bfcda819f5a00da0d07aa6059c407ec",
+      "baseBytes": 667,
+      "baseSha256": "0817ccad3c765275b20c95e5cccb8865adc968921d8fcebf92cada229d7d6d03",
+      "reviewedBytes": 667,
+      "reviewedSha256": "0817ccad3c765275b20c95e5cccb8865adc968921d8fcebf92cada229d7d6d03",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/tr/meaning.ts",
+      "baseBlob": "07fef95e584e9ab9f5f9e32c73e66e58081ce143",
+      "baseBytes": 53051,
+      "baseSha256": "c3be148209fbea0f1aa58033fd9d273dd36cc231c27a4d574ceaa7e167582550",
+      "reviewedBytes": 53051,
+      "reviewedSha256": "c3be148209fbea0f1aa58033fd9d273dd36cc231c27a4d574ceaa7e167582550",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/tr/optimism.ts",
+      "baseBlob": "a02c123b08df253d1893d5a870930afb8493d17d",
+      "baseBytes": 68663,
+      "baseSha256": "2ca3dc357346cd8816d0ab323e27ca102919f475b3850147810efb491693e32b",
+      "reviewedBytes": 68663,
+      "reviewedSha256": "2ca3dc357346cd8816d0ab323e27ca102919f475b3850147810efb491693e32b",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/tr/state.ts",
+      "baseBlob": "20ecbc1d137c7f581303c0c313b763069cafa0f8",
+      "baseBytes": 84666,
+      "baseSha256": "69b4cdd70b4308d3dbaf1edf4eae2d18ed263aa1f7af7e4219840e7410481fde",
+      "reviewedBytes": 84666,
+      "reviewedSha256": "69b4cdd70b4308d3dbaf1edf4eae2d18ed263aa1f7af7e4219840e7410481fde",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/tr/stoic.ts",
+      "baseBlob": "235bddd1ec47cfa5866bcdf47f2e5964d0085b8f",
+      "baseBytes": 52372,
+      "baseSha256": "d53c72829db6ed063d374935e6224067f1c35ba82138ef6f15c86b77d0f4761c",
+      "reviewedBytes": 52372,
+      "reviewedSha256": "d53c72829db6ed063d374935e6224067f1c35ba82138ef6f15c86b77d0f4761c",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseContent/turningDay.ts",
+      "baseBlob": "bd6df7f9e6d945840c4b859473e0078f1874b5e1",
+      "baseBytes": 34972,
+      "baseSha256": "298ad01178b4c5b0322a0de2e7c6e9745be819e74d626fe2f9b89bd3b9594093",
+      "reviewedBytes": 34972,
+      "reviewedSha256": "298ad01178b4c5b0322a0de2e7c6e9745be819e74d626fe2f9b89bd3b9594093",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseEntryCopy.ts",
+      "baseBlob": "e433342d3f71e82f239cd418fff81280ff25be19",
+      "baseBytes": 1079,
+      "baseSha256": "570b8d904e3ff10cc13ef3ac53219cc8abb34ffb87ce088f1256cff05b4a7c45",
+      "reviewedBytes": 1079,
+      "reviewedSha256": "570b8d904e3ff10cc13ef3ac53219cc8abb34ffb87ce088f1256cff05b4a7c45",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courseLearningCopy.ts",
+      "baseBlob": "90e72da19426b988de7cab6a3c2078ed8db394ed",
+      "baseBytes": 16184,
+      "baseSha256": "739ec314fd365603ddcd76124774b2ad72e8bd1d90564748b834cf668d009fcd",
+      "reviewedBytes": 16184,
+      "reviewedSha256": "739ec314fd365603ddcd76124774b2ad72e8bd1d90564748b834cf668d009fcd",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/coursePracticeContent.ts",
+      "baseBlob": "6ae80ed107f7baf66a6b0bc228cf70de133fe4c5",
+      "baseBytes": 54477,
+      "baseSha256": "14a7fb2821199df5c487bae3152dc213999ed3d70b4f0a141758093e34a4eb34",
+      "reviewedBytes": 54477,
+      "reviewedSha256": "14a7fb2821199df5c487bae3152dc213999ed3d70b4f0a141758093e34a4eb34",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/coursePresentation.ts",
+      "baseBlob": "895e927b42643e37a669eaf40ff7652661b55955",
+      "baseBytes": 6517,
+      "baseSha256": "746d396c13cb9b8d38aa40d55504bac60c2591de01b223b86d0dfaccbad2433c",
+      "reviewedBytes": 6517,
+      "reviewedSha256": "746d396c13cb9b8d38aa40d55504bac60c2591de01b223b86d0dfaccbad2433c",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/courses.ts",
+      "baseBlob": "340296def40a61109ed2d494c2f6c131d1de0628",
+      "baseBytes": 49006,
+      "baseSha256": "0a4b9a210c6cf0cb3f18c171c173b26b437aeb3572267cde66452558a422a2ec",
+      "reviewedBytes": 49006,
+      "reviewedSha256": "0a4b9a210c6cf0cb3f18c171c173b26b437aeb3572267cde66452558a422a2ec",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/dailyNudges.ts",
+      "baseBlob": "ed8f1075c7ad88bf119a67a4e3d8835a924638c7",
+      "baseBytes": 6176,
+      "baseSha256": "d4aa52dba619fc8b6a29746c76c66f01b53c640ba7d88cf9cd31c39f09a5947d",
+      "reviewedBytes": 6176,
+      "reviewedSha256": "d4aa52dba619fc8b6a29746c76c66f01b53c640ba7d88cf9cd31c39f09a5947d",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/dailyQuotes.ts",
+      "baseBlob": "61c6fc720d7ec3e890b1e18521256369ae770654",
+      "baseBytes": 43757,
+      "baseSha256": "b0cf414c57e6eefbff00d8fda5f2bde39902d24a6ec71d9f8fb3fbbdae7ed57e",
+      "reviewedBytes": 43757,
+      "reviewedSha256": "b0cf414c57e6eefbff00d8fda5f2bde39902d24a6ec71d9f8fb3fbbdae7ed57e",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/englishNarrationAssets.ts",
+      "baseBlob": "b4381e6f9e688ea9d950fbbba348aa574ffc7398",
+      "baseBytes": 97824,
+      "baseSha256": "498b9f951d20359f347052fbf7208a895355a56a166e486db671c4e3ef44ac45",
+      "reviewedBytes": 97824,
+      "reviewedSha256": "498b9f951d20359f347052fbf7208a895355a56a166e486db671c4e3ef44ac45",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/exploreDreams.ts",
+      "baseBlob": "aaff3585cbcc03a5bff9879073f1ecfb7e53763a",
+      "baseBytes": 103787,
+      "baseSha256": "5b8962ef76dd9a450a0bc1e58d3e524dbba085438d703a6c2ce7c07ed054b8c6",
+      "reviewedBytes": 103787,
+      "reviewedSha256": "5b8962ef76dd9a450a0bc1e58d3e524dbba085438d703a6c2ce7c07ed054b8c6",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/exploreDreamsMeaningful.ts",
+      "baseBlob": "86c6a263a48c51e8e101428c96b56df292025182",
+      "baseBytes": 13696,
+      "baseSha256": "ac600d8c48ec38dce978d47ed6d7faa3e05a5b37c10ed8dfbf4a297569dc9c6f",
+      "reviewedBytes": 13696,
+      "reviewedSha256": "ac600d8c48ec38dce978d47ed6d7faa3e05a5b37c10ed8dfbf4a297569dc9c6f",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/guidedMeditations.ts",
+      "baseBlob": "ff74fc1e21ab0207c345eb4d326fbd3ba5a84ccf",
+      "baseBytes": 23419,
+      "baseSha256": "c9cc5f56354654f270e6176c32ce1ee2452817bdb07194f5307b70b7e92d745d",
+      "reviewedBytes": 23419,
+      "reviewedSha256": "c9cc5f56354654f270e6176c32ce1ee2452817bdb07194f5307b70b7e92d745d",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/imageDelivery.ts",
+      "baseBlob": "d86a0e20c75d0194dd97b26b00050c9822b25f98",
+      "baseBytes": 2011,
+      "baseSha256": "f74b8d1f10c739308209422ec0afe6e41175f1270ac517e247ae66c0edb4d2c9",
+      "reviewedBytes": 2011,
+      "reviewedSha256": "f74b8d1f10c739308209422ec0afe6e41175f1270ac517e247ae66c0edb4d2c9",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/imageDeliveryAssets.ts",
+      "baseBlob": "aa0bc3d20dccfc0fb794b659a13118a1045b0141",
+      "baseBytes": 8186,
+      "baseSha256": "8b901ff8ded7f97f65a3878963f9755e510be01e82de16131300be07ec5850a5",
+      "reviewedBytes": 8186,
+      "reviewedSha256": "8b901ff8ded7f97f65a3878963f9755e510be01e82de16131300be07ec5850a5",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/journalPrompts.ts",
+      "baseBlob": "2fea061ad5f16a5860a49128b9938fc839768303",
+      "baseBytes": 2334,
+      "baseSha256": "be177bc9bec34898b76ea95f29bf4532a7df3b43620e8f9551eaaae22892fecb",
+      "reviewedBytes": 2334,
+      "reviewedSha256": "be177bc9bec34898b76ea95f29bf4532a7df3b43620e8f9551eaaae22892fecb",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/landingCopy.ts",
+      "baseBlob": "bb49bd2f16c714bfb84f489af02c5db89d771518",
+      "baseBytes": 19179,
+      "baseSha256": "f6e65dcd03bde9b75677d7b9fb071cb3e93858cfee12a515b23784219d12eef7",
+      "reviewedBytes": 19179,
+      "reviewedSha256": "f6e65dcd03bde9b75677d7b9fb071cb3e93858cfee12a515b23784219d12eef7",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/legal.ts",
+      "baseBlob": "53f83a383d26eb58434c44ed18e3f318d904d602",
+      "baseBytes": 25057,
+      "baseSha256": "7e0bdcf72fe9567dcb07ebe0ba2fadfaa083d3bf5b154488db41160484bf7598",
+      "reviewedBytes": 25057,
+      "reviewedSha256": "7e0bdcf72fe9567dcb07ebe0ba2fadfaa083d3bf5b154488db41160484bf7598",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/odaVoice.ts",
+      "baseBlob": "f97d15b9c08d9731e1d10ed87ce2859d7e5c160f",
+      "baseBytes": 1669,
+      "baseSha256": "f81d1668eed50ecc995214eaaff89df19bf9626a4ca1877bfc013b35a07d0f82",
+      "reviewedBytes": 1669,
+      "reviewedSha256": "f81d1668eed50ecc995214eaaff89df19bf9626a4ca1877bfc013b35a07d0f82",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/quoteCollection.ts",
+      "baseBlob": "f5e5756b10e3d45330d933d18483b89f7aadbf24",
+      "baseBytes": 1538,
+      "baseSha256": "b3e022d92138db58c4bdd26bfa9a83076d577738920183bf25ed4328c1c42dc8",
+      "reviewedBytes": 1538,
+      "reviewedSha256": "b3e022d92138db58c4bdd26bfa9a83076d577738920183bf25ed4328c1c42dc8",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/quoteExpansionFaith.ts",
+      "baseBlob": "ecb279fa027f916c002355580482f6f63272b5cf",
+      "baseBytes": 55110,
+      "baseSha256": "b8d8c1c6a3cf3ffcb1bd662f356541bdc87d0e8509b59ceb49a0dc5e9173b5a5",
+      "reviewedBytes": 55110,
+      "reviewedSha256": "b8d8c1c6a3cf3ffcb1bd662f356541bdc87d0e8509b59ceb49a0dc5e9173b5a5",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/quoteExpansionFaithMore.ts",
+      "baseBlob": "d288893a6b8625eae1022a93953ff9ac62435d69",
+      "baseBytes": 53573,
+      "baseSha256": "e61df1a64742a8f471be294e66ebd7c2045d53a5951d51762587146fdc12ac09",
+      "reviewedBytes": 53573,
+      "reviewedSha256": "e61df1a64742a8f471be294e66ebd7c2045d53a5951d51762587146fdc12ac09",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/quoteExpansionPhilosophyMore.ts",
+      "baseBlob": "28b31b9154f8113111fc5d21da37f9e8d2b67da1",
+      "baseBytes": 56943,
+      "baseSha256": "1e7fb0a2d0019f8c97540d444e76d112e275477aed55eadf791e75000720d86d",
+      "reviewedBytes": 56943,
+      "reviewedSha256": "1e7fb0a2d0019f8c97540d444e76d112e275477aed55eadf791e75000720d86d",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/quoteExpansionScienceMore.ts",
+      "baseBlob": "817ebb5fbdf4876b732f1f23ac3dd3d51563da32",
+      "baseBytes": 54951,
+      "baseSha256": "c55295d1a9f6dfbca19436d08489edd59a2ae1279cf13f9d743c1f9cbb0fe311",
+      "reviewedBytes": 54951,
+      "reviewedSha256": "c55295d1a9f6dfbca19436d08489edd59a2ae1279cf13f9d743c1f9cbb0fe311",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/quoteExpansionThinkers.ts",
+      "baseBlob": "a1789e9fa0cca2d3fa8e073e956317baf31948b6",
+      "baseBytes": 55893,
+      "baseSha256": "b4a245c6dd1dd19f81fe1e8e412fa8c4b6b30658a8481db355465836adbb313a",
+      "reviewedBytes": 55893,
+      "reviewedSha256": "b4a245c6dd1dd19f81fe1e8e412fa8c4b6b30658a8481db355465836adbb313a",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/quoteTypes.ts",
+      "baseBlob": "16cd142b6bacccd74a8e7336bfd9bac095992362",
+      "baseBytes": 393,
+      "baseSha256": "7d7c403926df3abdd8775a36117f60418d6808523b82b65dc51377c6f2ff89c4",
+      "reviewedBytes": 393,
+      "reviewedSha256": "7d7c403926df3abdd8775a36117f60418d6808523b82b65dc51377c6f2ff89c4",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/seed.ts",
+      "baseBlob": "880a1bb7cdc857dd4911281f7852a29aaeb044c6",
+      "baseBytes": 27532,
+      "baseSha256": "0c5cb0d2e8deb8fff7281908145be98b8f0ae51fd408c6066683599340fed663",
+      "reviewedBytes": 27532,
+      "reviewedSha256": "0c5cb0d2e8deb8fff7281908145be98b8f0ae51fd408c6066683599340fed663",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/soundRoom.ts",
+      "baseBlob": "e4bbd193bbaeb5c75e88babdd607353578db348d",
+      "baseBytes": 8252,
+      "baseSha256": "303649d8c09a86043087f6dba619fb2ebbb17fd7ac455b5d8fad5690aca6d6f4",
+      "reviewedBytes": 8252,
+      "reviewedSha256": "303649d8c09a86043087f6dba619fb2ebbb17fd7ac455b5d8fad5690aca6d6f4",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/starterDecisions.ts",
+      "baseBlob": "6bc75e2733ac954b6a21a369a654423c9b6b40fb",
+      "baseBytes": 2982,
+      "baseSha256": "6273020e598d9f549aecaa73109362ee8efe18e01fd1e994a23defceee1a3e1e",
+      "reviewedBytes": 2982,
+      "reviewedSha256": "6273020e598d9f549aecaa73109362ee8efe18e01fd1e994a23defceee1a3e1e",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/support.ts",
+      "baseBlob": "8a86294fbaf6032adb7f3bdeee3159f9e56e3244",
+      "baseBytes": 13192,
+      "baseSha256": "154097fcde4ba51aa0f1aa7cabd30beeb7d04470e37a9634b3d107e6c0b712e7",
+      "reviewedBytes": 13192,
+      "reviewedSha256": "154097fcde4ba51aa0f1aa7cabd30beeb7d04470e37a9634b3d107e6c0b712e7",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/treePresentation.ts",
+      "baseBlob": "cf862b5e6cf375ee65877428027dab000e8bd223",
+      "baseBytes": 1462,
+      "baseSha256": "94dc692fac1cf60dbe82036495b18f6b042f1537c33a5939f7a931ff2b6bdb41",
+      "reviewedBytes": 1462,
+      "reviewedSha256": "94dc692fac1cf60dbe82036495b18f6b042f1537c33a5939f7a931ff2b6bdb41",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/data/wisdom.ts",
+      "baseBlob": "c261bad97d125b393824929aaabaf8be2456d6d4",
+      "baseBytes": 8745,
+      "baseSha256": "7764e4c67804497c1a475bd55aeb7ea3cc9487f7cb095e2096bd03a6029b6147",
+      "reviewedBytes": 8745,
+      "reviewedSha256": "7764e4c67804497c1a475bd55aeb7ea3cc9487f7cb095e2096bd03a6029b6147",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/aiCoach.ts",
+      "baseBlob": "6ad8375198bb7bbc5634c35c497837cec96585b5",
+      "baseBytes": 17100,
+      "baseSha256": "297adf69393524f6fd2599a58a68049350a21db7ec195450ddf154ebb8c19df4",
+      "reviewedBytes": 17100,
+      "reviewedSha256": "297adf69393524f6fd2599a58a68049350a21db7ec195450ddf154ebb8c19df4",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/aiCoach.worker.ts",
+      "baseBlob": "3e8da612bb3b04de4f2b530448e8c416e2a28e87",
+      "baseBytes": 163,
+      "baseSha256": "ecefde703fa2e326739a93cea54305dca519e8137d5d8c3ae4487a6a694b6efd",
+      "reviewedBytes": 163,
+      "reviewedSha256": "ecefde703fa2e326739a93cea54305dca519e8137d5d8c3ae4487a6a694b6efd",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/backup.ts",
+      "baseBlob": "6ebd910b5074989bcfaca18c7ee6c3d7736e5237",
+      "baseBytes": 18904,
+      "baseSha256": "0ece443b6e61dfc0508658e5fb24a6373145fc56094f8e9b906fe53bebfdf3b9",
+      "reviewedBytes": 18904,
+      "reviewedSha256": "0ece443b6e61dfc0508658e5fb24a6373145fc56094f8e9b906fe53bebfdf3b9",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/backupReminder.ts",
+      "baseBlob": "ee43820677e6dad9a4fbbc871e3d7f1da8fb92ca",
+      "baseBytes": 4029,
+      "baseSha256": "00d88642a5338d0c24ea3b9073ddffbdfdf8c4aa8d3cb3b328468ae830c70dd4",
+      "reviewedBytes": 4029,
+      "reviewedSha256": "00d88642a5338d0c24ea3b9073ddffbdfdf8c4aa8d3cb3b328468ae830c70dd4",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/bankPractice.ts",
+      "baseBlob": "4b82de98909b034c5007fac2eeb1438bc33eb138",
+      "baseBytes": 979,
+      "baseSha256": "7d132bd81285707e2fee7650f92298f427e1d3abe532a5a53744448829d48fc3",
+      "reviewedBytes": 979,
+      "reviewedSha256": "7d132bd81285707e2fee7650f92298f427e1d3abe532a5a53744448829d48fc3",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/cloudCoach.ts",
+      "baseBlob": "5e3bb68db5bfc3eb823e6c6728bfde0075583725",
+      "baseBytes": 8518,
+      "baseSha256": "cfe576500181c63cda717f70fe209b54b5036936adb0120a380589d9b3a2ca09",
+      "reviewedBytes": 8518,
+      "reviewedSha256": "cfe576500181c63cda717f70fe209b54b5036936adb0120a380589d9b3a2ca09",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/cloudSync.ts",
+      "baseBlob": "79f9e34829dbc875105f112e41474b15eaf70f9e",
+      "baseBytes": 35111,
+      "baseSha256": "18374c6a9062224d05c555d2ea48c0e267b3d947569a62c17549429f918d36b9",
+      "reviewedBytes": 35111,
+      "reviewedSha256": "18374c6a9062224d05c555d2ea48c0e267b3d947569a62c17549429f918d36b9",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/cloudUploadReadiness.ts",
+      "baseBlob": "0ddb0dccf1b4d151265eff4ef79413bd2e5797fd",
+      "baseBytes": 1802,
+      "baseSha256": "71c2fd85d6fa8399bed7a2925c58df046f301b0b74e631c041c627448b029c59",
+      "reviewedBytes": 1802,
+      "reviewedSha256": "71c2fd85d6fa8399bed7a2925c58df046f301b0b74e631c041c627448b029c59",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/courseEntry.ts",
+      "baseBlob": "1d1133e40d5b4277b38aad4705369e8392722360",
+      "baseBytes": 1711,
+      "baseSha256": "0370a5c22cee72752ec0e770a3cfc705d1d705ab4b2116bce6752a69ce44f23b",
+      "reviewedBytes": 1711,
+      "reviewedSha256": "0370a5c22cee72752ec0e770a3cfc705d1d705ab4b2116bce6752a69ce44f23b",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/courseLearning.ts",
+      "baseBlob": "b383a2c91876b79af96c51a9aea8d51316902ef8",
+      "baseBytes": 6581,
+      "baseSha256": "f4184c4ee175f14ef62c4c4c98c01dfbb3619f62e720d4053a9e2da10bc7e751",
+      "reviewedBytes": 6581,
+      "reviewedSha256": "f4184c4ee175f14ef62c4c4c98c01dfbb3619f62e720d4053a9e2da10bc7e751",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/courseProgress.ts",
+      "baseBlob": "5092bc5599e9741a515d310c795cc20bf2b7329e",
+      "baseBytes": 10476,
+      "baseSha256": "7f9d3d7800706c652d014f7deff762d079e538a11e6e637eb6d72bdf4a72fe16",
+      "reviewedBytes": 10476,
+      "reviewedSha256": "7f9d3d7800706c652d014f7deff762d079e538a11e6e637eb6d72bdf4a72fe16",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/courseProgressDraft.ts",
+      "baseBlob": "0d87d1ab5bbc848fd70d0d0ed1727bac882e2a29",
+      "baseBytes": 7019,
+      "baseSha256": "a221c7c9ff74c72962314d6d4d40839a3f7979f2185c27112bcbb7aa745f99f1",
+      "reviewedBytes": 7019,
+      "reviewedSha256": "a221c7c9ff74c72962314d6d4d40839a3f7979f2185c27112bcbb7aa745f99f1",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/dailyLoop.ts",
+      "baseBlob": "b41b800e196f10dc1089ffcd1e17060d26d6e132",
+      "baseBytes": 4704,
+      "baseSha256": "39b2c2c0b76e4cc0ae135ff96a485b7c50b85459cfb907cfd49b187ae202c82e",
+      "reviewedBytes": 4704,
+      "reviewedSha256": "39b2c2c0b76e4cc0ae135ff96a485b7c50b85459cfb907cfd49b187ae202c82e",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/dataSnapshots.ts",
+      "baseBlob": "ea44d4559c334c2607c0025210ac045b0ba5e4c3",
+      "baseBytes": 6358,
+      "baseSha256": "e9786193e676e9d2c790d97c818ea9140957f9f21ff04ab60976915b78eff68b",
+      "reviewedBytes": 6358,
+      "reviewedSha256": "e9786193e676e9d2c790d97c818ea9140957f9f21ff04ab60976915b78eff68b",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/dataWrites.ts",
+      "baseBlob": "4cf3a80564e212f39523ae671d28b039c08544bc",
+      "baseBytes": 12249,
+      "baseSha256": "9f966b2edb05b506bef85e50ff3cf91bbd5267458ad86fef2af07f93711b4038",
+      "reviewedBytes": 12249,
+      "reviewedSha256": "9f966b2edb05b506bef85e50ff3cf91bbd5267458ad86fef2af07f93711b4038",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/economy.ts",
+      "baseBlob": "9e30de89e49e54fc96a4eaaeb8a7bf5840ea9d6f",
+      "baseBytes": 15401,
+      "baseSha256": "fdeff021f4db8566d1e1b408fbf23734cb23e3edc6db3261d74723acc922551e",
+      "reviewedBytes": 15401,
+      "reviewedSha256": "fdeff021f4db8566d1e1b408fbf23734cb23e3edc6db3261d74723acc922551e",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/entitlements.ts",
+      "baseBlob": "4640c782ff681b277ab647fcc1e353ca41db4119",
+      "baseBytes": 2401,
+      "baseSha256": "ee4a9c923f94154d4a3e4809980929474ab3289929d56ee067790010fa691219",
+      "reviewedBytes": 2401,
+      "reviewedSha256": "ee4a9c923f94154d4a3e4809980929474ab3289929d56ee067790010fa691219",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/microHabitsService.ts",
+      "baseBlob": "a9228710d2f6926ffce7d625f18655e5999b6f50",
+      "baseBytes": 7751,
+      "baseSha256": "8587aa4936130b372eb71b919c9e136e143336fb9db900e42fc73f3880a3cc14",
+      "reviewedBytes": 7751,
+      "reviewedSha256": "8587aa4936130b372eb71b919c9e136e143336fb9db900e42fc73f3880a3cc14",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/momentum.ts",
+      "baseBlob": "29007273439858c8183f62b8188658d10b22cd9b",
+      "baseBytes": 9828,
+      "baseSha256": "8a1c33a176a2fc9f9e8c1c19e3d44c58e8208bd01533975045d0b2e294bdfc16",
+      "reviewedBytes": 9828,
+      "reviewedSha256": "8a1c33a176a2fc9f9e8c1c19e3d44c58e8208bd01533975045d0b2e294bdfc16",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/native.ts",
+      "baseBlob": "d0de6ac016950a528f209f49e2c7dc5d73d373b1",
+      "baseBytes": 3097,
+      "baseSha256": "55462f6c779126002857402f9172cb7dbc025d1ae72351ca4c295d9b50cecfbd",
+      "reviewedBytes": 3097,
+      "reviewedSha256": "55462f6c779126002857402f9172cb7dbc025d1ae72351ca4c295d9b50cecfbd",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/nativeNotifications.ts",
+      "baseBlob": "41db8647a6dae2a32a5dd62b9b9bef0c7f4c3922",
+      "baseBytes": 4669,
+      "baseSha256": "f352a63f7e0c4adb794b0a08e8cc1b8f7569a163069a1b1d2dbae6f4df97c444",
+      "reviewedBytes": 4669,
+      "reviewedSha256": "f352a63f7e0c4adb794b0a08e8cc1b8f7569a163069a1b1d2dbae6f4df97c444",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/notebook.ts",
+      "baseBlob": "2ffd2f80fd122f0c63b98cff234846745bf980eb",
+      "baseBytes": 19995,
+      "baseSha256": "dab465119b30d1aff002819e85e9989dbad000fc4ffd2a265767136f4ace6e40",
+      "reviewedBytes": 19995,
+      "reviewedSha256": "dab465119b30d1aff002819e85e9989dbad000fc4ffd2a265767136f4ace6e40",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/notebookDrafts.ts",
+      "baseBlob": "27bbb4de73124fcb0ebd6af4d49ccaa8c3f5e78e",
+      "baseBytes": 1619,
+      "baseSha256": "7d63e63c1761ebc9c842326390ecaa1a3afa9ba11fd20015f152250c4ec43538",
+      "reviewedBytes": 1619,
+      "reviewedSha256": "7d63e63c1761ebc9c842326390ecaa1a3afa9ba11fd20015f152250c4ec43538",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/notificationScheduler.ts",
+      "baseBlob": "193b3751cded8a323d0003eb858f0e80fdb02901",
+      "baseBytes": 9859,
+      "baseSha256": "d57887738cc44963dcae28ac2a088997333bea0a731897f5dc23c7f8aa96d326",
+      "reviewedBytes": 9859,
+      "reviewedSha256": "d57887738cc44963dcae28ac2a088997333bea0a731897f5dc23c7f8aa96d326",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/onboardingDraft.ts",
+      "baseBlob": "e4b3386aab559b660a687f13aca36c826303926f",
+      "baseBytes": 1951,
+      "baseSha256": "55f585edd37f6cb6af9621b75e18b5dc974627b3a43cf163f7608a9edbd58f78",
+      "reviewedBytes": 1951,
+      "reviewedSha256": "55f585edd37f6cb6af9621b75e18b5dc974627b3a43cf163f7608a9edbd58f78",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/purchaseIdentityBinding.ts",
+      "baseBlob": "ba75f4772eb9309308432c49dc79852a6bf36520",
+      "baseBytes": 2109,
+      "baseSha256": "9635abcc38a61f1893e2222e82ceea5038cca03cbecb15df1f76b98421d19d39",
+      "reviewedBytes": 2109,
+      "reviewedSha256": "9635abcc38a61f1893e2222e82ceea5038cca03cbecb15df1f76b98421d19d39",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/purchaseStatus.ts",
+      "baseBlob": "e2604ede1575442c18d157823f4f96a6e3446b98",
+      "baseBytes": 1189,
+      "baseSha256": "87fb8c6e709feb6b05353d805510e2df230440b46eb249decfe2daf337bdeec3",
+      "reviewedBytes": 1189,
+      "reviewedSha256": "87fb8c6e709feb6b05353d805510e2df230440b46eb249decfe2daf337bdeec3",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/purchases.ts",
+      "baseBlob": "ec01102fc16a816ef6dae00596655362b2f9de83",
+      "baseBytes": 20920,
+      "baseSha256": "20166152294fdaba6c351e282c1b738a47b775256677030af518a417e1da257d",
+      "reviewedBytes": 20920,
+      "reviewedSha256": "20166152294fdaba6c351e282c1b738a47b775256677030af518a417e1da257d",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/pushNotifications.ts",
+      "baseBlob": "6e3e1d6518e61f58fb68bf78fd5df34256e7e1a7",
+      "baseBytes": 11396,
+      "baseSha256": "0a3d366aafdec81e57829b3d25739ea988e26c3585fa33ab5dbb5fe1550705b4",
+      "reviewedBytes": 11396,
+      "reviewedSha256": "0a3d366aafdec81e57829b3d25739ea988e26c3585fa33ab5dbb5fe1550705b4",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/repository.ts",
+      "baseBlob": "175fc336aafc0175529e12c48fed59ba8f21b6d6",
+      "baseBytes": 22934,
+      "baseSha256": "a65560692f655d05b37a367e5acbeff1b6dd2974f2f951ff70e419c1c9dcfc8a",
+      "reviewedBytes": 22934,
+      "reviewedSha256": "a65560692f655d05b37a367e5acbeff1b6dd2974f2f951ff70e419c1c9dcfc8a",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/soundRoom.ts",
+      "baseBlob": "f4e85e801d26e243e9fcc42debc18eac4814dcc0",
+      "baseBytes": 2618,
+      "baseSha256": "f5d65b15d8b0da6aa42bb81073efb0670d8569eb9866cffb105e71e52c070175",
+      "reviewedBytes": 2618,
+      "reviewedSha256": "f5d65b15d8b0da6aa42bb81073efb0670d8569eb9866cffb105e71e52c070175",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/soundRoomAccess.ts",
+      "baseBlob": "70babf551c234bded9dd8841d584938d3c236031",
+      "baseBytes": 1744,
+      "baseSha256": "e34e384f12abbc6b8185a377e9aa3c212832182d97b9f773ee973d9abe4c1199",
+      "reviewedBytes": 1744,
+      "reviewedSha256": "e34e384f12abbc6b8185a377e9aa3c212832182d97b9f773ee973d9abe4c1199",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/soundRoomPlayer.ts",
+      "baseBlob": "bb69b0b45b1bf492f91bd19aeaedef83b049dbd1",
+      "baseBytes": 9438,
+      "baseSha256": "2911dd8b1ccc510f3a6757f43ddb3aa2b9d52d3d209e12ee2f0cf44c96a039f4",
+      "reviewedBytes": 9438,
+      "reviewedSha256": "2911dd8b1ccc510f3a6757f43ddb3aa2b9d52d3d209e12ee2f0cf44c96a039f4",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/storageKeys.ts",
+      "baseBlob": "b5552650c429f78d9b4e0701d0d5def74a4ef0f4",
+      "baseBytes": 225,
+      "baseSha256": "e5d3b1d244a08530c13c5fb1cb33ceee0a3dce543b849dbd0ee1a9e136f833f4",
+      "reviewedBytes": 225,
+      "reviewedSha256": "e5d3b1d244a08530c13c5fb1cb33ceee0a3dce543b849dbd0ee1a9e136f833f4",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/services/useCloudState.ts",
+      "baseBlob": "4338b0ce47d2c765ae7e6e4d0437abd1491cc84e",
+      "baseBytes": 420,
+      "baseSha256": "ddd8f7f8e54fda8f90feb37a150c94d0faceecf7e6c11900bb77116e9a00e0a9",
+      "reviewedBytes": 420,
+      "reviewedSha256": "ddd8f7f8e54fda8f90feb37a150c94d0faceecf7e6c11900bb77116e9a00e0a9",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/store/AppContext.ts",
+      "baseBlob": "796fbc001aa2c61eacbbfc224a6392b4b4b98c15",
+      "baseBytes": 240,
+      "baseSha256": "081bcfbe8e33f95caacc9cc033a5641747ff069f48aa239ac2dc50e5fddbfa12",
+      "reviewedBytes": 240,
+      "reviewedSha256": "081bcfbe8e33f95caacc9cc033a5641747ff069f48aa239ac2dc50e5fddbfa12",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/store/useApp.tsx",
+      "baseBlob": "8113d16d8770f14e02aefa37a8f4f7a16b2f786f",
+      "baseBytes": 96366,
+      "baseSha256": "0576b4a1b6c849049f88e8d9c043143c667e1aabf9357bbfba35fe79f5ac6497",
+      "reviewedBytes": 96366,
+      "reviewedSha256": "0576b4a1b6c849049f88e8d9c043143c667e1aabf9357bbfba35fe79f5ac6497",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/utils/ambientTextures.ts",
+      "baseBlob": "6f1d924f38073ca0c7761fd45cbd989538f45f60",
+      "baseBytes": 7184,
+      "baseSha256": "4de8b5025fe94ab1727231080f253e8443c85db9f249c06011bb9abd7176cc4b",
+      "reviewedBytes": 7184,
+      "reviewedSha256": "4de8b5025fe94ab1727231080f253e8443c85db9f249c06011bb9abd7176cc4b",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/utils/categoryHelpers.ts",
+      "baseBlob": "a39ea6a49a34c8a4f0adca5fe2658675c6a9f19f",
+      "baseBytes": 12360,
+      "baseSha256": "8c8bb672f3918183176f532d2afaab459e276c5fc139476b0017c136078417ee",
+      "reviewedBytes": 12360,
+      "reviewedSha256": "8c8bb672f3918183176f532d2afaab459e276c5fc139476b0017c136078417ee",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/utils/confetti.ts",
+      "baseBlob": "a1ca0534281e99f9845293b36c552207f2cb656e",
+      "baseBytes": 2230,
+      "baseSha256": "99e2dfe738c365a69829bc6dda9fbd70ba92bde834e9ec0fb69857fac00774e5",
+      "reviewedBytes": 2230,
+      "reviewedSha256": "99e2dfe738c365a69829bc6dda9fbd70ba92bde834e9ec0fb69857fac00774e5",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/utils/exportCsv.ts",
+      "baseBlob": "348b4e7546944471d59f81deee542de0372af0fb",
+      "baseBytes": 4591,
+      "baseSha256": "aad9de8684ced00ddbcffd9d77cd9669e1b15be962e7eb8da7d36ce9f2d0bb64",
+      "reviewedBytes": 4591,
+      "reviewedSha256": "aad9de8684ced00ddbcffd9d77cd9669e1b15be962e7eb8da7d36ce9f2d0bb64",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/utils/exportVisualizationImage.ts",
+      "baseBlob": "c64a66c23e8f9ca1ff92d2a7ef6e00900102dcd2",
+      "baseBytes": 2367,
+      "baseSha256": "dd184c9730f6554c480782a2ebf56b59627448a75bf45fbf7bea896afe56a6fb",
+      "reviewedBytes": 2367,
+      "reviewedSha256": "dd184c9730f6554c480782a2ebf56b59627448a75bf45fbf7bea896afe56a6fb",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/utils/geminiVoice.ts",
+      "baseBlob": "caece9a6b9ae021f5394285f5e0abe6b3df41df6",
+      "baseBytes": 7031,
+      "baseSha256": "890181dca317a0bdf93cbafd048bec0e94fe2ec2d196305c2daeb014d9a99e69",
+      "reviewedBytes": 7031,
+      "reviewedSha256": "890181dca317a0bdf93cbafd048bec0e94fe2ec2d196305c2daeb014d9a99e69",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/utils/recordId.ts",
+      "baseBlob": "49361907bbf086cda25fe75c25fd304b80138f7a",
+      "baseBytes": 563,
+      "baseSha256": "22c8adc08281419fa124c39d7e8546b1caa9e811d1f485178c18878a377b6d6b",
+      "reviewedBytes": 563,
+      "reviewedSha256": "22c8adc08281419fa124c39d7e8546b1caa9e811d1f485178c18878a377b6d6b",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/utils/recordedNarration.ts",
+      "baseBlob": "1b93c7d6bbb2915992309d14de8b0147af51584c",
+      "baseBytes": 14251,
+      "baseSha256": "9bacb11df80eea39cc677afd9660450c24a06ee765b2063730cb849d2586ecca",
+      "reviewedBytes": 14251,
+      "reviewedSha256": "9bacb11df80eea39cc677afd9660450c24a06ee765b2063730cb849d2586ecca",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/utils/routing.ts",
+      "baseBlob": "6da1aa10bd9b79cbd97d79fd421ec9c09a2982f8",
+      "baseBytes": 1319,
+      "baseSha256": "6173f1d3d9c433f0afd8cd8ceef49d5f3833d2c9d4956f32c22e5d9cf0aecbd6",
+      "reviewedBytes": 1319,
+      "reviewedSha256": "6173f1d3d9c433f0afd8cd8ceef49d5f3833d2c9d4956f32c22e5d9cf0aecbd6",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/utils/soundSynthesizer.ts",
+      "baseBlob": "203fe67ddbe09f484fd75b5f9bc997d5c24bde90",
+      "baseBytes": 52114,
+      "baseSha256": "db278da38a4a0d1b540268e10cee36b92522fcf0194c690b07e866e400b1ff92",
+      "reviewedBytes": 52114,
+      "reviewedSha256": "db278da38a4a0d1b540268e10cee36b92522fcf0194c690b07e866e400b1ff92",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/utils/useDialogAccessibility.ts",
+      "baseBlob": "0a2e743895cfd77afd769c1ed28272695f19b8de",
+      "baseBytes": 4193,
+      "baseSha256": "5b068c627b873c7da369502937470a45704cd748d1d4e22a70015ef9e66cf027",
+      "reviewedBytes": 4193,
+      "reviewedSha256": "5b068c627b873c7da369502937470a45704cd748d1d4e22a70015ef9e66cf027",
+      "byteIdentical": true
+    },
+    {
+      "path": "src/utils/voiceGuide.ts",
+      "baseBlob": "66a735733c64e8ffb02730db84b21b34d2b62754",
+      "baseBytes": 18931,
+      "baseSha256": "f087d6c852415be301e04518e560dabe73cf6f5b4e91b217b936cd69502a547c",
+      "reviewedBytes": 18931,
+      "reviewedSha256": "f087d6c852415be301e04518e560dabe73cf6f5b4e91b217b936cd69502a547c",
+      "byteIdentical": true
+    },
+    {
+      "path": "tests/security.test.ts",
+      "baseBlob": "03f4058405373de12e0e559dac30446c77623809",
+      "baseBytes": 2228,
+      "baseSha256": "fb6ae130442e5ab34e8d0a361686504c64848b574c433e7298e638d40cb66cdd",
+      "reviewedBytes": 2228,
+      "reviewedSha256": "fb6ae130442e5ab34e8d0a361686504c64848b574c433e7298e638d40cb66cdd",
+      "byteIdentical": true
+    },
+    {
+      "path": "tsconfig.json",
+      "baseBlob": "09a64319bfc87092fea57ada23ba95a7e46213fd",
+      "baseBytes": 585,
+      "baseSha256": "ddef73b7703df1705b454b64c27528feecfe5d21a63df85f5a99048e1add5a95",
+      "reviewedBytes": 585,
+      "reviewedSha256": "ddef73b7703df1705b454b64c27528feecfe5d21a63df85f5a99048e1add5a95",
+      "byteIdentical": true
+    },
+    {
+      "path": "vercel.json",
+      "baseBlob": "787bc40bf5d154d8d80c363e781e66df2a9fbf61",
+      "baseBytes": 242,
+      "baseSha256": "c4e933717ed1bdf09809086477884ff43a258709bd776d42ea742edc75c0a3b8",
+      "reviewedBytes": 242,
+      "reviewedSha256": "c4e933717ed1bdf09809086477884ff43a258709bd776d42ea742edc75c0a3b8",
+      "byteIdentical": true
+    },
+    {
+      "path": "vite.config.ts",
+      "baseBlob": "c94faf739f3b62720b8afbee95debcc1e7d19cdb",
+      "baseBytes": 2174,
+      "baseSha256": "9d0bb4a32c17b3796cc90e783a33f2d661874a4691ba8dfc4426809619aeaf6c",
+      "reviewedBytes": 2174,
+      "reviewedSha256": "9d0bb4a32c17b3796cc90e783a33f2d661874a4691ba8dfc4426809619aeaf6c",
+      "byteIdentical": true
+    }
+  ],
+  "findings": [],
+  "limitations": [
+    "Source and asset parity inspection only; no tests or browser checks executed by this reviewer.",
+    "No credential or saved-record files accessed.",
+    "No model-setting verification performed or claimed.",
+    "This receipt establishes protected-code preservation, not publication approval."
+  ]
+}
