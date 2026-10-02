@@ -4922,6 +4922,7 @@ const dict: Record<string, string> = {
   "Dream journal": "Diario de sueños",
   "Untitled": "Sin título",
   "Days with entries": "Días con entradas",
+  "Scroll sideways to see all dates": "Desliza hacia los lados para ver todas las fechas",
   "3-6-9": "3-6-9",
   "One intention, written three times in the morning, six at midday, nine in the evening. For 33 days.": "Una intención, escrita tres veces por la mañana, seis al mediodía y nueve por la noche. Durante 33 días.",
   "{n} / 33 days": "{n} / 33 días",

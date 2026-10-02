@@ -4922,6 +4922,7 @@ const dict: Record<string, string> = {
   "Dream journal": "Hayal günlüğü",
   "Untitled": "Başlıksız",
   "Days with entries": "Kayıtlı günler",
+  "Scroll sideways to see all dates": "Tüm tarihleri görmek için yana kaydırın",
   "3-6-9": "3-6-9",
   "One intention, written three times in the morning, six at midday, nine in the evening. For 33 days.": "Tek bir niyet; sabah üç, öğlen altı, akşam dokuz kez yazılır. 33 gün boyunca.",
   "{n} / 33 days": "{n} / 33 gün",

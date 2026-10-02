@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeftRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useT, getSpeechLang } from '../../i18n';
 import { dateLabel, localDate } from './shared';
 
@@ -23,7 +23,7 @@ export const NotebookCalendar: React.FC<{
       <span className="text-sm font-semibold capitalize" aria-live="polite">{monthLabel}</span>
       <button type="button" className={navBtn} aria-label={t('Next month')} onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1, 12))}><ChevronRight className="w-5 h-5" strokeWidth={1.8} /></button>
     </div>
-    <div className="oda-notebook-calendar-scroll">
+    <div className="oda-notebook-calendar-scroll" role="region" aria-label={t('Writing calendar')} tabIndex={0}>
     <table className="w-full table-fixed text-center border-separate border-spacing-1">
       <caption className="sr-only">{t('Writing calendar')} — {monthLabel}</caption>
       <thead><tr>{Array.from({ length: 7 }, (_, i) => <th key={i} scope="col" className="text-xs font-medium text-[var(--fg-muted)] pb-1">{new Intl.DateTimeFormat(getSpeechLang(), { weekday: 'narrow' }).format(new Date(2024, 0, 1 + i))}</th>)}</tr></thead>
@@ -37,6 +37,7 @@ export const NotebookCalendar: React.FC<{
       })}</tr>)}</tbody>
     </table>
     </div>
+    <p className="oda-notebook-calendar-scroll-hint"><ArrowLeftRight size={16} strokeWidth={1.8} aria-hidden="true" /><span>{t('Scroll sideways to see all dates')}</span></p>
     <p className="text-xs text-[var(--fg-muted)] flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" aria-hidden="true" />{t('Days with entries')}</p>
   </div>;
 };
