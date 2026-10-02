@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "reviewer": "/root/nonvisual_selection_audit",
+  "reviewedAtUtc": "2026-10-02T14:24:44.255597+00:00",
+  "reviewedBase": "fa7c4a3e11758b7dc6177c0e6391321065105ae6",
+  "phase": "Independent read-only patched-harness review",
+  "harness": "artifacts/verification/english-guidance-first-use/independent-narration-review/lifecycle-probes.mts",
+  "originalBytes": 13944,
+  "originalSha256": "652961443e4bf9f7cee92c483d9ff1319bbc9f4337cfa46d62fbddf3e91134b8",
+  "patchedBytes": 14114,
+  "patchedSha256": "a389f7c962aba6a9011ca27447d3afede1dd4213fe2fcd80275f3262b21828a1",
+  "findings": [],
+  "probeBodyAndAssertionsUnchanged": true,
+  "historicalReceipts": [
+    {
+      "path": "artifacts/verification/english-guidance-first-use/independent-narration-review/README.md",
+      "unchanged": true,
+      "sha256": "743dc80c59375a11af292c151da2b6083c48116c4c382c354065094fea0610ec"
+    },
+    {
+      "path": "artifacts/verification/english-guidance-first-use/independent-narration-review/lifecycle-report.json",
+      "unchanged": true,
+      "sha256": "b1bc83cfdf4e3a3e533e01a8bfe7e86f8f497d09db57aa5486b2d5d32bba4b68"
+    },
+    {
+      "path": "artifacts/verification/english-guidance-first-use/independent-narration-review/browser-report.json",
+      "unchanged": true,
+      "sha256": "64fcc269cb2f42b153fa1b4ac7a2908467c58e523c5c9d174265b9566859b953"
+    }
+  ],
+  "trackedChangesAtReview": [
+    "artifacts/verification/english-guidance-first-use/independent-narration-review/lifecycle-probes.mts"
+  ],
+  "scopeLimitedToHarnessAtReview": true,
+  "pathAssessment": {
+    "imports": "Four parent traversals resolve to current checkout src; no old absolute source import remains.",
+    "sourceHashReads": "new URL(file, new URL(\"../../../../\", import.meta.url)) reads current source independently of cwd.",
+    "defaultOutput": "mkdtempSync(join(tmpdir(), \"oda-narration-lifecycle-\")) creates unique scratch directory; mkdirSync supports explicit output override.",
+    "historicalOutput": "Default no longer assumes or reuses old scratch directory; tracked historical report and README are unchanged."
+  },
+  "previousIndependentPermissionControl": {
+    "node": "v24.19.0",
+    "allowedReadRoot": "/workspace/oda-evidence-portability",
+    "currentRecordedNarrationReadable": true,
+    "legacyRecordedNarrationReadDenied": "ERR_ACCESS_DENIED"
+  },
+  "remainingRootValidation": [
+    "Unchanged-tsconfig scoped tsc reproduction before repair and pass after repair with old source unreadable.",
+    "Patched15 controlled probes with current source hashes and zero provider calls; fresh scratch output.",
+    "Exact original harness snapshot/SHA provenance and final evidence-only source/config/package parity."
+  ],
+  "limits": [
+    "This reviewer did not rerun compiler or probes; their outcome is not asserted by this receipt.",
+    "No app/source/config/package edits, exclusion, source symlink, installation or publication performed."
+  ],
+  "diff": "diff --git a/artifacts/verification/english-guidance-first-use/independent-narration-review/lifecycle-probes.mts b/artifacts/verification/english-guidance-first-use/independent-narration-review/lifecycle-probes.mts\nindex 0c848fc..c486de1 100644\n--- a/artifacts/verification/english-guidance-first-use/independent-narration-review/lifecycle-probes.mts\n+++ b/artifacts/verification/english-guidance-first-use/independent-narration-review/lifecycle-probes.mts\n@@ -1,11 +1,15 @@\n import assert from 'node:assert/strict';\n import { createHash } from 'node:crypto';\n-import { readFileSync, writeFileSync } from 'node:fs';\n-import { RecordedNarration } from '/workspace/one-decision-away/src/utils/recordedNarration.ts';\n-import { VoiceGuide } from '/workspace/one-decision-away/src/utils/voiceGuide.ts';\n-import { geminiVoice } from '/workspace/one-decision-away/src/utils/geminiVoice.ts';\n+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';\n+import { tmpdir } from 'node:os';\n+import { join } from 'node:path';\n+import { RecordedNarration } from '../../../../src/utils/recordedNarration.ts';\n+import { VoiceGuide } from '../../../../src/utils/voiceGuide.ts';\n+import { geminiVoice } from '../../../../src/utils/geminiVoice.ts';\n \n-const out = '/workspace/scratch/oda-narration-integration-review';\n+const out = process.env.ODA_NARRATION_REVIEW_OUT ?? mkdtempSync(join(tmpdir(), 'oda-narration-lifecycle-'));\n+mkdirSync(out, { recursive: true });\n+const sourceRoot = new URL('../../../../', import.meta.url);\n const digest = (bytes: ArrayBuffer) => Promise.resolve(createHash('sha256').update(Buffer.from(bytes)).digest('hex'));\n const bytes = Uint8Array.of(21, 31, 41, 51);\n const asset = (cueIndex = 0, sessionId = 'review') => ({ sessionId, cueIndex, language: 'en-US' as const, version: 'v1', text: `Original English cue ${cueIndex}.`, file: `assets/oda/narration/en-US/v1/clips/${sessionId}-${cueIndex}.mp3`, bytes: bytes.length, checksum: createHash('sha256').update(bytes).digest('hex'), sourceTextHash: createHash('sha256').update(`Original English cue ${cueIndex}.`).digest('hex'), decodedDurationSeconds: 5, containerDurationSeconds: 5.04, scheduledStartSeconds: cueIndex * 20, slotSeconds: 20 });\n@@ -133,6 +137,6 @@ await probe('No installed English voice never substitutes Turkish when recorded\n   assert.equal(spoken.length,0);assert.equal(guide.getPlaybackMode(),'unavailable');assert.equal(providerCalls,0);guide.stop();return {mode:'unavailable',spoken:0};\n });\n geminiVoice.speak=provider;for(const [name,descriptor]of original){if(descriptor)Object.defineProperty(globalThis,name,descriptor);else Reflect.deleteProperty(globalThis,name);}\n-const sources=['src/utils/recordedNarration.ts','src/utils/voiceGuide.ts','public/sw.js'].map(file => ({file,sha256:createHash('sha256').update(readFileSync('/workspace/one-decision-away/'+file)).digest('hex')}));\n+const sources=['src/utils/recordedNarration.ts','src/utils/voiceGuide.ts','public/sw.js'].map(file => ({file,sha256:createHash('sha256').update(readFileSync(new URL(file, sourceRoot))).digest('hex')}));\n const report={at:new Date().toISOString(),kind:'Independent controlled lifecycle probes, no network/provider',sources,results,passed:results.filter(r=>r.status==='passed').length,failed:results.filter(r=>r.status==='failed').length};\n writeFileSync(out+'/lifecycle-report.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));\n"
+}

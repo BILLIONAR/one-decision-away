@@ -1,0 +1,63 @@
+{
+  "reviewer": "/root/nonvisual_selection_audit",
+  "atUtc": "2026-10-02T14:20:53.480780+00:00",
+  "phase": "Read-only pre-patch portability/provenance guidance",
+  "base": "fa7c4a3e11758b7dc6177c0e6391321065105ae6",
+  "harness": "artifacts/verification/english-guidance-first-use/independent-narration-review/lifecycle-probes.mts",
+  "historicalHarness": {
+    "bytes": 13944,
+    "sha256": "652961443e4bf9f7cee92c483d9ff1319bbc9f4337cfa46d62fbddf3e91134b8",
+    "source": "git show fa7c4a3e11758b7dc6177c0e6391321065105ae6:artifacts/verification/english-guidance-first-use/independent-narration-review/lifecycle-probes.mts"
+  },
+  "proposedRelativeImports": [
+    {
+      "relativeImport": "../../../../src/utils/recordedNarration.ts",
+      "resolvedPath": "/workspace/oda-evidence-portability/src/utils/recordedNarration.ts",
+      "exists": true
+    },
+    {
+      "relativeImport": "../../../../src/utils/voiceGuide.ts",
+      "resolvedPath": "/workspace/oda-evidence-portability/src/utils/voiceGuide.ts",
+      "exists": true
+    },
+    {
+      "relativeImport": "../../../../src/utils/geminiVoice.ts",
+      "resolvedPath": "/workspace/oda-evidence-portability/src/utils/geminiVoice.ts",
+      "exists": true
+    }
+  ],
+  "findings": [
+    {
+      "severity": "Confirmed CI portability defect",
+      "location": "artifacts/verification/english-guidance-first-use/independent-narration-review/lifecycle-probes.mts:4-6,136",
+      "description": "Three imports and source-hash reads target the old absolute /workspace/one-decision-away checkout. tsconfig default inclusion also type-checks this tracked .mts file."
+    },
+    {
+      "severity": "Evidence preservation requirement",
+      "location": "artifacts/verification/english-guidance-first-use/independent-narration-review/lifecycle-probes.mts:8,138",
+      "description": "The old hardcoded scratch output assumes a directory exists. New runs need a created unique scratch output and must not overwrite archived lifecycle-report.json or README."
+    }
+  ],
+  "proposedHashRead": "const sourceRoot = new URL(\"../../../../\", import.meta.url); readFileSync(new URL(file, sourceRoot))",
+  "proposedScratchOutput": "mkdtempSync(join(tmpdir(), \"oda-narration-lifecycle-\")) using Node built-ins; explicit output override may be supported with directory creation.",
+  "permissionControl": {
+    "nodeVersion": "v24.19.0",
+    "command": "node --permission --allow-fs-read=/workspace/oda-evidence-portability -e <read current and legacy recordedNarration.ts without outputting source>",
+    "currentSourceReadable": true,
+    "legacySourceReadable": false,
+    "legacyErrorCode": "ERR_ACCESS_DENIED"
+  },
+  "requiredEvidence": [
+    "Preserve exact historical fa7 harness bytes and SHA256 as labeled evidence; never relabel historical reports as current results.",
+    "Before/after direct TypeScript noEmit runs with unchanged tsconfig and narrowly permitted current checkout/dependency/runtime paths; no broad /workspace read permission, source symlink, exclusions or disabled checks.",
+    "Record current-source-readable and old-source-denied permission controls; permission-scoped source unavailability is distinct from claiming the old checkout was physically deleted.",
+    "Execute patched controlled probes in fresh scratch and record current checkout source hashes; confirm 15 probes pass and zero paid provider calls.",
+    "Verify changes limited to the harness and review evidence; application, configuration, package/lock and historical receipt bytes unchanged."
+  ],
+  "limits": [
+    "No compiler/test rerun by this reviewer at this phase.",
+    "Permission model control verifies this installed Node permits the proposed bounded filesystem proof; it is not a general security-boundary certification.",
+    "Final independent patched-harness review remains pending."
+  ],
+  "noApplicationEdits": true
+}

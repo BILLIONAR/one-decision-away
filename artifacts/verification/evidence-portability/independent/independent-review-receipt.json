@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "reviewer": "/root/nonvisual_selection_audit",
+  "atUtc": "2026-10-02T14:27:16.548962+00:00",
+  "base": "fa7c4a3e11758b7dc6177c0e6391321065105ae6",
+  "headAtRun": "707d5866492465937b3f54ffb025e298ec52b31c",
+  "workspace": "/workspace/oda-evidence-portability",
+  "command": {
+    "cwd": "/workspace/oda-evidence-portability",
+    "argv": [
+      "node",
+      "--import",
+      "tsx",
+      "artifacts/verification/english-guidance-first-use/independent-narration-review/lifecycle-probes.mts"
+    ],
+    "environmentOverride": {
+      "ODA_NARRATION_REVIEW_OUT": "/tmp/oda-evidence-portability-review-r49duyd2"
+    },
+    "shellEquivalent": "ODA_NARRATION_REVIEW_OUT=/tmp/oda-evidence-portability-review-r49duyd2 node --import tsx artifacts/verification/english-guidance-first-use/independent-narration-review/lifecycle-probes.mts"
+  },
+  "commandExitCode": 0,
+  "passed": 15,
+  "failed": 0,
+  "probeCount": 15,
+  "allProbeStatusesPassed": true,
+  "providerCallCounters": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "allProviderCountersZero": true,
+  "sourceHashChecks": [
+    {
+      "path": "src/utils/recordedNarration.ts",
+      "reportedSha256": "9bacb11df80eea39cc677afd9660450c24a06ee765b2063730cb849d2586ecca",
+      "actualSha256": "9bacb11df80eea39cc677afd9660450c24a06ee765b2063730cb849d2586ecca",
+      "matches": true
+    },
+    {
+      "path": "src/utils/voiceGuide.ts",
+      "reportedSha256": "f087d6c852415be301e04518e560dabe73cf6f5b4e91b217b936cd69502a547c",
+      "actualSha256": "f087d6c852415be301e04518e560dabe73cf6f5b4e91b217b936cd69502a547c",
+      "matches": true
+    },
+    {
+      "path": "public/sw.js",
+      "reportedSha256": "51e9575be78bfaa1cf9d2de7a461d819c6fae141cbfe196b4985c34aa04511ef",
+      "actualSha256": "51e9575be78bfaa1cf9d2de7a461d819c6fae141cbfe196b4985c34aa04511ef",
+      "matches": true
+    }
+  ],
+  "allSourceHashesCurrentCheckout": true,
+  "historicalAndConfigurationParity": [
+    {
+      "path": "artifacts/verification/english-guidance-first-use/independent-narration-review/README.md",
+      "unchanged": true,
+      "sha256": "743dc80c59375a11af292c151da2b6083c48116c4c382c354065094fea0610ec"
+    },
+    {
+      "path": "artifacts/verification/english-guidance-first-use/independent-narration-review/lifecycle-report.json",
+      "unchanged": true,
+      "sha256": "b1bc83cfdf4e3a3e533e01a8bfe7e86f8f497d09db57aa5486b2d5d32bba4b68"
+    },
+    {
+      "path": "artifacts/verification/english-guidance-first-use/independent-narration-review/browser-report.json",
+      "unchanged": true,
+      "sha256": "64fcc269cb2f42b153fa1b4ac7a2908467c58e523c5c9d174265b9566859b953"
+    },
+    {
+      "path": "tsconfig.json",
+      "unchanged": true,
+      "sha256": "ddef73b7703df1705b454b64c27528feecfe5d21a63df85f5a99048e1add5a95"
+    },
+    {
+      "path": "package.json",
+      "unchanged": true,
+      "sha256": "614199dd79f59c8b11a3dfc9b9a7ff4c8206666a92b8e1ec9da611647aa4d8f1"
+    },
+    {
+      "path": "package-lock.json",
+      "unchanged": true,
+      "sha256": "d08110baa951e3a716d06e24009dd278eca19a85eea967d0dd1d1c6dcf2eab22"
+    }
+  ],
+  "allHistoricalAndConfigurationUnchanged": true,
+  "applicationConfigurationWorkflowChanges": [],
+  "harness": {
+    "path": "artifacts/verification/english-guidance-first-use/independent-narration-review/lifecycle-probes.mts",
+    "originalSha256": "652961443e4bf9f7cee92c483d9ff1319bbc9f4337cfa46d62fbddf3e91134b8",
+    "patchedSha256": "a389f7c962aba6a9011ca27447d3afede1dd4213fe2fcd80275f3262b21828a1",
+    "probeBodyAndAssertionsUnchanged": true
+  },
+  "artifacts": [
+    {
+      "path": "/tmp/oda-evidence-portability-review-r49duyd2/command.json",
+      "bytes": 538,
+      "sha256": "fbde56244536f2bc50d643a98f16615749ab88d7a0382aeaeae66554ece83b4c"
+    },
+    {
+      "path": "/tmp/oda-evidence-portability-review-r49duyd2/lifecycle-probes.log",
+      "bytes": 3931,
+      "sha256": "4b2165d821e9f2710b65a90f53ab0ead7826d5fca681356596f075d523960691"
+    },
+    {
+      "path": "/tmp/oda-evidence-portability-review-r49duyd2/lifecycle-report.json",
+      "bytes": 3930,
+      "sha256": "e3ba10e512d08e3ad7dcf8cea2730891c757eaf0733d94dd0a2bb1a528f203a1"
+    }
+  ],
+  "findings": [],
+  "limits": [
+    "Controlled mocks establish lifecycle behavior, not physical-device/browser/audio listening quality.",
+    "This reviewer did not rerun aggregate/build; root owns that packet.",
+    "No app/config edits, package installation, provider request or publication performed."
+  ]
+}
