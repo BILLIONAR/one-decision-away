@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-10-02T10:11:33.895361+00:00",
+  "workspace": "/workspace/oda-native-settings-otp",
+  "base": "dcb05c3622b92a7545054df535915de408743bb2",
+  "branch": "fix/native-settings-otp",
+  "command": [
+    "node",
+    "--import",
+    "tsx",
+    "--test",
+    "--test-reporter=tap",
+    "tests/native-settings-otp.test.ts",
+    "tests/routing.test.ts"
+  ],
+  "exitCode": 0,
+  "tests": 12,
+  "passed": 12,
+  "failed": 0,
+  "sourceSHA256": {
+    "src/components/BackupAndCloudSettings.tsx": "b9eea2340144bda9ae1cffbb387703ffe8a2bd3fc391265509d799ffd9e50cd3",
+    "src/pages/Account.tsx": "8fe6847b30ac3f488bb7e78323e99835fc186e3ae4adf0eab631a7f32526a533",
+    "src/i18n/account.ts": "6e6affef8aeda166429da564a87ae6395e1986a77fff4f311164054e51f6439f",
+    "tests/native-settings-otp.test.ts": "20195e141053f0a61390704b1283743dbf20d1672667fb37cb76ed5ca78fb16f"
+  },
+  "sourceChangedDuringRun": [],
+  "testLogSHA256": "eb77145193fdda21e949e5812301f7204f62bcbe9c3207acacb41c945f414168",
+  "scope": "Bounded native Settings-to-Account OTP UI review; no app source edits or provider operations by reviewer.",
+  "protectedScopeDiff": [],
+  "limits": [
+    "Focused tests render native/web semantic UI with a test-only decorative-tree/CSS loader; browser fixture covers actual built styling.",
+    "CloudSync request/verify assertions use injected local auth functions, with no provider/email/native SDK calls.",
+    "Physical native app, email delivery, and real-provider authentication remain unverified.",
+    "Parent retains publication checkpoint; separate sync diagnosis is outside this OTP source change."
+  ],
+  "finalLayoutReview": "Native-only fixed tree wrapper, min-width-zero info, long-email wrapping and mr-4 action spacing. Web legacy tree/copy branch preserved."
+}

@@ -1,0 +1,33 @@
+import React, { useSyncExternalStore } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BackupAndCloudSettings } from '/workspace/oda-native-settings-otp/src/components/BackupAndCloudSettings';
+import { Account } from '/workspace/oda-native-settings-otp/src/pages/Account';
+import { setLocale, ensureLocaleLoaded, getLocale, t } from '/workspace/oda-native-settings-otp/src/i18n';
+import { accountCopy } from '/workspace/oda-native-settings-otp/src/i18n/account';
+import { fixture, routeStore } from './mock';
+
+const controls = { ...fixture,
+  setLocale: async (locale: 'en' | 'tr' | 'es') => { setLocale(locale); await ensureLocaleLoaded(locale); },
+  copy: () => accountCopy(getLocale()), translate: (source: string, params?: any) => t(source, params),
+};
+(window as any).ODA_OTP_FIXTURE = controls;
+document.getElementById('fixture-controls')!.innerHTML = `<summary>Synthetic native OTP fixture — no email/provider calls</summary>
+  <label>Language <select id="fixture-locale"><option>en</option><option>tr</option><option>es</option></select></label>
+  <button data-action="native">Reset native</button><button data-action="web">Reset web</button><button data-action="settings">Settings</button>
+  <button data-action="account">Account</button><button data-action="fail-send">Fail next send</button><button data-action="fail-verify">Fail next verify</button>
+  <p>The actual components and cloud hook share one synthetic session. Sign-in requests are local mocks; verification success emits that session to both screens.</p>`;
+document.getElementById('fixture-locale')!.addEventListener('change', event => void controls.setLocale((event.target as HTMLSelectElement).value as any));
+document.getElementById('fixture-controls')!.addEventListener('click', event => {
+  const action = (event.target as HTMLElement).dataset.action;
+  if (action === 'native' || action === 'web') controls.reset(action === 'native');
+  else if (action === 'settings' || action === 'account') controls.navigate(`/app/${action}`);
+  else if (action === 'fail-send') controls.next('send', { reject: true });
+  else if (action === 'fail-verify') controls.next('verify', { reject: true });
+});
+function Router() {
+  useSyncExternalStore(routeStore.subscribe, routeStore.getSnapshot, routeStore.getSnapshot);
+  return routeStore.route() === '/app/settings'
+    ? <BackupAndCloudSettings key={`settings-${routeStore.epoch()}`} />
+    : <Account key={`account-${routeStore.epoch()}`} />;
+}
+createRoot(document.getElementById('root')!).render(<Router />);
