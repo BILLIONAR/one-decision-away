@@ -1,0 +1,330 @@
+TAP version 13
+# Subtest: native free direct starts and toggles cannot start an all-paid track
+ok 1 - native free direct starts and toggles cannot start an all-paid track
+  ---
+  duration_ms: 3.299065
+  type: 'test'
+  ...
+# Subtest: downgrade hard-stops owned restricted playing selection without page subscribers
+ok 2 - downgrade hard-stops owned restricted playing selection without page subscribers
+  ---
+  duration_ms: 35.228173
+  type: 'test'
+  ...
+# Subtest: downgrade hard-stops owned restricted paused selection without page subscribers
+ok 3 - downgrade hard-stops owned restricted paused selection without page subscribers
+  ---
+  duration_ms: 21.524787
+  type: 'test'
+  ...
+# Subtest: downgrade hard-stops owned restricted expired selection without page subscribers
+ok 4 - downgrade hard-stops owned restricted expired selection without page subscribers
+  ---
+  duration_ms: 14.572481
+  type: 'test'
+  ...
+# Subtest: owned paid playing selection revokes on identityConfirmed even with a paid cached tier
+ok 5 - owned paid playing selection revokes on identityConfirmed even with a paid cached tier
+  ---
+  duration_ms: 0.821885
+  type: 'test'
+  ...
+# Subtest: owned paid paused selection revokes on identityConfirmed even with a paid cached tier
+ok 6 - owned paid paused selection revokes on identityConfirmed even with a paid cached tier
+  ---
+  duration_ms: 0.787192
+  type: 'test'
+  ...
+# Subtest: owned paid expired selection revokes on identityConfirmed even with a paid cached tier
+ok 7 - owned paid expired selection revokes on identityConfirmed even with a paid cached tier
+  ---
+  duration_ms: 1.512489
+  type: 'test'
+  ...
+# Subtest: owned paid playing selection revokes on identityRevision even with a paid cached tier
+ok 8 - owned paid playing selection revokes on identityRevision even with a paid cached tier
+  ---
+  duration_ms: 0.397282
+  type: 'test'
+  ...
+# Subtest: owned paid paused selection revokes on identityRevision even with a paid cached tier
+ok 9 - owned paid paused selection revokes on identityRevision even with a paid cached tier
+  ---
+  duration_ms: 0.662873
+  type: 'test'
+  ...
+# Subtest: owned paid expired selection revokes on identityRevision even with a paid cached tier
+ok 10 - owned paid expired selection revokes on identityRevision even with a paid cached tier
+  ---
+  duration_ms: 1.197783
+  type: 'test'
+  ...
+# Subtest: same-account confirmed paid access survives offerings loading or failed offline refresh
+ok 11 - same-account confirmed paid access survives offerings loading or failed offline refresh
+  ---
+  duration_ms: 0.626969
+  type: 'test'
+  ...
+# Subtest: admission reads current purchase state even if a notification has not been emitted
+ok 12 - admission reads current purchase state even if a notification has not been emitted
+  ---
+  duration_ms: 0.719119
+  type: 'test'
+  ...
+# Subtest: live resume and timer change reconcile access even without a purchase notification
+ok 13 - live resume and timer change reconcile access even without a purchase notification
+  ---
+  duration_ms: 0.411563
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"sectionId":"relax"} without replacing audio
+ok 14 - invalid or mismatched provenance rejects {"sectionId":"relax"} without replacing audio
+  ---
+  duration_ms: 55.840448
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"indexInCategory":3} without replacing audio
+ok 15 - invalid or mismatched provenance rejects {"indexInCategory":3} without replacing audio
+  ---
+  duration_ms: 29.463606
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"sectionId":"focus","indexInCategory":0} without replacing audio
+ok 16 - invalid or mismatched provenance rejects {"sectionId":"focus","indexInCategory":0} without replacing audio
+  ---
+  duration_ms: 30.295916
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":-1} without replacing audio
+ok 17 - invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":-1} without replacing audio
+  ---
+  duration_ms: 24.556197
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":0.5} without replacing audio
+ok 18 - invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":0.5} without replacing audio
+  ---
+  duration_ms: 21.643106
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":99} without replacing audio
+ok 19 - invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":99} without replacing audio
+  ---
+  duration_ms: 55.406842
+  type: 'test'
+  ...
+# Subtest: essentials admits all catalog origins and preserves the timer and user volume
+ok 20 - essentials admits all catalog origins and preserves the timer and user volume
+  ---
+  duration_ms: 326.414233
+  type: 'test'
+  ...
+# Subtest: pro admits all catalog origins and preserves the timer and user volume
+ok 21 - pro admits all catalog origins and preserves the timer and user volume
+  ---
+  duration_ms: 190.290656
+  type: 'test'
+  ...
+# Subtest: coach admits all catalog origins and preserves the timer and user volume
+ok 22 - coach admits all catalog origins and preserves the timer and user volume
+  ---
+  duration_ms: 212.980617
+  type: 'test'
+  ...
+# Subtest: each category first two entries remain free, including duplicate 432 and brown-noise origins
+ok 23 - each category first two entries remain free, including duplicate 432 and brown-noise origins
+  ---
+  duration_ms: 134.017313
+  type: 'test'
+  ...
+# Subtest: omitted-origin admission allows any-free aliases and denies exclusively paid tracks
+ok 24 - omitted-origin admission allows any-free aliases and denies exclusively paid tracks
+  ---
+  duration_ms: 43.816344
+  type: 'test'
+  ...
+# Subtest: web and unconfigured purchases keep paid sounds open through identity transitions
+ok 25 - web and unconfigured purchases keep paid sounds open through identity transitions
+  ---
+  duration_ms: 0.558505
+  type: 'test'
+  ...
+# Subtest: external Focus tibetan_bowls replacement survives Sound Room downgrade
+ok 26 - external Focus tibetan_bowls replacement survives Sound Room downgrade
+  ---
+  duration_ms: 1.556737
+  type: 'test'
+  ...
+# Subtest: external Focus waves replacement survives Sound Room downgrade
+ok 27 - external Focus waves replacement survives Sound Room downgrade
+  ---
+  duration_ms: 46.454359
+  type: 'test'
+  ...
+# Subtest: purchase event during an engine start cannot publish a revoked playing selection
+ok 28 - purchase event during an engine start cannot publish a revoked playing selection
+  ---
+  duration_ms: 0.617535
+  type: 'test'
+  ...
+# Subtest: purchase event during player publication cannot re-arm the revoked timer
+ok 29 - purchase event during player publication cannot re-arm the revoked timer
+  ---
+  duration_ms: 0.483652
+  type: 'test'
+  ...
+# Subtest: external waves replacement during player publication retains its untimed graph
+ok 30 - external waves replacement during player publication retains its untimed graph
+  ---
+  duration_ms: 24.477447
+  type: 'test'
+  ...
+# Subtest: external tibetan_bowls replacement during player publication retains its untimed graph
+ok 31 - external tibetan_bowls replacement during player publication retains its untimed graph
+  ---
+  duration_ms: 1.759955
+  type: 'test'
+  ...
+# Subtest: an unavailable AudioContext rejects the actual engine start without claiming playback
+ok 32 - an unavailable AudioContext rejects the actual engine start without claiming playback
+  ---
+  duration_ms: 0.526607
+  type: 'test'
+  ...
+# Subtest: failed buffer allocation retains entitlement ownership of the existing paid graph
+ok 33 - failed buffer allocation retains entitlement ownership of the existing paid graph
+  ---
+  duration_ms: 24.979327
+  type: 'test'
+  ...
+# Subtest: failed no replacement retains entitlement ownership of the existing paid graph
+ok 34 - failed no replacement retains entitlement ownership of the existing paid graph
+  ---
+  duration_ms: 0.529101
+  type: 'test'
+  ...
+# Subtest: same-track no-op cannot take revocation ownership of an external Focus graph
+ok 35 - same-track no-op cannot take revocation ownership of an external Focus graph
+  ---
+  duration_ms: 0.679319
+  type: 'test'
+  ...
+# Subtest: pause publication cannot fade or time the reentrant external tibetan_bowls graph
+not ok 36 - pause publication cannot fade or time the reentrant external tibetan_bowls graph
+  ---
+  duration_ms: 3.314448
+  type: 'test'
+  location: '/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:1:11347'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    true !== false
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:286:14)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: pause publication cannot fade or time the reentrant external waves graph
+not ok 37 - pause publication cannot fade or time the reentrant external waves graph
+  ---
+  duration_ms: 38.150707
+  type: 'test'
+  location: '/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:1:11347'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    true !== false
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:286:14)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: setTimer publication cannot fade or time the reentrant external tibetan_bowls graph
+not ok 38 - setTimer publication cannot fade or time the reentrant external tibetan_bowls graph
+  ---
+  duration_ms: 0.731647
+  type: 'test'
+  location: '/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:1:11347'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    true !== false
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:286:14)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: setTimer publication cannot fade or time the reentrant external waves graph
+not ok 39 - setTimer publication cannot fade or time the reentrant external waves graph
+  ---
+  duration_ms: 27.82205
+  type: 'test'
+  location: '/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:1:11347'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    true !== false
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:286:14)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: silence or an absent audio context cannot publish a playing selection
+ok 40 - silence or an absent audio context cannot publish a playing selection
+  ---
+  duration_ms: 0.483882
+  type: 'test'
+  ...
+1..40
+# tests 40
+# suites 0
+# pass 36
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1611.84771

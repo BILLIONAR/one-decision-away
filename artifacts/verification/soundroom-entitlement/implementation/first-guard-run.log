@@ -1,0 +1,232 @@
+TAP version 13
+# Subtest: native free direct starts and toggles cannot start an all-paid track
+ok 1 - native free direct starts and toggles cannot start an all-paid track
+  ---
+  duration_ms: 2.867591
+  type: 'test'
+  ...
+# Subtest: downgrade hard-stops owned restricted playing selection without page subscribers
+ok 2 - downgrade hard-stops owned restricted playing selection without page subscribers
+  ---
+  duration_ms: 36.322033
+  type: 'test'
+  ...
+# Subtest: downgrade hard-stops owned restricted paused selection without page subscribers
+ok 3 - downgrade hard-stops owned restricted paused selection without page subscribers
+  ---
+  duration_ms: 28.261689
+  type: 'test'
+  ...
+# Subtest: downgrade hard-stops owned restricted expired selection without page subscribers
+ok 4 - downgrade hard-stops owned restricted expired selection without page subscribers
+  ---
+  duration_ms: 14.492492
+  type: 'test'
+  ...
+# Subtest: owned paid selection revokes on identityConfirmed even with a paid cached tier
+ok 5 - owned paid selection revokes on identityConfirmed even with a paid cached tier
+  ---
+  duration_ms: 0.837388
+  type: 'test'
+  ...
+# Subtest: owned paid selection revokes on ready even with a paid cached tier
+ok 6 - owned paid selection revokes on ready even with a paid cached tier
+  ---
+  duration_ms: 0.596754
+  type: 'test'
+  ...
+# Subtest: owned paid selection revokes on identityRevision even with a paid cached tier
+ok 7 - owned paid selection revokes on identityRevision even with a paid cached tier
+  ---
+  duration_ms: 0.397151
+  type: 'test'
+  ...
+# Subtest: admission reads current purchase state even if a notification has not been emitted
+ok 8 - admission reads current purchase state even if a notification has not been emitted
+  ---
+  duration_ms: 0.263168
+  type: 'test'
+  ...
+# Subtest: live resume and timer change reconcile access even without a purchase notification
+ok 9 - live resume and timer change reconcile access even without a purchase notification
+  ---
+  duration_ms: 0.506697
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"sectionId":"relax"} without replacing audio
+ok 10 - invalid or mismatched provenance rejects {"sectionId":"relax"} without replacing audio
+  ---
+  duration_ms: 68.141208
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"indexInCategory":3} without replacing audio
+ok 11 - invalid or mismatched provenance rejects {"indexInCategory":3} without replacing audio
+  ---
+  duration_ms: 43.646792
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"sectionId":"focus","indexInCategory":0} without replacing audio
+ok 12 - invalid or mismatched provenance rejects {"sectionId":"focus","indexInCategory":0} without replacing audio
+  ---
+  duration_ms: 44.230716
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":-1} without replacing audio
+ok 13 - invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":-1} without replacing audio
+  ---
+  duration_ms: 33.541592
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":0.5} without replacing audio
+ok 14 - invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":0.5} without replacing audio
+  ---
+  duration_ms: 57.322118
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":99} without replacing audio
+ok 15 - invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":99} without replacing audio
+  ---
+  duration_ms: 54.952128
+  type: 'test'
+  ...
+# Subtest: essentials admits all catalog origins and preserves the timer and user volume
+ok 16 - essentials admits all catalog origins and preserves the timer and user volume
+  ---
+  duration_ms: 376.408996
+  type: 'test'
+  ...
+# Subtest: pro admits all catalog origins and preserves the timer and user volume
+ok 17 - pro admits all catalog origins and preserves the timer and user volume
+  ---
+  duration_ms: 293.21525
+  type: 'test'
+  ...
+# Subtest: coach admits all catalog origins and preserves the timer and user volume
+ok 18 - coach admits all catalog origins and preserves the timer and user volume
+  ---
+  duration_ms: 195.437431
+  type: 'test'
+  ...
+# Subtest: each category first two entries remain free, including duplicate 432 and brown-noise origins
+ok 19 - each category first two entries remain free, including duplicate 432 and brown-noise origins
+  ---
+  duration_ms: 101.708779
+  type: 'test'
+  ...
+# Subtest: omitted-origin admission allows any-free aliases and denies exclusively paid tracks
+ok 20 - omitted-origin admission allows any-free aliases and denies exclusively paid tracks
+  ---
+  duration_ms: 23.71192
+  type: 'test'
+  ...
+# Subtest: web and unconfigured purchases keep paid sounds open through identity transitions
+ok 21 - web and unconfigured purchases keep paid sounds open through identity transitions
+  ---
+  duration_ms: 0.690405
+  type: 'test'
+  ...
+# Subtest: external Focus tibetan_bowls replacement survives Sound Room downgrade
+ok 22 - external Focus tibetan_bowls replacement survives Sound Room downgrade
+  ---
+  duration_ms: 2.185749
+  type: 'test'
+  ...
+# Subtest: external Focus waves replacement survives Sound Room downgrade
+ok 23 - external Focus waves replacement survives Sound Room downgrade
+  ---
+  duration_ms: 47.868214
+  type: 'test'
+  ...
+# Subtest: purchase event during an engine start cannot publish a revoked playing selection
+ok 24 - purchase event during an engine start cannot publish a revoked playing selection
+  ---
+  duration_ms: 0.6535
+  type: 'test'
+  ...
+# Subtest: silence or an absent audio context cannot publish a playing selection
+ok 25 - silence or an absent audio context cannot publish a playing selection
+  ---
+  duration_ms: 0.322037
+  type: 'test'
+  ...
+# Subtest: arming a timer retains the independent three-second attack and actual stereo loop
+ok 26 - arming a timer retains the independent three-second attack and actual stereo loop
+  ---
+  duration_ms: 97.592059
+  type: 'test'
+  ...
+# Subtest: mute and volume respond immediately at the beginning of a timer fade
+ok 27 - mute and volume respond immediately at the beginning of a timer fade
+  ---
+  duration_ms: 32.829655
+  type: 'test'
+  ...
+# Subtest: mute and volume respond immediately at the middle of a timer fade
+ok 28 - mute and volume respond immediately at the middle of a timer fade
+  ---
+  duration_ms: 18.404424
+  type: 'test'
+  ...
+# Subtest: mute and volume respond immediately at the end of a timer fade
+ok 29 - mute and volume respond immediately at the end of a timer fade
+  ---
+  duration_ms: 16.892716
+  type: 'test'
+  ...
+# Subtest: running fades can shorten but do not extend, and timer cancellation preserves user volume
+ok 30 - running fades can shorten but do not extend, and timer cancellation preserves user volume
+  ---
+  duration_ms: 57.396709
+  type: 'test'
+  ...
+# Subtest: shortening a running fade with a delay cannot restore a louder envelope
+ok 31 - shortening a running fade with a delay cannot restore a louder envelope
+  ---
+  duration_ms: 110.645915
+  type: 'test'
+  ...
+# Subtest: browsers without cancelAndHold retain the current level when shortening a fade
+ok 32 - browsers without cancelAndHold retain the current level when shortening a fade
+  ---
+  duration_ms: 64.993712
+  type: 'test'
+  ...
+# Subtest: track switches release the previous graph and repeated switches/stops bound resources
+ok 33 - track switches release the previous graph and repeated switches/stops bound resources
+  ---
+  duration_ms: 500.15425
+  type: 'test'
+  ...
+# Subtest: stop/restart of a tone cancels its initial bowl and recurring callbacks
+ok 34 - stop/restart of a tone cancels its initial bowl and recurring callbacks
+  ---
+  duration_ms: 1.420521
+  type: 'test'
+  ...
+# Subtest: natural bowl endings disconnect their tails while the current ambient drone continues
+ok 35 - natural bowl endings disconnect their tails while the current ambient drone continues
+  ---
+  duration_ms: 0.609643
+  type: 'test'
+  ...
+# Subtest: Sound Room timer arming, pause/resume and expiry keep player state and start fade intact
+ok 36 - Sound Room timer arming, pause/resume and expiry keep player state and start fade intact
+  ---
+  duration_ms: 63.670679
+  type: 'test'
+  ...
+# Subtest: external restart of the same track clears the Sound Room countdown and timer selection
+ok 37 - external restart of the same track clears the Sound Room countdown and timer selection
+  ---
+  duration_ms: 106.5015
+  type: 'test'
+  ...
+1..37
+# tests 37
+# suites 0
+# pass 37
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1642.202142

@@ -1,0 +1,187 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import http from 'node:http';
+import { createRequire } from 'node:module';
+import { createHash } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
+const out = path.dirname(fileURLToPath(import.meta.url));
+const repo = '/workspace/oda-soundroom-entitlement-fix';
+const require = createRequire(path.join(repo, 'package.json'));
+const { build } = require('esbuild'); const { chromium } = require('playwright');
+const baseURL = 'http://127.0.0.1:4192';
+const sha = file => createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+const builtHTML = fs.readFileSync(path.join(repo, 'dist/index.html'), 'utf8');
+const css = builtHTML.match(/href="[^\"]*\/(assets\/index-[^\"]+\.css)"/)?.[1];
+assert.ok(css, 'Wait for final source/build before running.');
+const mockPath = path.join(out, 'mocks.ts');
+const bundle = await build({ entryPoints: [path.join(out, 'fixture.tsx')], absWorkingDir: repo,
+  nodePaths: [path.join(repo, 'node_modules')], bundle: true, write: false, outfile: path.join(out, 'fixture.js'),
+  format: 'iife', platform: 'browser', jsx: 'automatic', define: { 'import.meta.env': '{"BASE_URL":"/one-decision-away/"}' },
+  plugins: [{ name: 'synthetic-purchase-engine-boundaries', setup(build) {
+    build.onResolve({ filter: /(?:^|\/)(?:purchases|soundSynthesizer|useApp)$/ }, () => ({ path: mockPath }));
+  } }] });
+for (const file of bundle.outputFiles) fs.writeFileSync(file.path, file.contents);
+fs.writeFileSync(path.join(out, 'index.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ODA SoundRoom synthetic acceptance fixture</title><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: https://images.unsplash.com; connect-src 'self'; object-src 'none'">
+  <link rel="stylesheet" href="/one-decision-away/${css}">
+  <style>body{margin:0;background:var(--bg);color:var(--fg)}#fixture-controls{margin:12px 16px;font:12px system-ui;max-width:560px}#fixture-controls button,#fixture-controls select{margin:4px;padding:6px;border:1px solid #777;border-radius:4px}#root{max-width:760px;margin:0 auto;padding:16px}</style>
+  </head><body><details id="fixture-controls"></details><main id="root"></main><script src="/fixture.js"></script></body></html>`);
+const server = http.createServer((request, response) => {
+  const pathname = new URL(request.url, baseURL).pathname;
+  const built = pathname.startsWith('/one-decision-away/');
+  const root = built ? path.join(repo, 'dist') : out;
+  const relative = built ? pathname.slice('/one-decision-away/'.length) : pathname.slice(1) || 'index.html';
+  const file = path.resolve(root, relative);
+  if (!file.startsWith(root + path.sep) || !fs.existsSync(file) || !fs.statSync(file).isFile()) { response.writeHead(404); response.end('Not found'); return; }
+  const mime = { '.css': 'text/css', '.woff2': 'font/woff2', '.js': 'text/javascript', '.html': 'text/html', '.png': 'image/png', '.webp': 'image/webp' };
+  response.writeHead(200, { 'Content-Type': mime[path.extname(file)] ?? 'application/octet-stream', 'Cache-Control': 'no-store' }); fs.createReadStream(file).pipe(response);
+});
+await new Promise((resolve, reject) => { server.once('error', reject); server.listen(4192, '127.0.0.1', resolve); });
+if (process.argv.includes('--serve')) { console.log(`Interactive synthetic SoundRoom fixture at ${baseURL}; PID ${process.pid}`); await new Promise(() => {}); }
+const report = { at: new Date().toISOString(), baseURL, browser: '', sourceHashes: Object.fromEntries([
+  'src/pages/SoundRoom.tsx','src/services/soundRoomPlayer.ts','src/services/soundRoomAccess.ts','src/services/entitlements.ts','src/data/soundRoom.ts','src/services/soundRoom.ts',
+].map(file => [file, sha(path.join(repo, file))])), css: { path: css, sha256: sha(path.join(repo, 'dist', css)) },
+  checks: [], screenshots: [], layouts: [], boundaryObservations: [], errors: [], unexpectedExternalAttempts: [], blockedExpectedUnsplashImages: [], failedLocalResponses: [],
+  limits: ['Actual SoundRoom component/player/access/catalogue/entitlements/i18n and current built CSS; synthetic purchases/usePro/store route and synthesizer.',
+    'The synthetic engine verifies requested track, volume and callback scheduling; no real audio, naturalness, device-gain or native SDK claims.',
+    'Expected Unsplash photo requests are deliberately blocked before network; resulting real component fallbacks are preserved in screenshots.',
+    'Playwright clock advances timer callbacks; paid/native SDK and Web Audio constructors throw locally and count any attempt.',
+    'Selected saved Linux cloud executor, Chromium; no packages, source edits, providers, real accounts, commits or publication.'] };
+let browser, page;
+const check = (name, evidence = {}) => report.checks.push({ name, passed: true, ...evidence });
+const snap = () => page.evaluate(() => window.ODA_SOUND_FIXTURE.snapshot());
+const translate = source => page.evaluate(source => window.ODA_SOUND_FIXTURE.translate(source), source);
+const patch = (state, emit = true) => page.evaluate(({state,emit}) => window.ODA_SOUND_FIXTURE.patchPurchases(state,emit), {state,emit});
+const navigate = route => page.evaluate(route => window.ODA_SOUND_FIXTURE.navigate(route), route);
+const returnSound = async () => { await navigate('/app/sound'); await page.locator('.oda-sound').waitFor(); };
+const assertRevoked = state => {
+  assert.equal(state.engine.track, 'silence'); assert.equal(state.engine.scheduledStop, false);
+  assert.deepEqual([state.player.track,state.player.playing,state.player.sleep,state.player.endsAt,state.player.pausedRemainingMs], [null,false,false,null,null]);
+};
+const paid = async (revision = 1) => patch({available:true,ready:true,identityConfirmed:true,identityRevision:revision,tier:'essentials'});
+const card = async (sectionId, index) => {
+  const catalog = await page.evaluate(() => window.ODA_SOUND_FIXTURE.catalogue());
+  const section = catalog.find(item => item.id === sectionId);
+  if (sectionId !== 'frequencies') await page.getByRole('tab', {name:section.label,exact:true}).click();
+  return page.locator(sectionId === 'frequencies' ? '.oda-sound-frequencies .oda-sound-card-button' : '.oda-sound-panel .oda-sound-card-button').nth(index);
+};
+const playCard = async (sectionId,index) => (await card(sectionId,index)).click();
+const setUIVolume = async value => {
+  const range = page.getByRole('slider',{name:await translate('Volume'),exact:true});
+  await range.evaluate((input,value)=>{Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,String(value));input.dispatchEvent(new Event('input',{bubbles:true}));input.dispatchEvent(new Event('change',{bubbles:true}));},value);
+};
+const screenshot = async (name,fullPage=false) => { await page.evaluate(() => document.fonts.ready); await page.screenshot({path:path.join(out,name),fullPage,animations:'disabled'});report.screenshots.push(name); };
+try {
+  browser = await chromium.launch({executablePath:'/usr/bin/chromium'});report.browser=await browser.version();
+  const open = async (locale='en',width=390) => {
+    const context = await browser.newContext({viewport:{width,height:844},deviceScaleFactor:1,serviceWorkers:'block'});
+    await context.route('**/*', route => {
+      const url = new URL(route.request().url());
+      if (url.origin === baseURL) return route.continue();
+      if (url.hostname === 'images.unsplash.com' && route.request().resourceType() === 'image') {
+        report.blockedExpectedUnsplashImages.push({url:url.href,resourceType:'image'});return route.abort();
+      }
+      report.unexpectedExternalAttempts.push({url:url.href,resourceType:route.request().resourceType()});return route.abort();
+    });
+    page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));
+    page.on('response',response=>{if(response.status()>=400&&new URL(response.url()).origin===baseURL)report.failedLocalResponses.push({url:response.url(),status:response.status()});});
+    await page.clock.install({time:new Date('2026-10-02T12:00:00Z')});
+    await page.goto(baseURL);await page.waitForFunction(()=>Boolean(window.ODA_SOUND_FIXTURE));
+    await page.evaluate(locale=>window.ODA_SOUND_FIXTURE.setLocale(locale),locale);await page.locator('.oda-sound').waitFor();
+    return context;
+  };
+  let context=await open();
+  await patch({tier:'free'});const initialPlayCount=(await snap()).calls.filter(call=>call.kind==='play').length;
+  await playCard('relax',3);await page.locator('#fixture-away').waitFor();
+  assert.equal((await snap()).route,'/app/upgrade');assert.equal((await snap()).calls.filter(call=>call.kind==='play').length,initialPlayCount);
+  check('Native free paid-card click routes to Upgrade without invoking the synthetic audio engine');
+  await returnSound();await playCard('focus',0);assert.equal((await snap()).engine.track,'brown_noise');
+  await playCard('sleep',2);assert.equal((await snap()).route,'/app/upgrade');assert.equal((await snap()).engine.track,'brown_noise');
+  check('Brown-noise free Focus card plays; duplicate paid Sleep origin routes to Upgrade without replacing it');
+  await returnSound();await playCard('frequencies',0);assert.equal((await snap()).engine.track,'meditation_432hz');
+  await playCard('relax',2);assert.equal((await snap()).route,'/app/upgrade');assert.equal((await snap()).engine.track,'meditation_432hz');
+  check('432Hz free Frequencies card plays; duplicate paid Relax origin remains guarded');
+  await returnSound();await patch({tier:'essentials',identityConfirmed:true,ready:false});await playCard('relax',3);
+  assert.equal((await snap()).engine.track,'tibetan_bowls');assert.equal((await snap()).player.playing,true);
+  check('Confirmed Essentials admits paid card while offerings are not ready');
+  await page.getByRole('combobox',{name:await translate('Timer'),exact:true}).selectOption('10');
+  await playCard('sleep',2);let state=await snap();assert.equal(state.player.sleep,true);assert.equal(state.engine.scheduledStop,true);
+  await navigate('/app/away');await page.locator('#fixture-away').waitFor();assert.equal((await snap()).purchaseListenerCount,1);
+  await patch({tier:'free',ready:true});state=await snap();assertRevoked(state);assert.equal(state.player.timerMinutes,10);
+  check('Playing paid selection downgrades and hard-clears owned engine/timer with SoundRoom unmounted');
+  const startsAfterRevocation=state.calls.filter(call=>call.kind==='play').length;
+  await paid();assertRevoked(await snap());assert.equal(await page.evaluate(()=>window.ODA_SOUND_FIXTURE.resume()),false);
+  assert.equal((await snap()).calls.filter(call=>call.kind==='play').length,startsAfterRevocation);
+  await returnSound();await playCard('relax',3);assert.equal((await snap()).player.playing,true);
+  check('Regrant causes no autoplay/revival; only a new explicit paid-card click starts again');
+  await page.locator('.oda-sound-player-toggle').click();assert.equal((await snap()).player.playing,false);
+  assert.ok((await snap()).player.pausedRemainingMs>0);await navigate('/app/away');await patch({identityConfirmed:false,tier:'essentials',ready:false});
+  assertRevoked(await snap());await page.clock.fastForward(1000);assertRevoked(await snap());
+  check('Paused paid selection revokes on unknown identity, removes delayed stop and cannot resume');
+  await paid(10);await returnSound();await playCard('relax',3);await navigate('/app/away');await patch({identityRevision:11});assertRevoked(await snap());
+  check('Confirmed paid account revision change clears the prior owned selection even while route is away');
+  await returnSound();await paid(11);await playCard('relax',3);await patch({ready:false});assert.equal((await snap()).player.playing,true);
+  await page.locator('.oda-sound-player-toggle').click();await page.clock.runFor(700);await page.locator('.oda-sound-player-toggle').click();
+  assert.equal((await snap()).engine.track,'tibetan_bowls');assert.equal((await snap()).player.playing,true);
+  check('Same-account confirmed Essentials survives ready=false and actual UI pause/restart');
+  await patch({tier:'free',identityConfirmed:false,identityRevision:20});await playCard('focus',0);
+  await patch({identityRevision:21});assert.equal((await snap()).player.playing,true);assert.equal((await snap()).engine.track,'brown_noise');
+  await page.locator('.oda-sound-player-toggle').click();await page.clock.runFor(700);await page.locator('.oda-sound-player-toggle').click();
+  assert.equal((await snap()).player.playing,true);
+  check('A genuinely free duplicate origin survives unknown/revised identity and remains restartable');
+  await setUIVolume(0);assert.equal((await snap()).engine.volume,0);
+  await page.locator('.oda-sound-player-toggle').click();await page.clock.runFor(700);await page.locator('.oda-sound-player-toggle').click();assert.equal((await snap()).engine.volume,0);
+  await setUIVolume(0.73);assert.equal((await snap()).engine.volume,0.73);
+  await page.getByRole('combobox',{name:await translate('Timer'),exact:true}).selectOption('10');state=await snap();
+  assert.equal(state.player.timerMinutes,10);assert.equal(state.engine.scheduledStop,true);assert.equal(state.calls.filter(call=>call.kind==='fade').at(-1).delaySeconds,590);
+  check('Actual volume/timer controls preserve zero through restart and apply latest requested volume');
+  await page.clock.fastForward(600100);state=await snap();assert.equal(state.engine.track,'silence');assert.equal(state.engine.scheduledStop,false);assert.equal(state.player.playing,false);assert.equal(state.player.endsAt,null);
+  check('Actual player timer expiry settles silently with no scheduled synthetic callback');
+  await paid(30);await playCard('relax',3);await navigate('/app/away');
+  await page.evaluate(()=>window.ODA_SOUND_FIXTURE.handoffOnNextEmission('tibetan_bowls'));await page.evaluate(()=>window.ODA_SOUND_FIXTURE.pause());
+  state=await snap();assert.equal(state.engine.track,'tibetan_bowls');assert.equal(state.engine.scheduledStop,false);assert.equal(state.player.playing,true);assert.equal(state.player.timerMinutes,null);
+  check('Pause publication cannot fade an external same-track replacement graph');
+  await returnSound();await playCard('relax',3);await page.evaluate(()=>window.ODA_SOUND_FIXTURE.setTimer(10));await navigate('/app/away');
+  await page.evaluate(()=>window.ODA_SOUND_FIXTURE.handoffOnNextEmission('tibetan_bowls'));await page.evaluate(()=>window.ODA_SOUND_FIXTURE.setTimer(20));
+  state=await snap();assert.equal(state.engine.track,'tibetan_bowls');assert.equal(state.engine.scheduledStop,false);assert.equal(state.player.timerMinutes,null);assert.equal(state.player.endsAt,null);
+  await patch({tier:'free',identityConfirmed:false,identityRevision:31});assert.equal((await snap()).engine.track,'tibetan_bowls');
+  check('Timer publication and downgrade preserve the external controller graph without a stale owned countdown');
+  await returnSound();await paid(31);const beforeStaleClick=(await snap()).calls.filter(call=>call.kind==='play').length;
+  await patch({tier:'free',identityConfirmed:false},false);await playCard('relax',3);assert.equal((await snap()).route,'/app/upgrade');
+  assert.equal((await snap()).calls.filter(call=>call.kind==='play').length,beforeStaleClick);
+  check('Paid click reads latest identity even before a purchase notification rerenders the UI');
+  report.boundaryObservations.push({case:'actual-player-flows',...(await snap()).boundaryAttempts});await context.close();
+  for(const locale of ['en','tr','es'])for(const width of [320,390]){
+    context=await open(locale,width);await patch({tier:'free',identityConfirmed:false,ready:false});await playCard('focus',0);
+    await page.getByRole('combobox',{name:await translate('Timer'),exact:true}).selectOption('10');
+    await setUIVolume(0);
+    // Load every lazy photo's fallback before captures rather than accepting an undecoded image.
+    while(await page.locator('.oda-sound-photo img').count()){
+      const before=await page.locator('.oda-sound-photo img').count();
+      await page.locator('.oda-sound-photo img').first().scrollIntoViewIfNeeded();
+      await page.waitForFunction(before=>document.querySelectorAll('.oda-sound-photo img').length<before,before);
+    }
+    await page.waitForFunction(()=>document.querySelectorAll('.oda-sound-photo img').length===0);
+    await page.evaluate(()=>{window.scrollTo(0,0);return document.fonts.ready;});
+    const layout=await page.evaluate(()=>{
+      const main=document.querySelector('main'),tabs=main.querySelector('.oda-sound-tabs');
+      return {viewport:innerWidth,documentScroll:document.documentElement.scrollWidth,mainScroll:main.scrollWidth,mainWidth:main.clientWidth,
+        controls:[...main.querySelectorAll('button,input,select')].filter(element=>element.getClientRects().length&&!element.closest('.oda-sound-tabs')).map(element=>{const rect=element.getBoundingClientRect();return {text:element.textContent||element.type,x:rect.x,right:rect.right,width:rect.width,height:rect.height};}),
+        tabs:{clientWidth:tabs.clientWidth,scrollWidth:tabs.scrollWidth,x:tabs.getBoundingClientRect().x,right:tabs.getBoundingClientRect().right},fontStatus:document.fonts.status,
+        photoFallbacks:main.querySelectorAll('.oda-sound-photo-fallback').length};
+    });
+    await screenshot(`soundroom-${locale}-${width}-top.png`);await screenshot(`soundroom-${locale}-${width}-full.png`,true);report.layouts.push({locale,width,...layout});
+    const problems=[];if(layout.documentScroll>width+1||layout.mainScroll>layout.mainWidth+1)problems.push('page/component overflow');
+    if(!layout.controls.every(control=>control.x>=0&&control.right<=width+1))problems.push('clipped control');
+    if(layout.tabs.x<0||layout.tabs.right>width+1)problems.push('tab scroll container overflows viewport');
+    report.checks.push({name:`${locale}${width}: real SoundRoom labels/player controls fit with expected photo fallbacks`,passed:problems.length===0,problems,...layout});
+    report.boundaryObservations.push({case:`${locale}-${width}`,...(await snap()).boundaryAttempts});await context.close();
+  }
+  assert.deepEqual(report.errors,[]);assert.deepEqual(report.unexpectedExternalAttempts,[]);assert.deepEqual(report.failedLocalResponses,[]);
+  assert.ok(report.boundaryObservations.every(item=>Object.entries(item).filter(([key])=>key!=='case').every(([,value])=>value===0)));
+  assert.ok(report.blockedExpectedUnsplashImages.length>0);
+  check('Observed paid SDK/Web Audio attempts and unexpected external/errors are zero; expected Unsplash image aborts are reported separately');
+  assert.equal(report.checks.filter(item=>!item.passed).length,0,'Responsive checks failed; all matrix screenshots preserved');
+}catch(error){report.failure=String(error.stack||error);if(page&&!page.isClosed()){report.failureState=await snap().catch(()=>null);await page.screenshot({path:path.join(out,'failure.png'),fullPage:true}).catch(()=>{});report.failureScreenshot='failure.png';}throw error;
+}finally{fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2)+'\n');if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));console.log(JSON.stringify({out,passed:report.checks.filter(item=>item.passed).length,checks:report.checks.length,screenshots:report.screenshots.length,expectedUnsplashBlocks:report.blockedExpectedUnsplashImages.length,failure:report.failure??null}));}

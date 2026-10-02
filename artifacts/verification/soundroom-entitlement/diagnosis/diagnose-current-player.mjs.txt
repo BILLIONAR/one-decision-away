@@ -1,0 +1,56 @@
+import { createRequire } from 'node:module';
+import { writeFileSync, readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+const repo = '/workspace/oda-cloud-upload-guard';
+const out = '/workspace/scratch/oda-soundroom-readonly-prep';
+const require = createRequire(`${repo}/package.json`);
+const esbuild = require('esbuild');
+const { SOUND_ROOM_SECTIONS } = await import(`${repo}/src/data/soundRoom.ts`);
+const { isSoundLocked } = await import(`${repo}/src/services/entitlements.ts`);
+const callbacks = new Set();
+const calls = [];
+let current = 'silence';
+let volume = .5;
+globalThis.__soundAuditFakeEngine = {
+  subscribe(callback) { callbacks.add(callback); return () => callbacks.delete(callback); },
+  getCurrentTrack() { return current; },
+  isFadingOut() { return false; },
+  hasFadeOutScheduled() { return false; },
+  playAmbient(track, options) { calls.push({ method:'playAmbient',track,options }); current=track; for (const cb of callbacks) cb(); },
+  fadeOutAndStop(seconds,delay) { calls.push({ method:'fadeOutAndStop',seconds,delay }); },
+  cancelFadeOut() { calls.push({ method:'cancelFadeOut' }); },
+  setVolume(value) { volume=value; },
+  getVolume() { return volume; },
+};
+const bundled = await esbuild.build({ entryPoints:[`${repo}/src/services/soundRoomPlayer.ts`],bundle:true,platform:'node',format:'esm',write:false,
+  plugins:[{ name:'readonly-fake-audio',setup(build) {
+    build.onLoad({filter:/\/utils\/soundSynthesizer\.ts$/}, () => ({contents:'export const soundSynthesizer = globalThis.__soundAuditFakeEngine;',loader:'js'}));
+  }}] });
+const { soundRoomPlayer } = await import(`data:text/javascript;base64,${Buffer.from(bundled.outputFiles[0].text).toString('base64')}`);
+const evidence = [];
+const summarize = label => ({label,state:{...soundRoomPlayer.getSnapshot()},calls:structuredClone(calls)});
+soundRoomPlayer.setTimer(30);
+soundRoomPlayer.play('tibetan_bowls');
+evidence.push(summarize('Essentials starts Relax index3; parent policy then downgrades to free'));
+evidence.push({label:'Current free card rule denies Relax index3',cardDenied:isSoundLocked(3,{gating:true,tier:'free'}),state:{...soundRoomPlayer.getSnapshot()}});
+soundRoomPlayer.pause();
+soundRoomPlayer.resume();
+evidence.push(summarize('Existing player resume starts the retained paid track despite free card rule'));
+current='silence'; for (const callback of callbacks) callback();
+soundRoomPlayer.resume();
+evidence.push(summarize('External hard silence retains track and allows another replay'));
+soundRoomPlayer.setTimer(60);
+evidence.push(summarize('Timer change on the still-playing unauthorized selection cancels the old fade'));
+const byTrack = new Map();
+for (const section of SOUND_ROOM_SECTIONS) section.sounds.forEach((sound,index) => {
+  const items = byTrack.get(sound.track) ?? [];
+  items.push({sectionId:section.id,index,free:isSoundLocked(index,{gating:true,tier:'free'})===false});
+  byTrack.set(sound.track,items);
+});
+const aliases = [...byTrack].filter(([,items]) => new Set(items.map(i=>i.free)).size>1).map(([track,placements])=>({track,placements}));
+const sourceFiles=['src/pages/SoundRoom.tsx','src/services/soundRoomPlayer.ts','src/services/soundRoom.ts','src/services/entitlements.ts','src/services/purchases.ts','src/data/soundRoom.ts','src/utils/soundSynthesizer.ts'];
+const report={readOnlyProductSource:true,syntheticFakeEngineOnly:true,noNetworkOrNativeProvider:true,
+  evidence,aliases,sourceHashes:sourceFiles.map(file=>({file,sha256:createHash('sha256').update(readFileSync(`${repo}/${file}`)).digest('hex')}))};
+writeFileSync(`${out}/current-player-diagnosis.json`,JSON.stringify(report,null,2));
+console.log(JSON.stringify({retainedTrack:soundRoomPlayer.getSnapshot().track,starts:calls.filter(c=>c.method==='playAmbient').length,
+  cardDenied:isSoundLocked(3,{gating:true,tier:'free'}),aliasTracks:aliases.map(a=>a.track),syntheticFakeEngineOnly:true}));

@@ -1,0 +1,16 @@
+globalThis.cardClick=() => {
+          const current = purchases.getState();
+          const tier = current.identityConfirmed ? current.tier : 'free';
+          if (isSoundLocked(indexInCategory, { gating: current.available, tier })) {
+            setActiveRoute('/app/upgrade');
+            return;
+          }
+          soundRoomPlayer.toggle(sound.track, { sleep: sectionId === 'sleep', sectionId, indexInCategory });
+        };
+globalThis.breatheClick=() => soundRoomPlayer.toggle(sound.track, { sectionId: 'breathe', indexInCategory: 0 });
+globalThis.barClick=() => (player.playing ? soundRoomPlayer.pause() : soundRoomPlayer.resume());
+globalThis.timerChange=(event) => soundRoomPlayer.setTimer(event.target.value ? Number(event.target.value) : null);
+globalThis.timerValue=()=>(player.timerMinutes ?? '');
+globalThis.labelLocked=()=>{const tier=pro.identityConfirmed ? pro.tier : 'free';return isSoundLocked(i, { gating: pro.gating, tier });};
+globalThis.normalBinding=()=>({sectionId:section.id,indexInCategory:i,sound:sound});
+globalThis.frequencyBinding=()=>({sectionId:"frequencies",indexInCategory:i,sound:sound});

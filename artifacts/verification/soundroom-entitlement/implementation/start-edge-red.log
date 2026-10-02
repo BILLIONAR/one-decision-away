@@ -1,0 +1,208 @@
+TAP version 13
+# Subtest: native free direct starts and toggles cannot start an all-paid track
+ok 1 - native free direct starts and toggles cannot start an all-paid track
+  ---
+  duration_ms: 2.276216
+  type: 'test'
+  ...
+# Subtest: downgrade hard-stops owned restricted playing selection without page subscribers
+ok 2 - downgrade hard-stops owned restricted playing selection without page subscribers
+  ---
+  duration_ms: 26.125512
+  type: 'test'
+  ...
+# Subtest: downgrade hard-stops owned restricted paused selection without page subscribers
+ok 3 - downgrade hard-stops owned restricted paused selection without page subscribers
+  ---
+  duration_ms: 18.518316
+  type: 'test'
+  ...
+# Subtest: downgrade hard-stops owned restricted expired selection without page subscribers
+ok 4 - downgrade hard-stops owned restricted expired selection without page subscribers
+  ---
+  duration_ms: 14.355203
+  type: 'test'
+  ...
+# Subtest: owned paid selection revokes on identityConfirmed even with a paid cached tier
+ok 5 - owned paid selection revokes on identityConfirmed even with a paid cached tier
+  ---
+  duration_ms: 0.864018
+  type: 'test'
+  ...
+# Subtest: owned paid selection revokes on identityRevision even with a paid cached tier
+ok 6 - owned paid selection revokes on identityRevision even with a paid cached tier
+  ---
+  duration_ms: 0.465896
+  type: 'test'
+  ...
+# Subtest: same-account confirmed paid access survives offerings loading or failed offline refresh
+ok 7 - same-account confirmed paid access survives offerings loading or failed offline refresh
+  ---
+  duration_ms: 0.738117
+  type: 'test'
+  ...
+# Subtest: admission reads current purchase state even if a notification has not been emitted
+ok 8 - admission reads current purchase state even if a notification has not been emitted
+  ---
+  duration_ms: 0.267936
+  type: 'test'
+  ...
+# Subtest: live resume and timer change reconcile access even without a purchase notification
+ok 9 - live resume and timer change reconcile access even without a purchase notification
+  ---
+  duration_ms: 0.518895
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"sectionId":"relax"} without replacing audio
+ok 10 - invalid or mismatched provenance rejects {"sectionId":"relax"} without replacing audio
+  ---
+  duration_ms: 54.140595
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"indexInCategory":3} without replacing audio
+ok 11 - invalid or mismatched provenance rejects {"indexInCategory":3} without replacing audio
+  ---
+  duration_ms: 34.433761
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"sectionId":"focus","indexInCategory":0} without replacing audio
+ok 12 - invalid or mismatched provenance rejects {"sectionId":"focus","indexInCategory":0} without replacing audio
+  ---
+  duration_ms: 32.275613
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":-1} without replacing audio
+ok 13 - invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":-1} without replacing audio
+  ---
+  duration_ms: 29.757821
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":0.5} without replacing audio
+ok 14 - invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":0.5} without replacing audio
+  ---
+  duration_ms: 29.676899
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":99} without replacing audio
+ok 15 - invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":99} without replacing audio
+  ---
+  duration_ms: 28.786922
+  type: 'test'
+  ...
+# Subtest: essentials admits all catalog origins and preserves the timer and user volume
+ok 16 - essentials admits all catalog origins and preserves the timer and user volume
+  ---
+  duration_ms: 366.258993
+  type: 'test'
+  ...
+# Subtest: pro admits all catalog origins and preserves the timer and user volume
+ok 17 - pro admits all catalog origins and preserves the timer and user volume
+  ---
+  duration_ms: 233.235954
+  type: 'test'
+  ...
+# Subtest: coach admits all catalog origins and preserves the timer and user volume
+ok 18 - coach admits all catalog origins and preserves the timer and user volume
+  ---
+  duration_ms: 172.34628
+  type: 'test'
+  ...
+# Subtest: each category first two entries remain free, including duplicate 432 and brown-noise origins
+ok 19 - each category first two entries remain free, including duplicate 432 and brown-noise origins
+  ---
+  duration_ms: 88.565493
+  type: 'test'
+  ...
+# Subtest: omitted-origin admission allows any-free aliases and denies exclusively paid tracks
+ok 20 - omitted-origin admission allows any-free aliases and denies exclusively paid tracks
+  ---
+  duration_ms: 26.005132
+  type: 'test'
+  ...
+# Subtest: web and unconfigured purchases keep paid sounds open through identity transitions
+ok 21 - web and unconfigured purchases keep paid sounds open through identity transitions
+  ---
+  duration_ms: 0.615913
+  type: 'test'
+  ...
+# Subtest: external Focus tibetan_bowls replacement survives Sound Room downgrade
+ok 22 - external Focus tibetan_bowls replacement survives Sound Room downgrade
+  ---
+  duration_ms: 2.693158
+  type: 'test'
+  ...
+# Subtest: external Focus waves replacement survives Sound Room downgrade
+ok 23 - external Focus waves replacement survives Sound Room downgrade
+  ---
+  duration_ms: 35.3818
+  type: 'test'
+  ...
+# Subtest: purchase event during an engine start cannot publish a revoked playing selection
+ok 24 - purchase event during an engine start cannot publish a revoked playing selection
+  ---
+  duration_ms: 0.639087
+  type: 'test'
+  ...
+# Subtest: purchase event during player publication cannot re-arm the revoked timer
+not ok 25 - purchase event during player publication cannot re-arm the revoked timer
+  ---
+  duration_ms: 4.535016
+  type: 'test'
+  location: '/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:1:8369'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    true !== false
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:211:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: an unavailable AudioContext rejects the actual engine start without claiming playback
+not ok 26 - an unavailable AudioContext rejects the actual engine start without claiming playback
+  ---
+  duration_ms: 0.434157
+  type: 'test'
+  location: '/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:1:8748'
+  failureType: 'testCodeFailure'
+  error: 'AudioCtx is not a constructor'
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    SoundSynthesizer.initContext (/workspace/oda-soundroom-entitlement-fix/src/utils/soundSynthesizer.ts:108:18)
+    SoundSynthesizer.playAmbient (/workspace/oda-soundroom-entitlement-fix/src/utils/soundSynthesizer.ts:280:10)
+    <anonymous> (/workspace/oda-soundroom-entitlement-fix/src/services/soundRoomPlayer.ts:148:34)
+    drive (/workspace/oda-soundroom-entitlement-fix/src/services/soundRoomPlayer.ts:60:5)
+    Object.play (/workspace/oda-soundroom-entitlement-fix/src/services/soundRoomPlayer.ts:148:5)
+    TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:219:23)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+  ...
+# Subtest: silence or an absent audio context cannot publish a playing selection
+ok 27 - silence or an absent audio context cannot publish a playing selection
+  ---
+  duration_ms: 0.387868
+  type: 'test'
+  ...
+1..27
+# tests 27
+# suites 0
+# pass 25
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1440.591011

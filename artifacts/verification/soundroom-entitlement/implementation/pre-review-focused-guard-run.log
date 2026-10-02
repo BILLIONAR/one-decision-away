@@ -1,0 +1,358 @@
+TAP version 13
+# Subtest: ambient renders are long independent stereo textures with finite bounded levels
+ok 1 - ambient renders are long independent stereo textures with finite bounded levels
+  ---
+  duration_ms: 156.343261
+  type: 'test'
+  ...
+# Subtest: scene identities differ in spectrum and amplitude dynamics
+ok 2 - scene identities differ in spectrum and amplitude dynamics
+  ---
+  duration_ms: 35.532498
+  type: 'test'
+  ...
+# Subtest: loop overlaps join continuous adjacent noise without a boundary spike
+ok 3 - loop overlaps join continuous adjacent noise without a boundary spike
+  ---
+  duration_ms: 52.299871
+  type: 'test'
+  ...
+# Subtest: seeds reproduce review samples and produce a new texture when changed
+ok 4 - seeds reproduce review samples and produce a new texture when changed
+  ---
+  duration_ms: 158.735127
+  type: 'test'
+  ...
+# Subtest: one Sound Room track keeps one title across categories, including intentional noise reuse
+ok 5 - one Sound Room track keeps one title across categories, including intentional noise reuse
+  ---
+  duration_ms: 0.312383
+  type: 'test'
+  ...
+# Subtest: native free direct starts and toggles cannot start an all-paid track
+ok 6 - native free direct starts and toggles cannot start an all-paid track
+  ---
+  duration_ms: 2.557562
+  type: 'test'
+  ...
+# Subtest: downgrade hard-stops owned restricted playing selection without page subscribers
+ok 7 - downgrade hard-stops owned restricted playing selection without page subscribers
+  ---
+  duration_ms: 39.237297
+  type: 'test'
+  ...
+# Subtest: downgrade hard-stops owned restricted paused selection without page subscribers
+ok 8 - downgrade hard-stops owned restricted paused selection without page subscribers
+  ---
+  duration_ms: 38.720354
+  type: 'test'
+  ...
+# Subtest: downgrade hard-stops owned restricted expired selection without page subscribers
+ok 9 - downgrade hard-stops owned restricted expired selection without page subscribers
+  ---
+  duration_ms: 19.046136
+  type: 'test'
+  ...
+# Subtest: owned paid playing selection revokes on identityConfirmed even with a paid cached tier
+ok 10 - owned paid playing selection revokes on identityConfirmed even with a paid cached tier
+  ---
+  duration_ms: 0.972953
+  type: 'test'
+  ...
+# Subtest: owned paid paused selection revokes on identityConfirmed even with a paid cached tier
+ok 11 - owned paid paused selection revokes on identityConfirmed even with a paid cached tier
+  ---
+  duration_ms: 1.210442
+  type: 'test'
+  ...
+# Subtest: owned paid expired selection revokes on identityConfirmed even with a paid cached tier
+ok 12 - owned paid expired selection revokes on identityConfirmed even with a paid cached tier
+  ---
+  duration_ms: 3.146543
+  type: 'test'
+  ...
+# Subtest: owned paid playing selection revokes on identityRevision even with a paid cached tier
+ok 13 - owned paid playing selection revokes on identityRevision even with a paid cached tier
+  ---
+  duration_ms: 0.421097
+  type: 'test'
+  ...
+# Subtest: owned paid paused selection revokes on identityRevision even with a paid cached tier
+ok 14 - owned paid paused selection revokes on identityRevision even with a paid cached tier
+  ---
+  duration_ms: 1.088838
+  type: 'test'
+  ...
+# Subtest: owned paid expired selection revokes on identityRevision even with a paid cached tier
+ok 15 - owned paid expired selection revokes on identityRevision even with a paid cached tier
+  ---
+  duration_ms: 1.634424
+  type: 'test'
+  ...
+# Subtest: same-account confirmed paid access survives offerings loading or failed offline refresh
+ok 16 - same-account confirmed paid access survives offerings loading or failed offline refresh
+  ---
+  duration_ms: 0.60755
+  type: 'test'
+  ...
+# Subtest: admission reads current purchase state even if a notification has not been emitted
+ok 17 - admission reads current purchase state even if a notification has not been emitted
+  ---
+  duration_ms: 0.249287
+  type: 'test'
+  ...
+# Subtest: live resume and timer change reconcile access even without a purchase notification
+ok 18 - live resume and timer change reconcile access even without a purchase notification
+  ---
+  duration_ms: 0.543133
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"sectionId":"relax"} without replacing audio
+ok 19 - invalid or mismatched provenance rejects {"sectionId":"relax"} without replacing audio
+  ---
+  duration_ms: 83.368197
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"indexInCategory":3} without replacing audio
+ok 20 - invalid or mismatched provenance rejects {"indexInCategory":3} without replacing audio
+  ---
+  duration_ms: 69.939354
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"sectionId":"focus","indexInCategory":0} without replacing audio
+ok 21 - invalid or mismatched provenance rejects {"sectionId":"focus","indexInCategory":0} without replacing audio
+  ---
+  duration_ms: 36.202497
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":-1} without replacing audio
+ok 22 - invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":-1} without replacing audio
+  ---
+  duration_ms: 30.407571
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":0.5} without replacing audio
+ok 23 - invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":0.5} without replacing audio
+  ---
+  duration_ms: 36.403202
+  type: 'test'
+  ...
+# Subtest: invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":99} without replacing audio
+ok 24 - invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":99} without replacing audio
+  ---
+  duration_ms: 60.04777
+  type: 'test'
+  ...
+# Subtest: essentials admits all catalog origins and preserves the timer and user volume
+ok 25 - essentials admits all catalog origins and preserves the timer and user volume
+  ---
+  duration_ms: 465.188209
+  type: 'test'
+  ...
+# Subtest: pro admits all catalog origins and preserves the timer and user volume
+ok 26 - pro admits all catalog origins and preserves the timer and user volume
+  ---
+  duration_ms: 265.599973
+  type: 'test'
+  ...
+# Subtest: coach admits all catalog origins and preserves the timer and user volume
+ok 27 - coach admits all catalog origins and preserves the timer and user volume
+  ---
+  duration_ms: 253.031918
+  type: 'test'
+  ...
+# Subtest: each category first two entries remain free, including duplicate 432 and brown-noise origins
+ok 28 - each category first two entries remain free, including duplicate 432 and brown-noise origins
+  ---
+  duration_ms: 151.952169
+  type: 'test'
+  ...
+# Subtest: omitted-origin admission allows any-free aliases and denies exclusively paid tracks
+ok 29 - omitted-origin admission allows any-free aliases and denies exclusively paid tracks
+  ---
+  duration_ms: 34.471232
+  type: 'test'
+  ...
+# Subtest: web and unconfigured purchases keep paid sounds open through identity transitions
+ok 30 - web and unconfigured purchases keep paid sounds open through identity transitions
+  ---
+  duration_ms: 0.625176
+  type: 'test'
+  ...
+# Subtest: external Focus tibetan_bowls replacement survives Sound Room downgrade
+ok 31 - external Focus tibetan_bowls replacement survives Sound Room downgrade
+  ---
+  duration_ms: 3.736521
+  type: 'test'
+  ...
+# Subtest: external Focus waves replacement survives Sound Room downgrade
+ok 32 - external Focus waves replacement survives Sound Room downgrade
+  ---
+  duration_ms: 55.652487
+  type: 'test'
+  ...
+# Subtest: purchase event during an engine start cannot publish a revoked playing selection
+ok 33 - purchase event during an engine start cannot publish a revoked playing selection
+  ---
+  duration_ms: 0.70049
+  type: 'test'
+  ...
+# Subtest: purchase event during player publication cannot re-arm the revoked timer
+ok 34 - purchase event during player publication cannot re-arm the revoked timer
+  ---
+  duration_ms: 0.454588
+  type: 'test'
+  ...
+# Subtest: external waves replacement during player publication retains its untimed graph
+ok 35 - external waves replacement during player publication retains its untimed graph
+  ---
+  duration_ms: 21.169596
+  type: 'test'
+  ...
+# Subtest: external tibetan_bowls replacement during player publication retains its untimed graph
+ok 36 - external tibetan_bowls replacement during player publication retains its untimed graph
+  ---
+  duration_ms: 1.432749
+  type: 'test'
+  ...
+# Subtest: an unavailable AudioContext rejects the actual engine start without claiming playback
+ok 37 - an unavailable AudioContext rejects the actual engine start without claiming playback
+  ---
+  duration_ms: 0.499616
+  type: 'test'
+  ...
+# Subtest: failed buffer allocation retains entitlement ownership of the existing paid graph
+ok 38 - failed buffer allocation retains entitlement ownership of the existing paid graph
+  ---
+  duration_ms: 23.044214
+  type: 'test'
+  ...
+# Subtest: failed no replacement retains entitlement ownership of the existing paid graph
+ok 39 - failed no replacement retains entitlement ownership of the existing paid graph
+  ---
+  duration_ms: 0.581991
+  type: 'test'
+  ...
+# Subtest: same-track no-op cannot take revocation ownership of an external Focus graph
+ok 40 - same-track no-op cannot take revocation ownership of an external Focus graph
+  ---
+  duration_ms: 0.440096
+  type: 'test'
+  ...
+# Subtest: silence or an absent audio context cannot publish a playing selection
+ok 41 - silence or an absent audio context cannot publish a playing selection
+  ---
+  duration_ms: 0.256778
+  type: 'test'
+  ...
+# Subtest: breath pacer runs at about 5.5 breaths a minute
+ok 42 - breath pacer runs at about 5.5 breaths a minute
+  ---
+  duration_ms: 1.142329
+  type: 'test'
+  ...
+# Subtest: breathPhase: inhale first, then exhale, then repeats
+ok 43 - breathPhase: inhale first, then exhale, then repeats
+  ---
+  duration_ms: 1.067947
+  type: 'test'
+  ...
+# Subtest: breathPhase is safe with odd input
+ok 44 - breathPhase is safe with odd input
+  ---
+  duration_ms: 0.210909
+  type: 'test'
+  ...
+# Subtest: formatRemaining
+ok 45 - formatRemaining
+  ---
+  duration_ms: 0.255647
+  type: 'test'
+  ...
+# Subtest: timer fades: a minute for sleep, short otherwise, never over half the timer
+ok 46 - timer fades: a minute for sleep, short otherwise, never over half the timer
+  ---
+  duration_ms: 0.250619
+  type: 'test'
+  ...
+# Subtest: arming a timer retains the independent three-second attack and actual stereo loop
+ok 47 - arming a timer retains the independent three-second attack and actual stereo loop
+  ---
+  duration_ms: 113.196987
+  type: 'test'
+  ...
+# Subtest: mute and volume respond immediately at the beginning of a timer fade
+ok 48 - mute and volume respond immediately at the beginning of a timer fade
+  ---
+  duration_ms: 38.983573
+  type: 'test'
+  ...
+# Subtest: mute and volume respond immediately at the middle of a timer fade
+ok 49 - mute and volume respond immediately at the middle of a timer fade
+  ---
+  duration_ms: 22.689838
+  type: 'test'
+  ...
+# Subtest: mute and volume respond immediately at the end of a timer fade
+ok 50 - mute and volume respond immediately at the end of a timer fade
+  ---
+  duration_ms: 14.459058
+  type: 'test'
+  ...
+# Subtest: running fades can shorten but do not extend, and timer cancellation preserves user volume
+ok 51 - running fades can shorten but do not extend, and timer cancellation preserves user volume
+  ---
+  duration_ms: 50.866852
+  type: 'test'
+  ...
+# Subtest: shortening a running fade with a delay cannot restore a louder envelope
+ok 52 - shortening a running fade with a delay cannot restore a louder envelope
+  ---
+  duration_ms: 82.646389
+  type: 'test'
+  ...
+# Subtest: browsers without cancelAndHold retain the current level when shortening a fade
+ok 53 - browsers without cancelAndHold retain the current level when shortening a fade
+  ---
+  duration_ms: 53.687913
+  type: 'test'
+  ...
+# Subtest: track switches release the previous graph and repeated switches/stops bound resources
+ok 54 - track switches release the previous graph and repeated switches/stops bound resources
+  ---
+  duration_ms: 890.047122
+  type: 'test'
+  ...
+# Subtest: stop/restart of a tone cancels its initial bowl and recurring callbacks
+ok 55 - stop/restart of a tone cancels its initial bowl and recurring callbacks
+  ---
+  duration_ms: 1.076269
+  type: 'test'
+  ...
+# Subtest: natural bowl endings disconnect their tails while the current ambient drone continues
+ok 56 - natural bowl endings disconnect their tails while the current ambient drone continues
+  ---
+  duration_ms: 0.625256
+  type: 'test'
+  ...
+# Subtest: Sound Room timer arming, pause/resume and expiry keep player state and start fade intact
+ok 57 - Sound Room timer arming, pause/resume and expiry keep player state and start fade intact
+  ---
+  duration_ms: 64.075997
+  type: 'test'
+  ...
+# Subtest: external restart of the same track clears the Sound Room countdown and timer selection
+ok 58 - external restart of the same track clears the Sound Room countdown and timer selection
+  ---
+  duration_ms: 79.817056
+  type: 'test'
+  ...
+1..58
+# tests 58
+# suites 0
+# pass 58
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1972.035578

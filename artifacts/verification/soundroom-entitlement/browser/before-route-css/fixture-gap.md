@@ -1,0 +1,1 @@
+Preserved first scratch-only attempt. The component route stylesheet was omitted by the fixture, so its screenshots and responsive PASS results are not valid visual acceptance. The original report/log/12 PNG bytes are unchanged. App source was never modified. Main CSS alone supplied the base styling. Final acceptance must include the actual built SoundRoom route CSS.

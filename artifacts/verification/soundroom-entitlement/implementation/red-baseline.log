@@ -1,0 +1,636 @@
+✖ native free direct starts and toggles cannot start an all-paid track (6.065994ms)
+✖ downgrade hard-stops owned restricted playing selection without page subscribers (41.956519ms)
+✖ downgrade hard-stops owned restricted paused selection without page subscribers (23.755046ms)
+✖ downgrade hard-stops owned restricted expired selection without page subscribers (8.819022ms)
+✖ owned paid selection revokes on identityConfirmed even with a paid cached tier (0.99043ms)
+✖ owned paid selection revokes on ready even with a paid cached tier (0.558235ms)
+✖ owned paid selection revokes on identityRevision even with a paid cached tier (0.58154ms)
+✖ admission reads current purchase state even if a notification has not been emitted (0.702794ms)
+✖ live resume and timer change reconcile access even without a purchase notification (0.810998ms)
+✖ invalid or mismatched provenance rejects {"sectionId":"relax"} without replacing audio (63.570294ms)
+✖ invalid or mismatched provenance rejects {"indexInCategory":3} without replacing audio (36.185546ms)
+✖ invalid or mismatched provenance rejects {"sectionId":"focus","indexInCategory":0} without replacing audio (40.517436ms)
+✖ invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":-1} without replacing audio (24.615008ms)
+✖ invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":0.5} without replacing audio (27.531588ms)
+✖ invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":99} without replacing audio (26.944335ms)
+✖ essentials admits all catalog origins and preserves the timer and user volume (0.906313ms)
+✖ pro admits all catalog origins and preserves the timer and user volume (0.444573ms)
+✖ coach admits all catalog origins and preserves the timer and user volume (0.393997ms)
+✖ each category first two entries remain free, including duplicate 432 and brown-noise origins (0.480838ms)
+✖ omitted-origin admission allows any-free aliases and denies exclusively paid tracks (8.659982ms)
+✖ web and unconfigured purchases keep paid sounds open through identity transitions (0.527158ms)
+✖ external Focus tibetan_bowls replacement survives Sound Room downgrade (3.186974ms)
+✖ external Focus waves replacement survives Sound Room downgrade (68.493913ms)
+✖ purchase event during an engine start cannot publish a revoked playing selection (0.704197ms)
+✖ silence or an absent audio context cannot publish a playing selection (0.267595ms)
+✔ arming a timer retains the independent three-second attack and actual stereo loop (115.708778ms)
+✔ mute and volume respond immediately at the beginning of a timer fade (39.347705ms)
+✔ mute and volume respond immediately at the middle of a timer fade (23.923662ms)
+✔ mute and volume respond immediately at the end of a timer fade (14.07471ms)
+✔ running fades can shorten but do not extend, and timer cancellation preserves user volume (57.340081ms)
+✔ shortening a running fade with a delay cannot restore a louder envelope (63.180062ms)
+✔ browsers without cancelAndHold retain the current level when shortening a fade (50.440615ms)
+✔ track switches release the previous graph and repeated switches/stops bound resources (454.787178ms)
+✔ stop/restart of a tone cancels its initial bowl and recurring callbacks (1.114367ms)
+✔ natural bowl endings disconnect their tails while the current ambient drone continues (0.741152ms)
+✔ Sound Room timer arming, pause/resume and expiry keep player state and start fade intact (60.411435ms)
+✔ external restart of the same track clears the Sound Room countdown and timer selection (58.193718ms)
+ℹ tests 37
+ℹ suites 0
+ℹ pass 12
+ℹ fail 25
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1179.558717
+
+✖ failing tests:
+
+test at tests/sound-room-player-access.test.ts:1:1686
+✖ native free direct starts and toggles cannot start an all-paid track (6.065994ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'tibetan_bowls'
+  - 'silence'
+  
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:53:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'tibetan_bowls',
+    expected: 'silence',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:2101
+✖ downgrade hard-stops owned restricted playing selection without page subscribers (41.956519ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'brown_noise'
+  - 'silence'
+  
+      at assertRevoked (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:41:10)
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:67:3)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'brown_noise',
+    expected: 'silence',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:2101
+✖ downgrade hard-stops owned restricted paused selection without page subscribers (23.755046ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'brown_noise'
+  - 'silence'
+  
+      at assertRevoked (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:41:10)
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:67:3)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'brown_noise',
+    expected: 'silence',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:2101
+✖ downgrade hard-stops owned restricted expired selection without page subscribers (8.819022ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'brown_noise'
+  - null
+  
+      at assertRevoked (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:43:10)
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:67:3)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'brown_noise',
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:2829
+✖ owned paid selection revokes on identityConfirmed even with a paid cached tier (0.99043ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'tibetan_bowls'
+  - 'silence'
+  
+      at assertRevoked (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:41:10)
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:81:5)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'tibetan_bowls',
+    expected: 'silence',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:2829
+✖ owned paid selection revokes on ready even with a paid cached tier (0.558235ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'tibetan_bowls'
+  - 'silence'
+  
+      at assertRevoked (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:41:10)
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:81:5)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'tibetan_bowls',
+    expected: 'silence',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:2829
+✖ owned paid selection revokes on identityRevision even with a paid cached tier (0.58154ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'tibetan_bowls'
+  - 'silence'
+  
+      at assertRevoked (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:41:10)
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:81:5)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'tibetan_bowls',
+    expected: 'silence',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:3270
+✖ admission reads current purchase state even if a notification has not been emitted (0.702794ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'tibetan_bowls'
+  - 'silence'
+  
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:94:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'tibetan_bowls',
+    expected: 'silence',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:3612
+✖ live resume and timer change reconcile access even without a purchase notification (0.810998ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'tibetan_bowls'
+  - 'silence'
+  
+      at assertRevoked (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:41:10)
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:104:3)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'tibetan_bowls',
+    expected: 'silence',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:4156
+✖ invalid or mismatched provenance rejects {"sectionId":"relax"} without replacing audio (63.570294ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'tibetan_bowls'
+  - 'waves'
+  
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:117:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'tibetan_bowls',
+    expected: 'waves',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:4156
+✖ invalid or mismatched provenance rejects {"indexInCategory":3} without replacing audio (36.185546ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'tibetan_bowls'
+  - 'waves'
+  
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:117:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'tibetan_bowls',
+    expected: 'waves',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:4156
+✖ invalid or mismatched provenance rejects {"sectionId":"focus","indexInCategory":0} without replacing audio (40.517436ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'tibetan_bowls'
+  - 'waves'
+  
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:117:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'tibetan_bowls',
+    expected: 'waves',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:4156
+✖ invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":-1} without replacing audio (24.615008ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'tibetan_bowls'
+  - 'waves'
+  
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:117:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'tibetan_bowls',
+    expected: 'waves',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:4156
+✖ invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":0.5} without replacing audio (27.531588ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'tibetan_bowls'
+  - 'waves'
+  
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:117:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'tibetan_bowls',
+    expected: 'waves',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:4156
+✖ invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":99} without replacing audio (26.944335ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'tibetan_bowls'
+  - 'waves'
+  
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:117:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'tibetan_bowls',
+    expected: 'waves',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:4507
+✖ essentials admits all catalog origins and preserves the timer and user volume (0.906313ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - true
+  
+      at <anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:125:12)
+      at Array.forEach (<anonymous>)
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:124:61)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:4507
+✖ pro admits all catalog origins and preserves the timer and user volume (0.444573ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - true
+  
+      at <anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:125:12)
+      at Array.forEach (<anonymous>)
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:124:61)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:4507
+✖ coach admits all catalog origins and preserves the timer and user volume (0.393997ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - true
+  
+      at <anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:125:12)
+      at Array.forEach (<anonymous>)
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:124:61)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:5145
+✖ each category first two entries remain free, including duplicate 432 and brown-noise origins (0.480838ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - true
+  
+      at <anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:138:12)
+      at Array.forEach (<anonymous>)
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:137:73)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:5971
+✖ omitted-origin admission allows any-free aliases and denies exclusively paid tracks (8.659982ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - true
+  
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:154:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:6426
+✖ web and unconfigured purchases keep paid sounds open through identity transitions (0.527158ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - true
+  
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:163:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:6871
+✖ external Focus tibetan_bowls replacement survives Sound Room downgrade (3.186974ms)
+  AssertionError [ERR_ASSERTION]: external replay gets fresh conservative admission
+  + actual - expected
+  
+  + undefined
+  - false
+  
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:181:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:6871
+✖ external Focus waves replacement survives Sound Room downgrade (68.493913ms)
+  AssertionError [ERR_ASSERTION]: external replay gets fresh conservative admission
+  + actual - expected
+  
+  + undefined
+  - true
+  
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:181:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:7599
+✖ purchase event during an engine start cannot publish a revoked playing selection (0.704197ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'tibetan_bowls'
+  - 'silence'
+  
+      at assertRevoked (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:41:10)
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:194:3)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'tibetan_bowls',
+    expected: 'silence',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/sound-room-player-access.test.ts:1:7950
+✖ silence or an absent audio context cannot publish a playing selection (0.267595ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - false
+  
+      at TestContext.<anonymous> (/workspace/oda-soundroom-entitlement-fix/tests/sound-room-player-access.test.ts:199:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

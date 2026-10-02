@@ -1,0 +1,377 @@
+{
+  "evidence": "Actual source-extracted SoundCard, BreathePanel, PlayerBar and timer handlers, lock expressions and map prop expressions in a VM. Synthetic player boundary uses actual pure resolver/access helper. No mounted React, actual player, synthesizer, audio, SDK, provider or native device.",
+  "beforeSourceSha256": {
+    "src/pages/SoundRoom.tsx": "83fd4ed46bf8ae85facd20d791cbeb66558b36ff1d9021febb038d2964530238",
+    "src/services/soundRoomAccess.ts": "e34e384f12abbc6b8185a377e9aa3c212832182d97b9f773ee973d9abe4c1199",
+    "src/data/soundRoom.ts": "303649d8c09a86043087f6dba619fb2ebbb17fd7ac455b5d8fad5690aca6d6f4",
+    "src/services/entitlements.ts": "ee4a9c923f94154d4a3e4809980929474ab3289929d56ee067790010fa691219",
+    "src/services/purchases.ts": "20166152294fdaba6c351e282c1b738a47b775256677030af518a417e1da257d"
+  },
+  "cases": [
+    {
+      "name": "native free card stays open while identity/load are unknown",
+      "passed": true,
+      "routes": [],
+      "toggleCalls": [
+        {
+          "track": "binaural",
+          "options": {
+            "sleep": false,
+            "sectionId": "relax",
+            "indexInCategory": 0
+          }
+        }
+      ],
+      "pauseCalls": 0,
+      "resumeCalls": 0,
+      "simulatedStarts": 1,
+      "boundaryDenials": 0,
+      "timers": []
+    },
+    {
+      "name": "stale unlocked paid card reads current free state and routes upgrade",
+      "passed": true,
+      "routes": [
+        "/app/upgrade"
+      ],
+      "toggleCalls": [],
+      "pauseCalls": 0,
+      "resumeCalls": 0,
+      "simulatedStarts": 0,
+      "boundaryDenials": 0,
+      "timers": []
+    },
+    {
+      "name": "unconfirmed cached paid tier cannot unlock card or current click",
+      "passed": true,
+      "routes": [
+        "/app/upgrade"
+      ],
+      "toggleCalls": [],
+      "pauseCalls": 0,
+      "resumeCalls": 0,
+      "simulatedStarts": 0,
+      "boundaryDenials": 0,
+      "timers": []
+    },
+    {
+      "name": "stale locked paid card opens after current account confirms Essentials",
+      "passed": true,
+      "routes": [],
+      "toggleCalls": [
+        {
+          "track": "rain",
+          "options": {
+            "sleep": true,
+            "sectionId": "sleep",
+            "indexInCategory": 3
+          }
+        }
+      ],
+      "pauseCalls": 0,
+      "resumeCalls": 0,
+      "simulatedStarts": 1,
+      "boundaryDenials": 0,
+      "timers": []
+    },
+    {
+      "name": "confirmed Essentials remains open during ready-false store loading",
+      "passed": true,
+      "routes": [],
+      "toggleCalls": [
+        {
+          "track": "rain",
+          "options": {
+            "sleep": true,
+            "sectionId": "sleep",
+            "indexInCategory": 3
+          }
+        }
+      ],
+      "pauseCalls": 0,
+      "resumeCalls": 0,
+      "simulatedStarts": 1,
+      "boundaryDenials": 0,
+      "timers": []
+    },
+    {
+      "name": "web gating-false paid card remains open",
+      "passed": true,
+      "routes": [],
+      "toggleCalls": [
+        {
+          "track": "rain",
+          "options": {
+            "sleep": true,
+            "sectionId": "sleep",
+            "indexInCategory": 3
+          }
+        }
+      ],
+      "pauseCalls": 0,
+      "resumeCalls": 0,
+      "simulatedStarts": 1,
+      "boundaryDenials": 0,
+      "timers": []
+    },
+    {
+      "name": "unconfigured native gating-false paid card remains open",
+      "passed": true,
+      "routes": [],
+      "toggleCalls": [
+        {
+          "track": "rain",
+          "options": {
+            "sleep": true,
+            "sectionId": "sleep",
+            "indexInCategory": 3
+          }
+        }
+      ],
+      "pauseCalls": 0,
+      "resumeCalls": 0,
+      "simulatedStarts": 1,
+      "boundaryDenials": 0,
+      "timers": []
+    },
+    {
+      "name": "brown-noise free Focus placement keeps its exact origin",
+      "passed": true,
+      "routes": [],
+      "toggleCalls": [
+        {
+          "track": "brown_noise",
+          "options": {
+            "sleep": false,
+            "sectionId": "focus",
+            "indexInCategory": 0
+          }
+        }
+      ],
+      "pauseCalls": 0,
+      "resumeCalls": 0,
+      "simulatedStarts": 1,
+      "boundaryDenials": 0,
+      "timers": []
+    },
+    {
+      "name": "brown-noise paid Sleep placement cannot borrow free Focus placement",
+      "passed": true,
+      "routes": [
+        "/app/upgrade"
+      ],
+      "toggleCalls": [],
+      "pauseCalls": 0,
+      "resumeCalls": 0,
+      "simulatedStarts": 0,
+      "boundaryDenials": 0,
+      "timers": []
+    },
+    {
+      "name": "432-Hz free Frequencies placement keeps its exact origin",
+      "passed": true,
+      "routes": [],
+      "toggleCalls": [
+        {
+          "track": "meditation_432hz",
+          "options": {
+            "sleep": false,
+            "sectionId": "frequencies",
+            "indexInCategory": 0
+          }
+        }
+      ],
+      "pauseCalls": 0,
+      "resumeCalls": 0,
+      "simulatedStarts": 1,
+      "boundaryDenials": 0,
+      "timers": []
+    },
+    {
+      "name": "432-Hz paid Relax placement cannot borrow free Frequencies placement",
+      "passed": true,
+      "routes": [
+        "/app/upgrade"
+      ],
+      "toggleCalls": [],
+      "pauseCalls": 0,
+      "resumeCalls": 0,
+      "simulatedStarts": 0,
+      "boundaryDenials": 0,
+      "timers": []
+    },
+    {
+      "name": "Breathe handler supplies explicit free breathe-zero provenance",
+      "passed": true,
+      "routes": [],
+      "toggleCalls": [
+        {
+          "track": "breath_pacer",
+          "options": {
+            "sectionId": "breathe",
+            "indexInCategory": 0
+          }
+        }
+      ],
+      "pauseCalls": 0,
+      "resumeCalls": 0,
+      "simulatedStarts": 1,
+      "boundaryDenials": 0,
+      "timers": []
+    },
+    {
+      "name": "paused bar delegates resume without replacing original category and revoked selection cannot start",
+      "passed": true,
+      "routes": [],
+      "toggleCalls": [],
+      "pauseCalls": 0,
+      "resumeCalls": 1,
+      "simulatedStarts": 0,
+      "boundaryDenials": 1,
+      "timers": []
+    },
+    {
+      "name": "playing bar delegates pause without a play/resume request",
+      "passed": true,
+      "routes": [],
+      "toggleCalls": [],
+      "pauseCalls": 1,
+      "resumeCalls": 0,
+      "simulatedStarts": 0,
+      "boundaryDenials": 0,
+      "timers": []
+    },
+    {
+      "name": "cleared player selection keeps timer preference display and timer setter accepts choice or none",
+      "passed": true,
+      "routes": [],
+      "toggleCalls": [],
+      "pauseCalls": 0,
+      "resumeCalls": 0,
+      "simulatedStarts": 0,
+      "boundaryDenials": 0,
+      "timers": [
+        15,
+        null
+      ]
+    }
+  ],
+  "failures": [],
+  "catalogBindings": [
+    {
+      "track": "binaural",
+      "sectionId": "relax",
+      "indexInCategory": 0,
+      "passed": true
+    },
+    {
+      "track": "waves",
+      "sectionId": "relax",
+      "indexInCategory": 1,
+      "passed": true
+    },
+    {
+      "track": "meditation_432hz",
+      "sectionId": "relax",
+      "indexInCategory": 2,
+      "passed": true
+    },
+    {
+      "track": "tibetan_bowls",
+      "sectionId": "relax",
+      "indexInCategory": 3,
+      "passed": true
+    },
+    {
+      "track": "delta_sleep",
+      "sectionId": "sleep",
+      "indexInCategory": 0,
+      "passed": true
+    },
+    {
+      "track": "pink_noise",
+      "sectionId": "sleep",
+      "indexInCategory": 1,
+      "passed": true
+    },
+    {
+      "track": "brown_noise",
+      "sectionId": "sleep",
+      "indexInCategory": 2,
+      "passed": true
+    },
+    {
+      "track": "rain",
+      "sectionId": "sleep",
+      "indexInCategory": 3,
+      "passed": true
+    },
+    {
+      "track": "brown_noise",
+      "sectionId": "focus",
+      "indexInCategory": 0,
+      "passed": true
+    },
+    {
+      "track": "pink_noise",
+      "sectionId": "focus",
+      "indexInCategory": 1,
+      "passed": true
+    },
+    {
+      "track": "fireplace",
+      "sectionId": "focus",
+      "indexInCategory": 2,
+      "passed": true
+    },
+    {
+      "track": "rain",
+      "sectionId": "focus",
+      "indexInCategory": 3,
+      "passed": true
+    },
+    {
+      "track": "meditation_432hz",
+      "sectionId": "frequencies",
+      "indexInCategory": 0,
+      "passed": true
+    },
+    {
+      "track": "solfeggio_528hz",
+      "sectionId": "frequencies",
+      "indexInCategory": 1,
+      "passed": true
+    },
+    {
+      "track": "solfeggio_396hz",
+      "sectionId": "frequencies",
+      "indexInCategory": 2,
+      "passed": true
+    },
+    {
+      "track": "solfeggio_639hz",
+      "sectionId": "frequencies",
+      "indexInCategory": 3,
+      "passed": true
+    },
+    {
+      "track": "theta_meditation",
+      "sectionId": "frequencies",
+      "indexInCategory": 4,
+      "passed": true
+    }
+  ],
+  "fetchCalls": 0,
+  "playerServiceStatus": "Actual player is not executed by this UI probe; parent owns its separate unresolved reentrant handoff review.",
+  "afterSourceSha256": {
+    "src/pages/SoundRoom.tsx": "83fd4ed46bf8ae85facd20d791cbeb66558b36ff1d9021febb038d2964530238",
+    "src/services/soundRoomAccess.ts": "e34e384f12abbc6b8185a377e9aa3c212832182d97b9f773ee973d9abe4c1199",
+    "src/data/soundRoom.ts": "303649d8c09a86043087f6dba619fb2ebbb17fd7ac455b5d8fad5690aca6d6f4",
+    "src/services/entitlements.ts": "ee4a9c923f94154d4a3e4809980929474ab3289929d56ee067790010fa691219",
+    "src/services/purchases.ts": "20166152294fdaba6c351e282c1b738a47b775256677030af518a417e1da257d"
+  },
+  "sourceUnchangedDuringProbe": true,
+  "total": 15,
+  "passed": 15,
+  "failed": 0
+}

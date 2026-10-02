@@ -1,0 +1,128 @@
+{
+  "decision": "PASS for bounded Sound Room entitlement/ownership change; no publication authorization",
+  "timestampUTC": "2026-10-02T11:29:15.188146+00:00",
+  "reviewedCommit": "5adcb6a22bda7a087e1718b2cf2eeb105e1248ba",
+  "baseCommit": "8fe9e55b602cc757646aa2c51baac8e176284840",
+  "sourceHashes": {
+    "src/services/soundRoomPlayer.ts": "2911dd8b1ccc510f3a6757f43ddb3aa2b9d52d3d209e12ee2f0cf44c96a039f4",
+    "src/services/soundRoomAccess.ts": "e34e384f12abbc6b8185a377e9aa3c212832182d97b9f773ee973d9abe4c1199",
+    "src/pages/SoundRoom.tsx": "83fd4ed46bf8ae85facd20d791cbeb66558b36ff1d9021febb038d2964530238",
+    "tests/sound-room-player-access.test.ts": "3ce43f3cf0edd4c73885ccd53dd673256c8ec93fce809580045bd9e2585c4092",
+    "tests/helpers/soundSynthesizerFixture.ts": "191871a9f5a61de0e8c1765b59f651d2581381a645bdf3cd6be4151d8a00022b",
+    "tests/sound-synthesizer.test.ts": "2d8d4bf20b7fff809045b9a657bb69fd0d6d17446d0fcfa70f05e1ed0cad5fab",
+    "src/utils/soundSynthesizer.ts": "db278da38a4a0d1b540268e10cee36b92522fcf0194c690b07e866e400b1ff92",
+    "src/data/soundRoom.ts": "303649d8c09a86043087f6dba619fb2ebbb17fd7ac455b5d8fad5690aca6d6f4",
+    "src/services/entitlements.ts": "ee4a9c923f94154d4a3e4809980929474ab3289929d56ee067790010fa691219",
+    "src/services/purchases.ts": "20166152294fdaba6c351e282c1b738a47b775256677030af518a417e1da257d",
+    "src/services/cloudSync.ts": "74f6405e6fe70cf89f7ac64473565a8d812ebc8180d3a0dc7e214e8183713dce",
+    "src/store/useApp.tsx": "0576b4a1b6c849049f88e8d9c043143c667e1aabf9357bbfba35fe79f5ac6497",
+    "package.json": "614199dd79f59c8b11a3dfc9b9a7ff4c8206666a92b8e1ec9da611647aa4d8f1",
+    "package-lock.json": "d08110baa951e3a716d06e24009dd278eca19a85eea967d0dd1d1c6dcf2eab22"
+  },
+  "sourceUnchangedDuringFinalChecks": true,
+  "scopeAudit": {
+    "changedTrackedFiles": [
+      "src/pages/SoundRoom.tsx",
+      "src/services/soundRoomAccess.ts",
+      "src/services/soundRoomPlayer.ts",
+      "tests/helpers/soundSynthesizerFixture.ts",
+      "tests/sound-room-player-access.test.ts",
+      "tests/sound-synthesizer.test.ts"
+    ],
+    "expectedOnlySixFiles": true,
+    "cleanWorktree": true,
+    "protectedRuntimeUnchanged": [
+      "soundSynthesizer engine",
+      "purchases SDK/service and identity policy",
+      "entitlement/pricing policy",
+      "catalogue",
+      "CloudSync/storage/useApp",
+      "package/lockfiles",
+      "native config and deployment workflows",
+      "styles and approved assets"
+    ]
+  },
+  "baseline": {
+    "originalDefectsReproduced": 3,
+    "total": 3,
+    "source": {
+      "src/services/soundRoomPlayer.ts": "a148bef6797cb62ebe682d95208eec5cad1282b0556d99a520c275d5ba1ffab7",
+      "src/pages/SoundRoom.tsx": "43224106f060f11106b334ec8749aebf5e2076b5951e37349fdb12e320411cf8",
+      "src/utils/soundSynthesizer.ts": "db278da38a4a0d1b540268e10cee36b92522fcf0194c690b07e866e400b1ff92",
+      "src/data/soundRoom.ts": "303649d8c09a86043087f6dba619fb2ebbb17fd7ac455b5d8fad5690aca6d6f4",
+      "src/services/entitlements.ts": "ee4a9c923f94154d4a3e4809980929474ab3289929d56ee067790010fa691219"
+    },
+    "fetchCalls": 0,
+    "meaning": "Three original actual-player defects intentionally reproduced under synthetic purchase/audio adapters; original observations preserved unchanged."
+  },
+  "interimFindings": {
+    "playerHash": "d64f3b16f34d73bff6d800ed061bae6a62f53f954322454a88141e67da4348a8",
+    "total": 53,
+    "passed": 51,
+    "failed": 2,
+    "severity": "P2 bounded synthetic reentrant subscriber ownership handoff",
+    "resolution": "Final v2 ownership + emission checks fix both preserved same-track pause/timer publication reproductions; same actual probe bytes now pass."
+  },
+  "finalActualPlayerProbes": {
+    "total": 53,
+    "passed": 53,
+    "failed": 0,
+    "fetchCalls": 0,
+    "method": "Actual player TypeScript loaded with only audio and purchase adapter imports replaced by synthetic local objects; actual catalog/helper logic retained"
+  },
+  "finalSourceExtractedUIProbes": {
+    "total": 15,
+    "passed": 15,
+    "failed": 0,
+    "fetchCalls": 0,
+    "catalogBindings": 17,
+    "method": "Actual source-extracted SoundCard, BreathePanel, PlayerBar and timer handlers, lock expressions and map prop expressions in a VM. Synthetic player boundary uses actual pure resolver/access helper. No mounted React, actual player, synthesizer, audio, SDK, provider or native device.",
+    "earlierPlayerHoldResolved": "UI report preserves its earlier independent-player hold. That separate hold is resolved by final2911 player probe53/53 here."
+  },
+  "finalFocusedActualEngineTests": {
+    "command": "node --import tsx --test tests/sound-room-player-access.test.ts tests/sound-synthesizer.test.ts tests/sound-room.test.ts",
+    "exitCode": 0,
+    "counts": {
+      "tests": 62,
+      "pass": 62,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "method": "Actual player and production synthesizer with synthetic local AudioContext, automation, sources and timers; no real rendering/native SDK."
+  },
+  "reviewedBehavior": [
+    "Live account confirmation and Essentials+ gate, independent of optional ready/offerings reload; web/unconfigured stays open.",
+    "Downgrade/unconfirmed/revision change clears only owned restricted selection and graph; no restored selection or regrant autoplay; timer preference retained.",
+    "Validated origin preserves free brown-noise and432Hz duplicate placements; paid-origin pause/resume cannot silently become free.",
+    "Observer survives navigation/unsubscription; direct play/toggle/resume/timer reads fresh state.",
+    "External same/different-track replacement, including reentrant pause/timer state publication, keeps its graph and envelope.",
+    "Normal external controls, free timers, sleep fade and volume0 remain functional; failed/no-op audio start does not publish false playing."
+  ],
+  "limitations": [
+    "No actual native device, RevenueCat SDK/customer change, real audio output/quality or Web Audio implementation differences tested.",
+    "UI probes execute actual extracted handlers/expressions with a synthetic player boundary; they do not mount React.",
+    "No parent publication checkpoint, merge, push, deployment or provider call performed. Separate cloud caller/dirty-confirmation followup remains held outside this SoundRoom assessment."
+  ],
+  "evidenceSHA256": {
+    "baseline.log": "8bdd0e18d4c094083165b507e6e3f87656a0900b9490babf8608c8a55dd348d5",
+    "baseline-report.json": "60a22c7402c44f05401e33f5c0d6c70b8c958e15ecf3db2270446cf179e98109",
+    "interim.log": "54025011a283482e5b37a2a314dec3110284edc3f35a5403ab70147550a03416",
+    "interim-report.json": "59f0a5969f16e30fbee17664c4ebb383e2930ae3ac5143ebad118f2d375ca033",
+    "interim-v2.log": "61cde01cd4a26f90530bcc9edbe910e94df7d21b32650c648711f9c4f775e2d4",
+    "interim-v2-report.json": "b98b1a11ae4bc46339a3952ff88bcb5b104c987a8e4915682135e7086bcb8707",
+    "interim-v3.log": "87aa98529ea73bda0eee7ca2eefff61bb3d22f0c4736839b41fd79e4a9303d2a",
+    "interim-v3-report.json": "7c1fbe1bef52b7a1c2ffad7230a1d40cfbf77c72928ca9a83d119ff098d2c35f",
+    "handoff-findings-receipt.json": "034b2e518e9470686f420456f3f4998d6e7a00f0e1cd0be344cbb43a90a1486d",
+    "probes.mts": "91a39cdcf1ec2a900f2be127e771fbae53ebc6b71d807b1901139923d88a5aa2",
+    "final-probes.log": "91817ec755750bf94782923823ea4842d3bbac76a53f12c763a8cc85117561ac",
+    "final-report.json": "aa497329f9796fa73fa650c39f0854964ed51a9daaa64be3256dd0cee2834307",
+    "final-focused.log": "eee44c3aac104d9a59fb912293854614b0e625ebb7c2f596267269164af099c6",
+    "source-before-final.json": "3938d9fa5836904bb156f88ef898e23ba15c6eefc72a22be33b198f6ecbc6c7c",
+    "source-after-final.json": "c20865bc9ef35d2777280be56ac577349334f6fc99ca54d3cb056044a61b8cbc",
+    "ui/ui-probes.mjs": "14b05600788e5409f463053076ed1042d7c2f15b7106bde11de1f9b9e9134f8a",
+    "ui/extracted-ui.ts.txt": "c0d8e1da4a4ac3ff844a4183ee4a83eef4a128e5ea777ee6c0badbd4b3b7f169",
+    "ui/ui-report.json": "c95883a5d799d04d92f0c3212b0d7cbf26939fa2db3488cdf43a685dc132097a",
+    "ui/source-and-evidence-sha256.json": "0adee93c1867829fb9d07f2f992d3061d539650ca84426152449193d0bfe1eb7"
+  }
+}

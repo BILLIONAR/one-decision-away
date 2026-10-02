@@ -1,0 +1,44 @@
+import React, { useSyncExternalStore } from 'react';
+import { createRoot } from 'react-dom/client';
+import { SoundRoom } from '/workspace/oda-soundroom-entitlement-fix/src/pages/SoundRoom';
+import { soundRoomPlayer } from '/workspace/oda-soundroom-entitlement-fix/src/services/soundRoomPlayer';
+import { SOUND_ROOM_SECTIONS } from '/workspace/oda-soundroom-entitlement-fix/src/data/soundRoom';
+import { setLocale, ensureLocaleLoaded, t } from '/workspace/oda-soundroom-entitlement-fix/src/i18n';
+import { mockSnapshot, setPurchases, soundSynthesizer, app, routeStore } from './mocks';
+
+const controls = {
+  snapshot: () => ({ ...mockSnapshot(), player: soundRoomPlayer.getSnapshot() }),
+  patchPurchases: setPurchases,
+  navigate: app.setActiveRoute,
+  setLocale: async (locale: 'en' | 'tr' | 'es') => { setLocale(locale); await ensureLocaleLoaded(locale); },
+  translate: (source: string) => t(source),
+  catalogue: () => SOUND_ROOM_SECTIONS.map(section => ({ id: section.id, label: t(section.label), sounds: section.sounds.map((sound, index) => ({ track: sound.track, name: t(sound.name), index })) })),
+  play: (track: any, options?: any) => soundRoomPlayer.play(track, options),
+  pause: () => soundRoomPlayer.pause(), resume: () => soundRoomPlayer.resume(),
+  setTimer: (minutes: number | null) => soundRoomPlayer.setTimer(minutes), setVolume: (value: number) => soundRoomPlayer.setVolume(value),
+  externalPlay: (track: any) => soundSynthesizer.playAmbient(track), externalStop: () => soundSynthesizer.stopAmbient(),
+  handoffOnNextEmission: (track: any) => { const remove = soundRoomPlayer.subscribe(() => { remove(); soundSynthesizer.playAmbient(track); }); },
+};
+(window as any).ODA_SOUND_FIXTURE = controls;
+document.getElementById('fixture-controls')!.innerHTML = `<summary>Synthetic SoundRoom entitlement fixture — no SDK or real audio</summary>
+  <label>Language <select id="fixture-locale"><option>en</option><option>tr</option><option>es</option></select></label>
+  <button data-action="sound">SoundRoom</button><button data-action="away">Navigate away</button>
+  <button data-action="free">Free</button><button data-action="essentials">Confirmed Essentials</button><button data-action="unknown">Unknown identity</button>
+  <p>Actual SoundRoom/player/access helpers, synthetic purchase state and engine. Unsplash image requests are intentionally blocked by the automated harness.</p>`;
+document.getElementById('fixture-locale')!.addEventListener('change', event => void controls.setLocale((event.target as HTMLSelectElement).value as any));
+document.getElementById('fixture-controls')!.addEventListener('click', event => {
+  const action = (event.target as HTMLElement).dataset.action;
+  if (action === 'sound' || action === 'away') app.setActiveRoute(action === 'sound' ? '/app/sound' : '/app/away');
+  else if (action === 'free') setPurchases({ available: true, ready: true, identityConfirmed: true, tier: 'free' });
+  else if (action === 'essentials') setPurchases({ available: true, ready: true, identityConfirmed: true, tier: 'essentials' });
+  else if (action === 'unknown') setPurchases({ available: true, ready: false, identityConfirmed: false, tier: 'essentials', identityRevision: mockSnapshot().purchases.identityRevision + 1 });
+});
+function Router() {
+  useSyncExternalStore(routeStore.subscribe, routeStore.getSnapshot, routeStore.getSnapshot);
+  return routeStore.route() === '/app/sound' ? <SoundRoom /> : <section id="fixture-away">
+    <h1>Synthetic route: {routeStore.route()}</h1>
+    <p>SoundRoom is unmounted. The actual player and its purchase subscription remain process-lived.</p>
+    <button onClick={() => app.setActiveRoute('/app/sound')}>Return to SoundRoom</button>
+  </section>;
+}
+createRoot(document.getElementById('root')!).render(<Router />);

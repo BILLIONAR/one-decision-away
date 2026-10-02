@@ -1,0 +1,225 @@
+{
+  "mode": "guard",
+  "root": "/workspace/oda-soundroom-entitlement-fix",
+  "head": "8fe9e55b602cc757646aa2c51baac8e176284840",
+  "method": "Actual player TypeScript loaded with only audio and purchase adapter imports replaced by synthetic local objects; actual catalog/helper logic retained",
+  "source": {
+    "src/services/soundRoomPlayer.ts": "b5f0aeae789ebe37a7af4caf66133c2d46d0ac145d118bf5472a9db1091a3ed0",
+    "src/pages/SoundRoom.tsx": "a199ef5aaddbda8a2e41edcbd287d997122c48d28844d7847ae5fd13c42a0bc0",
+    "src/utils/soundSynthesizer.ts": "db278da38a4a0d1b540268e10cee36b92522fcf0194c690b07e866e400b1ff92",
+    "src/data/soundRoom.ts": "303649d8c09a86043087f6dba619fb2ebbb17fd7ac455b5d8fad5690aca6d6f4",
+    "src/services/entitlements.ts": "ee4a9c923f94154d4a3e4809980929474ab3289929d56ee067790010fa691219",
+    "src/services/soundRoomAccess.ts": "e34e384f12abbc6b8185a377e9aa3c212832182d97b9f773ee973d9abe4c1199"
+  },
+  "total": 51,
+  "passed": 51,
+  "failed": 0,
+  "fetchCalls": 0,
+  "nativeSDKOrRealAudioTested": false,
+  "results": [
+    {
+      "name": "paid playback downgrade revokes audio, selection, sleep and deadline without losing timer choice",
+      "passed": true
+    },
+    {
+      "name": "paused paid selection downgrade cannot resume via retained stale player closure",
+      "passed": true
+    },
+    {
+      "name": "fresh playback start reads current entitlement even without a purchase event",
+      "passed": true
+    },
+    {
+      "name": "essentials permits every restricted catalog placement",
+      "passed": true
+    },
+    {
+      "name": "pro permits every restricted catalog placement",
+      "passed": true
+    },
+    {
+      "name": "coach permits every restricted catalog placement",
+      "passed": true
+    },
+    {
+      "name": "web unconfigured capability opens paid placement without confirmed identity",
+      "passed": true
+    },
+    {
+      "name": "web unconfigured paid-origin playback survives identity revision",
+      "passed": true
+    },
+    {
+      "name": "loss of identity confirmation revokes cached paid tier",
+      "passed": true
+    },
+    {
+      "name": "unconfirmed identity with cached Pro cannot freshly start a paid sound",
+      "passed": true
+    },
+    {
+      "name": "confirmed paid entitlement survives pricing readiness reload without downgrade",
+      "passed": true
+    },
+    {
+      "name": "confirmed cached Essentials can freshly start while offerings readiness is false",
+      "passed": true
+    },
+    {
+      "name": "confirmed paused paid entitlement resumes during same-identity pricing retry",
+      "passed": true
+    },
+    {
+      "name": "paid playing selection expires across paid to paid identity revision",
+      "passed": true
+    },
+    {
+      "name": "paid paused selection expires across paid to paid identity revision",
+      "passed": true
+    },
+    {
+      "name": "paid ended selection expires across paid to paid identity revision",
+      "passed": true
+    },
+    {
+      "name": "free retained selection stays across downgrade and preserves timed pause remainder",
+      "passed": true
+    },
+    {
+      "name": "free duplicate placement brown_noise stays usable through downgrade",
+      "passed": true
+    },
+    {
+      "name": "free duplicate placement meditation_432hz stays usable through downgrade",
+      "passed": true
+    },
+    {
+      "name": "explicit paid duplicate placement brown_noise remains restricted",
+      "passed": true
+    },
+    {
+      "name": "explicit paid duplicate placement meditation_432hz remains restricted",
+      "passed": true
+    },
+    {
+      "name": "stale paid-origin toggle cannot pause current free duplicate graph",
+      "passed": true
+    },
+    {
+      "name": "paid duplicate paused selection cannot downgrade to free no-origin resume",
+      "passed": true
+    },
+    {
+      "name": "incomplete or nonnumeric provenance cannot claim free duplicate {\"sectionId\":\"focus\"}",
+      "passed": true
+    },
+    {
+      "name": "incomplete or nonnumeric provenance cannot claim free duplicate {\"indexInCategory\":0}",
+      "passed": true
+    },
+    {
+      "name": "incomplete or nonnumeric provenance cannot claim free duplicate {\"sectionId\":\"focus\",\"indexInCategory\":\"0\"}",
+      "passed": true
+    },
+    {
+      "name": "incomplete or nonnumeric provenance cannot claim free duplicate {\"sectionId\":\"focus\",\"indexInCategory\":null}",
+      "passed": true
+    },
+    {
+      "name": "no-origin brown_noise uses an actual free catalog placement",
+      "passed": true
+    },
+    {
+      "name": "no-origin meditation_432hz uses an actual free catalog placement",
+      "passed": true
+    },
+    {
+      "name": "no-origin waves uses an actual free catalog placement",
+      "passed": true
+    },
+    {
+      "name": "free account rejects paid/mismatched/malformed origin {\"sectionId\":\"frequencies\",\"indexInCategory\":2}",
+      "passed": true
+    },
+    {
+      "name": "free account rejects paid/mismatched/malformed origin {\"sectionId\":\"frequencies\",\"indexInCategory\":0}",
+      "passed": true
+    },
+    {
+      "name": "free account rejects paid/mismatched/malformed origin {\"sectionId\":\"breathe\",\"indexInCategory\":0}",
+      "passed": true
+    },
+    {
+      "name": "free account rejects paid/mismatched/malformed origin {\"sectionId\":\"frequencies\",\"indexInCategory\":-1}",
+      "passed": true
+    },
+    {
+      "name": "free account rejects paid/mismatched/malformed origin {\"sectionId\":\"frequencies\",\"indexInCategory\":0.5}",
+      "passed": true
+    },
+    {
+      "name": "free account rejects paid/mismatched/malformed origin {\"sectionId\":\"bogus\",\"indexInCategory\":0}",
+      "passed": true
+    },
+    {
+      "name": "no-origin paid-only or unknown solfeggio_396hz cannot start under gating",
+      "passed": true
+    },
+    {
+      "name": "no-origin paid-only or unknown theta_meditation cannot start under gating",
+      "passed": true
+    },
+    {
+      "name": "no-origin paid-only or unknown unknown-track cannot start under gating",
+      "passed": true
+    },
+    {
+      "name": "regrant never autoplays or restores revoked paid selection",
+      "passed": true
+    },
+    {
+      "name": "external Focus rain graph survives SoundRoom downgrade/account change",
+      "passed": true
+    },
+    {
+      "name": "external Focus solfeggio_396hz graph survives SoundRoom downgrade/account change",
+      "passed": true
+    },
+    {
+      "name": "restricted paused room selection cannot stop later Focus graph on revoke",
+      "passed": true
+    },
+    {
+      "name": "free timer and volume0 remain effective through access changes",
+      "passed": true
+    },
+    {
+      "name": "fresh resume gate revokes paid selection even if change event was absent",
+      "passed": true
+    },
+    {
+      "name": "fresh timer control revokes unauthorized retained graph without waiting for a purchase event",
+      "passed": true
+    },
+    {
+      "name": "player process observer survives all React listener unsubscriptions",
+      "passed": true
+    },
+    {
+      "name": "synchronous entitlement loss during engine start cannot publish retained paid playback",
+      "passed": true
+    },
+    {
+      "name": "synchronous identity revision during engine start cannot publish old paid selection",
+      "passed": true
+    },
+    {
+      "name": "audio start no-op cannot report accepted playing selection",
+      "passed": true
+    },
+    {
+      "name": "silence cannot become a playing SoundRoom selection",
+      "passed": true
+    }
+  ]
+}

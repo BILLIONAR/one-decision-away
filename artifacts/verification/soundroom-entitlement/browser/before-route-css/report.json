@@ -1,0 +1,2216 @@
+{
+  "at": "2026-10-02T11:30:15.367Z",
+  "baseURL": "http://127.0.0.1:4192",
+  "browser": "151.0.7922.173",
+  "sourceHashes": {
+    "src/pages/SoundRoom.tsx": "83fd4ed46bf8ae85facd20d791cbeb66558b36ff1d9021febb038d2964530238",
+    "src/services/soundRoomPlayer.ts": "2911dd8b1ccc510f3a6757f43ddb3aa2b9d52d3d209e12ee2f0cf44c96a039f4",
+    "src/services/soundRoomAccess.ts": "e34e384f12abbc6b8185a377e9aa3c212832182d97b9f773ee973d9abe4c1199",
+    "src/services/entitlements.ts": "ee4a9c923f94154d4a3e4809980929474ab3289929d56ee067790010fa691219",
+    "src/data/soundRoom.ts": "303649d8c09a86043087f6dba619fb2ebbb17fd7ac455b5d8fad5690aca6d6f4",
+    "src/services/soundRoom.ts": "f5d65b15d8b0da6aa42bb81073efb0670d8569eb9866cffb105e71e52c070175"
+  },
+  "css": {
+    "path": "assets/index-D6Ptr9gO.css",
+    "sha256": "a5e714416151984e402601fc542cbea6426cec029d2a1f2d9619762421ecb336"
+  },
+  "checks": [
+    {
+      "name": "Native free paid-card click routes to Upgrade without invoking the synthetic audio engine",
+      "passed": true
+    },
+    {
+      "name": "Brown-noise free Focus card plays; duplicate paid Sleep origin routes to Upgrade without replacing it",
+      "passed": true
+    },
+    {
+      "name": "432Hz free Frequencies card plays; duplicate paid Relax origin remains guarded",
+      "passed": true
+    },
+    {
+      "name": "Confirmed Essentials admits paid card while offerings are not ready",
+      "passed": true
+    },
+    {
+      "name": "Playing paid selection downgrades and hard-clears owned engine/timer with SoundRoom unmounted",
+      "passed": true
+    },
+    {
+      "name": "Regrant causes no autoplay/revival; only a new explicit paid-card click starts again",
+      "passed": true
+    },
+    {
+      "name": "Paused paid selection revokes on unknown identity, removes delayed stop and cannot resume",
+      "passed": true
+    },
+    {
+      "name": "Confirmed paid account revision change clears the prior owned selection even while route is away",
+      "passed": true
+    },
+    {
+      "name": "Same-account confirmed Essentials survives ready=false and actual UI pause/restart",
+      "passed": true
+    },
+    {
+      "name": "A genuinely free duplicate origin survives unknown/revised identity and remains restartable",
+      "passed": true
+    },
+    {
+      "name": "Actual volume/timer controls preserve zero through restart and apply latest requested volume",
+      "passed": true
+    },
+    {
+      "name": "Actual player timer expiry settles silently with no scheduled synthetic callback",
+      "passed": true
+    },
+    {
+      "name": "Pause publication cannot fade an external same-track replacement graph",
+      "passed": true
+    },
+    {
+      "name": "Timer publication and downgrade preserve the external controller graph without a stale owned countdown",
+      "passed": true
+    },
+    {
+      "name": "Paid click reads latest identity even before a purchase notification rerenders the UI",
+      "passed": true
+    },
+    {
+      "name": "en320: real SoundRoom labels/player controls fit with expected photo fallbacks",
+      "passed": true,
+      "problems": [],
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Brown noiseA deep, low rumble, like a distant waterfall.Many people find a low, steady wall of sound easier to work in than silence.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 114
+        },
+        {
+          "text": "Pink noiseAn even, soft hiss, gentler and deeper than white noise.Masks voices and background noise, so less pulls at your attention.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 114
+        },
+        {
+          "text": "ProFireplaceThe low crackle of a wood fire.A cosy, irregular crackle that keeps a quiet room from feeling empty.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 88
+        },
+        {
+          "text": "ProRainLight, steady rain against a window.A soft, varied texture that covers distractions without asking for attention.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 112
+        },
+        {
+          "text": "Warm drone · 432 HzA warm 432 Hz drone with a soft bowl every half minute.Some musicians prefer tuning to 432 Hz. Claims that it heals are not supported by evidence.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 138
+        },
+        {
+          "text": "528 HzA 528 Hz tone with a soft shimmer and bowl strikes.Called the “love frequency” in sound-healing circles. Enjoy it as a pleasant tone.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 114
+        },
+        {
+          "text": "Pro396 HzA grounded 396 Hz tone with low harmonics.Linked to “letting go of fear” in the solfeggio tradition.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 88
+        },
+        {
+          "text": "Pro639 HzA bright 639 Hz tone with gentle chimes.Linked to “connection” in the solfeggio tradition.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 88
+        },
+        {
+          "text": "ProTheta beat · 6 HzA 6 Hz binaural beat on warm, low tones.Theta rhythms are linked with drowsy, dreamy states. Many people find it deeply restful.Use headphones for binaural sounds",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 150
+        },
+        {
+          "text": "button",
+          "x": 16,
+          "right": 36,
+          "width": 20,
+          "height": 20
+        },
+        {
+          "text": "range",
+          "x": 16,
+          "right": 145,
+          "width": 129,
+          "height": 16
+        },
+        {
+          "text": "No timer10 min20 min30 min60 min",
+          "x": 16,
+          "right": 98,
+          "width": 82,
+          "height": 23
+        }
+      ],
+      "tabs": {
+        "clientWidth": 288,
+        "scrollWidth": 288,
+        "x": 16,
+        "right": 304
+      },
+      "fontStatus": "loaded",
+      "photoFallbacks": 11
+    },
+    {
+      "name": "en390: real SoundRoom labels/player controls fit with expected photo fallbacks",
+      "passed": true,
+      "problems": [],
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Brown noiseA deep, low rumble, like a distant waterfall.Many people find a low, steady wall of sound easier to work in than silence.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 90
+        },
+        {
+          "text": "Pink noiseAn even, soft hiss, gentler and deeper than white noise.Masks voices and background noise, so less pulls at your attention.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 90
+        },
+        {
+          "text": "ProFireplaceThe low crackle of a wood fire.A cosy, irregular crackle that keeps a quiet room from feeling empty.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "ProRainLight, steady rain against a window.A soft, varied texture that covers distractions without asking for attention.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "Warm drone · 432 HzA warm 432 Hz drone with a soft bowl every half minute.Some musicians prefer tuning to 432 Hz. Claims that it heals are not supported by evidence.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 114
+        },
+        {
+          "text": "528 HzA 528 Hz tone with a soft shimmer and bowl strikes.Called the “love frequency” in sound-healing circles. Enjoy it as a pleasant tone.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 90
+        },
+        {
+          "text": "Pro396 HzA grounded 396 Hz tone with low harmonics.Linked to “letting go of fear” in the solfeggio tradition.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "Pro639 HzA bright 639 Hz tone with gentle chimes.Linked to “connection” in the solfeggio tradition.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "ProTheta beat · 6 HzA 6 Hz binaural beat on warm, low tones.Theta rhythms are linked with drowsy, dreamy states. Many people find it deeply restful.Use headphones for binaural sounds",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 150
+        },
+        {
+          "text": "button",
+          "x": 16,
+          "right": 36,
+          "width": 20,
+          "height": 20
+        },
+        {
+          "text": "range",
+          "x": 16,
+          "right": 145,
+          "width": 129,
+          "height": 16
+        },
+        {
+          "text": "No timer10 min20 min30 min60 min",
+          "x": 16,
+          "right": 98,
+          "width": 82,
+          "height": 23
+        }
+      ],
+      "tabs": {
+        "clientWidth": 358,
+        "scrollWidth": 358,
+        "x": 16,
+        "right": 374
+      },
+      "fontStatus": "loaded",
+      "photoFallbacks": 11
+    },
+    {
+      "name": "tr320: real SoundRoom labels/player controls fit with expected photo fallbacks",
+      "passed": true,
+      "problems": [],
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Kahverengi gürültüUzaktaki bir şelale gibi derin, pes bir uğultu.Pek çok kişi pes ve sabit bir ses duvarıyla çalışmayı sessizlikten daha kolay buluyor.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 114
+        },
+        {
+          "text": "Pembe gürültüBeyaz gürültüden daha yumuşak ve derin, dengeli bir hışırtı.Konuşmaları ve arka plan gürültüsünü örter; dikkatin daha az dağılır.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 138
+        },
+        {
+          "text": "ProŞömineOdun ateşinin hafif çıtırtısı.Sessiz bir odayı boş hissettirmeyen sıcacık, düzensiz bir çıtırtı.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 112
+        },
+        {
+          "text": "ProYağmurPencereye vuran hafif, düzenli yağmur.Dikkatini çekmeden çevredeki sesleri örten, yumuşak ve değişken bir doku.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 112
+        },
+        {
+          "text": "Sıcak ton · 432 HzYarım dakikada bir yumuşak bir çanak sesinin eşlik ettiği, sıcak ve sürekli bir 432 Hz tonu.Bazı müzisyenler akordu 432 Hz'e göre yapmayı tercih ediyor. İyileştirdiği iddiaları kanıtlarla desteklenmiyor.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 162
+        },
+        {
+          "text": "528 HzYumuşak bir parıltı ve çanak vuruşlarıyla 528 Hz'lik bir ton.Sesle şifa çevrelerinde “aşk frekansı” diye anılır. Hoş bir ton olarak tadını çıkar.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 114
+        },
+        {
+          "text": "Pro396 HzPes armonikli, dingin bir 396 Hz tonu.Solfej geleneğinde “korkuyu bırakmak” ile ilişkilendirilir.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 88
+        },
+        {
+          "text": "Pro639 HzYumuşak çınlamalarla parlak bir 639 Hz tonu.Solfej geleneğinde “bağ kurmak” ile ilişkilendirilir.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 88
+        },
+        {
+          "text": "ProTeta vuruşu · 6 HzSıcak, pes tonlar üzerinde 6 Hz'lik bir binaural vuruş.Teta ritimleri uykulu, rüya gibi hâllerle ilişkilendirilir. Pek çok kişi bunu derinden dinlendirici buluyor.Binaural sesler için kulaklık kullan",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 174
+        },
+        {
+          "text": "button",
+          "x": 16,
+          "right": 36,
+          "width": 20,
+          "height": 20
+        },
+        {
+          "text": "range",
+          "x": 16,
+          "right": 145,
+          "width": 129,
+          "height": 16
+        },
+        {
+          "text": "Zamanlayıcı yok10 dk20 dk30 dk60 dk",
+          "x": 16,
+          "right": 152,
+          "width": 136,
+          "height": 23
+        }
+      ],
+      "tabs": {
+        "clientWidth": 288,
+        "scrollWidth": 288,
+        "x": 16,
+        "right": 304
+      },
+      "fontStatus": "loaded",
+      "photoFallbacks": 11
+    },
+    {
+      "name": "tr390: real SoundRoom labels/player controls fit with expected photo fallbacks",
+      "passed": true,
+      "problems": [],
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Kahverengi gürültüUzaktaki bir şelale gibi derin, pes bir uğultu.Pek çok kişi pes ve sabit bir ses duvarıyla çalışmayı sessizlikten daha kolay buluyor.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 114
+        },
+        {
+          "text": "Pembe gürültüBeyaz gürültüden daha yumuşak ve derin, dengeli bir hışırtı.Konuşmaları ve arka plan gürültüsünü örter; dikkatin daha az dağılır.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 90
+        },
+        {
+          "text": "ProŞömineOdun ateşinin hafif çıtırtısı.Sessiz bir odayı boş hissettirmeyen sıcacık, düzensiz bir çıtırtı.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "ProYağmurPencereye vuran hafif, düzenli yağmur.Dikkatini çekmeden çevredeki sesleri örten, yumuşak ve değişken bir doku.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "Sıcak ton · 432 HzYarım dakikada bir yumuşak bir çanak sesinin eşlik ettiği, sıcak ve sürekli bir 432 Hz tonu.Bazı müzisyenler akordu 432 Hz'e göre yapmayı tercih ediyor. İyileştirdiği iddiaları kanıtlarla desteklenmiyor.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 138
+        },
+        {
+          "text": "528 HzYumuşak bir parıltı ve çanak vuruşlarıyla 528 Hz'lik bir ton.Sesle şifa çevrelerinde “aşk frekansı” diye anılır. Hoş bir ton olarak tadını çıkar.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 114
+        },
+        {
+          "text": "Pro396 HzPes armonikli, dingin bir 396 Hz tonu.Solfej geleneğinde “korkuyu bırakmak” ile ilişkilendirilir.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "Pro639 HzYumuşak çınlamalarla parlak bir 639 Hz tonu.Solfej geleneğinde “bağ kurmak” ile ilişkilendirilir.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "ProTeta vuruşu · 6 HzSıcak, pes tonlar üzerinde 6 Hz'lik bir binaural vuruş.Teta ritimleri uykulu, rüya gibi hâllerle ilişkilendirilir. Pek çok kişi bunu derinden dinlendirici buluyor.Binaural sesler için kulaklık kullan",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 150
+        },
+        {
+          "text": "button",
+          "x": 16,
+          "right": 36,
+          "width": 20,
+          "height": 20
+        },
+        {
+          "text": "range",
+          "x": 16,
+          "right": 145,
+          "width": 129,
+          "height": 16
+        },
+        {
+          "text": "Zamanlayıcı yok10 dk20 dk30 dk60 dk",
+          "x": 16,
+          "right": 152,
+          "width": 136,
+          "height": 23
+        }
+      ],
+      "tabs": {
+        "clientWidth": 358,
+        "scrollWidth": 358,
+        "x": 16,
+        "right": 374
+      },
+      "fontStatus": "loaded",
+      "photoFallbacks": 11
+    },
+    {
+      "name": "es320: real SoundRoom labels/player controls fit with expected photo fallbacks",
+      "passed": true,
+      "problems": [],
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Ruido marrónUn rumor grave y profundo, como una cascada lejana.A muchas personas les resulta más fácil trabajar con un muro de sonido grave y constante que en silencio.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 138
+        },
+        {
+          "text": "Ruido rosaUn siseo suave y uniforme, más delicado y profundo que el ruido blanco.Tapa voces y ruido de fondo, así hay menos cosas que tiran de tu atención.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 138
+        },
+        {
+          "text": "ProChimeneaEl crepitar suave de un fuego de leña.Un crepitar acogedor e irregular que evita que una habitación silenciosa se sienta vacía.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 112
+        },
+        {
+          "text": "ProLluviaLluvia ligera y constante contra una ventana.Una textura suave y variada que tapa las distracciones sin pedir tu atención.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 112
+        },
+        {
+          "text": "Zumbido cálido · 432 HzUn zumbido cálido de 432 Hz con un cuenco suave cada medio minuto.Algunos músicos prefieren afinar a 432 Hz. Las afirmaciones de que cura no están respaldadas por la evidencia.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 162
+        },
+        {
+          "text": "528 HzUn tono de 528 Hz con un brillo suave y toques de cuenco.En los círculos de sanación con sonido la llaman la «frecuencia del amor». Disfrútala como un tono agradable.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 138
+        },
+        {
+          "text": "Pro396 HzUn tono de 396 Hz, estable y con armónicos graves.En la tradición solfeggio se asocia con «soltar el miedo».",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 112
+        },
+        {
+          "text": "Pro639 HzUn tono brillante de 639 Hz con campanillas suaves.En la tradición solfeggio se asocia con la «conexión».",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 88
+        },
+        {
+          "text": "ProPulso theta · 6 HzUn pulso binaural de 6 Hz sobre tonos cálidos y graves.Los ritmos theta se asocian con estados somnolientos y de ensoñación. A muchas personas les resulta muy reparador.Usa auriculares para los sonidos binaurales",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 222
+        },
+        {
+          "text": "button",
+          "x": 16,
+          "right": 36,
+          "width": 20,
+          "height": 20
+        },
+        {
+          "text": "range",
+          "x": 16,
+          "right": 145,
+          "width": 129,
+          "height": 16
+        },
+        {
+          "text": "Sin temporizador10 min20 min30 min60 min",
+          "x": 16,
+          "right": 159,
+          "width": 143,
+          "height": 23
+        }
+      ],
+      "tabs": {
+        "clientWidth": 288,
+        "scrollWidth": 288,
+        "x": 16,
+        "right": 304
+      },
+      "fontStatus": "loaded",
+      "photoFallbacks": 11
+    },
+    {
+      "name": "es390: real SoundRoom labels/player controls fit with expected photo fallbacks",
+      "passed": true,
+      "problems": [],
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Ruido marrónUn rumor grave y profundo, como una cascada lejana.A muchas personas les resulta más fácil trabajar con un muro de sonido grave y constante que en silencio.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 114
+        },
+        {
+          "text": "Ruido rosaUn siseo suave y uniforme, más delicado y profundo que el ruido blanco.Tapa voces y ruido de fondo, así hay menos cosas que tiran de tu atención.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 114
+        },
+        {
+          "text": "ProChimeneaEl crepitar suave de un fuego de leña.Un crepitar acogedor e irregular que evita que una habitación silenciosa se sienta vacía.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "ProLluviaLluvia ligera y constante contra una ventana.Una textura suave y variada que tapa las distracciones sin pedir tu atención.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "Zumbido cálido · 432 HzUn zumbido cálido de 432 Hz con un cuenco suave cada medio minuto.Algunos músicos prefieren afinar a 432 Hz. Las afirmaciones de que cura no están respaldadas por la evidencia.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 138
+        },
+        {
+          "text": "528 HzUn tono de 528 Hz con un brillo suave y toques de cuenco.En los círculos de sanación con sonido la llaman la «frecuencia del amor». Disfrútala como un tono agradable.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 114
+        },
+        {
+          "text": "Pro396 HzUn tono de 396 Hz, estable y con armónicos graves.En la tradición solfeggio se asocia con «soltar el miedo».",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "Pro639 HzUn tono brillante de 639 Hz con campanillas suaves.En la tradición solfeggio se asocia con la «conexión».",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "ProPulso theta · 6 HzUn pulso binaural de 6 Hz sobre tonos cálidos y graves.Los ritmos theta se asocian con estados somnolientos y de ensoñación. A muchas personas les resulta muy reparador.Usa auriculares para los sonidos binaurales",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 174
+        },
+        {
+          "text": "button",
+          "x": 16,
+          "right": 36,
+          "width": 20,
+          "height": 20
+        },
+        {
+          "text": "range",
+          "x": 16,
+          "right": 145,
+          "width": 129,
+          "height": 16
+        },
+        {
+          "text": "Sin temporizador10 min20 min30 min60 min",
+          "x": 16,
+          "right": 159,
+          "width": 143,
+          "height": 23
+        }
+      ],
+      "tabs": {
+        "clientWidth": 358,
+        "scrollWidth": 358,
+        "x": 16,
+        "right": 374
+      },
+      "fontStatus": "loaded",
+      "photoFallbacks": 11
+    },
+    {
+      "name": "Observed paid SDK/Web Audio attempts and unexpected external/errors are zero; expected Unsplash image aborts are reported separately",
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    "soundroom-en-320-top.png",
+    "soundroom-en-320-full.png",
+    "soundroom-en-390-top.png",
+    "soundroom-en-390-full.png",
+    "soundroom-tr-320-top.png",
+    "soundroom-tr-320-full.png",
+    "soundroom-tr-390-top.png",
+    "soundroom-tr-390-full.png",
+    "soundroom-es-320-top.png",
+    "soundroom-es-320-full.png",
+    "soundroom-es-390-top.png",
+    "soundroom-es-390-full.png"
+  ],
+  "layouts": [
+    {
+      "locale": "en",
+      "width": 320,
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Brown noiseA deep, low rumble, like a distant waterfall.Many people find a low, steady wall of sound easier to work in than silence.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 114
+        },
+        {
+          "text": "Pink noiseAn even, soft hiss, gentler and deeper than white noise.Masks voices and background noise, so less pulls at your attention.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 114
+        },
+        {
+          "text": "ProFireplaceThe low crackle of a wood fire.A cosy, irregular crackle that keeps a quiet room from feeling empty.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 88
+        },
+        {
+          "text": "ProRainLight, steady rain against a window.A soft, varied texture that covers distractions without asking for attention.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 112
+        },
+        {
+          "text": "Warm drone · 432 HzA warm 432 Hz drone with a soft bowl every half minute.Some musicians prefer tuning to 432 Hz. Claims that it heals are not supported by evidence.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 138
+        },
+        {
+          "text": "528 HzA 528 Hz tone with a soft shimmer and bowl strikes.Called the “love frequency” in sound-healing circles. Enjoy it as a pleasant tone.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 114
+        },
+        {
+          "text": "Pro396 HzA grounded 396 Hz tone with low harmonics.Linked to “letting go of fear” in the solfeggio tradition.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 88
+        },
+        {
+          "text": "Pro639 HzA bright 639 Hz tone with gentle chimes.Linked to “connection” in the solfeggio tradition.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 88
+        },
+        {
+          "text": "ProTheta beat · 6 HzA 6 Hz binaural beat on warm, low tones.Theta rhythms are linked with drowsy, dreamy states. Many people find it deeply restful.Use headphones for binaural sounds",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 150
+        },
+        {
+          "text": "button",
+          "x": 16,
+          "right": 36,
+          "width": 20,
+          "height": 20
+        },
+        {
+          "text": "range",
+          "x": 16,
+          "right": 145,
+          "width": 129,
+          "height": 16
+        },
+        {
+          "text": "No timer10 min20 min30 min60 min",
+          "x": 16,
+          "right": 98,
+          "width": 82,
+          "height": 23
+        }
+      ],
+      "tabs": {
+        "clientWidth": 288,
+        "scrollWidth": 288,
+        "x": 16,
+        "right": 304
+      },
+      "fontStatus": "loaded",
+      "photoFallbacks": 11
+    },
+    {
+      "locale": "en",
+      "width": 390,
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Brown noiseA deep, low rumble, like a distant waterfall.Many people find a low, steady wall of sound easier to work in than silence.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 90
+        },
+        {
+          "text": "Pink noiseAn even, soft hiss, gentler and deeper than white noise.Masks voices and background noise, so less pulls at your attention.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 90
+        },
+        {
+          "text": "ProFireplaceThe low crackle of a wood fire.A cosy, irregular crackle that keeps a quiet room from feeling empty.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "ProRainLight, steady rain against a window.A soft, varied texture that covers distractions without asking for attention.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "Warm drone · 432 HzA warm 432 Hz drone with a soft bowl every half minute.Some musicians prefer tuning to 432 Hz. Claims that it heals are not supported by evidence.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 114
+        },
+        {
+          "text": "528 HzA 528 Hz tone with a soft shimmer and bowl strikes.Called the “love frequency” in sound-healing circles. Enjoy it as a pleasant tone.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 90
+        },
+        {
+          "text": "Pro396 HzA grounded 396 Hz tone with low harmonics.Linked to “letting go of fear” in the solfeggio tradition.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "Pro639 HzA bright 639 Hz tone with gentle chimes.Linked to “connection” in the solfeggio tradition.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "ProTheta beat · 6 HzA 6 Hz binaural beat on warm, low tones.Theta rhythms are linked with drowsy, dreamy states. Many people find it deeply restful.Use headphones for binaural sounds",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 150
+        },
+        {
+          "text": "button",
+          "x": 16,
+          "right": 36,
+          "width": 20,
+          "height": 20
+        },
+        {
+          "text": "range",
+          "x": 16,
+          "right": 145,
+          "width": 129,
+          "height": 16
+        },
+        {
+          "text": "No timer10 min20 min30 min60 min",
+          "x": 16,
+          "right": 98,
+          "width": 82,
+          "height": 23
+        }
+      ],
+      "tabs": {
+        "clientWidth": 358,
+        "scrollWidth": 358,
+        "x": 16,
+        "right": 374
+      },
+      "fontStatus": "loaded",
+      "photoFallbacks": 11
+    },
+    {
+      "locale": "tr",
+      "width": 320,
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Kahverengi gürültüUzaktaki bir şelale gibi derin, pes bir uğultu.Pek çok kişi pes ve sabit bir ses duvarıyla çalışmayı sessizlikten daha kolay buluyor.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 114
+        },
+        {
+          "text": "Pembe gürültüBeyaz gürültüden daha yumuşak ve derin, dengeli bir hışırtı.Konuşmaları ve arka plan gürültüsünü örter; dikkatin daha az dağılır.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 138
+        },
+        {
+          "text": "ProŞömineOdun ateşinin hafif çıtırtısı.Sessiz bir odayı boş hissettirmeyen sıcacık, düzensiz bir çıtırtı.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 112
+        },
+        {
+          "text": "ProYağmurPencereye vuran hafif, düzenli yağmur.Dikkatini çekmeden çevredeki sesleri örten, yumuşak ve değişken bir doku.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 112
+        },
+        {
+          "text": "Sıcak ton · 432 HzYarım dakikada bir yumuşak bir çanak sesinin eşlik ettiği, sıcak ve sürekli bir 432 Hz tonu.Bazı müzisyenler akordu 432 Hz'e göre yapmayı tercih ediyor. İyileştirdiği iddiaları kanıtlarla desteklenmiyor.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 162
+        },
+        {
+          "text": "528 HzYumuşak bir parıltı ve çanak vuruşlarıyla 528 Hz'lik bir ton.Sesle şifa çevrelerinde “aşk frekansı” diye anılır. Hoş bir ton olarak tadını çıkar.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 114
+        },
+        {
+          "text": "Pro396 HzPes armonikli, dingin bir 396 Hz tonu.Solfej geleneğinde “korkuyu bırakmak” ile ilişkilendirilir.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 88
+        },
+        {
+          "text": "Pro639 HzYumuşak çınlamalarla parlak bir 639 Hz tonu.Solfej geleneğinde “bağ kurmak” ile ilişkilendirilir.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 88
+        },
+        {
+          "text": "ProTeta vuruşu · 6 HzSıcak, pes tonlar üzerinde 6 Hz'lik bir binaural vuruş.Teta ritimleri uykulu, rüya gibi hâllerle ilişkilendirilir. Pek çok kişi bunu derinden dinlendirici buluyor.Binaural sesler için kulaklık kullan",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 174
+        },
+        {
+          "text": "button",
+          "x": 16,
+          "right": 36,
+          "width": 20,
+          "height": 20
+        },
+        {
+          "text": "range",
+          "x": 16,
+          "right": 145,
+          "width": 129,
+          "height": 16
+        },
+        {
+          "text": "Zamanlayıcı yok10 dk20 dk30 dk60 dk",
+          "x": 16,
+          "right": 152,
+          "width": 136,
+          "height": 23
+        }
+      ],
+      "tabs": {
+        "clientWidth": 288,
+        "scrollWidth": 288,
+        "x": 16,
+        "right": 304
+      },
+      "fontStatus": "loaded",
+      "photoFallbacks": 11
+    },
+    {
+      "locale": "tr",
+      "width": 390,
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Kahverengi gürültüUzaktaki bir şelale gibi derin, pes bir uğultu.Pek çok kişi pes ve sabit bir ses duvarıyla çalışmayı sessizlikten daha kolay buluyor.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 114
+        },
+        {
+          "text": "Pembe gürültüBeyaz gürültüden daha yumuşak ve derin, dengeli bir hışırtı.Konuşmaları ve arka plan gürültüsünü örter; dikkatin daha az dağılır.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 90
+        },
+        {
+          "text": "ProŞömineOdun ateşinin hafif çıtırtısı.Sessiz bir odayı boş hissettirmeyen sıcacık, düzensiz bir çıtırtı.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "ProYağmurPencereye vuran hafif, düzenli yağmur.Dikkatini çekmeden çevredeki sesleri örten, yumuşak ve değişken bir doku.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "Sıcak ton · 432 HzYarım dakikada bir yumuşak bir çanak sesinin eşlik ettiği, sıcak ve sürekli bir 432 Hz tonu.Bazı müzisyenler akordu 432 Hz'e göre yapmayı tercih ediyor. İyileştirdiği iddiaları kanıtlarla desteklenmiyor.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 138
+        },
+        {
+          "text": "528 HzYumuşak bir parıltı ve çanak vuruşlarıyla 528 Hz'lik bir ton.Sesle şifa çevrelerinde “aşk frekansı” diye anılır. Hoş bir ton olarak tadını çıkar.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 114
+        },
+        {
+          "text": "Pro396 HzPes armonikli, dingin bir 396 Hz tonu.Solfej geleneğinde “korkuyu bırakmak” ile ilişkilendirilir.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "Pro639 HzYumuşak çınlamalarla parlak bir 639 Hz tonu.Solfej geleneğinde “bağ kurmak” ile ilişkilendirilir.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "ProTeta vuruşu · 6 HzSıcak, pes tonlar üzerinde 6 Hz'lik bir binaural vuruş.Teta ritimleri uykulu, rüya gibi hâllerle ilişkilendirilir. Pek çok kişi bunu derinden dinlendirici buluyor.Binaural sesler için kulaklık kullan",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 150
+        },
+        {
+          "text": "button",
+          "x": 16,
+          "right": 36,
+          "width": 20,
+          "height": 20
+        },
+        {
+          "text": "range",
+          "x": 16,
+          "right": 145,
+          "width": 129,
+          "height": 16
+        },
+        {
+          "text": "Zamanlayıcı yok10 dk20 dk30 dk60 dk",
+          "x": 16,
+          "right": 152,
+          "width": 136,
+          "height": 23
+        }
+      ],
+      "tabs": {
+        "clientWidth": 358,
+        "scrollWidth": 358,
+        "x": 16,
+        "right": 374
+      },
+      "fontStatus": "loaded",
+      "photoFallbacks": 11
+    },
+    {
+      "locale": "es",
+      "width": 320,
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Ruido marrónUn rumor grave y profundo, como una cascada lejana.A muchas personas les resulta más fácil trabajar con un muro de sonido grave y constante que en silencio.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 138
+        },
+        {
+          "text": "Ruido rosaUn siseo suave y uniforme, más delicado y profundo que el ruido blanco.Tapa voces y ruido de fondo, así hay menos cosas que tiran de tu atención.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 138
+        },
+        {
+          "text": "ProChimeneaEl crepitar suave de un fuego de leña.Un crepitar acogedor e irregular que evita que una habitación silenciosa se sienta vacía.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 112
+        },
+        {
+          "text": "ProLluviaLluvia ligera y constante contra una ventana.Una textura suave y variada que tapa las distracciones sin pedir tu atención.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 112
+        },
+        {
+          "text": "Zumbido cálido · 432 HzUn zumbido cálido de 432 Hz con un cuenco suave cada medio minuto.Algunos músicos prefieren afinar a 432 Hz. Las afirmaciones de que cura no están respaldadas por la evidencia.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 162
+        },
+        {
+          "text": "528 HzUn tono de 528 Hz con un brillo suave y toques de cuenco.En los círculos de sanación con sonido la llaman la «frecuencia del amor». Disfrútala como un tono agradable.",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 138
+        },
+        {
+          "text": "Pro396 HzUn tono de 396 Hz, estable y con armónicos graves.En la tradición solfeggio se asocia con «soltar el miedo».",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 112
+        },
+        {
+          "text": "Pro639 HzUn tono brillante de 639 Hz con campanillas suaves.En la tradición solfeggio se asocia con la «conexión».",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 88
+        },
+        {
+          "text": "ProPulso theta · 6 HzUn pulso binaural de 6 Hz sobre tonos cálidos y graves.Los ritmos theta se asocian con estados somnolientos y de ensoñación. A muchas personas les resulta muy reparador.Usa auriculares para los sonidos binaurales",
+          "x": 16,
+          "right": 304,
+          "width": 288,
+          "height": 222
+        },
+        {
+          "text": "button",
+          "x": 16,
+          "right": 36,
+          "width": 20,
+          "height": 20
+        },
+        {
+          "text": "range",
+          "x": 16,
+          "right": 145,
+          "width": 129,
+          "height": 16
+        },
+        {
+          "text": "Sin temporizador10 min20 min30 min60 min",
+          "x": 16,
+          "right": 159,
+          "width": 143,
+          "height": 23
+        }
+      ],
+      "tabs": {
+        "clientWidth": 288,
+        "scrollWidth": 288,
+        "x": 16,
+        "right": 304
+      },
+      "fontStatus": "loaded",
+      "photoFallbacks": 11
+    },
+    {
+      "locale": "es",
+      "width": 390,
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Ruido marrónUn rumor grave y profundo, como una cascada lejana.A muchas personas les resulta más fácil trabajar con un muro de sonido grave y constante que en silencio.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 114
+        },
+        {
+          "text": "Ruido rosaUn siseo suave y uniforme, más delicado y profundo que el ruido blanco.Tapa voces y ruido de fondo, así hay menos cosas que tiran de tu atención.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 114
+        },
+        {
+          "text": "ProChimeneaEl crepitar suave de un fuego de leña.Un crepitar acogedor e irregular que evita que una habitación silenciosa se sienta vacía.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "ProLluviaLluvia ligera y constante contra una ventana.Una textura suave y variada que tapa las distracciones sin pedir tu atención.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "Zumbido cálido · 432 HzUn zumbido cálido de 432 Hz con un cuenco suave cada medio minuto.Algunos músicos prefieren afinar a 432 Hz. Las afirmaciones de que cura no están respaldadas por la evidencia.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 138
+        },
+        {
+          "text": "528 HzUn tono de 528 Hz con un brillo suave y toques de cuenco.En los círculos de sanación con sonido la llaman la «frecuencia del amor». Disfrútala como un tono agradable.",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 114
+        },
+        {
+          "text": "Pro396 HzUn tono de 396 Hz, estable y con armónicos graves.En la tradición solfeggio se asocia con «soltar el miedo».",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "Pro639 HzUn tono brillante de 639 Hz con campanillas suaves.En la tradición solfeggio se asocia con la «conexión».",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 88
+        },
+        {
+          "text": "ProPulso theta · 6 HzUn pulso binaural de 6 Hz sobre tonos cálidos y graves.Los ritmos theta se asocian con estados somnolientos y de ensoñación. A muchas personas les resulta muy reparador.Usa auriculares para los sonidos binaurales",
+          "x": 16,
+          "right": 374,
+          "width": 358,
+          "height": 174
+        },
+        {
+          "text": "button",
+          "x": 16,
+          "right": 36,
+          "width": 20,
+          "height": 20
+        },
+        {
+          "text": "range",
+          "x": 16,
+          "right": 145,
+          "width": 129,
+          "height": 16
+        },
+        {
+          "text": "Sin temporizador10 min20 min30 min60 min",
+          "x": 16,
+          "right": 159,
+          "width": 143,
+          "height": 23
+        }
+      ],
+      "tabs": {
+        "clientWidth": 358,
+        "scrollWidth": 358,
+        "x": 16,
+        "right": 374
+      },
+      "fontStatus": "loaded",
+      "photoFallbacks": 11
+    }
+  ],
+  "boundaryObservations": [
+    {
+      "case": "actual-player-flows",
+      "purchaseInitialization": 0,
+      "purchases": 0,
+      "restores": 0,
+      "audioContexts": 0
+    },
+    {
+      "case": "en-320",
+      "purchaseInitialization": 0,
+      "purchases": 0,
+      "restores": 0,
+      "audioContexts": 0
+    },
+    {
+      "case": "en-390",
+      "purchaseInitialization": 0,
+      "purchases": 0,
+      "restores": 0,
+      "audioContexts": 0
+    },
+    {
+      "case": "tr-320",
+      "purchaseInitialization": 0,
+      "purchases": 0,
+      "restores": 0,
+      "audioContexts": 0
+    },
+    {
+      "case": "tr-390",
+      "purchaseInitialization": 0,
+      "purchases": 0,
+      "restores": 0,
+      "audioContexts": 0
+    },
+    {
+      "case": "es-320",
+      "purchaseInitialization": 0,
+      "purchases": 0,
+      "restores": 0,
+      "audioContexts": 0
+    },
+    {
+      "case": "es-390",
+      "purchaseInitialization": 0,
+      "purchases": 0,
+      "restores": 0,
+      "audioContexts": 0
+    }
+  ],
+  "errors": [],
+  "unexpectedExternalAttempts": [],
+  "blockedExpectedUnsplashImages": [
+    {
+      "url": "https://images.unsplash.com/photo-1533757879476-8f4a3cb1ae4b?auto=format&fit=crop&w=480&h=300&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1625786682948-2168238883d2?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1757911261159-c3d020451341?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593810451410-8fbb422cc15e?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1757911261159-c3d020451341?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1604951832436-90867d74f4de?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1674668560191-536c9fd88b8d?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1505144566083-38fb92594b3a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1533757879476-8f4a3cb1ae4b?auto=format&fit=crop&w=480&h=300&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1625786682948-2168238883d2?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1757911261159-c3d020451341?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593810451410-8fbb422cc15e?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1604951832436-90867d74f4de?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1674668560191-536c9fd88b8d?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1505144566083-38fb92594b3a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1506147854445-5a3f534191f8?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1559060017-445fb9722f2a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1543393470-b2c833b98dce?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1509635022432-0220ac12960b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1506147854445-5a3f534191f8?auto=format&fit=crop&w=96&h=96&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593664028538-b8c65d4e2a91?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1559060017-445fb9722f2a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1506147854445-5a3f534191f8?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1509635022432-0220ac12960b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1533757879476-8f4a3cb1ae4b?auto=format&fit=crop&w=480&h=300&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593664028538-b8c65d4e2a91?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1559060017-445fb9722f2a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1506147854445-5a3f534191f8?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1509635022432-0220ac12960b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1757911261159-c3d020451341?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1604951832436-90867d74f4de?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1674668560191-536c9fd88b8d?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1505144566083-38fb92594b3a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1506147854445-5a3f534191f8?auto=format&fit=crop&w=96&h=96&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1625786682948-2168238883d2?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1757911261159-c3d020451341?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593810451410-8fbb422cc15e?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1533757879476-8f4a3cb1ae4b?auto=format&fit=crop&w=480&h=300&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1625786682948-2168238883d2?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1757911261159-c3d020451341?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593810451410-8fbb422cc15e?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1604951832436-90867d74f4de?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1674668560191-536c9fd88b8d?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1505144566083-38fb92594b3a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1757911261159-c3d020451341?auto=format&fit=crop&w=96&h=96&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593664028538-b8c65d4e2a91?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1559060017-445fb9722f2a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1506147854445-5a3f534191f8?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1509635022432-0220ac12960b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1533757879476-8f4a3cb1ae4b?auto=format&fit=crop&w=480&h=300&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593664028538-b8c65d4e2a91?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1559060017-445fb9722f2a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1506147854445-5a3f534191f8?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1509635022432-0220ac12960b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1757911261159-c3d020451341?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1604951832436-90867d74f4de?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1674668560191-536c9fd88b8d?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1505144566083-38fb92594b3a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1625786682948-2168238883d2?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1757911261159-c3d020451341?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593810451410-8fbb422cc15e?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593810451410-8fbb422cc15e?auto=format&fit=crop&w=96&h=96&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1533757879476-8f4a3cb1ae4b?auto=format&fit=crop&w=480&h=300&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1625786682948-2168238883d2?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1757911261159-c3d020451341?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593810451410-8fbb422cc15e?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1757911261159-c3d020451341?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1604951832436-90867d74f4de?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1674668560191-536c9fd88b8d?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1505144566083-38fb92594b3a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1533757879476-8f4a3cb1ae4b?auto=format&fit=crop&w=480&h=300&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1625786682948-2168238883d2?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1757911261159-c3d020451341?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593810451410-8fbb422cc15e?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1604951832436-90867d74f4de?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1674668560191-536c9fd88b8d?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1505144566083-38fb92594b3a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593810451410-8fbb422cc15e?auto=format&fit=crop&w=96&h=96&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1506147854445-5a3f534191f8?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1559060017-445fb9722f2a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1543393470-b2c833b98dce?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1509635022432-0220ac12960b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1506147854445-5a3f534191f8?auto=format&fit=crop&w=96&h=96&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1625786682948-2168238883d2?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1757911261159-c3d020451341?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593810451410-8fbb422cc15e?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1533757879476-8f4a3cb1ae4b?auto=format&fit=crop&w=480&h=300&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1625786682948-2168238883d2?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1757911261159-c3d020451341?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593810451410-8fbb422cc15e?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1604951832436-90867d74f4de?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1674668560191-536c9fd88b8d?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1505144566083-38fb92594b3a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593810451410-8fbb422cc15e?auto=format&fit=crop&w=96&h=96&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1533757879476-8f4a3cb1ae4b?auto=format&fit=crop&w=480&h=300&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1625786682948-2168238883d2?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1757911261159-c3d020451341?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593810451410-8fbb422cc15e?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1604951832436-90867d74f4de?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1674668560191-536c9fd88b8d?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1505144566083-38fb92594b3a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593810451410-8fbb422cc15e?auto=format&fit=crop&w=96&h=96&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1533757879476-8f4a3cb1ae4b?auto=format&fit=crop&w=480&h=300&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1625786682948-2168238883d2?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1757911261159-c3d020451341?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593810451410-8fbb422cc15e?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1604951832436-90867d74f4de?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1674668560191-536c9fd88b8d?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1505144566083-38fb92594b3a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1506147854445-5a3f534191f8?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1559060017-445fb9722f2a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1543393470-b2c833b98dce?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1509635022432-0220ac12960b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1506147854445-5a3f534191f8?auto=format&fit=crop&w=96&h=96&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1533757879476-8f4a3cb1ae4b?auto=format&fit=crop&w=480&h=300&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1625786682948-2168238883d2?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1757911261159-c3d020451341?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593810451410-8fbb422cc15e?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1604951832436-90867d74f4de?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1674668560191-536c9fd88b8d?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1505144566083-38fb92594b3a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1506147854445-5a3f534191f8?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1559060017-445fb9722f2a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1543393470-b2c833b98dce?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1509635022432-0220ac12960b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1506147854445-5a3f534191f8?auto=format&fit=crop&w=96&h=96&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1533757879476-8f4a3cb1ae4b?auto=format&fit=crop&w=480&h=300&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1625786682948-2168238883d2?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1757911261159-c3d020451341?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593810451410-8fbb422cc15e?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1604951832436-90867d74f4de?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1674668560191-536c9fd88b8d?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1505144566083-38fb92594b3a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1506147854445-5a3f534191f8?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1559060017-445fb9722f2a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1543393470-b2c833b98dce?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1509635022432-0220ac12960b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1506147854445-5a3f534191f8?auto=format&fit=crop&w=96&h=96&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1533757879476-8f4a3cb1ae4b?auto=format&fit=crop&w=480&h=300&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1625786682948-2168238883d2?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1757911261159-c3d020451341?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593810451410-8fbb422cc15e?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1757911261159-c3d020451341?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1604951832436-90867d74f4de?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1674668560191-536c9fd88b8d?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1505144566083-38fb92594b3a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1506147854445-5a3f534191f8?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1559060017-445fb9722f2a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1543393470-b2c833b98dce?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1509635022432-0220ac12960b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1506147854445-5a3f534191f8?auto=format&fit=crop&w=96&h=96&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1533757879476-8f4a3cb1ae4b?auto=format&fit=crop&w=480&h=300&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1625786682948-2168238883d2?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1757911261159-c3d020451341?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593810451410-8fbb422cc15e?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1604951832436-90867d74f4de?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1674668560191-536c9fd88b8d?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1505144566083-38fb92594b3a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1506147854445-5a3f534191f8?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1559060017-445fb9722f2a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1543393470-b2c833b98dce?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1509635022432-0220ac12960b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1506147854445-5a3f534191f8?auto=format&fit=crop&w=96&h=96&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1533757879476-8f4a3cb1ae4b?auto=format&fit=crop&w=480&h=300&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1625786682948-2168238883d2?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1757911261159-c3d020451341?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1593810451410-8fbb422cc15e?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1604951832436-90867d74f4de?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1674668560191-536c9fd88b8d?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1505144566083-38fb92594b3a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1506147854445-5a3f534191f8?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1559060017-445fb9722f2a?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1543393470-b2c833b98dce?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1509635022432-0220ac12960b?auto=format&fit=crop&w=560&h=400&q=70",
+      "resourceType": "image"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1506147854445-5a3f534191f8?auto=format&fit=crop&w=96&h=96&q=70",
+      "resourceType": "image"
+    }
+  ],
+  "failedLocalResponses": [],
+  "limits": [
+    "Actual SoundRoom component/player/access/catalogue/entitlements/i18n and current built CSS; synthetic purchases/usePro/store route and synthesizer.",
+    "The synthetic engine verifies requested track, volume and callback scheduling; no real audio, naturalness, device-gain or native SDK claims.",
+    "Expected Unsplash photo requests are deliberately blocked before network; resulting real component fallbacks are preserved in screenshots.",
+    "Playwright clock advances timer callbacks; paid/native SDK and Web Audio constructors throw locally and count any attempt.",
+    "Selected saved Linux cloud executor, Chromium; no packages, source edits, providers, real accounts, commits or publication."
+  ]
+}

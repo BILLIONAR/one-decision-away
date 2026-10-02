@@ -1,0 +1,499 @@
+{
+  "sourceCommit": "5adcb6a22bda7a087e1718b2cf2eeb105e1248ba",
+  "baseCommit": "8fe9e55b602cc757646aa2c51baac8e176284840",
+  "main": "350aa158f30c773a373f2895e267119f9f2eb17a",
+  "changedSourceFiles": [
+    "src/pages/SoundRoom.tsx",
+    "src/services/soundRoomAccess.ts",
+    "src/services/soundRoomPlayer.ts",
+    "tests/helpers/soundSynthesizerFixture.ts",
+    "tests/sound-room-player-access.test.ts",
+    "tests/sound-synthesizer.test.ts"
+  ],
+  "sourceFilesBoundToAggregate": 684,
+  "sourceUnchangedDuringFinalAggregate": true,
+  "aggregate": {
+    "passed": 565,
+    "failed": 0,
+    "exitCode": 0,
+    "log": "aggregate-check-v2.log",
+    "logBytes": 72608,
+    "logSha256": "cb05f88fb5e77a4510d905ea18f2c3cbe7e46bd5ab607debcaa4e9902a017b42"
+  },
+  "focusedTests": 67,
+  "independentActualPlayerChecks": 53,
+  "independentActualEngineTests": 62,
+  "sourceExtractedUIChecks": 15,
+  "browserChecks": 22,
+  "currentBrowserPNGs": 12,
+  "browserReportSha256": "d7aa71679993e042f179b7495f489421aee7bd77aacdb8927055b111315030b9",
+  "productionCSS": {
+    "main": {
+      "path": "assets/index-D6Ptr9gO.css",
+      "sha256": "a5e714416151984e402601fc542cbea6426cec029d2a1f2d9619762421ecb336"
+    },
+    "soundRoom": {
+      "path": "assets/SoundRoom-CqaeVc25.css",
+      "sha256": "4b92eddafcbfc1a7dd877f5d2b4fd73a4338d14246b771985bcdd26e8713a13f"
+    }
+  },
+  "protectedAppearanceFilesMatchMain": 83,
+  "observedSDKAudioProviderOrUnexpectedNetworkAttempts": 0,
+  "expectedBlockedUnsplashImages": 192,
+  "beforeRouteCSSAttempt": "Preserved unchanged under browser/before-route-css; screenshots are invalid for visual acceptance. Current screenshots load both built stylesheets.",
+  "redBaselineCorrection": "The original 37-test draft baseline remains unchanged. Its ready=false revocation expectation was superseded: an already-confirmed same-account paid tier remains valid while offerings reload.",
+  "inheritedCloudGuardStatus": "HOLD: parent reproduced stale caller payload rollback and current-document backup status gap in inherited 8fe source. A separate fix/cloud-upload-current-record follow-up is in progress. This SoundRoom pass does not authorize publication.",
+  "limitations": [
+    "Synthetic purchases and audio adapters; no native SDK/customer changes, real audio output or human listening QA tested.",
+    "Source-extracted UI probes do not mount React. Browser uses actual component/player with synthetic adapter boundaries.",
+    "Direct Focus engine policy remains outside SoundRoom entitlement scope.",
+    "No main merge or production deployment. Parent final publication checkpoint retained."
+  ],
+  "artifacts": [
+    {
+      "file": "PACKAGING.json",
+      "bytes": 22921,
+      "sha256": "82ef8d8c54a46da1800e70ce77a9649cb7a36b4e0c3fa7c16510aaaaf0ac4914"
+    },
+    {
+      "file": "README.md",
+      "bytes": 4623,
+      "sha256": "182d8a833683dc7f882d2079ac0ce4e0bccb8791db6c2dc7da92caf9c79dda4f"
+    },
+    {
+      "file": "browser/README.md",
+      "bytes": 3272,
+      "sha256": "d593d71b60819f6ecb302a0fadf813486032f3e821a47b3d5a0038fdc40dab7a"
+    },
+    {
+      "file": "browser/artifact-checksums.json",
+      "bytes": 2028,
+      "sha256": "1bb19a6ce6bf087effba9509cfd159c87107252a8e1105340aba923545f5138f"
+    },
+    {
+      "file": "browser/before-route-css/README.md",
+      "bytes": 1664,
+      "sha256": "5252a441d0ffcfb3b1164b64ca59d03e58bc97b23c71b4da827884331a5b8f83"
+    },
+    {
+      "file": "browser/before-route-css/artifact-checksums.json",
+      "bytes": 1768,
+      "sha256": "0c0e63eff066b5b042adbf11b3868d40354fb02727a0636179e3c69934527bc5"
+    },
+    {
+      "file": "browser/before-route-css/fixture-gap.md",
+      "bytes": 370,
+      "sha256": "bd54d7d3458ca8e54d5db30fa0ba44e8090641466e6965ddd6b202efa1ed47ca"
+    },
+    {
+      "file": "browser/before-route-css/fixture.css",
+      "bytes": 13222,
+      "sha256": "d042224d002188a5386484911fb13e3679bd293e1804794cb4f9ce7e34ecbfcb"
+    },
+    {
+      "file": "browser/before-route-css/fixture.js.txt",
+      "bytes": 2673205,
+      "sha256": "69fa5f7dd9238d429c96edcb0bbbde74acde6694af5f35b3191a9414a91ff36e"
+    },
+    {
+      "file": "browser/before-route-css/index.html",
+      "bytes": 932,
+      "sha256": "c4569612af30ff6e1ef89e120f48e5e0e620b492e28758f2860e1149e2aa8ade"
+    },
+    {
+      "file": "browser/before-route-css/report.json",
+      "bytes": 79050,
+      "sha256": "ce5988b653c32a776f8e6ffcca5c897ce7ae35c94b6dc1655350a304d136a948"
+    },
+    {
+      "file": "browser/before-route-css/run.log",
+      "bytes": 136,
+      "sha256": "ca79c249888fc0bd36290b06b24adce98fc5b3193857b4a7e36067ec15f26b5f"
+    },
+    {
+      "file": "browser/before-route-css/run.mjs.txt",
+      "bytes": 19688,
+      "sha256": "c912a0c5ba975051ea5d76d04d758a840695fd89e56736b0d5918500dd3c3c2f"
+    },
+    {
+      "file": "browser/before-route-css/soundroom-en-320-full.png",
+      "bytes": 224764,
+      "sha256": "2bf6ecef9f13399639678b17b2b85e0de35de0744b97d0b7783ec0ea7b68ab24"
+    },
+    {
+      "file": "browser/before-route-css/soundroom-en-320-top.png",
+      "bytes": 77428,
+      "sha256": "bcc7306e2196799642f300bf1a600c46fb8ad8014e0755e05ddbd1fddfcf78dd"
+    },
+    {
+      "file": "browser/before-route-css/soundroom-en-390-full.png",
+      "bytes": 217458,
+      "sha256": "d400d97d1fa41dc8827697ccfcc173b091bf6f1e8872beb78c70834ec310218e"
+    },
+    {
+      "file": "browser/before-route-css/soundroom-en-390-top.png",
+      "bytes": 87330,
+      "sha256": "539e18887b523ce982a4cbca6bcea59a6ed52bd7ec4bb294ec69016c36dd3372"
+    },
+    {
+      "file": "browser/before-route-css/soundroom-es-320-full.png",
+      "bytes": 257929,
+      "sha256": "e109afaabb52477ad3faf5c2dab1448958ece9b0eec9cf34e581fa5bb9e6105f"
+    },
+    {
+      "file": "browser/before-route-css/soundroom-es-320-top.png",
+      "bytes": 74751,
+      "sha256": "fe634a35840d8d33337d3c093583b2f55053e3a24b0c037a20fe3f28780c3ee6"
+    },
+    {
+      "file": "browser/before-route-css/soundroom-es-390-full.png",
+      "bytes": 238406,
+      "sha256": "23b2db01377823acfd9f155aab40592b8e70bb380e478fad2f00f754640d67dd"
+    },
+    {
+      "file": "browser/before-route-css/soundroom-es-390-top.png",
+      "bytes": 87957,
+      "sha256": "7618c8f5ab197c1314052f90a27050b88b671e49cc56030bc0923769accef05a"
+    },
+    {
+      "file": "browser/before-route-css/soundroom-tr-320-full.png",
+      "bytes": 242385,
+      "sha256": "4f2c8682745d18d32dc21117cd30d83f3b3fdeebf9037b36880ff796eda7d6b9"
+    },
+    {
+      "file": "browser/before-route-css/soundroom-tr-320-top.png",
+      "bytes": 77111,
+      "sha256": "4ab28ca13f7b1db5edaa7f1fc7df52654dbd9688532068fa8e5f6c780cdec368"
+    },
+    {
+      "file": "browser/before-route-css/soundroom-tr-390-full.png",
+      "bytes": 228184,
+      "sha256": "2a8083dc9c84332c3570a252349539874a40deea59246f4940f2114665fd3a4b"
+    },
+    {
+      "file": "browser/before-route-css/soundroom-tr-390-top.png",
+      "bytes": 88143,
+      "sha256": "7c46102ed96f2f048c303153fa2d12a7718546804b88aa5aa7ecdd571ad15a07"
+    },
+    {
+      "file": "browser/fixture.css",
+      "bytes": 13222,
+      "sha256": "d042224d002188a5386484911fb13e3679bd293e1804794cb4f9ce7e34ecbfcb"
+    },
+    {
+      "file": "browser/fixture.js.txt",
+      "bytes": 2673205,
+      "sha256": "69fa5f7dd9238d429c96edcb0bbbde74acde6694af5f35b3191a9414a91ff36e"
+    },
+    {
+      "file": "browser/fixture.tsx.txt",
+      "bytes": 3794,
+      "sha256": "f9cf4f99abaa8fae2fe855fc0d7ba059b1c0cc1705a77cca578d3eb404cc63b7"
+    },
+    {
+      "file": "browser/index.html",
+      "bytes": 1014,
+      "sha256": "384b0a65dc032b45977bed55bc8983fea26c24e56ba54b1b111f8f4467516add"
+    },
+    {
+      "file": "browser/mocks.ts.txt",
+      "bytes": 4326,
+      "sha256": "64babe195ecb200d50f01720463eee11dac1a1b11af868c922d3da2ee840da30"
+    },
+    {
+      "file": "browser/report.json",
+      "bytes": 80185,
+      "sha256": "d7aa71679993e042f179b7495f489421aee7bd77aacdb8927055b111315030b9"
+    },
+    {
+      "file": "browser/review-receipt.json",
+      "bytes": 3474,
+      "sha256": "01382a8f0a0e98ad7325b5fa6fc1f494dbbd951ccf47f300fe9561765a9c79ca"
+    },
+    {
+      "file": "browser/run.log",
+      "bytes": 136,
+      "sha256": "e339e2a5a14cd2cef184582c801d018e97719be62c9da1a5c4089317d83a39ab"
+    },
+    {
+      "file": "browser/run.mjs.txt",
+      "bytes": 20889,
+      "sha256": "3f1ef65cd6b2f44e32a78ac3467757f5a7882f05e4af0dfd6491e38dee1d6350"
+    },
+    {
+      "file": "browser/soundroom-en-320-full.png",
+      "bytes": 404212,
+      "sha256": "2f2f2bab8dac0425077a76942f952701852d3d88ee5391af07e44b56762f50b8"
+    },
+    {
+      "file": "browser/soundroom-en-320-top.png",
+      "bytes": 65236,
+      "sha256": "8ee2ded2d7007d807741b6fcdec0b6e1e391f62f7b5ac62c8ad9561276b554fe"
+    },
+    {
+      "file": "browser/soundroom-en-390-full.png",
+      "bytes": 448892,
+      "sha256": "310fc30d5bd959d162b9456b37a914ad28aa6eb7f5fe10eb43d0df44be7a8532"
+    },
+    {
+      "file": "browser/soundroom-en-390-top.png",
+      "bytes": 77301,
+      "sha256": "01c3e960915c0fe31fb744d543fc09e119ac8a2cfd8c20def5378282babd97f3"
+    },
+    {
+      "file": "browser/soundroom-es-320-full.png",
+      "bytes": 437565,
+      "sha256": "b73b6da43a4a59966a63831d0b11abb656e527097ff21cd0c91bce6293f59749"
+    },
+    {
+      "file": "browser/soundroom-es-320-top.png",
+      "bytes": 70076,
+      "sha256": "064db9eeda72cd78a365c6707ba5a343fd711b1129315a3a7df984c3d3f4bf50"
+    },
+    {
+      "file": "browser/soundroom-es-390-full.png",
+      "bytes": 478403,
+      "sha256": "05b2c0626656ac1197ebbea67373e95a9a9e51edff9a3db65af8308308a979a3"
+    },
+    {
+      "file": "browser/soundroom-es-390-top.png",
+      "bytes": 84221,
+      "sha256": "9c31cce8d1b95e6b0944aca3942dc8727b62d217a4cb0cc9b1b4908c2422aa94"
+    },
+    {
+      "file": "browser/soundroom-tr-320-full.png",
+      "bytes": 417341,
+      "sha256": "c3db7a9e9504328e46f7fedd8c04312f881977aeaa26c6397a8ad916c5ab62e9"
+    },
+    {
+      "file": "browser/soundroom-tr-320-top.png",
+      "bytes": 66937,
+      "sha256": "73d92746b8b03ab16e2ceb51d7fcb62682fcffa143229b2ed0c3b6bb1949625c"
+    },
+    {
+      "file": "browser/soundroom-tr-390-full.png",
+      "bytes": 457237,
+      "sha256": "db78891eee30d0f19e74e08d0685bc85781c9fa024ffa2a046f29045e543cda6"
+    },
+    {
+      "file": "browser/soundroom-tr-390-top.png",
+      "bytes": 79736,
+      "sha256": "352ce6e65ffebed7c02388b4d3abf35484612e9545b21ca475297a8b5e817570"
+    },
+    {
+      "file": "diagnosis/README.md",
+      "bytes": 7867,
+      "sha256": "9428a4606e9f80f13b1b14f30c9b7c1b866a3ef22d30aa233afc7d3365c2ae1a"
+    },
+    {
+      "file": "diagnosis/current-player-diagnosis.json",
+      "bytes": 6136,
+      "sha256": "e825564b9bc65f3e56d1873adf3f119ebcf0c11de48b6c94a3a89756526b0064"
+    },
+    {
+      "file": "diagnosis/diagnose-current-player.mjs.txt",
+      "bytes": 3915,
+      "sha256": "a52f85f0b475db7c30084ecf3c2d252e9cf5d925a7aa583f658aa1dd47ebf501"
+    },
+    {
+      "file": "implementation/README.md",
+      "bytes": 3369,
+      "sha256": "37ba8bb642b575018e8dc614514ac80586747cc4a8a1633e05df5c567d7f4914"
+    },
+    {
+      "file": "implementation/aggregate-check-v2.log",
+      "bytes": 72608,
+      "sha256": "cb05f88fb5e77a4510d905ea18f2c3cbe7e46bd5ab607debcaa4e9902a017b42"
+    },
+    {
+      "file": "implementation/aggregate-check.log",
+      "bytes": 71640,
+      "sha256": "12fde4e8cd1b25612eb4af311fa346bcaa86978acfa865d57c6cf3fffcd935ab"
+    },
+    {
+      "file": "implementation/build-receipt-v2.json",
+      "bytes": 196760,
+      "sha256": "5a55f3e90d9e7dc8d2230d89efff098a26168aef1ec2f27d5e65918fdb94216c"
+    },
+    {
+      "file": "implementation/build-receipt.json",
+      "bytes": 196897,
+      "sha256": "a578082f4b03397bbd37096ee8b030c637ec546a2abf58a051b4c931ef24cd80"
+    },
+    {
+      "file": "implementation/evidence-manifest.json",
+      "bytes": 2132,
+      "sha256": "351e8cc06be55a0fa2fc89a7c80523212cd3b93dbbdcdcf339d77d1a8c9f3b1b"
+    },
+    {
+      "file": "implementation/first-guard-run.log",
+      "bytes": 8757,
+      "sha256": "9ba6ec71a8970a48baea35f24376953bc7e8e033f4463dbc89d9a4b1c05dbc85"
+    },
+    {
+      "file": "implementation/focused-guard-run.log",
+      "bytes": 15599,
+      "sha256": "a120867d97257b4a0d2507348c8fb8dd01fde5e4fca7b98486c705a20ad7ea6c"
+    },
+    {
+      "file": "implementation/handoff-review-red.log",
+      "bytes": 12897,
+      "sha256": "802ee3fa97ed2db9270bc7f2b2489b9296165b48ceafd2c4317dcb59d16c67bf"
+    },
+    {
+      "file": "implementation/implementation-receipt.json",
+      "bytes": 3752,
+      "sha256": "ced0f148f4aebc2be882786f15ff0dd4c7ea61d4328c85a062dd24a19074064b"
+    },
+    {
+      "file": "implementation/lint.log",
+      "bytes": 260,
+      "sha256": "9c32c2513077a435fbba4c8f21b151b8e08a62696a1f346b8ab54706e6af6aa1"
+    },
+    {
+      "file": "implementation/pre-review-focused-guard-run.log",
+      "bytes": 13320,
+      "sha256": "ca4015b54c5a22527aae32faf82e0fe885c411edb47bb7473c0f5686080d85f1"
+    },
+    {
+      "file": "implementation/pre-review-implementation-receipt.json",
+      "bytes": 2584,
+      "sha256": "9146a14cab7c47608c083b26d058aab4c84e825005bee5c17611a1536e2c26aa"
+    },
+    {
+      "file": "implementation/red-baseline-receipt.json",
+      "bytes": 667,
+      "sha256": "0dd03d9d8a3c0bdc57d12c26178363e2704bc8bf712d7ff7e3cbf07c6aa8278a"
+    },
+    {
+      "file": "implementation/red-baseline.log",
+      "bytes": 29162,
+      "sha256": "61743e7a2398fe8e7cabadf194af00185ed00b4361bd9188e78869322c707a23"
+    },
+    {
+      "file": "implementation/start-edge-red.log",
+      "bytes": 8450,
+      "sha256": "b7e2406ab3e9a8bdc301baf8a8dee70a6623971aed8f9db5eb55fadecd6bc498"
+    },
+    {
+      "file": "independent/baseline-report.json",
+      "bytes": 3597,
+      "sha256": "60a22c7402c44f05401e33f5c0d6c70b8c958e15ecf3db2270446cf179e98109"
+    },
+    {
+      "file": "independent/baseline-soundRoomPlayer.ts.txt",
+      "bytes": 5353,
+      "sha256": "a148bef6797cb62ebe682d95208eec5cad1282b0556d99a520c275d5ba1ffab7"
+    },
+    {
+      "file": "independent/baseline.log",
+      "bytes": 1458,
+      "sha256": "8bdd0e18d4c094083165b507e6e3f87656a0900b9490babf8608c8a55dd348d5"
+    },
+    {
+      "file": "independent/final-focused.log",
+      "bytes": 6215,
+      "sha256": "eee44c3aac104d9a59fb912293854614b0e625ebb7c2f596267269164af099c6"
+    },
+    {
+      "file": "independent/final-probes.log",
+      "bytes": 7839,
+      "sha256": "91817ec755750bf94782923823ea4842d3bbac76a53f12c763a8cc85117561ac"
+    },
+    {
+      "file": "independent/final-report.json",
+      "bytes": 27940,
+      "sha256": "aa497329f9796fa73fa650c39f0854964ed51a9daaa64be3256dd0cee2834307"
+    },
+    {
+      "file": "independent/final-review-receipt.json",
+      "bytes": 8182,
+      "sha256": "692a315e1c603a8efcbd629944d1d676494e7ff2398a3956a12cdc7d4d73725e"
+    },
+    {
+      "file": "independent/guard-report.json",
+      "bytes": 27940,
+      "sha256": "aa497329f9796fa73fa650c39f0854964ed51a9daaa64be3256dd0cee2834307"
+    },
+    {
+      "file": "independent/handoff-findings-receipt.json",
+      "bytes": 3431,
+      "sha256": "034b2e518e9470686f420456f3f4998d6e7a00f0e1cd0be344cbb43a90a1486d"
+    },
+    {
+      "file": "independent/interim-report.json",
+      "bytes": 24764,
+      "sha256": "59f0a5969f16e30fbee17664c4ebb383e2930ae3ac5143ebad118f2d375ca033"
+    },
+    {
+      "file": "independent/interim-v2-report.json",
+      "bytes": 26377,
+      "sha256": "b98b1a11ae4bc46339a3952ff88bcb5b104c987a8e4915682135e7086bcb8707"
+    },
+    {
+      "file": "independent/interim-v2.log",
+      "bytes": 7578,
+      "sha256": "61cde01cd4a26f90530bcc9edbe910e94df7d21b32650c648711f9c4f775e2d4"
+    },
+    {
+      "file": "independent/interim-v3-report.json",
+      "bytes": 27560,
+      "sha256": "7c1fbe1bef52b7a1c2ffad7230a1d40cfbf77c72928ca9a83d119ff098d2c35f"
+    },
+    {
+      "file": "independent/interim-v3.log",
+      "bytes": 8761,
+      "sha256": "87aa98529ea73bda0eee7ca2eefff61bb3d22f0c4736839b41fd79e4a9303d2a"
+    },
+    {
+      "file": "independent/interim.log",
+      "bytes": 6937,
+      "sha256": "54025011a283482e5b37a2a314dec3110284edc3f35a5403ab70147550a03416"
+    },
+    {
+      "file": "independent/probes.mts.txt",
+      "bytes": 21566,
+      "sha256": "91a39cdcf1ec2a900f2be127e771fbae53ebc6b71d807b1901139923d88a5aa2"
+    },
+    {
+      "file": "independent/source-after-final.json",
+      "bytes": 1589,
+      "sha256": "c20865bc9ef35d2777280be56ac577349334f6fc99ca54d3cb056044a61b8cbc"
+    },
+    {
+      "file": "independent/source-before-final.json",
+      "bytes": 1845,
+      "sha256": "3938d9fa5836904bb156f88ef898e23ba15c6eefc72a22be33b198f6ecbc6c7c"
+    },
+    {
+      "file": "independent/ui/extracted-ui.ts.txt",
+      "bytes": 1127,
+      "sha256": "c0d8e1da4a4ac3ff844a4183ee4a83eef4a128e5ea777ee6c0badbd4b3b7f169"
+    },
+    {
+      "file": "independent/ui/source-and-evidence-sha256.json",
+      "bytes": 833,
+      "sha256": "0adee93c1867829fb9d07f2f992d3061d539650ca84426152449193d0bfe1eb7"
+    },
+    {
+      "file": "independent/ui/ui-probes.mjs.txt",
+      "bytes": 14132,
+      "sha256": "14b05600788e5409f463053076ed1042d7c2f15b7106bde11de1f9b9e9134f8a"
+    },
+    {
+      "file": "independent/ui/ui-report.json",
+      "bytes": 9662,
+      "sha256": "c95883a5d799d04d92f0c3212b0d7cbf26939fa2db3488cdf43a685dc132097a"
+    },
+    {
+      "file": "protected-appearance-parity.json",
+      "bytes": 14148,
+      "sha256": "36ddb7f3e6b26131a0be6f0b503c3eb979dba582d7ef8e398ec7f7ac835de530"
+    },
+    {
+      "file": "run-aggregate.py.txt",
+      "bytes": 2440,
+      "sha256": "a08b7fa1746de077a163b7e1d1fca9b61360ed1e94dd016783bf88138eb22d6a"
+    }
+  ]
+}

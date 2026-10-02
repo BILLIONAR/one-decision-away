@@ -1,0 +1,62 @@
+import { useSyncExternalStore } from 'react';
+
+export const boundaryAttempts = { purchaseInitialization: 0, purchases: 0, restores: 0, audioContexts: 0 };
+let purchaseState = { available: true, ready: true, identityConfirmed: true, identityRevision: 1,
+  tier: 'essentials', isPro: false, renewsAt: null, products: {}, error: null };
+const purchaseListeners = new Set<(state?: any) => void>();
+export const purchases = {
+  getState: () => purchaseState,
+  subscribe: (listener: (state?: any) => void) => { purchaseListeners.add(listener); return () => { purchaseListeners.delete(listener); }; },
+  init: async () => { boundaryAttempts.purchaseInitialization++; throw new Error('Paid SDK initialization is outside this fixture.'); },
+  purchase: async () => { boundaryAttempts.purchases++; throw new Error('Real purchases are outside this fixture.'); },
+  restore: async () => { boundaryAttempts.restores++; throw new Error('Real restore is outside this fixture.'); },
+};
+export const usePro = () => { const state = useSyncExternalStore(purchases.subscribe, purchases.getState, purchases.getState); return { ...state, gating: state.available }; };
+export const setPurchases = (patch: any, emit = true) => {
+  purchaseState = { ...purchaseState, ...patch };
+  if (emit) purchaseListeners.forEach(listener => listener(purchaseState));
+};
+
+let track = 'silence', volume = 0.5, startedAt: number | null = null;
+let stopTimer: number | null = null, fadeAt: number | null = null, stopAt: number | null = null;
+const synthListeners = new Set<() => void>();
+const calls: any[] = [];
+const emitSynth = () => synthListeners.forEach(listener => listener());
+const cancelStop = () => {
+  if (stopTimer !== null) window.clearTimeout(stopTimer);
+  stopTimer = null; fadeAt = null; stopAt = null;
+};
+export const soundSynthesizer = {
+  subscribe: (listener: () => void) => { synthListeners.add(listener); return () => { synthListeners.delete(listener); }; },
+  getCurrentTrack: () => track,
+  getTrackStartedAt: () => startedAt,
+  getVolume: () => volume,
+  setVolume: (value: number) => { volume = Math.max(0, Math.min(1, value)); calls.push({ kind: 'volume', value: volume }); },
+  isFadingOut: () => fadeAt !== null && Date.now() >= fadeAt,
+  hasFadeOutScheduled: () => stopTimer !== null,
+  playAmbient: (next: string, options?: any) => {
+    cancelStop(); track = next; startedAt = Date.now(); calls.push({ kind: 'play', track, options, volume }); emitSynth();
+  },
+  stopAmbient: () => { cancelStop(); track = 'silence'; startedAt = null; calls.push({ kind: 'stop' }); emitSynth(); },
+  cancelFadeOut: () => { cancelStop(); calls.push({ kind: 'cancel-fade' }); },
+  fadeOutAndStop: (seconds: number, delaySeconds = 0) => {
+    cancelStop(); fadeAt = Date.now() + delaySeconds * 1000; stopAt = fadeAt + seconds * 1000;
+    calls.push({ kind: 'fade', seconds, delaySeconds, track });
+    stopTimer = window.setTimeout(() => { cancelStop(); track = 'silence'; startedAt = null; calls.push({ kind: 'timer-stop' }); emitSynth(); }, Math.max(0, (seconds + delaySeconds) * 1000));
+    emitSynth();
+  },
+};
+
+let route = '/app/sound';
+let routeRevision = 0;
+const routeListeners = new Set<() => void>();
+export const app = { setActiveRoute: (value: string) => { route = value; routeRevision++; routeListeners.forEach(listener => listener()); } };
+export const useApp = () => app;
+export const routeStore = { subscribe: (listener: () => void) => { routeListeners.add(listener); return () => { routeListeners.delete(listener); }; },
+  getSnapshot: () => routeRevision, route: () => route };
+export const mockSnapshot = () => ({ purchases: purchaseState, purchaseListenerCount: purchaseListeners.size, synthListenerCount: synthListeners.size,
+  route, engine: { track, volume, startedAt, fadeAt, stopAt, scheduledStop: stopTimer !== null }, calls: [...calls], boundaryAttempts: { ...boundaryAttempts } });
+// Any accidental real Web Audio construction fails locally and is observed.
+class ForbiddenAudioContext { constructor() { boundaryAttempts.audioContexts++; throw new Error('Web Audio is deliberately synthetic in this fixture.'); } }
+Object.defineProperty(window, 'AudioContext', { configurable: true, value: ForbiddenAudioContext });
+Object.defineProperty(window, 'webkitAudioContext', { configurable: true, value: ForbiddenAudioContext });

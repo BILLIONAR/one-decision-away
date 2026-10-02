@@ -1,0 +1,49 @@
+{
+  "base": "8fe9e55b602cc757646aa2c51baac8e176284840",
+  "branch": "fix/soundroom-entitlement",
+  "uncommittedCandidate": true,
+  "scope": "Sound Room player, access helper, focused tests; root owns page provenance",
+  "syntheticActualEngineAndInMemoryPurchaseState": true,
+  "noProviderInitOrSDKCalls": true,
+  "sourceHashes": {
+    "src/services/soundRoomPlayer.ts": "d64f3b16f34d73bff6d800ed061bae6a62f53f954322454a88141e67da4348a8",
+    "src/services/soundRoomAccess.ts": "e34e384f12abbc6b8185a377e9aa3c212832182d97b9f773ee973d9abe4c1199",
+    "tests/sound-room-player-access.test.ts": "46396649d2d3d5659a483687a349b039fa3b89be502203e6e88a9e548ae4cc69",
+    "tests/sound-synthesizer.test.ts": "2d8d4bf20b7fff809045b9a657bb69fd0d6d17446d0fcfa70f05e1ed0cad5fab",
+    "tests/helpers/soundSynthesizerFixture.ts": "191871a9f5a61de0e8c1765b59f651d2581381a645bdf3cd6be4151d8a00022b"
+  },
+  "protectedUnchanged": {
+    "src/utils/soundSynthesizer.ts": true,
+    "src/services/purchases.ts": true,
+    "src/services/entitlements.ts": true,
+    "src/data/soundRoom.ts": true,
+    "src/services/soundRoom.ts": true
+  },
+  "focusedTests": {
+    "tests": 58,
+    "pass": 58,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0
+  },
+  "redBaseline": {
+    "tests": 37,
+    "pass": 12,
+    "fail": 25,
+    "playerSourceUnchangedAtBase": true,
+    "path": "red-baseline.log",
+    "supersededExpectation": "The draft ready=false revocation test was corrected: ready concerns offerings loading, while confirmed same-account paid entitlement remains valid."
+  },
+  "furtherEdgeRedLog": "start-edge-red.log",
+  "finalLog": "focused-guard-run.log",
+  "lintLog": "lint.log",
+  "contract": {
+    "nativeRestricted": "identityConfirmed and Essentials+; identityRevision captured by owned selection; ready is not entitlement",
+    "webUnconfigured": "available=false keeps open access across identity transitions",
+    "origin": "both sectionId and indexInCategory validate exact catalog track; omitted origin permits any free placement",
+    "revocation": "hard-stop only owned restricted graph; clear track/playing/deadline/paused remainder/sleep, preserve timer preference; no autoplay on regrant",
+    "externalFocus": "non-silent replacement including same track clears Sound Room ownership; external replay uses fresh omitted-origin admission",
+    "failedStart": "require engine emission/current track and roll ownership back on no replacement or allocation failure",
+    "reentrantPublication": "after state notification recheck owned selection before arming timer or returning acceptance"
+  }
+}

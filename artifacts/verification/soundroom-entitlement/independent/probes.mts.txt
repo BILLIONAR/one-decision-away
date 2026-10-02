@@ -1,0 +1,221 @@
+import assert from 'node:assert/strict';
+import { registerHooks } from 'node:module';
+import { createHash } from 'node:crypto';
+import { readFile, writeFile } from 'node:fs/promises';
+import { execFileSync } from 'node:child_process';
+
+const root = process.argv[2] || '/workspace/oda-soundroom-entitlement-fix';
+const mode = process.argv[3] || 'guard';
+const out = '/workspace/scratch/oda-soundroom-entitlement-review';
+let fetchCalls = 0;
+Object.defineProperty(globalThis, 'fetch', { configurable: true, value: async () => { fetchCalls++; throw new Error('Networking denied'); } });
+let now = 1_800_000_000_000;
+const originalNow = Date.now;
+Date.now = () => now;
+const purchaseListeners = new Set<() => void>();
+let access: any;
+const purchaseMock = {
+  getState: () => access,
+  subscribe(fn: () => void) { purchaseListeners.add(fn); return () => purchaseListeners.delete(fn); },
+  currentIdentityGuard() { const revision = access.identityRevision; return () => access.identityRevision === revision && access.identityConfirmed; },
+};
+const synthListeners = new Set<() => void>();
+let track = 'silence'; let volume = 0.5; let graph = 0; let startedAt: number | null = null;
+let fade: { seconds: number; delay: number; graph: number } | null = null;
+const calls: any[] = [];
+const emitSynth = () => synthListeners.forEach(fn => { try { fn(); } catch { /* match actual engine listener isolation */ } });
+const synthMock = {
+  getCurrentTrack: () => track,
+  getTrackSnapshot: () => track,
+  getTrackStartedAt: () => startedAt,
+  subscribe(fn: () => void) { synthListeners.add(fn); return () => synthListeners.delete(fn); },
+  isFadingOut: () => !!fade && fade.delay === 0,
+  hasFadeOutScheduled: () => fade !== null,
+  isPlaying: () => track !== 'silence',
+  playAmbient(next: string, options: any) { graph++; track = next; startedAt = now; fade = null; calls.push({ kind: 'play', track, graph, options }); emitSynth(); },
+  fadeOutAndStop(seconds: number, delay = 0) { fade = { seconds, delay, graph }; calls.push({ kind: 'fade', seconds, delay, graph }); },
+  cancelFadeOut() { fade = null; calls.push({ kind: 'cancelFade', graph }); },
+  stopAmbient() { calls.push({ kind: 'stop', track, graph }); track = 'silence'; startedAt = null; fade = null; emitSynth(); },
+  setVolume(value: number) { volume = value; calls.push({ kind: 'volume', value }); },
+  getVolume: () => volume,
+};
+Object.assign(globalThis, { __soundReviewSynth: synthMock, __soundReviewPurchases: purchaseMock });
+const hooks = registerHooks({ load(url, context, nextLoad) {
+  if (url.split('?')[0].endsWith('/utils/soundSynthesizer.ts')) return { format: 'module', source: 'export const soundSynthesizer = globalThis.__soundReviewSynth;', shortCircuit: true };
+  if (url.split('?')[0].endsWith('/services/purchases.ts')) return { format: 'module', source: 'export const purchases = globalThis.__soundReviewPurchases;', shortCircuit: true };
+  return nextLoad(url, context);
+} });
+let counter = 0;
+function setAccess(patch: any, emit = true) { access = { ...access, ...patch }; if (emit) purchaseListeners.forEach(fn => fn()); }
+async function fixture(patch: any = {}) {
+  purchaseListeners.clear(); synthListeners.clear(); calls.splice(0); graph = 0; track = 'silence'; startedAt = null; fade = null; volume = 0.5; now = 1_800_000_000_000;
+  access = { available: true, ready: true, identityConfirmed: true, identityRevision: 1, tier: 'pro', isPro: true, renewsAt: null, products: {}, error: null, ...patch };
+  const module = await import(`${root}/src/services/soundRoomPlayer.ts?independent=${++counter}`);
+  const player = module.soundRoomPlayer;
+  return { player, snapshot: () => player.getSnapshot(), setAccess, calls,
+    externalPlay(next: string) { synthMock.playAmbient(next, { external: 'Focus' }); },
+    externalStop() { synthMock.stopAmbient(); },
+    finishFade() { assert.ok(fade); synthMock.stopAmbient(); },
+    advance(ms: number) { now += ms; },
+  };
+}
+const count = (kind: string) => calls.filter(c => c.kind === kind).length;
+const paid = { sectionId: 'frequencies', indexInCategory: 2 };
+const sleepPaid = { sleep: true, sectionId: 'sleep', indexInCategory: 2 };
+const freeBrown = { sectionId: 'focus', indexInCategory: 0 };
+const cleared = (f: any, timer: number | null) => {
+  assert.deepEqual(f.snapshot(), { track: null, playing: false, sleep: false, timerMinutes: timer, endsAt: null, pausedRemainingMs: null });
+};
+const results: any[] = [];
+async function probe(name: string, fn: () => Promise<any>) {
+  if (mode === 'baseline') name = `Known defect reproduced before fix: ${name}`;
+  try { results.push({ name, passed: true, evidence: await fn() }); }
+  catch (error) { results.push({ name, passed: false, error: error instanceof Error ? error.stack : String(error) }); }
+}
+
+await probe('paid playback downgrade revokes audio, selection, sleep and deadline without losing timer choice', async () => {
+  const f = await fixture(); f.player.setTimer(10); f.player.play('solfeggio_396hz', paid); f.setAccess({ tier: 'free', isPro: false });
+  if (mode === 'baseline') { assert.equal(f.snapshot().playing, true); assert.equal(track, 'solfeggio_396hz'); }
+  else { cleared(f, 10); assert.equal(track, 'silence'); }
+  return { state: f.snapshot(), track, calls: cloneCalls() };
+});
+await probe('paused paid selection downgrade cannot resume via retained stale player closure', async () => {
+  const f = await fixture(); f.player.setTimer(20); f.player.play('solfeggio_396hz', paid); f.advance(5000); f.player.pause(); const staleResume = () => f.player.resume();
+  f.setAccess({ tier: 'free', isPro: false }); const starts = count('play'); staleResume();
+  if (mode === 'baseline') assert.equal(count('play'), starts + 1);
+  else { cleared(f, 20); assert.equal(count('play'), starts); }
+  return { state: f.snapshot(), calls: cloneCalls() };
+});
+await probe('fresh playback start reads current entitlement even without a purchase event', async () => {
+  const f = await fixture(); const staleStart = () => f.player.play('solfeggio_396hz', paid); f.setAccess({ tier: 'free', isPro: false }, false); staleStart();
+  assert.equal(count('play'), mode === 'baseline' ? 1 : 0); return { state: f.snapshot(), calls: cloneCalls() };
+});
+function cloneCalls() { return structuredClone(calls); }
+
+if (mode !== 'baseline') {
+  for (const tier of ['essentials', 'pro', 'coach']) await probe(`${tier} permits every restricted catalog placement`, async () => {
+    const f = await fixture({ tier, isPro: tier !== 'essentials' }); f.player.play('solfeggio_396hz', paid); assert.equal(count('play'), 1); assert.equal(f.snapshot().playing, true); return { state: f.snapshot() };
+  });
+  await probe('web unconfigured capability opens paid placement without confirmed identity', async () => {
+    const f = await fixture({ available: false, tier: 'free', identityConfirmed: false, ready: false }); f.player.play('solfeggio_396hz', paid); assert.equal(count('play'), 1); return { state: f.snapshot() };
+  });
+  await probe('web unconfigured paid-origin playback survives identity revision', async () => {
+    const f = await fixture({ available: false, tier: 'free', identityConfirmed: false }); f.player.play('solfeggio_396hz', paid); const previous = f.snapshot(); f.setAccess({ identityRevision: 2 }); assert.deepEqual(f.snapshot(), previous); assert.equal(count('stop'), 0); return { state: f.snapshot() };
+  });
+  await probe('loss of identity confirmation revokes cached paid tier', async () => {
+    const f = await fixture(); f.player.setTimer(10); f.player.play('solfeggio_396hz', paid); f.setAccess({ identityConfirmed: false }); cleared(f, 10); assert.equal(track, 'silence'); return { state: f.snapshot() };
+  });
+  await probe('unconfirmed identity with cached Pro cannot freshly start a paid sound', async () => {
+    const f = await fixture({ identityConfirmed: false }); f.player.play('solfeggio_396hz', paid); assert.equal(count('play'), 0); return { state: f.snapshot() };
+  });
+  await probe('confirmed paid entitlement survives pricing readiness reload without downgrade', async () => {
+    const f = await fixture({ tier: 'essentials', isPro: false }); f.player.setTimer(10); f.player.play('solfeggio_396hz', paid); const previous = f.snapshot();
+    f.setAccess({ ready: false }); assert.deepEqual(f.snapshot(), previous); assert.equal(count('stop'), 0); assert.equal(track, 'solfeggio_396hz'); return { state: f.snapshot() };
+  });
+  await probe('confirmed cached Essentials can freshly start while offerings readiness is false', async () => {
+    const f = await fixture({ ready: false, tier: 'essentials', isPro: false }); assert.equal(f.player.play('solfeggio_396hz', paid), true); assert.equal(f.snapshot().playing, true); return { state: f.snapshot() };
+  });
+  await probe('confirmed paused paid entitlement resumes during same-identity pricing retry', async () => {
+    const f = await fixture({ tier: 'essentials', isPro: false }); f.player.setTimer(10); f.player.play('solfeggio_396hz', paid); f.advance(10000); f.player.pause(); f.setAccess({ ready: false });
+    assert.equal(f.player.resume(), true); assert.equal(f.snapshot().endsAt, now + 590000); return { state: f.snapshot() };
+  });
+  for (const value of ['playing', 'paused', 'ended']) await probe(`paid ${value} selection expires across paid to paid identity revision`, async () => {
+    const f = await fixture(); f.player.setTimer(30); f.player.play('solfeggio_396hz', paid);
+    if (value === 'paused') { f.advance(10000); f.player.pause(); }
+    if (value === 'ended') f.finishFade();
+    const previousStarts = count('play'); f.setAccess({ identityRevision: 2, tier: 'pro' }); cleared(f, 30);
+    f.player.resume(); assert.equal(count('play'), previousStarts); return { state: f.snapshot(), calls: cloneCalls() };
+  });
+  await probe('free retained selection stays across downgrade and preserves timed pause remainder', async () => {
+    const f = await fixture(); f.player.setTimer(10); f.player.play('waves', { sectionId: 'relax', indexInCategory: 1 }); f.advance(10000); f.player.pause();
+    const before = f.snapshot(); f.setAccess({ tier: 'free', isPro: false }); assert.deepEqual(f.snapshot(), before); f.player.resume();
+    assert.equal(f.snapshot().endsAt, now + 590000); assert.equal(f.snapshot().playing, true); return { state: f.snapshot(), calls: cloneCalls() };
+  });
+  for (const placement of [{ track: 'brown_noise', options: freeBrown }, { track: 'meditation_432hz', options: { sectionId: 'frequencies', indexInCategory: 0 } }]) await probe(`free duplicate placement ${placement.track} stays usable through downgrade`, async () => {
+    const f = await fixture(); f.player.play(placement.track, placement.options); f.setAccess({ tier: 'free', isPro: false }); assert.equal(f.snapshot().playing, true); assert.equal(track, placement.track); assert.equal(count('stop'), 0); return { state: f.snapshot() };
+  });
+  for (const placement of [{ track: 'brown_noise', options: sleepPaid }, { track: 'meditation_432hz', options: { sectionId: 'relax', indexInCategory: 2 } }]) await probe(`explicit paid duplicate placement ${placement.track} remains restricted`, async () => {
+    const f = await fixture(); f.player.play(placement.track, placement.options); f.setAccess({ tier: 'free', isPro: false }); cleared(f, null); assert.equal(track, 'silence'); return { state: f.snapshot(), calls: cloneCalls() };
+  });
+  await probe('stale paid-origin toggle cannot pause current free duplicate graph', async () => {
+    const f = await fixture({ tier: 'free', isPro: false }); f.player.play('brown_noise', freeBrown); const previous = f.snapshot(); const fadeCount = count('fade');
+    assert.equal(f.player.toggle('brown_noise', sleepPaid), false); assert.deepEqual(f.snapshot(), previous); assert.equal(count('fade'), fadeCount); assert.equal(track, 'brown_noise'); return { state: f.snapshot() };
+  });
+  await probe('paid duplicate paused selection cannot downgrade to free no-origin resume', async () => {
+    const f = await fixture(); f.player.play('brown_noise', sleepPaid); f.player.pause(); f.setAccess({ tier: 'free', isPro: false }, false); const starts = count('play'); f.player.resume(); assert.equal(count('play'), starts); cleared(f, null); return { state: f.snapshot() };
+  });
+  for (const options of [{ sectionId: 'focus' }, { indexInCategory: 0 }, { sectionId: 'focus', indexInCategory: '0' }, { sectionId: 'focus', indexInCategory: Number.NaN }]) await probe(`incomplete or nonnumeric provenance cannot claim free duplicate ${JSON.stringify(options)}`, async () => {
+    const f = await fixture({ tier: 'free', isPro: false }); f.player.play('brown_noise', options); assert.equal(count('play'), 0); return { state: f.snapshot() };
+  });
+  for (const next of ['brown_noise', 'meditation_432hz', 'waves']) await probe(`no-origin ${next} uses an actual free catalog placement`, async () => {
+    const f = await fixture({ tier: 'free', isPro: false }); f.player.play(next); assert.equal(f.snapshot().playing, true); assert.equal(count('play'), 1); return { state: f.snapshot() };
+  });
+  for (const options of [paid, { sectionId: 'frequencies', indexInCategory: 0 }, { sectionId: 'breathe', indexInCategory: 0 }, { sectionId: 'frequencies', indexInCategory: -1 }, { sectionId: 'frequencies', indexInCategory: 0.5 }, { sectionId: 'bogus', indexInCategory: 0 }]) await probe(`free account rejects paid/mismatched/malformed origin ${JSON.stringify(options)}`, async () => {
+    const f = await fixture({ tier: 'free', isPro: false }); f.player.play('solfeggio_396hz', options); assert.equal(count('play'), 0); assert.equal(f.snapshot().playing, false); return { state: f.snapshot() };
+  });
+  for (const next of ['solfeggio_396hz', 'theta_meditation', 'unknown-track']) await probe(`no-origin paid-only or unknown ${next} cannot start under gating`, async () => {
+    const f = await fixture({ tier: 'free', isPro: false }); f.player.play(next); assert.equal(count('play'), 0); return { state: f.snapshot() };
+  });
+  await probe('regrant never autoplays or restores revoked paid selection', async () => {
+    const f = await fixture(); f.player.setTimer(60); f.player.play('solfeggio_396hz', paid); f.setAccess({ tier: 'free', isPro: false }); const plays = count('play'); f.setAccess({ tier: 'pro', isPro: true }); cleared(f, 60); assert.equal(count('play'), plays); f.player.resume(); assert.equal(count('play'), plays); return { state: f.snapshot() };
+  });
+  for (const next of ['rain', 'solfeggio_396hz']) await probe(`external Focus ${next} graph survives SoundRoom downgrade/account change`, async () => {
+    const f = await fixture(); f.player.setTimer(10); f.player.play('solfeggio_396hz', paid); f.externalPlay(next); const externalGraph = graph; const stops = count('stop');
+    f.setAccess({ tier: 'free', isPro: false, identityRevision: 2 }); assert.equal(track, next); assert.equal(graph, externalGraph); assert.equal(count('stop'), stops); assert.equal(f.snapshot().endsAt, null); assert.equal(f.snapshot().pausedRemainingMs, null); return { state: f.snapshot(), calls: cloneCalls() };
+  });
+  await probe('restricted paused room selection cannot stop later Focus graph on revoke', async () => {
+    const f = await fixture(); f.player.play('solfeggio_396hz', paid); f.player.pause(); f.externalPlay('rain'); const stops = count('stop'); f.setAccess({ tier: 'free', isPro: false }); assert.equal(count('stop'), stops); assert.equal(track, 'rain'); return { state: f.snapshot(), calls: cloneCalls() };
+  });
+  await probe('free timer and volume0 remain effective through access changes', async () => {
+    const f = await fixture({ tier: 'free', isPro: false }); f.player.setTimer(10); f.player.play('pink_noise', { sleep: true, sectionId: 'sleep', indexInCategory: 1 }); f.player.setVolume(0);
+    assert.equal(volume, 0); assert.equal(fade!.seconds, 60); assert.equal(fade!.delay, 540); const before = f.snapshot(); f.setAccess({ identityRevision: 2, tier: 'free' }); assert.deepEqual(f.snapshot(), before);
+    f.player.setTimer(null); assert.equal(f.snapshot().endsAt, null); assert.equal(fade, null); assert.equal(volume, 0); return { state: f.snapshot(), calls: cloneCalls() };
+  });
+  await probe('fresh resume gate revokes paid selection even if change event was absent', async () => {
+    const f = await fixture(); f.player.setTimer(10); f.player.play('solfeggio_396hz', paid); f.player.pause(); f.setAccess({ tier: 'free', isPro: false }, false); const starts = count('play'); f.player.resume(); assert.equal(count('play'), starts); cleared(f, 10); return { state: f.snapshot() };
+  });
+  await probe('fresh timer control revokes unauthorized retained graph without waiting for a purchase event', async () => {
+    const f = await fixture(); f.player.setTimer(10); f.player.play('solfeggio_396hz', paid); f.setAccess({ tier: 'free', isPro: false }, false); f.player.setTimer(20); cleared(f, 20); assert.equal(track, 'silence'); assert.equal(fade, null); return { state: f.snapshot() };
+  });
+  await probe('player process observer survives all React listener unsubscriptions', async () => {
+    const f = await fixture(); const unsubscribe = f.player.subscribe(() => {}); f.player.play('solfeggio_396hz', paid); unsubscribe(); f.setAccess({ tier: 'free', isPro: false }); cleared(f, null); assert.equal(track, 'silence'); assert.equal(purchaseListeners.size, 1); return { state: f.snapshot(), observerCount: purchaseListeners.size };
+  });
+  await probe('synchronous entitlement loss during engine start cannot publish retained paid playback', async () => {
+    const f = await fixture(); let notified = false;
+    synthListeners.add(() => { if (!notified && track === 'solfeggio_396hz') { notified = true; f.setAccess({ tier: 'free', isPro: false }); } });
+    assert.equal(f.player.play('solfeggio_396hz', paid), false); cleared(f, null); assert.equal(track, 'silence'); return { state: f.snapshot(), calls: cloneCalls() };
+  });
+  await probe('synchronous identity revision during engine start cannot publish old paid selection', async () => {
+    const f = await fixture(); let notified = false;
+    synthListeners.add(() => { if (!notified && track === 'solfeggio_396hz') { notified = true; f.setAccess({ identityRevision: 2 }); } });
+    assert.equal(f.player.play('solfeggio_396hz', paid), false); cleared(f, null); assert.equal(track, 'silence'); return { state: f.snapshot(), calls: cloneCalls() };
+  });
+  await probe('audio start no-op cannot report accepted playing selection', async () => {
+    const f = await fixture(); const original = synthMock.playAmbient;
+    synthMock.playAmbient = () => {};
+    try { assert.equal(f.player.play('solfeggio_396hz', paid), false); assert.equal(f.snapshot().playing, false); assert.equal(track, 'silence'); }
+    finally { synthMock.playAmbient = original; }
+    return { state: f.snapshot() };
+  });
+  await probe('silence cannot become a playing SoundRoom selection', async () => {
+    const f = await fixture({ available: false }); assert.equal(f.player.play('silence'), false); assert.equal(f.snapshot().playing, false); assert.equal(track, 'silence'); return { state: f.snapshot() };
+  });
+  await probe('external same-track handoff during pause publication must retain its own graph', async () => {
+    const f = await fixture(); f.player.play('solfeggio_396hz', paid); let switched = false;
+    f.player.subscribe(() => { if (!switched && !f.snapshot().playing) { switched = true; f.externalPlay('solfeggio_396hz'); } });
+    f.player.pause(); assert.equal(track, 'solfeggio_396hz'); assert.equal(fade, null); assert.equal(f.snapshot().playing, true); return { state: f.snapshot(), calls: cloneCalls() };
+  });
+  await probe('external same-track handoff during timer publication must not inherit room fade', async () => {
+    const f = await fixture(); f.player.play('solfeggio_396hz', paid); let switched = false;
+    f.player.subscribe(() => { if (!switched && f.snapshot().timerMinutes === 20) { switched = true; f.externalPlay('solfeggio_396hz'); } });
+    f.player.setTimer(20); assert.equal(track, 'solfeggio_396hz'); assert.equal(fade, null); assert.equal(f.snapshot().endsAt, null); assert.equal(f.snapshot().timerMinutes, null); return { state: f.snapshot(), calls: cloneCalls() };
+  });
+}
+hooks.deregister(); Date.now = originalNow;
+const source: any = {};
+for (const file of ['src/services/soundRoomPlayer.ts', 'src/pages/SoundRoom.tsx', 'src/utils/soundSynthesizer.ts', 'src/data/soundRoom.ts', 'src/services/entitlements.ts']) source[file] = createHash('sha256').update(await readFile(`${root}/${file}`)).digest('hex');
+try { source['src/services/soundRoomAccess.ts'] = createHash('sha256').update(await readFile(`${root}/src/services/soundRoomAccess.ts`)).digest('hex'); } catch { source['src/services/soundRoomAccess.ts'] = null; }
+const report = { mode, root, head: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(), method: 'Actual player TypeScript loaded with only audio and purchase adapter imports replaced by synthetic local objects; actual catalog/helper logic retained', source, total: results.length, passed: results.filter(r => r.passed).length, failed: results.filter(r => !r.passed).length, fetchCalls, nativeSDKOrRealAudioTested: false, results };
+await writeFile(`${out}/${mode}-report.json`, JSON.stringify(report, null, 2) + '\n');
+console.log(JSON.stringify({ ...report, results: results.map(r => ({ name: r.name, passed: r.passed, error: r.error })) }, null, 2));
+if (report.failed || fetchCalls) process.exitCode = 1;

@@ -1,0 +1,125 @@
+{
+  "mode": "baseline",
+  "root": "/workspace/oda-cloud-upload-guard",
+  "head": "8fe9e55b602cc757646aa2c51baac8e176284840",
+  "method": "Actual player TypeScript loaded with only audio and purchase adapter imports replaced by synthetic local objects; actual catalog/helper logic retained",
+  "source": {
+    "src/services/soundRoomPlayer.ts": "a148bef6797cb62ebe682d95208eec5cad1282b0556d99a520c275d5ba1ffab7",
+    "src/pages/SoundRoom.tsx": "43224106f060f11106b334ec8749aebf5e2076b5951e37349fdb12e320411cf8",
+    "src/utils/soundSynthesizer.ts": "db278da38a4a0d1b540268e10cee36b92522fcf0194c690b07e866e400b1ff92",
+    "src/data/soundRoom.ts": "303649d8c09a86043087f6dba619fb2ebbb17fd7ac455b5d8fad5690aca6d6f4",
+    "src/services/entitlements.ts": "ee4a9c923f94154d4a3e4809980929474ab3289929d56ee067790010fa691219"
+  },
+  "total": 3,
+  "passed": 3,
+  "failed": 0,
+  "fetchCalls": 0,
+  "nativeSDKOrRealAudioTested": false,
+  "results": [
+    {
+      "name": "Known defect reproduced before fix: paid playback downgrade revokes audio, selection, sleep and deadline without losing timer choice",
+      "passed": true,
+      "evidence": {
+        "state": {
+          "track": "solfeggio_396hz",
+          "playing": true,
+          "sleep": false,
+          "timerMinutes": 10,
+          "endsAt": 1800000600000,
+          "pausedRemainingMs": null
+        },
+        "track": "solfeggio_396hz",
+        "calls": [
+          {
+            "kind": "play",
+            "track": "solfeggio_396hz",
+            "graph": 1,
+            "options": {
+              "fadeInSeconds": 3
+            }
+          },
+          {
+            "kind": "fade",
+            "seconds": 10,
+            "delay": 590,
+            "graph": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "Known defect reproduced before fix: paused paid selection downgrade cannot resume via retained stale player closure",
+      "passed": true,
+      "evidence": {
+        "state": {
+          "track": "solfeggio_396hz",
+          "playing": true,
+          "sleep": false,
+          "timerMinutes": 20,
+          "endsAt": 1800001200000,
+          "pausedRemainingMs": null
+        },
+        "calls": [
+          {
+            "kind": "play",
+            "track": "solfeggio_396hz",
+            "graph": 1,
+            "options": {
+              "fadeInSeconds": 3
+            }
+          },
+          {
+            "kind": "fade",
+            "seconds": 10,
+            "delay": 1190,
+            "graph": 1
+          },
+          {
+            "kind": "fade",
+            "seconds": 0.6,
+            "delay": 0,
+            "graph": 1
+          },
+          {
+            "kind": "play",
+            "track": "solfeggio_396hz",
+            "graph": 2,
+            "options": {
+              "fadeInSeconds": 3
+            }
+          },
+          {
+            "kind": "fade",
+            "seconds": 10,
+            "delay": 1185,
+            "graph": 2
+          }
+        ]
+      }
+    },
+    {
+      "name": "Known defect reproduced before fix: fresh playback start reads current entitlement even without a purchase event",
+      "passed": true,
+      "evidence": {
+        "state": {
+          "track": "solfeggio_396hz",
+          "playing": true,
+          "sleep": false,
+          "timerMinutes": null,
+          "endsAt": null,
+          "pausedRemainingMs": null
+        },
+        "calls": [
+          {
+            "kind": "play",
+            "track": "solfeggio_396hz",
+            "graph": 1,
+            "options": {
+              "fadeInSeconds": 3
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

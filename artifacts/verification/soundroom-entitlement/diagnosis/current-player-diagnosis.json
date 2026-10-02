@@ -1,0 +1,261 @@
+{
+  "readOnlyProductSource": true,
+  "syntheticFakeEngineOnly": true,
+  "noNetworkOrNativeProvider": true,
+  "evidence": [
+    {
+      "label": "Essentials starts Relax index3; parent policy then downgrades to free",
+      "state": {
+        "track": "tibetan_bowls",
+        "playing": true,
+        "sleep": false,
+        "timerMinutes": 30,
+        "endsAt": 1790939353804,
+        "pausedRemainingMs": null
+      },
+      "calls": [
+        {
+          "method": "playAmbient",
+          "track": "tibetan_bowls",
+          "options": {
+            "fadeInSeconds": 3
+          }
+        },
+        {
+          "method": "fadeOutAndStop",
+          "seconds": 10,
+          "delay": 1790
+        }
+      ]
+    },
+    {
+      "label": "Current free card rule denies Relax index3",
+      "cardDenied": true,
+      "state": {
+        "track": "tibetan_bowls",
+        "playing": true,
+        "sleep": false,
+        "timerMinutes": 30,
+        "endsAt": 1790939353804,
+        "pausedRemainingMs": null
+      }
+    },
+    {
+      "label": "Existing player resume starts the retained paid track despite free card rule",
+      "state": {
+        "track": "tibetan_bowls",
+        "playing": true,
+        "sleep": false,
+        "timerMinutes": 30,
+        "endsAt": 1790939353804,
+        "pausedRemainingMs": null
+      },
+      "calls": [
+        {
+          "method": "playAmbient",
+          "track": "tibetan_bowls",
+          "options": {
+            "fadeInSeconds": 3
+          }
+        },
+        {
+          "method": "fadeOutAndStop",
+          "seconds": 10,
+          "delay": 1790
+        },
+        {
+          "method": "fadeOutAndStop",
+          "seconds": 0.6
+        },
+        {
+          "method": "playAmbient",
+          "track": "tibetan_bowls",
+          "options": {
+            "fadeInSeconds": 3
+          }
+        },
+        {
+          "method": "fadeOutAndStop",
+          "seconds": 10,
+          "delay": 1790
+        }
+      ]
+    },
+    {
+      "label": "External hard silence retains track and allows another replay",
+      "state": {
+        "track": "tibetan_bowls",
+        "playing": true,
+        "sleep": false,
+        "timerMinutes": 30,
+        "endsAt": 1790939353804,
+        "pausedRemainingMs": null
+      },
+      "calls": [
+        {
+          "method": "playAmbient",
+          "track": "tibetan_bowls",
+          "options": {
+            "fadeInSeconds": 3
+          }
+        },
+        {
+          "method": "fadeOutAndStop",
+          "seconds": 10,
+          "delay": 1790
+        },
+        {
+          "method": "fadeOutAndStop",
+          "seconds": 0.6
+        },
+        {
+          "method": "playAmbient",
+          "track": "tibetan_bowls",
+          "options": {
+            "fadeInSeconds": 3
+          }
+        },
+        {
+          "method": "fadeOutAndStop",
+          "seconds": 10,
+          "delay": 1790
+        },
+        {
+          "method": "playAmbient",
+          "track": "tibetan_bowls",
+          "options": {
+            "fadeInSeconds": 3
+          }
+        },
+        {
+          "method": "fadeOutAndStop",
+          "seconds": 10,
+          "delay": 1790
+        }
+      ]
+    },
+    {
+      "label": "Timer change on the still-playing unauthorized selection cancels the old fade",
+      "state": {
+        "track": "tibetan_bowls",
+        "playing": true,
+        "sleep": false,
+        "timerMinutes": 60,
+        "endsAt": 1790941153804,
+        "pausedRemainingMs": null
+      },
+      "calls": [
+        {
+          "method": "playAmbient",
+          "track": "tibetan_bowls",
+          "options": {
+            "fadeInSeconds": 3
+          }
+        },
+        {
+          "method": "fadeOutAndStop",
+          "seconds": 10,
+          "delay": 1790
+        },
+        {
+          "method": "fadeOutAndStop",
+          "seconds": 0.6
+        },
+        {
+          "method": "playAmbient",
+          "track": "tibetan_bowls",
+          "options": {
+            "fadeInSeconds": 3
+          }
+        },
+        {
+          "method": "fadeOutAndStop",
+          "seconds": 10,
+          "delay": 1790
+        },
+        {
+          "method": "playAmbient",
+          "track": "tibetan_bowls",
+          "options": {
+            "fadeInSeconds": 3
+          }
+        },
+        {
+          "method": "fadeOutAndStop",
+          "seconds": 10,
+          "delay": 1790
+        },
+        {
+          "method": "cancelFadeOut"
+        },
+        {
+          "method": "fadeOutAndStop",
+          "seconds": 10,
+          "delay": 3590
+        }
+      ]
+    }
+  ],
+  "aliases": [
+    {
+      "track": "meditation_432hz",
+      "placements": [
+        {
+          "sectionId": "relax",
+          "index": 2,
+          "free": false
+        },
+        {
+          "sectionId": "frequencies",
+          "index": 0,
+          "free": true
+        }
+      ]
+    },
+    {
+      "track": "brown_noise",
+      "placements": [
+        {
+          "sectionId": "sleep",
+          "index": 2,
+          "free": false
+        },
+        {
+          "sectionId": "focus",
+          "index": 0,
+          "free": true
+        }
+      ]
+    }
+  ],
+  "sourceHashes": [
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "sha256": "43224106f060f11106b334ec8749aebf5e2076b5951e37349fdb12e320411cf8"
+    },
+    {
+      "file": "src/services/soundRoomPlayer.ts",
+      "sha256": "a148bef6797cb62ebe682d95208eec5cad1282b0556d99a520c275d5ba1ffab7"
+    },
+    {
+      "file": "src/services/soundRoom.ts",
+      "sha256": "f5d65b15d8b0da6aa42bb81073efb0670d8569eb9866cffb105e71e52c070175"
+    },
+    {
+      "file": "src/services/entitlements.ts",
+      "sha256": "ee4a9c923f94154d4a3e4809980929474ab3289929d56ee067790010fa691219"
+    },
+    {
+      "file": "src/services/purchases.ts",
+      "sha256": "20166152294fdaba6c351e282c1b738a47b775256677030af518a417e1da257d"
+    },
+    {
+      "file": "src/data/soundRoom.ts",
+      "sha256": "303649d8c09a86043087f6dba619fb2ebbb17fd7ac455b5d8fad5690aca6d6f4"
+    },
+    {
+      "file": "src/utils/soundSynthesizer.ts",
+      "sha256": "db278da38a4a0d1b540268e10cee36b92522fcf0194c690b07e866e400b1ff92"
+    }
+  ]
+}
