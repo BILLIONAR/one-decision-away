@@ -42,6 +42,8 @@ class CloudSync {
   private syncing = false;
   private error: string | null = null;
   private initialized = false;
+  private initializing: Promise<void> | null = null;
+  private sessionHydrated = false;
   private pushQueue: Promise<boolean> = Promise.resolve(false);
   private scopeRevision = 0;
   private authSubscription: { unsubscribe: () => void } | null = null;
@@ -147,6 +149,8 @@ class CloudSync {
     this.syncing = false;
     this.error = null;
     this.initialized = false;
+    this.initializing = null;
+    this.sessionHydrated = false;
     this.emit();
   }
 
@@ -167,28 +171,49 @@ class CloudSync {
   }
 
   /** Restores an existing session (call once on app start). */
-  public async init(): Promise<void> {
-    if (this.initialized) return;
+  public init(): Promise<void> {
+    if (this.initializing) return this.initializing;
+    if (this.initialized) return Promise.resolve();
     this.initialized = true;
+    const pending = this.initializeSession().finally(() => {
+      if (this.initializing === pending) this.initializing = null;
+    });
+    this.initializing = pending;
+    return pending;
+  }
+
+  private async initializeSession(): Promise<void> {
     const config = this.config;
     const revision = this.scopeRevision;
-    const client = await this.getClient();
-    if (!client) return;
+    let ownedRevision = revision;
     try {
-      const { data } = await client.auth.getSession();
+      const client = await this.getClient();
+      if (!client) return;
+      const { data, error } = await client.auth.getSession();
+      if (error) throw error;
       if (this.config !== config || this.client !== client || this.scopeRevision !== revision) return;
       this.setSession(data.session);
+      ownedRevision = this.scopeRevision;
       const { data: { subscription } } = client.auth.onAuthStateChange((_evt, session) => {
         if (this.config !== config || this.client !== client) return;
         this.setSession(session);
+        this.sessionHydrated = true;
         this.emit();
       });
       this.authSubscription = subscription;
+      this.sessionHydrated = true;
+      this.error = null;
     } catch (e) {
+      if (this.config !== config || this.scopeRevision !== ownedRevision) return;
       this.error = (e as Error).message;
+      this.sessionHydrated = false;
+      this.initialized = false;
     }
     this.emit();
   }
+
+  /** A missing session before hydration is unknown, rather than signed out. */
+  public isSessionReady(): boolean { return !this.config || this.sessionHydrated; }
 
   public getState(): CloudState {
     return {

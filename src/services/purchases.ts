@@ -55,6 +55,10 @@ export type PurchasesState = {
   available: boolean;
   /** Offerings and customer info have loaded (or failed). */
   ready: boolean;
+  /** The SDK's current identity has been verified against the explicitly bound ODA account. */
+  identityConfirmed: boolean;
+  /** Changes synchronously when the desired ODA account changes. */
+  identityRevision: number;
   /** The highest active level. */
   tier: Tier;
   /** Compatibility: Pro or higher. */
@@ -104,17 +108,23 @@ type RCPackage = { packageType: string; identifier: string; product: { identifie
 type RCOffering = { availablePackages?: RCPackage[]; annual?: RCPackage | null; monthly?: RCPackage | null };
 type RCCustomerInfo = { entitlements: { active: Record<string, { expirationDate: string | null } | undefined> } };
 
-export type PurchasesSDK = Pick<PurchasesPlugin, 'configure' | 'addCustomerInfoUpdateListener' | 'getCustomerInfo' | 'getOfferings' | 'checkTrialOrIntroductoryPriceEligibility' | 'purchasePackage' | 'restorePurchases' | 'logIn' | 'logOut' | 'isAnonymous'>;
+export type PurchasesSDK = Pick<PurchasesPlugin, 'configure' | 'addCustomerInfoUpdateListener' | 'getCustomerInfo' | 'getOfferings' | 'checkTrialOrIntroductoryPriceEligibility' | 'purchasePackage' | 'restorePurchases' | 'logIn' | 'logOut' | 'getAppUserID' | 'isAnonymous'>;
 type PurchasesDependencies = { native: () => boolean; key: () => string; sdk: () => Promise<PurchasesSDK> };
+type Identity = { revision: number; userId: string | null | undefined };
+class SupersededIdentity extends Error {}
+class IdentityCheckFailed extends Error {}
 
 export class PurchasesService {
-  private state: PurchasesState = { available: false, ready: true, tier: 'free', isPro: false, renewsAt: null, products: {}, error: null };
+  private state: PurchasesState = { available: false, ready: true, identityConfirmed: false, identityRevision: 0, tier: 'free', isPro: false, renewsAt: null, products: {}, error: null };
   private listeners = new Set<Listener>();
   private packages = new Map<ProductId, RCPackage>();
   private configuredSDK: PurchasesSDK | null = null;
   private customerListenerAttached = false;
-  private configuring: Promise<PurchasesSDK> | null = null;
-  private loading: Promise<void> | null = null;
+  /** Undefined means cloud identity has not hydrated yet; null explicitly means anonymous. */
+  private desiredIdentity: string | null | undefined;
+  private confirmedRevision: number | null = null;
+  private queue: Promise<void> = Promise.resolve();
+  private loading: { revision: number; promise: Promise<void> } | null = null;
   private dependencies: PurchasesDependencies;
 
   constructor(dependencies: Partial<PurchasesDependencies> = {}) {
@@ -123,26 +133,114 @@ export class PurchasesService {
       key: dependencies.key ?? apiKey,
       sdk: dependencies.sdk ?? (async () => (await import('@revenuecat/purchases-capacitor')).Purchases),
     };
+    // Native locks depend on purchase capability, even before auth or SDK startup.
+    const available = this.dependencies.native() && Boolean(this.dependencies.key());
+    this.state = { ...this.state, available, ready: !available };
   }
 
   getState = (): PurchasesState => this.state;
   subscribe = (fn: Listener) => { this.listeners.add(fn); return () => { this.listeners.delete(fn); }; };
   private set(patch: Partial<PurchasesState>) { this.state = { ...this.state, ...patch }; this.listeners.forEach(fn => fn()); }
 
-  /** Share setup across callers; only successfully completed setup is retained. */
-  private configureSDK(): Promise<PurchasesSDK> {
-    if (this.configuring) return this.configuring;
-    if (this.configuredSDK && this.customerListenerAttached) return Promise.resolve(this.configuredSDK);
-    this.configuring = (async () => {
-      const sdk = this.configuredSDK ?? await this.dependencies.sdk();
-      if (!this.configuredSDK) { await sdk.configure({ apiKey: this.dependencies.key() }); this.configuredSDK = sdk; }
-      if (!this.customerListenerAttached) {
-        await sdk.addCustomerInfoUpdateListener(info => this.applyCustomer(info as unknown as RCCustomerInfo));
-        this.customerListenerAttached = true;
-      }
-      return sdk;
-    })().finally(() => { this.configuring = null; });
-    return this.configuring;
+  private identity(): Identity { return { revision: this.state.identityRevision, userId: this.desiredIdentity }; }
+  private isCurrent(identity: Identity): boolean { return identity.revision === this.state.identityRevision; }
+  private isConfirmed(identity: Identity): boolean {
+    return identity.userId !== undefined && this.isCurrent(identity) && this.confirmedRevision === identity.revision && this.state.identityConfirmed;
+  }
+  private requireCurrent(identity: Identity) { if (!this.isCurrent(identity)) throw new SupersededIdentity(); }
+  /** Also lets UI callers suppress feedback from a completed operation for an old account. */
+  currentIdentityGuard = (): (() => boolean) => { const identity = this.identity(); return () => this.isConfirmed(identity); };
+
+  /** SDK identity mutations and customer-context operations must never overlap. */
+  private enqueue<T>(operation: () => Promise<T>): Promise<T> {
+    const result = this.queue.then(operation);
+    this.queue = result.then(() => undefined, () => undefined);
+    return result;
+  }
+
+  private unknownProducts(products = this.state.products): PurchasesState['products'] {
+    return Object.fromEntries(Object.entries(products).map(([id, product]) => [id, { ...product, trialEligibility: 'unknown' as const }]));
+  }
+  private clearCustomer() {
+    this.confirmedRevision = null;
+    this.set({ identityConfirmed: false, tier: 'free', isPro: false, renewsAt: null, products: this.unknownProducts() });
+  }
+
+  /** Called only inside the queue; successful setup is retained even after a superseded load. */
+  private async configureSDK(identity: Identity): Promise<PurchasesSDK> {
+    this.requireCurrent(identity);
+    const sdk = this.configuredSDK ?? await this.dependencies.sdk();
+    this.requireCurrent(identity);
+    if (!this.configuredSDK) {
+      await sdk.configure({ apiKey: this.dependencies.key() });
+      this.configuredSDK = sdk;
+    }
+    this.requireCurrent(identity);
+    if (!this.customerListenerAttached) {
+      // Event payloads can belong to an earlier SDK identity or contain aliased IDs.
+      await sdk.addCustomerInfoUpdateListener(() => this.customerChanged());
+      this.customerListenerAttached = true;
+    }
+    this.requireCurrent(identity);
+    return sdk;
+  }
+
+  private async matchesSDKIdentity(sdk: PurchasesSDK, identity: Identity): Promise<boolean> {
+    try {
+      this.requireCurrent(identity);
+      const { appUserID } = await sdk.getAppUserID();
+      this.requireCurrent(identity);
+      const { isAnonymous } = await sdk.isAnonymous();
+      this.requireCurrent(identity);
+      return identity.userId === null ? isAnonymous : identity.userId !== undefined && !isAnonymous && appUserID === identity.userId;
+    } catch (error) {
+      if (error instanceof SupersededIdentity) throw error;
+      throw new IdentityCheckFailed();
+    }
+  }
+
+  private async verifyIdentity(sdk: PurchasesSDK, identity: Identity) {
+    const matches = await this.matchesSDKIdentity(sdk, identity);
+    this.requireCurrent(identity);
+    if (!matches) {
+      this.clearCustomer();
+      this.requireCurrent(identity);
+      this.set({ error: 'identity-unconfirmed' });
+      throw new Error('identity-unconfirmed');
+    }
+  }
+
+  private async confirmIdentity(sdk: PurchasesSDK, identity: Identity) {
+    const matches = await this.matchesSDKIdentity(sdk, identity);
+    this.requireCurrent(identity);
+    if (!matches) {
+      this.clearCustomer();
+      this.requireCurrent(identity);
+      if (identity.userId === null) await sdk.logOut();
+      else if (identity.userId !== undefined) await sdk.logIn({ appUserID: identity.userId });
+      this.requireCurrent(identity);
+      await this.verifyIdentity(sdk, identity);
+    }
+    this.requireCurrent(identity);
+    this.confirmedRevision = identity.revision;
+    this.set({ identityConfirmed: true });
+  }
+
+  private customerChanged() {
+    const identity = this.identity();
+    if (!this.isConfirmed(identity)) return;
+    void this.enqueue(async () => {
+      if (!this.isConfirmed(identity)) return;
+      try {
+        const sdk = this.configuredSDK!;
+        await this.verifyIdentity(sdk, identity);
+        this.requireCurrent(identity);
+        const { customerInfo } = await sdk.getCustomerInfo();
+        this.requireCurrent(identity);
+        await this.verifyIdentity(sdk, identity);
+        if (this.isConfirmed(identity)) this.applyCustomer(customerInfo as unknown as RCCustomerInfo);
+      } catch { /* A failed refresh retains only this already-confirmed account's entitlement. */ }
+    });
   }
 
   private applyCustomer(info: RCCustomerInfo) {
@@ -151,17 +249,17 @@ export class PurchasesService {
   }
 
   /** Finds our six products in the current offering first, then in any other offering. */
-  private collectProducts(offerings: { current: unknown; all?: Record<string, unknown> }): Partial<Record<ProductId, ProductPrice>> {
+  private collectProducts(offerings: { current: unknown; all?: Record<string, unknown> }) {
     const lists: RCOffering[] = [offerings.current as RCOffering | null, ...Object.values(offerings.all ?? {}) as RCOffering[]].filter(Boolean) as RCOffering[];
     const products: Partial<Record<ProductId, ProductPrice>> = {};
-    this.packages.clear();
+    const packages = new Map<ProductId, RCPackage>();
     for (const offering of lists) {
       const pkgs = [...(offering.availablePackages ?? []), offering.annual, offering.monthly].filter(Boolean) as RCPackage[];
       for (const pkg of pkgs) {
         const id = pkg.product?.identifier;
         const info = id ? describeProduct(id) : null;
         if (!id || !info || products[id as ProductId]) continue;
-        this.packages.set(id as ProductId, pkg);
+        packages.set(id as ProductId, pkg);
         products[id as ProductId] = {
           id: id as ProductId, tier: info.tier, plan: info.plan,
           price: pkg.product.priceString,
@@ -172,11 +270,11 @@ export class PurchasesService {
         };
       }
     }
-    return products;
+    return { products, packages };
   }
 
   private async checkEligibility(sdk: PurchasesSDK, products: PurchasesState['products']): Promise<PurchasesState['products']> {
-    const unknownProducts: PurchasesState['products'] = Object.fromEntries(Object.entries(products).map(([id, product]) => [id, { ...product, trialEligibility: 'unknown' as const }]));
+    const unknownProducts = this.unknownProducts(products);
     const identifiers = Object.values(unknownProducts).filter(product => product?.trialDays).map(product => product!.id);
     if (!identifiers.length) return unknownProducts;
     try {
@@ -187,60 +285,127 @@ export class PurchasesService {
 
   /** Failed plan loads may retry; concurrent calls share one SDK setup and load. */
   init(): Promise<void> {
-    if (this.loading) return this.loading;
+    const identity = this.identity();
+    const wasConfirmed = this.isConfirmed(identity);
+    if (this.loading?.revision === identity.revision) return this.loading.promise;
     if (!this.dependencies.native() || !this.dependencies.key()) return Promise.resolve();
-    if (this.state.available && this.state.ready && !this.state.error) return Promise.resolve();
-    this.set({ available: true, ready: false });
-    this.loading = (async () => { try {
-      const Purchases = await this.configureSDK();
-      const [{ customerInfo }, offerings] = await Promise.all([Purchases.getCustomerInfo(), Purchases.getOfferings()]);
-      this.applyCustomer(customerInfo as unknown as RCCustomerInfo);
-      const products = await this.checkEligibility(Purchases, this.collectProducts(offerings as unknown as { current: unknown; all?: Record<string, unknown> }));
+    if (this.state.available && this.state.ready && !this.state.error && (identity.userId === undefined || this.isConfirmed(identity))) return Promise.resolve();
+    this.set({ available: true, ready: false, error: null, products: this.unknownProducts() });
+    const promise = this.enqueue(async () => { try {
+      const sdk = await this.configureSDK(identity);
+      this.requireCurrent(identity);
+      if (identity.userId !== undefined) {
+        await this.confirmIdentity(sdk, identity);
+        this.requireCurrent(identity);
+        const { customerInfo } = await sdk.getCustomerInfo();
+        this.requireCurrent(identity);
+        await this.verifyIdentity(sdk, identity);
+        this.requireCurrent(identity);
+        this.applyCustomer(customerInfo as unknown as RCCustomerInfo);
+      }
+      // Before cloud hydration, only account-independent store prices may load.
+      this.requireCurrent(identity);
+      const offerings = await sdk.getOfferings();
+      this.requireCurrent(identity);
+      const collected = this.collectProducts(offerings as unknown as { current: unknown; all?: Record<string, unknown> });
+      let products = collected.products;
+      if (identity.userId !== undefined) {
+        await this.verifyIdentity(sdk, identity);
+        this.requireCurrent(identity);
+        products = await this.checkEligibility(sdk, products);
+        this.requireCurrent(identity);
+        await this.verifyIdentity(sdk, identity);
+      }
+      this.requireCurrent(identity);
+      this.packages = collected.packages;
       this.set({ products, ready: true, error: Object.keys(products).length ? null : 'no-plans' });
-    } catch {
-      this.packages.clear(); this.set({ products: {}, ready: true, error: 'unavailable' });
-    } })().finally(() => { this.loading = null; });
-    return this.loading;
+    } catch (error) {
+      if (!this.isCurrent(identity)) return;
+      // A first load cannot retain a partially verified identity after a later
+      // ID lookup fails. Previously confirmed same-account offline reads may.
+      if (error instanceof IdentityCheckFailed && !wasConfirmed) this.clearCustomer();
+      if (!this.isCurrent(identity)) return;
+      if (identity.userId !== undefined && !this.isConfirmed(identity)) {
+        this.clearCustomer();
+        this.set({ ready: true, error: 'identity-unconfirmed' });
+      } else {
+        this.packages.clear();
+        this.set({ products: {}, ready: true, error: 'unavailable' });
+      }
+    } }).finally(() => { if (this.loading?.promise === promise) this.loading = null; });
+    this.loading = { revision: identity.revision, promise };
+    return promise;
   }
 
   /** Ties purchases to the ODA account so the level follows the member to a new phone. */
-  async identify(userId: string | null): Promise<void> {
-    if (!this.state.available) return;
-    try {
-      // An account transition must not keep a previous eligibility claim visible.
-      this.set({ products: Object.fromEntries(Object.entries(this.state.products).map(([id, product]) => [id, { ...product, trialEligibility: 'unknown' as const }])) });
-      const Purchases = await this.configureSDK();
-      if (userId) this.applyCustomer((await Purchases.logIn({ appUserID: userId })).customerInfo as unknown as RCCustomerInfo);
-      else if (!(await Purchases.isAnonymous()).isAnonymous) this.applyCustomer((await Purchases.logOut()).customerInfo as unknown as RCCustomerInfo);
-      this.set({ products: await this.checkEligibility(Purchases, this.state.products) });
-    } catch { /* keep the current entitlement */ }
+  identify(userId: string | null): Promise<void> {
+    if (this.desiredIdentity !== userId) {
+      this.desiredIdentity = userId;
+      this.confirmedRevision = null;
+      this.set({ identityRevision: this.state.identityRevision + 1, identityConfirmed: false, tier: 'free', isPro: false, renewsAt: null,
+        products: this.unknownProducts(), ready: false, error: null });
+    }
+    // Register desired identity before any asynchronous setup or cached-tier read.
+    if (!this.dependencies.native() || !this.dependencies.key()) {
+      this.set({ ready: true });
+      return Promise.resolve();
+    }
+    return this.init();
+  }
+
+  /** Unknown cloud auth must not assert either a cached account or anonymity. No SDK calls. */
+  deferIdentity(): void {
+    const changed = this.desiredIdentity !== undefined;
+    this.desiredIdentity = undefined;
+    this.confirmedRevision = null;
+    this.set({ available: this.dependencies.native() && Boolean(this.dependencies.key()),
+      identityRevision: this.state.identityRevision + (changed ? 1 : 0), identityConfirmed: false,
+      tier: 'free', isPro: false, renewsAt: null, products: this.unknownProducts(), ready: true, error: null });
   }
 
   async purchase(productId: ProductId): Promise<PurchaseResult> {
+    const identity = this.identity();
     const pkg = this.packages.get(productId);
     const info = describeProduct(productId);
-    if (!this.state.available || !pkg || !info) return 'failed';
-    try {
-      const Purchases = await this.configureSDK();
-      const { customerInfo } = await Purchases.purchasePackage({ aPackage: pkg as never });
-      this.applyCustomer(customerInfo as unknown as RCCustomerInfo);
-      return tierAtLeast(this.state.tier, info.tier) ? 'purchased' : 'unconfirmed';
-    } catch (error) {
-      return purchaseErrorResult(error);
-    }
+    if (!this.state.available || !this.state.ready || !this.isConfirmed(identity) || !pkg || !info) return 'failed';
+    return this.enqueue(async () => {
+      if (!this.state.ready || !this.isConfirmed(identity)) return 'failed';
+      try {
+        const sdk = this.configuredSDK!;
+        await this.verifyIdentity(sdk, identity);
+        this.requireCurrent(identity);
+        const { customerInfo } = await sdk.purchasePackage({ aPackage: pkg as never });
+        this.requireCurrent(identity);
+        await this.verifyIdentity(sdk, identity);
+        this.requireCurrent(identity);
+        this.applyCustomer(customerInfo as unknown as RCCustomerInfo);
+        return tierAtLeast(this.state.tier, info.tier) ? 'purchased' : 'unconfirmed';
+      } catch (error) {
+        return this.isConfirmed(identity) ? purchaseErrorResult(error) : 'failed';
+      }
+    });
   }
 
   /** Distinguish a successful check with no plan from a failed store check. */
   async restore(): Promise<RestoreResult> {
-    if (!this.state.available) return 'failed';
-    try {
-      const Purchases = await this.configureSDK();
-      const { customerInfo } = await Purchases.restorePurchases();
-      this.applyCustomer(customerInfo as unknown as RCCustomerInfo);
-      return this.state.tier !== 'free' ? 'restored' : 'not-found';
-    } catch {
-      return 'failed';
-    }
+    const identity = this.identity();
+    if (!this.state.available || !this.state.ready || !this.isConfirmed(identity)) return 'failed';
+    return this.enqueue(async () => {
+      if (!this.state.ready || !this.isConfirmed(identity)) return 'failed';
+      try {
+        const sdk = this.configuredSDK!;
+        await this.verifyIdentity(sdk, identity);
+        this.requireCurrent(identity);
+        const { customerInfo } = await sdk.restorePurchases();
+        this.requireCurrent(identity);
+        await this.verifyIdentity(sdk, identity);
+        this.requireCurrent(identity);
+        this.applyCustomer(customerInfo as unknown as RCCustomerInfo);
+        return this.state.tier !== 'free' ? 'restored' : 'not-found';
+      } catch {
+        return 'failed';
+      }
+    });
   }
 }
 

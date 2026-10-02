@@ -7,7 +7,7 @@ import { AppContext } from '../src/store/AppContext';
 import { purchases, type PurchasesState, type TrialEligibility } from '../src/services/purchases';
 
 const stateFor = (eligibility: TrialEligibility): PurchasesState => ({
-  available: true, ready: true, tier: 'free', isPro: false, renewsAt: null, error: null,
+  available: true, ready: true, tier: 'free', isPro: false, renewsAt: null, error: null, identityConfirmed: true, identityRevision: 1,
   products: { oda_pro_annual: { id: 'oda_pro_annual', tier: 'pro', plan: 'annual', price: '$49.99', amount: 49.99, perMonth: '$4.17', trialDays: 7, trialEligibility: eligibility } },
 });
 
@@ -43,4 +43,20 @@ test('web paywall keeps free access and does not offer a purchase CTA', () => {
   assert.match(html, /Here on the web every course and sound is open to you, free/);
   assert.match(html, /Open the courses/);
   assert.doesNotMatch(html, /Subscribe to Pro|Start 7 days free|Try loading plans again/);
+});
+
+test('unconfirmed identity shows truthful verification retry and disables buy and restore even with cached prices', () => {
+  const html = render({ ...stateFor('eligible'), identityConfirmed: false, error: 'identity-unconfirmed' });
+  assert.match(html, /subscription for this account couldn’t be verified/);
+  assert.match(html, /Retry account verification/);
+  assert.doesNotMatch(html, /Start 7 days free|7 days free|How the free trial works/);
+  assert.match(html, /<button[^>]*disabled=""[^>]*>Restore purchases<\/button>/);
+  assert.match(html, /<button[^>]*disabled=""[^>]*>Subscribe to Pro<\/button>/);
+});
+
+test('pending identity verification does not render a trial or an enabled restore action', () => {
+  const html = render({ ...stateFor('eligible'), ready: false, identityConfirmed: false });
+  assert.match(html, /Checking the subscription for this account/);
+  assert.doesNotMatch(html, /Start 7 days free|7 days free|How the free trial works/);
+  assert.match(html, /<button[^>]*disabled=""[^>]*>Restore purchases<\/button>/);
 });

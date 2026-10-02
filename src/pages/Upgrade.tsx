@@ -12,6 +12,8 @@ import {
 import { AI_MONTHLY_MESSAGES, ESSENTIAL_COURSES, tierAtLeast, tierRank, type PaidTier } from '../services/entitlements';
 import { haptic, openExternal } from '../services/native';
 import { LEGAL_COMPANY } from '../data/legal';
+import { cloudSync } from '../services/cloudSync';
+import { refreshPurchaseIdentity } from '../services/purchaseIdentityBinding';
 
 const LEVELS: readonly PaidTier[] = ['essentials', 'pro', 'coach'];
 
@@ -33,6 +35,7 @@ export const Upgrade: React.FC = () => {
   const [purchaseNotice, setPurchaseNotice] = useState<Exclude<PurchaseResult, 'purchased'> | null>(null);
   const [awaitingTier, setAwaitingTier] = useState<PaidTier | null>(null);
   useEffect(() => { void purchases.init(); }, []);
+  useEffect(() => { setPurchaseNotice(null); setAwaitingTier(null); }, [sub.identityRevision]);
   useEffect(() => {
     if (awaitingTier && tierAtLeast(sub.tier, awaitingTier)) { setPurchaseNotice(null); setAwaitingTier(null); }
   }, [sub.tier, awaitingTier]);
@@ -57,7 +60,8 @@ export const Upgrade: React.FC = () => {
   }, [products]);
 
   const product = products[productIdFor(chosen, period)];
-  const trial = !current && chosen === 'pro' && period === 'annual' ? confirmedTrialDays(product) : null;
+  const trial = sub.identityConfirmed && sub.ready && !current && chosen === 'pro' && period === 'annual' ? confirmedTrialDays(product) : null;
+  const retryIdentity = () => { void refreshPurchaseIdentity(cloudSync, purchases).catch(() => {}); };
 
   const lessons = COURSES.reduce((n, c) => n + c.lessons.length, 0);
   const benefits: Record<PaidTier, string[]> = {
@@ -87,18 +91,22 @@ export const Upgrade: React.FC = () => {
   };
 
   const buy = async () => {
-    if (busy || !product || awaitingTier) return;
+    if (busy || !product || awaitingTier || !sub.ready || !sub.identityConfirmed) return;
+    const isCurrentIdentity = purchases.currentIdentityGuard();
     setBusy('buy');
     const result = await purchases.purchase(product.id);
     setBusy(null);
+    if (!isCurrentIdentity()) return;
     if (result === 'purchased') { setPurchaseNotice(null); setAwaitingTier(null); void haptic('success'); showToast(t('Welcome to {level}.', { level: fullName(product.tier) }), 'success'); }
     else { setPurchaseNotice(result); setAwaitingTier(result === 'pending' || result === 'unconfirmed' ? product.tier : null); showToast(purchaseFeedback(result, locale), result === 'failed' ? 'error' : 'info'); }
   };
   const restore = async () => {
-    if (busy) return;
+    if (busy || !sub.ready || !sub.identityConfirmed) return;
+    const isCurrentIdentity = purchases.currentIdentityGuard();
     setBusy('restore');
     const result = await purchases.restore();
     setBusy(null);
+    if (!isCurrentIdentity()) return;
     if (result === 'restored') {
       if (!awaitingTier || tierAtLeast(purchases.getState().tier, awaitingTier)) { setPurchaseNotice(null); setAwaitingTier(null); }
       showToast(t('Your ODA subscription was restored.'), 'success');
@@ -165,6 +173,7 @@ export const Upgrade: React.FC = () => {
   // ---- Web: no purchases here, but the levels are still explained. ----
   const purchasesHere = sub.available;
   const failed = purchasesHere && sub.ready && !Object.keys(products).length;
+  const identityFailed = purchasesHere && sub.ready && !sub.identityConfirmed;
 
   const primary = (() => {
     if (!purchasesHere) return null;
@@ -174,14 +183,14 @@ export const Upgrade: React.FC = () => {
       : trial ? t('Start {n} days free', { n: trial })
       : current ? (rankDelta > 0 ? t('Upgrade to {level}', { level: levelName(chosen) }) : t('Switch to {level}', { level: levelName(chosen) }))
       : t('Subscribe to {level}', { level: levelName(chosen) });
-    return { label, action: () => void buy(), disabled: busy !== null || !product || purchaseNotice === 'pending' || purchaseNotice === 'unconfirmed' };
+    return { label, action: () => void buy(), disabled: busy !== null || !sub.ready || !sub.identityConfirmed || !product || purchaseNotice === 'pending' || purchaseNotice === 'unconfirmed' };
   })();
 
   return (
     <div className="space-y-7 max-w-[560px]">
       {purchasesHere && (
         <div className="flex justify-end -mx-2 -mb-4">
-          <button type="button" onClick={() => void restore()} disabled={busy !== null} className="min-h-11 px-2 text-[14px] text-[var(--fg-muted)] hover:text-[var(--fg)] disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent)] rounded-md">{busy === 'restore' ? t('Restoring…') : t('Restore purchases')}</button>
+          <button type="button" onClick={() => void restore()} disabled={busy !== null || !sub.ready || !sub.identityConfirmed} className="min-h-11 px-2 text-[14px] text-[var(--fg-muted)] hover:text-[var(--fg)] disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent)] rounded-md">{busy === 'restore' ? t('Restoring…') : t('Restore purchases')}</button>
         </div>
       )}
 
@@ -208,11 +217,19 @@ export const Upgrade: React.FC = () => {
       )}
 
       {purchasesHere && !sub.ready ? (
-        <div className="space-y-3" aria-busy="true" aria-label={t('Loading plans…')}>
+        <div className="space-y-3" aria-busy="true" aria-label={!sub.identityConfirmed ? purchaseLabels.identityPending : t('Loading plans…')}>
+          {!sub.identityConfirmed && <p className="text-[14px] leading-relaxed text-[var(--fg-muted)]">{purchaseLabels.identityPending}</p>}
           {[0, 1, 2].map(i => <div key={i} className="h-40 rounded-[var(--radius-lg)] bg-[var(--bg-muted)] animate-pulse" />)}
         </div>
       ) : (
         <>
+          {identityFailed && (
+            <section className="oda-card rounded-[var(--radius-lg)] p-5 space-y-1" role="alert">
+              <p className="text-[15px] font-semibold">{purchaseLabels.identityFailed}</p>
+              <p className="text-[14px] text-[var(--fg-muted)]">{purchaseLabels.identityHelp}</p>
+              <button type="button" onClick={retryIdentity} className="min-h-11 text-[14px] font-semibold text-[var(--accent)] underline underline-offset-4">{purchaseLabels.identityRetry}</button>
+            </section>
+          )}
           {purchasesHere && !failed && (
             <div role="radiogroup" aria-label={t('Billing period')} className="grid grid-cols-2 gap-1 p-1 rounded-full bg-[var(--bg-muted)] border border-[var(--border)]">
               {(['monthly', 'annual'] as const).map(p => {
@@ -229,7 +246,7 @@ export const Upgrade: React.FC = () => {
             </div>
           )}
 
-          {failed && (
+          {failed && !identityFailed && (
             <section className="oda-card rounded-[var(--radius-lg)] p-5 space-y-1" role="alert">
               <p className="text-[15px] font-semibold">{t('Plans couldn’t load.')}</p>
               <p className="text-[14px] text-[var(--fg-muted)]">{purchaseLabels.retryHelp}</p>
@@ -275,7 +292,7 @@ export const Upgrade: React.FC = () => {
                       <span className="oda-numeral text-[30px] leading-none">{item.price}</span>
                       <span className="text-[14px] text-[var(--fg-muted)]"> {period === 'annual' ? t('/ year') : t('/ month')}</span>
                       {item.perMonth && <span className="block text-[13px] text-[var(--fg-muted)] mt-1">{t('about {price} a month', { price: item.perMonth })}</span>}
-                      {level === 'pro' && period === 'annual' && confirmedTrialDays(item) && !current && <span className="inline-block mt-2 text-[12px] font-semibold text-[var(--accent)] bg-[var(--accent-soft)] px-2 py-1 rounded-full">{t('{n} days free', { n: confirmedTrialDays(item) })}</span>}
+                      {sub.identityConfirmed && sub.ready && level === 'pro' && period === 'annual' && confirmedTrialDays(item) && !current && <span className="inline-block mt-2 text-[12px] font-semibold text-[var(--accent)] bg-[var(--accent-soft)] px-2 py-1 rounded-full">{t('{n} days free', { n: confirmedTrialDays(item) })}</span>}
                     </>
                   ) : (
                     <span className="text-[14px] text-[var(--fg-muted)]">{t('Price shown by the App Store')}</span>

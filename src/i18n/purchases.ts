@@ -5,6 +5,10 @@ import type { PurchaseResult } from '../services/purchaseStatus';
 const copy = {
   en: {
     retry: 'Try loading plans again', retryHelp: 'Check your connection, then try again.',
+    identityPending: 'Checking the subscription for this account…',
+    identityFailed: 'The subscription for this account couldn’t be verified.',
+    identityHelp: 'Paid access and purchasing are paused until this account is verified. Check your connection and try again.',
+    identityRetry: 'Retry account verification',
     unknownTrial: 'The App Store will confirm whether an introductory offer applies before you approve a purchase.',
     ineligibleTrial: 'The standard subscription price applies to this plan.',
     trialStart: 'On confirmation', trialStartBody: 'Pro opens after the App Store confirms your trial.',
@@ -16,6 +20,10 @@ const copy = {
   },
   tr: {
     retry: 'Planları yeniden yükle', retryHelp: 'Bağlantını kontrol edip yeniden dene.',
+    identityPending: 'Bu hesabın aboneliği kontrol ediliyor…',
+    identityFailed: 'Bu hesabın aboneliği doğrulanamadı.',
+    identityHelp: 'Bu hesap doğrulanana kadar ücretli erişim ve satın alma duraklatıldı. Bağlantını kontrol edip yeniden dene.',
+    identityRetry: 'Hesap doğrulamasını yeniden dene',
     unknownTrial: 'Satın almayı onaylamadan önce App Store, başlangıç teklifinin geçerli olup olmadığını gösterecek.',
     ineligibleTrial: 'Bu plan için standart abonelik fiyatı geçerlidir.',
     trialStart: 'Onaylandığında', trialStartBody: 'App Store denemeni onayladıktan sonra Pro açılır.',
@@ -27,6 +35,10 @@ const copy = {
   },
   es: {
     retry: 'Volver a cargar los planes', retryHelp: 'Comprueba tu conexión y vuelve a intentarlo.',
+    identityPending: 'Comprobando la suscripción de esta cuenta…',
+    identityFailed: 'No se pudo verificar la suscripción de esta cuenta.',
+    identityHelp: 'El acceso de pago y las compras están en pausa hasta verificar esta cuenta. Comprueba tu conexión y vuelve a intentarlo.',
+    identityRetry: 'Reintentar la verificación de la cuenta',
     unknownTrial: 'El App Store confirmará si se aplica una oferta introductoria antes de que apruebes la compra.',
     ineligibleTrial: 'A este plan se aplica el precio estándar de suscripción.',
     trialStart: 'Al confirmarse', trialStartBody: 'Pro se abre cuando el App Store confirma tu prueba.',

@@ -16,22 +16,33 @@ const offerings = { current: { availablePackages: [packageFixture] }, all: {} };
 function setup(overrides: Record<string, unknown> = {}, eligibility = 2) {
   const calls = { load: 0, configure: 0, listener: 0, offerings: 0, eligibility: 0, purchase: 0 };
   let listener: ((info: unknown) => void) | undefined;
+  let currentId = '$RCAnonymousID:readiness', anonymous = true, currentCustomer = customer();
   const sdk = {
     configure: async () => { calls.configure++; },
     addCustomerInfoUpdateListener: async (fn: (info: unknown) => void) => { calls.listener++; listener = fn; return 'mock-listener'; },
-    getCustomerInfo: async () => ({ customerInfo: customer() }),
+    getCustomerInfo: async () => ({ customerInfo: currentCustomer }),
     getOfferings: async () => { calls.offerings++; return offerings; },
     checkTrialOrIntroductoryPriceEligibility: async ({ productIdentifiers }: { productIdentifiers: string[] }) => {
       calls.eligibility++; assert.deepEqual(productIdentifiers, ['oda_pro_annual']);
       return { oda_pro_annual: { status: eligibility, description: 'mock status' } };
     },
-    purchasePackage: async () => { calls.purchase++; return { customerInfo: customer({ pro: { expirationDate: null } }) }; },
+    purchasePackage: async () => { calls.purchase++; currentCustomer = customer({ pro: { expirationDate: null } }); return { customerInfo: currentCustomer }; },
     restorePurchases: async () => ({ customerInfo: customer() }),
-    logIn: async () => ({ customerInfo: customer() }), logOut: async () => ({ customerInfo: customer() }), isAnonymous: async () => ({ isAnonymous: true }),
+    logIn: async ({ appUserID }: { appUserID: string }) => { currentId = appUserID; anonymous = false; currentCustomer = customer(); return { customerInfo: currentCustomer }; },
+    logOut: async () => { currentId = '$RCAnonymousID:readiness'; anonymous = true; currentCustomer = customer(); return { customerInfo: currentCustomer }; },
+    getAppUserID: async () => ({ appUserID: currentId }), isAnonymous: async () => ({ isAnonymous: anonymous }),
     ...overrides,
   } as unknown as PurchasesSDK;
   const service = new PurchasesService({ native: () => true, key: () => 'mock-key-not-a-provider-key', sdk: async () => { calls.load++; return sdk; } });
-  return { service, sdk, calls, emitCustomer: (info: unknown) => listener!(info) };
+  // These plan/purchase fixtures explicitly model an anonymous ODA account.
+  // The production default remains unbound until cloud hydration completes.
+  const init = service.init.bind(service);
+  let bound = false;
+  service.init = () => { if (!bound) { bound = true; return service.identify(null); } return init(); };
+  return { service, sdk, calls, emitCustomer: async (info: ReturnType<typeof customer>) => {
+    currentCustomer = info; listener!(info);
+    await new Promise(resolve => setImmediate(resolve));
+  } };
 }
 
 test('offerings failure is retryable without configuring or listening twice', async () => {
@@ -116,7 +127,7 @@ test('a successful store response without the requested entitlement remains unco
 test('confirmed entitlement grants access and later SDK updates retain the real highest level', async () => {
   const { service, emitCustomer, calls } = setup(); await service.init();
   assert.equal(await service.purchase('oda_pro_annual'), 'purchased'); assert.equal(service.getState().isPro, true);
-  emitCustomer(customer({ coach: { expirationDate: '2027-01-01' } })); assert.equal(service.getState().tier, 'coach'); assert.equal(service.getState().renewsAt, '2027-01-01');
+  await emitCustomer(customer({ coach: { expirationDate: '2027-01-01' } })); assert.equal(service.getState().tier, 'coach'); assert.equal(service.getState().renewsAt, '2027-01-01');
   assert.equal(calls.configure, 1); assert.equal(calls.listener, 1);
 });
 

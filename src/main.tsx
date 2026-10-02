@@ -24,11 +24,12 @@ if (isNative()) {
   if (import.meta.hot) import.meta.hot.dispose(stopNativeResume);
   // Pro purchases (RevenueCat) follow the signed-in ODA account across phones.
   void import('./services/purchases').then(async ({ purchases }) => {
-    await purchases.init();
     const { cloudSync } = await import('./services/cloudSync');
-    let last: string | null | undefined;
-    const sync = () => { const id = cloudSync.getState().session?.user.id ?? null; if (id !== last) { last = id; void purchases.identify(id); } };
-    cloudSync.subscribe(sync); sync();
+    const { bindPurchaseIdentity } = await import('./services/purchaseIdentityBinding');
+    const binding = bindPurchaseIdentity(cloudSync, purchases);
+    // If account hydration is unavailable, purchases stay unbound and closed.
+    void binding.ready.catch(() => {});
+    if (import.meta.hot) import.meta.hot.dispose(binding.dispose);
   });
 }
 else if ('serviceWorker' in navigator && import.meta.env.PROD) {
