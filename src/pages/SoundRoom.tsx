@@ -1,7 +1,7 @@
 import React, { useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Headphones, Info, LockKeyhole, Pause, Play, Timer, Volume1, Volume2, Wind } from 'lucide-react';
 import { useApp } from '../store/useApp';
-import { usePro } from '../services/purchases';
+import { purchases, usePro } from '../services/purchases';
 import { isSoundLocked } from '../services/entitlements';
 import { useT } from '../i18n';
 import {
@@ -80,7 +80,7 @@ const SoundPhotoImg: React.FC<{ photo: SoundPhoto; width: number; height: number
   );
 };
 
-const SoundCard: React.FC<{ sound: SoundRoomSound; sectionId: SoundRoomSectionId; playing: boolean; locked?: boolean }> = ({ sound, sectionId, playing, locked }) => {
+const SoundCard: React.FC<{ sound: SoundRoomSound; sectionId: SoundRoomSectionId; indexInCategory: number; playing: boolean; locked?: boolean }> = ({ sound, sectionId, indexInCategory, playing, locked }) => {
   const t = useT();
   const { setActiveRoute } = useApp();
   const nameId = useId();
@@ -93,7 +93,15 @@ const SoundCard: React.FC<{ sound: SoundRoomSound; sectionId: SoundRoomSectionId
         aria-pressed={playing}
         aria-labelledby={nameId}
         aria-describedby={descriptionId}
-        onClick={() => (locked ? setActiveRoute('/app/upgrade') : soundRoomPlayer.toggle(sound.track, { sleep: sectionId === 'sleep' }))}
+        onClick={() => {
+          const current = purchases.getState();
+          const tier = current.identityConfirmed ? current.tier : 'free';
+          if (isSoundLocked(indexInCategory, { gating: current.available, tier })) {
+            setActiveRoute('/app/upgrade');
+            return;
+          }
+          soundRoomPlayer.toggle(sound.track, { sleep: sectionId === 'sleep', sectionId, indexInCategory });
+        }}
       >
         <span className="oda-sound-card-media">
           <SoundPhotoImg photo={sound.photo} width={560} height={400} sizes="(max-width: 559px) 92vw, 340px" />
@@ -167,7 +175,7 @@ const BreathePanel: React.FC<{ sound: SoundRoomSound; soundPlaying: boolean }> =
           type="button"
           className="oda-sound-primary"
           aria-pressed={soundPlaying}
-          onClick={() => soundRoomPlayer.toggle(sound.track)}
+          onClick={() => soundRoomPlayer.toggle(sound.track, { sectionId: 'breathe', indexInCategory: 0 })}
         >
           {soundPlaying ? <Pause size={18} aria-hidden="true" /> : <Play size={18} aria-hidden="true" />}
           {soundPlaying ? t('Pause the tone') : t('Start with the tone')}
@@ -278,6 +286,7 @@ export const SoundRoom: React.FC = () => {
   const t = useT();
   const player = usePlayer();
   const pro = usePro();
+  const tier = pro.identityConfirmed ? pro.tier : 'free';
   const [tab, setTab] = useState<SoundRoomSectionId>(readTab);
   const tabRefs = useRef<Partial<Record<SoundRoomSectionId, HTMLButtonElement | null>>>({});
   const baseId = useId();
@@ -360,7 +369,7 @@ export const SoundRoom: React.FC = () => {
         ) : (
           <ul className="oda-sound-grid">
             {section.sounds.map((sound, i) => (
-              <SoundCard key={`${section.id}-${sound.track}`} sound={sound} sectionId={section.id} playing={isPlaying(sound.track)} locked={isSoundLocked(i, { gating: pro.gating, tier: pro.tier })} />
+              <SoundCard key={`${section.id}-${sound.track}`} sound={sound} sectionId={section.id} indexInCategory={i} playing={isPlaying(sound.track)} locked={isSoundLocked(i, { gating: pro.gating, tier })} />
             ))}
           </ul>
         )}
@@ -385,7 +394,7 @@ export const SoundRoom: React.FC = () => {
         </aside>
         <ul className="oda-sound-grid">
           {FREQUENCIES.sounds.map((sound, i) => (
-            <SoundCard key={`frequencies-${sound.track}`} sound={sound} sectionId="frequencies" playing={isPlaying(sound.track)} locked={isSoundLocked(i, { gating: pro.gating, tier: pro.tier })} />
+            <SoundCard key={`frequencies-${sound.track}`} sound={sound} sectionId="frequencies" indexInCategory={i} playing={isPlaying(sound.track)} locked={isSoundLocked(i, { gating: pro.gating, tier })} />
           ))}
         </ul>
       </section>
