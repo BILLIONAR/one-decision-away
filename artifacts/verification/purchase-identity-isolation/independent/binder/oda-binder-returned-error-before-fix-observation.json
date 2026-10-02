@@ -1,0 +1,33 @@
+{
+  "evidence": "Excerpt preserved from the actual pre-fix independent probe output in this session; this is a recorded observation, not a new execution.",
+  "sourceSha256": {
+    "src/main.tsx": "0814637533b0ea42e813e4275a3602a7ea0ff2367ad3bf75a27201a4ce2c2cbc",
+    "src/services/purchaseIdentityBinding.ts": "9635abcc38a61f1893e2222e82ceea5038cca03cbecb15df1f76b98421d19d39",
+    "src/services/cloudSync.ts": "2c06ec511b3b8b2bf5acb345487a63dfdf578f013e4aaad517b1e021b8b7d35a"
+  },
+  "fetchCalls": 0,
+  "observedCase": {
+    "case": "getSession-returns-error-result",
+    "returnedErrorCannotAssertAnonymous": false,
+    "isSessionReady": true,
+    "cloudError": null,
+    "calls": [
+      {
+        "action": "defer"
+      },
+      {
+        "action": "identify",
+        "id": null
+      },
+      {
+        "action": "identify",
+        "id": null
+      },
+      {
+        "action": "purchase-init",
+        "cachedIdentity": null
+      }
+    ]
+  },
+  "failure": "Cloud auth returned an error result but the binder asserted anonymous identity and initialized purchases."
+}

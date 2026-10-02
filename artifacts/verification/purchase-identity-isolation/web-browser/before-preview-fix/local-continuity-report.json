@@ -1,0 +1,50 @@
+{
+  "syntheticFixtures": true,
+  "scope": "Bounded local web boot/course continuity after purchase identity fix; no native SDK/payment tests",
+  "sourceAtStart": [
+    {
+      "file": "src/main.tsx",
+      "sha256": "0814637533b0ea42e813e4275a3602a7ea0ff2367ad3bf75a27201a4ce2c2cbc"
+    },
+    {
+      "file": "src/services/cloudSync.ts",
+      "sha256": "50a24f6690106cebbc1b38dfabb0edb84d4ca34f28b26dde4b919537b62a4bde"
+    },
+    {
+      "file": "src/services/purchases.ts",
+      "sha256": "20166152294fdaba6c351e282c1b738a47b775256677030af518a417e1da257d"
+    },
+    {
+      "file": "src/services/purchaseIdentityBinding.ts",
+      "sha256": "9635abcc38a61f1893e2222e82ceea5038cca03cbecb15df1f76b98421d19d39"
+    },
+    {
+      "file": "src/pages/Upgrade.tsx",
+      "sha256": "5347a3452b252fce1050b0ffaa080e1429984b62e2b3365592309a44ceb78998"
+    },
+    {
+      "file": "src/i18n/purchases.ts",
+      "sha256": "6a2ee05bc421d8c169fa1ef0e732b1e1485f9e6d1e31d1fa1b0316ba234c0521"
+    },
+    {
+      "file": "src/services/native.ts",
+      "sha256": "55462f6c779126002857402f9172cb7dbc025d1ae72351ca4c295d9b50cecfbd"
+    }
+  ],
+  "noProductionOrExternalWrites": true,
+  "base": "http://127.0.0.1:4188/one-decision-away/#",
+  "repo": "/workspace/oda-purchase-identity-fix",
+  "at": "2026-10-02T09:31:52.551Z",
+  "buildIndex": "assets/index-CCDlpWJE.js",
+  "checks": [],
+  "screenshots": [
+    "failure.png"
+  ],
+  "accessibility": [],
+  "layouts": [],
+  "pageErrors": [],
+  "blockedExternalRequests": [],
+  "status": "failed",
+  "failure": "locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('h1').first() to be visible\u001b[22m\n\n    at ready (/workspace/scratch/oda-purchase-identity-browser/qa-local-continuity.mjs:69:36)\n    at goto (/workspace/scratch/oda-purchase-identity-browser/qa-local-continuity.mjs:78:9)\n    at async <anonymous> (/workspace/scratch/oda-purchase-identity-browser/qa-local-continuity.mjs:131:5)",
+  "finishedAt": "2026-10-02T09:32:01.339Z"
+}

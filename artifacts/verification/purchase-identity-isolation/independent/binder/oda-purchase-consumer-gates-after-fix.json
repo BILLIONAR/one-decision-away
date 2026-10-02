@@ -1,0 +1,42 @@
+{
+  "evidence": "Actual service and entitlement predicates; synthetic native/key capability only; SDK loader prohibited.",
+  "sourceSha256": {
+    "src/services/purchases.ts": "20166152294fdaba6c351e282c1b738a47b775256677030af518a417e1da257d",
+    "src/services/entitlements.ts": "ee4a9c923f94154d4a3e4809980929474ab3289929d56ee067790010fa691219",
+    "src/pages/Upgrade.tsx": "5347a3452b252fce1050b0ffaa080e1429984b62e2b3365592309a44ceb78998"
+  },
+  "sdkCalls": 0,
+  "cases": [
+    {
+      "name": "configured-native",
+      "availableBeforeDefer": true,
+      "availableAfterDefer": true,
+      "identityConfirmed": false,
+      "tier": "free",
+      "paidLessonLocked": true,
+      "paidSoundLocked": true,
+      "passed": true
+    },
+    {
+      "name": "web",
+      "availableBeforeDefer": false,
+      "availableAfterDefer": false,
+      "identityConfirmed": false,
+      "tier": "free",
+      "paidLessonLocked": false,
+      "paidSoundLocked": false,
+      "passed": true
+    },
+    {
+      "name": "unconfigured-native",
+      "availableBeforeDefer": false,
+      "availableAfterDefer": false,
+      "identityConfirmed": false,
+      "tier": "free",
+      "paidLessonLocked": false,
+      "paidSoundLocked": false,
+      "passed": true
+    }
+  ],
+  "failures": []
+}

@@ -1,0 +1,601 @@
+{
+  "at": "2026-10-02T09:36:07.091Z",
+  "baseURL": "http://127.0.0.1:4189",
+  "browser": "151.0.7922.173",
+  "sourceHashes": {
+    "upgrade": "5347a3452b252fce1050b0ffaa080e1429984b62e2b3365592309a44ceb78998",
+    "purchases": "20166152294fdaba6c351e282c1b738a47b775256677030af518a417e1da257d",
+    "mainCSS": {
+      "path": "assets/index-D6Ptr9gO.css",
+      "sha256": "a5e714416151984e402601fc542cbea6426cec029d2a1f2d9619762421ecb336"
+    },
+    "fixture": "40bf8c58451f40a42dd632d232aac411c870a006f1ad349e74e5c707f98f3f03",
+    "mocks": "745387f947001ea612d837de1217452bf5c4177a5642db8c2de311b45e4b179e"
+  },
+  "checks": [
+    {
+      "name": "purchase: A→B→A suppresses late pending toast/notice and clears busy",
+      "passed": true,
+      "state": {
+        "available": true,
+        "ready": true,
+        "identityConfirmed": true,
+        "identityRevision": 4,
+        "tier": "free",
+        "isPro": false,
+        "renewsAt": null,
+        "products": {
+          "oda_essentials_monthly": {
+            "id": "oda_essentials_monthly",
+            "tier": "essentials",
+            "plan": "monthly",
+            "price": "$3.99",
+            "amount": 3.99,
+            "perMonth": null,
+            "trialDays": null,
+            "trialEligibility": "eligible"
+          },
+          "oda_essentials_annual": {
+            "id": "oda_essentials_annual",
+            "tier": "essentials",
+            "plan": "annual",
+            "price": "$29.99",
+            "amount": 29.99,
+            "perMonth": "$2.50",
+            "trialDays": null,
+            "trialEligibility": "eligible"
+          },
+          "oda_pro_monthly": {
+            "id": "oda_pro_monthly",
+            "tier": "pro",
+            "plan": "monthly",
+            "price": "$5.99",
+            "amount": 5.99,
+            "perMonth": null,
+            "trialDays": null,
+            "trialEligibility": "eligible"
+          },
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "eligible"
+          },
+          "oda_coach_monthly": {
+            "id": "oda_coach_monthly",
+            "tier": "coach",
+            "plan": "monthly",
+            "price": "$11.99",
+            "amount": 11.99,
+            "perMonth": null,
+            "trialDays": null,
+            "trialEligibility": "eligible"
+          },
+          "oda_coach_annual": {
+            "id": "oda_coach_annual",
+            "tier": "coach",
+            "plan": "annual",
+            "price": "$119.99",
+            "amount": 119.99,
+            "perMonth": "$10.00",
+            "trialDays": null,
+            "trialEligibility": "eligible"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        {
+          "kind": "purchase",
+          "account": "A",
+          "revision": 2
+        }
+      ]
+    },
+    {
+      "name": "restore: A→B→A suppresses late restored toast/notice and clears busy",
+      "passed": true,
+      "state": {
+        "available": true,
+        "ready": true,
+        "identityConfirmed": true,
+        "identityRevision": 7,
+        "tier": "free",
+        "isPro": false,
+        "renewsAt": null,
+        "products": {
+          "oda_essentials_monthly": {
+            "id": "oda_essentials_monthly",
+            "tier": "essentials",
+            "plan": "monthly",
+            "price": "$3.99",
+            "amount": 3.99,
+            "perMonth": null,
+            "trialDays": null,
+            "trialEligibility": "eligible"
+          },
+          "oda_essentials_annual": {
+            "id": "oda_essentials_annual",
+            "tier": "essentials",
+            "plan": "annual",
+            "price": "$29.99",
+            "amount": 29.99,
+            "perMonth": "$2.50",
+            "trialDays": null,
+            "trialEligibility": "eligible"
+          },
+          "oda_pro_monthly": {
+            "id": "oda_pro_monthly",
+            "tier": "pro",
+            "plan": "monthly",
+            "price": "$5.99",
+            "amount": 5.99,
+            "perMonth": null,
+            "trialDays": null,
+            "trialEligibility": "eligible"
+          },
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "eligible"
+          },
+          "oda_coach_monthly": {
+            "id": "oda_coach_monthly",
+            "tier": "coach",
+            "plan": "monthly",
+            "price": "$11.99",
+            "amount": 11.99,
+            "perMonth": null,
+            "trialDays": null,
+            "trialEligibility": "eligible"
+          },
+          "oda_coach_annual": {
+            "id": "oda_coach_annual",
+            "tier": "coach",
+            "plan": "annual",
+            "price": "$119.99",
+            "amount": 119.99,
+            "perMonth": "$10.00",
+            "trialDays": null,
+            "trialEligibility": "eligible"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        {
+          "kind": "restore",
+          "account": "A",
+          "revision": 5
+        }
+      ]
+    },
+    {
+      "name": "Pending purchase notice/awaiting tier clears on desired B revision",
+      "passed": true,
+      "toastBeforeSwitch": {
+        "text": "The purchase is pending. Check your App Store subscriptions before trying again.",
+        "kind": "info"
+      }
+    },
+    {
+      "name": "Identity pending makes buy unavailable, disables restore and removes all confirmed-trial UI",
+      "passed": true
+    },
+    {
+      "name": "en 320px: failed identity disables buy/restore, suppresses stale eligible trial and fits localized retry",
+      "passed": true,
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "retry": {
+        "x": 37,
+        "right": 208.9375,
+        "width": 171.9375,
+        "height": 44,
+        "textWidth": 171.9375,
+        "textHeight": 16
+      },
+      "mainBounds": {
+        "x": 0,
+        "right": 320
+      },
+      "alertOverflow": false,
+      "cssLoaded": "36px",
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "en 320px: localized retry invokes actual binding helper and returns through pending verification",
+      "passed": true,
+      "calls": [
+        {
+          "kind": "cloud-init",
+          "account": "A",
+          "revision": 12
+        },
+        {
+          "kind": "identify",
+          "account": "A",
+          "revision": 12
+        }
+      ]
+    },
+    {
+      "name": "en 390px: failed identity disables buy/restore, suppresses stale eligible trial and fits localized retry",
+      "passed": true,
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "retry": {
+        "x": 37,
+        "right": 208.9375,
+        "width": 171.9375,
+        "height": 44,
+        "textWidth": 171.9375,
+        "textHeight": 16
+      },
+      "mainBounds": {
+        "x": 0,
+        "right": 390
+      },
+      "alertOverflow": false,
+      "cssLoaded": "36px",
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "en 390px: localized retry invokes actual binding helper and returns through pending verification",
+      "passed": true,
+      "calls": [
+        {
+          "kind": "cloud-init",
+          "account": "A",
+          "revision": 12
+        },
+        {
+          "kind": "identify",
+          "account": "A",
+          "revision": 12
+        },
+        {
+          "kind": "cloud-init",
+          "account": "A",
+          "revision": 13
+        },
+        {
+          "kind": "identify",
+          "account": "A",
+          "revision": 13
+        }
+      ]
+    },
+    {
+      "name": "tr 320px: failed identity disables buy/restore, suppresses stale eligible trial and fits localized retry",
+      "passed": true,
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "retry": {
+        "x": 37,
+        "right": 271.953125,
+        "width": 234.953125,
+        "height": 44,
+        "textWidth": 234.953125,
+        "textHeight": 16
+      },
+      "mainBounds": {
+        "x": 0,
+        "right": 320
+      },
+      "alertOverflow": false,
+      "cssLoaded": "36px",
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "tr 320px: localized retry invokes actual binding helper and returns through pending verification",
+      "passed": true,
+      "calls": [
+        {
+          "kind": "cloud-init",
+          "account": "A",
+          "revision": 12
+        },
+        {
+          "kind": "identify",
+          "account": "A",
+          "revision": 12
+        },
+        {
+          "kind": "cloud-init",
+          "account": "A",
+          "revision": 13
+        },
+        {
+          "kind": "identify",
+          "account": "A",
+          "revision": 13
+        },
+        {
+          "kind": "cloud-init",
+          "account": "A",
+          "revision": 14
+        },
+        {
+          "kind": "identify",
+          "account": "A",
+          "revision": 14
+        }
+      ]
+    },
+    {
+      "name": "tr 390px: failed identity disables buy/restore, suppresses stale eligible trial and fits localized retry",
+      "passed": true,
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "retry": {
+        "x": 37,
+        "right": 271.953125,
+        "width": 234.953125,
+        "height": 44,
+        "textWidth": 234.953125,
+        "textHeight": 16
+      },
+      "mainBounds": {
+        "x": 0,
+        "right": 390
+      },
+      "alertOverflow": false,
+      "cssLoaded": "36px",
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "tr 390px: localized retry invokes actual binding helper and returns through pending verification",
+      "passed": true,
+      "calls": [
+        {
+          "kind": "cloud-init",
+          "account": "A",
+          "revision": 12
+        },
+        {
+          "kind": "identify",
+          "account": "A",
+          "revision": 12
+        },
+        {
+          "kind": "cloud-init",
+          "account": "A",
+          "revision": 13
+        },
+        {
+          "kind": "identify",
+          "account": "A",
+          "revision": 13
+        },
+        {
+          "kind": "cloud-init",
+          "account": "A",
+          "revision": 14
+        },
+        {
+          "kind": "identify",
+          "account": "A",
+          "revision": 14
+        },
+        {
+          "kind": "cloud-init",
+          "account": "A",
+          "revision": 15
+        },
+        {
+          "kind": "identify",
+          "account": "A",
+          "revision": 15
+        }
+      ]
+    },
+    {
+      "name": "es 320px: failed identity disables buy/restore, suppresses stale eligible trial and fits localized retry",
+      "passed": true,
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "retry": {
+        "x": 37,
+        "right": 283,
+        "width": 246,
+        "height": 44,
+        "textWidth": 202.296875,
+        "textHeight": 37
+      },
+      "mainBounds": {
+        "x": 0,
+        "right": 320
+      },
+      "alertOverflow": false,
+      "cssLoaded": "36px",
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "es 320px: localized retry invokes actual binding helper and returns through pending verification",
+      "passed": true,
+      "calls": [
+        {
+          "kind": "cloud-init",
+          "account": "A",
+          "revision": 12
+        },
+        {
+          "kind": "identify",
+          "account": "A",
+          "revision": 12
+        },
+        {
+          "kind": "cloud-init",
+          "account": "A",
+          "revision": 13
+        },
+        {
+          "kind": "identify",
+          "account": "A",
+          "revision": 13
+        },
+        {
+          "kind": "cloud-init",
+          "account": "A",
+          "revision": 14
+        },
+        {
+          "kind": "identify",
+          "account": "A",
+          "revision": 14
+        },
+        {
+          "kind": "cloud-init",
+          "account": "A",
+          "revision": 15
+        },
+        {
+          "kind": "identify",
+          "account": "A",
+          "revision": 15
+        },
+        {
+          "kind": "cloud-init",
+          "account": "A",
+          "revision": 16
+        },
+        {
+          "kind": "identify",
+          "account": "A",
+          "revision": 16
+        }
+      ]
+    },
+    {
+      "name": "es 390px: failed identity disables buy/restore, suppresses stale eligible trial and fits localized retry",
+      "passed": true,
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "retry": {
+        "x": 37,
+        "right": 288.3125,
+        "width": 251.3125,
+        "height": 44,
+        "textWidth": 251.3125,
+        "textHeight": 16
+      },
+      "mainBounds": {
+        "x": 0,
+        "right": 390
+      },
+      "alertOverflow": false,
+      "cssLoaded": "36px",
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "es 390px: localized retry invokes actual binding helper and returns through pending verification",
+      "passed": true,
+      "calls": [
+        {
+          "kind": "cloud-init",
+          "account": "A",
+          "revision": 12
+        },
+        {
+          "kind": "identify",
+          "account": "A",
+          "revision": 12
+        },
+        {
+          "kind": "cloud-init",
+          "account": "A",
+          "revision": 13
+        },
+        {
+          "kind": "identify",
+          "account": "A",
+          "revision": 13
+        },
+        {
+          "kind": "cloud-init",
+          "account": "A",
+          "revision": 14
+        },
+        {
+          "kind": "identify",
+          "account": "A",
+          "revision": 14
+        },
+        {
+          "kind": "cloud-init",
+          "account": "A",
+          "revision": 15
+        },
+        {
+          "kind": "identify",
+          "account": "A",
+          "revision": 15
+        },
+        {
+          "kind": "cloud-init",
+          "account": "A",
+          "revision": 16
+        },
+        {
+          "kind": "identify",
+          "account": "A",
+          "revision": 16
+        },
+        {
+          "kind": "cloud-init",
+          "account": "A",
+          "revision": 17
+        },
+        {
+          "kind": "identify",
+          "account": "A",
+          "revision": 17
+        }
+      ]
+    },
+    {
+      "name": "No page errors, provider calls or external requests",
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    "identity-failed-en-320.png",
+    "identity-failed-en-390.png",
+    "identity-failed-tr-320.png",
+    "identity-failed-tr-390.png",
+    "identity-failed-es-320.png",
+    "identity-failed-es-390.png"
+  ],
+  "errors": [],
+  "externalAttempts": [],
+  "providerCalls": 0,
+  "deliberatelySyntheticNative": true,
+  "limits": [
+    "Real Upgrade component, translations, entitlements, course data and current built main CSS/fonts; synthetic store/native/cloud/purchase boundaries.",
+    "Browser verification covers UI state and layout, not native RevenueCat or Apple purchase behavior.",
+    "The synthetic identity guard models the independently tested real service revision/confirmation contract.",
+    "Chromium on the selected saved Linux cloud environment; no physical phone or WebKit claim."
+  ]
+}

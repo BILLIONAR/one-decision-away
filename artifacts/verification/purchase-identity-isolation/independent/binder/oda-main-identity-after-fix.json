@@ -1,0 +1,248 @@
+{
+  "sourcePath": "/workspace/oda-purchase-identity-fix/src/main.tsx",
+  "sourceSha256": "0814637533b0ea42e813e4275a3602a7ea0ff2367ad3bf75a27201a4ce2c2cbc",
+  "evidenceType": "Actual native startup block executed with synthetic cloud and purchases objects in a VM; no app/provider imports, credentials or native SDK calls.",
+  "scenarios": [
+    {
+      "initial": "synthetic-A",
+      "holdCloud": false,
+      "initBeforeCloudImportResolved": false,
+      "identityAnnouncedBeforeInit": true,
+      "subscribedWhileInitHeld": true,
+      "tracksRapidSwitchWhileInitHeld": true,
+      "sameIdNotSuppressed": true,
+      "callsWhileInitHeld": [
+        "synthetic-A",
+        "synthetic-A",
+        "synthetic-B",
+        "synthetic-B",
+        null
+      ],
+      "allIdentify": [
+        "synthetic-A",
+        "synthetic-A",
+        "synthetic-B",
+        "synthetic-B",
+        null,
+        "synthetic-A",
+        "synthetic-A"
+      ],
+      "events": [
+        {
+          "action": "import",
+          "specifier": "./services/purchases"
+        },
+        {
+          "action": "import",
+          "specifier": "./services/cloudSync"
+        },
+        {
+          "action": "import",
+          "specifier": "./services/purchaseIdentityBinding"
+        },
+        {
+          "action": "subscribe"
+        },
+        {
+          "action": "defer"
+        },
+        {
+          "action": "cloud-init"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-A"
+        },
+        {
+          "action": "purchase-init",
+          "desired": "synthetic-A"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-A"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-B"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-B"
+        },
+        {
+          "action": "identify",
+          "id": null
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-A"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-A"
+        }
+      ]
+    },
+    {
+      "initial": null,
+      "holdCloud": false,
+      "initBeforeCloudImportResolved": false,
+      "identityAnnouncedBeforeInit": true,
+      "subscribedWhileInitHeld": true,
+      "tracksRapidSwitchWhileInitHeld": true,
+      "sameIdNotSuppressed": true,
+      "callsWhileInitHeld": [
+        null,
+        "synthetic-A",
+        "synthetic-B",
+        "synthetic-B",
+        null
+      ],
+      "allIdentify": [
+        null,
+        "synthetic-A",
+        "synthetic-B",
+        "synthetic-B",
+        null,
+        "synthetic-A",
+        "synthetic-A"
+      ],
+      "events": [
+        {
+          "action": "import",
+          "specifier": "./services/purchases"
+        },
+        {
+          "action": "import",
+          "specifier": "./services/cloudSync"
+        },
+        {
+          "action": "import",
+          "specifier": "./services/purchaseIdentityBinding"
+        },
+        {
+          "action": "subscribe"
+        },
+        {
+          "action": "defer"
+        },
+        {
+          "action": "cloud-init"
+        },
+        {
+          "action": "identify",
+          "id": null
+        },
+        {
+          "action": "purchase-init",
+          "desired": null
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-A"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-B"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-B"
+        },
+        {
+          "action": "identify",
+          "id": null
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-A"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-A"
+        }
+      ]
+    },
+    {
+      "initial": "synthetic-A",
+      "holdCloud": true,
+      "initBeforeCloudImportResolved": false,
+      "identityAnnouncedBeforeInit": true,
+      "subscribedWhileInitHeld": true,
+      "tracksRapidSwitchWhileInitHeld": true,
+      "sameIdNotSuppressed": true,
+      "callsWhileInitHeld": [
+        "synthetic-A",
+        "synthetic-A",
+        "synthetic-B",
+        "synthetic-B",
+        null
+      ],
+      "allIdentify": [
+        "synthetic-A",
+        "synthetic-A",
+        "synthetic-B",
+        "synthetic-B",
+        null,
+        "synthetic-A",
+        "synthetic-A"
+      ],
+      "events": [
+        {
+          "action": "import",
+          "specifier": "./services/purchases"
+        },
+        {
+          "action": "import",
+          "specifier": "./services/cloudSync"
+        },
+        {
+          "action": "import",
+          "specifier": "./services/purchaseIdentityBinding"
+        },
+        {
+          "action": "subscribe"
+        },
+        {
+          "action": "defer"
+        },
+        {
+          "action": "cloud-init"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-A"
+        },
+        {
+          "action": "purchase-init",
+          "desired": "synthetic-A"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-A"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-B"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-B"
+        },
+        {
+          "action": "identify",
+          "id": null
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-A"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-A"
+        }
+      ]
+    }
+  ],
+  "failures": []
+}

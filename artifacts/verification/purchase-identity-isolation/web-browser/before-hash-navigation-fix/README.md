@@ -1,0 +1,1 @@
+After the parent corrected the preview configuration, nine EN checks passed. The scratch harness then incorrectly required an HTTP response for a same-document hash navigation; Playwright returns null in that case. The scratch helper was corrected to validate the loaded module script instead. No application source or fixture data changed. This is historical harness-only evidence.

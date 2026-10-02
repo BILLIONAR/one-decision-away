@@ -1,0 +1,718 @@
+{
+  "mode": "baseline",
+  "timestamp": "2026-10-02T09:09:29.078Z",
+  "source": {
+    "mode": "baseline",
+    "sourceSHA256": "801c7313fae1c1ed33f74a8fe91861340f76f8f3fe81faff2fae823369aedc9c",
+    "commit": "e72724f382501a1178d6cf21d01a437f755a40ed"
+  },
+  "total": 20,
+  "passed": 1,
+  "failed": 19,
+  "results": [
+    {
+      "name": "logout rejection cannot retain previous account Pro as ready for null identity",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n\n'pro' !== 'free'\n",
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "pro",
+        "isPro": true,
+        "renewsAt": "2030-01-01",
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "unknown"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "offerings",
+        "eligibility",
+        "logout"
+      ]
+    },
+    {
+      "name": "A then B held login serializes, invalidates A synchronously, and cannot publish A late",
+      "passed": false,
+      "error": "B SDK login started while A SDK mutation was outstanding",
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "pro",
+        "isPro": true,
+        "renewsAt": "2030-01-01",
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "eligible"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "customer:$RCAnonymous:review",
+        "offerings",
+        "anonymous:true",
+        "eligibility",
+        "login:A",
+        "login:B",
+        "eligibility",
+        "eligibility"
+      ],
+      "observations": {
+        "BStartedBeforeAResolved": true,
+        "tierAfterBResolvedBeforeA": "free",
+        "finalSDKIdentity": "A",
+        "finalTier": "pro"
+      }
+    },
+    {
+      "name": "held A purchase cannot grant B or return purchased after B desired",
+      "passed": false,
+      "error": "B login started during purchase mutation",
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "pro",
+        "isPro": true,
+        "renewsAt": "2030-01-01",
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "eligible"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "customer:$RCAnonymous:review",
+        "offerings",
+        "anonymous:true",
+        "eligibility",
+        "login:A",
+        "eligibility",
+        "purchase",
+        "login:B",
+        "eligibility"
+      ],
+      "observations": {
+        "BStartedBeforePurchaseResolved": true,
+        "purchaseResult": "purchased"
+      }
+    },
+    {
+      "name": "desired A before init cannot briefly expose cached prior SDK Pro",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n\n'old-account' !== 'A'\n",
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "pro",
+        "isPro": true,
+        "renewsAt": "2030-01-01",
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "eligible"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "customer:old-account",
+        "offerings",
+        "eligibility"
+      ]
+    },
+    {
+      "name": "late initial customer read cannot publish old account after A desired",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n\n'coach' !== 'free'\n",
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "coach",
+        "isPro": true,
+        "renewsAt": "2030-01-01",
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "eligible"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "customer:$RCAnonymous:review",
+        "offerings",
+        "login:A",
+        "eligibility"
+      ]
+    },
+    {
+      "name": "late offerings/eligibility cannot restore previous eligible trial after B desired",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'eligible'\n- 'ineligible'\n",
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "free",
+        "isPro": false,
+        "renewsAt": null,
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "eligible"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "customer:$RCAnonymous:review",
+        "offerings",
+        "anonymous:true",
+        "eligibility",
+        "login:B"
+      ]
+    },
+    {
+      "name": "late A restore cannot grant B or return restored",
+      "passed": false,
+      "error": "B login overlapped restore",
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "coach",
+        "isPro": true,
+        "renewsAt": "2030-01-01",
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "eligible"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "customer:$RCAnonymous:review",
+        "offerings",
+        "anonymous:true",
+        "eligibility",
+        "login:A",
+        "eligibility",
+        "restore",
+        "login:B",
+        "eligibility"
+      ]
+    },
+    {
+      "name": "listener ignores aliased stale payload and reads verified current SDK customer",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n\n'coach' !== 'free'\n",
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "coach",
+        "isPro": true,
+        "renewsAt": "2030-01-01",
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "eligible"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "customer:$RCAnonymous:review",
+        "offerings",
+        "anonymous:true",
+        "eligibility",
+        "login:B",
+        "eligibility"
+      ]
+    },
+    {
+      "name": "listener can refresh valid current B even when originalAppUserId names an alias",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- true\n",
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "pro",
+        "isPro": true,
+        "renewsAt": "2030-01-01",
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "eligible"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "customer:$RCAnonymous:review",
+        "offerings",
+        "anonymous:true",
+        "eligibility",
+        "login:B",
+        "eligibility"
+      ]
+    },
+    {
+      "name": "listener canonical read held across B transition cannot publish A snapshot",
+      "passed": false,
+      "error": "listener did not queue canonical read",
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "free",
+        "isPro": false,
+        "renewsAt": null,
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "eligible"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "customer:$RCAnonymous:review",
+        "offerings",
+        "anonymous:true",
+        "eligibility",
+        "login:A",
+        "eligibility",
+        "login:B",
+        "eligibility"
+      ]
+    },
+    {
+      "name": "same requested identity can retry failed login and confirm successful second login",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- false\n",
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "pro",
+        "isPro": true,
+        "renewsAt": "2030-01-01",
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "eligible"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "customer:$RCAnonymous:review",
+        "offerings",
+        "anonymous:true",
+        "eligibility",
+        "login:A",
+        "login:A",
+        "eligibility"
+      ]
+    },
+    {
+      "name": "confirmed A cached entitlement survives same-account offline refresh but is cleared for B",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- true\n",
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "pro",
+        "isPro": true,
+        "renewsAt": "2030-01-01",
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "unknown"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "customer:$RCAnonymous:review",
+        "offerings",
+        "anonymous:true",
+        "eligibility",
+        "login:A",
+        "eligibility",
+        "login:A",
+        "login:B"
+      ]
+    },
+    {
+      "name": "A entitlement is cleared synchronously before B SDK login begins",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n\n'coach' !== 'free'\n",
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "free",
+        "isPro": false,
+        "renewsAt": null,
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "eligible"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "customer:$RCAnonymous:review",
+        "offerings",
+        "anonymous:true",
+        "eligibility",
+        "login:A",
+        "eligibility",
+        "login:B",
+        "eligibility"
+      ]
+    },
+    {
+      "name": "purchase initiated while identity is unconfirmed never invokes SDK purchase",
+      "passed": false,
+      "error": "SDK purchase started while B unconfirmed",
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "free",
+        "isPro": false,
+        "renewsAt": null,
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "eligible"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "customer:$RCAnonymous:review",
+        "offerings",
+        "anonymous:true",
+        "eligibility",
+        "login:B",
+        "purchase",
+        "eligibility"
+      ]
+    },
+    {
+      "name": "unbound init loads prices without reading, logging out, or publishing cached SDK identity",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n\n'coach' !== 'free'\n",
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "coach",
+        "isPro": true,
+        "renewsAt": "2030-01-01",
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "eligible"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "customer:cached-A",
+        "offerings",
+        "eligibility"
+      ]
+    },
+    {
+      "name": "unbound restore cannot call SDK or publish cached prior account",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'restored'\n- 'failed'\n",
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "coach",
+        "isPro": true,
+        "renewsAt": "2030-01-01",
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "eligible"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "customer:cached-A",
+        "offerings",
+        "eligibility",
+        "restore"
+      ]
+    },
+    {
+      "name": "explicit startup A verifies matching cached SDK identity without logout/login",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- true\n",
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "pro",
+        "isPro": true,
+        "renewsAt": "2030-01-01",
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "eligible"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "customer:A",
+        "offerings",
+        "eligibility"
+      ]
+    },
+    {
+      "name": "listener customer completion after SDK identity drift cannot confirm old desired A",
+      "passed": false,
+      "error": "The expression evaluated to a falsy value:\n\n  assert.ok(canonical)\n",
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "coach",
+        "isPro": true,
+        "renewsAt": "2030-01-01",
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "eligible"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "customer:$RCAnonymous:review",
+        "offerings",
+        "anonymous:true",
+        "eligibility",
+        "login:A",
+        "eligibility"
+      ]
+    },
+    {
+      "name": "cached same-account startup lookup failure cannot grant unconfirmed Pro",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n\n'pro' !== 'free'\n",
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "pro",
+        "isPro": true,
+        "renewsAt": "2030-01-01",
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "eligible"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "customer:A",
+        "offerings",
+        "eligibility"
+      ]
+    },
+    {
+      "name": "late offerings completion cannot publish prior personal trial after B transition",
+      "passed": true,
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "free",
+        "isPro": false,
+        "renewsAt": null,
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "ineligible"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "customer:$RCAnonymous:review",
+        "offerings",
+        "anonymous:true",
+        "login:B",
+        "eligibility:B"
+      ]
+    }
+  ]
+}

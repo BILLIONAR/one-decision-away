@@ -1,0 +1,404 @@
+{
+  "syntheticFixtures": true,
+  "scope": "Bounded local web boot/course continuity after purchase identity fix; no native SDK/payment tests",
+  "sourceAtStart": [
+    {
+      "file": "src/main.tsx",
+      "sha256": "0814637533b0ea42e813e4275a3602a7ea0ff2367ad3bf75a27201a4ce2c2cbc"
+    },
+    {
+      "file": "src/services/cloudSync.ts",
+      "sha256": "50a24f6690106cebbc1b38dfabb0edb84d4ca34f28b26dde4b919537b62a4bde"
+    },
+    {
+      "file": "src/services/purchases.ts",
+      "sha256": "20166152294fdaba6c351e282c1b738a47b775256677030af518a417e1da257d"
+    },
+    {
+      "file": "src/services/purchaseIdentityBinding.ts",
+      "sha256": "9635abcc38a61f1893e2222e82ceea5038cca03cbecb15df1f76b98421d19d39"
+    },
+    {
+      "file": "src/pages/Upgrade.tsx",
+      "sha256": "5347a3452b252fce1050b0ffaa080e1429984b62e2b3365592309a44ceb78998"
+    },
+    {
+      "file": "src/i18n/purchases.ts",
+      "sha256": "6a2ee05bc421d8c169fa1ef0e732b1e1485f9e6d1e31d1fa1b0316ba234c0521"
+    },
+    {
+      "file": "src/services/native.ts",
+      "sha256": "55462f6c779126002857402f9172cb7dbc025d1ae72351ca4c295d9b50cecfbd"
+    }
+  ],
+  "noProductionOrExternalWrites": true,
+  "base": "http://127.0.0.1:4188/one-decision-away/#",
+  "repo": "/workspace/oda-purchase-identity-fix",
+  "at": "2026-10-02T09:36:05.506Z",
+  "entryChecks": [
+    {
+      "route": "/app",
+      "entry": "assets/index-CCDlpWJE.js",
+      "navigation": "document",
+      "status": 200
+    },
+    {
+      "route": "/app",
+      "entry": "assets/index-CCDlpWJE.js",
+      "navigation": "document",
+      "status": 200
+    },
+    {
+      "route": "/app",
+      "entry": "assets/index-CCDlpWJE.js",
+      "navigation": "same-document hash",
+      "status": null
+    },
+    {
+      "route": "/app/upgrade",
+      "entry": "assets/index-CCDlpWJE.js",
+      "navigation": "same-document hash",
+      "status": null
+    },
+    {
+      "route": "/app",
+      "entry": "assets/index-CCDlpWJE.js",
+      "navigation": "document",
+      "status": 200
+    },
+    {
+      "route": "/app",
+      "entry": "assets/index-CCDlpWJE.js",
+      "navigation": "document",
+      "status": 200
+    },
+    {
+      "route": "/app",
+      "entry": "assets/index-CCDlpWJE.js",
+      "navigation": "same-document hash",
+      "status": null
+    },
+    {
+      "route": "/app",
+      "entry": "assets/index-CCDlpWJE.js",
+      "navigation": "document",
+      "status": 200
+    },
+    {
+      "route": "/app",
+      "entry": "assets/index-CCDlpWJE.js",
+      "navigation": "document",
+      "status": 200
+    },
+    {
+      "route": "/app",
+      "entry": "assets/index-CCDlpWJE.js",
+      "navigation": "same-document hash",
+      "status": null
+    }
+  ],
+  "buildIndex": "assets/index-CCDlpWJE.js",
+  "checks": [
+    "en web welcome 320: controls fit and no serious/critical axe findings",
+    "en web welcome 390: controls fit and no serious/critical axe findings",
+    "en: a fresh web record boots to the real onboarding preview",
+    "en: signed-out Today boots with real lightweight lesson metadata",
+    "en untouched overview 320: controls fit and no serious/critical axe findings",
+    "en untouched overview 390: controls fit and no serious/critical axe findings",
+    "en: explicit Start and saved partial lesson/reflection survive web startup",
+    "en returning lesson 320: controls fit and no serious/critical axe findings",
+    "en returning lesson 390: controls fit and no serious/critical axe findings",
+    "en: saved lesson two resumes directly and Today continuation retains actual metadata",
+    "web Upgrade remains informational with no purchase/restore controls or SDK/payment interaction",
+    "tr web welcome 320: controls fit and no serious/critical axe findings",
+    "tr web welcome 390: controls fit and no serious/critical axe findings",
+    "tr: a fresh web record boots to the real onboarding preview",
+    "tr: signed-out Today boots with real lightweight lesson metadata",
+    "tr untouched overview 320: controls fit and no serious/critical axe findings",
+    "tr untouched overview 390: controls fit and no serious/critical axe findings",
+    "tr: explicit Start and saved partial lesson/reflection survive web startup",
+    "tr returning lesson 320: controls fit and no serious/critical axe findings",
+    "tr returning lesson 390: controls fit and no serious/critical axe findings",
+    "tr: saved lesson two resumes directly and Today continuation retains actual metadata",
+    "es web welcome 320: controls fit and no serious/critical axe findings",
+    "es web welcome 390: controls fit and no serious/critical axe findings",
+    "es: a fresh web record boots to the real onboarding preview",
+    "es: signed-out Today boots with real lightweight lesson metadata",
+    "es untouched overview 320: controls fit and no serious/critical axe findings",
+    "es untouched overview 390: controls fit and no serious/critical axe findings",
+    "es: explicit Start and saved partial lesson/reflection survive web startup",
+    "es returning lesson 320: controls fit and no serious/critical axe findings",
+    "es returning lesson 390: controls fit and no serious/critical axe findings",
+    "es: saved lesson two resumes directly and Today continuation retains actual metadata"
+  ],
+  "screenshots": [
+    "en-web-welcome-320.png",
+    "en-web-welcome-390.png",
+    "en-untouched-course-320.png",
+    "en-untouched-course-390.png",
+    "en-returning-lesson-two-320.png",
+    "en-returning-lesson-two-390.png",
+    "en-web-upgrade-320.png",
+    "en-web-upgrade-390.png",
+    "tr-web-welcome-320.png",
+    "tr-web-welcome-390.png",
+    "tr-untouched-course-320.png",
+    "tr-untouched-course-390.png",
+    "tr-returning-lesson-two-320.png",
+    "tr-returning-lesson-two-390.png",
+    "es-web-welcome-320.png",
+    "es-web-welcome-390.png",
+    "es-untouched-course-320.png",
+    "es-untouched-course-390.png",
+    "es-returning-lesson-two-320.png",
+    "es-returning-lesson-two-390.png"
+  ],
+  "accessibility": [
+    {
+      "name": "en web welcome 320",
+      "violations": []
+    },
+    {
+      "name": "en web welcome 390",
+      "violations": []
+    },
+    {
+      "name": "en untouched overview 320",
+      "violations": []
+    },
+    {
+      "name": "en untouched overview 390",
+      "violations": []
+    },
+    {
+      "name": "en returning lesson 320",
+      "violations": []
+    },
+    {
+      "name": "en returning lesson 390",
+      "violations": []
+    },
+    {
+      "name": "tr web welcome 320",
+      "violations": []
+    },
+    {
+      "name": "tr web welcome 390",
+      "violations": []
+    },
+    {
+      "name": "tr untouched overview 320",
+      "violations": []
+    },
+    {
+      "name": "tr untouched overview 390",
+      "violations": []
+    },
+    {
+      "name": "tr returning lesson 320",
+      "violations": []
+    },
+    {
+      "name": "tr returning lesson 390",
+      "violations": []
+    },
+    {
+      "name": "es web welcome 320",
+      "violations": []
+    },
+    {
+      "name": "es web welcome 390",
+      "violations": []
+    },
+    {
+      "name": "es untouched overview 320",
+      "violations": []
+    },
+    {
+      "name": "es untouched overview 390",
+      "violations": []
+    },
+    {
+      "name": "es returning lesson 320",
+      "violations": []
+    },
+    {
+      "name": "es returning lesson 390",
+      "violations": []
+    }
+  ],
+  "layouts": [
+    {
+      "name": "en web welcome 320",
+      "width": 320,
+      "scrollWidth": 320,
+      "outside": []
+    },
+    {
+      "name": "en web welcome 390",
+      "width": 390,
+      "scrollWidth": 390,
+      "outside": []
+    },
+    {
+      "name": "en untouched overview 320",
+      "width": 320,
+      "scrollWidth": 320,
+      "outside": []
+    },
+    {
+      "name": "en untouched overview 390",
+      "width": 390,
+      "scrollWidth": 390,
+      "outside": []
+    },
+    {
+      "name": "en returning lesson 320",
+      "width": 320,
+      "scrollWidth": 320,
+      "outside": []
+    },
+    {
+      "name": "en returning lesson 390",
+      "width": 390,
+      "scrollWidth": 390,
+      "outside": []
+    },
+    {
+      "name": "tr web welcome 320",
+      "width": 320,
+      "scrollWidth": 320,
+      "outside": []
+    },
+    {
+      "name": "tr web welcome 390",
+      "width": 390,
+      "scrollWidth": 390,
+      "outside": []
+    },
+    {
+      "name": "tr untouched overview 320",
+      "width": 320,
+      "scrollWidth": 320,
+      "outside": []
+    },
+    {
+      "name": "tr untouched overview 390",
+      "width": 390,
+      "scrollWidth": 390,
+      "outside": []
+    },
+    {
+      "name": "tr returning lesson 320",
+      "width": 320,
+      "scrollWidth": 320,
+      "outside": []
+    },
+    {
+      "name": "tr returning lesson 390",
+      "width": 390,
+      "scrollWidth": 390,
+      "outside": []
+    },
+    {
+      "name": "es web welcome 320",
+      "width": 320,
+      "scrollWidth": 320,
+      "outside": []
+    },
+    {
+      "name": "es web welcome 390",
+      "width": 390,
+      "scrollWidth": 390,
+      "outside": []
+    },
+    {
+      "name": "es untouched overview 320",
+      "width": 320,
+      "scrollWidth": 320,
+      "outside": []
+    },
+    {
+      "name": "es untouched overview 390",
+      "width": 390,
+      "scrollWidth": 390,
+      "outside": []
+    },
+    {
+      "name": "es returning lesson 320",
+      "width": 320,
+      "scrollWidth": 320,
+      "outside": []
+    },
+    {
+      "name": "es returning lesson 390",
+      "width": 390,
+      "scrollWidth": 390,
+      "outside": []
+    }
+  ],
+  "pageErrors": [],
+  "blockedExternalRequests": [
+    "https://images.unsplash.com/photo-1552360708-ebcdf76845ac?auto=format&fit=crop&w=600&h=338&q=70",
+    "https://images.unsplash.com/photo-1552360708-ebcdf76845ac?auto=format&fit=crop&w=600&h=338&q=70",
+    "https://images.unsplash.com/photo-1552360708-ebcdf76845ac?auto=format&fit=crop&w=600&h=338&q=70",
+    "https://images.unsplash.com/photo-1448387473223-5c37445527e7?auto=format&fit=crop&w=600&h=338&q=70",
+    "https://images.unsplash.com/photo-1448387473223-5c37445527e7?auto=format&fit=crop&w=600&h=338&q=70",
+    "https://images.unsplash.com/photo-1448387473223-5c37445527e7?auto=format&fit=crop&w=600&h=338&q=70",
+    "https://images.unsplash.com/photo-1552360708-ebcdf76845ac?auto=format&fit=crop&w=600&h=338&q=70",
+    "https://images.unsplash.com/photo-1552360708-ebcdf76845ac?auto=format&fit=crop&w=600&h=338&q=70",
+    "https://images.unsplash.com/photo-1552360708-ebcdf76845ac?auto=format&fit=crop&w=600&h=338&q=70",
+    "https://images.unsplash.com/photo-1448387473223-5c37445527e7?auto=format&fit=crop&w=600&h=338&q=70",
+    "https://images.unsplash.com/photo-1448387473223-5c37445527e7?auto=format&fit=crop&w=600&h=338&q=70",
+    "https://images.unsplash.com/photo-1448387473223-5c37445527e7?auto=format&fit=crop&w=600&h=338&q=70",
+    "https://images.unsplash.com/photo-1552360708-ebcdf76845ac?auto=format&fit=crop&w=600&h=338&q=70",
+    "https://images.unsplash.com/photo-1552360708-ebcdf76845ac?auto=format&fit=crop&w=600&h=338&q=70",
+    "https://images.unsplash.com/photo-1552360708-ebcdf76845ac?auto=format&fit=crop&w=600&h=338&q=70",
+    "https://images.unsplash.com/photo-1448387473223-5c37445527e7?auto=format&fit=crop&w=600&h=338&q=70",
+    "https://images.unsplash.com/photo-1448387473223-5c37445527e7?auto=format&fit=crop&w=600&h=338&q=70",
+    "https://images.unsplash.com/photo-1448387473223-5c37445527e7?auto=format&fit=crop&w=600&h=338&q=70"
+  ],
+  "sourceAtEnd": [
+    {
+      "file": "src/main.tsx",
+      "sha256": "0814637533b0ea42e813e4275a3602a7ea0ff2367ad3bf75a27201a4ce2c2cbc"
+    },
+    {
+      "file": "src/services/cloudSync.ts",
+      "sha256": "50a24f6690106cebbc1b38dfabb0edb84d4ca34f28b26dde4b919537b62a4bde"
+    },
+    {
+      "file": "src/services/purchases.ts",
+      "sha256": "20166152294fdaba6c351e282c1b738a47b775256677030af518a417e1da257d"
+    },
+    {
+      "file": "src/services/purchaseIdentityBinding.ts",
+      "sha256": "9635abcc38a61f1893e2222e82ceea5038cca03cbecb15df1f76b98421d19d39"
+    },
+    {
+      "file": "src/pages/Upgrade.tsx",
+      "sha256": "5347a3452b252fce1050b0ffaa080e1429984b62e2b3365592309a44ceb78998"
+    },
+    {
+      "file": "src/i18n/purchases.ts",
+      "sha256": "6a2ee05bc421d8c169fa1ef0e732b1e1485f9e6d1e31d1fa1b0316ba234c0521"
+    },
+    {
+      "file": "src/services/native.ts",
+      "sha256": "55462f6c779126002857402f9172cb7dbc025d1ae72351ca4c295d9b50cecfbd"
+    }
+  ],
+  "status": "passed",
+  "finishedAt": "2026-10-02T09:36:35.023Z",
+  "sourceCommit": "25e0dc2e9b536928bf57c04e83b167a796af5fac",
+  "sourceBranch": "fix/purchase-identity-isolation",
+  "sourceBase": "e72724f",
+  "previewConfigurationFailure": "before-preview-fix",
+  "scratchHashNavigationGuardCorrection": "before-hash-navigation-fix",
+  "actualPixelsInspected": [
+    "en-web-welcome-320.png",
+    "es-untouched-course-390.png",
+    "en-web-upgrade-320.png"
+  ],
+  "limitations": "Web continuity only; native purchase identity behavior is covered by the parent focused tests. No SDK/payment/account testing or production requests performed here."
+}
