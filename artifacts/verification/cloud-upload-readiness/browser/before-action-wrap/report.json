@@ -1,0 +1,1111 @@
+{
+  "at": "2026-10-02T10:46:05.465Z",
+  "baseURL": "http://127.0.0.1:4191",
+  "browser": "151.0.7922.173",
+  "sourceHashes": {
+    "src/store/useApp.tsx": "0576b4a1b6c849049f88e8d9c043143c667e1aabf9357bbfba35fe79f5ac6497",
+    "src/services/repository.ts": "a65560692f655d05b37a367e5acbeff1b6dd2974f2f951ff70e419c1c9dcfc8a",
+    "src/services/cloudSync.ts": "74f6405e6fe70cf89f7ac64473565a8d812ebc8180d3a0dc7e214e8183713dce",
+    "src/services/cloudUploadReadiness.ts": "c122d4fb1f518ba4f01931054fc0f85a5e9bec6ef03cb2e996d573e31a9fdd24",
+    "src/components/BackupAndCloudSettings.tsx": "39bdad1e69058eba6d46b49d387e31cc348b5c1ba236e50879963db5a8b7e0ce",
+    "src/pages/Account.tsx": "eb38c90df6feca059f1ca06d5f3772b702decb6b2ba826c11b47e12b674c304d",
+    "src/services/useCloudState.ts": "ddd8f7f8e54fda8f90feb37a150c94d0faceecf7e6c11900bb77116e9a00e0a9",
+    "src/components/BackupRestoreReview.tsx": "1c6e9fb305734c64bc64347406ebed054e0aca046ce4fe4d00780aadd01d6beb",
+    "src/data/backupCopy.ts": "92dffa5dab22201491cad85c29d8cc48f65b8b083324a04e00d95d57a8cbdf6e",
+    "tests/helpers/cloudCrudFixture.ts": "0c8901259e38dbca4e8f560c0d6425a199bfc5d36639f719339765ff6ca28f74"
+  },
+  "css": {
+    "path": "assets/index-D6Ptr9gO.css",
+    "sha256": "a5e714416151984e402601fc542cbea6426cec029d2a1f2d9619762421ecb336"
+  },
+  "checks": [
+    {
+      "name": "Ordinary real AppProvider save preserves local decision and pauses unreviewed existing cloud work without any SDK mutation",
+      "passed": true
+    },
+    {
+      "name": "Native signed-in Settings shows actual paused cloud error and preserves its existing account routing",
+      "passed": true
+    },
+    {
+      "name": "Paused Account renders device-saved/error copy without optimistic confirmed-backup or automatic-sync claims",
+      "passed": true
+    },
+    {
+      "name": "Native Account Back returns to the existing signed-in Settings screen",
+      "passed": true
+    },
+    {
+      "name": "Actual manual cloud review Cancel keeps exact local bytes and never enables fallback or subsequent unreviewed upload",
+      "passed": true
+    },
+    {
+      "name": "Actual manual review Accept replaces only the device record, renders reviewed data and acknowledges the row without uploading",
+      "passed": true
+    },
+    {
+      "name": "Ordinary save after reviewed acknowledgement performs the actual conditional SDK update",
+      "passed": true
+    },
+    {
+      "name": "SDK read failure pauses cloud work truthfully while the ordinary local save remains usable",
+      "passed": true
+    },
+    {
+      "name": "Manual retry after SDK recovery uses the acknowledged conditional upload and clears the paused status",
+      "passed": true
+    },
+    {
+      "name": "en 320px settings: truthful paused status and controls fit",
+      "passed": true,
+      "problems": [],
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Download backup",
+          "x": 37,
+          "right": 208.546875,
+          "width": 171.546875,
+          "height": 44
+        },
+        {
+          "text": "Restore",
+          "x": 37,
+          "right": 145.390625,
+          "width": 108.390625,
+          "height": 44
+        },
+        {
+          "text": "Sync now",
+          "x": 37,
+          "right": 157.015625,
+          "width": 120.015625,
+          "height": 44
+        },
+        {
+          "text": "Sign out",
+          "x": 165.015625,
+          "right": 274.03125,
+          "width": 109.015625,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "en 320px account: truthful paused status and controls fit",
+      "passed": true,
+      "problems": [],
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Back to Settings",
+          "x": 16,
+          "right": 116.265625,
+          "width": 100.265625,
+          "height": 44
+        },
+        {
+          "text": "Sync now",
+          "x": 41,
+          "right": 157.015625,
+          "width": 116.015625,
+          "height": 44
+        },
+        {
+          "text": "Sign out",
+          "x": 165.015625,
+          "right": 273.578125,
+          "width": 108.5625,
+          "height": 44
+        },
+        {
+          "text": "Delete my account",
+          "x": 20,
+          "right": 137.421875,
+          "width": 117.421875,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "en 390px settings: truthful paused status and controls fit",
+      "passed": true,
+      "problems": [],
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Download backup",
+          "x": 37,
+          "right": 208.546875,
+          "width": 171.546875,
+          "height": 44
+        },
+        {
+          "text": "Restore",
+          "x": 216.546875,
+          "right": 324.9375,
+          "width": 108.390625,
+          "height": 44
+        },
+        {
+          "text": "Sync now",
+          "x": 37,
+          "right": 157.015625,
+          "width": 120.015625,
+          "height": 44
+        },
+        {
+          "text": "Sign out",
+          "x": 165.015625,
+          "right": 274.03125,
+          "width": 109.015625,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "en 390px account: truthful paused status and controls fit",
+      "passed": true,
+      "problems": [],
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Back to Settings",
+          "x": 16,
+          "right": 116.265625,
+          "width": 100.265625,
+          "height": 44
+        },
+        {
+          "text": "Sync now",
+          "x": 41,
+          "right": 157.015625,
+          "width": 116.015625,
+          "height": 44
+        },
+        {
+          "text": "Sign out",
+          "x": 165.015625,
+          "right": 273.578125,
+          "width": 108.5625,
+          "height": 44
+        },
+        {
+          "text": "Delete my account",
+          "x": 20,
+          "right": 137.421875,
+          "width": 117.421875,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "tr 320px settings: truthful paused status and controls fit",
+      "passed": true,
+      "problems": [],
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Yedek indir",
+          "x": 37,
+          "right": 165.578125,
+          "width": 128.578125,
+          "height": 44
+        },
+        {
+          "text": "Geri al",
+          "x": 173.578125,
+          "right": 275.734375,
+          "width": 102.15625,
+          "height": 44
+        },
+        {
+          "text": "Şimdi eşitle",
+          "x": 37,
+          "right": 169.140625,
+          "width": 132.140625,
+          "height": 44
+        },
+        {
+          "text": "Çıkış yap",
+          "x": 177.140625,
+          "right": 292.75,
+          "width": 115.609375,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "tr 320px account: truthful paused status and controls fit",
+      "passed": true,
+      "problems": [],
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Ayarlara dön",
+          "x": 16,
+          "right": 96.28125,
+          "width": 80.28125,
+          "height": 44
+        },
+        {
+          "text": "Şimdi eşitle",
+          "x": 41,
+          "right": 169.140625,
+          "width": 128.140625,
+          "height": 44
+        },
+        {
+          "text": "Çıkış yap",
+          "x": 41,
+          "right": 156.21875,
+          "width": 115.21875,
+          "height": 44
+        },
+        {
+          "text": "Hesabımı sil",
+          "x": 20,
+          "right": 94.875,
+          "width": 74.875,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "tr 390px settings: truthful paused status and controls fit",
+      "passed": true,
+      "problems": [],
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Yedek indir",
+          "x": 37,
+          "right": 165.578125,
+          "width": 128.578125,
+          "height": 44
+        },
+        {
+          "text": "Geri al",
+          "x": 173.578125,
+          "right": 275.734375,
+          "width": 102.15625,
+          "height": 44
+        },
+        {
+          "text": "Şimdi eşitle",
+          "x": 37,
+          "right": 169.140625,
+          "width": 132.140625,
+          "height": 44
+        },
+        {
+          "text": "Çıkış yap",
+          "x": 177.140625,
+          "right": 292.75,
+          "width": 115.609375,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "tr 390px account: truthful paused status and controls fit",
+      "passed": true,
+      "problems": [],
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Ayarlara dön",
+          "x": 16,
+          "right": 96.28125,
+          "width": 80.28125,
+          "height": 44
+        },
+        {
+          "text": "Şimdi eşitle",
+          "x": 41,
+          "right": 169.140625,
+          "width": 128.140625,
+          "height": 44
+        },
+        {
+          "text": "Çıkış yap",
+          "x": 177.140625,
+          "right": 292.359375,
+          "width": 115.21875,
+          "height": 44
+        },
+        {
+          "text": "Hesabımı sil",
+          "x": 20,
+          "right": 94.875,
+          "width": 74.875,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "es 320px settings: truthful paused status and controls fit",
+      "passed": false,
+      "problems": [
+        "document overflow",
+        "component overflow",
+        "clipped cloud-status control"
+      ],
+      "viewport": 320,
+      "documentScroll": 361,
+      "mainScroll": 361,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Descargar copia",
+          "x": 37,
+          "right": 197.859375,
+          "width": 160.859375,
+          "height": 44
+        },
+        {
+          "text": "Restaurar",
+          "x": 37,
+          "right": 159.078125,
+          "width": 122.078125,
+          "height": 44
+        },
+        {
+          "text": "Sincronizar ahora",
+          "x": 37,
+          "right": 208.75,
+          "width": 171.75,
+          "height": 44
+        },
+        {
+          "text": "Cerrar sesión",
+          "x": 216.75,
+          "right": 360.953125,
+          "width": 144.203125,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "es 320px account: truthful paused status and controls fit",
+      "passed": true,
+      "problems": [],
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Volver a Ajustes",
+          "x": 16,
+          "right": 116.390625,
+          "width": 100.390625,
+          "height": 44
+        },
+        {
+          "text": "Sincronizar ahora",
+          "x": 41,
+          "right": 208.75,
+          "width": 167.75,
+          "height": 44
+        },
+        {
+          "text": "Cerrar sesión",
+          "x": 41,
+          "right": 184.640625,
+          "width": 143.640625,
+          "height": 44
+        },
+        {
+          "text": "Eliminar mi cuenta",
+          "x": 20,
+          "right": 136.234375,
+          "width": 116.234375,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "es 390px settings: truthful paused status and controls fit",
+      "passed": true,
+      "problems": [],
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Descargar copia",
+          "x": 37,
+          "right": 197.859375,
+          "width": 160.859375,
+          "height": 44
+        },
+        {
+          "text": "Restaurar",
+          "x": 205.859375,
+          "right": 327.9375,
+          "width": 122.078125,
+          "height": 44
+        },
+        {
+          "text": "Sincronizar ahora",
+          "x": 37,
+          "right": 208.75,
+          "width": 171.75,
+          "height": 44
+        },
+        {
+          "text": "Cerrar sesión",
+          "x": 216.75,
+          "right": 360.953125,
+          "width": 144.203125,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "es 390px account: truthful paused status and controls fit",
+      "passed": true,
+      "problems": [],
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Volver a Ajustes",
+          "x": 16,
+          "right": 116.390625,
+          "width": 100.390625,
+          "height": 44
+        },
+        {
+          "text": "Sincronizar ahora",
+          "x": 41,
+          "right": 208.75,
+          "width": 167.75,
+          "height": 44
+        },
+        {
+          "text": "Cerrar sesión",
+          "x": 41,
+          "right": 184.640625,
+          "width": 143.640625,
+          "height": 44
+        },
+        {
+          "text": "Eliminar mi cuenta",
+          "x": 20,
+          "right": 136.234375,
+          "width": 116.234375,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "Zero page errors, external requests, failed local assets, real emails or provider calls",
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    "review-cancel-en-390.png",
+    "review-accept-en-390.png",
+    "paused-settings-en-320.png",
+    "paused-account-en-320.png",
+    "paused-settings-en-390.png",
+    "paused-account-en-390.png",
+    "paused-settings-tr-320.png",
+    "paused-account-tr-320.png",
+    "paused-settings-tr-390.png",
+    "paused-account-tr-390.png",
+    "paused-settings-es-320.png",
+    "paused-account-es-320.png",
+    "paused-settings-es-390.png",
+    "paused-account-es-390.png"
+  ],
+  "layouts": [
+    {
+      "locale": "en",
+      "width": 320,
+      "screen": "settings",
+      "screenshot": "paused-settings-en-320.png",
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Download backup",
+          "x": 37,
+          "right": 208.546875,
+          "width": 171.546875,
+          "height": 44
+        },
+        {
+          "text": "Restore",
+          "x": 37,
+          "right": 145.390625,
+          "width": 108.390625,
+          "height": 44
+        },
+        {
+          "text": "Sync now",
+          "x": 37,
+          "right": 157.015625,
+          "width": 120.015625,
+          "height": 44
+        },
+        {
+          "text": "Sign out",
+          "x": 165.015625,
+          "right": 274.03125,
+          "width": 109.015625,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "locale": "en",
+      "width": 320,
+      "screen": "account",
+      "screenshot": "paused-account-en-320.png",
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Back to Settings",
+          "x": 16,
+          "right": 116.265625,
+          "width": 100.265625,
+          "height": 44
+        },
+        {
+          "text": "Sync now",
+          "x": 41,
+          "right": 157.015625,
+          "width": 116.015625,
+          "height": 44
+        },
+        {
+          "text": "Sign out",
+          "x": 165.015625,
+          "right": 273.578125,
+          "width": 108.5625,
+          "height": 44
+        },
+        {
+          "text": "Delete my account",
+          "x": 20,
+          "right": 137.421875,
+          "width": 117.421875,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "locale": "en",
+      "width": 390,
+      "screen": "settings",
+      "screenshot": "paused-settings-en-390.png",
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Download backup",
+          "x": 37,
+          "right": 208.546875,
+          "width": 171.546875,
+          "height": 44
+        },
+        {
+          "text": "Restore",
+          "x": 216.546875,
+          "right": 324.9375,
+          "width": 108.390625,
+          "height": 44
+        },
+        {
+          "text": "Sync now",
+          "x": 37,
+          "right": 157.015625,
+          "width": 120.015625,
+          "height": 44
+        },
+        {
+          "text": "Sign out",
+          "x": 165.015625,
+          "right": 274.03125,
+          "width": 109.015625,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "locale": "en",
+      "width": 390,
+      "screen": "account",
+      "screenshot": "paused-account-en-390.png",
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Back to Settings",
+          "x": 16,
+          "right": 116.265625,
+          "width": 100.265625,
+          "height": 44
+        },
+        {
+          "text": "Sync now",
+          "x": 41,
+          "right": 157.015625,
+          "width": 116.015625,
+          "height": 44
+        },
+        {
+          "text": "Sign out",
+          "x": 165.015625,
+          "right": 273.578125,
+          "width": 108.5625,
+          "height": 44
+        },
+        {
+          "text": "Delete my account",
+          "x": 20,
+          "right": 137.421875,
+          "width": 117.421875,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "locale": "tr",
+      "width": 320,
+      "screen": "settings",
+      "screenshot": "paused-settings-tr-320.png",
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Yedek indir",
+          "x": 37,
+          "right": 165.578125,
+          "width": 128.578125,
+          "height": 44
+        },
+        {
+          "text": "Geri al",
+          "x": 173.578125,
+          "right": 275.734375,
+          "width": 102.15625,
+          "height": 44
+        },
+        {
+          "text": "Şimdi eşitle",
+          "x": 37,
+          "right": 169.140625,
+          "width": 132.140625,
+          "height": 44
+        },
+        {
+          "text": "Çıkış yap",
+          "x": 177.140625,
+          "right": 292.75,
+          "width": 115.609375,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "locale": "tr",
+      "width": 320,
+      "screen": "account",
+      "screenshot": "paused-account-tr-320.png",
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Ayarlara dön",
+          "x": 16,
+          "right": 96.28125,
+          "width": 80.28125,
+          "height": 44
+        },
+        {
+          "text": "Şimdi eşitle",
+          "x": 41,
+          "right": 169.140625,
+          "width": 128.140625,
+          "height": 44
+        },
+        {
+          "text": "Çıkış yap",
+          "x": 41,
+          "right": 156.21875,
+          "width": 115.21875,
+          "height": 44
+        },
+        {
+          "text": "Hesabımı sil",
+          "x": 20,
+          "right": 94.875,
+          "width": 74.875,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "locale": "tr",
+      "width": 390,
+      "screen": "settings",
+      "screenshot": "paused-settings-tr-390.png",
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Yedek indir",
+          "x": 37,
+          "right": 165.578125,
+          "width": 128.578125,
+          "height": 44
+        },
+        {
+          "text": "Geri al",
+          "x": 173.578125,
+          "right": 275.734375,
+          "width": 102.15625,
+          "height": 44
+        },
+        {
+          "text": "Şimdi eşitle",
+          "x": 37,
+          "right": 169.140625,
+          "width": 132.140625,
+          "height": 44
+        },
+        {
+          "text": "Çıkış yap",
+          "x": 177.140625,
+          "right": 292.75,
+          "width": 115.609375,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "locale": "tr",
+      "width": 390,
+      "screen": "account",
+      "screenshot": "paused-account-tr-390.png",
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Ayarlara dön",
+          "x": 16,
+          "right": 96.28125,
+          "width": 80.28125,
+          "height": 44
+        },
+        {
+          "text": "Şimdi eşitle",
+          "x": 41,
+          "right": 169.140625,
+          "width": 128.140625,
+          "height": 44
+        },
+        {
+          "text": "Çıkış yap",
+          "x": 177.140625,
+          "right": 292.359375,
+          "width": 115.21875,
+          "height": 44
+        },
+        {
+          "text": "Hesabımı sil",
+          "x": 20,
+          "right": 94.875,
+          "width": 74.875,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "locale": "es",
+      "width": 320,
+      "screen": "settings",
+      "screenshot": "paused-settings-es-320.png",
+      "viewport": 320,
+      "documentScroll": 361,
+      "mainScroll": 361,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Descargar copia",
+          "x": 37,
+          "right": 197.859375,
+          "width": 160.859375,
+          "height": 44
+        },
+        {
+          "text": "Restaurar",
+          "x": 37,
+          "right": 159.078125,
+          "width": 122.078125,
+          "height": 44
+        },
+        {
+          "text": "Sincronizar ahora",
+          "x": 37,
+          "right": 208.75,
+          "width": 171.75,
+          "height": 44
+        },
+        {
+          "text": "Cerrar sesión",
+          "x": 216.75,
+          "right": 360.953125,
+          "width": 144.203125,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "locale": "es",
+      "width": 320,
+      "screen": "account",
+      "screenshot": "paused-account-es-320.png",
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Volver a Ajustes",
+          "x": 16,
+          "right": 116.390625,
+          "width": 100.390625,
+          "height": 44
+        },
+        {
+          "text": "Sincronizar ahora",
+          "x": 41,
+          "right": 208.75,
+          "width": 167.75,
+          "height": 44
+        },
+        {
+          "text": "Cerrar sesión",
+          "x": 41,
+          "right": 184.640625,
+          "width": 143.640625,
+          "height": 44
+        },
+        {
+          "text": "Eliminar mi cuenta",
+          "x": 20,
+          "right": 136.234375,
+          "width": 116.234375,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "locale": "es",
+      "width": 390,
+      "screen": "settings",
+      "screenshot": "paused-settings-es-390.png",
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Descargar copia",
+          "x": 37,
+          "right": 197.859375,
+          "width": 160.859375,
+          "height": 44
+        },
+        {
+          "text": "Restaurar",
+          "x": 205.859375,
+          "right": 327.9375,
+          "width": 122.078125,
+          "height": 44
+        },
+        {
+          "text": "Sincronizar ahora",
+          "x": 37,
+          "right": 208.75,
+          "width": 171.75,
+          "height": 44
+        },
+        {
+          "text": "Cerrar sesión",
+          "x": 216.75,
+          "right": 360.953125,
+          "width": 144.203125,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    },
+    {
+      "locale": "es",
+      "width": 390,
+      "screen": "account",
+      "screenshot": "paused-account-es-390.png",
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Volver a Ajustes",
+          "x": 16,
+          "right": 116.390625,
+          "width": 100.390625,
+          "height": 44
+        },
+        {
+          "text": "Sincronizar ahora",
+          "x": 41,
+          "right": 208.75,
+          "width": 167.75,
+          "height": 44
+        },
+        {
+          "text": "Cerrar sesión",
+          "x": 41,
+          "right": 184.640625,
+          "width": 143.640625,
+          "height": 44
+        },
+        {
+          "text": "Eliminar mi cuenta",
+          "x": 20,
+          "right": 136.234375,
+          "width": 116.234375,
+          "height": 44
+        }
+      ],
+      "fontStatus": "loaded"
+    }
+  ],
+  "errors": [],
+  "externalAttempts": [],
+  "failedRequests": [],
+  "boundaryObservations": [
+    {
+      "case": "real-callback-flows",
+      "providerConstruction": 0,
+      "authDelivery": 0,
+      "authVerification": 0
+    },
+    {
+      "case": "en-320",
+      "providerConstruction": 0,
+      "authDelivery": 0,
+      "authVerification": 0
+    },
+    {
+      "case": "en-390",
+      "providerConstruction": 0,
+      "authDelivery": 0,
+      "authVerification": 0
+    },
+    {
+      "case": "tr-320",
+      "providerConstruction": 0,
+      "authDelivery": 0,
+      "authVerification": 0
+    },
+    {
+      "case": "tr-390",
+      "providerConstruction": 0,
+      "authDelivery": 0,
+      "authVerification": 0
+    },
+    {
+      "case": "es-320",
+      "providerConstruction": 0,
+      "authDelivery": 0,
+      "authVerification": 0
+    },
+    {
+      "case": "es-390",
+      "providerConstruction": 0,
+      "authDelivery": 0,
+      "authVerification": 0
+    }
+  ],
+  "limits": [
+    "Real AppProvider/useApp, repository, CloudSync public methods, review callbacks, components, translations and built CSS/fonts.",
+    "One local synthetic SDK uses the actual test conditional-CRUD adapter; native/audio/notification/confetti boundaries are no-ops.",
+    "Startup is signed out; a synthetic auth callback emits account A only after the actual local AppProvider load finishes.",
+    "Chromium in the saved Linux cloud executor; no real SDK/provider/database/auth/native-device/network/email/publication claims."
+  ],
+  "failure": "AssertionError [ERR_ASSERTION]: Responsive checks failed; requested screenshots retained\n\n1 !== 0\n\n    at file:///workspace/scratch/oda-cloud-upload-guard-browser/run.mjs:167:10"
+}

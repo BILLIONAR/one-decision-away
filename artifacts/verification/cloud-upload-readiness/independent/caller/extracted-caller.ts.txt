@@ -1,0 +1,40 @@
+globalThis.run = async () => {
+    // Repeated presses cannot create unresolved review promises or trigger an upload.
+    if (cloudReviewActive.current) return true;
+    cloudReviewActive.current = true;
+    const accountIsCurrent = cloudSync.currentAccountGuard();
+    try {
+      const operationIsCurrent = cloudSync.currentOperationGuard();
+      const remote = await cloudSync.pullIfNewer(data, { forReview: true });
+      // A late read must not become an upload for another account or newer local work.
+      if (!operationIsCurrent()) return true;
+      if (remote) {
+        const accepted = await new Promise<boolean>(resolve => setCloudRestoreReview({ record: remote, resolve }));
+        if (!accepted) return true;
+        if (!await repository.replaceAll(remote, originalRecord => cloudSync.canApplyRemote(remote, originalRecord))) {
+          showToast(backupCopy(getLocale()).cloudChanged, 'info');
+          return true;
+        }
+        const acknowledged = await cloudSync.markRemoteApplied(remote);
+        if (!accountIsCurrent()) return true;
+        // Show the reviewed commit without making a second, unreviewed cloud read.
+        await refreshData({ skipCloudPull: true });
+        if (!accountIsCurrent()) return true;
+        showToast(acknowledged ? t('Synced from cloud.') : backupCopy(getLocale()).cloudAppliedPaused, acknowledged ? 'success' : 'info');
+        return true;
+      }
+      const cloudError = cloudSync.getState().error;
+      if (cloudError) {
+        showToast(cloudError, 'error');
+        return true;
+      }
+    } catch {
+      if (accountIsCurrent()) showToast(t('Cloud backup failed — check your connection.'), 'error');
+      return true;
+    } finally {
+      cloudReviewActive.current = false;
+    }
+    return false;
+  };
+globalThis.cancel = () => { cloudRestoreReview?.resolve(false); setCloudRestoreReview(null); };
+globalThis.confirm = () => { cloudRestoreReview?.resolve(true); setCloudRestoreReview(null); };

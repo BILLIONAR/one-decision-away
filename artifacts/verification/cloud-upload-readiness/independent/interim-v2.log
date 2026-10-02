@@ -1,0 +1,187 @@
+{
+  "label": "Independent actual-service synthetic conditional-query review",
+  "mode": "guard",
+  "root": "/workspace/oda-cloud-upload-guard",
+  "head": "c30da64a5991758e952983377cbd6c4740e09d20",
+  "source": {
+    "src/services/cloudSync.ts": "878c81ba3de7caae659b48396b4ed02c780555e3eccef5127bc3953a64956795",
+    "src/services/repository.ts": "a65560692f655d05b37a367e5acbeff1b6dd2974f2f951ff70e419c1c9dcfc8a",
+    "src/store/useApp.tsx": "0576b4a1b6c849049f88e8d9c043143c667e1aabf9357bbfba35fe79f5ac6497"
+  },
+  "total": 42,
+  "passed": 41,
+  "failed": 1,
+  "liveNetworkCalls": 0,
+  "providerOrNativeTested": false,
+  "results": [
+    {
+      "name": "Fresh existing cloud: ordinary first save preserves unseen remote and local",
+      "passed": true
+    },
+    {
+      "name": "Declined cloud preview then ordinary edit never authorizes remote replacement",
+      "passed": true
+    },
+    {
+      "name": "One-second remote advance after own upload is preserved on next push",
+      "passed": true
+    },
+    {
+      "name": "Absent remote uses represented atomic INSERT and exact returned timestamp ack",
+      "passed": true
+    },
+    {
+      "name": "Identical existing content without explicit acknowledgement still holds",
+      "passed": true
+    },
+    {
+      "name": "Legacy owner/timestamp metadata cannot authorize upload",
+      "passed": true
+    },
+    {
+      "name": "Resolved offline SELECT blocks without mutation and retry rereads",
+      "passed": true
+    },
+    {
+      "name": "Thrown offline SELECT blocks without mutation and retry rereads",
+      "passed": true
+    },
+    {
+      "name": "Accepted cloud commit acknowledges raw version; later ordinary edit uses conditional UPDATE",
+      "passed": true
+    },
+    {
+      "name": "Acknowledged remote version change holds both copies",
+      "passed": true
+    },
+    {
+      "name": "Acknowledged remote same-version-content change holds both copies",
+      "passed": true
+    },
+    {
+      "name": "Acknowledged remote older-version change holds both copies",
+      "passed": true
+    },
+    {
+      "name": "Acknowledged remote array-order change holds both copies",
+      "passed": true
+    },
+    {
+      "name": "Canonical equivalent object key order does not block known remote",
+      "passed": true
+    },
+    {
+      "name": "A B A shared-device cycle cannot reuse A acknowledgement after B owns the record",
+      "passed": true
+    },
+    {
+      "name": "Pending SELECT after account cannot mutate or acknowledge",
+      "passed": true
+    },
+    {
+      "name": "Pending SELECT after project cannot mutate or acknowledge",
+      "passed": true
+    },
+    {
+      "name": "Pending SELECT after local cannot mutate or acknowledge",
+      "passed": true
+    },
+    {
+      "name": "Pending SELECT after import cannot mutate or acknowledge",
+      "passed": true
+    },
+    {
+      "name": "Pending SELECT after same-id-relogin cannot mutate or acknowledge",
+      "passed": true
+    },
+    {
+      "name": "Conditional UPDATE loses timestamp race: zero rows means conflict, remote winner kept",
+      "passed": true
+    },
+    {
+      "name": "Racing absent-row INSERT conflict never upserts winner",
+      "passed": true
+    },
+    {
+      "name": "Unreliable write representation {\"data\":[],\"error\":null} cannot report acknowledged success",
+      "passed": true
+    },
+    {
+      "name": "Unreliable write representation {\"data\":null,\"error\":null} cannot report acknowledged success",
+      "passed": true
+    },
+    {
+      "name": "Unreliable write representation {\"error\":null} cannot report acknowledged success",
+      "passed": true
+    },
+    {
+      "name": "Unreliable write representation {\"data\":[{\"data\":{},\"updated_at\":\"invalid\"}],\"error\":null} cannot report acknowledged success",
+      "passed": true
+    },
+    {
+      "name": "Unreliable write representation {\"data\":[{\"data\":{\"profile\":{\"id\":\"demo-user\",\"displayName\":\"wrong-con cannot report acknowledged success",
+      "passed": true
+    },
+    {
+      "name": "Explicit import cannot overwrite unseen existing cloud and keeps restore token",
+      "passed": true
+    },
+    {
+      "name": "Explicit import inserts absent row and clears only matching import token",
+      "passed": true
+    },
+    {
+      "name": "Acknowledgement storage failure reports hold without claiming sync",
+      "passed": true
+    },
+    {
+      "name": "Digest rejection fails closed before mutation",
+      "passed": true
+    },
+    {
+      "name": "Awaited hash after account cannot authorize stale mutation",
+      "passed": true
+    },
+    {
+      "name": "Awaited hash after local cannot authorize stale mutation",
+      "passed": true
+    },
+    {
+      "name": "Awaited hash after import cannot authorize stale mutation",
+      "passed": true
+    },
+    {
+      "name": "Late write completion after account cannot acknowledge or clear newer state",
+      "passed": true
+    },
+    {
+      "name": "Late write completion after import cannot acknowledge or clear newer state",
+      "passed": true
+    },
+    {
+      "name": "Later ordinary save retains returned baseline permission without falsely displaying current sync",
+      "passed": true
+    },
+    {
+      "name": "Changed acknowledgment owner during hash cannot use captured earlier owner permission",
+      "passed": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\ntrue !== false\n\n    at <anonymous> (/workspace/scratch/oda-cloud-upload-review/probes.mts:283:28)\n    at async probe (/workspace/scratch/oda-cloud-upload-review/probes.mts:140:54)\n    at async <anonymous> (/workspace/scratch/oda-cloud-upload-review/probes.mts:278:3)"
+    },
+    {
+      "name": "Legacy normalized restore acknowledges exact fetched cloud, then safely uploads preserved courses",
+      "passed": true
+    },
+    {
+      "name": "Manual review exposes equal or older unacknowledged server row",
+      "passed": true
+    },
+    {
+      "name": "Manual review sees changed content at identical version while default freshness remains unchanged",
+      "passed": true
+    },
+    {
+      "name": "Legacy same-timestamp mutation after SELECT remains declared bounded limitation",
+      "passed": true
+    }
+  ]
+}

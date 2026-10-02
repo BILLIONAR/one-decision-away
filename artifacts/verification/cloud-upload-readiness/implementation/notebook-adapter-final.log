@@ -1,0 +1,48 @@
+✔ old backups normalize without copying or losing any legacy Dream Journal field (2.396949ms)
+✔ new writing of every kind including affirmation earns 25 once; intention alone does not (2.166951ms)
+✔ edit, no-op, delete and recreate preserve immutable once-per-day reward claims (0.453026ms)
+✔ local writing day and existing UTC reward ceiling are separate and cap-safe (0.352343ms)
+✔ 369 only counts matching written intentions, allows partial saves and retains archived histories (1.491177ms)
+✔ 369 derives a real 33-day streak and preserves the achieved target after a gap (1.356724ms)
+✔ 369 matches Turkish dotted/dotless uppercase pairs without stripping meaningful accents (0.432665ms)
+✔ calendar streaks use local days across DST, not elapsed 24-hour periods (0.529943ms)
+✔ validation rejects blank entries, future dates, past creation and excess slots without altering input (0.499987ms)
+✔ legacy edits preserve photos, links and original date; unified JSON roundtrip is lossless (6.424126ms)
+✔ real repository serializes concurrent writes, protects from stale saves, and honors explicit restore (10.164339ms)
+✔ stale whole-document saves do not resurrect deleted legacy entries or lose new ones (1.267629ms)
+✔ Notebook rebases after a delayed load against a concurrent profile and ledger save (0.975437ms)
+✔ concurrent mission and Notebook reward evaluation share the same 2500 ceiling (9.678603ms)
+✔ failed storage saves reject, do not push cloud or claim rewards, and queue recovers (1.263583ms)
+✔ unreadable saved JSON is preserved, never silently replaced with seed data (0.192121ms)
+✖ explicit local restore blocks older cloud data across failed uploads and is account/project scoped (10.760041ms)
+✔ an old in-flight cloud upload cannot overwrite a newer restored snapshot or clear its marker (8.476654ms)
+✔ a signed-out import binds to the first later connection and stays isolated from other accounts (3.645679ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 18
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 74.799606
+
+✖ failing tests:
+
+test at scripts/test-notebook.ts:1:16991
+✖ explicit local restore blocks older cloud data across failed uploads and is account/project scoped (10.760041ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - 'Old cloud copy'
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/scripts/test-notebook.ts:359:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'Old cloud copy',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

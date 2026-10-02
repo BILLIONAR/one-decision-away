@@ -1,0 +1,699 @@
+✖ fresh OTP sign-in cannot overwrite existing cloud work on the first ordinary save (6.303253ms)
+✖ an absent cloud row is inserted once and acknowledges the returned server version and exact data (2.156986ms)
+✖ offline SELECT throws and reconnect retain both records (1.106635ms)
+✖ offline SELECT resolved and reconnect retain both records (1.094106ms)
+✖ shared device A→B→A cannot reuse the historical acknowledgement of A after B owns the record (9.622749ms)
+✖ a stale upload SELECT after account cannot write or alter current-scope status (4.412901ms)
+✖ a stale upload SELECT after project cannot write or alter current-scope status (1.244074ms)
+✖ a stale upload SELECT after logout-return cannot write or alter current-scope status (1.307901ms)
+✖ a stale upload SELECT after local-edit cannot write or alter current-scope status (1.225355ms)
+✖ a stale upload SELECT after import cannot write or alter current-scope status (0.986894ms)
+✖ same-version remote content changed at the fresh read cannot authorize overwrite (3.016858ms)
+✖ canonical acknowledgement treats reordered object keys as equal, but retains array order (4.025725ms)
+✖ a changed remote version between SELECT and UPDATE yields zero rows and never acknowledges success (2.261725ms)
+✖ an absent-row insert race preserves the winning cloud record and holds the import token (3.299255ms)
+✖ empty returned write representation never acknowledges or clears import intent (0.612828ms)
+✖ missing returned write representation never acknowledges or clears import intent (0.438944ms)
+✖ invalid-data returned write representation never acknowledges or clears import intent (0.463942ms)
+✖ invalid-version returned write representation never acknowledges or clears import intent (0.548511ms)
+✖ multiple returned write representation never acknowledges or clears import intent (0.42236ms)
+✖ a legacy timestamp-only acknowledgement cannot authorize an existing-row upload (0.593208ms)
+✖ previewing or declining a cloud restore creates no acknowledgement and later saves remain held (0.958912ms)
+✖ accepted cloud restore acknowledges the raw fetched JSON, including omitted legacy course data (1.879726ms)
+✖ an explicit import facing unacknowledged existing cloud keeps bytes/token and cannot bypass review protection (1.09018ms)
+✖ an explicit import into absent cloud can insert and clear only its still-current token (1.022097ms)
+✔ a late write response cannot acknowledge a new account or clear a newer import token (0.733941ms)
+✖ a write response cannot clear an import created while that same account upload waited (0.758318ms)
+✔ acknowledgement storage failure does not report sync success or clear imported intent (0.664547ms)
+✖ hash failure cannot mutate cloud or acknowledge the local record (1.685702ms)
+✖ awaited remote fingerprint after account cannot authorize a stale write (1.731622ms)
+✖ awaited remote fingerprint after local-edit cannot authorize a stale write (1.311436ms)
+✖ awaited remote fingerprint after import cannot authorize a stale write (1.362112ms)
+✖ a malformed-data SELECT pauses upload without choosing a winner (0.87172ms)
+✖ a invalid-version SELECT pauses upload without choosing a winner (0.467588ms)
+✖ successful upload acknowledges the actual returned server version rather than the attempted client timestamp (0.728733ms)
+✖ a rejected reviewed restore cannot establish cloud acknowledgement (1.290735ms)
+✖ a regressed clock advances the conditional write beyond remote microseconds 2040-01-01T00:00:00.999999Z (1.554253ms)
+✖ a regressed clock advances the conditional write beyond remote microseconds 2040-01-01T00:00:00.000001+00:00 (2.755231ms)
+✖ manual review exposes unacknowledged/changed cloud at -1000ms while default startup policy remains unchanged (0.816717ms)
+✖ manual review exposes unacknowledged/changed cloud at 0ms while default startup policy remains unchanged (0.883257ms)
+✖ manual review exposes unacknowledged/changed cloud at 1000ms while default startup policy remains unchanged (0.776015ms)
+✖ known limitation: a legacy same-version mutation after SELECT can pass timestamp-only CAS (1.140386ms)
+ℹ tests 41
+ℹ suites 0
+ℹ pass 2
+ℹ fail 39
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 393.430599
+
+✖ failing tests:
+
+test at tests/cloud-upload-readiness.test.ts:1:6975
+✖ fresh OTP sign-in cannot overwrite existing cloud work on the first ordinary save (6.303253ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:170:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:7521
+✖ an absent cloud row is inserted once and acknowledges the returned server version and exact data (2.156986ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'upsert'
+  -   'insert'
+    ]
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:177:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'upsert' ],
+    expected: [ 'insert' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:8199
+✖ offline SELECT throws and reconnect retain both records (1.106635ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:190:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:8199
+✖ offline SELECT resolved and reconnect retain both records (1.094106ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:190:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:8745
+✖ shared device A→B→A cannot reuse the historical acknowledgement of A after B owns the record (9.622749ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(aOwner.remoteFingerprint)
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:199:34)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:9623
+✖ a stale upload SELECT after account cannot write or alter current-scope status (4.412901ms)
+  AssertionError [ERR_ASSERTION]: every upload must SELECT before mutating
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:221:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:9623
+✖ a stale upload SELECT after project cannot write or alter current-scope status (1.244074ms)
+  AssertionError [ERR_ASSERTION]: every upload must SELECT before mutating
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:221:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:9623
+✖ a stale upload SELECT after logout-return cannot write or alter current-scope status (1.307901ms)
+  AssertionError [ERR_ASSERTION]: every upload must SELECT before mutating
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:221:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:9623
+✖ a stale upload SELECT after local-edit cannot write or alter current-scope status (1.225355ms)
+  AssertionError [ERR_ASSERTION]: every upload must SELECT before mutating
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:221:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:9623
+✖ a stale upload SELECT after import cannot write or alter current-scope status (0.986894ms)
+  AssertionError [ERR_ASSERTION]: every upload must SELECT before mutating
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:221:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:10695
+✖ same-version remote content changed at the fresh read cannot authorize overwrite (3.016858ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:242:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:11274
+✖ canonical acknowledgement treats reordered object keys as equal, but retains array order (4.025725ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'upsert' !== 'update'
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:253:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'upsert',
+    expected: 'update',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:12156
+✖ a changed remote version between SELECT and UPDATE yields zero rows and never acknowledges success (2.261725ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:266:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:12867
+✖ an absent-row insert race preserves the winning cloud record and holds the import token (3.299255ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:280:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:13802
+✖ empty returned write representation never acknowledges or clears import intent (0.612828ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:295:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:13802
+✖ missing returned write representation never acknowledges or clears import intent (0.438944ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:295:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:13802
+✖ invalid-data returned write representation never acknowledges or clears import intent (0.463942ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:295:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:13802
+✖ invalid-version returned write representation never acknowledges or clears import intent (0.548511ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:295:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:13802
+✖ multiple returned write representation never acknowledges or clears import intent (0.42236ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:295:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:14286
+✖ a legacy timestamp-only acknowledgement cannot authorize an existing-row upload (0.593208ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:305:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:14782
+✖ previewing or declining a cloud restore creates no acknowledgement and later saves remain held (0.958912ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:314:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:15217
+✖ accepted cloud restore acknowledges the raw fetched JSON, including omitted legacy course data (1.879726ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - 'ba164b06f1d36a9f18c86a8ac8a06a54c50e09f3a5b39524fa7719ad1eab2be9'
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:322:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'ba164b06f1d36a9f18c86a8ac8a06a54c50e09f3a5b39524fa7719ad1eab2be9',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:15850
+✖ an explicit import facing unacknowledged existing cloud keeps bytes/token and cannot bypass review protection (1.09018ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:333:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:16409
+✖ an explicit import into absent cloud can insert and clear only its still-current token (1.022097ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'upsert'
+  -   'insert'
+    ]
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:342:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'upsert' ],
+    expected: [ 'insert' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:17624
+✖ a write response cannot clear an import created while that same account upload waited (0.758318ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:363:28)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:18669
+✖ hash failure cannot mutate cloud or acknowledge the local record (1.685702ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:379:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:19321
+✖ awaited remote fingerprint after account cannot authorize a stale write (1.731622ms)
+  AssertionError [ERR_ASSERTION]: the upload must hash a freshly selected remote record
+  
+  1 !== 2
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:395:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:19321
+✖ awaited remote fingerprint after local-edit cannot authorize a stale write (1.311436ms)
+  AssertionError [ERR_ASSERTION]: the upload must hash a freshly selected remote record
+  
+  1 !== 2
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:395:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:19321
+✖ awaited remote fingerprint after import cannot authorize a stale write (1.362112ms)
+  AssertionError [ERR_ASSERTION]: the upload must hash a freshly selected remote record
+  
+  1 !== 2
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:395:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:20615
+✖ a malformed-data SELECT pauses upload without choosing a winner (0.87172ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:411:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:20615
+✖ a invalid-version SELECT pauses upload without choosing a winner (0.467588ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:411:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:20955
+✖ successful upload acknowledges the actual returned server version rather than the attempted client timestamp (0.728733ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - '2041-01-01T00:00:00.000987+00:00'
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:424:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: '2041-01-01T00:00:00.000987+00:00',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:21612
+✖ a rejected reviewed restore cannot establish cloud acknowledgement (1.290735ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:435:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:22332
+✖ a regressed clock advances the conditional write beyond remote microseconds 2040-01-01T00:00:00.999999Z (1.554253ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'upsert' !== 'update'
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:442:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'upsert',
+    expected: 'update',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:22332
+✖ a regressed clock advances the conditional write beyond remote microseconds 2040-01-01T00:00:00.000001+00:00 (2.755231ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'upsert' !== 'update'
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:442:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'upsert',
+    expected: 'update',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:22850
+✖ manual review exposes unacknowledged/changed cloud at -1000ms while default startup policy remains unchanged (0.816717ms)
+  RangeError: Invalid time value
+      at Date.toISOString (<anonymous>)
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:452:112)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at tests/cloud-upload-readiness.test.ts:1:22850
+✖ manual review exposes unacknowledged/changed cloud at 0ms while default startup policy remains unchanged (0.883257ms)
+  RangeError: Invalid time value
+      at Date.toISOString (<anonymous>)
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:452:112)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at tests/cloud-upload-readiness.test.ts:1:22850
+✖ manual review exposes unacknowledged/changed cloud at 1000ms while default startup policy remains unchanged (0.776015ms)
+  RangeError: Invalid time value
+      at Date.toISOString (<anonymous>)
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:452:112)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at tests/cloud-upload-readiness.test.ts:1:23603
+✖ known limitation: a legacy same-version mutation after SELECT can pass timestamp-only CAS (1.140386ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'upsert' !== 'update'
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:470:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'upsert',
+    expected: 'update',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

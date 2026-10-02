@@ -1,0 +1,94 @@
+{
+  "label": "Cloud upload readiness implementation focused evidence; no deployment or live provider verification",
+  "baselineCommit": "c30da64a5991758e952983377cbd6c4740e09d20",
+  "baselineTests": {
+    "total": 41,
+    "pass": 2,
+    "fail": 39
+  },
+  "finalFocused": {
+    "total": 91,
+    "pass": 91,
+    "fail": 0
+  },
+  "lintPassed": true,
+  "source": [
+    {
+      "name": "src/services/cloudSync.ts",
+      "bytes": 26070,
+      "sha256": "74f6405e6fe70cf89f7ac64473565a8d812ebc8180d3a0dc7e214e8183713dce"
+    },
+    {
+      "name": "src/services/cloudUploadReadiness.ts",
+      "bytes": 1602,
+      "sha256": "c122d4fb1f518ba4f01931054fc0f85a5e9bec6ef03cb2e996d573e31a9fdd24"
+    },
+    {
+      "name": "src/data/backupCopy.ts",
+      "bytes": 7406,
+      "sha256": "92dffa5dab22201491cad85c29d8cc48f65b8b083324a04e00d95d57a8cbdf6e"
+    },
+    {
+      "name": "tests/cloud-upload-readiness.test.ts",
+      "bytes": 34412,
+      "sha256": "5081fd5c25e4e0bbd294c41368730154f7fc0e0b8ef40b7007e3dc1f825b4f57"
+    },
+    {
+      "name": "tests/helpers/cloudCrudFixture.ts",
+      "bytes": 1863,
+      "sha256": "0c8901259e38dbca4e8f560c0d6425a199bfc5d36639f719339765ff6ca28f74"
+    },
+    {
+      "name": "tests/backup.test.ts",
+      "bytes": 15020,
+      "sha256": "3b37754f5385648db017a340f06fd4003c934b3a049006aaf3e5ce7217070a78"
+    },
+    {
+      "name": "tests/cloud-restore-scope.test.ts",
+      "bytes": 7864,
+      "sha256": "3ec90c3ace9e96d5aafe5c0a65242955e77eb80fa5d67958405755ae3740cfd6"
+    },
+    {
+      "name": "tests/deep-cloud-review.test.ts",
+      "bytes": 14228,
+      "sha256": "f3c2a03a81aad88f24dd3a8ff373e110e253c6494d3b45e55634e09d8bd2d599"
+    }
+  ],
+  "evidence": [
+    {
+      "name": "baseline-cloudSync.ts",
+      "bytes": 19068,
+      "sha256": "50a24f6690106cebbc1b38dfabb0edb84d4ca34f28b26dde4b919537b62a4bde"
+    },
+    {
+      "name": "baseline-41-tests.test.ts",
+      "bytes": 27940,
+      "sha256": "cd0ec3887eef247a6517003704d0944fa2f666a28494a8d93778c1b8be155df0"
+    },
+    {
+      "name": "new-tests-interim.log",
+      "bytes": 29925,
+      "sha256": "ac130c2ff79053b4bb426fd07981ab0953de21c1be1130bc0b5420fe86b674dd"
+    },
+    {
+      "name": "new-tests-first-candidate.log",
+      "bytes": 4991,
+      "sha256": "8cf71448b4c3ad0f0de993f97ff6ec212439a45497d271e0e3cd7101fd6253f6"
+    },
+    {
+      "name": "focused-final.log",
+      "bytes": 9200,
+      "sha256": "3d7d5a295ed3c8d408a6ca8b8fab29edae745324e5bd131227ca769626071d07"
+    },
+    {
+      "name": "lint-final.log",
+      "bytes": 52,
+      "sha256": "de46db38213832557332966baecf53bd08bee3e817501a3b9d3a3248f6d97ab9"
+    }
+  ],
+  "limitations": [
+    "Legacy writer preserving updated_at between SELECT and conditional UPDATE remains outside bounded protection",
+    "Real provider RLS/OTP/native behavior untested"
+  ],
+  "baselineTestProvenance": "Original 41-case test bytes recovered by removing eight later added regression cases, verified against cd0ec3887eef247a6517003704d0944fa2f666a28494a8d93778c1b8be155df0 recorded before implementation; original logs never rerun or replaced"
+}

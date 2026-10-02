@@ -1,0 +1,417 @@
+{
+  "evidence": "Actual extracted syncFromCloud and actual cloud modal confirm/cancel handlers executed in a VM with injected synthetic stubs. Actual locale copy imported. No mounted React, SDK, provider, database or native device.",
+  "beforeSourceSha256": {
+    "src/store/useApp.tsx": "0576b4a1b6c849049f88e8d9c043143c667e1aabf9357bbfba35fe79f5ac6497",
+    "src/services/cloudSync.ts": "74f6405e6fe70cf89f7ac64473565a8d812ebc8180d3a0dc7e214e8183713dce",
+    "src/services/cloudUploadReadiness.ts": "c122d4fb1f518ba4f01931054fc0f85a5e9bec6ef03cb2e996d573e31a9fdd24",
+    "src/data/backupCopy.ts": "92dffa5dab22201491cad85c29d8cc48f65b8b083324a04e00d95d57a8cbdf6e",
+    "src/pages/Account.tsx": "eb38c90df6feca059f1ca06d5f3772b702decb6b2ba826c11b47e12b674c304d",
+    "src/components/BackupAndCloudSettings.tsx": "39bdad1e69058eba6d46b49d387e31cc348b5c1ba236e50879963db5a8b7e0ce",
+    "src/components/BackupRestoreReview.tsx": "1c6e9fb305734c64bc64347406ebed054e0aca046ce4fe4d00780aadd01d6beb"
+  },
+  "cases": [
+    {
+      "name": "current empty cloud permits exactly the normal upload fallback",
+      "passed": true,
+      "accountCurrent": true,
+      "operationCurrent": true,
+      "durable": false,
+      "fallbackCalls": 1,
+      "pullCalls": 1,
+      "reviewCalls": 0,
+      "replaceCalls": 0,
+      "ackCalls": 0,
+      "refreshCalls": 0,
+      "toasts": [],
+      "events": [
+        "capture operation",
+        "manual cloud read"
+      ]
+    },
+    {
+      "name": "repeat during pending read is handled without another read or fallback",
+      "passed": true,
+      "accountCurrent": true,
+      "operationCurrent": true,
+      "durable": false,
+      "fallbackCalls": 0,
+      "pullCalls": 1,
+      "reviewCalls": 1,
+      "replaceCalls": 0,
+      "ackCalls": 0,
+      "refreshCalls": 0,
+      "toasts": [],
+      "events": [
+        "capture operation",
+        "manual cloud read",
+        "review opened",
+        "review closed"
+      ]
+    },
+    {
+      "name": "actual cancel handler closes review with no replacement or fallback",
+      "passed": true,
+      "accountCurrent": true,
+      "operationCurrent": true,
+      "durable": false,
+      "fallbackCalls": 0,
+      "pullCalls": 1,
+      "reviewCalls": 1,
+      "replaceCalls": 0,
+      "ackCalls": 0,
+      "refreshCalls": 0,
+      "toasts": [],
+      "events": [
+        "capture operation",
+        "manual cloud read",
+        "review opened",
+        "review closed"
+      ]
+    },
+    {
+      "name": "operation capture exception is handled and next attempt can run",
+      "passed": true,
+      "accountCurrent": true,
+      "operationCurrent": true,
+      "durable": false,
+      "fallbackCalls": 0,
+      "pullCalls": 0,
+      "reviewCalls": 0,
+      "replaceCalls": 0,
+      "ackCalls": 0,
+      "refreshCalls": 0,
+      "toasts": [
+        {
+          "message": "Cloud backup failed — check your connection.",
+          "type": "error"
+        },
+        {
+          "message": "Cloud backup failed — check your connection.",
+          "type": "error"
+        }
+      ],
+      "events": [
+        "capture operation",
+        "toast:error",
+        "capture operation",
+        "toast:error"
+      ]
+    },
+    {
+      "name": "read exception is handled and repeat can perform a fresh read",
+      "passed": true,
+      "accountCurrent": true,
+      "operationCurrent": true,
+      "durable": false,
+      "fallbackCalls": 0,
+      "pullCalls": 2,
+      "reviewCalls": 0,
+      "replaceCalls": 0,
+      "ackCalls": 0,
+      "refreshCalls": 0,
+      "toasts": [
+        {
+          "message": "Cloud backup failed — check your connection.",
+          "type": "error"
+        },
+        {
+          "message": "Cloud backup failed — check your connection.",
+          "type": "error"
+        }
+      ],
+      "events": [
+        "capture operation",
+        "manual cloud read",
+        "toast:error",
+        "capture operation",
+        "manual cloud read",
+        "toast:error"
+      ]
+    },
+    {
+      "name": "stale null read is handled instead of granting upload permission",
+      "passed": true,
+      "accountCurrent": true,
+      "operationCurrent": false,
+      "durable": false,
+      "fallbackCalls": 0,
+      "pullCalls": 1,
+      "reviewCalls": 0,
+      "replaceCalls": 0,
+      "ackCalls": 0,
+      "refreshCalls": 0,
+      "toasts": [],
+      "events": [
+        "capture operation",
+        "manual cloud read"
+      ]
+    },
+    {
+      "name": "returned service pause is displayed exactly and suppresses upload",
+      "passed": true,
+      "accountCurrent": true,
+      "operationCurrent": true,
+      "durable": false,
+      "fallbackCalls": 0,
+      "pullCalls": 1,
+      "reviewCalls": 0,
+      "replaceCalls": 0,
+      "ackCalls": 0,
+      "refreshCalls": 0,
+      "toasts": [
+        {
+          "message": "Synthetic precise paused reason",
+          "type": "error"
+        }
+      ],
+      "events": [
+        "capture operation",
+        "manual cloud read",
+        "toast:error"
+      ]
+    },
+    {
+      "name": "accepted confirmed restore acknowledges after durable commit and refreshes without cloud pull",
+      "passed": true,
+      "accountCurrent": true,
+      "operationCurrent": true,
+      "durable": true,
+      "fallbackCalls": 0,
+      "pullCalls": 1,
+      "reviewCalls": 1,
+      "replaceCalls": 1,
+      "ackCalls": 1,
+      "refreshCalls": 1,
+      "toasts": [
+        {
+          "message": "Synced from cloud.",
+          "type": "success"
+        }
+      ],
+      "events": [
+        "capture operation",
+        "manual cloud read",
+        "review opened",
+        "review closed",
+        "replacement requested",
+        "replacement guard checked",
+        "durable replacement",
+        "ack after durable replacement",
+        "refresh device without cloud pull",
+        "toast:success"
+      ]
+    },
+    {
+      "name": "accepted unconfirmed restore renders durable record with truthful en paused copy",
+      "passed": true,
+      "accountCurrent": true,
+      "operationCurrent": true,
+      "durable": true,
+      "fallbackCalls": 0,
+      "pullCalls": 1,
+      "reviewCalls": 1,
+      "replaceCalls": 1,
+      "ackCalls": 1,
+      "refreshCalls": 1,
+      "toasts": [
+        {
+          "message": "The cloud record was restored on this device, but automatic cloud backup is paused because it could not be confirmed. Your restored record is saved.",
+          "type": "info"
+        }
+      ],
+      "events": [
+        "capture operation",
+        "manual cloud read",
+        "review opened",
+        "review closed",
+        "replacement requested",
+        "replacement guard checked",
+        "durable replacement",
+        "ack after durable replacement",
+        "refresh device without cloud pull",
+        "toast:info"
+      ]
+    },
+    {
+      "name": "accepted unconfirmed restore renders durable record with truthful tr paused copy",
+      "passed": true,
+      "accountCurrent": true,
+      "operationCurrent": true,
+      "durable": true,
+      "fallbackCalls": 0,
+      "pullCalls": 1,
+      "reviewCalls": 1,
+      "replaceCalls": 1,
+      "ackCalls": 1,
+      "refreshCalls": 1,
+      "toasts": [
+        {
+          "message": "Bulut kayıtları bu cihaza geri yüklendi, ancak doğrulanamadığı için otomatik bulut yedekleme duraklatıldı. Geri yüklenen kayıtların saklanıyor.",
+          "type": "info"
+        }
+      ],
+      "events": [
+        "capture operation",
+        "manual cloud read",
+        "review opened",
+        "review closed",
+        "replacement requested",
+        "replacement guard checked",
+        "durable replacement",
+        "ack after durable replacement",
+        "refresh device without cloud pull",
+        "toast:info"
+      ]
+    },
+    {
+      "name": "accepted unconfirmed restore renders durable record with truthful es paused copy",
+      "passed": true,
+      "accountCurrent": true,
+      "operationCurrent": true,
+      "durable": true,
+      "fallbackCalls": 0,
+      "pullCalls": 1,
+      "reviewCalls": 1,
+      "replaceCalls": 1,
+      "ackCalls": 1,
+      "refreshCalls": 1,
+      "toasts": [
+        {
+          "message": "Los datos de la nube se restauraron en este dispositivo, pero la copia automática está en pausa porque no se pudo confirmar. Los datos restaurados están guardados.",
+          "type": "info"
+        }
+      ],
+      "events": [
+        "capture operation",
+        "manual cloud read",
+        "review opened",
+        "review closed",
+        "replacement requested",
+        "replacement guard checked",
+        "durable replacement",
+        "ack after durable replacement",
+        "refresh device without cloud pull",
+        "toast:info"
+      ]
+    },
+    {
+      "name": "account switch after acknowledgement suppresses refresh and success toast",
+      "passed": true,
+      "accountCurrent": false,
+      "operationCurrent": true,
+      "durable": true,
+      "fallbackCalls": 0,
+      "pullCalls": 1,
+      "reviewCalls": 1,
+      "replaceCalls": 1,
+      "ackCalls": 1,
+      "refreshCalls": 0,
+      "toasts": [],
+      "events": [
+        "capture operation",
+        "manual cloud read",
+        "review opened",
+        "review closed",
+        "replacement requested",
+        "replacement guard checked",
+        "durable replacement",
+        "ack after durable replacement"
+      ]
+    },
+    {
+      "name": "account switch during refresh suppresses old-scope success toast",
+      "passed": true,
+      "accountCurrent": false,
+      "operationCurrent": true,
+      "durable": true,
+      "fallbackCalls": 0,
+      "pullCalls": 1,
+      "reviewCalls": 1,
+      "replaceCalls": 1,
+      "ackCalls": 1,
+      "refreshCalls": 1,
+      "toasts": [],
+      "events": [
+        "capture operation",
+        "manual cloud read",
+        "review opened",
+        "review closed",
+        "replacement requested",
+        "replacement guard checked",
+        "durable replacement",
+        "ack after durable replacement",
+        "refresh device without cloud pull"
+      ]
+    },
+    {
+      "name": "guarded replacement rejection keeps device record and suppresses fallback",
+      "passed": true,
+      "accountCurrent": true,
+      "operationCurrent": true,
+      "durable": false,
+      "fallbackCalls": 0,
+      "pullCalls": 1,
+      "reviewCalls": 1,
+      "replaceCalls": 1,
+      "ackCalls": 0,
+      "refreshCalls": 0,
+      "toasts": [
+        {
+          "message": "Your account or saved record changed during review. Your current data was kept. Sync again to review the latest backup.",
+          "type": "info"
+        }
+      ],
+      "events": [
+        "capture operation",
+        "manual cloud read",
+        "review opened",
+        "review closed",
+        "replacement requested",
+        "replacement guard checked",
+        "toast:info"
+      ]
+    },
+    {
+      "name": "thrown replacement failure is handled with no ack or fallback",
+      "passed": true,
+      "accountCurrent": true,
+      "operationCurrent": true,
+      "durable": false,
+      "fallbackCalls": 0,
+      "pullCalls": 1,
+      "reviewCalls": 1,
+      "replaceCalls": 1,
+      "ackCalls": 0,
+      "refreshCalls": 0,
+      "toasts": [
+        {
+          "message": "Cloud backup failed — check your connection.",
+          "type": "error"
+        }
+      ],
+      "events": [
+        "capture operation",
+        "manual cloud read",
+        "review opened",
+        "review closed",
+        "replacement requested",
+        "toast:error"
+      ]
+    }
+  ],
+  "failures": [],
+  "fetchCalls": 0,
+  "afterSourceSha256": {
+    "src/store/useApp.tsx": "0576b4a1b6c849049f88e8d9c043143c667e1aabf9357bbfba35fe79f5ac6497",
+    "src/services/cloudSync.ts": "74f6405e6fe70cf89f7ac64473565a8d812ebc8180d3a0dc7e214e8183713dce",
+    "src/services/cloudUploadReadiness.ts": "c122d4fb1f518ba4f01931054fc0f85a5e9bec6ef03cb2e996d573e31a9fdd24",
+    "src/data/backupCopy.ts": "92dffa5dab22201491cad85c29d8cc48f65b8b083324a04e00d95d57a8cbdf6e",
+    "src/pages/Account.tsx": "eb38c90df6feca059f1ca06d5f3772b702decb6b2ba826c11b47e12b674c304d",
+    "src/components/BackupAndCloudSettings.tsx": "39bdad1e69058eba6d46b49d387e31cc348b5c1ba236e50879963db5a8b7e0ce",
+    "src/components/BackupRestoreReview.tsx": "1c6e9fb305734c64bc64347406ebed054e0aca046ce4fe4d00780aadd01d6beb"
+  },
+  "sourceUnchangedDuringProbe": true,
+  "total": 15,
+  "passed": 15,
+  "failed": 0
+}

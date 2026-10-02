@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: native Settings and Account use the shared code flow with device copy in en
+ok 1 - native Settings and Account use the shared code flow with device copy in en
+  ---
+  duration_ms: 12.491052
+  type: 'test'
+  ...
+# Subtest: native Settings and Account use the shared code flow with device copy in tr
+ok 2 - native Settings and Account use the shared code flow with device copy in tr
+  ---
+  duration_ms: 20.841314
+  type: 'test'
+  ...
+# Subtest: native Settings and Account use the shared code flow with device copy in es
+ok 3 - native Settings and Account use the shared code flow with device copy in es
+  ---
+  duration_ms: 19.526704
+  type: 'test'
+  ...
+# Subtest: web backup keeps its inline magic-link form and Account keeps link copy
+ok 4 - web backup keeps its inline magic-link form and Account keeps link copy
+  ---
+  duration_ms: 3.725191
+  type: 'test'
+  ...
+# Subtest: native configured signed-in backup retains sync and sign-out actions
+ok 5 - native configured signed-in backup retains sync and sign-out actions
+  ---
+  duration_ms: 2.548418
+  type: 'test'
+  ...
+# Subtest: unconfigured native cloud does not offer a sign-in request
+ok 6 - unconfigured native cloud does not offer a sign-in request
+  ---
+  duration_ms: 1.685742
+  type: 'test'
+  ...
+# Subtest: actual cloud request and verification use one injected auth adapter and trim input
+ok 7 - actual cloud request and verification use one injected auth adapter and trim input
+  ---
+  duration_ms: 1.294119
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 459.401807

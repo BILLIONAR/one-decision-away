@@ -1,0 +1,33 @@
+
+> oda-one-decision-away@1.0.0 check
+> npm run lint && node scripts/validate-i18n.mjs && node --import tsx scripts/test-i18n.ts && node --import tsx scripts/test-notebook.ts && node --import tsx scripts/test-notebook-voice.ts && node --import tsx scripts/test-routing.ts && npm test && npm run build
+
+
+> oda-one-decision-away@1.0.0 lint
+> tsc --noEmit
+
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice
+tr: 6823 entries; missing keys 0; placeholder differences 0
+es: 6823 entries; missing keys 0; placeholder differences 0
+English-first startup, saved choices, EN/TR/ES switching, fallback and repeated placeholders passed.
+✔ old backups normalize without copying or losing any legacy Dream Journal field (2.346352ms)
+✔ new writing of every kind including affirmation earns 25 once; intention alone does not (1.988841ms)
+✔ edit, no-op, delete and recreate preserve immutable once-per-day reward claims (0.447578ms)
+✔ local writing day and existing UTC reward ceiling are separate and cap-safe (0.34401ms)
+✔ 369 only counts matching written intentions, allows partial saves and retains archived histories (2.363259ms)
+✔ 369 derives a real 33-day streak and preserves the achieved target after a gap (1.335812ms)
+✔ 369 matches Turkish dotted/dotless uppercase pairs without stripping meaningful accents (0.469842ms)
+✔ calendar streaks use local days across DST, not elapsed 24-hour periods (0.684486ms)
+✔ validation rejects blank entries, future dates, past creation and excess slots without altering input (0.464213ms)
+✔ legacy edits preserve photos, links and original date; unified JSON roundtrip is lossless (6.613924ms)
+✔ real repository serializes concurrent writes, protects from stale saves, and honors explicit restore (9.181783ms)
+✔ stale whole-document saves do not resurrect deleted legacy entries or lose new ones (1.268691ms)
+✔ Notebook rebases after a delayed load against a concurrent profile and ledger save (0.939142ms)
+✔ concurrent mission and Notebook reward evaluation share the same 2500 ceiling (9.35195ms)
+✔ failed storage saves reject, do not push cloud or claim rewards, and queue recovers (1.259837ms)
+✔ unreadable saved JSON is preserved, never silently replaced with seed data (0.21138ms)
+✖ explicit local restore blocks older cloud data across failed uploads and is account/project scoped (5.446336ms)
