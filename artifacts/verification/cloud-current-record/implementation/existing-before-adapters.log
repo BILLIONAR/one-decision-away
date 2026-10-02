@@ -1,0 +1,244 @@
+✔ legacy course storage migrates into the personal record without changing other data (5.405845ms)
+✔ course edits, completion, experiment plans and logs roundtrip through JSON backup (3.87059ms)
+✔ a stale save from another feature retains newer lesson notes and practice logs (2.328185ms)
+✔ a legacy backup keeps local courses; an explicit empty course backup clears them (2.177116ms)
+✔ validation rejects malformed personal, notebook and course data before any storage write (4.13473ms)
+✔ quota failures keep the entire previous record and legacy key intact, and a retry succeeds (1.302552ms)
+✔ unreadable main data is never replaced by a course-only save (0.465805ms)
+✔ lesson edits and re-completion retain the real-world experiment history (0.246173ms)
+✔ course mutations wait for the shared write lock and rebase onto a concurrent notebook commit (0.809546ms)
+✔ ledger and notebook rewards retain one UTC ceiling when the local decision day differs (14.212609ms)
+✔ cloud upload captures current courses and invalid cloud backups leave local storage untouched (16.298677ms)
+✖ cloud previews do not change last-sync or local data until the reviewed record is committed (6.022619ms)
+✔ a pending cloud SELECT cannot replace data after account switch (2.884968ms)
+✔ a pending cloud SELECT cannot replace data after project switch (0.514589ms)
+✔ a pending cloud SELECT cannot replace data after logout and reauthentication as the same account (0.671747ms)
+✔ a pending cloud SELECT cannot replace data after an explicit local import barrier (0.72626ms)
+✔ a pending cloud SELECT cannot replace data after newer saved personal writing (0.622322ms)
+✔ a reviewed cloud restore is checked inside the write lock after account switch (10.008193ms)
+✔ a reviewed cloud restore is checked inside the write lock after project switch (4.012415ms)
+✔ a reviewed cloud restore is checked inside the write lock after logout and reauthentication as the same account (2.362678ms)
+✔ a reviewed cloud restore is checked inside the write lock after an explicit local import barrier (1.853967ms)
+✔ a reviewed cloud restore is checked inside the write lock after newer saved personal writing (1.838013ms)
+✖ an unchanged reviewed cloud record commits once and records its scoped sync (5.755775ms)
+✔ manual sync cannot fall back to uploading a captured previous-account snapshot (1.075068ms)
+✔ a delayed automatic backup remains bound to its original account (0.485896ms)
+✖ an old upload success cannot mark or emit the new cloud scope (9.415841ms)
+✖ an old upload failure cannot mark or emit the new cloud scope (1.990574ms)
+✔ fresh OTP sign-in cannot overwrite existing cloud work on the first ordinary save (10.21062ms)
+✔ an absent cloud row is inserted once and acknowledges the returned server version and exact data (17.439284ms)
+✔ offline SELECT throws and reconnect retain both records (6.738612ms)
+✔ offline SELECT resolved and reconnect retain both records (2.863416ms)
+✔ shared device A→B→A cannot reuse the historical acknowledgement of A after B owns the record (10.900775ms)
+✔ a stale upload SELECT after account cannot write or alter current-scope status (2.118177ms)
+✔ a stale upload SELECT after project cannot write or alter current-scope status (1.483036ms)
+✔ a stale upload SELECT after logout-return cannot write or alter current-scope status (1.375372ms)
+✔ a stale upload SELECT after local-edit cannot write or alter current-scope status (1.569857ms)
+✔ a stale upload SELECT after import cannot write or alter current-scope status (1.485469ms)
+✖ same-version remote content changed at the fresh read cannot authorize overwrite (11.808909ms)
+✔ canonical acknowledgement treats reordered object keys as equal, but retains array order (9.572063ms)
+✔ a changed remote version between SELECT and UPDATE yields zero rows and never acknowledges success (5.017666ms)
+✔ an absent-row insert race preserves the winning cloud record and holds the import token (3.915448ms)
+✔ empty returned write representation never acknowledges or clears import intent (1.630158ms)
+✔ missing returned write representation never acknowledges or clears import intent (1.896601ms)
+✔ invalid-data returned write representation never acknowledges or clears import intent (1.497898ms)
+✔ invalid-version returned write representation never acknowledges or clears import intent (1.726745ms)
+✔ multiple returned write representation never acknowledges or clears import intent (1.939677ms)
+✔ a legacy timestamp-only acknowledgement cannot authorize an existing-row upload (1.552ms)
+✔ previewing or declining a cloud restore creates no acknowledgement and later saves remain held (2.259581ms)
+✔ accepted cloud restore acknowledges the raw fetched JSON, including omitted legacy course data (7.614579ms)
+✔ an explicit import facing unacknowledged existing cloud keeps bytes/token and cannot bypass review protection (1.684391ms)
+✔ an explicit import into absent cloud can insert and clear only its still-current token (2.808843ms)
+✔ a late write response cannot acknowledge a new account or clear a newer import token (1.814347ms)
+✔ a write response cannot clear an import created while that same account upload waited (2.520766ms)
+✔ acknowledgement storage failure does not report sync success or clear imported intent (2.836104ms)
+✔ hash failure cannot mutate cloud or acknowledge the local record (3.917411ms)
+✔ awaited remote fingerprint after account cannot authorize a stale write (7.170661ms)
+✔ awaited remote fingerprint after local-edit cannot authorize a stale write (2.700569ms)
+✔ awaited remote fingerprint after import cannot authorize a stale write (2.584923ms)
+✔ a malformed-data SELECT pauses upload without choosing a winner (0.860042ms)
+✔ a invalid-version SELECT pauses upload without choosing a winner (0.592086ms)
+✔ successful upload acknowledges the actual returned server version rather than the attempted client timestamp (2.690514ms)
+✔ a rejected reviewed restore cannot establish cloud acknowledgement (2.081692ms)
+✔ a regressed clock advances the conditional write beyond remote microseconds 2040-01-01T00:00:00.999999Z (6.671741ms)
+✔ a regressed clock advances the conditional write beyond remote microseconds 2040-01-01T00:00:00.000001+00:00 (3.147496ms)
+✔ a valid returned document differing from the sent snapshot cannot establish upload permission (1.987278ms)
+✖ a represented conditional write that fails to advance its version cannot be acknowledged (3.673933ms)
+✔ an absent-row insert is not attempted when payload hashing is unavailable (1.243573ms)
+✔ another owner recorded during hashing invalidates an earlier acknowledgement without changing device bytes (2.531313ms)
+✔ another owner recorded during an upload response cannot be overwritten by its late acknowledgement (3.735646ms)
+✔ an acknowledgement storage-read failure after durable restore returns false and preserves the restored record (1.821218ms)
+✔ a rejected SELECT after a newer local save cannot replace that newer status (1.085783ms)
+✔ a manual preview stays paused without acknowledging cloud work until an accepted commit (1.713294ms)
+✔ manual review exposes unacknowledged/changed cloud at -1000ms while default startup policy remains unchanged (3.295425ms)
+✔ manual review exposes unacknowledged/changed cloud at 0ms while default startup policy remains unchanged (2.053068ms)
+✔ manual review exposes unacknowledged/changed cloud at 1000ms while default startup policy remains unchanged (1.868329ms)
+✔ known limitation: a legacy same-version mutation after SELECT can pass timestamp-only CAS (3.200055ms)
+✔ deep backup safety: reject unparseable notebook day before replacing any storage (4.945417ms)
+✔ deep backup safety: reject impossible calendar day before replacing any storage (1.209391ms)
+✔ deep backup safety: reject object mood rendered in journal before replacing any storage (1.116891ms)
+✔ deep backup safety: reject object prompt assigned to editor before replacing any storage (0.958291ms)
+✔ deep backup safety: reject unknown kind hidden by every writing surface before replacing any storage (7.077636ms)
+✔ deep backup safety: reject unparseable gratitude day before replacing any storage (0.801244ms)
+✔ deep backup safety: reject invalid writing activity day before replacing any storage (0.82541ms)
+✔ deep backup safety: reject invalid ledger day before replacing any storage (0.578375ms)
+✔ deep backup safety: reject object activity transaction reference before replacing any storage (0.815144ms)
+✔ deep backup safety: reject invalid 369 start day before replacing any storage (0.965041ms)
+✔ deep backup safety: reject invalid 369 history day before replacing any storage (0.687421ms)
+✔ deep backup safety: reject object archive marker hiding a practice before replacing any storage (0.569081ms)
+✔ deep backup safety: reject object 369 day timestamp before replacing any storage (0.60713ms)
+✔ deep backup safety: reject dream instant producing an invalid display day before replacing any storage (0.419866ms)
+✔ deep backup safety: reject invalid course attempt day silently dropping a note before replacing any storage (0.830898ms)
+✔ deep backup safety: reject invalid course review due date before replacing any storage (0.669914ms)
+✔ deep backup safety: reject invalid course review completion date before replacing any storage (0.611937ms)
+✔ deep backup safety: legitimate exported writing, legacy moods, and leap days roundtrip and render (32.647901ms)
+✔ deep backup safety: legacy backups without a notebook retain dream fields and local courses (0.907514ms)
+✔ an earlier account sync timestamp cannot hide another account cloud record (25.842036ms)
+✔ a legacy unscoped timestamp is not proof that this account is synchronized (2.355165ms)
+✔ an account deletion response cannot sign out a later signed-in account (0.950389ms)
+✔ an account deletion response cannot clear a new project connection (0.280164ms)
+✔ a late cloud coach reply cannot be accepted in another account scope (23.71075ms)
+✔ account deletion cannot start with another account after awaiting the client (0.487718ms)
+✔ cloud coach context consent is isolated between accounts and projects (0.437783ms)
+✔ a token refresh keeps the current account coach request valid (0.908295ms)
+✔ a project change while reading a coach response also expires its content (0.64054ms)
+✔ stopping the coach cancels a response body still being downloaded (0.757717ms)
+✔ a queued backup cannot upload a local document rolled back while it waited (6.697851ms)
+✔ the latest queued backup still uploads after a preceding slower backup (6.210773ms)
+✔ returning to an earlier account cannot reuse its timestamp for another account local record (5.509421ms)
+✔ a replaced dataset cannot inherit this account historical synchronization proof (3.228378ms)
+✔ an owner-metadata quota failure cannot advertise a newer synchronized local record (7.559666ms)
+ℹ tests 110
+ℹ suites 0
+ℹ pass 104
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1279.397033
+
+✖ failing tests:
+
+test at tests/backup.test.ts:1:11992
+✖ cloud previews do not change last-sync or local data until the reviewed record is committed (6.022619ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + null
+  - '2030-01-01T00:00:00Z'
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/backup.test.ts:261:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: '2030-01-01T00:00:00Z',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-restore-scope.test.ts:1:4391
+✖ an unchanged reviewed cloud record commits once and records its scoped sync (5.755775ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + null
+  - '2030-01-01T00:00:00Z'
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-restore-scope.test.ts:104:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: '2030-01-01T00:00:00Z',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-restore-scope.test.ts:1:6184
+✖ an old upload success cannot mark or emit the new cloud scope (9.415841ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  4 !== 1
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-restore-scope.test.ts:146:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 4,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-restore-scope.test.ts:1:6184
+✖ an old upload failure cannot mark or emit the new cloud scope (1.990574ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  2 !== 1
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-restore-scope.test.ts:146:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:10695
+✖ same-version remote content changed at the fresh read cannot authorize overwrite (11.808909ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+      confirmedLocalFingerprint: 'ba72d293725a8a16a6c76f8bc936704b77af77af95de87e9baa5fc3911760181',
+      epoch: '6fd2801d-f8e3-4313-91f8-9288f70dd858',
+      key: 'oda_cloud_last_sync:https%3A%2F%2Fproject-a.example:A',
+      remoteFingerprint: 'a232bfa819b4c107405255183230da641488abfabcd3b7cfea33cf50980d27f6',
+      remoteVersion: '2030-01-01T00:00:00.000Z',
+  +   updatedAt: null
+  -   updatedAt: '2030-01-01T00:00:00.000Z'
+    }
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-upload-readiness.test.ts:243:39)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { key: 'oda_cloud_last_sync:https%3A%2F%2Fproject-a.example:A', epoch: '6fd2801d-f8e3-4313-91f8-9288f70dd858', updatedAt: null, remoteVersion: '2030-01-01T00:00:00.000Z', remoteFingerprint: 'a232bfa819b4c107405255183230da641488abfabcd3b7cfea33cf50980d27f6', confirmedLocalFingerprint: 'ba72d293725a8a16a6c76f8bc936704b77af77af95de87e9baa5fc3911760181' },
+    expected: { key: 'oda_cloud_last_sync:https%3A%2F%2Fproject-a.example:A', epoch: '6fd2801d-f8e3-4313-91f8-9288f70dd858', updatedAt: '2030-01-01T00:00:00.000Z', remoteVersion: '2030-01-01T00:00:00.000Z', remoteFingerprint: 'a232bfa819b4c107405255183230da641488abfabcd3b7cfea33cf50980d27f6', confirmedLocalFingerprint: 'ba72d293725a8a16a6c76f8bc936704b77af77af95de87e9baa5fc3911760181' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-upload-readiness.test.ts:1:23692
+✖ a represented conditional write that fails to advance its version cannot be acknowledged (3.673933ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+      confirmedLocalFingerprint: 'f107e29712b427d987c1d028b518b9265a3fa16c93b320db1965835946fe156a',
+      epoch: '8b57e893-1dc8-49c6-b7f1-98337c10db3a',
+      key: 'oda_cloud_last_sync:https%3A%2F%2Fproject-a.example:A',
+      remoteFingerprint: 'cfb441a6b28f4d31ba42f7d301ea38a38fe715ffb765c02c1a86977bc5b31e01',
+      remoteVersion: '2030-01-01T00:00:00.000Z',
+  +   updatedAt: null
+  -   updatedAt: '2030-01-01T00:00:00.000Z'
+    }
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-upload-readiness.test.ts:473:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { key: 'oda_cloud_last_sync:https%3A%2F%2Fproject-a.example:A', epoch: '8b57e893-1dc8-49c6-b7f1-98337c10db3a', updatedAt: null, remoteVersion: '2030-01-01T00:00:00.000Z', remoteFingerprint: 'cfb441a6b28f4d31ba42f7d301ea38a38fe715ffb765c02c1a86977bc5b31e01', confirmedLocalFingerprint: 'f107e29712b427d987c1d028b518b9265a3fa16c93b320db1965835946fe156a' },
+    expected: { key: 'oda_cloud_last_sync:https%3A%2F%2Fproject-a.example:A', epoch: '8b57e893-1dc8-49c6-b7f1-98337c10db3a', updatedAt: '2030-01-01T00:00:00.000Z', remoteVersion: '2030-01-01T00:00:00.000Z', remoteFingerprint: 'cfb441a6b28f4d31ba42f7d301ea38a38fe715ffb765c02c1a86977bc5b31e01', confirmedLocalFingerprint: 'f107e29712b427d987c1d028b518b9265a3fa16c93b320db1965835946fe156a' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

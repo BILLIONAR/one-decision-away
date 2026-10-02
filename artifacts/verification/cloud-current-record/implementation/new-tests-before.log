@@ -1,0 +1,434 @@
+✖ a matching current durable document uploads and records current plus historical confirmation (20.20922ms)
+✖ a stale rendered profile payload cannot roll acknowledged cloud work backward (11.705393ms)
+✖ a stale rendered notebook payload cannot roll acknowledged cloud work backward (5.020071ms)
+✖ a stale rendered futureSelf payload cannot roll acknowledged cloud work backward (4.455616ms)
+✖ missing authoritative local record rejects a push before any cloud query (4.924557ms)
+✖ invalid-json authoritative local record rejects a push before any cloud query (4.122496ms)
+✖ invalid-document authoritative local record rejects a push before any cloud query (5.884781ms)
+✖ a course-only stale caller uses the existing latest-course normalization and can upload (3.166595ms)
+✖ an ordinary repository save invalidates current confirmation immediately and retains history (3.587573ms)
+✖ a durable Notebook action invalidates confirmation without waiting for its debounce (3.370393ms)
+✖ a durable course save invalidates confirmation without requiring the AppProvider event listener (2.623883ms)
+✖ a save suppressed by its account guard still makes the current durable document dirty (3.313026ms)
+✖ a failed durable repository write preserves previous current confirmation (2.699968ms)
+✖ a failed durable notebook write preserves previous current confirmation (3.264532ms)
+✖ a failed durable course write preserves previous current confirmation (3.248649ms)
+✖ dirty startup does not automatically restore the same acknowledged cloud baseline over newer device work (6.139055ms)
+✖ an old in-flight upload retains its remote baseline while the latest durable document remains dirty (5.214014ms)
+✖ the latest queued durable payload updates after an older in-flight upload without reverting cloud or device (5.238021ms)
+✖ confirmation bootstrap after a clean reload is tied to the actual persisted document (2.44342ms)
+✖ confirmation bootstrap after a dirty reload preserves device work and historical cloud time (2.393474ms)
+✖ a coherently hydrated external-tab edit cannot inherit another tab’s current-document confirmation (1.71034ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 0
+ℹ fail 21
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 348.17583
+
+✖ failing tests:
+
+test at tests/cloud-current-record.test.ts:1:4919
+✖ a matching current durable document uploads and records current plus historical confirmation (20.20922ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - true
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:104:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:5433
+✖ a stale rendered profile payload cannot roll acknowledged cloud work backward (11.705393ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:117:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:5433
+✖ a stale rendered notebook payload cannot roll acknowledged cloud work backward (5.020071ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:117:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:5433
+✖ a stale rendered futureSelf payload cannot roll acknowledged cloud work backward (4.455616ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:117:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:6253
+✖ missing authoritative local record rejects a push before any cloud query (4.924557ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   'A'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:129:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'A' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:6253
+✖ invalid-json authoritative local record rejects a push before any cloud query (4.122496ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   'A'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:129:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'A' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:6253
+✖ invalid-document authoritative local record rejects a push before any cloud query (5.884781ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:128:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:6992
+✖ a course-only stale caller uses the existing latest-course normalization and can upload (3.166595ms)
+  AssertionError [ERR_ASSERTION]: Expected "actual" not to be strictly deep-equal to:
+  
+  {
+    lessons: {},
+    version: 1
+  }
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:138:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { version: 1, lessons: {} },
+    expected: { version: 1, lessons: {} },
+    operator: 'notDeepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:7628
+✖ an ordinary repository save invalidates current confirmation immediately and retains history (3.587573ms)
+  AssertionError [ERR_ASSERTION]: current durable record must be shown as unconfirmed
+  + actual - expected
+  
+  + undefined
+  - false
+  
+      at assertDirty (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:82:10)
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:147:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:8056
+✖ a durable Notebook action invalidates confirmation without waiting for its debounce (3.370393ms)
+  AssertionError [ERR_ASSERTION]: current durable record must be shown as unconfirmed
+  + actual - expected
+  
+  + undefined
+  - false
+  
+      at assertDirty (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:82:10)
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:155:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:8493
+✖ a durable course save invalidates confirmation without requiring the AppProvider event listener (2.623883ms)
+  AssertionError [ERR_ASSERTION]: current durable record must be shown as unconfirmed
+  + actual - expected
+  
+  + undefined
+  - false
+  
+      at assertDirty (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:82:10)
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:162:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:8939
+✖ a save suppressed by its account guard still makes the current durable document dirty (3.313026ms)
+  AssertionError [ERR_ASSERTION]: current durable record must be shown as unconfirmed
+  + actual - expected
+  
+  + undefined
+  - false
+  
+      at assertDirty (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:82:10)
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:173:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:9708
+✖ a failed durable repository write preserves previous current confirmation (2.699968ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - true
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:182:41)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:9708
+✖ a failed durable notebook write preserves previous current confirmation (3.264532ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - true
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:182:41)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:9708
+✖ a failed durable course write preserves previous current confirmation (3.248649ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - true
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:182:41)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:10558
+✖ dirty startup does not automatically restore the same acknowledged cloud baseline over newer device work (6.139055ms)
+  AssertionError [ERR_ASSERTION]: current durable record must be shown as unconfirmed
+  + actual - expected
+  
+  + undefined
+  - false
+  
+      at assertDirty (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:82:10)
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:191:33)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:11059
+✖ an old in-flight upload retains its remote baseline while the latest durable document remains dirty (5.214014ms)
+  AssertionError [ERR_ASSERTION]: current durable record must be shown as unconfirmed
+  + actual - expected
+  
+  + undefined
+  - false
+  
+      at assertDirty (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:82:10)
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:203:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:11936
+✖ the latest queued durable payload updates after an older in-flight upload without reverting cloud or device (5.238021ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - true
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:216:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:12919
+✖ confirmation bootstrap after a clean reload is tied to the actual persisted document (2.44342ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - true
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:228:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:13483
+✖ confirmation bootstrap after a dirty reload preserves device work and historical cloud time (2.393474ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:237:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:14284
+✖ a coherently hydrated external-tab edit cannot inherit another tab’s current-document confirmation (1.71034ms)
+  AssertionError [ERR_ASSERTION]: current durable record must be shown as unconfirmed
+  + actual - expected
+  
+  + undefined
+  - false
+  
+      at assertDirty (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:82:10)
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:248:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

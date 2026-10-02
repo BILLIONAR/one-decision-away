@@ -1,0 +1,63 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import http from 'node:http';
+import { createRequire } from 'node:module';
+import { createHash } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
+
+const out = path.dirname(fileURLToPath(import.meta.url));
+const repo = '/workspace/oda-cloud-upload-current-record';
+const require = createRequire(path.join(repo, 'package.json'));
+const { build } = require('esbuild');
+const { chromium } = require('playwright');
+const baseURL = 'http://127.0.0.1:4193';
+const sha = file => createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+const builtHTML = fs.readFileSync(path.join(repo, 'dist/index.html'), 'utf8');
+const css = builtHTML.match(/href="[^\"]*\/(assets\/index-[^\"]+\.css)"/)?.[1];
+assert.ok(css, 'Parent must confirm final source and fresh built CSS before this runs.');
+const boundaries = path.join(out, 'boundaries.ts');
+const bundleOptions = { absWorkingDir: repo,
+  nodePaths: [path.join(repo, 'node_modules')], bundle: true, write: false, outfile: path.join(out, 'fixture.js'),
+  format: 'iife', platform: 'browser', jsx: 'automatic', define: { 'import.meta.env': '{"BASE_URL":"/one-decision-away/"}' },
+  plugins: [{ name: 'synthetic-native-provider-boundaries', setup(build) {
+    build.onResolve({ filter: /(?:^|\/)(?:native|pushNotifications|notificationScheduler|soundSynthesizer|voiceGuide|confetti)$|^@supabase\/supabase-js$/ }, () => ({ path: boundaries }));
+  } }] };
+const bundle = await build({ ...bundleOptions, entryPoints: [path.join(out, 'fixture.tsx')] });
+for (const file of bundle.outputFiles) fs.writeFileSync(file.path, file.contents);
+const writerBundle = await build({ ...bundleOptions, entryPoints: [path.join(out, 'writer.ts')], outfile: path.join(out, 'writer.js') });
+for (const file of writerBundle.outputFiles) fs.writeFileSync(file.path, file.contents);
+fs.writeFileSync(path.join(out, 'writer.html'), '<!doctype html><meta charset="utf-8"><title>Synthetic concurrent record writer</title><meta http-equiv="Content-Security-Policy" content="default-src \'self\'; connect-src \'none\'"><p>Actual repository and record queue; synthetic local data only.</p><script src="/writer.js"></script>');
+fs.writeFileSync(path.join(out, 'index.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ODA current-record synthetic acceptance fixture</title><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self'; object-src 'none'">
+  <link rel="stylesheet" href="/one-decision-away/${css}">
+  <style>body{margin:0;background:var(--bg);color:var(--fg)}#fixture-controls{margin:12px 16px;font:12px system-ui;max-width:560px}#fixture-controls button,#fixture-controls select{margin:4px;padding:6px;border:1px solid #777;border-radius:4px}#root{max-width:592px;margin:0 auto;padding:16px}</style>
+  </head><body><details id="fixture-controls"></details><main id="root"></main><script src="/fixture.js"></script></body></html>`);
+if (process.argv.includes('--prepare')) { console.log('Scratch bundles prepared only; no acceptance or browser run.'); process.exit(0); }
+const server = http.createServer((request, response) => {
+  const pathname = new URL(request.url, baseURL).pathname;
+  const built = pathname.startsWith('/one-decision-away/');
+  const relative = built ? pathname.slice('/one-decision-away/'.length) : pathname.slice(1) || 'index.html';
+  const root = built ? path.join(repo, 'dist') : out;
+  const file = path.resolve(root, relative);
+  if (!file.startsWith(root + path.sep) || !fs.existsSync(file) || !fs.statSync(file).isFile()) { response.writeHead(404); response.end('Not found'); return; }
+  const mime = { '.css': 'text/css', '.woff2': 'font/woff2', '.js': 'text/javascript', '.html': 'text/html', '.png': 'image/png', '.webp': 'image/webp' };
+  response.writeHead(200, { 'Content-Type': mime[path.extname(file)] ?? 'application/octet-stream', 'Cache-Control': 'no-store' }); fs.createReadStream(file).pipe(response);
+});
+await new Promise((resolve, reject) => { server.once('error', reject); server.listen(4193, '127.0.0.1', resolve); });
+if (process.argv.includes('--serve')) { console.log(`Interactive synthetic upload fixture at ${baseURL}/#/app/settings`); await new Promise(() => {}); }
+const sourcePaths = ['src/store/useApp.tsx', 'src/services/repository.ts', 'src/services/dataWrites.ts', 'src/services/cloudSync.ts', 'src/services/cloudUploadReadiness.ts',
+  'src/components/BackupAndCloudSettings.tsx', 'src/pages/Account.tsx', 'src/services/useCloudState.ts', 'src/components/BackupRestoreReview.tsx', 'src/data/backupCopy.ts', 'tests/helpers/cloudCrudFixture.ts'];
+const report = { at: new Date().toISOString(), baseURL, browser: '', sourceHashes: Object.fromEntries(sourcePaths.map(file => [file, sha(path.join(repo, file))])),
+  css: { path: css, sha256: sha(path.join(repo, 'dist', css)) }, checks: [], screenshots: [], layouts: [], errors: [], externalAttempts: [], failedRequests: [],
+  boundaryObservations: [], capabilities: [], concurrentWrites: [], confirmationTransitions: [], staleCallbacks: [], limits: ['Real AppProvider/useApp, repository, CloudSync public methods, review callbacks, components, translations and built CSS/fonts.',
+    'One local synthetic SDK uses the actual test conditional-CRUD adapter; native/audio/notification/confetti boundaries are no-ops.',
+    'Startup is signed out; a synthetic auth callback emits account A only after the actual local AppProvider load finishes.',
+    'Real Chromium IndexedDB and navigator.locks exercise the actual authoritative record queue and same-origin concurrent writers.',
+    'Chromium in the saved Linux cloud executor; no real remote SDK/provider/database/auth/native-device/network/email/publication claims.'] };
+const { runAcceptance } = await import("./acceptance.mjs");
+try { await runAcceptance({chromium,report,baseURL,out}); } finally {
+  fs.writeFileSync(path.join(out,"report.json"),JSON.stringify(report,null,2)+"\n");
+  await new Promise(resolve=>server.close(resolve));
+  console.log(JSON.stringify({out,passed:report.checks.filter(item=>item.passed).length,checks:report.checks.length,screenshots:report.screenshots.length,failure:report.failure??null}));
+}

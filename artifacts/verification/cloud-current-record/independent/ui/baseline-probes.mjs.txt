@@ -1,0 +1,199 @@
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
+import vm from 'node:vm';
+
+const root = '/workspace/oda-cloud-upload-current-record';
+const out = '/workspace/scratch/oda-cloud-current-record-review/ui';
+const revision = execFileSync('git', ['rev-parse', '5adcb6a'], { cwd: root, encoding: 'utf8' }).trim();
+const ts = createRequire(`${root}/package.json`)('typescript');
+const files = ['src/pages/Account.tsx', 'src/components/BackupAndCloudSettings.tsx',
+  'src/store/useApp.tsx', 'src/services/cloudSync.ts', 'src/services/backup.ts', 'src/data/backupCopy.ts'];
+mkdirSync(`${out}/baseline-source`, { recursive: true });
+const hash = value => createHash('sha256').update(value).digest('hex');
+const source = Object.fromEntries(files.map(file => [file,
+  execFileSync('git', ['show', `${revision}:${file}`], { cwd: root, encoding: 'utf8' })]));
+const before = Object.fromEntries(files.map(file => [file, hash(source[file])]));
+for (const [file, body] of Object.entries(source)) writeFileSync(`${out}/baseline-source/${file.replaceAll('/', '__')}`, body);
+const asts = Object.fromEntries(files.map(file => [file, ts.createSourceFile(file, source[file], ts.ScriptTarget.Latest, true,
+  file.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS)]));
+const locations = {};
+function find(file, predicate) {
+  let result;
+  function visit(node) { if (predicate(node)) result = node; ts.forEachChild(node, visit); }
+  visit(asts[file]); assert.ok(result, `Missing AST target in ${file}`); return result;
+}
+function variable(file, name) {
+  const node = find(file, n => ts.isVariableDeclaration(n) && n.name.getText(asts[file]) === name);
+  locations[`${file}:${name}`] = asts[file].getLineAndCharacterOfPosition(node.getStart()).line + 1;
+  return node.initializer;
+}
+const account = variable(files[0], 'syncNow').getText(asts[files[0]]);
+const settings = variable(files[1], 'handleSyncNow').getText(asts[files[1]]);
+const caller = variable(files[2], 'syncFromCloud').arguments[0].getText(asts[files[2]]);
+const modal = find(files[2], n => ts.isJsxSelfClosingElement(n) && n.tagName.getText(asts[files[2]]) === 'BackupRestoreReview');
+const handlers = Object.fromEntries(modal.attributes.properties.filter(n => ts.isJsxAttribute(n)
+  && ['onCancel', 'onConfirm'].includes(n.name.getText(asts[files[2]]))).map(n => [n.name.getText(asts[files[2]]), n.initializer.expression.getText(asts[files[2]])]));
+assert.ok(handlers.onCancel && handlers.onConfirm);
+const confirmed = variable(files[0], 'cloudConfirmed').getText(asts[files[0]]);
+const header = variable(files[0], 'header');
+let title, summary;
+function headerVisit(node) {
+  if (ts.isJsxElement(node)) {
+    const tag = node.openingElement.tagName.getText(asts[files[0]]);
+    const expression = node.children.find(n => ts.isJsxExpression(n) && n.expression)?.expression;
+    if (tag === 'h1') title = expression.getText(asts[files[0]]);
+    if (tag === 'p' && node.openingElement.getText(asts[files[0]]).includes('max-w-[52ch]')) summary = expression.getText(asts[files[0]]);
+  }
+  ts.forEachChild(node, headerVisit);
+}
+headerVisit(header); assert.ok(title && summary);
+const methodNames = ['currentAccountGuard', 'currentOperationGuard', 'syncKey', 'localEpoch', 'lastSyncAt', 'getState', 'push'];
+const methods = methodNames.map(name => {
+  const node = find(files[3], n => ts.isMethodDeclaration(n) && n.name.getText(asts[files[3]]) === name);
+  locations[`${files[3]}:${name}`] = asts[files[3]].getLineAndCharacterOfPosition(node.getStart()).line + 1;
+  return node.getText(asts[files[3]]);
+});
+const snapshot = find(files[4], n => ts.isFunctionDeclaration(n) && n.name?.text === 'createBackupSnapshot').getText(asts[files[4]]).replace(/^export\s+/, '');
+const extracted = `${snapshot}\nclass BoundCloud {\n${methods.join('\n')}\n}\nglobalThis.BoundCloud = BoundCloud;
+globalThis.syncFromCloud = ${caller};
+globalThis.accountRun = ${account};
+globalThis.settingsRun = ${settings};
+globalThis.cancel = ${handlers.onCancel};
+globalThis.confirm = ${handlers.onConfirm};
+globalThis.readClaim = () => { const cloudConfirmed = ${confirmed}; return { confirmed: cloudConfirmed, title: ${title}, summary: ${summary} }; };\n`;
+writeFileSync(`${out}/baseline-extracted.ts.txt`, extracted);
+const compile = value => ts.transpileModule(value, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS } }).outputText;
+const copyContext = vm.createContext({ exports: {} });
+vm.runInContext(compile(source[files[5]]), copyContext);
+const backupCopy = copyContext.exports.backupCopy;
+let fetchCalls = 0;
+const denyFetch = () => { fetchCalls += 1; throw new Error('Network prohibited'); };
+const deferred = () => { let resolve; const promise = new Promise(r => { resolve = r; }); return { promise, resolve }; };
+const APP_DATA_STORAGE_KEY = 'one_decision_away_app_data_v1';
+const REPLACEMENT_EPOCH_KEY = '_odaReplacementEpoch';
+const LAST_SYNC_KEY = 'oda_cloud_last_sync';
+const LOCAL_SYNC_SCOPE_KEY = `${LAST_SYNC_KEY}:local_scope`;
+const savedAt = '2026-09-20T10:00:00.000Z';
+function fixture(options = {}) {
+  const oldRender = { missions: [{ id: 'synthetic-old', title: 'old decision' }], notebook: { synthetic: 'old note' }, courseProgress: { synthetic: 'unchanged course' }, [REPLACEMENT_EPOCH_KEY]: 'same-dataset' };
+  const currentRecord = { ...oldRender, missions: [...oldRender.missions, { id: 'synthetic-current', title: 'new saved decision' }] };
+  const remote = { ...currentRecord, missions: [{ id: 'synthetic-review', title: 'reviewed cloud decision' }] };
+  const storage = new Map([[APP_DATA_STORAGE_KEY, JSON.stringify(currentRecord)]]);
+  const state = { pushes: [], toasts: [], reviews: 0, pulls: 0, replacements: 0, acks: 0, refreshes: [], events: [] };
+  const heldRead = deferred();
+  const context = {
+    Promise, fetch: denyFetch, APP_DATA_STORAGE_KEY, REPLACEMENT_EPOCH_KEY, LAST_SYNC_KEY, LOCAL_SYNC_SCOPE_KEY,
+    localStorage: { getItem: key => storage.get(key) ?? null, setItem: (key, value) => storage.set(key, value) },
+    normalizeNotebook: value => value, readCourseProgress: value => value,
+    data: oldRender, cloudReviewActive: { current: false }, cloudRestoreReview: null,
+    getLocale: () => options.locale || 'en', backupCopy, t: value => value, native: true, copy: backupCopy(options.locale || 'en'),
+    showToast(message, type) { state.toasts.push({ message, type }); },
+    setCloudRestoreReview(value) { context.cloudRestoreReview = value; if (value) state.reviews += 1; },
+    async refreshData(value) { state.refreshes.push({ skipCloudPull: value.skipCloudPull }); context.data = JSON.parse(storage.get(APP_DATA_STORAGE_KEY)); },
+    repository: { async replaceAll(value, guard) {
+      state.replacements += 1;
+      if (!guard(storage.get(APP_DATA_STORAGE_KEY))) return false;
+      storage.set(APP_DATA_STORAGE_KEY, JSON.stringify(value)); return true;
+    } },
+  };
+  vm.createContext(context); vm.runInContext(compile(extracted), context);
+  const cloud = new context.BoundCloud();
+  Object.assign(cloud, { session: { user: { id: 'synthetic-account', email: 'synthetic@example.invalid' } },
+    config: { url: 'https://synthetic.invalid' }, client: {}, scopeRevision: 1, pushQueue: Promise.resolve(false), syncing: false, error: null,
+    isConfigured: () => true, restoreScope: () => 'synthetic-restore-scope', emit() {}, pauseUpload() { return false; },
+    async pushSnapshot(value, userId, projectUrl, revision, restoreScope, token, localRecord) {
+      state.pushes.push({ payload: JSON.parse(JSON.stringify(value)), localRecord: JSON.parse(localRecord), userId });
+      return options.pushOk !== false;
+    },
+    async pullIfNewer(value, flags) {
+      state.pulls += 1; assert.equal(value, oldRender); assert.equal(flags.forReview, true);
+      if (options.holdRead) return heldRead.promise;
+      if (options.readThrows) throw new Error('Synthetic cloud read failure');
+      return options.remote ? remote : null;
+    },
+    canApplyRemote: (value, original) => value === remote && original === JSON.stringify(currentRecord),
+    markRemoteApplied(value) { assert.equal(value, remote); state.acks += 1; return options.acknowledged !== false; },
+  });
+  const key = cloud.syncKey(cloud.config.url, cloud.session.user.id);
+  storage.set(key, savedAt);
+  storage.set(LOCAL_SYNC_SCOPE_KEY, JSON.stringify({ key, epoch: 'same-dataset', updatedAt: savedAt, remoteVersion: savedAt, remoteFingerprint: 'a'.repeat(64) }));
+  context.cloudSync = cloud;
+  context.cloud = { ...cloud.getState(), currentDocumentConfirmed: false, lastSuccessfulSyncAt: savedAt };
+  return { context, cloud, storage, state, oldRender, currentRecord, remote, heldRead,
+    run: surface => context[surface === 'Account' ? 'accountRun' : 'settingsRun']() };
+}
+async function waitForReview(f) { for (let i = 0; i < 30; i += 1) { if (f.context.cloudRestoreReview) return; await Promise.resolve(); } throw new Error('Review did not open'); }
+const report = { stage: 'exact baseline, expected defects reproduced', revision,
+  evidence: 'Actual git-object Account/Settings callbacks, shared syncFromCloud and modal confirm/cancel handlers, CloudSync account/operation guards, push queue entry, lastSyncAt/getState, createBackupSnapshot function and Account current-backup expressions extracted/transpiled. Synthetic localStorage, normalizer, repository, query/upload boundary and toasts only. No React mount, actual query/write, provider, credentials or native device.',
+  beforeSourceSha256: before, sourceLocations: locations, cases: [], failures: [] };
+async function check(name, options, action, defect = false) {
+  const f = fixture(options);
+  try { await action(f); report.cases.push({ name, passed: true, reproducedKnownDefect: defect, ...f.state }); }
+  catch (error) { report.failures.push({ name, error: String(error.stack || error) }); report.cases.push({ name, passed: false, ...f.state }); }
+}
+for (const surface of ['Account', 'Settings']) {
+  await check(`${surface}: stale render payload reaches actual pushSnapshot entry while authoritative record was already newer`, {}, async f => {
+    await f.run(surface);
+    assert.equal(f.state.pushes.length, 1);
+    assert.deepEqual(f.state.pushes[0].payload, f.oldRender);
+    assert.deepEqual(f.state.pushes[0].localRecord, f.currentRecord);
+    assert.equal(JSON.parse(f.storage.get(APP_DATA_STORAGE_KEY)).missions.length, 2);
+    assert.deepEqual(f.state.toasts, [{ message: 'Backed up to cloud.', type: 'success' }]);
+  }, true);
+  await check(`${surface}: pending actual read and cancelled review never invoke fallback`, { holdRead: true }, async f => {
+    const pending = f.run(surface); await Promise.resolve(); assert.equal(f.state.pushes.length, 0);
+    f.heldRead.resolve(f.remote); await waitForReview(f); assert.equal(f.state.pushes.length, 0);
+    assert.equal(f.context.cloudReviewActive.current, true); f.context.cancel(); await pending;
+    assert.equal(f.state.pushes.length, 0); assert.equal(f.state.replacements, 0); assert.equal(f.context.cloudReviewActive.current, false);
+  });
+  await check(`${surface}: actual accepted review applies once and suppresses upload fallback`, { remote: true }, async f => {
+    const pending = f.run(surface); await waitForReview(f); f.context.confirm(); await pending;
+    assert.equal(f.state.pushes.length, 0); assert.equal(f.state.replacements, 1); assert.equal(f.state.acks, 1);
+    assert.deepEqual(f.state.refreshes, [{ skipCloudPull: true }]);
+    assert.deepEqual(f.state.toasts, [{ message: 'Synced from cloud.', type: 'success' }]);
+  });
+  await check(`${surface}: local record changed after click remains handled without fallback`, { holdRead: true }, async f => {
+    const pending = f.run(surface); f.storage.set(APP_DATA_STORAGE_KEY, JSON.stringify({ ...f.currentRecord, ordinaryNewSave: true }));
+    f.heldRead.resolve(null); await pending;
+    assert.equal(f.state.pushes.length, 0); assert.equal(f.context.cloudReviewActive.current, false);
+  });
+  await check(`${surface}: account switch during read remains handled without fallback`, { holdRead: true }, async f => {
+    const pending = f.run(surface); f.cloud.session = { user: { id: 'synthetic-other-account' } }; f.cloud.scopeRevision += 1;
+    f.heldRead.resolve(null); await pending; assert.equal(f.state.pushes.length, 0); assert.equal(f.state.toasts.length, 0);
+  });
+  await check(`${surface}: thrown actual read is handled without fallback and clears review ref`, { readThrows: true }, async f => {
+    await f.run(surface); assert.equal(f.state.pushes.length, 0); assert.equal(f.context.cloudReviewActive.current, false);
+    assert.deepEqual(f.state.toasts, [{ message: 'Cloud backup failed — check your connection.', type: 'error' }]);
+  });
+}
+await check('dirty ordinary same-epoch saved record retains baseline timestamp and Account asserts current backup safe', {}, async f => {
+  assert.equal(f.cloud.lastSyncAt(), savedAt);
+  const claim = JSON.parse(JSON.stringify(f.context.readClaim()));
+  assert.equal(f.context.cloud.currentDocumentConfirmed, false);
+  assert.deepEqual(claim, { confirmed: true, title: 'Your proof is safe', summary: 'Your decisions, evidence tree and notes are backed up and stay the same on every device where you sign in.' });
+  f.state.claim = claim; f.state.historicalLastSyncAt = savedAt;
+}, true);
+await check('baseline Account exact confirmation expression suppresses safe claim on service error', {}, async f => {
+  f.context.cloud.error = 'Synthetic paused error'; const claim = f.context.readClaim();
+  assert.equal(claim.confirmed, false); assert.equal(claim.title, 'Account');
+  assert.equal(claim.summary, backupCopy('en').cloudDeviceSaved);
+});
+await check('repeat click during actual held review remains single-flight and handled', { remote: true }, async f => {
+  const first = f.run('Account'); await waitForReview(f); await f.run('Settings');
+  assert.equal(f.state.pulls, 1); assert.equal(f.state.reviews, 1); assert.equal(f.state.pushes.length, 0);
+  f.context.cancel(); await first; assert.equal(f.state.pushes.length, 0);
+});
+report.afterSourceSha256 = Object.fromEntries(files.map(file => [file, hash(execFileSync('git', ['show', `${revision}:${file}`], { cwd: root }))]));
+report.sourceUnchangedDuringProbe = JSON.stringify(before) === JSON.stringify(report.afterSourceSha256);
+report.total = report.cases.length; report.passed = report.cases.filter(value => value.passed).length;
+report.failed = report.failures.length; report.reproducedKnownDefects = report.cases.filter(value => value.reproducedKnownDefect).length; report.fetchCalls = fetchCalls;
+assert.equal(report.sourceUnchangedDuringProbe, true); assert.equal(fetchCalls, 0);
+writeFileSync(`${out}/baseline-report.json`, `${JSON.stringify(report, null, 2)}\n`);
+writeFileSync(`${out}/baseline-source-and-evidence-sha256.json`, `${JSON.stringify({ revision, sourceFiles: before,
+  evidenceFiles: Object.fromEntries(['baseline-probes.mjs', 'baseline-extracted.ts.txt', 'baseline-report.json'].map(file => [file, hash(readFileSync(`${out}/${file}`))])) }, null, 2)}\n`);
+console.log(JSON.stringify({ revision, total: report.total, passed: report.passed, failed: report.failed,
+  reproducedKnownDefects: report.reproducedKnownDefects, fetchCalls, sourceUnchangedDuringProbe: report.sourceUnchangedDuringProbe, failures: report.failures }, null, 2));
+if (report.failed) process.exitCode = 1;

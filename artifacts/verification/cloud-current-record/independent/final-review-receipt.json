@@ -1,0 +1,152 @@
+{
+  "decision": "PASS for bounded stale-caller upload/current-backup-confirmation followup; parent publication checkpoint remains mandatory",
+  "timestampUTC": "2026-10-02T11:51:16.709657+00:00",
+  "baseCommit": "5adcb6a22bda7a087e1718b2cf2eeb105e1248ba",
+  "snapshotHead": "5adcb6a22bda7a087e1718b2cf2eeb105e1248ba",
+  "sourceHashes": {
+    "src/services/cloudSync.ts": "18374c6a9062224d05c555d2ea48c0e267b3d947569a62c17549429f918d36b9",
+    "src/services/cloudUploadReadiness.ts": "71c2fd85d6fa8399bed7a2925c58df046f301b0b74e631c041c627448b029c59",
+    "src/services/dataWrites.ts": "9f966b2edb05b506bef85e50ff3cf91bbd5267458ad86fef2af07f93711b4038",
+    "src/pages/Account.tsx": "c2c68d5526171849c74a48e851caa9176b234ac0bd116383445125c044ec468b",
+    "src/components/BackupAndCloudSettings.tsx": "c3be63b88cecb21e642d292a3783f13104c3d1bd9b51a3c373a58fc82d2e95bf",
+    "tests/cloud-current-record.test.ts": "d161000beb2a4da6a31d5517a5825bde404023389b6ff8814bc5b5d5350ae69b",
+    "tests/cloud-upload-readiness.test.ts": "905bce5b8e79124596b5ebeb85666746d452a352c91cc4f474ed1806052c6050",
+    "tests/cloud-restore-scope.test.ts": "3bbd943e09a2ccbcc0b1add353551637ba8b00e2595756a523b1374df2ba63cd",
+    "tests/deep-cloud-review.test.ts": "03ba4d3c293d33fdae81e3b92eb44f2ea661c5dce6fef5ca1364f3ca99cb6243",
+    "tests/backup.test.ts": "32bb843472824bdc51d592552b9e41ca453c68de2f7f1ffd656675edec1b3e64",
+    "tests/native-settings-otp.test.ts": "1a5dd62c6bcfab973f34ee260c2a93ceb64a0ee926e2775491504551eac7f953",
+    "src/services/repository.ts": "a65560692f655d05b37a367e5acbeff1b6dd2974f2f951ff70e419c1c9dcfc8a",
+    "src/services/backup.ts": "0ece443b6e61dfc0508658e5fb24a6373145fc56094f8e9b906fe53bebfdf3b9",
+    "src/store/useApp.tsx": "0576b4a1b6c849049f88e8d9c043143c667e1aabf9357bbfba35fe79f5ac6497",
+    "src/services/purchases.ts": "20166152294fdaba6c351e282c1b738a47b775256677030af518a417e1da257d",
+    "src/services/soundRoomPlayer.ts": "2911dd8b1ccc510f3a6757f43ddb3aa2b9d52d3d209e12ee2f0cf44c96a039f4",
+    "src/services/soundRoomAccess.ts": "e34e384f12abbc6b8185a377e9aa3c212832182d97b9f773ee973d9abe4c1199",
+    "src/pages/SoundRoom.tsx": "83fd4ed46bf8ae85facd20d791cbeb66558b36ff1d9021febb038d2964530238",
+    "package.json": "614199dd79f59c8b11a3dfc9b9a7ff4c8206666a92b8e1ec9da611647aa4d8f1",
+    "package-lock.json": "d08110baa951e3a716d06e24009dd278eca19a85eea967d0dd1d1c6dcf2eab22"
+  },
+  "sourceUnchangedDuringFinalChecks": true,
+  "scope": {
+    "sourceAndTestChanges": [
+      "src/components/BackupAndCloudSettings.tsx",
+      "src/pages/Account.tsx",
+      "src/services/cloudSync.ts",
+      "src/services/cloudUploadReadiness.ts",
+      "src/services/dataWrites.ts",
+      "tests/backup.test.ts",
+      "tests/cloud-restore-scope.test.ts",
+      "tests/cloud-upload-readiness.test.ts",
+      "tests/deep-cloud-review.test.ts",
+      "tests/native-settings-otp.test.ts",
+      "tests/cloud-current-record.test.ts"
+    ],
+    "expectedOnlyElevenFiles": true,
+    "protectedUnchanged": [
+      "AppProvider callers/useApp",
+      "repository",
+      "backup serialization/validation policy",
+      "purchases/identity SDK policy",
+      "reviewed SoundRoom runtime",
+      "catalogue/styles/logo/tree/course assets",
+      "package/lockfile/native configuration/deployment workflows"
+    ],
+    "dataWritesInverseBridge": "Removing exactly the10 added commit-subscriber lines reproduces base5ad dataWrites bytes; existing lock/hydration/durable-commit/rollback semantics unchanged.",
+    "baseDataWritesSHA256": "c4363492fc45d25f66fa2732b8fcfd9781e87509561dd8288c023243fcd596eb"
+  },
+  "baseline": {
+    "actualServiceOriginalDefectsReproduced": 4,
+    "serviceTotal": 4,
+    "serviceNetworkCalls": 0,
+    "serviceSource": {
+      "src/services/cloudSync.ts": "74f6405e6fe70cf89f7ac64473565a8d812ebc8180d3a0dc7e214e8183713dce",
+      "src/services/cloudUploadReadiness.ts": "c122d4fb1f518ba4f01931054fc0f85a5e9bec6ef03cb2e996d573e31a9fdd24",
+      "src/services/repository.ts": "a65560692f655d05b37a367e5acbeff1b6dd2974f2f951ff70e419c1c9dcfc8a",
+      "src/services/dataWrites.ts": "c4363492fc45d25f66fa2732b8fcfd9781e87509561dd8288c023243fcd596eb",
+      "src/services/backup.ts": "0ece443b6e61dfc0508658e5fb24a6373145fc56094f8e9b906fe53bebfdf3b9",
+      "src/pages/Account.tsx": "eb38c90df6feca059f1ca06d5f3772b702decb6b2ba826c11b47e12b674c304d",
+      "src/components/BackupAndCloudSettings.tsx": "5991e14426bc8a328363db1a4d3c826a071ce2ab009427dc205f419cbba1738e",
+      "src/store/useApp.tsx": "0576b4a1b6c849049f88e8d9c043143c667e1aabf9357bbfba35fe79f5ac6497"
+    },
+    "UIOriginalDefects": 3,
+    "UICases": 15,
+    "method": "Original actual-service stale Notebook/profile/decision overwrite and dirty claim reproduced; independently executed original Account/Settings/AppProvider callbacks and header expressions reach matching wrong payload boundary. Original source snapshots/logs/reports/scripts unchanged."
+  },
+  "finalIndependentService": {
+    "total": 19,
+    "pass": 19,
+    "fail": 0,
+    "networkCalls": 0,
+    "method": "Actual CloudSync/repository/source helper TypeScript with local synthetic storage, queue, timers and SELECT/conditional UPDATE fixture; no React mount, native device or live providers"
+  },
+  "finalIndependentCallerUI": {
+    "total": 18,
+    "pass": 18,
+    "fail": 0,
+    "fetchCalls": 0,
+    "method": "Actual current Account/Settings callbacks, useApp syncFromCloud, modal handlers, CloudSync guards/capture/push entry and current/history/committed-record methods executed in VM; actual validated getInitialDemoState, backup/normalizer/canonical fingerprint helpers and non-browser queueDataWrite/subscribeDataCommitted imported. Query/pushSnapshot and repository review boundaries synthetic. Full service SELECT/write policy is independently reviewed by parent. No mounted React, IndexedDB, SDK, real account, credentials, provider or native hardware."
+  },
+  "focusedRegressionSuite": {
+    "command": "node --import tsx --test tests/cloud-current-record.test.ts tests/cloud-upload-readiness.test.ts tests/cloud-restore-scope.test.ts tests/backup.test.ts tests/deep-cloud-review.test.ts tests/deep-backup-review.test.ts tests/native-settings-otp.test.ts",
+    "exitCode": 0,
+    "counts": {
+      "tests": 149,
+      "pass": 149,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    }
+  },
+  "notebookAdapterSuite": {
+    "command": "node --import tsx scripts/test-notebook.ts",
+    "exitCode": 0,
+    "counts": {
+      "tests": 19,
+      "pass": 19,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    }
+  },
+  "findings": "No remaining blocker found within this bounded source and synthetic test scope.",
+  "reviewedBehavior": [
+    "Caller payload deep-frozen then validated/canonical-compared against the authoritative queued current saved backup snapshot; stale/missing/invalid durable records reject before cloud SELECT.",
+    "Normal latest-course normalization remains accepted and carries freshly saved course work.",
+    "Durable commit/hydration observer invalidates current confirmation without erasing historical lastSuccessfulSyncAt or remote version/fingerprint acknowledgement; failed provisional saves do not invalidate previous confirmed bytes.",
+    "Old completed in-flight representation becomes history only while local bytes are dirty, and queued latest write may use that acknowledged cloud baseline.",
+    "Dirty startup freshness uses remote acknowledgement rather than current-display null timestamp, preventing same acknowledged remote from replacing newer local work.",
+    "Clean/dirty reload confidence is scoped to persisted exact saved snapshot and confirmed fingerprint, not historical timestamp or old singleton memory.",
+    "Late account/project/record/hash operations do not publish stale account status; existing manual review cancellation/acceptance/paused acknowledgement and operation guards continue to suppress unsafe fallback.",
+    "Account proof-safe claim depends on exact current-document confirmation; Account/Settings history use lastSuccessfulSyncAt."
+  ],
+  "limitations": [
+    "Node tests use synthetic storage/query/timers and the actual non-browser personal-record queue; no real IndexedDB, Web Locks or live cross-tab React behavior tested here.",
+    "UI probes execute actual extracted handlers and display expressions with query/pushSnapshot/review repository boundaries stubbed; no mounted React, screenshots, native device or provider verified by this reviewer.",
+    "Legacy remote writer changing contents without updated_at advance between SELECT and timestamp-CAS UPDATE remains outside this source-only guard; no full conflict protocol or automatic data winner introduced.",
+    "No real SDK/auth/email/payment/provider operations, secrets, app-account data, repository source edits, commits, pushes or deployments performed by this reviewer.",
+    "Root combined aggregate/browser QA and parent visual/QA/publication checkpoint are separate requirements; this receipt alone does not authorize publication."
+  ],
+  "evidenceSHA256": {
+    "baseline-probes.mts": "450b34d80c80da92fe5bb4eec524c7d83e4b8896113af61d266bdfa2e7ea85f5",
+    "baseline.log": "b5989454768f8bd86dbe3810be6aaef0c6bb32387f78126854d88736f6a38ebf",
+    "baseline-report.json": "b5989454768f8bd86dbe3810be6aaef0c6bb32387f78126854d88736f6a38ebf",
+    "baseline-receipt.json": "0e7a87069c9152e5cd9cd7beeb3a0d0604eef817f671a6d87a9efcf4a7b25da1",
+    "source-before-interim.json": "c505545b3d495a55dafcc1539ed9055a5b3a1c0c57b659bd8aa8a6e55558f1c0",
+    "interim.log": "c933b935c96630fb175e70b35d5560f4e6c06c3d74ff9835216e1e25739068ea",
+    "interim-report.json": "c933b935c96630fb175e70b35d5560f4e6c06c3d74ff9835216e1e25739068ea",
+    "source-after-interim.json": "c505545b3d495a55dafcc1539ed9055a5b3a1c0c57b659bd8aa8a6e55558f1c0",
+    "probes.mts": "de50d60746a36f5e5a32d8b06090da8f4447cb62f758e6d04944a1f00cf00152",
+    "final-probes.log": "53f44bd8ee5e5a896e9b5fa5bf2f0360691239aeb7be96060ebdb726297c89c5",
+    "final-report.json": "53f44bd8ee5e5a896e9b5fa5bf2f0360691239aeb7be96060ebdb726297c89c5",
+    "final-focused.log": "2ab1d14fd31df84a2ef4048ac246126e80419404a33dabb59361caffc51d8df5",
+    "final-notebook.log": "114f8e0032d9f37c3bc5199cc893a636f9dd73ca1636282849062f97e766293d",
+    "source-before-final.json": "cdac0bd2412eefd0d5221c7bc9d19d9c06865f4fcf48dfa9fb9d81434b7a5578",
+    "source-after-final.json": "6c8ab9353c58b08ff20b54c6391bde48b9457c95cf5b5ae4a5c56b8b536ab10f",
+    "ui/baseline-probes.mjs": "293981eaa44c8cbdfa78cb058812a448e094e0557b81d335abfc4b6e1b636683",
+    "ui/baseline-report.json": "7f70a2a52cca8ea2fff0136f0f9518cdc73a1c66bd66787a84ea60280e7dafad",
+    "ui/baseline-source-and-evidence-sha256.json": "40ee8f25b51d9e5a9c3a667d1a45b174cf1b67384fd756395a94c479a7dd95d0",
+    "ui/final-probes.mjs": "e319dedc88b4a793144f8aa2c282cf9add21dcec7a300a70f0523b5465d6a504",
+    "ui/final-report.json": "37c1c5d1c0b6dd1638e5aa190f7a4fbc9aec44972351db14d44d378d0c2093de",
+    "ui/final-source-and-evidence-sha256.json": "91c6a77d5bc2def29a61cf32ddae6a08f62f76a27bdbb4064d2372ebd09a96cc",
+    "ui/final-extracted.ts.txt": "e68dacb1ce21350f7f8fe5ea44bab800678aba373953899d5dfb10c354df1435"
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "root": "/workspace/oda-soundroom-entitlement-fix",
+  "mode": "baseline",
+  "head": "5adcb6a22bda7a087e1718b2cf2eeb105e1248ba",
+  "source": {
+    "src/services/cloudSync.ts": "74f6405e6fe70cf89f7ac64473565a8d812ebc8180d3a0dc7e214e8183713dce",
+    "src/services/cloudUploadReadiness.ts": "c122d4fb1f518ba4f01931054fc0f85a5e9bec6ef03cb2e996d573e31a9fdd24",
+    "src/services/repository.ts": "a65560692f655d05b37a367e5acbeff1b6dd2974f2f951ff70e419c1c9dcfc8a",
+    "src/services/dataWrites.ts": "c4363492fc45d25f66fa2732b8fcfd9781e87509561dd8288c023243fcd596eb",
+    "src/services/backup.ts": "0ece443b6e61dfc0508658e5fb24a6373145fc56094f8e9b906fe53bebfdf3b9",
+    "src/pages/Account.tsx": "eb38c90df6feca059f1ca06d5f3772b702decb6b2ba826c11b47e12b674c304d",
+    "src/components/BackupAndCloudSettings.tsx": "5991e14426bc8a328363db1a4d3c826a071ce2ab009427dc205f419cbba1738e",
+    "src/store/useApp.tsx": "0576b4a1b6c849049f88e8d9c043143c667e1aabf9357bbfba35fe79f5ac6497"
+  },
+  "total": 4,
+  "passed": 4,
+  "failed": 0,
+  "networkCalls": 0,
+  "method": "Actual CloudSync/repository/source helper TypeScript with local synthetic storage, queue, timers and SELECT/conditional UPDATE fixture; no React mount, native device or live providers",
+  "results": [
+    {
+      "name": "Original defect reproduced: ordinary local writing removes current-document confirmation before debounce without deleting sync history",
+      "passed": true,
+      "evidence": {
+        "state": {
+          "configured": true,
+          "session": {
+            "user": {
+              "id": "A",
+              "email": "synthetic@fixture.invalid"
+            }
+          },
+          "lastSyncAt": "2026-10-02T11:34:26.613Z",
+          "syncing": false,
+          "error": null,
+          "scopeRevision": 0
+        },
+        "previous": "2026-10-02T11:34:26.613Z",
+        "localEntries": [
+          "New writing only on this device"
+        ],
+        "remoteEntries": [],
+        "pendingTimers": 1
+      }
+    },
+    {
+      "name": "Original defect reproduced: stale supplied notebook snapshot cannot replace newer acknowledged cloud/local work",
+      "passed": true,
+      "evidence": {
+        "kind": "notebook",
+        "accepted": true,
+        "readsAfterCapture": 1,
+        "writesAfterCapture": 1,
+        "localUnchanged": true,
+        "state": {
+          "configured": true,
+          "session": {
+            "user": {
+              "id": "A",
+              "email": "synthetic@fixture.invalid"
+            }
+          },
+          "lastSyncAt": "2026-10-02T11:34:26.628Z",
+          "syncing": false,
+          "error": null,
+          "scopeRevision": 0
+        }
+      }
+    },
+    {
+      "name": "Original defect reproduced: stale supplied profile snapshot cannot replace newer acknowledged cloud/local work",
+      "passed": true,
+      "evidence": {
+        "kind": "profile",
+        "accepted": true,
+        "readsAfterCapture": 1,
+        "writesAfterCapture": 1,
+        "localUnchanged": true,
+        "state": {
+          "configured": true,
+          "session": {
+            "user": {
+              "id": "A",
+              "email": "synthetic@fixture.invalid"
+            }
+          },
+          "lastSyncAt": "2026-10-02T11:34:26.633Z",
+          "syncing": false,
+          "error": null,
+          "scopeRevision": 0
+        }
+      }
+    },
+    {
+      "name": "Original defect reproduced: stale supplied decisions snapshot cannot replace newer acknowledged cloud/local work",
+      "passed": true,
+      "evidence": {
+        "kind": "decisions",
+        "accepted": true,
+        "readsAfterCapture": 1,
+        "writesAfterCapture": 1,
+        "localUnchanged": true,
+        "state": {
+          "configured": true,
+          "session": {
+            "user": {
+              "id": "A",
+              "email": "synthetic@fixture.invalid"
+            }
+          },
+          "lastSyncAt": "2026-10-02T11:34:26.638Z",
+          "syncing": false,
+          "error": null,
+          "scopeRevision": 0
+        }
+      }
+    }
+  ]
+}

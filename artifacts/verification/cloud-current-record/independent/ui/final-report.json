@@ -1,0 +1,1414 @@
+{
+  "stage": "final source-extracted caller and current-backup claim verification",
+  "branch": "fix/cloud-upload-current-record",
+  "head": "5adcb6a22bda7a087e1718b2cf2eeb105e1248ba",
+  "evidence": "Actual current Account/Settings callbacks, useApp syncFromCloud, modal handlers, CloudSync guards/capture/push entry and current/history/committed-record methods executed in VM; actual validated getInitialDemoState, backup/normalizer/canonical fingerprint helpers and non-browser queueDataWrite/subscribeDataCommitted imported. Query/pushSnapshot and repository review boundaries synthetic. Full service SELECT/write policy is independently reviewed by parent. No mounted React, IndexedDB, SDK, real account, credentials, provider or native hardware.",
+  "beforeSourceSha256": {
+    "src/pages/Account.tsx": "c2c68d5526171849c74a48e851caa9176b234ac0bd116383445125c044ec468b",
+    "src/components/BackupAndCloudSettings.tsx": "c3be63b88cecb21e642d292a3783f13104c3d1bd9b51a3c373a58fc82d2e95bf",
+    "src/store/useApp.tsx": "0576b4a1b6c849049f88e8d9c043143c667e1aabf9357bbfba35fe79f5ac6497",
+    "src/services/cloudSync.ts": "18374c6a9062224d05c555d2ea48c0e267b3d947569a62c17549429f918d36b9",
+    "src/services/cloudUploadReadiness.ts": "71c2fd85d6fa8399bed7a2925c58df046f301b0b74e631c041c627448b029c59",
+    "src/services/dataWrites.ts": "9f966b2edb05b506bef85e50ff3cf91bbd5267458ad86fef2af07f93711b4038",
+    "src/services/backup.ts": "0ece443b6e61dfc0508658e5fb24a6373145fc56094f8e9b906fe53bebfdf3b9",
+    "src/services/repository.ts": "a65560692f655d05b37a367e5acbeff1b6dd2974f2f951ff70e419c1c9dcfc8a",
+    "src/services/notebook.ts": "dab465119b30d1aff002819e85e9989dbad000fc4ffd2a265767136f4ace6e40",
+    "src/services/courseProgress.ts": "7f9d3d7800706c652d014f7deff762d079e538a11e6e637eb6d72bdf4a72fe16",
+    "src/services/courseLearning.ts": "f4184c4ee175f14ef62c4c4c98c01dfbb3619f62e720d4053a9e2da10bc7e751",
+    "src/services/storageKeys.ts": "e5d3b1d244a08530c13c5fb1cb33ceee0a3dce543b849dbd0ee1a9e136f833f4",
+    "src/data/backupCopy.ts": "92dffa5dab22201491cad85c29d8cc48f65b8b083324a04e00d95d57a8cbdf6e",
+    "src/data/seed.ts": "0c5cb0d2e8deb8fff7281908145be98b8f0ae51fd408c6066683599340fed663",
+    "src/services/economy.ts": "fdeff021f4db8566d1e1b408fbf23734cb23e3edc6db3261d74723acc922551e",
+    "src/services/dataSnapshots.ts": "e9786193e676e9d2c790d97c818ea9140957f9f21ff04ab60976915b78eff68b"
+  },
+  "sourceLocations": {
+    "src/pages/Account.tsx:syncNow": 74,
+    "src/components/BackupAndCloudSettings.tsx:handleSyncNow": 64,
+    "src/store/useApp.tsx:syncFromCloud": 2456,
+    "src/pages/Account.tsx:cloudConfirmed": 111,
+    "src/pages/Account.tsx:header": 112,
+    "src/services/cloudSync.ts:currentAccountGuard": 75,
+    "src/services/cloudSync.ts:currentOperationGuard": 85,
+    "src/services/cloudSync.ts:syncKey": 91,
+    "src/services/cloudSync.ts:localEpoch": 95,
+    "src/services/cloudSync.ts:markLocalSyncScope": 105,
+    "src/services/cloudSync.ts:pauseUpload": 124,
+    "src/services/cloudSync.ts:acknowledgedSyncAt": 129,
+    "src/services/cloudSync.ts:lastSyncAt": 143,
+    "src/services/cloudSync.ts:lastSuccessfulSyncAt": 154,
+    "src/services/cloudSync.ts:observeCommittedRecord": 181,
+    "src/services/cloudSync.ts:getState": 359,
+    "src/services/cloudSync.ts:push": 469
+  },
+  "cases": [
+    {
+      "name": "Account: stale profile render is rejected by actual capture guard before pushSnapshot",
+      "passed": true,
+      "pushes": [],
+      "toasts": [
+        {
+          "message": "Cloud backup could not be confirmed. Your device record is still saved. Try syncing again.",
+          "type": "error"
+        }
+      ],
+      "reviews": 0,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "commits": 2
+    },
+    {
+      "name": "Account: stale notebook render is rejected by actual capture guard before pushSnapshot",
+      "passed": true,
+      "pushes": [],
+      "toasts": [
+        {
+          "message": "Cloud backup could not be confirmed. Your device record is still saved. Try syncing again.",
+          "type": "error"
+        }
+      ],
+      "reviews": 0,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "commits": 2
+    },
+    {
+      "name": "Account: stale decision render is rejected by actual capture guard before pushSnapshot",
+      "passed": true,
+      "pushes": [],
+      "toasts": [
+        {
+          "message": "Cloud backup could not be confirmed. Your device record is still saved. Try syncing again.",
+          "type": "error"
+        }
+      ],
+      "reviews": 0,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "commits": 2
+    },
+    {
+      "name": "Account: pending read then actual cancel keeps current record and suppresses fallback",
+      "passed": true,
+      "pushes": [],
+      "toasts": [],
+      "reviews": 1,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "commits": 1
+    },
+    {
+      "name": "Account: approved review still applies once without stale upload fallback",
+      "passed": true,
+      "pushes": [],
+      "toasts": [
+        {
+          "message": "Synced from cloud.",
+          "type": "success"
+        }
+      ],
+      "reviews": 1,
+      "pulls": 1,
+      "replacements": 1,
+      "acks": 1,
+      "refreshes": [
+        {
+          "skipCloudPull": true
+        }
+      ],
+      "commits": 2
+    },
+    {
+      "name": "Settings: stale profile render is rejected by actual capture guard before pushSnapshot",
+      "passed": true,
+      "pushes": [],
+      "toasts": [
+        {
+          "message": "Cloud backup could not be confirmed. Your device record is still saved. Try syncing again.",
+          "type": "error"
+        }
+      ],
+      "reviews": 0,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "commits": 2
+    },
+    {
+      "name": "Settings: stale notebook render is rejected by actual capture guard before pushSnapshot",
+      "passed": true,
+      "pushes": [],
+      "toasts": [
+        {
+          "message": "Cloud backup could not be confirmed. Your device record is still saved. Try syncing again.",
+          "type": "error"
+        }
+      ],
+      "reviews": 0,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "commits": 2
+    },
+    {
+      "name": "Settings: stale decision render is rejected by actual capture guard before pushSnapshot",
+      "passed": true,
+      "pushes": [],
+      "toasts": [
+        {
+          "message": "Cloud backup could not be confirmed. Your device record is still saved. Try syncing again.",
+          "type": "error"
+        }
+      ],
+      "reviews": 0,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "commits": 2
+    },
+    {
+      "name": "Settings: pending read then actual cancel keeps current record and suppresses fallback",
+      "passed": true,
+      "pushes": [],
+      "toasts": [],
+      "reviews": 1,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "commits": 1
+    },
+    {
+      "name": "Settings: approved review still applies once without stale upload fallback",
+      "passed": true,
+      "pushes": [],
+      "toasts": [
+        {
+          "message": "Synced from cloud.",
+          "type": "success"
+        }
+      ],
+      "reviews": 1,
+      "pulls": 1,
+      "replacements": 1,
+      "acks": 1,
+      "refreshes": [
+        {
+          "skipCloudPull": true
+        }
+      ],
+      "commits": 2
+    },
+    {
+      "name": "accepted unconfirmed review keeps truthful paused toast without upload fallback",
+      "passed": true,
+      "pushes": [],
+      "toasts": [
+        {
+          "message": "The cloud record was restored on this device, but automatic cloud backup is paused because it could not be confirmed. Your restored record is saved.",
+          "type": "info"
+        }
+      ],
+      "reviews": 1,
+      "pulls": 1,
+      "replacements": 1,
+      "acks": 1,
+      "refreshes": [
+        {
+          "skipCloudPull": true
+        }
+      ],
+      "commits": 2
+    },
+    {
+      "name": "repeat click during actual held review is single-flight and handled",
+      "passed": true,
+      "pushes": [],
+      "toasts": [],
+      "reviews": 1,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "commits": 1
+    },
+    {
+      "name": "account switch after click handles stale read without fallback/toast",
+      "passed": true,
+      "pushes": [],
+      "toasts": [],
+      "reviews": 0,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "commits": 1
+    },
+    {
+      "name": "actual read exception remains handled and clears in-flight review",
+      "passed": true,
+      "pushes": [],
+      "toasts": [
+        {
+          "message": "Cloud backup failed — check your connection.",
+          "type": "error"
+        }
+      ],
+      "reviews": 0,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "commits": 1
+    },
+    {
+      "name": "dirty durable current document does not claim safe, retains both exact historical UI fields",
+      "passed": true,
+      "pushes": [],
+      "toasts": [],
+      "reviews": 0,
+      "pulls": 0,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "commits": 1,
+      "claim": {
+        "confirmed": false,
+        "title": "Account",
+        "summary": "Your work is saved on this device. Use Sync now to check your cloud backup."
+      },
+      "history": {
+        "accountVisible": true,
+        "settingsVisible": true,
+        "accountLabel": "Last synced 2026-09-20T10:00:00.000Z",
+        "settingsLabel": "Last sync 9/20/2026, 10:00:00 AM."
+      }
+    },
+    {
+      "name": "exact clean confirmed current document still renders safe and history, service error suppresses safe",
+      "passed": true,
+      "pushes": [],
+      "toasts": [],
+      "reviews": 0,
+      "pulls": 0,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "commits": 0
+    },
+    {
+      "name": "current payload still passes actual validated capture boundary",
+      "passed": true,
+      "pushes": [
+        {
+          "payload": {
+            "_odaReplacementEpoch": "synthetic-same-dataset",
+            "archivedMarketItemIds": [],
+            "archivedMarketRecords": [],
+            "budget": {
+              "business": 20,
+              "education": 10,
+              "giving": 5,
+              "health": 10,
+              "housing": 30,
+              "lifestyle": 5,
+              "savings": 10,
+              "travel": 10
+            },
+            "checkIns": [],
+            "completions": [],
+            "courseProgress": {
+              "lessons": {},
+              "version": 1
+            },
+            "customHabitCategories": [
+              {
+                "color": "#6366f1",
+                "createdAt": "2026-01-01T00:00:00Z",
+                "description": "Uninterrupted deep work sprint blocks & distraction defense",
+                "icon": "Zap",
+                "id": "custom-cat-deep-focus",
+                "name": "Deep Focus"
+              },
+              {
+                "color": "#e11d48",
+                "createdAt": "2026-01-01T00:00:00Z",
+                "description": "Generative thinking, design ideation, writing & rapid prototyping",
+                "icon": "Palette",
+                "id": "custom-cat-creativity",
+                "name": "Creativity"
+              }
+            ],
+            "customMarketItems": [],
+            "dailyPrimaryGoals": [],
+            "dreamJournal": [],
+            "futureSelf": {
+              "boundaries": [],
+              "coreValues": [],
+              "dailyStandards": [],
+              "habits": [],
+              "identityStatement": "",
+              "noLongerDoes": [],
+              "oldSelfBehaviors": [],
+              "oldSelfExcuses": [],
+              "oldSelfLabels": [],
+              "oldSelfPatterns": [],
+              "skills": [],
+              "title": "",
+              "updatedAt": "2026-10-02T11:48:18.330Z"
+            },
+            "goals": [
+              {
+                "area": "Work",
+                "createdAt": "2026-01-01T00:00:00Z",
+                "description": "Create an independent digital service generating reliable monthly cash flow & sovereignty.",
+                "id": "goal-seed-1",
+                "status": "active",
+                "targetDate": "2026-12-31",
+                "title": "Build a sustainable online income",
+                "userId": "demo-user"
+              },
+              {
+                "area": "Health",
+                "createdAt": "2026-01-01T00:00:00Z",
+                "description": "Build sustained cellular energy, VO2 max capacity, and morning metabolic alertness.",
+                "id": "goal-seed-2",
+                "status": "active",
+                "targetDate": "2026-11-30",
+                "title": "Feel strong and healthy",
+                "userId": "demo-user"
+              },
+              {
+                "area": "Personal Meaning",
+                "createdAt": "2026-01-01T00:00:00Z",
+                "description": "Guard attention against reactive digital noise, building daily cognitive discipline.",
+                "id": "goal-seed-3",
+                "status": "active",
+                "targetDate": "2026-12-31",
+                "title": "Focus on what matters",
+                "userId": "demo-user"
+              },
+              {
+                "area": "Money",
+                "createdAt": "2026-01-01T00:00:00Z",
+                "description": "Systematically fund dream purchases and eliminate consumer impulse spending.",
+                "id": "goal-seed-4",
+                "status": "active",
+                "targetDate": "2027-06-30",
+                "title": "Save for real dreams",
+                "userId": "demo-user"
+              }
+            ],
+            "inVisionItemIds": [],
+            "lastActiveDateKey": "2026-10-02",
+            "lastDailyResetTimestamp": "2026-10-02T11:48:18.330Z",
+            "lifeScores": [],
+            "microHabits": [
+              {
+                "bestStreak": 0,
+                "category": "Health",
+                "completedDates": [],
+                "createdAt": "2026-01-01T00:00:00Z",
+                "description": "First thing after waking, before coffee.",
+                "durationMinutes": 5,
+                "goalId": "goal-seed-2",
+                "id": "habit-seed-1",
+                "streakCount": 0,
+                "title": "Drink a glass of water"
+              },
+              {
+                "bestStreak": 0,
+                "category": "Mindset",
+                "completedDates": [],
+                "createdAt": "2026-01-01T00:00:00Z",
+                "description": "A book, not a feed.",
+                "durationMinutes": 3,
+                "goalId": "goal-seed-3",
+                "id": "habit-seed-2",
+                "streakCount": 0,
+                "title": "Read for 10 minutes"
+              },
+              {
+                "bestStreak": 0,
+                "category": "Discipline",
+                "completedDates": [],
+                "createdAt": "2026-01-01T00:00:00Z",
+                "description": "Start the day on your own terms.",
+                "durationMinutes": 5,
+                "goalId": "goal-seed-3",
+                "id": "habit-seed-6",
+                "streakCount": 0,
+                "title": "No phone for the first 30 minutes"
+              }
+            ],
+            "missions": [
+              {
+                "area": "Money",
+                "createdAt": "2026-01-01T00:00:00Z",
+                "difficulty": "easy",
+                "estimatedMinutes": 20,
+                "id": "mission-seed-2",
+                "isOneDecision": false,
+                "recurring": "weekly",
+                "status": "active",
+                "title": "Review this week's spending",
+                "type": "weekly_mission",
+                "userId": "demo-user"
+              },
+              {
+                "area": "Health",
+                "createdAt": "2026-01-01T00:00:00Z",
+                "difficulty": "easy",
+                "estimatedMinutes": 30,
+                "id": "mission-seed-3",
+                "isOneDecision": false,
+                "recurring": "daily",
+                "status": "active",
+                "title": "Move your body for 30 minutes",
+                "type": "daily_quest",
+                "userId": "demo-user"
+              },
+              {
+                "area": "Work",
+                "createdAt": "2026-01-01T00:00:00Z",
+                "difficulty": "hard",
+                "estimatedMinutes": 120,
+                "id": "mission-seed-5",
+                "isOneDecision": false,
+                "status": "active",
+                "title": "Finish one thing you have been putting off",
+                "type": "monthly_boss_fight",
+                "userId": "demo-user"
+              }
+            ],
+            "notebook": {
+              "activityDays": [],
+              "affirmations": [],
+              "entries": [
+                {
+                  "content": "Synthetic original Notebook content",
+                  "createdAt": "2026-09-20T10:00:00.000Z",
+                  "dateKey": "2026-09-20",
+                  "id": "synthetic-original-note",
+                  "kind": "journal",
+                  "title": "Original saved note",
+                  "updatedAt": "2026-09-20T10:00:00.000Z"
+                }
+              ],
+              "gratitudeDays": [],
+              "practices369": [],
+              "revision": 0,
+              "version": 1
+            },
+            "offlineQueue": [],
+            "profile": {
+              "createdAt": "2026-10-02T11:48:18.330Z",
+              "dailyWisdomEnabled": true,
+              "dailyWisdomTime": "08:30",
+              "displayName": "",
+              "firstOpenedAt": "2026-10-02T11:48:18.330Z",
+              "focusScreenPulseEnabled": true,
+              "focusTabBlinkEnabled": true,
+              "id": "demo-user",
+              "lastOpenedAt": "2026-10-02T11:48:18.330Z",
+              "locale": "en",
+              "onboardingStep": "welcome",
+              "reminderTime": "08:00",
+              "soundMuted": false,
+              "theme": "system"
+            },
+            "purchases": [],
+            "realityBridges": [],
+            "seasonProgress": [
+              {
+                "completedMissionIds": [],
+                "isCompleted": false,
+                "seasonId": "season-finish"
+              }
+            ],
+            "subscription": {
+              "cancelAtPeriodEnd": false,
+              "plan": "free",
+              "status": "active",
+              "updatedAt": "2026-10-02T11:48:18.330Z",
+              "userId": "demo-user"
+            },
+            "transactions": [
+              {
+                "amount": 250,
+                "createdAt": "2026-10-02T11:48:18.330Z",
+                "dayKey": "2026-10-02",
+                "id": "tx-welcome-grant",
+                "kind": "welcome_grant",
+                "memo": "Welcome grant for beginning your journey",
+                "userId": "demo-user",
+                "walletId": "wallet-demo"
+              }
+            ],
+            "twoFutures": {
+              "allowingAnswers": {},
+              "allowingVotes": 0,
+              "antiVision": "",
+              "buildingAnswers": {},
+              "buildingVotes": 0,
+              "updatedAt": "2026-10-02T11:48:18.330Z",
+              "vision": ""
+            }
+          },
+          "localRecord": {
+            "profile": {
+              "id": "demo-user",
+              "displayName": "",
+              "onboardingStep": "welcome",
+              "locale": "en",
+              "theme": "system",
+              "soundMuted": false,
+              "focusTabBlinkEnabled": true,
+              "focusScreenPulseEnabled": true,
+              "reminderTime": "08:00",
+              "dailyWisdomEnabled": true,
+              "dailyWisdomTime": "08:30",
+              "firstOpenedAt": "2026-10-02T11:48:18.330Z",
+              "lastOpenedAt": "2026-10-02T11:48:18.330Z",
+              "createdAt": "2026-10-02T11:48:18.330Z"
+            },
+            "lifeScores": [],
+            "twoFutures": {
+              "allowingAnswers": {},
+              "buildingAnswers": {},
+              "antiVision": "",
+              "vision": "",
+              "buildingVotes": 0,
+              "allowingVotes": 0,
+              "updatedAt": "2026-10-02T11:48:18.330Z"
+            },
+            "futureSelf": {
+              "title": "",
+              "coreValues": [],
+              "dailyStandards": [],
+              "habits": [],
+              "skills": [],
+              "boundaries": [],
+              "noLongerDoes": [],
+              "identityStatement": "",
+              "oldSelfBehaviors": [],
+              "oldSelfExcuses": [],
+              "oldSelfPatterns": [],
+              "oldSelfLabels": [],
+              "updatedAt": "2026-10-02T11:48:18.330Z"
+            },
+            "goals": [
+              {
+                "id": "goal-seed-1",
+                "userId": "demo-user",
+                "title": "Build a sustainable online income",
+                "description": "Create an independent digital service generating reliable monthly cash flow & sovereignty.",
+                "area": "Work",
+                "targetDate": "2026-12-31",
+                "status": "active",
+                "createdAt": "2026-01-01T00:00:00Z"
+              },
+              {
+                "id": "goal-seed-2",
+                "userId": "demo-user",
+                "title": "Feel strong and healthy",
+                "description": "Build sustained cellular energy, VO2 max capacity, and morning metabolic alertness.",
+                "area": "Health",
+                "targetDate": "2026-11-30",
+                "status": "active",
+                "createdAt": "2026-01-01T00:00:00Z"
+              },
+              {
+                "id": "goal-seed-3",
+                "userId": "demo-user",
+                "title": "Focus on what matters",
+                "description": "Guard attention against reactive digital noise, building daily cognitive discipline.",
+                "area": "Personal Meaning",
+                "targetDate": "2026-12-31",
+                "status": "active",
+                "createdAt": "2026-01-01T00:00:00Z"
+              },
+              {
+                "id": "goal-seed-4",
+                "userId": "demo-user",
+                "title": "Save for real dreams",
+                "description": "Systematically fund dream purchases and eliminate consumer impulse spending.",
+                "area": "Money",
+                "targetDate": "2027-06-30",
+                "status": "active",
+                "createdAt": "2026-01-01T00:00:00Z"
+              }
+            ],
+            "missions": [
+              {
+                "id": "mission-seed-2",
+                "userId": "demo-user",
+                "title": "Review this week's spending",
+                "type": "weekly_mission",
+                "area": "Money",
+                "difficulty": "easy",
+                "estimatedMinutes": 20,
+                "isOneDecision": false,
+                "recurring": "weekly",
+                "status": "active",
+                "createdAt": "2026-01-01T00:00:00Z"
+              },
+              {
+                "id": "mission-seed-3",
+                "userId": "demo-user",
+                "title": "Move your body for 30 minutes",
+                "type": "daily_quest",
+                "area": "Health",
+                "difficulty": "easy",
+                "estimatedMinutes": 30,
+                "isOneDecision": false,
+                "recurring": "daily",
+                "status": "active",
+                "createdAt": "2026-01-01T00:00:00Z"
+              },
+              {
+                "id": "mission-seed-5",
+                "userId": "demo-user",
+                "title": "Finish one thing you have been putting off",
+                "type": "monthly_boss_fight",
+                "area": "Work",
+                "difficulty": "hard",
+                "estimatedMinutes": 120,
+                "isOneDecision": false,
+                "status": "active",
+                "createdAt": "2026-01-01T00:00:00Z"
+              }
+            ],
+            "completions": [],
+            "transactions": [
+              {
+                "id": "tx-welcome-grant",
+                "walletId": "wallet-demo",
+                "userId": "demo-user",
+                "kind": "welcome_grant",
+                "amount": 250,
+                "dayKey": "2026-10-02",
+                "memo": "Welcome grant for beginning your journey",
+                "createdAt": "2026-10-02T11:48:18.330Z"
+              }
+            ],
+            "customMarketItems": [],
+            "purchases": [],
+            "realityBridges": [],
+            "budget": {
+              "housing": 30,
+              "health": 10,
+              "education": 10,
+              "business": 20,
+              "travel": 10,
+              "savings": 10,
+              "giving": 5,
+              "lifestyle": 5
+            },
+            "seasonProgress": [
+              {
+                "seasonId": "season-finish",
+                "completedMissionIds": [],
+                "isCompleted": false
+              }
+            ],
+            "subscription": {
+              "userId": "demo-user",
+              "plan": "free",
+              "status": "active",
+              "cancelAtPeriodEnd": false,
+              "updatedAt": "2026-10-02T11:48:18.330Z"
+            },
+            "inVisionItemIds": [],
+            "archivedMarketItemIds": [],
+            "archivedMarketRecords": [],
+            "dreamJournal": [],
+            "notebook": {
+              "version": 1,
+              "revision": 0,
+              "entries": [
+                {
+                  "id": "synthetic-original-note",
+                  "kind": "journal",
+                  "title": "Original saved note",
+                  "content": "Synthetic original Notebook content",
+                  "dateKey": "2026-09-20",
+                  "createdAt": "2026-09-20T10:00:00.000Z",
+                  "updatedAt": "2026-09-20T10:00:00.000Z"
+                }
+              ],
+              "practices369": [],
+              "gratitudeDays": [],
+              "affirmations": [],
+              "activityDays": []
+            },
+            "courseProgress": {
+              "version": 1,
+              "lessons": {}
+            },
+            "microHabits": [
+              {
+                "id": "habit-seed-1",
+                "title": "Drink a glass of water",
+                "category": "Health",
+                "goalId": "goal-seed-2",
+                "durationMinutes": 5,
+                "description": "First thing after waking, before coffee.",
+                "completedDates": [],
+                "streakCount": 0,
+                "bestStreak": 0,
+                "createdAt": "2026-01-01T00:00:00Z"
+              },
+              {
+                "id": "habit-seed-2",
+                "title": "Read for 10 minutes",
+                "category": "Mindset",
+                "goalId": "goal-seed-3",
+                "durationMinutes": 3,
+                "description": "A book, not a feed.",
+                "completedDates": [],
+                "streakCount": 0,
+                "bestStreak": 0,
+                "createdAt": "2026-01-01T00:00:00Z"
+              },
+              {
+                "id": "habit-seed-6",
+                "title": "No phone for the first 30 minutes",
+                "category": "Discipline",
+                "goalId": "goal-seed-3",
+                "durationMinutes": 5,
+                "description": "Start the day on your own terms.",
+                "completedDates": [],
+                "streakCount": 0,
+                "bestStreak": 0,
+                "createdAt": "2026-01-01T00:00:00Z"
+              }
+            ],
+            "customHabitCategories": [
+              {
+                "id": "custom-cat-deep-focus",
+                "name": "Deep Focus",
+                "icon": "Zap",
+                "color": "#6366f1",
+                "description": "Uninterrupted deep work sprint blocks & distraction defense",
+                "createdAt": "2026-01-01T00:00:00Z"
+              },
+              {
+                "id": "custom-cat-creativity",
+                "name": "Creativity",
+                "icon": "Palette",
+                "color": "#e11d48",
+                "description": "Generative thinking, design ideation, writing & rapid prototyping",
+                "createdAt": "2026-01-01T00:00:00Z"
+              }
+            ],
+            "checkIns": [],
+            "dailyPrimaryGoals": [],
+            "lastActiveDateKey": "2026-10-02",
+            "lastDailyResetTimestamp": "2026-10-02T11:48:18.330Z",
+            "offlineQueue": [],
+            "_odaReplacementEpoch": "synthetic-same-dataset"
+          },
+          "userId": "synthetic-account"
+        }
+      ],
+      "toasts": [
+        {
+          "message": "Backed up to cloud.",
+          "type": "success"
+        }
+      ],
+      "reviews": 0,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "commits": 1
+    },
+    {
+      "name": "course-only stale render uses latest saved course normalization and stays eligible",
+      "passed": true,
+      "pushes": [
+        {
+          "payload": {
+            "_odaReplacementEpoch": "synthetic-same-dataset",
+            "archivedMarketItemIds": [],
+            "archivedMarketRecords": [],
+            "budget": {
+              "business": 20,
+              "education": 10,
+              "giving": 5,
+              "health": 10,
+              "housing": 30,
+              "lifestyle": 5,
+              "savings": 10,
+              "travel": 10
+            },
+            "checkIns": [],
+            "completions": [],
+            "courseProgress": {
+              "lessons": {
+                "turning-day-1": {
+                  "answer": null,
+                  "checked": [
+                    false,
+                    false,
+                    false
+                  ],
+                  "completed": false,
+                  "reflection": "Synthetic newly saved course reflection"
+                }
+              },
+              "version": 1
+            },
+            "customHabitCategories": [
+              {
+                "color": "#6366f1",
+                "createdAt": "2026-01-01T00:00:00Z",
+                "description": "Uninterrupted deep work sprint blocks & distraction defense",
+                "icon": "Zap",
+                "id": "custom-cat-deep-focus",
+                "name": "Deep Focus"
+              },
+              {
+                "color": "#e11d48",
+                "createdAt": "2026-01-01T00:00:00Z",
+                "description": "Generative thinking, design ideation, writing & rapid prototyping",
+                "icon": "Palette",
+                "id": "custom-cat-creativity",
+                "name": "Creativity"
+              }
+            ],
+            "customMarketItems": [],
+            "dailyPrimaryGoals": [],
+            "dreamJournal": [],
+            "futureSelf": {
+              "boundaries": [],
+              "coreValues": [],
+              "dailyStandards": [],
+              "habits": [],
+              "identityStatement": "",
+              "noLongerDoes": [],
+              "oldSelfBehaviors": [],
+              "oldSelfExcuses": [],
+              "oldSelfLabels": [],
+              "oldSelfPatterns": [],
+              "skills": [],
+              "title": "",
+              "updatedAt": "2026-10-02T11:48:18.333Z"
+            },
+            "goals": [
+              {
+                "area": "Work",
+                "createdAt": "2026-01-01T00:00:00Z",
+                "description": "Create an independent digital service generating reliable monthly cash flow & sovereignty.",
+                "id": "goal-seed-1",
+                "status": "active",
+                "targetDate": "2026-12-31",
+                "title": "Build a sustainable online income",
+                "userId": "demo-user"
+              },
+              {
+                "area": "Health",
+                "createdAt": "2026-01-01T00:00:00Z",
+                "description": "Build sustained cellular energy, VO2 max capacity, and morning metabolic alertness.",
+                "id": "goal-seed-2",
+                "status": "active",
+                "targetDate": "2026-11-30",
+                "title": "Feel strong and healthy",
+                "userId": "demo-user"
+              },
+              {
+                "area": "Personal Meaning",
+                "createdAt": "2026-01-01T00:00:00Z",
+                "description": "Guard attention against reactive digital noise, building daily cognitive discipline.",
+                "id": "goal-seed-3",
+                "status": "active",
+                "targetDate": "2026-12-31",
+                "title": "Focus on what matters",
+                "userId": "demo-user"
+              },
+              {
+                "area": "Money",
+                "createdAt": "2026-01-01T00:00:00Z",
+                "description": "Systematically fund dream purchases and eliminate consumer impulse spending.",
+                "id": "goal-seed-4",
+                "status": "active",
+                "targetDate": "2027-06-30",
+                "title": "Save for real dreams",
+                "userId": "demo-user"
+              }
+            ],
+            "inVisionItemIds": [],
+            "lastActiveDateKey": "2026-10-02",
+            "lastDailyResetTimestamp": "2026-10-02T11:48:18.333Z",
+            "lifeScores": [],
+            "microHabits": [
+              {
+                "bestStreak": 0,
+                "category": "Health",
+                "completedDates": [],
+                "createdAt": "2026-01-01T00:00:00Z",
+                "description": "First thing after waking, before coffee.",
+                "durationMinutes": 5,
+                "goalId": "goal-seed-2",
+                "id": "habit-seed-1",
+                "streakCount": 0,
+                "title": "Drink a glass of water"
+              },
+              {
+                "bestStreak": 0,
+                "category": "Mindset",
+                "completedDates": [],
+                "createdAt": "2026-01-01T00:00:00Z",
+                "description": "A book, not a feed.",
+                "durationMinutes": 3,
+                "goalId": "goal-seed-3",
+                "id": "habit-seed-2",
+                "streakCount": 0,
+                "title": "Read for 10 minutes"
+              },
+              {
+                "bestStreak": 0,
+                "category": "Discipline",
+                "completedDates": [],
+                "createdAt": "2026-01-01T00:00:00Z",
+                "description": "Start the day on your own terms.",
+                "durationMinutes": 5,
+                "goalId": "goal-seed-3",
+                "id": "habit-seed-6",
+                "streakCount": 0,
+                "title": "No phone for the first 30 minutes"
+              }
+            ],
+            "missions": [
+              {
+                "area": "Money",
+                "createdAt": "2026-01-01T00:00:00Z",
+                "difficulty": "easy",
+                "estimatedMinutes": 20,
+                "id": "mission-seed-2",
+                "isOneDecision": false,
+                "recurring": "weekly",
+                "status": "active",
+                "title": "Review this week's spending",
+                "type": "weekly_mission",
+                "userId": "demo-user"
+              },
+              {
+                "area": "Health",
+                "createdAt": "2026-01-01T00:00:00Z",
+                "difficulty": "easy",
+                "estimatedMinutes": 30,
+                "id": "mission-seed-3",
+                "isOneDecision": false,
+                "recurring": "daily",
+                "status": "active",
+                "title": "Move your body for 30 minutes",
+                "type": "daily_quest",
+                "userId": "demo-user"
+              },
+              {
+                "area": "Work",
+                "createdAt": "2026-01-01T00:00:00Z",
+                "difficulty": "hard",
+                "estimatedMinutes": 120,
+                "id": "mission-seed-5",
+                "isOneDecision": false,
+                "status": "active",
+                "title": "Finish one thing you have been putting off",
+                "type": "monthly_boss_fight",
+                "userId": "demo-user"
+              }
+            ],
+            "notebook": {
+              "activityDays": [],
+              "affirmations": [],
+              "entries": [
+                {
+                  "content": "Synthetic original Notebook content",
+                  "createdAt": "2026-09-20T10:00:00.000Z",
+                  "dateKey": "2026-09-20",
+                  "id": "synthetic-original-note",
+                  "kind": "journal",
+                  "title": "Original saved note",
+                  "updatedAt": "2026-09-20T10:00:00.000Z"
+                }
+              ],
+              "gratitudeDays": [],
+              "practices369": [],
+              "revision": 0,
+              "version": 1
+            },
+            "offlineQueue": [],
+            "profile": {
+              "createdAt": "2026-10-02T11:48:18.333Z",
+              "dailyWisdomEnabled": true,
+              "dailyWisdomTime": "08:30",
+              "displayName": "",
+              "firstOpenedAt": "2026-10-02T11:48:18.333Z",
+              "focusScreenPulseEnabled": true,
+              "focusTabBlinkEnabled": true,
+              "id": "demo-user",
+              "lastOpenedAt": "2026-10-02T11:48:18.333Z",
+              "locale": "en",
+              "onboardingStep": "welcome",
+              "reminderTime": "08:00",
+              "soundMuted": false,
+              "theme": "system"
+            },
+            "purchases": [],
+            "realityBridges": [],
+            "seasonProgress": [
+              {
+                "completedMissionIds": [],
+                "isCompleted": false,
+                "seasonId": "season-finish"
+              }
+            ],
+            "subscription": {
+              "cancelAtPeriodEnd": false,
+              "plan": "free",
+              "status": "active",
+              "updatedAt": "2026-10-02T11:48:18.333Z",
+              "userId": "demo-user"
+            },
+            "transactions": [
+              {
+                "amount": 250,
+                "createdAt": "2026-10-02T11:48:18.333Z",
+                "dayKey": "2026-10-02",
+                "id": "tx-welcome-grant",
+                "kind": "welcome_grant",
+                "memo": "Welcome grant for beginning your journey",
+                "userId": "demo-user",
+                "walletId": "wallet-demo"
+              }
+            ],
+            "twoFutures": {
+              "allowingAnswers": {},
+              "allowingVotes": 0,
+              "antiVision": "",
+              "buildingAnswers": {},
+              "buildingVotes": 0,
+              "updatedAt": "2026-10-02T11:48:18.333Z",
+              "vision": ""
+            }
+          },
+          "localRecord": {
+            "profile": {
+              "id": "demo-user",
+              "displayName": "",
+              "onboardingStep": "welcome",
+              "locale": "en",
+              "theme": "system",
+              "soundMuted": false,
+              "focusTabBlinkEnabled": true,
+              "focusScreenPulseEnabled": true,
+              "reminderTime": "08:00",
+              "dailyWisdomEnabled": true,
+              "dailyWisdomTime": "08:30",
+              "firstOpenedAt": "2026-10-02T11:48:18.333Z",
+              "lastOpenedAt": "2026-10-02T11:48:18.333Z",
+              "createdAt": "2026-10-02T11:48:18.333Z"
+            },
+            "lifeScores": [],
+            "twoFutures": {
+              "allowingAnswers": {},
+              "buildingAnswers": {},
+              "antiVision": "",
+              "vision": "",
+              "buildingVotes": 0,
+              "allowingVotes": 0,
+              "updatedAt": "2026-10-02T11:48:18.333Z"
+            },
+            "futureSelf": {
+              "title": "",
+              "coreValues": [],
+              "dailyStandards": [],
+              "habits": [],
+              "skills": [],
+              "boundaries": [],
+              "noLongerDoes": [],
+              "identityStatement": "",
+              "oldSelfBehaviors": [],
+              "oldSelfExcuses": [],
+              "oldSelfPatterns": [],
+              "oldSelfLabels": [],
+              "updatedAt": "2026-10-02T11:48:18.333Z"
+            },
+            "goals": [
+              {
+                "id": "goal-seed-1",
+                "userId": "demo-user",
+                "title": "Build a sustainable online income",
+                "description": "Create an independent digital service generating reliable monthly cash flow & sovereignty.",
+                "area": "Work",
+                "targetDate": "2026-12-31",
+                "status": "active",
+                "createdAt": "2026-01-01T00:00:00Z"
+              },
+              {
+                "id": "goal-seed-2",
+                "userId": "demo-user",
+                "title": "Feel strong and healthy",
+                "description": "Build sustained cellular energy, VO2 max capacity, and morning metabolic alertness.",
+                "area": "Health",
+                "targetDate": "2026-11-30",
+                "status": "active",
+                "createdAt": "2026-01-01T00:00:00Z"
+              },
+              {
+                "id": "goal-seed-3",
+                "userId": "demo-user",
+                "title": "Focus on what matters",
+                "description": "Guard attention against reactive digital noise, building daily cognitive discipline.",
+                "area": "Personal Meaning",
+                "targetDate": "2026-12-31",
+                "status": "active",
+                "createdAt": "2026-01-01T00:00:00Z"
+              },
+              {
+                "id": "goal-seed-4",
+                "userId": "demo-user",
+                "title": "Save for real dreams",
+                "description": "Systematically fund dream purchases and eliminate consumer impulse spending.",
+                "area": "Money",
+                "targetDate": "2027-06-30",
+                "status": "active",
+                "createdAt": "2026-01-01T00:00:00Z"
+              }
+            ],
+            "missions": [
+              {
+                "id": "mission-seed-2",
+                "userId": "demo-user",
+                "title": "Review this week's spending",
+                "type": "weekly_mission",
+                "area": "Money",
+                "difficulty": "easy",
+                "estimatedMinutes": 20,
+                "isOneDecision": false,
+                "recurring": "weekly",
+                "status": "active",
+                "createdAt": "2026-01-01T00:00:00Z"
+              },
+              {
+                "id": "mission-seed-3",
+                "userId": "demo-user",
+                "title": "Move your body for 30 minutes",
+                "type": "daily_quest",
+                "area": "Health",
+                "difficulty": "easy",
+                "estimatedMinutes": 30,
+                "isOneDecision": false,
+                "recurring": "daily",
+                "status": "active",
+                "createdAt": "2026-01-01T00:00:00Z"
+              },
+              {
+                "id": "mission-seed-5",
+                "userId": "demo-user",
+                "title": "Finish one thing you have been putting off",
+                "type": "monthly_boss_fight",
+                "area": "Work",
+                "difficulty": "hard",
+                "estimatedMinutes": 120,
+                "isOneDecision": false,
+                "status": "active",
+                "createdAt": "2026-01-01T00:00:00Z"
+              }
+            ],
+            "completions": [],
+            "transactions": [
+              {
+                "id": "tx-welcome-grant",
+                "walletId": "wallet-demo",
+                "userId": "demo-user",
+                "kind": "welcome_grant",
+                "amount": 250,
+                "dayKey": "2026-10-02",
+                "memo": "Welcome grant for beginning your journey",
+                "createdAt": "2026-10-02T11:48:18.333Z"
+              }
+            ],
+            "customMarketItems": [],
+            "purchases": [],
+            "realityBridges": [],
+            "budget": {
+              "housing": 30,
+              "health": 10,
+              "education": 10,
+              "business": 20,
+              "travel": 10,
+              "savings": 10,
+              "giving": 5,
+              "lifestyle": 5
+            },
+            "seasonProgress": [
+              {
+                "seasonId": "season-finish",
+                "completedMissionIds": [],
+                "isCompleted": false
+              }
+            ],
+            "subscription": {
+              "userId": "demo-user",
+              "plan": "free",
+              "status": "active",
+              "cancelAtPeriodEnd": false,
+              "updatedAt": "2026-10-02T11:48:18.333Z"
+            },
+            "inVisionItemIds": [],
+            "archivedMarketItemIds": [],
+            "archivedMarketRecords": [],
+            "dreamJournal": [],
+            "notebook": {
+              "version": 1,
+              "revision": 0,
+              "entries": [
+                {
+                  "id": "synthetic-original-note",
+                  "kind": "journal",
+                  "title": "Original saved note",
+                  "content": "Synthetic original Notebook content",
+                  "dateKey": "2026-09-20",
+                  "createdAt": "2026-09-20T10:00:00.000Z",
+                  "updatedAt": "2026-09-20T10:00:00.000Z"
+                }
+              ],
+              "practices369": [],
+              "gratitudeDays": [],
+              "affirmations": [],
+              "activityDays": []
+            },
+            "courseProgress": {
+              "version": 1,
+              "lessons": {
+                "turning-day-1": {
+                  "checked": [
+                    false,
+                    false,
+                    false
+                  ],
+                  "answer": null,
+                  "reflection": "Synthetic newly saved course reflection",
+                  "completed": false
+                }
+              }
+            },
+            "microHabits": [
+              {
+                "id": "habit-seed-1",
+                "title": "Drink a glass of water",
+                "category": "Health",
+                "goalId": "goal-seed-2",
+                "durationMinutes": 5,
+                "description": "First thing after waking, before coffee.",
+                "completedDates": [],
+                "streakCount": 0,
+                "bestStreak": 0,
+                "createdAt": "2026-01-01T00:00:00Z"
+              },
+              {
+                "id": "habit-seed-2",
+                "title": "Read for 10 minutes",
+                "category": "Mindset",
+                "goalId": "goal-seed-3",
+                "durationMinutes": 3,
+                "description": "A book, not a feed.",
+                "completedDates": [],
+                "streakCount": 0,
+                "bestStreak": 0,
+                "createdAt": "2026-01-01T00:00:00Z"
+              },
+              {
+                "id": "habit-seed-6",
+                "title": "No phone for the first 30 minutes",
+                "category": "Discipline",
+                "goalId": "goal-seed-3",
+                "durationMinutes": 5,
+                "description": "Start the day on your own terms.",
+                "completedDates": [],
+                "streakCount": 0,
+                "bestStreak": 0,
+                "createdAt": "2026-01-01T00:00:00Z"
+              }
+            ],
+            "customHabitCategories": [
+              {
+                "id": "custom-cat-deep-focus",
+                "name": "Deep Focus",
+                "icon": "Zap",
+                "color": "#6366f1",
+                "description": "Uninterrupted deep work sprint blocks & distraction defense",
+                "createdAt": "2026-01-01T00:00:00Z"
+              },
+              {
+                "id": "custom-cat-creativity",
+                "name": "Creativity",
+                "icon": "Palette",
+                "color": "#e11d48",
+                "description": "Generative thinking, design ideation, writing & rapid prototyping",
+                "createdAt": "2026-01-01T00:00:00Z"
+              }
+            ],
+            "checkIns": [],
+            "dailyPrimaryGoals": [],
+            "lastActiveDateKey": "2026-10-02",
+            "lastDailyResetTimestamp": "2026-10-02T11:48:18.333Z",
+            "offlineQueue": [],
+            "_odaReplacementEpoch": "synthetic-same-dataset"
+          },
+          "userId": "synthetic-account"
+        }
+      ],
+      "toasts": [
+        {
+          "message": "Backed up to cloud.",
+          "type": "success"
+        }
+      ],
+      "reviews": 0,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "commits": 2
+    }
+  ],
+  "failures": [],
+  "afterSourceSha256": {
+    "src/pages/Account.tsx": "c2c68d5526171849c74a48e851caa9176b234ac0bd116383445125c044ec468b",
+    "src/components/BackupAndCloudSettings.tsx": "c3be63b88cecb21e642d292a3783f13104c3d1bd9b51a3c373a58fc82d2e95bf",
+    "src/store/useApp.tsx": "0576b4a1b6c849049f88e8d9c043143c667e1aabf9357bbfba35fe79f5ac6497",
+    "src/services/cloudSync.ts": "18374c6a9062224d05c555d2ea48c0e267b3d947569a62c17549429f918d36b9",
+    "src/services/cloudUploadReadiness.ts": "71c2fd85d6fa8399bed7a2925c58df046f301b0b74e631c041c627448b029c59",
+    "src/services/dataWrites.ts": "9f966b2edb05b506bef85e50ff3cf91bbd5267458ad86fef2af07f93711b4038",
+    "src/services/backup.ts": "0ece443b6e61dfc0508658e5fb24a6373145fc56094f8e9b906fe53bebfdf3b9",
+    "src/services/repository.ts": "a65560692f655d05b37a367e5acbeff1b6dd2974f2f951ff70e419c1c9dcfc8a",
+    "src/services/notebook.ts": "dab465119b30d1aff002819e85e9989dbad000fc4ffd2a265767136f4ace6e40",
+    "src/services/courseProgress.ts": "7f9d3d7800706c652d014f7deff762d079e538a11e6e637eb6d72bdf4a72fe16",
+    "src/services/courseLearning.ts": "f4184c4ee175f14ef62c4c4c98c01dfbb3619f62e720d4053a9e2da10bc7e751",
+    "src/services/storageKeys.ts": "e5d3b1d244a08530c13c5fb1cb33ceee0a3dce543b849dbd0ee1a9e136f833f4",
+    "src/data/backupCopy.ts": "92dffa5dab22201491cad85c29d8cc48f65b8b083324a04e00d95d57a8cbdf6e",
+    "src/data/seed.ts": "0c5cb0d2e8deb8fff7281908145be98b8f0ae51fd408c6066683599340fed663",
+    "src/services/economy.ts": "fdeff021f4db8566d1e1b408fbf23734cb23e3edc6db3261d74723acc922551e",
+    "src/services/dataSnapshots.ts": "e9786193e676e9d2c790d97c818ea9140957f9f21ff04ab60976915b78eff68b"
+  },
+  "sourceUnchangedDuringProbe": true,
+  "total": 18,
+  "passed": 18,
+  "failed": 0,
+  "fetchCalls": 0
+}

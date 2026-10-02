@@ -1,0 +1,256 @@
+class BoundCloud {
+public currentAccountGuard(): () => boolean {
+    const userId = this.session?.user.id;
+    const projectUrl = this.config?.url;
+    const client = this.client;
+    const revision = this.scopeRevision;
+    return () => !!userId && !!projectUrl && this.session?.user.id === userId && this.config?.url === projectUrl
+      && this.client === client && this.scopeRevision === revision;
+  }
+public currentOperationGuard(): () => boolean {
+    const current = this.currentAccountGuard();
+    const localRecord = localStorage.getItem(APP_DATA_STORAGE_KEY);
+    return () => current() && localStorage.getItem(APP_DATA_STORAGE_KEY) === localRecord;
+  }
+private syncKey(projectUrl: string, userId: string): string {
+    return `${LAST_SYNC_KEY}:${encodeURIComponent(projectUrl)}:${userId}`;
+  }
+private localEpoch(raw: string | null): string | null | undefined {
+    if (!raw) return undefined;
+    try {
+      const record = JSON.parse(raw);
+      if (!record || typeof record !== 'object' || Array.isArray(record)) return undefined;
+      const epoch = record[REPLACEMENT_EPOCH_KEY];
+      return epoch === undefined ? null : typeof epoch === 'string' ? epoch : undefined;
+    } catch { return undefined; }
+  }
+private markLocalSyncScope(key: string, raw: string | null, updatedAt: string, remoteFingerprint: string, displayConfirmed = true, localFingerprint?: string): void {
+    const epoch = this.localEpoch(raw);
+    if (epoch === undefined) throw new Error('Invalid local record');
+    localStorage.setItem(LOCAL_SYNC_SCOPE_KEY, JSON.stringify({ key, epoch, updatedAt: displayConfirmed ? updatedAt : null, remoteVersion: updatedAt, remoteFingerprint, confirmedLocalFingerprint: localFingerprint }));
+    this.confirmedLocalRecord = displayConfirmed && localFingerprint ? raw : undefined;
+    this.confirmedLocalFingerprint = displayConfirmed ? localFingerprint : undefined;
+  }
+private pauseUpload(copy: UploadPauseCopy): false {
+    this.error = backupCopy(getLocale())[copy];
+    return false;
+  }
+private acknowledgedSyncAt(): string | null {
+    if (!this.config || !this.session) return null;
+    const key = this.syncKey(this.config.url, this.session.user.id);
+    // Returning to A after B synchronized cannot use A's historical timestamp
+    // as evidence that the current device document still belongs to A.
+    try {
+      const owner = JSON.parse(localStorage.getItem(LOCAL_SYNC_SCOPE_KEY) || 'null');
+      const epoch = this.localEpoch(localStorage.getItem(APP_DATA_STORAGE_KEY));
+      const updatedAt = localStorage.getItem(key);
+      return epoch !== undefined && owner?.key === key && owner.epoch === epoch
+        && isRemoteVersion(owner.remoteVersion) && owner.remoteVersion === updatedAt ? updatedAt : null;
+    } catch { return null; }
+  }
+private lastSyncAt(): string | null {
+    try {
+      const raw = localStorage.getItem(APP_DATA_STORAGE_KEY);
+      const owner = JSON.parse(localStorage.getItem(LOCAL_SYNC_SCOPE_KEY) || 'null');
+      if (raw !== this.confirmedLocalRecord || !this.confirmedLocalFingerprint
+        || owner?.confirmedLocalFingerprint !== this.confirmedLocalFingerprint
+        || owner.updatedAt !== this.lastSuccessfulSyncAt()) return null;
+      return this.acknowledgedSyncAt();
+    } catch { return null; }
+  }
+private lastSuccessfulSyncAt(): string | null {
+    if (!this.config || !this.session) return null;
+    try {
+      const stamp = localStorage.getItem(this.syncKey(this.config.url, this.session.user.id));
+      return isRemoteVersion(stamp) ? stamp : null;
+    } catch { return null; }
+  }
+private observeCommittedRecord(): void {
+    try {
+      const raw = localStorage.getItem(APP_DATA_STORAGE_KEY);
+      const ownerRecord = localStorage.getItem(LOCAL_SYNC_SCOPE_KEY);
+      if (raw === this.confirmedLocalRecord && this.confirmedLocalFingerprint) return;
+      const previousFingerprint = this.confirmedLocalFingerprint;
+      this.confirmedLocalRecord = undefined;
+      this.confirmedLocalFingerprint = undefined;
+      if (!raw || !ownerRecord) { this.confirmationProbe = null; this.emit(); return; }
+      const owner = JSON.parse(ownerRecord);
+      const knownChanged = (previousFingerprint !== undefined && previousFingerprint === owner?.confirmedLocalFingerprint)
+        || (this.confirmationProbe !== null && this.confirmationProbe.raw !== raw && this.confirmationProbe.owner === ownerRecord);
+      if (knownChanged && owner?.updatedAt) {
+        localStorage.setItem(LOCAL_SYNC_SCOPE_KEY, JSON.stringify({ ...owner, updatedAt: null }));
+        this.confirmationProbe = null;
+        this.emit();
+        return;
+      }
+      this.emit();
+      if (!this.config || !this.session || owner?.key !== this.syncKey(this.config.url, this.session.user.id)
+        || owner.epoch !== this.localEpoch(raw) || !isRemoteVersion(owner.updatedAt)
+        || typeof owner.confirmedLocalFingerprint !== 'string') return;
+      if (this.confirmationProbe?.raw === raw && this.confirmationProbe.owner === ownerRecord) return;
+      const snapshot = createBackupSnapshot(JSON.parse(raw));
+      prepareBackupRestore(snapshot);
+      const frozen = JSON.parse(canonicalDocumentJson(snapshot));
+      const probe = { raw, owner: ownerRecord };
+      this.confirmationProbe = probe;
+      const accountIsCurrent = this.currentAccountGuard();
+      const work = remoteDocumentFingerprint(frozen).then(fingerprint => {
+        if (this.confirmationProbe !== probe || !accountIsCurrent()
+          || localStorage.getItem(APP_DATA_STORAGE_KEY) !== raw || localStorage.getItem(LOCAL_SYNC_SCOPE_KEY) !== ownerRecord) return;
+        return queueDataWrite(() => {
+        if (this.confirmationProbe !== probe) return;
+        this.confirmationProbe = null;
+        if (!accountIsCurrent() || localStorage.getItem(APP_DATA_STORAGE_KEY) !== raw
+          || localStorage.getItem(LOCAL_SYNC_SCOPE_KEY) !== ownerRecord) return;
+        if (fingerprint === owner.confirmedLocalFingerprint) {
+          this.confirmedLocalRecord = raw;
+          this.confirmedLocalFingerprint = fingerprint;
+        } else localStorage.setItem(LOCAL_SYNC_SCOPE_KEY, JSON.stringify({ ...owner, updatedAt: null }));
+        this.emit();
+        });
+      }).catch(() => {
+        try {
+          if (this.confirmationProbe !== probe || !accountIsCurrent() || localStorage.getItem(APP_DATA_STORAGE_KEY) !== raw
+            || localStorage.getItem(LOCAL_SYNC_SCOPE_KEY) !== ownerRecord) return;
+          this.confirmationProbe = null;
+          localStorage.setItem(LOCAL_SYNC_SCOPE_KEY, JSON.stringify({ ...owner, updatedAt: null }));
+          this.emit();
+        } catch { /* An unreadable record stays unconfirmed. */ }
+      }).finally(() => {
+        if (this.confirmationProbe === probe) this.confirmationProbe = null;
+        if (this.confirmationBootstrap === work) this.confirmationBootstrap = null;
+      });
+      this.confirmationBootstrap = work;
+    } catch {
+      this.confirmedLocalRecord = undefined;
+      this.confirmedLocalFingerprint = undefined;
+      this.confirmationProbe = null;
+      this.emit();
+    }
+  }
+public getState(): CloudState {
+    const lastSyncAt = this.lastSyncAt();
+    return {
+      configured: this.isConfigured(),
+      session: this.session,
+      lastSyncAt,
+      currentDocumentConfirmed: lastSyncAt !== null,
+      lastSuccessfulSyncAt: this.lastSuccessfulSyncAt(),
+      syncing: this.syncing,
+      error: this.error,
+      scopeRevision: this.scopeRevision,
+    };
+  }
+public async push(data: UserData): Promise<boolean> {
+    const originalAccount = this.currentAccountGuard();
+    try {
+    // Freeze caller-owned objects before yielding; a later render/mutation is
+    // neither the user's original payload nor permission to upload another record.
+    const supplied = JSON.parse(JSON.stringify(data)) as UserData;
+    // Capture account and restore identity now: an older queued upload cannot clear a newer import.
+    const userId = this.session?.user.id;
+    const projectUrl = this.config?.url;
+    const revision = this.scopeRevision;
+    const client = this.client;
+    const restoreScope = this.restoreScope();
+    const restoreToken = localStorage.getItem(restoreScope);
+    const captured = await queueDataWrite(() => {
+      if (!originalAccount() || localStorage.getItem(restoreScope) !== restoreToken) return null;
+      const localRecord = localStorage.getItem(APP_DATA_STORAGE_KEY);
+      if (!localRecord) throw new Error('Missing saved document');
+      const parsed: unknown = JSON.parse(localRecord);
+      prepareBackupRestore(parsed);
+      const authoritative = createBackupSnapshot(parsed as UserData);
+      const snapshot = createBackupSnapshot(supplied);
+      prepareBackupRestore(authoritative);
+      prepareBackupRestore(snapshot);
+      const payloadJson = canonicalDocumentJson(snapshot);
+      if (payloadJson !== canonicalDocumentJson(authoritative)) {
+        this.pauseUpload('cloudUploadUnconfirmed'); this.emit(); return null;
+      }
+      return { snapshot: JSON.parse(payloadJson) as UserData, localRecord };
+    });
+    if (!captured || !originalAccount()) return false;
+    const { snapshot, localRecord } = captured;
+    const run = async () => {
+      if (!userId || !projectUrl || this.session?.user.id !== userId || this.config?.url !== projectUrl
+        || this.scopeRevision !== revision || this.client !== client || localStorage.getItem(APP_DATA_STORAGE_KEY) !== localRecord) return false;
+      return this.pushSnapshot(snapshot, userId, projectUrl, revision, restoreScope, restoreToken, localRecord);
+    };
+    const result = this.pushQueue.then(run, run);
+    this.pushQueue = result;
+    return await result;
+    } catch {
+      if (originalAccount()) { this.pauseUpload('cloudUploadUnconfirmed'); this.emit(); }
+      return false;
+    }
+  }
+}
+globalThis.BoundCloud = BoundCloud;
+globalThis.syncFromCloud = async () => {
+    // Repeated presses cannot create unresolved review promises or trigger an upload.
+    if (cloudReviewActive.current) return true;
+    cloudReviewActive.current = true;
+    const accountIsCurrent = cloudSync.currentAccountGuard();
+    try {
+      const operationIsCurrent = cloudSync.currentOperationGuard();
+      const remote = await cloudSync.pullIfNewer(data, { forReview: true });
+      // A late read must not become an upload for another account or newer local work.
+      if (!operationIsCurrent()) return true;
+      if (remote) {
+        const accepted = await new Promise<boolean>(resolve => setCloudRestoreReview({ record: remote, resolve }));
+        if (!accepted) return true;
+        if (!await repository.replaceAll(remote, originalRecord => cloudSync.canApplyRemote(remote, originalRecord))) {
+          showToast(backupCopy(getLocale()).cloudChanged, 'info');
+          return true;
+        }
+        const acknowledged = await cloudSync.markRemoteApplied(remote);
+        if (!accountIsCurrent()) return true;
+        // Show the reviewed commit without making a second, unreviewed cloud read.
+        await refreshData({ skipCloudPull: true });
+        if (!accountIsCurrent()) return true;
+        showToast(acknowledged ? t('Synced from cloud.') : backupCopy(getLocale()).cloudAppliedPaused, acknowledged ? 'success' : 'info');
+        return true;
+      }
+      const cloudError = cloudSync.getState().error;
+      if (cloudError) {
+        showToast(cloudError, 'error');
+        return true;
+      }
+    } catch {
+      if (accountIsCurrent()) showToast(t('Cloud backup failed — check your connection.'), 'error');
+      return true;
+    } finally {
+      cloudReviewActive.current = false;
+    }
+    return false;
+  };
+globalThis.accountRun = async () => {
+    const current = cloudSync.currentOperationGuard();
+    const pulled = await syncFromCloud();
+    if (!pulled) {
+      if (!current()) { showToast(backupCopy(getLocale()).cloudChanged, 'info'); return; }
+      const ok = await cloudSync.push(data);
+      if (!current()) { showToast(backupCopy(getLocale()).cloudChanged, 'info'); return; }
+      showToast(ok ? t('Backed up to cloud.') : cloudSync.getState().error || t('Cloud backup failed — check your connection.'), ok ? 'success' : 'error');
+    }
+  };
+globalThis.settingsRun = async () => {
+    if (!data) return;
+    const current = cloudSync.currentOperationGuard();
+    const pulled = await syncFromCloud();
+    if (!pulled) {
+      // A late read must never turn into uploading the previous account's record
+      // to whichever account/project is connected now.
+      if (!current()) { showToast(copy.cloudChanged, 'info'); return; }
+      const ok = await cloudSync.push(data);
+      if (!current()) { showToast(copy.cloudChanged, 'info'); return; }
+      showToast(ok ? t('Backed up to cloud.') : cloudSync.getState().error || t('Cloud backup failed — check your connection.'), ok ? 'success' : 'error');
+    }
+  };
+globalThis.cancel = () => { cloudRestoreReview?.resolve(false); setCloudRestoreReview(null); };
+globalThis.confirm = () => { cloudRestoreReview?.resolve(true); setCloudRestoreReview(null); };
+globalThis.readClaim = () => { const cloudConfirmed = !!cloud.session && cloud.currentDocumentConfirmed && !cloud.error; return { confirmed: cloudConfirmed, title: cloud.session ? cloudConfirmed ? t('Your proof is safe') : t('Account') : t('Keep your proof with you'), summary: cloud.session
+          ? cloudConfirmed ? t('Your decisions, evidence tree and notes are backed up and stay the same on every device where you sign in.') : backupCopy(getLocale()).cloudDeviceSaved
+          : native ? copy.summary : t('Sign in and your decisions, evidence tree and notes are backed up and follow you to every device. No password: just tap the link we email you.') }; };
+globalThis.readHistory = () => ({ accountVisible: !!((cloud.syncing || cloud.lastSuccessfulSyncAt)), settingsVisible: !!(cloud.lastSuccessfulSyncAt), accountLabel: t('Last synced {date}', { date: formatDate(cloud.lastSuccessfulSyncAt!, { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }) }), settingsLabel: t('Last sync {time}.', { time: new Date(cloud.lastSuccessfulSyncAt).toLocaleString() }) });

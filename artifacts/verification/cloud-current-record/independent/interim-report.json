@@ -1,0 +1,473 @@
+{
+  "root": "/workspace/oda-cloud-upload-current-record",
+  "mode": "guard",
+  "head": "5adcb6a22bda7a087e1718b2cf2eeb105e1248ba",
+  "source": {
+    "src/services/cloudSync.ts": "2fe65e78611355715339eba743dd2785a8121cdf3e3e330d4c5415a18e6c351d",
+    "src/services/cloudUploadReadiness.ts": "f5dca913934d62bd076a7a73136708aa02f3896c0a25a983d2d22d1f2369a487",
+    "src/services/repository.ts": "a65560692f655d05b37a367e5acbeff1b6dd2974f2f951ff70e419c1c9dcfc8a",
+    "src/services/dataWrites.ts": "9f966b2edb05b506bef85e50ff3cf91bbd5267458ad86fef2af07f93711b4038",
+    "src/services/backup.ts": "0ece443b6e61dfc0508658e5fb24a6373145fc56094f8e9b906fe53bebfdf3b9",
+    "src/pages/Account.tsx": "c2c68d5526171849c74a48e851caa9176b234ac0bd116383445125c044ec468b",
+    "src/components/BackupAndCloudSettings.tsx": "c3be63b88cecb21e642d292a3783f13104c3d1bd9b51a3c373a58fc82d2e95bf",
+    "src/store/useApp.tsx": "0576b4a1b6c849049f88e8d9c043143c667e1aabf9357bbfba35fe79f5ac6497"
+  },
+  "total": 16,
+  "passed": 16,
+  "failed": 0,
+  "networkCalls": 0,
+  "method": "Actual CloudSync/repository/source helper TypeScript with local synthetic storage, queue, timers and SELECT/conditional UPDATE fixture; no React mount, native device or live providers",
+  "results": [
+    {
+      "name": "ordinary local writing removes current-document confirmation before debounce without deleting sync history",
+      "passed": true,
+      "evidence": {
+        "state": {
+          "configured": true,
+          "session": {
+            "user": {
+              "id": "A",
+              "email": "synthetic@fixture.invalid"
+            }
+          },
+          "lastSyncAt": null,
+          "currentDocumentConfirmed": false,
+          "lastSuccessfulSyncAt": "2026-10-02T11:41:35.841Z",
+          "syncing": false,
+          "error": null,
+          "scopeRevision": 0
+        },
+        "previous": "2026-10-02T11:41:35.841Z",
+        "localEntries": [
+          "New writing only on this device"
+        ],
+        "remoteEntries": [],
+        "pendingTimers": 1
+      }
+    },
+    {
+      "name": "stale supplied notebook snapshot cannot replace newer acknowledged cloud/local work",
+      "passed": true,
+      "evidence": {
+        "kind": "notebook",
+        "accepted": false,
+        "readsAfterCapture": 0,
+        "writesAfterCapture": 0,
+        "localUnchanged": true,
+        "state": {
+          "configured": true,
+          "session": {
+            "user": {
+              "id": "A",
+              "email": "synthetic@fixture.invalid"
+            }
+          },
+          "lastSyncAt": "2026-10-02T11:41:35.857Z",
+          "currentDocumentConfirmed": true,
+          "lastSuccessfulSyncAt": "2026-10-02T11:41:35.857Z",
+          "syncing": false,
+          "error": "Cloud backup could not be confirmed. Your device record is still saved. Try syncing again.",
+          "scopeRevision": 0
+        }
+      }
+    },
+    {
+      "name": "stale supplied profile snapshot cannot replace newer acknowledged cloud/local work",
+      "passed": true,
+      "evidence": {
+        "kind": "profile",
+        "accepted": false,
+        "readsAfterCapture": 0,
+        "writesAfterCapture": 0,
+        "localUnchanged": true,
+        "state": {
+          "configured": true,
+          "session": {
+            "user": {
+              "id": "A",
+              "email": "synthetic@fixture.invalid"
+            }
+          },
+          "lastSyncAt": "2026-10-02T11:41:35.869Z",
+          "currentDocumentConfirmed": true,
+          "lastSuccessfulSyncAt": "2026-10-02T11:41:35.869Z",
+          "syncing": false,
+          "error": "Cloud backup could not be confirmed. Your device record is still saved. Try syncing again.",
+          "scopeRevision": 0
+        }
+      }
+    },
+    {
+      "name": "stale supplied decisions snapshot cannot replace newer acknowledged cloud/local work",
+      "passed": true,
+      "evidence": {
+        "kind": "decisions",
+        "accepted": false,
+        "readsAfterCapture": 0,
+        "writesAfterCapture": 0,
+        "localUnchanged": true,
+        "state": {
+          "configured": true,
+          "session": {
+            "user": {
+              "id": "A",
+              "email": "synthetic@fixture.invalid"
+            }
+          },
+          "lastSyncAt": "2026-10-02T11:41:35.878Z",
+          "currentDocumentConfirmed": true,
+          "lastSuccessfulSyncAt": "2026-10-02T11:41:35.878Z",
+          "syncing": false,
+          "error": "Cloud backup could not be confirmed. Your device record is still saved. Try syncing again.",
+          "scopeRevision": 0
+        }
+      }
+    },
+    {
+      "name": "fresh exact authoritative payload clears dirty state and preserves historical account timestamp",
+      "passed": true,
+      "evidence": {
+        "state": {
+          "configured": true,
+          "session": {
+            "user": {
+              "id": "A",
+              "email": "synthetic@fixture.invalid"
+            }
+          },
+          "lastSyncAt": "2026-10-02T11:41:35.888Z",
+          "currentDocumentConfirmed": true,
+          "lastSuccessfulSyncAt": "2026-10-02T11:41:35.888Z",
+          "syncing": false,
+          "error": null,
+          "scopeRevision": 0
+        }
+      }
+    },
+    {
+      "name": "dirty local edit does not offer the unchanged acknowledged remote as a newer startup restore",
+      "passed": true,
+      "evidence": {
+        "state": {
+          "configured": true,
+          "session": {
+            "user": {
+              "id": "A",
+              "email": "synthetic@fixture.invalid"
+            }
+          },
+          "lastSyncAt": null,
+          "currentDocumentConfirmed": false,
+          "lastSuccessfulSyncAt": "2026-10-02T11:41:35.890Z",
+          "syncing": false,
+          "error": null,
+          "scopeRevision": 0
+        }
+      }
+    },
+    {
+      "name": "same canonical payload with different object key order still uploads",
+      "passed": true,
+      "evidence": {
+        "state": {
+          "configured": true,
+          "session": {
+            "user": {
+              "id": "A",
+              "email": "synthetic@fixture.invalid"
+            }
+          },
+          "lastSyncAt": "2026-10-02T11:41:35.899Z",
+          "currentDocumentConfirmed": true,
+          "lastSuccessfulSyncAt": "2026-10-02T11:41:35.899Z",
+          "syncing": false,
+          "error": null,
+          "scopeRevision": 0
+        },
+        "writes": 2
+      }
+    },
+    {
+      "name": "course-only stale caller rereads latest saved course projection and remains valid",
+      "passed": true,
+      "evidence": {
+        "state": {
+          "configured": true,
+          "session": {
+            "user": {
+              "id": "A",
+              "email": "synthetic@fixture.invalid"
+            }
+          },
+          "lastSyncAt": "2026-10-02T11:41:35.908Z",
+          "currentDocumentConfirmed": true,
+          "lastSuccessfulSyncAt": "2026-10-02T11:41:35.908Z",
+          "syncing": false,
+          "error": null,
+          "scopeRevision": 0
+        },
+        "remoteCourseReflection": "Latest saved course reflection"
+      }
+    },
+    {
+      "name": "missing/invalid durable record null rejects before SELECT without uploading caller memory",
+      "passed": true,
+      "evidence": {
+        "readsAfterCapture": 0,
+        "writesAfterCapture": 0,
+        "state": {
+          "configured": true,
+          "session": {
+            "user": {
+              "id": "A",
+              "email": "synthetic@fixture.invalid"
+            }
+          },
+          "lastSyncAt": null,
+          "currentDocumentConfirmed": false,
+          "lastSuccessfulSyncAt": "2026-10-02T11:41:35.910Z",
+          "syncing": false,
+          "error": "Cloud backup could not be confirmed. Your device record is still saved. Try syncing again.",
+          "scopeRevision": 0
+        }
+      }
+    },
+    {
+      "name": "missing/invalid durable record {bad-json rejects before SELECT without uploading caller memory",
+      "passed": true,
+      "evidence": {
+        "readsAfterCapture": 0,
+        "writesAfterCapture": 0,
+        "state": {
+          "configured": true,
+          "session": {
+            "user": {
+              "id": "A",
+              "email": "synthetic@fixture.invalid"
+            }
+          },
+          "lastSyncAt": null,
+          "currentDocumentConfirmed": false,
+          "lastSuccessfulSyncAt": "2026-10-02T11:41:35.913Z",
+          "syncing": false,
+          "error": "Cloud backup could not be confirmed. Your device record is still saved. Try syncing again.",
+          "scopeRevision": 0
+        }
+      }
+    },
+    {
+      "name": "missing/invalid durable record {\"profile\":{}} rejects before SELECT without uploading caller memory",
+      "passed": true,
+      "evidence": {
+        "readsAfterCapture": 0,
+        "writesAfterCapture": 0,
+        "state": {
+          "configured": true,
+          "session": {
+            "user": {
+              "id": "A",
+              "email": "synthetic@fixture.invalid"
+            }
+          },
+          "lastSyncAt": null,
+          "currentDocumentConfirmed": false,
+          "lastSuccessfulSyncAt": "2026-10-02T11:41:35.916Z",
+          "syncing": false,
+          "error": "Cloud backup could not be confirmed. Your device record is still saved. Try syncing again.",
+          "scopeRevision": 0
+        }
+      }
+    },
+    {
+      "name": "completed older in-flight upload keeps dirty current status and remote acknowledgement for queued latest upload",
+      "passed": true,
+      "evidence": {
+        "state": {
+          "configured": true,
+          "session": {
+            "user": {
+              "id": "A",
+              "email": "synthetic@fixture.invalid"
+            }
+          },
+          "lastSyncAt": "2026-10-02T11:41:35.926Z",
+          "currentDocumentConfirmed": true,
+          "lastSuccessfulSyncAt": "2026-10-02T11:41:35.926Z",
+          "syncing": false,
+          "error": null,
+          "scopeRevision": 0
+        },
+        "states": [
+          {
+            "configured": true,
+            "session": {
+              "user": {
+                "id": "A",
+                "email": "synthetic@fixture.invalid"
+              }
+            },
+            "lastSyncAt": null,
+            "currentDocumentConfirmed": false,
+            "lastSuccessfulSyncAt": "2026-10-02T11:41:35.920Z",
+            "syncing": true,
+            "error": null,
+            "scopeRevision": 0
+          },
+          {
+            "configured": true,
+            "session": {
+              "user": {
+                "id": "A",
+                "email": "synthetic@fixture.invalid"
+              }
+            },
+            "lastSyncAt": null,
+            "currentDocumentConfirmed": false,
+            "lastSuccessfulSyncAt": "2026-10-02T11:41:35.923Z",
+            "syncing": true,
+            "error": null,
+            "scopeRevision": 0
+          },
+          {
+            "configured": true,
+            "session": {
+              "user": {
+                "id": "A",
+                "email": "synthetic@fixture.invalid"
+              }
+            },
+            "lastSyncAt": null,
+            "currentDocumentConfirmed": false,
+            "lastSuccessfulSyncAt": "2026-10-02T11:41:35.923Z",
+            "syncing": false,
+            "error": null,
+            "scopeRevision": 0
+          },
+          {
+            "configured": true,
+            "session": {
+              "user": {
+                "id": "A",
+                "email": "synthetic@fixture.invalid"
+              }
+            },
+            "lastSyncAt": null,
+            "currentDocumentConfirmed": false,
+            "lastSuccessfulSyncAt": "2026-10-02T11:41:35.923Z",
+            "syncing": true,
+            "error": null,
+            "scopeRevision": 0
+          },
+          {
+            "configured": true,
+            "session": {
+              "user": {
+                "id": "A",
+                "email": "synthetic@fixture.invalid"
+              }
+            },
+            "lastSyncAt": "2026-10-02T11:41:35.926Z",
+            "currentDocumentConfirmed": true,
+            "lastSuccessfulSyncAt": "2026-10-02T11:41:35.926Z",
+            "syncing": false,
+            "error": null,
+            "scopeRevision": 0
+          }
+        ],
+        "versions": [
+          "2026-10-02T11:41:35.920Z",
+          "2026-10-02T11:41:35.923Z",
+          "2026-10-02T11:41:35.926Z"
+        ],
+        "remoteEntries": [
+          "Later note saved during upload",
+          "Earlier in-flight note"
+        ]
+      }
+    },
+    {
+      "name": "accountB does not inherit account A current or historical confirmation",
+      "passed": true,
+      "evidence": {
+        "state": {
+          "configured": true,
+          "session": {
+            "user": {
+              "id": "B",
+              "email": "B@fixture.invalid"
+            }
+          },
+          "lastSyncAt": null,
+          "currentDocumentConfirmed": false,
+          "lastSuccessfulSyncAt": null,
+          "syncing": false,
+          "error": null,
+          "scopeRevision": 1
+        }
+      }
+    },
+    {
+      "name": "projectB does not inherit account A current or historical confirmation",
+      "passed": true,
+      "evidence": {
+        "state": {
+          "configured": true,
+          "session": {
+            "user": {
+              "id": "A",
+              "email": "synthetic@fixture.invalid"
+            }
+          },
+          "lastSyncAt": null,
+          "currentDocumentConfirmed": false,
+          "lastSuccessfulSyncAt": null,
+          "syncing": false,
+          "error": null,
+          "scopeRevision": 1
+        }
+      }
+    },
+    {
+      "name": "ordinary local record change invalidates confirmation even without calling schedulePush",
+      "passed": true,
+      "evidence": {
+        "state": {
+          "configured": true,
+          "session": {
+            "user": {
+              "id": "A",
+              "email": "synthetic@fixture.invalid"
+            }
+          },
+          "lastSyncAt": null,
+          "currentDocumentConfirmed": false,
+          "lastSuccessfulSyncAt": "2026-10-02T11:41:35.934Z",
+          "syncing": false,
+          "error": null,
+          "scopeRevision": 0
+        }
+      }
+    },
+    {
+      "name": "late accepted-restore fingerprint rejection after switching accounts cannot publish old-account error",
+      "passed": true,
+      "evidence": {
+        "state": {
+          "configured": true,
+          "session": {
+            "user": {
+              "id": "B",
+              "email": "B@fixture.invalid"
+            }
+          },
+          "lastSyncAt": null,
+          "currentDocumentConfirmed": false,
+          "lastSuccessfulSyncAt": null,
+          "syncing": false,
+          "error": null,
+          "scopeRevision": 1
+        }
+      }
+    }
+  ]
+}

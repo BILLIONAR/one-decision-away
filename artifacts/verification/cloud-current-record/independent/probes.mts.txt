@@ -1,0 +1,182 @@
+import assert from 'node:assert/strict';
+import { readFile, writeFile } from 'node:fs/promises';
+import { createHash, webcrypto } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+
+const root = process.argv[2] || '/workspace/oda-cloud-upload-current-record';
+const mode = process.argv[3] || 'guard';
+const output = '/workspace/scratch/oda-cloud-current-record-review';
+class MemoryStorage {
+  values = new Map<string, string>();
+  failWriteKey:string|null=null;
+  getItem(key: string) { return this.values.get(key) ?? null; }
+  setItem(key: string, value: string) { if(key===this.failWriteKey)throw new Error('Synthetic durable storage failure');this.values.set(key, String(value)); }
+  removeItem(key: string) { this.values.delete(key); }
+}
+const storage = new MemoryStorage();
+Object.defineProperty(globalThis, 'localStorage', { configurable: true, value: storage });
+Object.defineProperty(globalThis, 'crypto', { configurable: true, value: webcrypto });
+const timers = new Map<number, () => void>(); let nextTimer = 0;
+Object.defineProperty(globalThis, 'window', { configurable: true, value: {
+  location: { origin: 'https://synthetic.invalid', pathname: '/app/account', search: '', hash: '' },
+  setTimeout(callback: () => void) { const id = ++nextTimer; timers.set(id, callback); return id; },
+  clearTimeout(id: number) { timers.delete(id); },
+}});
+let networkCalls = 0;
+Object.defineProperty(globalThis, 'fetch', { configurable: true, value: async () => { networkCalls++; throw new Error('Live network forbidden'); } });
+const { cloudSync } = await import(`${root}/src/services/cloudSync.ts`);
+const { LocalDemoRepository, getInitialDemoState } = await import(`${root}/src/services/repository.ts`);
+const { APP_DATA_STORAGE_KEY } = await import(`${root}/src/services/storageKeys.ts`);
+const { cloudCrudFixture } = await import(`${root}/tests/helpers/cloudCrudFixture.ts`);
+const { saveCourseProgress } = await import(`${root}/src/services/courseProgress.ts`);
+const { courseCatalogFor } = await import(`${root}/src/data/courseCatalog.ts`);
+const internal = cloudSync as unknown as Record<string, any>;
+const repository = new LocalDemoRepository();
+const clone = <T>(data: T): T => structuredClone(data);
+const deferred = <T>() => { let resolve!: (value: T) => void; let reject!: (reason:any)=>void; const promise = new Promise<T>((r,j) => { resolve = r; reject=j; }); return { promise, resolve, reject }; };
+async function setup() {
+  storage.values.clear(); storage.failWriteKey=null;timers.clear();
+  Object.assign(internal, { session: null, config: null, client: null, scopeRevision: 0, syncing: false, error: null,
+    initialized: true, initializing: null, sessionHydrated: true, authSubscription: null, pushTimer: null,
+    pushQueue: Promise.resolve(false), pendingPulls: new WeakMap() });
+  const initial = clone(getInitialDemoState()); initial.profile.displayName = 'Synthetic member'; initial.profile.onboardingStep = 'completed';
+  await repository.replaceAll(initial);
+  const sent: any[] = []; let reads = 0; let holdWrite: ReturnType<typeof deferred<void>> | null = null;
+  let startedWrite = deferred<void>();
+  let fixture: any;
+  fixture = cloudCrudFixture({
+    read: async id => { reads++; return { data: fixture.rows.get(id) ? clone(fixture.rows.get(id)) : null, error: null }; },
+    write: async row => { sent.push(clone(row)); startedWrite.resolve(); if (holdWrite) await holdWrite.promise; return { error: null }; },
+  });
+  Object.assign(internal, { session: { user: { id: 'A', email: 'synthetic@fixture.invalid' } },
+    config: { url: 'https://synthetic-project.invalid', anonKey: 'public-mock-key' }, client: fixture.client });
+  const authoritative = await repository.load(); assert.equal(await cloudSync.push(authoritative), true);
+  return { fixture, sent, initial: clone(authoritative), reads: () => reads,
+    holdWrite() { startedWrite = deferred<void>(); holdWrite = deferred<void>(); return holdWrite; }, get startedWrite() { return startedWrite; } };
+}
+const entries = (data: any) => data.notebook.entries.map((entry: any) => entry.content);
+const currentConfirmed = () => !!(cloudSync.getState() as any).currentDocumentConfirmed;
+const results: any[] = [];
+async function probe(name: string, run: () => Promise<any>) {
+  if (mode === 'baseline') name = `Original defect reproduced: ${name}`;
+  try { results.push({ name, passed: true, evidence: await run() }); }
+  catch (error) { results.push({ name, passed: false, error: error instanceof Error ? error.stack : String(error) }); }
+}
+await probe('ordinary local writing removes current-document confirmation before debounce without deleting sync history', async () => {
+  const f = await setup(); const previous = cloudSync.getState().lastSyncAt; assert.ok(previous);
+  await repository.mutateNotebook({ type: 'save_entry', input: { kind: 'journal', content: 'New writing only on this device' } });
+  const state = cloudSync.getState() as any; const latest = await repository.load();
+  assert.equal(entries(latest).length, 1); assert.equal(entries(f.fixture.rows.get('A').data).length, 0); assert.equal(timers.size, 1);
+  if (mode === 'baseline') { assert.equal(state.lastSyncAt, previous); assert.equal(!!state.session && !!state.lastSyncAt && !state.error, true); }
+  else { assert.equal(state.currentDocumentConfirmed, false); assert.equal(state.lastSyncAt, null); assert.equal(state.lastSuccessfulSyncAt, previous); }
+  return { state, previous, localEntries: entries(latest), remoteEntries: entries(f.fixture.rows.get('A').data), pendingTimers: timers.size };
+});
+for (const kind of ['notebook', 'profile', 'decisions'] as const) await probe(`stale supplied ${kind} snapshot cannot replace newer acknowledged cloud/local work`, async () => {
+  const f = await setup(); const stale = clone(f.initial);
+  if (kind === 'notebook') await repository.mutateNotebook({ type: 'save_entry', input: { kind: 'journal', content: 'New writing already backed up' } });
+  else { const latest = await repository.load(); if (kind === 'profile') latest.profile.displayName = 'New profile already backed up'; else latest.missions[0].note = 'New decision note already backed up'; await repository.save(latest); }
+  const latest = await repository.load(); assert.equal(await cloudSync.push(latest), true);
+  const raw = storage.getItem(APP_DATA_STORAGE_KEY); const remote = clone(f.fixture.rows.get('A')); const operation = cloudSync.currentOperationGuard();
+  assert.equal(await cloudSync.pullIfNewer(stale, { forReview: true }), null); assert.equal(operation(), true);
+  const reads = f.reads(); const writes = f.sent.length; const accepted = await cloudSync.push(stale);
+  if (mode === 'baseline') { assert.equal(accepted, true); assert.equal(f.sent.length, writes + 1); assert.notDeepEqual(f.fixture.rows.get('A').data, remote.data); assert.ok(cloudSync.getState().lastSyncAt); }
+  else { assert.equal(accepted, false); assert.equal(f.reads(), reads, 'reject stale caller before any cloud SELECT'); assert.equal(f.sent.length, writes); assert.deepEqual(f.fixture.rows.get('A'), remote); assert.ok(cloudSync.getState().error); }
+  assert.equal(storage.getItem(APP_DATA_STORAGE_KEY), raw); assert.equal(operation(), true);
+  return { kind, accepted, readsAfterCapture: f.reads()-reads, writesAfterCapture: f.sent.length-writes, localUnchanged: true, state: cloudSync.getState() };
+});
+if (mode !== 'baseline') {
+  await probe('fresh exact authoritative payload clears dirty state and preserves historical account timestamp', async () => {
+    const f = await setup(); const old = (cloudSync.getState() as any).lastSuccessfulSyncAt;
+    await repository.mutateNotebook({ type: 'save_entry', input: { kind: 'journal', content: 'Current authoritative note' } });
+    assert.equal(currentConfirmed(), false); const latest = await repository.load(); assert.equal(await cloudSync.push(latest), true);
+    const state = cloudSync.getState() as any; assert.equal(state.currentDocumentConfirmed, true); assert.equal(state.lastSyncAt, state.lastSuccessfulSyncAt); assert.ok(Date.parse(state.lastSuccessfulSyncAt) > Date.parse(old));
+    assert.deepEqual(entries(f.fixture.rows.get('A').data), entries(latest)); return { state };
+  });
+  await probe('dirty local edit does not offer the unchanged acknowledged remote as a newer startup restore', async () => {
+    const f = await setup(); await repository.mutateNotebook({ type: 'save_entry', input: { kind: 'journal', content: 'Current only-device note' } });
+    const latest = await repository.load(); assert.equal(currentConfirmed(), false);
+    assert.equal(await cloudSync.pullIfNewer(latest), null); assert.equal(await cloudSync.pullIfNewer(latest, { forReview: true }), null);
+    assert.equal(entries(latest).length, 1); assert.equal(entries(f.fixture.rows.get('A').data).length, 0); return { state: cloudSync.getState() };
+  });
+  await probe('same canonical payload with different object key order still uploads', async () => {
+    const f = await setup(); const latest = await repository.load(); const reordered = Object.fromEntries(Object.entries(latest).reverse());
+    assert.equal(await cloudSync.push(reordered as any), true); assert.equal(currentConfirmed(), true); return { state: cloudSync.getState(), writes: f.sent.length };
+  });
+  await probe('course-only stale caller rereads latest saved course projection and remains valid', async () => {
+    const f = await setup(); const stale = clone(f.initial); const lesson = courseCatalogFor('en')[0].lessons[0];
+    const progress = { version: 1, lessons: { [lesson.id]: { checked: Array(lesson.practiceCount).fill(false), answer: null, reflection: 'Latest saved course reflection', completed: false } } };
+    assert.equal(await saveCourseProgress(progress), true); assert.equal(currentConfirmed(), false);
+    assert.equal(await cloudSync.push(stale), true); assert.equal(f.fixture.rows.get('A').data.courseProgress.lessons[lesson.id].reflection, 'Latest saved course reflection'); assert.equal(currentConfirmed(), true);
+    return { state: cloudSync.getState(), remoteCourseReflection: f.fixture.rows.get('A').data.courseProgress.lessons[lesson.id].reflection };
+  });
+  for (const local of [null, '{bad-json', JSON.stringify({ profile: {} })]) await probe(`missing/invalid durable record ${local} rejects before SELECT without uploading caller memory`, async () => {
+    const f = await setup(); if (local === null) storage.removeItem(APP_DATA_STORAGE_KEY); else storage.setItem(APP_DATA_STORAGE_KEY, local);
+    const reads = f.reads(), writes = f.sent.length, remote = clone(f.fixture.rows.get('A'));
+    assert.equal(await cloudSync.push(f.initial), false); assert.equal(f.reads(), reads); assert.equal(f.sent.length, writes); assert.deepEqual(f.fixture.rows.get('A'), remote); assert.equal(currentConfirmed(), false);
+    return { readsAfterCapture: f.reads()-reads, writesAfterCapture: f.sent.length-writes, state: cloudSync.getState() };
+  });
+  await probe('completed older in-flight upload keeps dirty current status and remote acknowledgement for queued latest upload', async () => {
+    const f = await setup();
+    await repository.mutateNotebook({ type: 'save_entry', input: { kind: 'journal', content: 'Earlier in-flight note' } });
+    const earlier = await repository.load(); const hold = f.holdWrite(); const first = cloudSync.push(earlier); await f.startedWrite.promise;
+    await repository.mutateNotebook({ type: 'save_entry', input: { kind: 'journal', content: 'Later note saved during upload' } });
+    const latest = await repository.load(); const states:any[]=[]; const remove=cloudSync.subscribe((state:any)=>states.push(clone(state)));
+    const next = cloudSync.push(latest); hold.resolve();
+    let firstHistory:string; try {
+      assert.equal(await first, true); firstHistory = (cloudSync.getState() as any).lastSuccessfulSyncAt;
+      assert.equal(await next, true);
+    } finally { remove(); }
+    const state = cloudSync.getState() as any;
+    assert.ok(states.some(item=>item.lastSuccessfulSyncAt===f.sent[1].updated_at&&!item.syncing&&item.currentDocumentConfirmed===false&&item.lastSyncAt===null),'older represented commit remains historical only while newer local bytes are waiting');
+    assert.deepEqual(entries(f.fixture.rows.get('A').data), entries(latest)); assert.equal(state.currentDocumentConfirmed, true); assert.ok(state.lastSuccessfulSyncAt >= firstHistory);
+    return { state, states, versions: f.sent.map((row: any) => row.updated_at), remoteEntries: entries(f.fixture.rows.get('A').data) };
+  });
+  for (const target of ['accountB','projectB']) await probe(`${target} does not inherit account A current or historical confirmation`, async () => {
+    const f = await setup(); const original = cloudSync.getState() as any; assert.equal(original.currentDocumentConfirmed, true); assert.ok(original.lastSuccessfulSyncAt);
+    if (target === 'accountB') internal.setSession({ user: { id:'B', email:'B@fixture.invalid' } });
+    else { internal.config = { ...internal.config, url:'https://project-b.invalid' }; internal.scopeRevision++; }
+    const state = cloudSync.getState() as any; assert.equal(state.currentDocumentConfirmed,false); assert.equal(state.lastSyncAt,null); assert.equal(state.lastSuccessfulSyncAt,null);
+    assert.equal(f.fixture.rows.get('A').data.profile.displayName,f.initial.profile.displayName); return { state };
+  });
+  await probe('ordinary local record change invalidates confirmation even without calling schedulePush', async () => {
+    const f = await setup(); const previous = (cloudSync.getState() as any).lastSuccessfulSyncAt;
+    const latest = JSON.parse(storage.getItem(APP_DATA_STORAGE_KEY)!); latest.profile.displayName='Unsynchronized same-epoch local change'; storage.setItem(APP_DATA_STORAGE_KEY,JSON.stringify(latest));
+    const state = cloudSync.getState() as any; assert.equal(state.currentDocumentConfirmed,false); assert.equal(state.lastSyncAt,null); assert.equal(state.lastSuccessfulSyncAt,previous);
+    assert.equal(f.fixture.rows.get('A').data.profile.displayName,f.initial.profile.displayName); return { state };
+  });
+  await probe('late accepted-restore fingerprint rejection after switching accounts cannot publish old-account error', async () => {
+    const f = await setup(); const row=f.fixture.rows.get('A');row.data.profile.displayName='Explicit remote review';row.updated_at=new Date(Date.parse(row.updated_at)+1000).toISOString();
+    const remote=await cloudSync.pullIfNewer(await repository.load(),{forReview:true});assert.ok(remote);
+    assert.equal(await repository.replaceAll(remote,(original:string|null)=>cloudSync.canApplyRemote(remote,original)),true);
+    const held=deferred<ArrayBuffer>();const originalCrypto=globalThis.crypto;
+    Object.defineProperty(globalThis,'crypto',{configurable:true,value:{subtle:{digest:()=>held.promise}}});
+    const pending=cloudSync.markRemoteApplied(remote);await Promise.resolve();
+    internal.setSession({user:{id:'B',email:'B@fixture.invalid'}});assert.equal(cloudSync.getState().error,null);
+    held.reject(new Error('Synthetic delayed digest failure'));
+    try { assert.equal(await pending,false);assert.equal(cloudSync.getState().error,null,'account B must not inherit account A restore hash failure'); }
+    finally { Object.defineProperty(globalThis,'crypto',{configurable:true,value:originalCrypto}); }
+    return { state:cloudSync.getState() };
+  });
+  await probe('failed durable local save retains prior confirmed current document and history', async () => {
+    const f=await setup();const previous=cloudSync.getState() as any;const raw=storage.getItem(APP_DATA_STORAGE_KEY);const latest=await repository.load();latest.profile.displayName='Unsaved failing value';
+    storage.failWriteKey=APP_DATA_STORAGE_KEY;
+    try { await assert.rejects(repository.save(latest)); } finally { storage.failWriteKey=null; }
+    assert.equal(storage.getItem(APP_DATA_STORAGE_KEY),raw);const state=cloudSync.getState() as any;assert.equal(state.currentDocumentConfirmed,true);assert.equal(state.lastSuccessfulSyncAt,previous.lastSuccessfulSyncAt);assert.equal(f.fixture.rows.get('A').data.profile.displayName,f.initial.profile.displayName);
+    return { state };
+  });
+  for(const dirty of [false,true])await probe(`${dirty?'dirty':'clean'} reload confirms only actual saved backup snapshot after authoritative queue hydration`,async()=>{
+    const f=await setup();const history=(cloudSync.getState() as any).lastSuccessfulSyncAt;
+    if(dirty)await repository.mutateNotebook({type:'save_entry',input:{kind:'journal',content:'Dirty document before reload'}});
+    const Reloaded=cloudSync.constructor as any;const reloaded=new Reloaded();Object.assign(reloaded,{config:{...internal.config},session:clone(internal.session),client:f.fixture.client});
+    assert.equal(reloaded.getState().currentDocumentConfirmed,false,'fresh service never inherits singleton memory confidence');
+    await repository.load();await (reloaded as any).confirmationBootstrap;
+    const state=reloaded.getState();assert.equal(state.currentDocumentConfirmed,!dirty);assert.equal(state.lastSyncAt,dirty?null:history);assert.equal(state.lastSuccessfulSyncAt,history);assert.equal(entries(JSON.parse(storage.getItem(APP_DATA_STORAGE_KEY)!)).length,dirty?1:0);
+    return { state,localEntries:entries(JSON.parse(storage.getItem(APP_DATA_STORAGE_KEY)!)) };
+  });
+}
+const source: any = {};
+for (const file of ['src/services/cloudSync.ts','src/services/cloudUploadReadiness.ts','src/services/repository.ts','src/services/dataWrites.ts','src/services/backup.ts','src/pages/Account.tsx','src/components/BackupAndCloudSettings.tsx','src/store/useApp.tsx']) source[file]=createHash('sha256').update(await readFile(`${root}/${file}`)).digest('hex');
+const report = { root, mode, head:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(), source, total:results.length, passed:results.filter(x=>x.passed).length, failed:results.filter(x=>!x.passed).length, networkCalls, method:'Actual CloudSync/repository/source helper TypeScript with local synthetic storage, queue, timers and SELECT/conditional UPDATE fixture; no React mount, native device or live providers', results };
+await writeFile(`${output}/${mode}-report.json`,JSON.stringify(report,null,2)+'\n');
+console.log(JSON.stringify(report,null,2));
+if (report.failed || networkCalls) process.exitCode=1;

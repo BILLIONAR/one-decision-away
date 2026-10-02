@@ -1,0 +1,11 @@
+import { createRepository } from '/workspace/oda-cloud-upload-current-record/src/services/repository';
+const repository = createRepository();
+const operations: { text: string; done: boolean; error?: string }[] = [];
+(window as any).ODA_RECORD_WRITER = {
+  ready: true,
+  snapshot: () => ({ operations, capabilities: { indexedDB: typeof indexedDB !== 'undefined', webLocks: typeof navigator.locks?.request === 'function' } }),
+  beginNotebookWrite: (text: string) => {
+    const item = { text, done: false } as (typeof operations)[number]; operations.push(item);
+    void repository.mutateNotebook({ type: 'save_affirmation', input: { text } }).catch(error => { item.error = String(error); }).finally(() => { item.done = true; });
+  },
+};

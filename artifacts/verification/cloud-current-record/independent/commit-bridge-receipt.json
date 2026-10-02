@@ -1,0 +1,58 @@
+{
+  "decision": "PASS: committed source exactly matches prior independently reviewed frozen bytes",
+  "timestampUTC": "2026-10-02T11:52:13.579831+00:00",
+  "reviewedCommit": "5af456fc7b31fc34f72cdf53bef55ca3a8b62589",
+  "baseCommit": "5adcb6a22bda7a087e1718b2cf2eeb105e1248ba",
+  "commitParent": "5adcb6a22bda7a087e1718b2cf2eeb105e1248ba",
+  "workingAndCommittedHashesMatchIndependentReceipt": true,
+  "sourceHashes": {
+    "src/services/cloudSync.ts": "18374c6a9062224d05c555d2ea48c0e267b3d947569a62c17549429f918d36b9",
+    "src/services/cloudUploadReadiness.ts": "71c2fd85d6fa8399bed7a2925c58df046f301b0b74e631c041c627448b029c59",
+    "src/services/dataWrites.ts": "9f966b2edb05b506bef85e50ff3cf91bbd5267458ad86fef2af07f93711b4038",
+    "src/pages/Account.tsx": "c2c68d5526171849c74a48e851caa9176b234ac0bd116383445125c044ec468b",
+    "src/components/BackupAndCloudSettings.tsx": "c3be63b88cecb21e642d292a3783f13104c3d1bd9b51a3c373a58fc82d2e95bf",
+    "tests/cloud-current-record.test.ts": "d161000beb2a4da6a31d5517a5825bde404023389b6ff8814bc5b5d5350ae69b",
+    "tests/cloud-upload-readiness.test.ts": "905bce5b8e79124596b5ebeb85666746d452a352c91cc4f474ed1806052c6050",
+    "tests/cloud-restore-scope.test.ts": "3bbd943e09a2ccbcc0b1add353551637ba8b00e2595756a523b1374df2ba63cd",
+    "tests/deep-cloud-review.test.ts": "03ba4d3c293d33fdae81e3b92eb44f2ea661c5dce6fef5ca1364f3ca99cb6243",
+    "tests/backup.test.ts": "32bb843472824bdc51d592552b9e41ca453c68de2f7f1ffd656675edec1b3e64",
+    "tests/native-settings-otp.test.ts": "1a5dd62c6bcfab973f34ee260c2a93ceb64a0ee926e2775491504551eac7f953",
+    "src/services/repository.ts": "a65560692f655d05b37a367e5acbeff1b6dd2974f2f951ff70e419c1c9dcfc8a",
+    "src/services/backup.ts": "0ece443b6e61dfc0508658e5fb24a6373145fc56094f8e9b906fe53bebfdf3b9",
+    "src/store/useApp.tsx": "0576b4a1b6c849049f88e8d9c043143c667e1aabf9357bbfba35fe79f5ac6497",
+    "src/services/purchases.ts": "20166152294fdaba6c351e282c1b738a47b775256677030af518a417e1da257d",
+    "src/services/soundRoomPlayer.ts": "2911dd8b1ccc510f3a6757f43ddb3aa2b9d52d3d209e12ee2f0cf44c96a039f4",
+    "src/services/soundRoomAccess.ts": "e34e384f12abbc6b8185a377e9aa3c212832182d97b9f773ee973d9abe4c1199",
+    "src/pages/SoundRoom.tsx": "83fd4ed46bf8ae85facd20d791cbeb66558b36ff1d9021febb038d2964530238",
+    "package.json": "614199dd79f59c8b11a3dfc9b9a7ff4c8206666a92b8e1ec9da611647aa4d8f1",
+    "package-lock.json": "d08110baa951e3a716d06e24009dd278eca19a85eea967d0dd1d1c6dcf2eab22"
+  },
+  "exactElevenFileDiff": [
+    "src/components/BackupAndCloudSettings.tsx",
+    "src/pages/Account.tsx",
+    "src/services/cloudSync.ts",
+    "src/services/cloudUploadReadiness.ts",
+    "src/services/dataWrites.ts",
+    "tests/backup.test.ts",
+    "tests/cloud-current-record.test.ts",
+    "tests/cloud-restore-scope.test.ts",
+    "tests/cloud-upload-readiness.test.ts",
+    "tests/deep-cloud-review.test.ts",
+    "tests/native-settings-otp.test.ts"
+  ],
+  "sourceReviewReceiptSHA256": "c404314e28a248443eb4c25f2d562b0a9c1da1ff33ad6f907db63fec3e2f347b",
+  "originalReceiptUnchanged": true,
+  "boundedCounts": {
+    "actualService": 19,
+    "callerUI": 18,
+    "focusedRegression": 149,
+    "Notebook": 19,
+    "failures": 0,
+    "independentProviderNetworkCalls": 0
+  },
+  "remainingLimits": [
+    "Real IndexedDB/Web Locks and mounted React/native/provider behavior remain separate root browser/native checks.",
+    "Legacy remote same-version contents mutation between SELECT and conditional PATCH remains a declared limitation.",
+    "Parent visual/QA checkpoint remains mandatory before any publication; no publication performed by this reviewer."
+  ]
+}
