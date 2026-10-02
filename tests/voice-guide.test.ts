@@ -495,3 +495,37 @@ test('a recorded request that already ended cannot later fall back and revive th
   assert.equal(h.spoken.length, 0);
   assert.equal(h.providerCalls(), 0);
 });
+
+test('actual playback mode stays loading until recorded start and reports English device fallback', async t => {
+  const h = fixture(t), r = recorder(), modes: string[] = [];
+  h.guide.setRecordedNarration(r.player);
+  const remove = h.guide.onPlaybackModeChange(mode => modes.push(mode));
+  assert.equal(h.guide.getAvailableGuidanceMode(), 'recorded');
+  h.guide.speak('Recorded cue', context); assert.equal(h.guide.getPlaybackMode(), 'loading');
+  r.requests[0].start(); assert.equal(h.guide.getPlaybackMode(), 'recorded');
+  r.requests[0].result.resolve(false); await settled();
+  assert.equal(h.guide.getPlaybackMode(), 'loading');
+  h.spoken[0].onstart!(); assert.equal(h.guide.getPlaybackMode(), 'device');
+  h.guide.stop(); assert.equal(h.guide.getPlaybackMode(), 'idle');
+  remove(); assert.deepEqual(modes, ['idle', 'loading', 'recorded', 'loading', 'device', 'idle']);
+  assert.equal(h.providerCalls(), 0);
+});
+
+test('a resumed recording failure uses only installed English device speech and rejects stale resume fallback', async t => {
+  const h = fixture(t), r = recorder();
+  r.player.getResumeFallback = () => ({ text: 'Resumed English cue', context });
+  r.player.resume = async () => false;
+  h.guide.setRecordedNarration(r.player);
+  h.guide.speak('Pending cue', context); h.guide.pause(); h.guide.resume(); await settled();
+  assert.equal(h.spoken[0].text, 'Resumed English cue'); assert.equal(h.spoken[0].voice, english);
+  const pending = deferred<boolean>(); r.player.resume = () => pending.promise;
+  h.guide.pause(); h.guide.resume(); h.guide.stop(); pending.resolve(false); await settled();
+  assert.equal(h.spoken.length, 1); assert.equal(h.providerCalls(), 0);
+});
+
+test('registered recorded volume receives current preference and live zero/nonzero changes', t => {
+  const h = fixture(t, { prefs: { volume: 0.35 } }), r = recorder(), volumes: number[] = [];
+  r.player.setVolume = volume => volumes.push(volume);
+  h.guide.setRecordedNarration(r.player); h.guide.setVolume(0); h.guide.setVolume(0.4);
+  assert.deepEqual(volumes, [0.35, 0, 0.4]);
+});
