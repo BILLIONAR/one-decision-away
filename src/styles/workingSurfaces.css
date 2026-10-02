@@ -148,4 +148,6 @@
 .oda-fidelity-week-fact { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .oda-fidelity-week-ring { width: 32px; height: 32px; flex: none; display: grid; place-items: center; border-radius: 50%; }
 .oda-fidelity-week-ring > i { width: 25px; height: 25px; display: grid; place-items: center; border-radius: 50%; background: var(--surface); color: var(--fg); font-size: 10px; font-style: normal; font-variant-numeric: tabular-nums; }
+.oda-fidelity-today .oda-evidence-tree.w-20 { width: 5rem; height: 4rem; max-width: 5rem; flex: 0 0 5rem; aspect-ratio: auto; }
+.oda-fidelity-today .oda-evidence-tree.w-20 + .min-w-0 { flex: 1 1 0%; overflow-wrap: anywhere; }
 :root[data-theme="dark"] .oda-fidelity-scene img, html.dark .oda-fidelity-scene img { opacity: .3; }
