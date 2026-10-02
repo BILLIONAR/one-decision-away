@@ -89,7 +89,9 @@
 .oda-sound-now-control-surface { position: relative; margin: -22px auto 0; padding: .75rem; border: 1px solid rgb(194 245 239 / .22); border-radius: 26px; background: rgb(50 99 106 / .8); backdrop-filter: blur(14px); color: #D9EEEA; }
 .oda-sound-now-controls { display: flex; justify-content: space-around; align-items: center; width: min(100%, 270px); margin-inline: auto; }
 .oda-sound-now-status { margin-block: .4rem .25rem; font-size: .74rem; line-height: 1.4; text-align: center; font-variant-numeric: tabular-nums; color: #DEEFED; }
-.oda-sound-now-control-surface .oda-sound-player-controls { gap: .6rem; }
+.oda-sound-now-control-surface .oda-sound-player-controls { gap: .6rem; flex-wrap: wrap; }
+.oda-sound-now-control-surface .oda-sound-player-volume { min-width: 68px; }
+.oda-sound-now-control-surface .oda-sound-player-volume input { min-width: 44px; }
 .oda-sound-now-control-surface input:focus-visible, .oda-sound-now-control-surface select:focus-visible { outline-color: #D3F7F4; }
 .oda-sound-now-toggle { display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 50%; color: var(--sound-on-cyan); background: var(--sound-cyan); cursor: pointer; box-shadow: 0 0 22px rgb(71 218 217 / .2); }
 .oda-sound-now-toggle:disabled { background: #587C80; color: #E3F0ED; cursor: not-allowed; box-shadow: none; }
