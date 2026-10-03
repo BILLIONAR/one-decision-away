@@ -1,4 +1,4 @@
-/* ODA's public front door: original brand, editorial paper and useful depth. */
+/* ODA's public landing: a licensed landscape and the selected domino palette. */
 .oda-landing { overflow: clip; background: var(--bg); color: var(--fg); }
 .oda-landing-shell { width: min(1180px, calc(100% - 80px)); margin-inline: auto; }
 .oda-landing [tabindex="-1"] { scroll-margin-top: 28px; }
@@ -16,8 +16,8 @@
 .oda-landing-nav-link:hover { color: var(--fg); }
 .oda-landing-button { display: inline-flex; align-items: center; justify-content: center; gap: 17px; min-height: 52px; padding: 14px 23px; border: 1px solid transparent; border-radius: 8px; font-size: 14px; font-weight: 600; line-height: 1.4; cursor: pointer; transition: background-color 160ms, box-shadow 160ms; }
 .oda-landing-button svg { flex-shrink: 0; }
-.oda-landing-button-primary { background: var(--accent); color: var(--on-accent); box-shadow: 0 4px 12px -6px rgb(23 62 53 / 35%); }
-.oda-landing-button-primary:hover { box-shadow: 0 7px 18px -7px rgb(23 62 53 / 45%); }
+.oda-landing-button-primary { background: var(--accent); color: var(--on-accent); box-shadow: 0 4px 12px -6px rgb(84 1 12 / 35%); }
+.oda-landing-button-primary:hover { box-shadow: 0 7px 18px -7px rgb(84 1 12 / 45%); }
 .oda-landing-button-plain { border-color: var(--border-strong); color: var(--fg); background: transparent; }
 .oda-landing-button-plain:hover { background: var(--bg-muted); }
 .oda-landing-nav .oda-landing-button { min-height: 44px; padding: 10px 17px; font-size: 13px; }
@@ -34,13 +34,9 @@
 .oda-landing-privacy svg { flex-shrink: 0; margin-top: 3px; }
 .oda-landing-preview { min-width: 0; }
 .oda-landing-preview-stage { position: relative; padding: 28px 25px 39px; min-height: 470px; border-radius: 160px 160px 12px 12px; background: linear-gradient(155deg, var(--accent-soft), var(--bg-muted) 88%); border: 1px solid var(--border); isolation: isolate; }
-.oda-landing-doorway { position: absolute; inset: 27px 46px 0; border-radius: 190px 190px 0 0; background: linear-gradient(150deg, var(--bg) 20%, var(--bg-elevated)); box-shadow: inset 11px 6px 17px -12px rgb(23 62 53 / 40%), inset -1px 0 0 var(--border-strong), -10px 0 20px -15px rgb(23 62 53 / 30%); z-index: -1; }
-.oda-landing-doorway::after { content: ''; position: absolute; inset: 17px 20px 0; border: 1px solid var(--border); border-bottom: 0; border-radius: 180px 180px 0 0; }
-.oda-landing-doorway span:first-child { position: absolute; top: 70px; right: 40px; width: 52px; height: 52px; border-radius: 50%; border: 1px solid var(--brand-burgundy); opacity: .45; }
-.oda-landing-doorway span:last-child { position: absolute; top: 104px; right: 58px; width: 8px; height: 8px; border-radius: 50%; background: var(--brand-burgundy); }
 .oda-landing-preview-caption { display: flex; align-items: center; justify-content: center; gap: 9px; padding: 11px 0 37px; font-family: var(--font-editorial); font-style: italic; font-size: 18px; color: var(--accent); }
 .oda-landing-preview-logo { width: 21px; height: 21px; }
-.oda-landing-preview-card { position: relative; padding: 25px 26px 15px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 13px; box-shadow: 0 21px 33px -24px rgb(23 62 53 / 45%), 0 5px 12px -8px rgb(23 62 53 / 20%); }
+.oda-landing-preview-card { position: relative; padding: 25px 26px 15px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 13px; box-shadow: 0 21px 33px -24px rgb(84 1 12 / 45%), 0 5px 12px -8px rgb(84 1 12 / 20%); }
 .oda-landing-preview-card::before { content: ''; position: absolute; top: -9px; left: 13px; right: 13px; height: 8px; border: 1px solid var(--border); border-bottom: 0; border-radius: 9px 9px 0 0; background: var(--bg); z-index: -1; }
 .oda-landing-preview-card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .oda-landing-preview-card-top p { font-size: 10px; font-weight: 600; letter-spacing: .03em; color: var(--fg-muted); }
@@ -59,7 +55,6 @@
 .oda-landing-preview-controls button > span { font-size: 9px; color: var(--brand-burgundy); }
 .oda-landing-preview-controls button[aria-pressed="true"] { color: var(--accent); background: var(--accent-soft); font-weight: 600; }
 .oda-landing-preview-controls button:hover { background: var(--bg-muted); }
-.oda-landing-preview-coordinate { display: block; margin-top: 19px; text-align: center; font-size: 10px; letter-spacing: .14em; color: var(--fg-muted); }
 .oda-landing-preview figcaption { margin: 17px auto 0; max-width: 40ch; font-size: 10px; line-height: 1.7; text-align: center; color: var(--fg-muted); }
 .oda-landing-principle { border-block: 1px solid var(--border-strong); padding-block: 23px; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
 .oda-landing-principle > p { max-width: 45ch; font-family: var(--font-editorial); font-size: 22px; font-style: italic; line-height: 1.4; }
@@ -84,23 +79,10 @@
 .oda-landing-course-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
 .oda-landing-course { display: flex; flex-direction: column; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; overflow: clip; }
 .oda-landing-course-art { position: relative; display: block; height: 150px; overflow: hidden; isolation: isolate; background: var(--accent-soft); }
-.oda-landing-course-art > span { position: absolute; display: block; }
 .oda-landing-course-art .oda-landing-course-art-number { top: 19px; left: 22px; font-family: var(--font-editorial); font-size: 16px; }
-.oda-landing-course-0 .oda-landing-course-art { background: #173E35; color: #F7F3EA; }
-.oda-landing-course-0 .oda-landing-course-art > span:first-child { width: 95px; height: 126px; top: 33px; left: calc(50% - 47px); border: 1px solid rgb(247 243 234 / 40%); border-bottom: 0; border-radius: 70px 70px 0 0; }
-.oda-landing-course-0 .oda-landing-course-art > span:nth-child(2) { width: 75px; height: 109px; top: 50px; left: calc(50% - 38px); background: linear-gradient(135deg, #EFE3CE, #DCC9AE); border-radius: 60px 60px 0 0; box-shadow: 8px 5px 16px -10px #000; }
-.oda-landing-course-0 .oda-landing-course-art > span:nth-child(3) { width: 55px; height: 110px; top: 68px; left: calc(50% - 27px); background: #244F45; border-radius: 44px 44px 0 0; }
-.oda-landing-course-0 .oda-landing-course-art > span:nth-child(4) { width: 12px; height: 3px; top: 122px; left: calc(50% + 6px); border-radius: 5px; background: #EFE3CE; }
+.oda-landing-course-0 .oda-landing-course-art { background: #54010C; color: #F7F3EA; }
 .oda-landing-course-1 .oda-landing-course-art { background: var(--brand-burgundy-soft); color: var(--brand-burgundy); }
-.oda-landing-course-1 .oda-landing-course-art > span:first-child { height: 28px; width: 77px; top: 112px; left: calc(50% - 101px); border: 1px solid var(--brand-burgundy); background: var(--bg); }
-.oda-landing-course-1 .oda-landing-course-art > span:nth-child(2) { height: 50px; width: 77px; top: 90px; left: calc(50% - 25px); border: 1px solid var(--brand-burgundy); background: var(--bg); }
-.oda-landing-course-1 .oda-landing-course-art > span:nth-child(3) { height: 73px; width: 77px; top: 67px; left: calc(50% + 51px); border: 1px solid var(--brand-burgundy); background: var(--bg); }
-.oda-landing-course-1 .oda-landing-course-art > span:nth-child(4) { height: 25px; width: 25px; top: 51px; left: calc(50% - 11px); border-radius: 50%; background: var(--brand-burgundy); box-shadow: 0 7px 14px -7px rgb(138 48 66 / 45%); }
 .oda-landing-course-2 .oda-landing-course-art { background: var(--tint-sand); color: var(--fg); }
-.oda-landing-course-2 .oda-landing-course-art > span:first-child { width: 120px; height: 120px; top: 29px; left: calc(50% - 60px); border: 1px solid var(--border-strong); border-radius: 50%; }
-.oda-landing-course-2 .oda-landing-course-art > span:nth-child(2) { width: 86px; height: 86px; top: 46px; left: calc(50% - 43px); border: 1px solid var(--brand-burgundy); border-radius: 50%; opacity: .55; }
-.oda-landing-course-2 .oda-landing-course-art > span:nth-child(3) { width: 52px; height: 52px; top: 63px; left: calc(50% - 26px); border: 1px solid var(--brand-burgundy); border-radius: 50%; }
-.oda-landing-course-2 .oda-landing-course-art > span:nth-child(4) { width: 17px; height: 17px; top: 81px; left: calc(50% - 8px); background: var(--brand-burgundy); border-radius: 50%; }
 .oda-landing-course-content { display: flex; flex: 1; flex-direction: column; padding: 24px 23px 17px; }
 .oda-landing-course-label { font-size: 10px; line-height: 1.7; color: var(--brand-burgundy); font-weight: 500; }
 .oda-landing-course h3 { margin-top: 10px; font-family: var(--font-editorial); font-size: 30px; line-height: 1.15; letter-spacing: -.015em; font-weight: 400; }
@@ -126,14 +108,14 @@
 .oda-landing-resource-arrow { flex-shrink: 0; margin-top: 5px; color: var(--fg-muted); transition: transform 160ms; }
 .oda-landing-resource:hover .oda-landing-resource-title { color: var(--brand-burgundy); }
 .oda-landing-resource:hover .oda-landing-resource-arrow { transform: translateX(3px); }
-.oda-landing-trust { padding-block: 58px 61px; background: #173E35; color: #F7F3EA; }
+.oda-landing-trust { padding-block: 58px 61px; background: #54010C; color: #F7F3EA; }
 .oda-landing-trust .oda-landing-kicker { color: #E6D9BC; }
 .oda-landing-trust .oda-landing-section-heading { max-width: 550px; }
 .oda-landing-trust-items { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 45px; margin-top: 36px; }
 .oda-landing-trust-items article { border-top: 1px solid rgb(247 243 234 / 30%); padding-top: 18px; }
 .oda-landing-trust-items article > span { font-size: 10px; color: #E6D9BC; }
 .oda-landing-trust-items h3 { margin-block: 16px 8px; font-size: 17px; font-weight: 500; }
-.oda-landing-trust-items p { font-size: 12px; line-height: 1.85; color: #D3DFD8; }
+.oda-landing-trust-items p { font-size: 12px; line-height: 1.85; color: #F7F3EA; }
 .oda-landing-faq { display: grid; grid-template-columns: .7fr 1.3fr; gap: 70px; padding-block: 78px 45px; }
 .oda-landing-faq .oda-landing-section-heading { margin-top: 8px; }
 .oda-landing-faq details { border-bottom: 1px solid var(--border-strong); }
@@ -278,4 +260,130 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .oda-landing *, .oda-landing *::before, .oda-landing *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+/* All palette changes belong to the public landing, including under dark preference. */
+.oda-landing {
+  --bg: #F7F3EA;
+  --fg: #54010C;
+  --fg-muted: #79535A;
+  --bg-muted: #F1E7DC;
+  --bg-elevated: #FFFDF8;
+  --border: #DECABA;
+  --border-strong: #AD8074;
+  --accent: #C51624;
+  --on-accent: #F7F3EA;
+  --accent-soft: #FAE6E6;
+  --brand-burgundy: #54010C;
+  --brand-burgundy-soft: #F4DDD9;
+}
+.oda-landing-shell { width: min(1240px, calc(100% - 80px)); }
+.oda-landing .oda-domino8-mark { filter: none; }
+:root[data-theme="dark"] .oda-landing .oda-domino8-mark, html.dark .oda-landing .oda-domino8-mark { filter: none; }
+.oda-landing-button-primary { background: #E0AB5A; color: #54010C; box-shadow: 0 5px 18px -9px rgb(84 1 12 / 40%); }
+.oda-landing-button-primary:hover { background: #ECC078; }
+.oda-landing-button-primary:active { background: #D69B45; }
+.oda-landing-button-primary:focus-visible { outline: 3px solid #54010C; outline-offset: 4px; box-shadow: 0 0 0 2px #F7F3EA; }
+.oda-landing-nav {
+  --fg: #F7F3EA;
+  --fg-muted: #F7F3EA;
+  --bg: #54010C;
+  --bg-muted: #740B1B;
+  --border-strong: #E0AB5A;
+  display: block;
+  min-height: 0;
+  background: #54010C;
+  color: #F7F3EA;
+  border-bottom: 1px solid rgb(224 171 90 / 30%);
+}
+.oda-landing-nav-content { display: flex; align-items: center; justify-content: space-between; min-height: 106px; gap: 28px; }
+.oda-landing-nav-link:hover { color: #E0AB5A; }
+.oda-landing-nav .oda-landing-button { color: #F7F3EA; }
+.oda-landing-nav :is(button, select):focus-visible { outline: 3px solid #E0AB5A; outline-offset: 4px; }
+.oda-landing-nav-actions select { min-height: 44px; }
+.oda-landing-nav-actions option { background: #54010C; color: #F7F3EA; }
+.oda-landing-hero { position: relative; isolation: isolate; display: block; padding: 0; background: #54010C; color: #F7F3EA; }
+.oda-landing-hero-photo { position: absolute; inset: 0; z-index: -2; display: block; overflow: hidden; pointer-events: none; }
+.oda-landing-hero-photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 65% 50%; }
+.oda-landing-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgb(84 1 12 / 95%) 0%, rgb(84 1 12 / 87%) 29%, rgb(84 1 12 / 56%) 47%, rgb(84 1 12 / 6%) 73%, transparent 100%), linear-gradient(0deg, rgb(84 1 12 / 22%), transparent 28%);
+}
+.oda-landing-hero-inner { position: relative; display: flex; align-items: center; min-height: 740px; padding-block: 86px 105px; }
+.oda-landing-hero-copy { max-width: 600px; }
+.oda-landing-title { max-width: 12ch; font-size: clamp(64px, 6.1vw, 92px); line-height: 1.02; margin-block: 22px 26px; }
+.oda-landing-title em { color: #E0AB5A; line-height: 1.05; }
+.oda-landing-hero .oda-landing-kicker { color: #F7F3EA; }
+.oda-landing-hero .oda-landing-kicker > span { background: #E0AB5A; }
+.oda-landing-introduction { color: #F7F3EA; max-width: 42ch; }
+.oda-landing-privacy { color: #F7F3EA; }
+.oda-landing-hero-actions { gap: 7px 25px; }
+.oda-landing-hero .oda-landing-link { color: #F7F3EA; }
+.oda-landing-hero :is(button, a):focus-visible { outline: 3px solid #E0AB5A; outline-offset: 5px; box-shadow: 0 0 0 2px #54010C; }
+.oda-landing-hero .oda-landing-button-primary:focus-visible { outline-color: #F7F3EA; }
+.oda-landing-photo-credit { position: absolute; bottom: 18px; right: max(24px, calc((100vw - 1240px) / 2)); display: flex; align-items: center; min-height: 44px; padding: 8px 12px; border-radius: 5px; background: rgb(84 1 12 / 85%); color: #F7F3EA; font-size: 10px; line-height: 1.6; text-underline-offset: 3px; }
+.oda-landing-photo-credit:hover { text-decoration: underline; }
+.oda-landing-example { display: grid; grid-template-columns: .85fr 1.15fr; align-items: center; gap: 86px; padding-block: 74px 78px; border-bottom: 1px solid var(--border-strong); }
+.oda-landing-example .oda-landing-principle { display: flex; flex-direction: column; align-items: flex-start; border: 0; padding: 0; gap: 28px; }
+.oda-landing-example .oda-landing-principle > p { max-width: 20ch; font-size: clamp(31px, 3.1vw, 42px); line-height: 1.18; }
+.oda-landing-example .oda-landing-principle > span { font-size: 11px; gap: 16px; }
+.oda-landing-preview { width: 100%; margin: 0; }
+.oda-landing-preview-stage { min-height: 0; padding: 0; border: 0; border-radius: 0; background: none; }
+.oda-landing-preview-caption { justify-content: space-between; padding: 0 0 17px; color: #54010C; }
+.oda-landing-preview-card { box-shadow: 0 12px 28px -22px rgb(84 1 12 / 35%); }
+.oda-landing-preview-card::before { display: none; }
+.oda-landing-preview-content { min-height: 260px; }
+.oda-landing-preview-controls button[aria-pressed="true"] { background: #C51624; color: #F7F3EA; }
+.oda-landing-preview-controls button[aria-pressed="true"] > span { color: #F7F3EA; }
+.oda-landing-preview figcaption { max-width: none; }
+.oda-landing-course-art { height: 64px; border-bottom: 1px solid var(--border); background: #54010C; color: #F7F3EA; }
+.oda-landing-course-art .oda-landing-course-art-number { position: absolute; top: 18px; left: 25px; color: #E0AB5A; }
+.oda-landing-course-0 .oda-landing-course-art { background: #54010C; }
+.oda-landing-course-1 .oda-landing-course-art { background: #740B1B; color: #F7F3EA; }
+.oda-landing-course-2 .oda-landing-course-art { background: #54010C; color: #F7F3EA; }
+.oda-landing-trust { background: #54010C; }
+.oda-landing-trust .oda-landing-kicker, .oda-landing-trust-items article > span { color: #E0AB5A; }
+.oda-landing-trust-items p { color: #F7F3EA; }
+@media (max-width: 1060px) {
+  .oda-landing-shell { width: calc(100% - 60px); }
+  .oda-landing-example { gap: 45px; }
+  .oda-landing-hero-copy { max-width: 560px; }
+}
+@media (max-width: 640px) {
+  .oda-landing-shell { width: calc(100% - 40px); }
+  .oda-landing-nav-content { min-height: 88px; gap: 12px; }
+  .oda-landing-nav-actions { gap: 10px; }
+  .oda-landing-hero-inner { min-height: 0; padding-block: 53px 305px; }
+  .oda-landing-hero-copy { max-width: 100%; }
+  .oda-landing-hero-photo img { object-position: 65% 50%; }
+  .oda-landing-hero::before { background: linear-gradient(180deg, rgb(84 1 12 / 80%) 0%, rgb(84 1 12 / 72%) 36%, rgb(84 1 12 / 62%) 64%, rgb(84 1 12 / 4%) 80%, transparent 89%); }
+  .oda-landing-title { max-width: 12ch; font-size: clamp(47px, 14.8vw, 70px); line-height: 1.05; margin-block: 22px; }
+  .oda-landing-introduction { font-size: 15px; line-height: 1.85; }
+  .oda-landing-hero-actions { gap: 7px 18px; margin-top: 26px; }
+  .oda-landing-hero-actions .oda-landing-button { padding-inline: 20px; font-size: 13px; }
+  .oda-landing-hero-actions .oda-landing-link { font-size: 12px; }
+  .oda-landing-privacy { margin-top: 16px; font-size: 11px; }
+  .oda-landing-photo-credit { right: 20px; bottom: 16px; }
+  .oda-landing-example { grid-template-columns: 1fr; gap: 34px; padding-block: 47px 48px; }
+  .oda-landing-example .oda-landing-principle { gap: 16px; }
+  .oda-landing-example .oda-landing-principle > p { max-width: 24ch; font-size: 29px; }
+  .oda-landing-preview-content { min-height: 285px; }
+  .oda-landing-preview-card { padding-inline: 21px; }
+  .oda-landing-preview-title { font-size: 30px; }
+  .oda-landing-preview-controls button { flex-direction: row; }
+}
+@media (max-width: 359px) {
+  .oda-landing-shell { width: calc(100% - 32px); }
+  .oda-landing-nav-actions { gap: 7px; }
+  .oda-landing-nav-content { gap: 7px; }
+  .oda-landing-hero-inner { padding-top: 43px; }
+  .oda-landing-title { font-size: 47px; }
+  .oda-landing-hero-actions .oda-landing-button { width: 100%; }
+  .oda-landing-preview-card { padding-inline: 17px; }
+  .oda-landing-preview-title { font-size: 27px; }
+  .oda-landing-preview-controls button { flex-direction: column; }
 }

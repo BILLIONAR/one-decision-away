@@ -9,6 +9,11 @@ import { courseCatalogFor } from '../data/courseCatalog';
 import { LEGAL_COMPANY, PRIVACY, TERMS } from '../data/legal';
 import '../styles/landing.css';
 
+const photoBase = `${import.meta.env.BASE_URL}assets/oda/landing-photo/`;
+const heroSources = [768, 1280, 1920, 2560].map(width => `${photoBase}hero-dolomites-${width}.webp ${width}w`).join(', ');
+const mobileHeroSources = [480, 960].map(width => `${photoBase}hero-dolomites-mobile-${width}.webp ${width}w`).join(', ');
+const photoSource = 'https://unsplash.com/photos/landscape-photo-of-mountain-range-during-golden-hour-pn_Pp9P8P2U';
+
 /** An interactive example, never written to the visitor's personal record. */
 const DailyPreview: React.FC<{ copy: ReturnType<typeof landingCopy> }> = ({ copy: c }) => {
   const [step, setStep] = useState(0);
@@ -16,7 +21,6 @@ const DailyPreview: React.FC<{ copy: ReturnType<typeof landingCopy> }> = ({ copy
   return (
     <figure className="oda-landing-preview">
       <div className="oda-landing-preview-stage">
-        <div className="oda-landing-doorway" aria-hidden="true"><span /><span /></div>
         <div className="oda-landing-preview-caption"><span>{c.previewLabel}</span><Logo className="oda-landing-preview-logo" /></div>
         <div className="oda-landing-preview-card">
           <div className="oda-landing-preview-card-top"><p>{current.label}</p><span aria-hidden="true">ODA</span></div>
@@ -30,7 +34,6 @@ const DailyPreview: React.FC<{ copy: ReturnType<typeof landingCopy> }> = ({ copy
             {c.previewSteps.map((label, i) => <button key={label} type="button" aria-pressed={i === step} aria-controls="oda-preview-content" onClick={() => setStep(i)}><span aria-hidden="true">0{i + 1}</span>{label}</button>)}
           </div>
         </div>
-        <span className="oda-landing-preview-coordinate" aria-hidden="true">01 — ∞</span>
       </div>
       <figcaption>{c.previewNote}</figcaption>
     </figure>
@@ -67,8 +70,10 @@ export const Landing: React.FC = () => {
 
   return (
     <div className="oda-landing" lang={locale}>
+      <link rel="preload" as="image" href={`${photoBase}hero-dolomites-1920.webp`} imageSrcSet={heroSources} imageSizes="100vw" media="(min-width: 641px)" />
+      <link rel="preload" as="image" href={`${photoBase}hero-dolomites-mobile-480.webp`} imageSrcSet={mobileHeroSources} imageSizes="100vw" media="(max-width: 640px)" />
       <button type="button" onClick={() => moveTo('oda-landing-main')} className="oda-landing-skip">{c.skip}</button>
-      <header className="oda-landing-shell oda-landing-nav">
+      <header className="oda-landing-nav"><div className="oda-landing-shell oda-landing-nav-content">
         <div className="oda-landing-brand"><Logo className="oda-landing-brand-mark" /><div><span>ODA</span><span>ONE DECISION AWAY</span></div></div>
         <nav className="oda-landing-nav-actions" aria-label={c.mainNavigation}>
           <button type="button" onClick={() => moveTo('oda-method')} className="oda-landing-nav-link">{c.methodNav}</button>
@@ -76,10 +81,15 @@ export const Landing: React.FC = () => {
           <LanguagePicker />
           <button type="button" onClick={() => setActiveRoute('/app')} className="oda-landing-button oda-landing-button-plain">{c.open}<ArrowRight size={15} aria-hidden="true" /></button>
         </nav>
-      </header>
+      </div></header>
 
       <main id="oda-landing-main" tabIndex={-1}>
-        <section className="oda-landing-shell oda-landing-hero" aria-labelledby="landing-title">
+        <section className="oda-landing-hero" aria-labelledby="landing-title">
+          <picture className="oda-landing-hero-photo" aria-hidden="true">
+            <source media="(max-width: 640px)" srcSet={mobileHeroSources} sizes="100vw" width={960} height={1474} />
+            <img src={`${photoBase}hero-dolomites-1920.webp`} srcSet={heroSources} sizes="100vw" width={1920} height={1091} alt="" loading="eager" fetchPriority="high" decoding="async" />
+          </picture>
+          <div className="oda-landing-shell oda-landing-hero-inner">
           <div className="oda-landing-hero-copy">
             <p className="oda-landing-kicker"><span aria-hidden="true" />{c.eyebrow}</p>
             <h1 id="landing-title" className="oda-landing-title">{c.title} <em>{c.titleAccent}</em></h1>
@@ -90,10 +100,14 @@ export const Landing: React.FC = () => {
             </div>
             <p className="oda-landing-privacy"><ShieldCheck size={15} aria-hidden="true" />{c.privacy}</p>
           </div>
-          <DailyPreview copy={c} />
+          </div>
+          <a className="oda-landing-photo-credit" href={photoSource} target="_blank" rel="noopener noreferrer">Wolfgang Moritzer · Unsplash</a>
         </section>
 
-        <div className="oda-landing-shell oda-landing-principle"><p>{c.principle}</p><span>{c.principleNote}<Logo className="oda-landing-principle-mark" /></span></div>
+        <section className="oda-landing-shell oda-landing-example" aria-label={c.previewHint}>
+          <div className="oda-landing-principle"><p>{c.principle}</p><span>{c.principleNote}<Logo className="oda-landing-principle-mark" /></span></div>
+          <DailyPreview copy={c} />
+        </section>
 
         <section id="oda-method" tabIndex={-1} className="oda-landing-shell oda-landing-method" aria-labelledby="landing-method-title">
           <div className="oda-landing-section-intro"><p className="oda-landing-kicker">{c.methodLabel}</p><h2 id="landing-method-title" className="oda-landing-section-heading">{c.methodTitle}</h2></div>
@@ -104,7 +118,7 @@ export const Landing: React.FC = () => {
           <div className="oda-landing-shell">
             <div className="oda-landing-discover-header"><div><p className="oda-landing-kicker">{c.discoverLabel}</p><h2 id="landing-discover-title" className="oda-landing-section-heading">{c.discoverTitle}</h2></div><div><p>{c.discoverBody}</p><p className="oda-landing-course-count"><span>{landingCount(c.courseCount, 'courses', catalog.length, locale)}</span><span aria-hidden="true">/</span><span>{landingCount(c.lessonCount, 'lessons', lessons, locale)}</span></p></div></div>
             <div className="oda-landing-course-grid">{featured.map((course, i) => <article key={course.id} className={`oda-landing-course oda-landing-course-${i}`}>
-              <div className="oda-landing-course-art" aria-hidden="true"><span /><span /><span /><span /><span className="oda-landing-course-art-number">0{i + 1}</span></div>
+              <div className="oda-landing-course-art" aria-hidden="true"><span className="oda-landing-course-art-number">0{i + 1}</span></div>
               <div className="oda-landing-course-content"><p className="oda-landing-course-label">{c.courseThemes[i]}</p><h3 lang={course.lang}>{course.title}</h3><p className="oda-landing-course-meta">{landingCount(c.lessonUnit, 'count', course.lessonCount, locale)}<span aria-hidden="true"> · </span>{landingCount(c.minutesUnit, 'count', course.minutes, locale)}</p><p className="oda-landing-course-outcome-label">{c.courseOutcome}</p><p lang={course.lang} className="oda-landing-course-outcome">{course.outcome}</p><button type="button" onClick={() => openCourse(course.id)} className="oda-landing-link" aria-label={`${c.courseOpen}: ${course.title}`}>{c.courseOpen}<ArrowRight size={17} aria-hidden="true" /></button></div>
             </article>)}</div>
             <div className="oda-landing-course-bottom"><p>{c.courseNote}</p><button type="button" onClick={() => setActiveRoute('/app/courses')} className="oda-landing-button oda-landing-button-plain">{c.courseCta}<BookOpen size={17} aria-hidden="true" /></button></div>
