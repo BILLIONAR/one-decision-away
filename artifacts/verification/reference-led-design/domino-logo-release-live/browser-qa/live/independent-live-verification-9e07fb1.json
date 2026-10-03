@@ -1,0 +1,50 @@
+{
+  "status": "blocked at normal Chromium HTTPS navigation; no live render verification claimed",
+  "sourceCommit": "84ecbf8776146b766a30964bf8e6487234dd1dd4",
+  "parentConfirmedDeployedMergeCommit": "9e07fb13ee1f3ba1b06ec0a69d64fa536bd6a429",
+  "parentConfirmedSuccessfulPagesRun": "https://github.com/BILLIONAR/one-decision-away/actions/runs/37147734045",
+  "target": "https://billionar.github.io/one-decision-away/",
+  "sealedAtUtc": "2026-10-03T19:28:49.539333+00:00",
+  "syntheticFixturesPrepared": true,
+  "normalTls": true,
+  "browser": "Installed Playwright with /usr/bin/chromium, default certificate validation",
+  "securityBypassUsed": false,
+  "certificateOrPermissionChanges": false,
+  "attempts": 1,
+  "navigation": "https://billionar.github.io/one-decision-away/#/",
+  "exactBlocker": "page.goto: net::ERR_CERT_AUTHORITY_INVALID",
+  "livePngs": 0,
+  "liveServedBodiesObserved": 0,
+  "liveArtworkCssOrJsEqualityClaimed": false,
+  "ciArtifactDownloaded": false,
+  "ciArtifactLimit": "Parent reports github-pages artifact 11282578198 is 76,589,568 bytes, above 32 MiB platform download limit. No artifact download or direct artifact binding claimed.",
+  "publicEnvComparisonLimit": "Existing public VITE production settings can alter HTML/JS relative to local blank-env build. No all-JS equality claim.",
+  "localReviewedEvidence": {
+    "file": "../final/independent-browser-review-84ecbf8.json",
+    "bytes": 15884,
+    "sha256": "07b546fc385dc058070573d4db37ec66570085668adc125fb56337d23f1476c9",
+    "actualPngs": 43,
+    "checksPassed": 69,
+    "sourceHashes": 900,
+    "distHashes": 445
+  },
+  "cleanup": "Owned Chromium closed in finally; owned local preview was already closed. No further navigation/retry performed.",
+  "sourceOrDeploymentWritesByThisAgent": 0,
+  "supportingEvidence": [
+    {
+      "file": "live/report.json",
+      "bytes": 1632,
+      "sha256": "0d56191416bfc3ccab9f091deb486270b8b6f29d614a4a466ac09863b8db7d51"
+    },
+    {
+      "file": "live-capture.log",
+      "bytes": 522,
+      "sha256": "98140698a4fe6d285d1f95c683701f47814ce964112274d23806bda651aca717"
+    },
+    {
+      "file": "live-capture.mjs",
+      "bytes": 10273,
+      "sha256": "283f1d97285731560b1c0bf794d87e9f748d27e3098d2bd940c4007fbd8f0e2a"
+    }
+  ]
+}
