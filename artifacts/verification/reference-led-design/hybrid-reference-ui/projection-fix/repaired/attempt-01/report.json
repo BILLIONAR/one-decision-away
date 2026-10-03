@@ -1,0 +1,2315 @@
+{
+  "task": "Repaired compiled-app course-progress boundary regression",
+  "synthetic": true,
+  "startedAtUtc": "2026-10-03T02:50:25.911Z",
+  "preflight": {
+    "head": "d33c0077c549bdf8e61fbf9b8bb20422a768f8e9",
+    "source": "d33c0077c549bdf8e61fbf9b8bb20422a768f8e9",
+    "branch": "design/reference-led-oda",
+    "clean": true,
+    "sourceFiles": 876,
+    "buildFiles": 437,
+    "onlyEvidenceChangedSinceSource": true,
+    "time": "2026-10-03T02:50:26.103Z"
+  },
+  "cases": [
+    {
+      "name": "same-tab actual Complete lesson then Today route mount; commit",
+      "baseline": {
+        "atUtc": "2026-10-03T02:50:27.641Z",
+        "at": 592,
+        "route": "/app",
+        "projectionCompleted": false,
+        "savedLibraryCompleted": 0,
+        "savedCourseCompleted": 0,
+        "nextTitle": "Morning · Direction: mark today as a beginning",
+        "roadmap": [],
+        "events": {
+          "focus": [],
+          "storage": []
+        },
+        "gate": {
+          "armed": false,
+          "phase": "idle",
+          "release": null,
+          "events": [],
+          "nativeMutationPuts": 0,
+          "reads": 0
+        }
+      },
+      "baselineAuthority": {
+        "completed": false,
+        "projectionCompleted": false
+      },
+      "heldBeforeNav": {
+        "armed": false,
+        "phase": "held-before-native-put",
+        "release": null,
+        "events": [
+          {
+            "phase": "held-before-native-put",
+            "at": 1111.0999999940395
+          }
+        ],
+        "nativeMutationPuts": 0,
+        "reads": 64,
+        "heldAt": 1111.0999999940395,
+        "candidateCompleted": true,
+        "transactionMode": "readwrite",
+        "database": "oda_personal_record_v1",
+        "authorityCompleted": false,
+        "lastAuthorityReadAt": 1125.7999999970198
+      },
+      "pending": {
+        "atUtc": "2026-10-03T02:50:28.255Z",
+        "at": 1206.4000000059605,
+        "route": "/app",
+        "projectionCompleted": true,
+        "savedLibraryCompleted": 0,
+        "savedCourseCompleted": 0,
+        "nextTitle": "Morning · Direction: mark today as a beginning",
+        "roadmap": [],
+        "events": {
+          "focus": [],
+          "storage": []
+        },
+        "gate": {
+          "armed": false,
+          "phase": "held-before-native-put",
+          "release": null,
+          "events": [
+            {
+              "phase": "held-before-native-put",
+              "at": 1111.0999999940395
+            }
+          ],
+          "nativeMutationPuts": 0,
+          "reads": 353,
+          "heldAt": 1111.0999999940395,
+          "candidateCompleted": true,
+          "transactionMode": "readwrite",
+          "database": "oda_personal_record_v1",
+          "authorityCompleted": false,
+          "lastAuthorityReadAt": 1206
+        }
+      },
+      "pendingAfterScreenshot": {
+        "atUtc": "2026-10-03T02:50:29.239Z",
+        "at": 2189.5999999940395,
+        "route": "/app",
+        "projectionCompleted": true,
+        "savedLibraryCompleted": 0,
+        "savedCourseCompleted": 0,
+        "nextTitle": "Morning · Direction: mark today as a beginning",
+        "roadmap": [],
+        "events": {
+          "focus": [],
+          "storage": []
+        },
+        "gate": {
+          "armed": false,
+          "phase": "held-before-native-put",
+          "release": null,
+          "events": [
+            {
+              "phase": "held-before-native-put",
+              "at": 1111.0999999940395
+            }
+          ],
+          "nativeMutationPuts": 0,
+          "reads": 9310,
+          "heldAt": 1111.0999999940395,
+          "candidateCompleted": true,
+          "transactionMode": "readwrite",
+          "database": "oda_personal_record_v1",
+          "authorityCompleted": false,
+          "lastAuthorityReadAt": 2189.4000000059605
+        }
+      },
+      "pendingSavedDisplayCorrect": true,
+      "settled": {
+        "atUtc": "2026-10-03T02:50:29.252Z",
+        "at": 2202.7000000029802,
+        "route": "/app",
+        "projectionCompleted": true,
+        "savedLibraryCompleted": 1,
+        "savedCourseCompleted": 1,
+        "nextTitle": "Midday · See the obstacle, build an if–then plan",
+        "roadmap": [],
+        "events": {
+          "focus": [],
+          "storage": []
+        },
+        "gate": {
+          "armed": false,
+          "phase": "native-transaction-complete",
+          "release": "commit",
+          "events": [
+            {
+              "phase": "held-before-native-put",
+              "at": 1111.0999999940395
+            },
+            {
+              "phase": "native-transaction-complete",
+              "at": 2194.7999999970198
+            }
+          ],
+          "nativeMutationPuts": 1,
+          "reads": 9313,
+          "heldAt": 1111.0999999940395,
+          "candidateCompleted": true,
+          "transactionMode": "readwrite",
+          "database": "oda_personal_record_v1",
+          "authorityCompleted": false,
+          "lastAuthorityReadAt": 2193.2999999970198,
+          "nativePutAt": 2193.2999999970198
+        }
+      },
+      "settledAuthority": {
+        "completed": true,
+        "projectionCompleted": true
+      },
+      "reloaded": {
+        "atUtc": "2026-10-03T02:50:29.812Z",
+        "at": 446.8999999910593,
+        "route": "/app",
+        "projectionCompleted": true,
+        "savedLibraryCompleted": 1,
+        "savedCourseCompleted": 1,
+        "nextTitle": "Midday · See the obstacle, build an if–then plan",
+        "roadmap": [],
+        "events": {
+          "focus": [],
+          "storage": []
+        },
+        "gate": {
+          "armed": false,
+          "phase": "idle",
+          "release": null,
+          "events": [],
+          "nativeMutationPuts": 0,
+          "reads": 0
+        }
+      },
+      "reloadedAuthority": {
+        "completed": true,
+        "projectionCompleted": true
+      }
+    },
+    {
+      "name": "same-tab actual Complete lesson then Today route mount; abort",
+      "baseline": {
+        "atUtc": "2026-10-03T02:50:30.500Z",
+        "at": 552.5,
+        "route": "/app",
+        "projectionCompleted": false,
+        "savedLibraryCompleted": 0,
+        "savedCourseCompleted": 0,
+        "nextTitle": "Morning · Direction: mark today as a beginning",
+        "roadmap": [],
+        "events": {
+          "focus": [],
+          "storage": []
+        },
+        "gate": {
+          "armed": false,
+          "phase": "idle",
+          "release": null,
+          "events": [],
+          "nativeMutationPuts": 0,
+          "reads": 0
+        }
+      },
+      "baselineAuthority": {
+        "completed": false,
+        "projectionCompleted": false
+      },
+      "heldBeforeNav": {
+        "armed": false,
+        "phase": "held-before-native-put",
+        "release": null,
+        "events": [
+          {
+            "phase": "held-before-native-put",
+            "at": 1038.2999999970198
+          }
+        ],
+        "nativeMutationPuts": 0,
+        "reads": 22,
+        "heldAt": 1038.2999999970198,
+        "candidateCompleted": true,
+        "transactionMode": "readwrite",
+        "database": "oda_personal_record_v1",
+        "authorityCompleted": false,
+        "lastAuthorityReadAt": 1044.2000000029802
+      },
+      "pending": {
+        "atUtc": "2026-10-03T02:50:31.068Z",
+        "at": 1120.5,
+        "route": "/app",
+        "projectionCompleted": true,
+        "savedLibraryCompleted": 0,
+        "savedCourseCompleted": 0,
+        "nextTitle": "Morning · Direction: mark today as a beginning",
+        "roadmap": [],
+        "events": {
+          "focus": [],
+          "storage": []
+        },
+        "gate": {
+          "armed": false,
+          "phase": "held-before-native-put",
+          "release": null,
+          "events": [
+            {
+              "phase": "held-before-native-put",
+              "at": 1038.2999999970198
+            }
+          ],
+          "nativeMutationPuts": 0,
+          "reads": 277,
+          "heldAt": 1038.2999999970198,
+          "candidateCompleted": true,
+          "transactionMode": "readwrite",
+          "database": "oda_personal_record_v1",
+          "authorityCompleted": false,
+          "lastAuthorityReadAt": 1119.2999999970198
+        }
+      },
+      "pendingAfterScreenshot": {
+        "atUtc": "2026-10-03T02:50:32.036Z",
+        "at": 2088.9000000059605,
+        "route": "/app",
+        "projectionCompleted": true,
+        "savedLibraryCompleted": 0,
+        "savedCourseCompleted": 0,
+        "nextTitle": "Morning · Direction: mark today as a beginning",
+        "roadmap": [],
+        "events": {
+          "focus": [],
+          "storage": []
+        },
+        "gate": {
+          "armed": false,
+          "phase": "held-before-native-put",
+          "release": null,
+          "events": [
+            {
+              "phase": "held-before-native-put",
+              "at": 1038.2999999970198
+            }
+          ],
+          "nativeMutationPuts": 0,
+          "reads": 8316,
+          "heldAt": 1038.2999999970198,
+          "candidateCompleted": true,
+          "transactionMode": "readwrite",
+          "database": "oda_personal_record_v1",
+          "authorityCompleted": false,
+          "lastAuthorityReadAt": 2088.7000000029802
+        }
+      },
+      "pendingSavedDisplayCorrect": true,
+      "settled": {
+        "atUtc": "2026-10-03T02:50:32.055Z",
+        "at": 2106.9000000059605,
+        "route": "/app",
+        "projectionCompleted": false,
+        "savedLibraryCompleted": 0,
+        "savedCourseCompleted": 0,
+        "nextTitle": "Morning · Direction: mark today as a beginning",
+        "roadmap": [],
+        "events": {
+          "focus": [],
+          "storage": []
+        },
+        "gate": {
+          "armed": false,
+          "phase": "native-transaction-aborted",
+          "release": "abort",
+          "events": [
+            {
+              "phase": "held-before-native-put",
+              "at": 1038.2999999970198
+            },
+            {
+              "phase": "native-transaction-aborted",
+              "at": 2092.2000000029802
+            }
+          ],
+          "nativeMutationPuts": 0,
+          "reads": 8328,
+          "heldAt": 1038.2999999970198,
+          "candidateCompleted": true,
+          "transactionMode": "readwrite",
+          "database": "oda_personal_record_v1",
+          "authorityCompleted": false,
+          "lastAuthorityReadAt": 2090.4000000059605,
+          "abortReason": "controlled abort"
+        }
+      },
+      "settledAuthority": {
+        "completed": false,
+        "projectionCompleted": false
+      },
+      "reloaded": {
+        "atUtc": "2026-10-03T02:50:32.615Z",
+        "at": 460.3999999910593,
+        "route": "/app",
+        "projectionCompleted": false,
+        "savedLibraryCompleted": 0,
+        "savedCourseCompleted": 0,
+        "nextTitle": "Morning · Direction: mark today as a beginning",
+        "roadmap": [],
+        "events": {
+          "focus": [],
+          "storage": []
+        },
+        "gate": {
+          "armed": false,
+          "phase": "idle",
+          "release": null,
+          "events": [],
+          "nativeMutationPuts": 0,
+          "reads": 0
+        }
+      },
+      "reloadedAuthority": {
+        "completed": false,
+        "projectionCompleted": false
+      }
+    },
+    {
+      "name": "cross-tab already-mounted Today; focus handler while writer pending; abort",
+      "readerBaseline": {
+        "atUtc": "2026-10-03T02:50:33.629Z",
+        "at": 542.8999999910593,
+        "route": "/app",
+        "projectionCompleted": false,
+        "savedLibraryCompleted": 0,
+        "savedCourseCompleted": 0,
+        "nextTitle": "Morning · Direction: mark today as a beginning",
+        "roadmap": [],
+        "events": {
+          "focus": [],
+          "storage": []
+        },
+        "gate": {
+          "armed": false,
+          "phase": "idle",
+          "release": null,
+          "events": [],
+          "nativeMutationPuts": 0,
+          "reads": 0
+        }
+      },
+      "baselineAuthority": {
+        "completed": false,
+        "projectionCompleted": false
+      },
+      "writerHeld": {
+        "armed": false,
+        "phase": "held-before-native-put",
+        "release": null,
+        "events": [
+          {
+            "phase": "held-before-native-put",
+            "at": 1323.3999999910593
+          }
+        ],
+        "nativeMutationPuts": 0,
+        "reads": 4,
+        "heldAt": 1323.3999999910593,
+        "candidateCompleted": true,
+        "transactionMode": "readwrite",
+        "database": "oda_personal_record_v1",
+        "authorityCompleted": false,
+        "lastAuthorityReadAt": 1327
+      },
+      "readerBeforeFocus": {
+        "atUtc": "2026-10-03T02:50:34.115Z",
+        "at": 1029.7000000029802,
+        "route": "/app",
+        "projectionCompleted": true,
+        "savedLibraryCompleted": 0,
+        "savedCourseCompleted": 0,
+        "nextTitle": "Morning · Direction: mark today as a beginning",
+        "roadmap": [],
+        "events": {
+          "focus": [],
+          "storage": [
+            {
+              "at": 1020.3999999910593,
+              "completed": true
+            }
+          ]
+        },
+        "gate": {
+          "armed": false,
+          "phase": "idle",
+          "release": null,
+          "events": [],
+          "nativeMutationPuts": 0,
+          "reads": 0
+        }
+      },
+      "readerAfterBringToFront": {
+        "atUtc": "2026-10-03T02:50:34.226Z",
+        "at": 1139.8999999910593,
+        "route": "/app",
+        "projectionCompleted": true,
+        "savedLibraryCompleted": 0,
+        "savedCourseCompleted": 0,
+        "nextTitle": "Morning · Direction: mark today as a beginning",
+        "roadmap": [],
+        "events": {
+          "focus": [],
+          "storage": [
+            {
+              "at": 1020.3999999910593,
+              "completed": true
+            }
+          ]
+        },
+        "gate": {
+          "armed": false,
+          "phase": "idle",
+          "release": null,
+          "events": [],
+          "nativeMutationPuts": 0,
+          "reads": 0
+        }
+      },
+      "trustedFocusObserved": false,
+      "focusCoverage": "explicit synthetic window focus event because headless bringToFront did not deliver trusted focus",
+      "readerPending": {
+        "atUtc": "2026-10-03T02:50:34.232Z",
+        "at": 1146.3999999910593,
+        "route": "/app",
+        "projectionCompleted": true,
+        "savedLibraryCompleted": 0,
+        "savedCourseCompleted": 0,
+        "nextTitle": "Morning · Direction: mark today as a beginning",
+        "roadmap": [],
+        "events": {
+          "focus": [
+            {
+              "at": 1141.5,
+              "trusted": false
+            }
+          ],
+          "storage": [
+            {
+              "at": 1020.3999999910593,
+              "completed": true
+            }
+          ]
+        },
+        "gate": {
+          "armed": false,
+          "phase": "idle",
+          "release": null,
+          "events": [],
+          "nativeMutationPuts": 0,
+          "reads": 0
+        }
+      },
+      "writerPending": {
+        "atUtc": "2026-10-03T02:50:34.323Z",
+        "at": 1541.699999988079,
+        "route": "/app/courses",
+        "projectionCompleted": true,
+        "savedLibraryCompleted": null,
+        "savedCourseCompleted": null,
+        "roadmap": [],
+        "events": {
+          "focus": [],
+          "storage": []
+        },
+        "gate": {
+          "armed": false,
+          "phase": "held-before-native-put",
+          "release": null,
+          "events": [
+            {
+              "phase": "held-before-native-put",
+              "at": 1323.3999999910593
+            }
+          ],
+          "nativeMutationPuts": 0,
+          "reads": 1683,
+          "heldAt": 1323.3999999910593,
+          "candidateCompleted": true,
+          "transactionMode": "readwrite",
+          "database": "oda_personal_record_v1",
+          "authorityCompleted": false,
+          "lastAuthorityReadAt": 1541.199999988079
+        }
+      },
+      "pendingSavedDisplayCorrect": true,
+      "readerSettled": {
+        "atUtc": "2026-10-03T02:50:34.348Z",
+        "at": 1262,
+        "route": "/app",
+        "projectionCompleted": false,
+        "savedLibraryCompleted": 0,
+        "savedCourseCompleted": 0,
+        "nextTitle": "Morning · Direction: mark today as a beginning",
+        "roadmap": [],
+        "events": {
+          "focus": [
+            {
+              "at": 1141.5,
+              "trusted": false
+            }
+          ],
+          "storage": [
+            {
+              "at": 1020.3999999910593,
+              "completed": true
+            },
+            {
+              "at": 1243.0999999940395,
+              "completed": false
+            }
+          ]
+        },
+        "gate": {
+          "armed": false,
+          "phase": "idle",
+          "release": null,
+          "events": [],
+          "nativeMutationPuts": 0,
+          "reads": 0
+        }
+      },
+      "settledAuthority": {
+        "completed": false,
+        "projectionCompleted": false
+      },
+      "readerReloaded": {
+        "atUtc": "2026-10-03T02:50:34.898Z",
+        "at": 443.8999999910593,
+        "route": "/app",
+        "projectionCompleted": false,
+        "savedLibraryCompleted": 0,
+        "savedCourseCompleted": 0,
+        "nextTitle": "Morning · Direction: mark today as a beginning",
+        "roadmap": [],
+        "events": {
+          "focus": [],
+          "storage": []
+        },
+        "gate": {
+          "armed": false,
+          "phase": "idle",
+          "release": null,
+          "events": [],
+          "nativeMutationPuts": 0,
+          "reads": 0
+        }
+      }
+    }
+  ],
+  "contexts": [
+    {
+      "label": "same-tab-commit",
+      "requests": [
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/",
+          "method": "GET",
+          "resourceType": "document"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/theme-init.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/index-BzGXO_tX.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/index-BH5El-p7.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/hanken-grotesk-latin-wght-normal-CaVRRdDk.woff2",
+          "method": "GET",
+          "resourceType": "font"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/brand/oda-favicon-c4-v1-32.png",
+          "method": "GET",
+          "resourceType": "other"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/Today-Cz_2AIbk.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/growth-CtfcX3mW.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/OriginalSceneImage-zmk9pRa_.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/courseNavigationIntent-DRUgWlzo.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/chevron-right-DxjGt5aM.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/lock-keyhole-D8SyJaTN.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/entitlements-u2O6Yfci.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/courseNavigationIntent-C0ky-Yq1.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/MissionFlows-Rzw8ZiDT.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/square-v8iVd8cI.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/DreamArt-CjaGjVyR.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/DailyMicroHabits-Ds754O8p.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/motion-HNvQpnN_.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/music-CrZKu0SV.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/trending-up-aJzc87sR.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/moon-BtobBrFu.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/sparkles-B1rdxUWk.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/trash-2-BRBjGjka.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/pen-line-DOt3CTb4.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/rotate-ccw-C3Bx6sH4.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/circle-check-C0lolFj_.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/charts-Bzd-XkHo.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/pencil-ColSTqGO.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/shuffle-DaKpXDEm.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/wind-uNJB5jOV.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/route-5TmPJXMl.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/share-2-CorDr4kn.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/waves-BzgSkO9m.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/Today-D76Bu5Fr.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/workingSurfaces-Ug3LNMJ2.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/brand/oda-c4.png",
+          "method": "GET",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/original-scenes/today-scene-1280.webp",
+          "method": "GET",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/delivery/trees/tree-00-seedling-0-640.webp",
+          "method": "GET",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2",
+          "method": "GET",
+          "resourceType": "font"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/Courses-C93eAtFk.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/courses-CKtnra3s.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/CourseCover-D3TST4Hf.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/calendar-days-Bnr-9Ke4.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/purchases-CXIjL5gt.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/search-BqU5JYop.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/brand/oda-favicon-c4-v1-32.png",
+          "method": "GET",
+          "resourceType": "other"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/newsreader-latin-opsz-italic-kJKFiXvB.woff2",
+          "method": "GET",
+          "resourceType": "font"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/brand/oda-favicon-c4-v1-32.png",
+          "method": "GET",
+          "resourceType": "other"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/",
+          "method": "GET",
+          "resourceType": "document"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/theme-init.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/index-BzGXO_tX.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/index-BH5El-p7.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/hanken-grotesk-latin-wght-normal-CaVRRdDk.woff2",
+          "method": "GET",
+          "resourceType": "font"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/brand/oda-favicon-c4-v1-32.png",
+          "method": "GET",
+          "resourceType": "other"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/Today-Cz_2AIbk.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/growth-CtfcX3mW.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/OriginalSceneImage-zmk9pRa_.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/courseNavigationIntent-DRUgWlzo.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/chevron-right-DxjGt5aM.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/lock-keyhole-D8SyJaTN.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/entitlements-u2O6Yfci.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/courseNavigationIntent-C0ky-Yq1.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/MissionFlows-Rzw8ZiDT.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/square-v8iVd8cI.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/DreamArt-CjaGjVyR.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/DailyMicroHabits-Ds754O8p.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/motion-HNvQpnN_.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/music-CrZKu0SV.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/trending-up-aJzc87sR.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/moon-BtobBrFu.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/sparkles-B1rdxUWk.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/trash-2-BRBjGjka.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/pen-line-DOt3CTb4.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/rotate-ccw-C3Bx6sH4.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/circle-check-C0lolFj_.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/charts-Bzd-XkHo.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/pencil-ColSTqGO.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/shuffle-DaKpXDEm.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/wind-uNJB5jOV.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/route-5TmPJXMl.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/share-2-CorDr4kn.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/waves-BzgSkO9m.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/Today-D76Bu5Fr.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/workingSurfaces-Ug3LNMJ2.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/brand/oda-c4.png",
+          "method": "GET",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/original-scenes/today-scene-1280.webp",
+          "method": "GET",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/delivery/trees/tree-00-seedling-0-640.webp",
+          "method": "GET",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2",
+          "method": "GET",
+          "resourceType": "font"
+        }
+      ],
+      "blockedExternal": [
+        {
+          "url": "https://images.unsplash.com/photo-1676475382103-54041209cf6c?auto=format&fit=crop&w=900&h=506&q=70",
+          "method": "GET"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1676475382103-54041209cf6c?auto=format&fit=crop&w=900&h=506&q=70",
+          "method": "GET"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "label": "same-tab-abort",
+      "requests": [
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/",
+          "method": "GET",
+          "resourceType": "document"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/theme-init.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/index-BzGXO_tX.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/index-BH5El-p7.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/hanken-grotesk-latin-wght-normal-CaVRRdDk.woff2",
+          "method": "GET",
+          "resourceType": "font"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/brand/oda-favicon-c4-v1-32.png",
+          "method": "GET",
+          "resourceType": "other"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/Today-Cz_2AIbk.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/growth-CtfcX3mW.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/OriginalSceneImage-zmk9pRa_.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/courseNavigationIntent-DRUgWlzo.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/chevron-right-DxjGt5aM.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/lock-keyhole-D8SyJaTN.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/entitlements-u2O6Yfci.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/courseNavigationIntent-C0ky-Yq1.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/MissionFlows-Rzw8ZiDT.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/square-v8iVd8cI.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/DreamArt-CjaGjVyR.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/DailyMicroHabits-Ds754O8p.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/motion-HNvQpnN_.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/music-CrZKu0SV.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/trending-up-aJzc87sR.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/moon-BtobBrFu.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/sparkles-B1rdxUWk.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/trash-2-BRBjGjka.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/pen-line-DOt3CTb4.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/rotate-ccw-C3Bx6sH4.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/circle-check-C0lolFj_.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/charts-Bzd-XkHo.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/pencil-ColSTqGO.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/shuffle-DaKpXDEm.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/wind-uNJB5jOV.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/route-5TmPJXMl.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/share-2-CorDr4kn.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/waves-BzgSkO9m.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/Today-D76Bu5Fr.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/workingSurfaces-Ug3LNMJ2.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/brand/oda-c4.png",
+          "method": "GET",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/original-scenes/today-scene-1280.webp",
+          "method": "GET",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/delivery/trees/tree-00-seedling-0-640.webp",
+          "method": "GET",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2",
+          "method": "GET",
+          "resourceType": "font"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/Courses-C93eAtFk.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/courses-CKtnra3s.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/CourseCover-D3TST4Hf.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/calendar-days-Bnr-9Ke4.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/purchases-CXIjL5gt.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/search-BqU5JYop.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/brand/oda-favicon-c4-v1-32.png",
+          "method": "GET",
+          "resourceType": "other"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/newsreader-latin-opsz-italic-kJKFiXvB.woff2",
+          "method": "GET",
+          "resourceType": "font"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/brand/oda-favicon-c4-v1-32.png",
+          "method": "GET",
+          "resourceType": "other"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/",
+          "method": "GET",
+          "resourceType": "document"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/theme-init.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/index-BzGXO_tX.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/index-BH5El-p7.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/hanken-grotesk-latin-wght-normal-CaVRRdDk.woff2",
+          "method": "GET",
+          "resourceType": "font"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/brand/oda-favicon-c4-v1-32.png",
+          "method": "GET",
+          "resourceType": "other"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/Today-Cz_2AIbk.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/growth-CtfcX3mW.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/OriginalSceneImage-zmk9pRa_.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/courseNavigationIntent-DRUgWlzo.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/chevron-right-DxjGt5aM.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/lock-keyhole-D8SyJaTN.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/entitlements-u2O6Yfci.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/courseNavigationIntent-C0ky-Yq1.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/MissionFlows-Rzw8ZiDT.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/square-v8iVd8cI.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/DreamArt-CjaGjVyR.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/DailyMicroHabits-Ds754O8p.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/motion-HNvQpnN_.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/music-CrZKu0SV.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/trending-up-aJzc87sR.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/moon-BtobBrFu.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/sparkles-B1rdxUWk.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/trash-2-BRBjGjka.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/pen-line-DOt3CTb4.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/rotate-ccw-C3Bx6sH4.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/circle-check-C0lolFj_.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/charts-Bzd-XkHo.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/pencil-ColSTqGO.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/shuffle-DaKpXDEm.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/wind-uNJB5jOV.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/route-5TmPJXMl.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/share-2-CorDr4kn.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/waves-BzgSkO9m.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/Today-D76Bu5Fr.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/workingSurfaces-Ug3LNMJ2.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/brand/oda-c4.png",
+          "method": "GET",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/original-scenes/today-scene-1280.webp",
+          "method": "GET",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/delivery/trees/tree-00-seedling-0-640.webp",
+          "method": "GET",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2",
+          "method": "GET",
+          "resourceType": "font"
+        }
+      ],
+      "blockedExternal": [
+        {
+          "url": "https://images.unsplash.com/photo-1676475382103-54041209cf6c?auto=format&fit=crop&w=900&h=506&q=70",
+          "method": "GET"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1676475382103-54041209cf6c?auto=format&fit=crop&w=900&h=506&q=70",
+          "method": "GET"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "label": "cross-tab-focus-abort",
+      "requests": [
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/",
+          "method": "GET",
+          "resourceType": "document"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/theme-init.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/index-BzGXO_tX.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/index-BH5El-p7.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/hanken-grotesk-latin-wght-normal-CaVRRdDk.woff2",
+          "method": "GET",
+          "resourceType": "font"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/brand/oda-favicon-c4-v1-32.png",
+          "method": "GET",
+          "resourceType": "other"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/Today-Cz_2AIbk.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/growth-CtfcX3mW.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/OriginalSceneImage-zmk9pRa_.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/courseNavigationIntent-DRUgWlzo.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/chevron-right-DxjGt5aM.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/lock-keyhole-D8SyJaTN.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/entitlements-u2O6Yfci.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/courseNavigationIntent-C0ky-Yq1.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/MissionFlows-Rzw8ZiDT.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/square-v8iVd8cI.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/DreamArt-CjaGjVyR.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/DailyMicroHabits-Ds754O8p.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/motion-HNvQpnN_.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/music-CrZKu0SV.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/trending-up-aJzc87sR.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/moon-BtobBrFu.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/sparkles-B1rdxUWk.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/trash-2-BRBjGjka.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/pen-line-DOt3CTb4.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/rotate-ccw-C3Bx6sH4.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/circle-check-C0lolFj_.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/charts-Bzd-XkHo.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/pencil-ColSTqGO.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/shuffle-DaKpXDEm.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/wind-uNJB5jOV.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/route-5TmPJXMl.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/share-2-CorDr4kn.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/waves-BzgSkO9m.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/Today-D76Bu5Fr.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/workingSurfaces-Ug3LNMJ2.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/brand/oda-c4.png",
+          "method": "GET",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/",
+          "method": "GET",
+          "resourceType": "document"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/theme-init.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/original-scenes/today-scene-1280.webp",
+          "method": "GET",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/delivery/trees/tree-00-seedling-0-640.webp",
+          "method": "GET",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/index-BzGXO_tX.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/index-BH5El-p7.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/hanken-grotesk-latin-wght-normal-CaVRRdDk.woff2",
+          "method": "GET",
+          "resourceType": "font"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/brand/oda-favicon-c4-v1-32.png",
+          "method": "GET",
+          "resourceType": "other"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/Today-Cz_2AIbk.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/growth-CtfcX3mW.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/OriginalSceneImage-zmk9pRa_.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/courseNavigationIntent-DRUgWlzo.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/chevron-right-DxjGt5aM.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/lock-keyhole-D8SyJaTN.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/entitlements-u2O6Yfci.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/courseNavigationIntent-C0ky-Yq1.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/MissionFlows-Rzw8ZiDT.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/square-v8iVd8cI.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/DreamArt-CjaGjVyR.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/DailyMicroHabits-Ds754O8p.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/motion-HNvQpnN_.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/music-CrZKu0SV.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/trending-up-aJzc87sR.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/moon-BtobBrFu.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/sparkles-B1rdxUWk.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/trash-2-BRBjGjka.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/pen-line-DOt3CTb4.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/rotate-ccw-C3Bx6sH4.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/circle-check-C0lolFj_.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/charts-Bzd-XkHo.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/pencil-ColSTqGO.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/shuffle-DaKpXDEm.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/wind-uNJB5jOV.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/route-5TmPJXMl.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/share-2-CorDr4kn.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/waves-BzgSkO9m.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/Today-D76Bu5Fr.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/workingSurfaces-Ug3LNMJ2.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/brand/oda-c4.png",
+          "method": "GET",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2",
+          "method": "GET",
+          "resourceType": "font"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/original-scenes/today-scene-1280.webp",
+          "method": "GET",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/delivery/trees/tree-00-seedling-0-640.webp",
+          "method": "GET",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2",
+          "method": "GET",
+          "resourceType": "font"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/Courses-C93eAtFk.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/courses-CKtnra3s.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/CourseCover-D3TST4Hf.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/calendar-days-Bnr-9Ke4.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/purchases-CXIjL5gt.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/search-BqU5JYop.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/brand/oda-favicon-c4-v1-32.png",
+          "method": "GET",
+          "resourceType": "other"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/newsreader-latin-opsz-italic-kJKFiXvB.woff2",
+          "method": "GET",
+          "resourceType": "font"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/",
+          "method": "GET",
+          "resourceType": "document"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/theme-init.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/index-BzGXO_tX.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/react-5GCfeWye.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/media-2mgEiOLR.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/index-BH5El-p7.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/hanken-grotesk-latin-wght-normal-CaVRRdDk.woff2",
+          "method": "GET",
+          "resourceType": "font"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/brand/oda-favicon-c4-v1-32.png",
+          "method": "GET",
+          "resourceType": "other"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/Today-Cz_2AIbk.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/growth-CtfcX3mW.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/OriginalSceneImage-zmk9pRa_.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/courseNavigationIntent-DRUgWlzo.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/chevron-right-DxjGt5aM.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/lock-keyhole-D8SyJaTN.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/entitlements-u2O6Yfci.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/courseNavigationIntent-C0ky-Yq1.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/MissionFlows-Rzw8ZiDT.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/square-v8iVd8cI.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/DreamArt-CjaGjVyR.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/DailyMicroHabits-Ds754O8p.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/motion-HNvQpnN_.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/music-CrZKu0SV.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/trending-up-aJzc87sR.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/moon-BtobBrFu.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/sparkles-B1rdxUWk.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/trash-2-BRBjGjka.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/pen-line-DOt3CTb4.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/rotate-ccw-C3Bx6sH4.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/circle-check-C0lolFj_.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/charts-Bzd-XkHo.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/pencil-ColSTqGO.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/shuffle-DaKpXDEm.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/wind-uNJB5jOV.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/route-5TmPJXMl.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/share-2-CorDr4kn.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/waves-BzgSkO9m.js",
+          "method": "GET",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/Today-D76Bu5Fr.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/workingSurfaces-Ug3LNMJ2.css",
+          "method": "GET",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/brand/oda-c4.png",
+          "method": "GET",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/original-scenes/today-scene-1280.webp",
+          "method": "GET",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/oda/delivery/trees/tree-00-seedling-0-640.webp",
+          "method": "GET",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4183/one-decision-away/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2",
+          "method": "GET",
+          "resourceType": "font"
+        }
+      ],
+      "blockedExternal": [
+        {
+          "url": "https://images.unsplash.com/photo-1676475382103-54041209cf6c?auto=format&fit=crop&w=900&h=506&q=70",
+          "method": "GET"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1676475382103-54041209cf6c?auto=format&fit=crop&w=900&h=506&q=70",
+          "method": "GET"
+        }
+      ],
+      "pageErrors": []
+    }
+  ],
+  "screenshots": [
+    "same-tab-commit-pending.png",
+    "same-tab-commit-settled.png",
+    "same-tab-abort-pending.png",
+    "same-tab-abort-settled.png",
+    "cross-tab-focus-abort-pending.png",
+    "cross-tab-focus-abort-settled.png"
+  ],
+  "limits": [
+    "Tests compiled existing normal local preview, without source edits, rebuild, installs, dependency override or publication.",
+    "Controlled fault injection delays a genuine native IndexedDB readwrite transaction before its put. This amplifies a pending-save window; it does not measure its typical production duration.",
+    "Course editor private optimistic state is intentional and is not treated as saved progress evidence.",
+    "All records are disposable synthetic signed-out fixtures. External requests are blocked and attempts are retained."
+  ],
+  "previewIndexMatchesFrozenDist": true,
+  "fixture": {
+    "courseId": "turning-day",
+    "first": {
+      "id": "turning-day-1",
+      "title": "Morning · Direction: mark today as a beginning",
+      "minutes": 7,
+      "goal": "This morning, mark today as a fresh start and choose one area of life plus a reason that matters to you.",
+      "practiceCount": 3,
+      "optionCount": 3,
+      "correct": 0
+    },
+    "second": {
+      "id": "turning-day-2",
+      "title": "Midday · See the obstacle, build an if–then plan",
+      "minutes": 8,
+      "goal": "At midday, find a realistic inner obstacle for the area you chose this morning and write an if–then plan for it.",
+      "practiceCount": 3,
+      "optionCount": 3,
+      "correct": 1
+    },
+    "initialCompleted": 0,
+    "alreadySavedPrerequisites": true
+  },
+  "browser": "151.0.7922.173",
+  "status": "completed",
+  "postflight": {
+    "head": "d33c0077c549bdf8e61fbf9b8bb20422a768f8e9",
+    "source": "d33c0077c549bdf8e61fbf9b8bb20422a768f8e9",
+    "branch": "design/reference-led-oda",
+    "clean": true,
+    "sourceFiles": 876,
+    "buildFiles": 437,
+    "onlyEvidenceChangedSinceSource": true,
+    "time": "2026-10-03T02:50:35.191Z"
+  },
+  "finishedAtUtc": "2026-10-03T02:50:35.191Z"
+}

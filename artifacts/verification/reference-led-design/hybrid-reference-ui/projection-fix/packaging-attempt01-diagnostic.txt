@@ -1,0 +1,4 @@
+Evidence-only packaging validation stopped before the packet manifest was created. Tool-captured diagnostic:
+AssertionError: ('README.md', 'packet-manifest.json')
+
+The link validator checked the manifest link before generating that file. Archived raw evidence was already copied byte-for-byte. Finalization verifies those existing copies, creates the manifest, then checks links. No application source or compiled build changed; no tests or aggregate were rerun or replaced.

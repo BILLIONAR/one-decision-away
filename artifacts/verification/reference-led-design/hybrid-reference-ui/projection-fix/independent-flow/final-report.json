@@ -1,0 +1,198 @@
+{
+  "sourceCommit": "d33c0077c549bdf8e61fbf9b8bb20422a768f8e9",
+  "status": "passed bounded independent repair QA",
+  "syntheticOnly": true,
+  "recordedPassChecks": 13,
+  "primaryCases": 3,
+  "backupSequence": "one context/two tabs: reviewCancel, ReplaceB sameowner/newepoch, ReplaceC distinctsyntheticowner/newepoch",
+  "checks": [
+    {
+      "report": "primary-attempt1/report.json",
+      "name": "320px pending native save keeps public course0/library0/first title despite optimistic projection"
+    },
+    {
+      "report": "primary-attempt1/report.json",
+      "name": "commit updates only after durable native transaction to one/second lesson"
+    },
+    {
+      "report": "primary-attempt1/report.json",
+      "name": "commit result survives reload with correct103lesson denominator"
+    },
+    {
+      "report": "primary-attempt1/report.json",
+      "name": "390px pending native save keeps public course0/library0/first title despite optimistic projection"
+    },
+    {
+      "report": "primary-attempt1/report.json",
+      "name": "abort updates only after durable native transaction to zero/first lesson"
+    },
+    {
+      "report": "primary-attempt1/report.json",
+      "name": "abort result survives reload with correct103lesson denominator"
+    },
+    {
+      "report": "primary-attempt1/report.json",
+      "name": "Already mounted cross-tab public saved progress ignores provisional storage/focus projection"
+    },
+    {
+      "report": "primary-attempt1/report.json",
+      "name": "Cross-tab abort/reload keeps canonical zero and real first title"
+    },
+    {
+      "report": "backup-supplement/attempt-01/backup-scope-report.json",
+      "name": "Two real tabs hydrate factory-backed A with native IDB authority and both Today projections0/title1"
+    },
+    {
+      "report": "backup-supplement/attempt-01/backup-scope-report.json",
+      "name": "Supported picker/review/Cancel keeps exact A bytes, progress0 and first title while Today stays mounted"
+    },
+    {
+      "report": "backup-supplement/attempt-01/backup-scope-report.json",
+      "name": "Actual Replace B commits IDB+new epoch and updates both mounted Today projections1/real title2"
+    },
+    {
+      "report": "backup-supplement/attempt-01/backup-scope-report.json",
+      "name": "Actual Replace C changes profile+epoch and resets mounted saved counts0/title1 without previous-scope leakage"
+    },
+    {
+      "report": "backup-supplement/attempt-01/backup-scope-report.json",
+      "name": "Trusted cross-tab storage updates settle with original Today DOM/document, no navigation/reload/page error/bulk audio"
+    }
+  ],
+  "failedAttempts": [],
+  "unresolvedBlockers": [],
+  "rawLogs": {
+    "primary": {
+      "file": "run.log",
+      "bytes": 668,
+      "sha256": "d2b528c76dab8f66d6454687b1a325d361bdedd5ebaf06c868bff2deffcaac65"
+    },
+    "backup": {
+      "file": "backup-supplement/attempt-01/browser.log",
+      "bytes": 652,
+      "sha256": "6175bce89756e8cac32ff3d2bea746232faf1274c888c3eaef52db0e846e7c29"
+    }
+  },
+  "binding": {
+    "source": "source-binding.json",
+    "sourceGitExactFiles": 876,
+    "frozenDistFiles": 437,
+    "primaryObservedHTTP": "http-binding-primary.json",
+    "primaryObservedHTTPResources": 41,
+    "backupServedActualResources": "backup-supplement/attempt-01/backup-scope-report.json: servedPreflight/servedPostflight",
+    "backupServedJS": 97,
+    "backupServedCSS": 7,
+    "parentBuildReceiptSHA256": "054a3bd2eff5f0dbe89a5b72601b7c4cb598d0b85e3dd0d80c6f1eb962ef876d",
+    "parentAggregate": {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-fix/final/aggregate-check.log",
+      "bytes": 78574,
+      "sha256": "3d6b779d241a660d14e6c9d4723ef14ad73c8f83e0b706f123691ac536831f9d",
+      "passed": 614,
+      "failed": 0,
+      "notRerunByQA": true
+    },
+    "latestCleanSourceAndBuildAudit": {
+      "sourceCommit": "d33c0077c549bdf8e61fbf9b8bb20422a768f8e9",
+      "branch": "design/reference-led-oda",
+      "clean": true,
+      "sourceFiles": 876,
+      "buildFiles": 437,
+      "parentReceiptSHA256": "054a3bd2eff5f0dbe89a5b72601b7c4cb598d0b85e3dd0d80c6f1eb962ef876d",
+      "atUtc": "2026-10-03T02:58:22.667Z"
+    }
+  },
+  "sourceDelta": {
+    "changedExisting": [
+      {
+        "file": "src/components/today/CourseNextStep.tsx",
+        "oldSHA256": "3570aac8baa4830f887b6c227303ef409b200d113b00339d5bd109d6d2b2cf18",
+        "newSHA256": "b74d839c88120d7669e4ade6bd8dc4c502f129cf4af7d6690d239fb8eb00dd95"
+      },
+      {
+        "file": "src/hooks/useSavedCourseProgress.ts",
+        "oldSHA256": "23ad4cfb966d87880bde4a436bb0be0203abde515daf51396641b8109be7ac78",
+        "newSHA256": "d0315e83f83f181bb44e94b2225bd50574783075013a488799704fe3f153f365"
+      },
+      {
+        "file": "src/pages/Today.tsx",
+        "oldSHA256": "b60f1a6c57283bfc936e4341420bfdbd42f04e59c799f103f5dd6e6aff60519c",
+        "newSHA256": "f3772e7dda408a5a04a503b7237238fafa55afd23e50c5b84606de1587021420"
+      }
+    ],
+    "unchangedExistingFiles": 871,
+    "addedFocusedTestFiles": [
+      "scripts/qa-saved-course-progress.ts",
+      "tests/saved-course-progress.test.ts"
+    ],
+    "noStylePersistenceCatalogueAudioAssetDependencyChanges": true
+  },
+  "actualScreenshots": 11,
+  "personallyPixelInspected": 11,
+  "pixelReceipt": "pixel-inspection.json",
+  "scopeAndOutcome": {
+    "pending": "Private projection completedtrue while realnative gate beforeput0/authorityfalse; both publiccourse/library remain0/realfirsttitle at320/390 and mountedcross-tab.",
+    "commit": "Native complete then1/secondtitle, durableIDB/localprojection/reload1.",
+    "abort": "Native abort then0/firsttitle, durableIDB/localprojection/reload0.",
+    "denominator": 103,
+    "overflow": "None on320/390 tested routes; intentional horizontal roadmap is not pageoverflow.",
+    "backupCancel": "ExactnativecanonicalAbytesunchanged and public0/title1.",
+    "backupReplaceB": "Same syntheticowner/newreplacementepoch/nativeIDB durable1/title2 whileTodayoriginalDOM/documentstaysmounted.",
+    "backupReplaceC": "Distinctsyntheticowner/newepoch/nativeIDB durable0/title1, no oldscopeleak.",
+    "backupEvents": "Trustednative storage events; onlyinitialreader navigation."
+  },
+  "externalAttempts": {
+    "primaryBlockedGETImageAttempts": 6,
+    "primaryURLs": [
+      {
+        "url": "https://images.unsplash.com/photo-1676475382103-54041209cf6c?auto=format&fit=crop&w=600&h=338&q=70",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1676475382103-54041209cf6c?auto=format&fit=crop&w=600&h=338&q=70",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1676475382103-54041209cf6c?auto=format&fit=crop&w=600&h=338&q=70",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1676475382103-54041209cf6c?auto=format&fit=crop&w=600&h=338&q=70",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1676475382103-54041209cf6c?auto=format&fit=crop&w=900&h=506&q=70",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1676475382103-54041209cf6c?auto=format&fit=crop&w=900&h=506&q=70",
+        "method": "GET",
+        "resourceType": "image"
+      }
+    ],
+    "backupBlockedAttempts": 0,
+    "allowedExternalOutbound": 0,
+    "notZeroAttemptClaim": true
+  },
+  "limits": [
+    "Scoped independent currentcompiled Chromium QA; normal localHTTP, no server restart/build/install/repository edits/provider/model/account/billing/native signing/security override/publication.",
+    "Native-put delay is a controlled diagnostic gate amplifying pending save latency, not a production-latency benchmark.",
+    "Cross-tab focus primary required a labelled synthetic window focus event because headlessbringToFront lackedtrustedfocus; backupstorageeventsaretrusted.",
+    "Synthetic localbackup replacements change only disposable localprofiledata, not a realaccount; localbackup has schema validation but no checksum requirement.",
+    "Mobileviewports are Chromium emulation, not physical device certification.",
+    "No broad courses/Notebook/160narration/UI/visual approval rerun claimed;871 existing sourcefiles unchanged and old evidence retains prior hashes."
+  ],
+  "allReadersClosed": {
+    "primaryBrowser": true,
+    "backupBrowser": true,
+    "childArtifactReaders": true,
+    "sourceGitDistHTTP": true,
+    "artifactHashReaders": true,
+    "handoff": "No more tools/source/build/browser reads after sealing command."
+  },
+  "sealedAtUtc": "2026-10-03T03:02:38.794520+00:00"
+}

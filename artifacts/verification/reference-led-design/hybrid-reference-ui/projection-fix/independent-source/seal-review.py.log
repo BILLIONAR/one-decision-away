@@ -1,0 +1,152 @@
+import json, pathlib, hashlib, subprocess, re, datetime, struct
+repo=pathlib.Path('/workspace/oda-reference-redesign')
+scratch=pathlib.Path('/workspace/scratch/oda-reference-redesign')
+out=scratch/'hybrid-reference-ui/projection-fix/independent-source'
+source='d33c0077c549bdf8e61fbf9b8bb20422a768f8e9'
+base='5ff74beeadcc820adce69541d0a811d5335ad0d7'
+c2a='c2a5e6497f1bed4cf95951375c9aa86872b169a9'
+def git(*args): return subprocess.check_output(['git','-C',str(repo),*args])
+def sha(b): return hashlib.sha256(b).hexdigest()
+def record(p):
+ b=p.read_bytes(); return {'file':str(p),'bytes':len(b),'sha256':sha(b)}
+def load(p): return json.loads(p.read_text())
+def save(n,d): (out/n).write_text(json.dumps(d,indent=2)+'\n')
+def tree(commit):
+ result={}
+ for line in git('ls-tree','-r','-z',commit).split(b'\0'):
+  if not line: continue
+  meta,path=line.split(b'\t',1); mode,typ,oid=meta.split()
+  result[path.decode()]={'mode':mode.decode(),'type':typ.decode(),'oid':oid.decode()}
+ return result
+def receipt_log(path,receipt):
+ p=pathlib.Path(receipt['log'])
+ return p if p.is_absolute() else path.parent/p
+assert git('rev-parse','HEAD').decode().strip()==source
+assert not git('status','--porcelain').strip()
+t=tree(source); bt=tree(base)
+receiptPath=scratch/'hybrid-reference-ui/projection-fix/final/build-receipt.json'
+receipt=load(receiptPath); raw=receipt_log(receiptPath,receipt); rawdata=raw.read_bytes()
+assert receipt['sourceCommit']==source and receipt['exitCode']==0 and receipt['passed']==614 and receipt['failed']==0
+assert len(rawdata)==78574==receipt['logBytes']
+assert sha(rawdata)=='3d6b779d241a660d14e6c9d4723ef14ad73c8f83e0b706f123691ac536831f9d'==receipt['logSha256']
+assert all(re.search(p,rawdata.decode()) for p in [r'ℹ tests 614\b',r'ℹ pass 614\b',r'ℹ fail 0\b',r'✓ built in'])
+sourceEntries=receipt['source']; sourceSet={x['file'] for x in sourceEntries}
+assert len(sourceSet)==876==receipt['sourceFileCount']
+assert sourceSet=={p for p in t if not p.startswith('artifacts/')}
+for x in sourceEntries:
+ b=(repo/x['file']).read_bytes()
+ assert len(b)==x['bytes'] and sha(b)==x['sha256'],x['file']
+ assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==t[x['file']]['oid'],x['file']
+buildEntries=receipt['build']; buildSet={x['file'] for x in buildEntries}
+assert len(buildEntries)==437==receipt['buildFileCount']
+assert buildSet=={str(p.relative_to(repo)) for p in (repo/'dist').rglob('*') if p.is_file()}
+for x in buildEntries:
+ b=(repo/x['file']).read_bytes(); assert len(b)==x['bytes'] and sha(b)==x['sha256'],x['file']
+oldReceiptPath=scratch/'hybrid-reference-ui/final/timer-evidence-fix/build-receipt.json'
+oldReceipt=load(oldReceiptPath)
+assert sha(oldReceiptPath.read_bytes())=='1adede11a241c7c434ad3c3429f888f49967b0edf1240606fed8a41b17368942'
+oldLog=receipt_log(oldReceiptPath,oldReceipt)
+assert len(oldLog.read_bytes())==78158 and sha(oldLog.read_bytes())=='5c1f5db98ade7925403e2885c235a27369572c481ee669053ce486909842ab66'
+css={x['file']:x['sha256'] for x in buildEntries if x['file'].endswith('.css')}
+assert len(css)==7==receipt['cssFileCount']
+assert css=={x['file']:x['sha256'] for x in oldReceipt['build'] if x['file'].endswith('.css')}
+oldSourcePath=scratch/'expanded-hybrid/protection/final-c2a/source-manifest.json'
+oldSource=load(oldSourcePath); oldEntries={x['file']:x for x in oldSource['files']}; newEntries={x['file']:x for x in sourceEntries}
+changedOld=sorted(p for p,x in oldEntries.items() if newEntries[p]['sha256']!=x['sha256'])
+newPaths=sorted(sourceSet-set(oldEntries))
+assert changedOld==['src/components/today/CourseNextStep.tsx','src/hooks/useSavedCourseProgress.ts','src/pages/Today.tsx']
+assert newPaths==['scripts/qa-saved-course-progress.ts','tests/saved-course-progress.test.ts']
+assert not (set(oldEntries)-sourceSet) and oldSource['sourceCommit']==c2a and len(oldEntries)==874
+protectedPath=scratch/'scoped-layout-repair/protection/protected-baseline.json'; protected=load(protectedPath)
+assert len(protected['files'])==348
+for x in protected['files']: assert newEntries[x['file']]['sha256']==x['sha256'],x['file']
+criticalPath=scratch/'scoped-layout-repair/protection/metadata-and-critical-baseline.json'; critical=load(criticalPath)
+assert len(critical['publicFiles'])==285
+for x in critical['publicFiles']: assert newEntries[x['file']]['sha256']==x['sha256'],x['file']
+public=[x for x in sourceEntries if x['file'].startswith('public/')]; mp3=[x for x in public if x['file'].endswith('.mp3')]
+originalPaths={x['file'] for x in critical['publicFiles']}; variants=[x for x in public if x['file'] not in originalPaths]
+assert len(public)==325 and len(mp3)==160 and len(variants)==40
+for x in public: assert x['sha256']==oldEntries[x['file']]['sha256']
+assert len({re.sub(r'-\d+\.en-US\.v1\.mp3$','',pathlib.PurePosixPath(x['file']).name) for x in mp3})==11
+historical={p:x for p,x in bt.items() if p.startswith('artifacts/')}
+assert all(t.get(p)==x for p,x in historical.items()) and {p for p in t if p.startswith('artifacts/')}==set(historical)
+(out/'exact-source.delta.diff.log').write_bytes(git('diff','--binary',base,source))
+numstat=git('diff','--numstat',base,source).decode().splitlines()
+add=sum(int(x.split('\t')[0]) for x in numstat); delete=sum(int(x.split('\t')[1]) for x in numstat)
+assert (add,delete)==(273,10)
+nativeDir=scratch/'hybrid-reference-ui/projection-fix/final-native-regressions'; nativePath=nativeDir/'receipt.json'; native=load(nativePath)
+nativeLog=nativeDir/'native-regressions.log'; nd=nativeLog.read_bytes()
+assert native['sourceCommit']==source and native['exitCode']==0 and len(nd)==1304==native['logBytes']
+assert sha(nd)=='06ce2f2a3580a198eb6c609fd677b94f5d4acd18fd32429e17b5a8c9d28986ef'==native['logSha256']
+assert all(re.search(p,nd.decode()) for p in [r'ℹ tests 11\b',r'ℹ pass 11\b',r'ℹ fail 0\b'])
+assert sha((repo/native['harness']).read_bytes())==native['harnessSha256']==newEntries[native['harness']]['sha256']
+def held(g):
+ assert g['phase']=='held-before-native-put' and g['nativeMutationPuts']==0 and g['authorityCompleted'] is False and g['transactionMode']=='readwrite'
+ assert not any(e['phase'] in ['native-transaction-complete','native-transaction-aborted'] for e in g['events'])
+rootDir=scratch/'hybrid-reference-ui/projection-fix/repaired/attempt-01'; rootReport=load(rootDir/'report.json')
+assert rootReport['status']=='completed' and rootReport['synthetic'] and rootReport['previewIndexMatchesFrozenDist']
+for k in ['preflight','postflight']: assert rootReport[k]['source']==source and rootReport[k]['head']==source and rootReport[k]['clean']
+rootCases=[]
+for i,c in enumerate(rootReport['cases']):
+ p=c.get('pending',c.get('readerPending')); g=c.get('heldBeforeNav',c.get('writerPending',{}).get('gate')); held(g)
+ assert p['projectionCompleted'] is True and p['savedCourseCompleted']==0 and p['savedLibraryCompleted']==0 and c['pendingSavedDisplayCorrect']
+ settled=c.get('settled',c.get('readerSettled')); reload=c.get('reloaded',c.get('readerReloaded')); expected=1 if i==0 else 0
+ assert settled['savedCourseCompleted']==expected and settled['savedLibraryCompleted']==expected and reload['savedCourseCompleted']==expected and reload['savedLibraryCompleted']==expected and c['settledAuthority']['completed']==bool(expected)
+ rootCases.append({'name':c['name'],'pendingAuthorityCompleted':False,'pendingNativePuts':0,'pendingPublicCourse':0,'pendingPublicLibrary':0,'settledAndReloadedPublic':expected,'focusCoverage':c.get('focusCoverage'),'trustedFocusObserved':c.get('trustedFocusObserved')})
+assert len(rootCases)==3
+rootCmd=load(rootDir/'command-receipt.json'); assert rootCmd['exitCode']==0 and rootCmd['sourceCommit']==source
+peerDir=scratch/'hybrid-reference-ui/projection-repair-qa/final-d33/primary-attempt1'; peer=load(peerDir/'report.json')
+assert peer['status']=='passed' and peer['synthetic'] and not peer['errors'] and len(peer['checks'])==8 and len(peer['cases'])==3
+for k in ['preflight','postflight']: assert peer[k]['sourceCommit']==source and peer[k]['clean'] and peer[k]['parentReceiptSHA256']==sha(receiptPath.read_bytes())
+assert peer['servedIndex']['sha256']==sha((repo/'dist/index.html').read_bytes()) and peer['servedIndex']['status']==200
+peerCases=[]
+for i,c in enumerate(peer['cases']):
+ held(c['held']); expected=1 if i==0 else 0
+ for observation in c['pending']:
+  p=observation['state']; held(observation['gate'])
+  assert p['projectionCompleted'] is True and p['course']==0 and p['library']==0 and p['libraryMaximum']==103 and p['width']==p['scrollWidth']
+ for k in ['settled','reloaded']:
+  p=c[k]; assert p['course']==expected and p['library']==expected and p['libraryMaximum']==103 and p['width']==p['scrollWidth']
+ assert c['authority']['completed']==bool(expected)
+ peerCases.append({'name':c['name'],'pendingPolls':len(c['pending']),'viewportWidth':c['settled']['width'],'noHorizontalOverflow':True,'libraryDenominator':103,'pendingPublicCourse':0,'pendingPublicLibrary':0,'nativeAuthorityCompletedBeforePut':False,'settledAndReloadedPublic':expected,'focusCoverage':c.get('focusCoverage'),'trustedFocusObserved':c.get('trustedFocusObserved')})
+peerCmd=load(peerDir/'command-receipt.json'); assert peerCmd['exitCode']==0
+screens=[]
+for group,d,report in [('rootCompiled',rootDir,rootReport),('independentMobile',peerDir,peer)]:
+ for name in report['screenshots']:
+  p=d/name; b=p.read_bytes(); assert b[:8]==b'\x89PNG\r\n\x1a\n'; w,h=struct.unpack('>II',b[16:24])
+  screens.append({**record(p),'group':group,'width':w,'height':h,'pixelInspectionByThisAuditor':False})
+oldProtectionPath=scratch/'expanded-hybrid/protection/final-c2a/final-source-protection-review.json'
+assert sha(oldProtectionPath.read_bytes())=='ee12158b7fa6e3d1e01dd791f29c48578757608c242a765c2653651248d74065'
+originalDir=scratch/'hybrid-reference-ui/projection-repro-c2a'
+originalPreserved=[record(originalDir/'reproduce.mjs'),record(originalDir/'attempt-02/report.json'),record(originalDir/'attempt-02/run.log')]
+originalOne=originalDir/'attempt-01'
+attemptOne=[record(p) for p in sorted(originalOne.iterdir()) if p.is_file() and p.suffix!='.png'] if originalOne.exists() else []
+scanPaths=[repo/p for p in changedOld+newPaths]+[raw,nativeLog,rootDir/'run.log',peerDir/'run.log']
+patterns=[rb'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----',rb'\bAKIA[0-9A-Z]{16}\b',rb'\bsk_live_[0-9A-Za-z]{20,}\b']
+sensitiveHits=[str(p) for p in scanPaths if any(re.search(pattern,p.read_bytes()) for pattern in patterns)]; assert not sensitiveHits
+for x in sourceEntries+buildEntries: assert sha((repo/x['file']).read_bytes())==x['sha256']
+assert git('rev-parse','HEAD').decode().strip()==source and not git('status','--porcelain').strip()
+save('source-manifest.json',{'sourceCommit':source,'baselineSourceCommit':c2a,'sourceCount':876,'unchangedExistingSourceCount':871,'changedExisting':changedOld,'newPaths':newPaths,'files':sourceEntries,'method':'Actual SHA256; exact nonartifact Git-tree paths; Git blob SHA1 header+bytes matches committed OIDs; repeated physical hashes at closure.'})
+save('compiled-binding.json',{'sourceCommit':source,'buildCount':437,'cssCount':7,'allActualDistBytesMatchFrozenAggregate':True,'allSevenCssNamesAndBytesUnchangedFromC2a':True,'files':buildEntries,'css':css})
+review={
+ 'kind':'Independent bounded frozen-source/protection/build/existing-evidence review',
+ 'status':'pass within stated scope; no source blocker found','sourceCommit':source,'baselineEvidenceCommit':base,'baselineFunctionalSourceCommit':c2a,'branch':'design/reference-led-oda','reviewedAtUtc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+ 'readOnly':True,'noTestsBuildBrowserInstallOrAppWritesByThisAuditor':True,'gitCleanAtStartAndClosure':True,
+ 'exactDiff':{'pathCount':5,'appExistingChanged':changedOld,'newQaPaths':newPaths,'insertions':add,'deletions':delete,'delta':record(out/'exact-source.delta.diff.log')},
+ 'sourceBinding':{'trackedNonartifactSources':876,'allPhysicalMatchImmutableCommittedGit':True,'allPhysicalMatchAggregateManifest':True,'unchangedExistingC2aSources':871,'baselineManifest':record(oldSourcePath),'currentManifest':record(out/'source-manifest.json')},
+ 'protection':{'protectedCount':348,'allProtectedByteIdenticalOriginal635Baseline':True,'protectedBaseline':record(protectedPath),'allDependenciesPackageLockBuildConfigNativeWorkflowServiceWorkerCspStorePersistenceAudioCoreControllersCurrentStylingIdentityUnchangedFromC2a':True,'oldPublicAssets':285,'originalDeliveryVariants':40,'allPublicAssets':325,'englishMp3':160,'englishSessionPrefixes':11,'allPublicByteIdenticalC2a':True,'allHistoricalArtifactGitBlobOidsUnchanged':True,'historicalArtifactFiles':len(historical),'currentCssByteIdenticalC2a':True,'workflowQualifier':'Automatic push deployment remains main-only; unchanged workflow_dispatch also exists without an explicit branch guard. This review did not invoke it.'},
+ 'staticHookReview':{'finding':'Confirmed P2 premature public saved-course display corrected by confirmed provider seeding and serialized authoritative refreshes. No new bounded finding.','confirmedSeedAndNewestGenerationVisibleImmediately':True,'profileEpochCloudRevisionAndUnmountPublicationFences':True,'guardsBeforeQueuedReadAndPublication':True,'coalescingAndListenerCleanup':True,'failedRefreshRetainsConfirmedSeedOrResult':True,'existingQueueHydrationPersistenceUnmodified':True,'noNewDirectSaveMutationReplacementPersistenceOrProviderCall':True,'noUnconditionalCommittedSubscriptionReadLoop':True,'signedOutExplanation':'Initial/focus refreshes require no online account. Expired guarded notifications are dropped; unchanged AppProvider independently reloads canonical data before optional cloud scheduling.','callerChanges':'Only two arguments pass the provider record; their other state/callbacks/JSX/ARIA/handlers retain bytes.'},
+ 'aggregate':{'receipt':record(receiptPath),'command':receipt['command'],'exitCode':0,'tests':614,'passed':614,'failed':0,'actualRawLog':record(raw),'buildCompleteInRawLog':True,'buildFiles':437,'cssFiles':7,'actualDistMatchedTwice':True,'binding':record(out/'compiled-binding.json')},
+ 'nativeHookRegressions':{'receipt':record(nativePath),'rawLog':record(nativeLog),'harness':record(repo/native['harness']),'actualRawSummary':{'tests':11,'passed':11,'failed':0},'limits':native['limits']},
+ 'compiledAppRepairedEvidence':{'report':record(rootDir/'report.json'),'rawLog':record(rootDir/'run.log'),'commandReceipt':record(rootDir/'command-receipt.json'),'harness':record(rootDir/'harness.mjs'),'caseCount':3,'actualPendingOldNativeAuthorityAndPublicZero':True,'cases':rootCases,'limits':rootReport['limits']},
+ 'independentPrimaryFlowEvidence':{'report':record(peerDir/'report.json'),'rawLog':record(peerDir/'run.log'),'commandReceipt':record(peerDir/'command-receipt.json'),'checks':8,'cases':peerCases,'reportStatus':'passed','errors':0,'actualServedIndexMatchesFrozenDist':True,'limits':peer['limits']},
+ 'screenshots':screens,
+ 'historicalEvidence':{'old611AggregateLog':record(oldLog),'old611AggregateReceipt':record(oldReceiptPath),'priorC2aProtectionReview':record(oldProtectionPath),'originalDefectProof':originalPreserved,'attempt01PreBrowserParseFailureFilesRetained':attemptOne,'interpretation':'Original defect and failed pre-browser attempt remain historical evidence; repaired evidence supersedes their saved-display result, not their bytes. No durable corruption or persistent rollback staleness was demonstrated.'},
+ 'nonsensitiveScope':{'syntheticFixtures':True,'privateCredentialFilesRead':False,'boundedPatternScanFiles':len(scanPaths),'privateKeyLiveTokenPatternHits':sensitiveHits,'notAnExhaustiveSecretAudit':True},
+ 'findings':[],
+ 'remainingLimits':['Parent reports supplemental real backup UI QA passed five checks while its artifacts are being sealed. Those raw files were not reviewed in this bounded receipt; root can link the separate final result.','Reports are read and hashed; this auditor did not personally view PNG pixels or rerun a browser.','Headless focus is explicitly synthetic; 320/390 are Chromium viewport emulation, not physical iOS.','Controlled genuine native transaction hold proves the boundary, not its ordinary production duration.','Existing unrelated dependency advisory remains unchanged; this is no dependency-alert resolution or compliance claim.','No visual or publication approval is conferred.'],
+ 'readerClosure':{'thisAuditor':'closed after final hashes','helperSafetyInventory':'closed; independent static diff pass; no executions','otherRootPeerQa':'outside this auditor; supplemental QA evidence separate'}
+}
+save('final-source-protection-review.json',review)
+(out/'final-source-protection-review.md').write_text('Independent bounded review passed for frozen source `'+source+'`.\n\nThe five-path diff comprises the confirmed saved-progress hook fix, two caller arguments and portable/native QA. All 876 source files match immutable Git and the aggregate; all 437 compiled files match the frozen build. All 348 protected files, 325 public assets (160 English clips across 11 sessions, 40 original image variants), dependencies, persistence, identity and all seven compiled CSS files retain prior bytes.\n\nExisting actual evidence: aggregate 614/0; separately invoked native hook 11/0; repaired compiled-app 3 cases; independent primary flow 8 checks across 3 cases, including 320/390 no horizontal overflow and denominator 103. Held native authority remains incomplete with zero native puts while public saved counts stay zero; successful commit displays one, abort/reload zero. Focus coverage is explicitly synthetic.\n\nThe parent reports supplemental real backup UI QA passed five checks; this auditor did not inspect its still-sealing raw artifacts. Root can link that separately. No test/build/browser was run by this auditor; PNG bytes/dimensions were bound without a new pixel review. Historical defect, failed attempt and old aggregate evidence remain unchanged. This is no publication or visual approval. All this auditor/helper readers are closed.\n')
+print(json.dumps({'status':review['status'],'sourceCommit':source,'review':record(out/'final-source-protection-review.json'),'sourceFiles':876,'distFiles':437,'protected':348,'public':325,'englishMp3':160,'cssUnchanged':7,'aggregate':'614/0','native':'11/0','rootCases':3,'peerChecks':8,'allOurReaders':'closed'},indent=2))
