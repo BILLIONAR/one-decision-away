@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Modal } from '../ui';
 import { useApp } from '../../store/useApp';
 import { useT } from '../../i18n';
@@ -17,6 +17,8 @@ export const DecisionPlanModal: React.FC<{ mission: Mission | null; isOpen: bool
   const [obstacle, setObstacle] = useState('');
   const [ifThen, setIfThen] = useState('');
   const [saving, setSaving] = useState(false);
+  const savingRef = useRef(false);
+  const [saveError, setSaveError] = useState(false);
 
   useEffect(() => {
     if (!isOpen || !mission) return;
@@ -24,6 +26,7 @@ export const DecisionPlanModal: React.FC<{ mission: Mission | null; isOpen: bool
     setTitle(t(mission.title));
     setObstacle(mission.plan?.obstacle ?? '');
     setIfThen(mission.plan?.ifThen ?? '');
+    setSaveError(false);
     // Re-seed only when the sheet opens for a decision.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, mission?.id]);
@@ -31,10 +34,13 @@ export const DecisionPlanModal: React.FC<{ mission: Mission | null; isOpen: bool
   if (!mission) return null;
   const tip = FEELINGS.find(f => f.key === feeling)?.tip;
   const shrink = feeling === 'overwhelming' || feeling === 'unclear';
+  const close = () => { if (!savingRef.current) onClose(); };
 
   const save = async () => {
-    if (saving) return;
+    if (savingRef.current) return;
+    savingRef.current = true;
     setSaving(true);
+    setSaveError(false);
     try {
       const nextTitle = title.trim();
       await updateDecision(mission.id, {
@@ -43,7 +49,10 @@ export const DecisionPlanModal: React.FC<{ mission: Mission | null; isOpen: bool
       });
       showToast(ifThen.trim() ? t('Plan saved. You know what to do when it gets hard.') : t('Saved.'), 'success');
       onClose();
+    } catch {
+      setSaveError(true);
     } finally {
+      savingRef.current = false;
       setSaving(false);
     }
   };
@@ -53,12 +62,12 @@ export const DecisionPlanModal: React.FC<{ mission: Mission | null; isOpen: bool
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={close}
       title={justSet ? t('Make it doable') : t('Your plan for today')}
       subtitle={t('Thirty seconds now saves you from deciding again later.')}
     >
-      <div className="space-y-6 pb-2">
-        <fieldset className="space-y-3">
+      <div className="space-y-6 pb-2" aria-busy={saving}>
+        <fieldset className="space-y-3" disabled={saving}>
           <legend className="text-[14px] font-semibold text-[var(--fg)] mb-3">{t('1. How does this decision feel right now?')}</legend>
           <div className="flex flex-wrap gap-2">
             {FEELINGS.map(f => (
@@ -84,17 +93,19 @@ export const DecisionPlanModal: React.FC<{ mission: Mission | null; isOpen: bool
 
         <div className="space-y-1.5">
           <label htmlFor="plan-obstacle" className="block text-[14px] font-semibold text-[var(--fg)]">{t('2. What could stop you today?')}</label>
-          <input id="plan-obstacle" value={obstacle} onChange={e => setObstacle(e.target.value)} maxLength={140} placeholder={t('e.g. I’ll pick up my phone first')} className={field} />
+          <input id="plan-obstacle" value={obstacle} onChange={e => setObstacle(e.target.value)} disabled={saving} maxLength={140} placeholder={t('e.g. I’ll pick up my phone first')} className={field} />
         </div>
 
         <div className="space-y-1.5">
           <label htmlFor="plan-then" className="block text-[14px] font-semibold text-[var(--fg)]">{t('3. If that happens, I will…')}</label>
-          <input id="plan-then" value={ifThen} onChange={e => setIfThen(e.target.value)} maxLength={160} placeholder={t('e.g. put the phone in another room and start for two minutes')} className={field} />
+          <input id="plan-then" value={ifThen} onChange={e => setIfThen(e.target.value)} disabled={saving} maxLength={160} placeholder={t('e.g. put the phone in another room and start for two minutes')} className={field} />
           <p className="text-[12px] leading-relaxed text-[var(--fg-muted)]">{t('Deciding in advance what you will do when the obstacle appears is one of the best-studied ways to follow through.')}</p>
         </div>
 
+        {saveError && <p role="alert" className="text-[14px] leading-relaxed text-[var(--danger)]">{t('Could not save this change. Your writing is still here; please try again.')}</p>}
+
         <div className="flex flex-col-reverse sm:flex-row gap-2 pt-1">
-          <button type="button" onClick={onClose} className="h-12 px-5 rounded-[var(--radius-sm)] text-[15px] font-semibold text-[var(--fg-muted)] hover:text-[var(--fg)]">
+          <button type="button" onClick={close} disabled={saving} className="h-12 px-5 rounded-[var(--radius-sm)] text-[15px] font-semibold text-[var(--fg-muted)] hover:text-[var(--fg)] disabled:opacity-50">
             {justSet ? t('Skip for now') : t('Cancel')}
           </button>
           <button type="button" onClick={save} disabled={saving} className="h-12 w-full sm:flex-1 rounded-[var(--radius-sm)] bg-[var(--accent)] text-[var(--bg)] text-[15px] font-semibold disabled:opacity-50">

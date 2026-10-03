@@ -47,6 +47,7 @@ import { decisionChain, evidenceSummary, isSimpleMode, keptDecisions, localDayKe
 import { EasyDecisionChips, KeptMomentCard } from '../components/momentum/FirstSteps';
 import { easyDecisions } from '../data/starterDecisions';
 import { firstRunCopy } from '../i18n/firstRun';
+import { sentenceCaseLabel } from '../utils/sentenceCaseLabel';
 import '../styles/workingSurfaces.css';
 
 const RITUALS_KEY = 'oda_rituals_open';
@@ -264,7 +265,7 @@ export const Today: React.FC = () => {
                 <span className="block text-[13px] text-[var(--fg-muted)]">
                   {decisionPlan.obstacle ? t('If {obstacle}', { obstacle: decisionPlan.obstacle }) : t('If it gets hard')}
                 </span>
-                <span className="block text-[15px] leading-snug text-[var(--fg)]">{t('then I will {plan}', { plan: decisionPlan.ifThen })}</span>
+                <span className="block text-[15px] leading-snug text-[var(--fg)]">{sentenceCaseLabel(t('then I will {plan}', { plan: decisionPlan.ifThen }), locale)}</span>
               </button>
             )}
             {decisionDone ? (
@@ -392,7 +393,7 @@ export const Today: React.FC = () => {
         ) : (
           <button type="button" onClick={() => setActiveRoute('/app/evidence')} className="oda-tile">
             <span className="oda-tile-icon oda-tint-sage"><Leaf size={18} strokeWidth={1.9} aria-hidden="true" /></span>
-            <span><span className="block text-[14px] font-semibold">{t('Your evidence')}</span><span className="block text-[12px] text-[var(--fg-muted)]">{t('{n} kept promises', { n: keptCount })}</span></span>
+            <span><span className="block text-[14px] font-semibold">{t('Your evidence')}</span><span className="block text-[12px] text-[var(--fg-muted)]">{keptCount === 1 ? t('1 kept promise') : t('{n} kept promises', { n: keptCount })}</span></span>
           </button>
         )}
         {todayOneDecision ? (

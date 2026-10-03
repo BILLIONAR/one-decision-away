@@ -1,4 +1,6 @@
 const en = {
+  writingDays: (n: number) => `${n} ${n === 1 ? 'day' : 'days'} written`,
+  streak: (n: number) => `${n} day streak`,
   quotes: 'Quotes', loadingQuotes: 'Opening sourced passages…',
   categories: 'Passage categories', all: 'All',
   faith: 'Faith', philosophy: 'Philosophy', society: 'Society', science: 'Science',
@@ -15,6 +17,8 @@ const en = {
   entryActions: 'Entry actions', allEntries: 'Journal archive',
 };
 const tr: typeof en = {
+  writingDays: n => `${n} gün yazıldı`,
+  streak: n => `${n} günlük seri`,
   quotes: 'Alıntılar', loadingQuotes: 'Kaynaklı metinler açılıyor…',
   categories: 'Metin kategorileri', all: 'Tümü',
   faith: 'İnanç', philosophy: 'Felsefe', society: 'Toplum', science: 'Bilim',
@@ -31,6 +35,8 @@ const tr: typeof en = {
   entryActions: 'Yazı işlemleri', allEntries: 'Günlük arşivi',
 };
 const es: typeof en = {
+  writingDays: n => `${n} ${n === 1 ? 'día escrito' : 'días escritos'}`,
+  streak: n => `Racha de ${n} ${n === 1 ? 'día' : 'días'}`,
   quotes: 'Citas', loadingQuotes: 'Abriendo textos con fuentes…',
   categories: 'Categorías de textos', all: 'Todas',
   faith: 'Fe', philosophy: 'Filosofía', society: 'Sociedad', science: 'Ciencia',

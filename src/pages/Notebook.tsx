@@ -54,8 +54,8 @@ export const Notebook: React.FC = () => {
 
     <div className="oda-notebook-stats oda-card rounded-[var(--radius-lg)] px-4 min-h-[56px] py-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-sm">
       <div className="oda-notebook-stat-values flex flex-wrap gap-x-4 gap-y-1">
-        <span className="oda-notebook-stat text-[var(--fg)]">{t('{n} day streak', { n: stats.currentStreak })}</span>
-        <span className="oda-notebook-stat text-[var(--fg-muted)]">{t('{n} days written', { n: stats.totalWritingDays })}</span>
+        <span className="oda-notebook-stat text-[var(--fg)]">{c.streak(stats.currentStreak)}</span>
+        <span className="oda-notebook-stat text-[var(--fg-muted)]">{c.writingDays(stats.totalWritingDays)}</span>
         <span className="oda-notebook-stat text-[var(--fg-muted)]">{t('Best {n}', { n: stats.bestStreak })}</span>
       </div>
       <span className="flex items-center gap-1.5 text-[var(--fg-muted)]" role="status">

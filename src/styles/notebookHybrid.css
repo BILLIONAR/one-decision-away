@@ -76,7 +76,7 @@
   .oda-quotes-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @container oda-notebook (min-width: 850px) {
-  .oda-notebook-hybrid .oda-notebook-workspace { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
+  .oda-notebook-hybrid .oda-notebook-workspace { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); grid-template-rows: max-content minmax(0, 1fr) auto; }
   .oda-notebook-hybrid .oda-notebook-calendar-lead { grid-column: 1; grid-row: 1; }
   .oda-notebook-hybrid .oda-hybrid-entry-preview { grid-column: 1; grid-row: 2; }
   .oda-notebook-hybrid .oda-notebook-writing-column { grid-column: 2; grid-row: 1 / span 2; align-self: start; }

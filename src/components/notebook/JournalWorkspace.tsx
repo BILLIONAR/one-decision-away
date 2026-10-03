@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { CalendarDays, ChevronLeft, ChevronRight, MoreHorizontal, Plus, Search, Trash2, X } from 'lucide-react';
 import { useApp } from '../../store/useApp';
 import { getSpeechLang, N_, useLocale, useT } from '../../i18n';
@@ -52,6 +52,7 @@ export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: Rea
   const [selectedDate, setSelectedDate] = useState('');
   const [showCalendar, setShowCalendar] = useState(false);
   const [weekAnchor, setWeekAnchor] = useState<string | null>(null);
+  const weekRegion = useRef<HTMLDivElement>(null);
   const [validation, setValidation] = useState(false);
   const [photoOpen, setPhotoOpen] = useState(false);
   const nativePhotoDialog = typeof window !== 'undefined' && typeof window.HTMLDialogElement !== 'undefined'
@@ -64,8 +65,33 @@ export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: Rea
     return entry.source === 'dream' && SEED_TEXT[entry.id]?.[field] === value ? t(value) : value;
   };
   const dirty = `${title}\u0000${content}\u0000${mood}` !== baseline;
-  const entries = useMemo(() => data ? getNotebookEntries(data, { kinds: ['journal'], dateKey: selectedDate || undefined }).filter(entry => !query.trim() || [entry.title, entry.content, entry.dreamName || '', displayText(entry, 'title'), displayText(entry, 'content'), displayText(entry, 'dreamName')].join(' ').toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())) : [], [data, query, selectedDate, t]);
+  const entries = useMemo(() => data ? getNotebookEntries(data, { kinds: ['journal'], dateKey: selectedDate || undefined }).filter(entry => !query.trim() || [entry.title, entry.content, entry.dreamName || '', displayText(entry, 'title'), displayText(entry, 'content'), displayText(entry, 'dreamName')].join(' ').toLocaleLowerCase(locale).includes(query.trim().toLocaleLowerCase(locale))) : [], [data, query, selectedDate, t, locale]);
   const dates = useMemo(() => new Set(data ? getNotebookEntries(data, { kinds: ['journal'] }).map(entry => entry.dateKey) : []), [data]);
+  const weekDates = useMemo(() => notebookWeekDates(weekAnchor || today), [weekAnchor, today]);
+  const hasData = Boolean(data);
+
+  useEffect(() => {
+    const region = weekRegion.current;
+    if (!region) return;
+    const activeSelector = weekDates.includes(selectedDate) ? 'button[aria-pressed="true"]'
+      : weekDates.includes(today) ? 'button[aria-current="date"]' : null;
+    if (!activeSelector) return;
+    const revealActiveDate = () => {
+      const button = region.querySelector<HTMLButtonElement>(activeSelector);
+      if (!button || region.clientWidth === 0 || region.scrollWidth <= region.clientWidth) return;
+      const viewport = region.getBoundingClientRect();
+      const bounds = button.getBoundingClientRect();
+      const left = viewport.left + region.clientLeft;
+      const right = left + region.clientWidth;
+      if (bounds.left < left) region.scrollLeft += bounds.left - left;
+      else if (bounds.right > right) region.scrollLeft += bounds.right - right;
+    };
+    revealActiveDate();
+    if (typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(revealActiveDate);
+    observer.observe(region);
+    return () => observer.disconnect();
+  }, [hasData, weekDates, selectedDate, today, showCalendar]);
 
   useEffect(() => {
     if (!dirty) return;
@@ -109,11 +135,11 @@ export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: Rea
     const result = await run(async () => { if (editing.source === 'dream') await deleteDreamJournalEntry(editing.id); else await deleteNotebookEntry(editing.id); return true; }, 'Entry deleted.');
     if (result) reset();
   };
-  const weekDates = notebookWeekDates(weekAnchor || today);
   const weekMonth = weekDates[0].slice(0, 7) === weekDates[6].slice(0, 7)
     ? dateLabel(weekDates[0], { month: 'long', year: 'numeric' })
     : `${dateLabel(weekDates[0], { month: 'short' })} — ${dateLabel(weekDates[6], { month: 'short', year: 'numeric' })}`;
   const preview = entries[0];
+  const hasFilters = Boolean(query || selectedDate);
 
   return <div className="oda-notebook-workspace">
     <section className="oda-notebook-calendar-lead min-w-0 space-y-3" aria-label={t('Journal archive')}>
@@ -123,7 +149,7 @@ export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: Rea
         <button type="button" className="oda-hybrid-week-month" aria-label={`${c.thisWeek} — ${weekMonth}`} title={c.thisWeek} onClick={() => setWeekAnchor(null)}><span aria-live="polite">{weekMonth}</span></button>
         <button type="button" aria-label={c.nextWeek} onClick={() => setWeekAnchor(shiftNotebookWeek(weekAnchor || today, 1))}><ChevronRight size={18} aria-hidden="true" /></button>
       </div>
-      <div className="oda-notebook-week-region" role="region" aria-label={t('Journal archive')} aria-describedby="notebook-archive-date-help" tabIndex={0}>
+      <div ref={weekRegion} className="oda-notebook-week-region" role="region" aria-label={t('Journal archive')} aria-describedby="notebook-archive-date-help" tabIndex={0}>
         <div className="oda-notebook-week-strip">
           {weekDates.map(key => {
             const day = new Date(`${key}T12:00:00`);
@@ -135,6 +161,11 @@ export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: Rea
       </div>
       <p className="oda-notebook-week-hint text-xs text-[var(--fg-muted)]">{t('Scroll sideways to see all dates')}</p>
       <div className="relative"><Search className="absolute left-3 top-3.5 w-4 h-4 text-[var(--fg-muted)]" aria-hidden="true" strokeWidth={1.8} /><label htmlFor="notebook-journal-search" className="sr-only">{t('Search entries')}</label><NInput id="notebook-journal-search" type="search" className="pl-9 !bg-[var(--bg-muted)] !border-transparent" value={query} onChange={e => setQuery(e.target.value)} placeholder={t('Search')} /></div>
+      <div className="flex flex-wrap gap-2 justify-between items-center text-sm">
+        <p id="notebook-filter-result" role="status" className="text-[var(--fg-muted)]">{hasFilters && entries.length === 0 ? t('No entries match.') : `${c.allEntries} (${entries.length})`}</p>
+        {hasFilters && <button id="notebook-clear-filters" type="button" className={quietButton} onClick={() => { setQuery(''); setSelectedDate(''); }}>{t('Clear filters')}</button>}
+      </div>
+      {hasFilters && entries.length === 0 && <p className="text-sm text-[var(--fg-muted)]">{t('Try another word or choose all dates.')}</p>}
       {showCalendar && <div id="notebook-calendar"><NotebookCalendar today={today} selected={selectedDate} dates={dates} onSelect={key => { setSelectedDate(key); if (key) setWeekAnchor(key); }} /></div>}
       {selectedDate && <div className="flex gap-2 justify-between items-center text-sm"><span>{dateLabel(selectedDate)}</span><button type="button" className={quietButton} onClick={() => setSelectedDate('')}>{t('All dates')}</button></div>}
       <p id="notebook-archive-date-help" className="oda-hybrid-date-help">{c.archiveDates}</p>
@@ -173,7 +204,7 @@ export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: Rea
 
     <section className="oda-notebook-archive min-w-0 space-y-3" aria-label={t('Journal archive')}>
       <h2 className="oda-hybrid-archive-heading">{c.allEntries} <span>({entries.length})</span></h2>
-      {entries.length === 0 ? <div className="oda-card rounded-[var(--radius-lg)] p-5 text-center"><p className="text-[15px] font-semibold">{query || selectedDate ? t('No entries match.') : t('Nothing written yet')}</p><p className="text-sm text-[var(--fg-muted)] mt-1">{query || selectedDate ? t('Try another word or choose all dates.') : t('Your first entry will appear here.')}</p>{(query || selectedDate) && <button type="button" className={`${quietButton} mt-2`} onClick={() => { setQuery(''); setSelectedDate(''); }}>{t('Clear filters')}</button>}</div> : <div className="oda-notebook-entry-list bg-[var(--bg-muted)] rounded-[var(--radius-md)] divide-y divide-[var(--border)] max-h-[650px] overflow-y-auto">{entries.map(entry => <button type="button" key={entry.viewId} disabled={busy} aria-current={editing?.viewId === entry.viewId ? 'true' : undefined} onClick={() => openEntry(entry)} className={`w-full text-left px-4 py-3 min-h-[56px] cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset disabled:opacity-50 ${editing?.viewId === entry.viewId ? 'bg-[var(--bg-inset)]' : ''}`}>
+      {entries.length === 0 ? !hasFilters && <div className="oda-card rounded-[var(--radius-lg)] p-5 text-center"><p className="text-[15px] font-semibold">{t('Nothing written yet')}</p><p className="text-sm text-[var(--fg-muted)] mt-1">{t('Your first entry will appear here.')}</p></div> : <div className="oda-notebook-entry-list bg-[var(--bg-muted)] rounded-[var(--radius-md)] divide-y divide-[var(--border)] max-h-[650px] overflow-y-auto">{entries.map(entry => <button type="button" key={entry.viewId} disabled={busy} aria-current={editing?.viewId === entry.viewId ? 'true' : undefined} onClick={() => openEntry(entry)} className={`w-full text-left px-4 py-3 min-h-[56px] cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset disabled:opacity-50 ${editing?.viewId === entry.viewId ? 'bg-[var(--bg-inset)]' : ''}`}>
         <span className="flex justify-between gap-2 text-xs text-[var(--fg-muted)]"><span>{dateLabel(entry.dateKey, { month: 'short', day: 'numeric', year: 'numeric' })}</span>{entryTime(entry.createdAt) && <time dateTime={entry.createdAt}>{entryTime(entry.createdAt)}</time>}{entry.source === 'dream' && <span>{t('Dream journal')}</span>}</span>
         <span className="text-[15px] font-medium leading-snug block break-words mt-0.5">{displayText(entry, 'title') || t('Untitled')}</span>
         <span className="text-sm text-[var(--fg-muted)] line-clamp-2 block mt-0.5 break-words">{displayText(entry, 'content')}</span>
