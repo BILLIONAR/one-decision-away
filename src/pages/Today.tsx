@@ -49,6 +49,7 @@ import { easyDecisions } from '../data/starterDecisions';
 import { firstRunCopy } from '../i18n/firstRun';
 import { sentenceCaseLabel } from '../utils/sentenceCaseLabel';
 import '../styles/workingSurfaces.css';
+import '../styles/todayPalette.css';
 
 const RITUALS_KEY = 'oda_rituals_open';
 
