@@ -1,0 +1,96 @@
+/* Notebook/Quotes hybrid from the approved references; all colors inherit app tokens. */
+.oda-notebook-hybrid .oda-notebook-tabs { width: 100%; max-width: 480px; }
+.oda-notebook-hybrid .oda-notebook-tabs button { min-width: 0; padding-inline: .65rem; }
+.oda-notebook-hybrid .oda-notebook-workspace { gap: 12px; }
+.oda-notebook-hybrid .oda-notebook-writing-column { display: grid; min-width: 0; gap: 12px; }
+.oda-notebook-hybrid .oda-hybrid-journal-header { gap: 8px; }
+.oda-notebook-hybrid .oda-hybrid-journal-header > div { display: flex; gap: 6px; align-items: center; }
+.oda-notebook-hybrid .oda-hybrid-journal-header h2 { font-size: .9rem; letter-spacing: .04em; text-transform: uppercase; }
+.oda-notebook-hybrid .oda-hybrid-journal-header .oda-hybrid-new-entry { display: grid; place-items: center; min-width: 44px; width: 44px; height: 44px; flex: none; border: 0; border-radius: 50%; background: var(--accent); color: var(--on-accent); }
+.oda-notebook-hybrid .oda-hybrid-new-entry:disabled { opacity: .45; }
+.oda-notebook-hybrid .oda-notebook-calendar-lead > * + * { margin-top: 8px; }
+.oda-notebook-hybrid .oda-hybrid-week-nav { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; gap: 4px; align-items: center; }
+.oda-notebook-hybrid .oda-hybrid-week-nav > button { min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 10px; color: var(--fg-muted); background: var(--surface); }
+.oda-notebook-hybrid .oda-hybrid-week-nav > .oda-hybrid-week-month { font-size: .78rem; color: var(--fg); text-align: center; text-transform: capitalize; font-weight: 650; padding-inline: 4px; }
+.oda-notebook-hybrid .oda-notebook-week-strip button { min-height: 56px; border: 0; border-radius: 12px; }
+.oda-notebook-hybrid .oda-notebook-week-strip button > strong { font-size: 1rem; line-height: 1.25; }
+.oda-notebook-hybrid .oda-notebook-week-strip button[aria-current="date"] { box-shadow: inset 0 0 0 1px var(--accent); }
+.oda-notebook-hybrid .oda-notebook-week-strip button[aria-pressed="true"] { border-radius: 999px; }
+.oda-notebook-hybrid .oda-hybrid-date-help { color: var(--fg-muted); font-size: .7rem; line-height: 1.5; }
+.oda-notebook-hybrid .oda-hybrid-entry-preview { min-width: 0; position: relative; padding: 12px 16px 16px; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); box-shadow: var(--surface-shadow); }
+.oda-hybrid-entry-preview > header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.oda-hybrid-entry-preview > header h2 { color: var(--fg-muted); font-size: .7rem; font-weight: 650; text-transform: uppercase; letter-spacing: .04em; }
+.oda-hybrid-entry-preview h3 { margin-top: 2px; color: var(--fg); font-size: .93rem; font-weight: 650; line-height: 1.5; overflow-wrap: anywhere; }
+.oda-hybrid-preview-text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; margin-top: 8px; color: var(--fg); font-size: .88rem; line-height: 1.7; white-space: pre-line; overflow-wrap: anywhere; }
+.oda-hybrid-entry-preview > footer { display: flex; flex-wrap: wrap; gap: 5px 12px; margin-top: 12px; color: var(--fg-muted); font-size: .7rem; font-variant-numeric: tabular-nums; }
+.oda-hybrid-entry-actions { position: relative; flex: none; }
+.oda-hybrid-entry-actions > summary { display: grid; place-items: center; list-style: none; width: 44px; height: 44px; border-radius: 10px; color: var(--fg-muted); cursor: pointer; }
+.oda-hybrid-entry-actions > summary::-webkit-details-marker { display: none; }
+.oda-hybrid-entry-actions[open] > summary { background: var(--accent-soft); color: var(--accent); }
+.oda-hybrid-entry-actions > div { position: absolute; inset-inline-end: 0; top: 48px; z-index: 5; min-width: 168px; max-width: 240px; padding: 5px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--surface-shadow); }
+.oda-hybrid-entry-actions button { width: 100%; min-width: 44px; min-height: 44px; padding: 8px 12px; text-align: start; color: var(--fg); font-size: .85rem; border-radius: 8px; }
+.oda-hybrid-entry-actions button:hover { background: var(--bg-muted); }
+.oda-notebook-hybrid .oda-notebook-editor-heading { padding: 12px 16px; margin-bottom: 12px; }
+.oda-notebook-hybrid .oda-notebook-editor-form { padding-inline: 16px; }
+.oda-notebook-hybrid .oda-notebook-reflection-hero { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px; align-items: center; min-height: 0; padding: 14px; background: var(--surface); }
+.oda-notebook-hybrid .oda-notebook-reflection-art { height: 112px; overflow: hidden; border-radius: 12px; }
+.oda-notebook-hybrid .oda-notebook-reflection-art::before, .oda-notebook-hybrid .oda-notebook-reflection-art::after { content: none; }
+.oda-notebook-hybrid .oda-notebook-reflection-art img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 55% 42%; }
+.oda-notebook-hybrid .oda-notebook-reflection-hero > section { padding: 0; }
+.oda-notebook-hybrid .oda-notebook-reflection-hero > section .oda-display { font-family: var(--font-sans); font-size: 1rem; line-height: 1.5; text-transform: none; letter-spacing: 0; }
+.oda-notebook-hybrid .oda-notebook-reflection-hero > section .oda-kicker { font-size: .65rem; }
+.oda-notebook-hybrid .oda-notebook-reflection-hero > section button { font-size: .78rem; border-radius: 10px; }
+.oda-notebook-hybrid .oda-hybrid-archive-heading { margin-bottom: 12px; color: var(--fg); font-size: .85rem; font-weight: 650; }
+.oda-hybrid-archive-heading > span { color: var(--fg-muted); font-weight: 400; }
+.oda-notebook-hybrid .oda-notebook-entry-list > button > span:first-child { flex-wrap: wrap; }
+.oda-notebook-hybrid button:focus-visible, .oda-notebook-hybrid summary:focus-visible, .oda-notebook-hybrid a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.oda-quotes-browser { display: grid; gap: 14px; min-width: 0; }
+.oda-quotes-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.oda-quotes-heading h2 { color: var(--fg); font-size: 1.15rem; font-weight: 650; text-transform: uppercase; letter-spacing: .04em; }
+.oda-quotes-heading p { margin-top: 4px; color: var(--fg-muted); font-size: .8rem; line-height: 1.5; }
+.oda-quotes-heading > svg { color: var(--accent); flex: none; }
+.oda-quotes-categories { display: flex; flex-wrap: wrap; gap: 6px; }
+.oda-quotes-categories button { min-height: 44px; min-width: 44px; padding: 8px 13px; border: 1px solid var(--border); border-radius: 999px; color: var(--fg-muted); background: var(--surface); font-size: .77rem; font-weight: 550; }
+.oda-quotes-categories button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+.oda-quotes-search { display: flex; min-width: 0; align-items: center; gap: 10px; min-height: 48px; padding: 0 14px; border: 1px solid var(--border); border-radius: 12px; color: var(--fg-muted); background: var(--surface); }
+.oda-quotes-search > svg { flex: none; }
+.oda-notebook-hybrid .oda-quotes-search input { min-width: 0; width: 100%; min-height: 46px; border: 0; border-radius: 0; background: transparent; color: var(--fg); font-size: .9rem; }
+.oda-notebook-hybrid .oda-quotes-search input:focus-visible { outline: none; }
+.oda-quotes-search:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.oda-quotes-language, .oda-quotes-count, .oda-quotes-art-note { color: var(--fg-muted); font-size: .75rem; line-height: 1.6; }
+.oda-quotes-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; min-width: 0; }
+.oda-quote-card { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 90px; gap: 12px; align-content: start; min-width: 0; padding: 18px; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); box-shadow: var(--surface-shadow); overflow: hidden; }
+.oda-quote-card > .oda-quote-mark { grid-column: 1 / -1; color: var(--accent); }
+.oda-quote-card blockquote { grid-column: 1 / -1; color: var(--fg); font-size: 1rem; font-weight: 600; line-height: 1.6; overflow-wrap: anywhere; }
+.oda-quote-citation { position: relative; min-width: 0; color: var(--fg-muted); font-size: .74rem; line-height: 1.6; overflow-wrap: anywhere; }
+.oda-quote-reference { margin-top: 3px; font-size: .7rem; }
+.oda-quote-kind { display: block; margin-top: 6px; font-size: .7rem; }
+.oda-quote-citation a { display: inline-flex; align-items: center; gap: 4px; min-width: 44px; min-height: 44px; color: var(--accent); font-size: .76rem; font-weight: 650; text-decoration: underline; text-underline-offset: 3px; }
+.oda-quote-illustration { align-self: end; height: 100px; width: 90px; overflow: hidden; border-radius: 45px 45px 12px 12px; }
+.oda-quote-illustration img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 54% 45%; }
+.oda-quotes-more, .oda-quotes-empty button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; width: fit-content; max-width: 100%; padding: 10px 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--accent); font-size: .87rem; font-weight: 650; }
+.oda-quotes-empty { padding: 20px; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); color: var(--fg); }
+.oda-quotes-empty button { margin-top: 12px; }
+@container oda-notebook (min-width: 620px) {
+  .oda-quotes-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@container oda-notebook (min-width: 850px) {
+  .oda-notebook-hybrid .oda-notebook-workspace { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
+  .oda-notebook-hybrid .oda-notebook-calendar-lead { grid-column: 1; grid-row: 1; }
+  .oda-notebook-hybrid .oda-hybrid-entry-preview { grid-column: 1; grid-row: 2; }
+  .oda-notebook-hybrid .oda-notebook-writing-column { grid-column: 2; grid-row: 1 / span 2; align-self: start; }
+  .oda-notebook-hybrid .oda-notebook-editor, .oda-notebook-hybrid .oda-notebook-reflection-hero { grid-column: auto; grid-row: auto; }
+  .oda-notebook-hybrid .oda-notebook-archive { grid-column: 1 / -1; grid-row: 3; }
+  .oda-notebook-hybrid .oda-notebook-reflection-art { height: 112px; }
+}
+@media (max-width: 359px) {
+  .oda-notebook-hybrid .oda-notebook-heading p { max-width: 27ch; }
+  .oda-notebook-hybrid .oda-notebook-stat { padding-inline: 6px; }
+  .oda-notebook-hybrid .oda-notebook-tabs button { padding-inline: 6px; font-size: .77rem; }
+  .oda-notebook-hybrid .oda-notebook-reflection-hero { grid-template-columns: 70px minmax(0, 1fr); gap: 10px; }
+  .oda-quote-card { padding: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .oda-notebook-hybrid *, .oda-notebook-hybrid *::before, .oda-notebook-hybrid *::after { scroll-behavior: auto; transition: none; }
+}

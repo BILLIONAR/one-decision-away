@@ -5,6 +5,9 @@ import { OriginalSceneImage } from '../components/OriginalSceneImage';
 import { growthCopy } from '../i18n/growth';
 import { courseCatalogFor } from '../data/courseCatalog';
 import { courseForIntent } from '../data/starterDecisions';
+import { useSavedCourseProgress } from '../hooks/useSavedCourseProgress';
+import { timerFocusEvidence } from '../services/focusEvidence';
+import { dashboardHybridCopy } from '../i18n/dashboardHybrid';
 import { useApp } from '../store/useApp';
 import { getDailyQuote } from '../data/dailyQuotes';
 import { Modal } from '../components/ui';
@@ -72,6 +75,8 @@ export const Today: React.FC = () => {
   const d = designCopy(locale);
   const loop = dailyLoopCopy(locale);
   const growth = growthCopy(locale);
+  const hybrid = dashboardHybridCopy(locale);
+  const courseProgress = useSavedCourseProgress(data?.courseProgress);
 
   const [completingMission, setCompletingMission] = useState<Mission | null>(null);
   const [newDecisionTitle, setNewDecisionTitle] = useState('');
@@ -140,7 +145,7 @@ export const Today: React.FC = () => {
   // Micro-habits
   const habits = data.microHabits || [];
   const visibleHabits = habits.slice(0, 3);
-  const habitsDone = visibleHabits.filter((h) => h.completedDates.includes(todayStr)).length;
+  const allHabitsDone = habits.filter(habit => habit.completedDates.includes(todayStr)).length;
 
   // Active dream
   const allItems = [...SEED_MARKET_ITEMS, ...(data.customMarketItems || [])].filter((i) => !i.isArchived);
@@ -165,6 +170,12 @@ export const Today: React.FC = () => {
   const keptCount = keptDecisions(data.missions).length;
   const chain = decisionChain(data.missions);
   const week = evidenceSummary(data.missions, now);
+  const catalog = courseCatalogFor(locale);
+  const allLessonIds = new Set(catalog.flatMap(course => course.lessonIds));
+  const completedLessons = [...allLessonIds].filter(id => courseProgress.lessons[id]?.completed === true).length;
+  const coursePercent = Math.round(completedLessons / Math.max(1, allLessonIds.size) * 100);
+  const focusEvidence = timerFocusEvidence(data.completions, now);
+  const maximumFocusMinutes = Math.max(1, ...focusEvidence.days.map(day => day.minutes));
   const suggestedCourse = courseCatalogFor(locale).find(c => c.id === courseForIntent(data.profile.intent));
   const draftForToday = data.profile.nextDecisionDraft?.forDay === localDayKey() ? data.profile.nextDecisionDraft.text : null;
   const pickSuggestion = (title: string) => {
@@ -311,8 +322,38 @@ export const Today: React.FC = () => {
       </section>
       {decisionError && <p role="alert" className="oda-loop-error">{loop.saveError}</p>}
       </div>
-          <GrowthWeek summary={week} onEvidence={() => setActiveRoute('/app/evidence')} />
+          <section className="oda-hybrid-progress oda-hybrid-card" aria-labelledby="today-library-progress">
+            <h2 id="today-library-progress">{hybrid.progress}</h2>
+            <div className="oda-hybrid-progress-summary">
+              <div className="oda-hybrid-ring" style={{ '--progress': `${coursePercent}%` } as React.CSSProperties} role="progressbar" aria-label={hybrid.progress} aria-valuemin={0} aria-valuemax={allLessonIds.size} aria-valuenow={completedLessons}>
+                <span aria-hidden="true">{coursePercent}%</span>
+              </div>
+              <div><p>{hybrid.lessons(completedLessons, allLessonIds.size)}</p><p className="oda-hybrid-help">{hybrid.progressHint}</p></div>
+            </div>
+            <dl className="oda-hybrid-metrics"><div><dt>{hybrid.keptDays}</dt><dd>{week.last7} / 7</dd></div><div><dt>{hybrid.habits}</dt><dd>{allHabitsDone} / {habits.length}</dd></div></dl>
+          </section>
           <GrowthTreePanel count={keptCount} onEvidence={() => setActiveRoute('/app/evidence')} />
+          <section className="oda-hybrid-focus oda-hybrid-card" aria-labelledby="today-timer-streak">
+            <h2 id="today-timer-streak">{hybrid.focus}</h2>
+            <p className="oda-hybrid-streak-value">{hybrid.days(focusEvidence.streak)}</p>
+            <p className="oda-hybrid-help">{hybrid.utc}</p>
+            <ol className="oda-hybrid-focus-days">{focusEvidence.days.map(day => <li key={day.dayKey} aria-label={`${day.dayKey} UTC: ${day.minutes} min`} data-focus-day-minutes={day.minutes}>
+              <span className="oda-hybrid-focus-bar" aria-hidden="true"><span style={{ height: `${day.minutes / maximumFocusMinutes * 100}%` }} /></span>
+              <span aria-hidden="true">{formatDate(`${day.dayKey}T12:00:00Z`, { weekday: 'narrow', timeZone: 'UTC' })}</span>
+            </li>)}</ol>
+            <p className="oda-hybrid-help">{focusEvidence.streak > 0 || focusEvidence.todayMinutes > 0 ? hybrid.focusToday(Number(focusEvidence.todayMinutes.toFixed(1))) : hybrid.focusEmpty}</p>
+            <button type="button" onClick={() => setActiveRoute('/app/focus')} className="oda-hybrid-link">{hybrid.openFocus}<ArrowRight size={16} aria-hidden="true" /></button>
+          </section>
+          <section className="oda-hybrid-actions oda-hybrid-card" aria-labelledby="today-real-actions">
+            <div className="oda-hybrid-heading"><h2 id="today-real-actions">{hybrid.actions}</h2><button type="button" onClick={() => setHabitsModalOpen(true)} className="oda-hybrid-link">{hybrid.viewAll}<ChevronRight size={15} aria-hidden="true" /></button></div>
+            <ul>
+              <li>{todayOneDecision ? <button type="button" disabled={decisionDone} onClick={() => setCompletingMission(todayOneDecision)} aria-label={`${decisionDone ? t('Kept today') : hybrid.confirm}: ${t(todayOneDecision.title)}`} className="oda-hybrid-action" data-done={decisionDone}>
+                <span className="oda-hybrid-check" aria-hidden="true">{decisionDone && <Check size={15} />}</span><span>{t(todayOneDecision.title)}</span>
+              </button> : <button type="button" onClick={() => { document.getElementById('today-decision-input')?.focus(); }} className="oda-hybrid-action"><Plus size={18} aria-hidden="true" /><span>{hybrid.choose}</span></button>}</li>
+              {visibleHabits.map(habit => { const done = habit.completedDates.includes(todayStr); return <li key={habit.id}><button type="button" onClick={() => toggleMicroHabit(habit.id)} aria-pressed={done} className="oda-hybrid-action" data-done={done}><span className="oda-hybrid-check" aria-hidden="true">{done && <Check size={15} />}</span><span>{t(habit.title)}</span></button></li>; })}
+              {habits.length === 0 && <li><button type="button" onClick={() => setHabitsModalOpen(true)} className="oda-hybrid-action"><Plus size={18} aria-hidden="true" /><span>{hybrid.addHabit}</span></button></li>}
+            </ul>
+          </section>
           <CourseNextStep />
         </div>
       </div>
@@ -320,6 +361,7 @@ export const Today: React.FC = () => {
       <BackupReminder />
 
       <div className="oda-fidelity-support">
+      <GrowthWeek summary={week} onEvidence={() => setActiveRoute('/app/evidence')} />
       <DailyPractice mission={todayOneDecision} dayKey={todayStr} />
 
       <MomentumCard
@@ -379,72 +421,6 @@ export const Today: React.FC = () => {
       <WeeklyOutcomeReview key={reviewWeek} weekKey={reviewWeek} />
       <EvidenceStrip />
       {checkInDue && <TwoWeekCheckIn />}
-
-      {/* 3. Three small habits */}
-      <section className="oda-fidelity-habits bg-[var(--bg-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] p-5">
-        <div className="flex items-center justify-between gap-3 mb-2">
-          <h2 className="text-[15px] font-semibold text-[var(--fg)]">{t('Three small habits')}</h2>
-          <span className="text-[13px] text-[var(--fg-muted)]">
-            {habitsDone} / {visibleHabits.length || 3}
-          </span>
-        </div>
-
-        {visibleHabits.length > 0 ? (
-          <ul className="divide-y divide-[var(--border)]">
-            {visibleHabits.map((habit) => {
-              const done = habit.completedDates.includes(todayStr);
-              return (
-                <li key={habit.id}>
-                  <button
-                    type="button"
-                    onClick={() => toggleMicroHabit(habit.id)}
-                    aria-pressed={done}
-                    className="w-full h-[52px] flex items-center gap-3.5 text-left"
-                  >
-                    <span
-                      className={`w-6 h-6 shrink-0 rounded-full border flex items-center justify-center transition-colors ${
-                        done
-                          ? 'bg-[var(--accent)] border-[var(--accent)] text-[var(--bg)]'
-                          : 'border-[var(--border-strong)] bg-transparent'
-                      }`}
-                    >
-                      {done && <Check size={14} strokeWidth={2.2} />}
-                    </span>
-                    <span
-                      className={`text-[15px] truncate ${
-                        done ? 'text-[var(--fg-muted)] line-through' : 'text-[var(--fg)]'
-                      }`}
-                    >
-                      {t(habit.title)}
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        ) : (
-          <button
-            type="button"
-            onClick={() => setHabitsModalOpen(true)}
-            className="w-full h-[52px] flex items-center gap-3.5 text-left"
-          >
-            <span className="w-6 h-6 shrink-0 rounded-full border border-dashed border-[var(--border-strong)] flex items-center justify-center text-[var(--fg-muted)]">
-              <Plus size={14} strokeWidth={2} />
-            </span>
-            <span className="text-[15px] text-[var(--fg-muted)]">{t('Add a habit')}</span>
-          </button>
-        )}
-
-        {habits.length > 3 && (
-          <button
-            type="button"
-            onClick={() => setHabitsModalOpen(true)}
-            className="mt-2 h-11 text-[14px] text-[var(--fg-muted)] hover:text-[var(--fg)]"
-          >
-            {t('See all {n}', { n: habits.length })}
-          </button>
-        )}
-      </section>
 
       {simple ? <SimpleModeNote /> : <>
       <section aria-labelledby="today-discover" className="space-y-3">

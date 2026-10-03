@@ -375,3 +375,36 @@
   .oda-courses-fidelity .oda-course-row-content { padding: 16px; }
   .oda-courses-fidelity .oda-course-steps { gap: 8px; }
 }
+
+/* The hybrid roadmap follows real lessons; its geometry never implies extra curriculum. */
+.oda-course-roadmap { min-width: 0; }
+.oda-course-roadmap-cue { display: flex; align-items: center; gap: 7px; margin: 12px 0; color: var(--fg-muted); font-size: .73rem; line-height: 1.5; }
+.oda-course-roadmap > ol { display: grid; gap: 0; padding: 0; margin: 0; list-style: none; }
+.oda-course-roadmap > ol > li { position: relative; min-width: 0; border: 0; }
+.oda-course-roadmap > ol > li + li { border: 0; }
+.oda-course-roadmap > ol > li:not(:last-child)::after { content: ''; position: absolute; left: 24px; top: 48px; bottom: -4px; width: 1px; background: var(--border-strong); pointer-events: none; }
+.oda-course-roadmap > ol > li > button, .oda-course-roadmap > ol > li > div { display: flex; align-items: flex-start; gap: 12px; min-height: 64px; width: 100%; padding: 12px 4px; text-align: left; border: 0; border-radius: 10px; color: var(--fg); background: transparent; }
+.oda-course-roadmap > ol > li > button { cursor: pointer; }
+.oda-course-roadmap > ol > li > button:hover:not(:disabled) { background: var(--accent-soft); }
+.oda-course-roadmap > ol > li > button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.oda-course-roadmap > ol > li > button:disabled { cursor: not-allowed; color: var(--fg-muted); }
+.oda-course-roadmap-number { position: relative; z-index: 1; display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border-strong); background: var(--surface, var(--bg-elevated)); color: var(--fg); font-size: .9rem; font-weight: 650; }
+.oda-course-roadmap [data-completed="true"] .oda-course-roadmap-number { color: var(--accent); background: var(--accent-soft); border-color: var(--accent); }
+.oda-course-roadmap [data-current="true"] .oda-course-roadmap-number { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.oda-course-roadmap-copy { display: grid; gap: 5px; min-width: 0; flex: 1; padding-top: 2px; }
+.oda-course-roadmap-title { color: var(--fg); font-size: .85rem; line-height: 1.45; font-weight: 650; overflow-wrap: anywhere; }
+.oda-course-roadmap-meta { color: var(--fg-muted); font-size: .7rem; line-height: 1.5; }
+.oda-course-roadmap-goal { color: var(--fg-muted); font-size: .75rem; line-height: 1.6; }
+.oda-course-roadmap-lock { flex: none; margin-top: 13px; color: var(--fg-muted); }
+.oda-course-overview-progress { margin-top: 18px; }
+.oda-course-overview-progress > p { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-size: .75rem; color: var(--fg-muted); }
+.oda-course-overview-progress [role="progressbar"] { height: 5px; margin-top: 9px; border-radius: 99px; overflow: hidden; background: var(--border); }
+.oda-course-overview-progress [role="progressbar"] > span { display: block; height: 100%; background: var(--accent); border-radius: inherit; }
+.oda-course-navigation-notice { font-size: .82rem; line-height: 1.6; color: var(--fg); padding: 12px 16px; border-inline-start: 2px solid var(--accent); background: var(--accent-soft); }
+.oda-course-roadmap--compact > ol { display: grid; grid-auto-flow: column; grid-auto-columns: 136px; gap: 16px; overflow-x: auto; padding: 4px 4px 12px; scroll-snap-type: x proximity; scrollbar-width: thin; scrollbar-color: var(--accent) var(--border); }
+.oda-course-roadmap--compact > ol > li { scroll-snap-align: start; }
+.oda-course-roadmap--compact > ol > li > button, .oda-course-roadmap--compact > ol > li > div { flex-direction: column; align-items: center; gap: 9px; min-height: 110px; padding: 4px; text-align: center; }
+.oda-course-roadmap--compact > ol > li:not(:last-child)::after { left: calc(50% + 22px); top: 24px; bottom: auto; width: calc(100% - 28px); height: 1px; }
+.oda-course-roadmap--compact .oda-course-roadmap-copy { padding-top: 0; width: 100%; }
+.oda-course-roadmap--compact .oda-course-roadmap-title { font-size: .73rem; }
+.oda-course-roadmap--compact .oda-course-roadmap-lock { position: absolute; top: 14px; right: 6px; margin: 0; }

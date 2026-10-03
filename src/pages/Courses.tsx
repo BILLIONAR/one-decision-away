@@ -12,6 +12,9 @@ import { courseCatalogueCopy, courseOutcomeFor } from '../data/coursePresentatio
 import { courseEntryCopy } from '../data/courseEntryCopy';
 import { courseEntryFor, hasCourseLearningProgress, sameCourseEntryScope, type CourseEntryScope } from '../services/courseEntry';
 import { REPLACEMENT_EPOCH_KEY } from '../services/dataSnapshots';
+import { queueDataWrite } from '../services/dataWrites';
+import { consumeCourseNavigation, resolveCourseNavigation } from '../services/courseNavigationIntent';
+import { CourseRoadmap } from '../components/CourseRoadmap';
 import { getCourseExperiment, isCourseReviewDue } from '../services/courseLearning';
 import { useLocale, useT } from '../i18n';
 import { useApp } from '../store/useApp';
@@ -60,6 +63,12 @@ export const Courses: React.FC = () => {
   const didMount = useRef(false);
   const manuallyEnteredLesson = useRef(false);
   const resolvedEntry = useRef({ courseId: selected, scope: entryScope, started: entry?.started ?? false });
+  const navigationChecked = useRef(false);
+  const navigationCopy = ({
+    en: { prerequisite: 'Complete the previous lessons before opening this one.', entitlement: 'This lesson needs your course’s subscription level. You can still review the roadmap.', invalid: 'That lesson is not part of this course. Choose a lesson from the roadmap.' },
+    tr: { prerequisite: 'Bu dersi açmadan önce önceki dersleri tamamla.', entitlement: 'Bu ders kursunun abonelik düzeyini gerektiriyor. Yol haritasını yine de inceleyebilirsin.', invalid: 'Bu ders bu kursa ait değil. Yol haritasından bir ders seç.' },
+    es: { prerequisite: 'Completa las lecciones anteriores antes de abrir esta.', entitlement: 'Esta lección requiere el nivel de suscripción del curso. Puedes seguir consultando el mapa.', invalid: 'Esa lección no pertenece a este curso. Elige una lección del mapa.' },
+  })[locale];
   useEffect(() => draft.subscribe((progress, failed) => {
     setState(progress);
     setStorageError(failed);
@@ -82,6 +91,27 @@ export const Courses: React.FC = () => {
     if (replaced) { setEntryRequest(null); setNotice(''); }
     resolvedEntry.current = { courseId: course.id, scope: entryScope, started: entry!.started };
   }, [state, course, index, entryScope.recordId, entryScope.replacementEpoch]);
+  useEffect(() => {
+    if (!appData || !pro.ready || navigationChecked.current) return;
+    let cancelled = false;
+    // The session's authoritative initial read is already queued. Consume the
+    // one-use request only after that read, and after access/profile are ready.
+    void queueDataWrite(() => draft.read()).then(saved => {
+      if (cancelled || navigationChecked.current) return;
+      navigationChecked.current = true;
+      const intent = consumeCourseNavigation();
+      if (!intent) return;
+      const target = courses.find(item => item.id === intent.courseId);
+      if (!target) return;
+      const resolved = resolveCourseNavigation(intent, target, saved, { gating: pro.gating, tier: pro.tier });
+      setState(saved);
+      open(target, resolved.mode);
+      setIndex(resolved.index);
+      resolvedEntry.current = { courseId: target.id, scope: entryScope, started: hasCourseLearningProgress(target.lessons.map(lesson => lesson.id), saved) };
+      setNotice(resolved.reason ? navigationCopy[resolved.reason] : '');
+    }).catch(() => { /* Leave the request available if the personal record cannot yet be read. */ });
+    return () => { cancelled = true; };
+  }, [draft, appData?.profile.id, entryScope.replacementEpoch, pro.ready, pro.gating, pro.tier]);
 
   // Each updater is replayed onto the latest stored copy under the shared data lock.
   const commit = (update: (current: typeof state) => typeof state) => draft.update(update);
@@ -96,6 +126,16 @@ export const Courses: React.FC = () => {
   };
   const countCompleted = (item: GuidedCourse) => item.lessons.filter(lesson => getLessonProgress(state, lesson).completed).length;
   const started = (item: GuidedCourse) => hasCourseLearningProgress(item.lessons.map(lesson => lesson.id), state);
+  const openRoadmapLesson = (lessonId?: string) => {
+    if (!course) return;
+    const resolved = resolveCourseNavigation({ courseId: course.id, mode: 'lesson', lessonId }, course, draft.read(), { gating: pro.gating, tier: pro.tier });
+    manuallyEnteredLesson.current = true;
+    setIndex(resolved.index);
+    setEntryRequest({ courseId: course.id, scope: entryScope, mode: resolved.mode, resumeOnHydration: !entry?.started });
+    setNotice(resolved.reason ? navigationCopy[resolved.reason] : '');
+  };
+  const completedLessonIds = course ? course.lessons.filter(lesson => getLessonProgress(state, lesson).completed).map(lesson => lesson.id) : [];
+  const availableLessonIds = course ? course.lessons.filter((lesson, i) => i <= nextLessonIndex(state, course) && !isLessonLocked(course.id, i, { gating: pro.gating, tier: pro.tier })).map(lesson => lesson.id) : [];
   const inProgress = courses.filter(item => started(item) && countCompleted(item) < item.lessons.length);
   const resumeCourse = inProgress.find(item => item.id === lastVisited) ?? inProgress[0];
   const reviewCourse = courses.find(item => isCourseReviewDue(getCourseExperiment(state.experiments, item.id)));
@@ -168,21 +208,17 @@ export const Courses: React.FC = () => {
       <h1 id="course-overview-title" lang={content} ref={titleRef} tabIndex={-1} className="oda-display oda-course-title outline-none scroll-mt-16">{course.title}</h1>
       <p lang={content} className="text-sm leading-relaxed text-[var(--fg-muted)]">{course.subtitle}</p>
       <p className="flex flex-wrap items-center gap-2 text-xs text-[var(--fg-muted)] mt-3"><Clock3 size={14} aria-hidden="true" />{t('{lessons} lessons · {minutes} min', { lessons: course.lessons.length, minutes: course.lessons.reduce((sum, lesson) => sum + lesson.minutes, 0) })} · {catalogue.pace}</p>
+      <div className="oda-course-overview-progress"><p>{t('{done}/{total} lessons completed', { done: completedLessonIds.length, total: course.lessons.length })}<span>{Math.round(completedLessonIds.length / course.lessons.length * 100)}%</span></p><div role="progressbar" aria-label={t('{title} progress', { title: course.title })} aria-valuemin={0} aria-valuemax={course.lessons.length} aria-valuenow={completedLessonIds.length}><span style={{ width: `${completedLessonIds.length / course.lessons.length * 100}%` }} /></div></div>
       {languageNote}
       </div>
       <CourseCover courseId={course.id} eager layout="overview" className="oda-course-overview-art" />
     </header>
-    <button id="course-start-lesson" type="button" className="oda-course-primary w-full" onClick={() => {
-      manuallyEnteredLesson.current = true;
-      setIndex(entry!.index);
-      setEntryRequest({ courseId: course.id, scope: entryScope, mode: 'lesson', resumeOnHydration: !entry!.started });
-      setNotice('');
-    }}>{entry!.started ? entryCopy.continueLesson.replace('{number}', String(entry!.index + 1)) : entryCopy.startFirst}<ArrowRight size={16} aria-hidden="true" /></button>
+    <button id="course-start-lesson" type="button" className="oda-course-primary w-full" onClick={() => openRoadmapLesson()}>{entry!.started ? entryCopy.continueLesson.replace('{number}', String(entry!.index + 1)) : entryCopy.startFirst}<ArrowRight size={16} aria-hidden="true" /></button>
+    {notice && <p role="status" className="oda-course-navigation-notice">{notice}</p>}
+    {notice === navigationCopy.entitlement && <button type="button" className="oda-course-primary" onClick={() => setActiveRoute('/app/upgrade')}>{t('See the levels')}<ArrowRight size={16} aria-hidden="true" /></button>}
     <section className="oda-course-map" aria-labelledby="course-overview-lessons">
       <h2 id="course-overview-lessons" className="oda-display text-xl pt-4">{entryCopy.lessons}</h2>
-      <ol>{course.lessons.map((lesson, i) => <li key={lesson.id} data-course-overview-lesson={lesson.id} className="flex items-start gap-3 py-3 text-sm leading-relaxed">
-        <span className="oda-course-map-number" aria-hidden="true">{i + 1}</span><span lang={content} className="flex-1 min-w-0">{lesson.title}</span><span className="shrink-0 text-xs text-[var(--fg-muted)] whitespace-nowrap">{lesson.minutes} min</span>
-      </li>)}</ol>
+      <CourseRoadmap lessons={course.lessons} completedLessonIds={completedLessonIds} currentLessonId={course.lessons[entry!.index]?.id} availableLessonIds={availableLessonIds} onOpenLesson={openRoadmapLesson} language={content} />
     </section>
     <section aria-labelledby="course-overview-about">
       <h2 id="course-overview-about" className="oda-display text-xl mb-3">{entryCopy.about}</h2>
@@ -219,11 +255,7 @@ export const Courses: React.FC = () => {
       const unlocked = i === 0 || getLessonProgress(state, course.lessons[i - 1]).completed;
       return <button key={item.id} type="button" disabled={!unlocked} data-completed={done} aria-current={i === index ? 'step' : undefined} aria-label={done ? t('Lesson {number}: {title}, completed', { number: i + 1, title: item.title }) : !unlocked ? t('Lesson {number}: {title}, complete the previous lesson first', { number: i + 1, title: item.title }) : t('Lesson {number}: {title}', { number: i + 1, title: item.title })} onClick={() => { manuallyEnteredLesson.current = true; setIndex(i); setNotice(''); }} className="oda-course-step">{done ? <Check size={15} aria-hidden="true" /> : !unlocked ? <LockKeyhole size={12} aria-hidden="true" /> : null}{i + 1}</button>;
     })}</nav>
-    <details className="oda-course-map"><summary>{copy.courseMap}<span>{completed}/{course.lessons.length}</span></summary><p>{copy.lessonMap}</p><ol>{course.lessons.map((item, i) => {
-      const done = getLessonProgress(state, item).completed;
-      const unlocked = i === 0 || getLessonProgress(state, course.lessons[i - 1]).completed;
-      return <li key={item.id}><button type="button" disabled={!unlocked} aria-current={i === index ? 'step' : undefined} onClick={() => { manuallyEnteredLesson.current = true; setIndex(i); setNotice(''); }}><span className="oda-course-map-number" aria-hidden="true">{done ? <Check size={16} /> : i + 1}</span><span lang={content}>{item.title}</span><span>{item.minutes} min</span>{!unlocked && <LockKeyhole size={13} aria-hidden="true" />}</button></li>;
-    })}</ol></details>
+    <details className="oda-course-map"><summary>{copy.courseMap}<span>{completed}/{course.lessons.length}</span></summary><CourseRoadmap lessons={course.lessons} completedLessonIds={completedLessonIds} currentLessonId={lesson.id} availableLessonIds={availableLessonIds} onOpenLesson={openRoadmapLesson} language={content} /></details>
     <p lang={content} className="text-xs leading-relaxed text-[var(--fg-muted)]">{course.scope}</p>
     <section className="oda-course-goal"><p className="text-xs font-semibold text-[var(--accent)]">{t("This lesson's small goal")}</p><p lang={content}>{lesson.goal}</p></section>
     <CoursePracticeStudio key={course.id} course={course} locale={locale} experiments={state.experiments} completed={completed} onUpdate={update => commit(current => ({ ...current, experiments: update(current.experiments) }))} />

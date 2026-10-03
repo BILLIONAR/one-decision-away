@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { CalendarDays, Plus, Search, Trash2, X } from 'lucide-react';
+import { CalendarDays, ChevronLeft, ChevronRight, MoreHorizontal, Plus, Search, Trash2, X } from 'lucide-react';
 import { useApp } from '../../store/useApp';
-import { N_, useT } from '../../i18n';
+import { getSpeechLang, N_, useLocale, useT } from '../../i18n';
+import { notebookHybridCopy } from '../../i18n/notebookHybrid';
+import { notebookWeekDates, shiftNotebookWeek } from '../../services/notebookHybrid';
 import { getNotebookEntries, type NotebookDisplayEntry } from '../../services/notebook';
 import type { DreamJournalEntry, NotebookMood } from '../../types/models';
 import { NotebookCalendar } from './NotebookCalendar';
@@ -15,6 +17,10 @@ const MOODS = [
 ] as const;
 const LEGACY_MOODS = [['triumphant', N_('Triumphant')], ['focused', N_('Focused')], ['grateful', N_('Grateful')], ['visionary', N_('Visionary')], ['breakthrough', N_('Breakthrough')]] as const;
 const moodLabel = (mood: string) => [...MOODS, ...LEGACY_MOODS].find(([id]) => id === mood)?.[1] || mood;
+const entryTime = (instant: string) => {
+  const date = new Date(instant);
+  return Number.isNaN(date.getTime()) ? undefined : new Intl.DateTimeFormat(getSpeechLang(), { hour: 'numeric', minute: '2-digit' }).format(date);
+};
 const SEED_TEXT: Record<string, Record<string, string>> = {
   'journal-seed-1': {
     title: 'Morning Focus & Sanctuary Awakening',
@@ -31,6 +37,8 @@ const SEED_TEXT: Record<string, Record<string, string>> = {
 
 export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: React.ReactNode }> = ({ today, reflectionArtwork }) => {
   const t = useT();
+  const [locale] = useLocale();
+  const c = notebookHybridCopy(locale);
   const { data, saveNotebookEntry, updateDreamJournalEntry, deleteNotebookEntry, deleteDreamJournalEntry } = useApp();
   const { busy, notice, run, setNotice } = useNotebookAction();
   const [editingRef, setEditingRef] = useSessionDraft<{ id: string; source: 'notebook' | 'dream' } | null>('journal:editing', null);
@@ -43,6 +51,7 @@ export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: Rea
   const [query, setQuery] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
   const [showCalendar, setShowCalendar] = useState(false);
+  const [weekAnchor, setWeekAnchor] = useState<string | null>(null);
   const [validation, setValidation] = useState(false);
   const [photoOpen, setPhotoOpen] = useState(false);
   const nativePhotoDialog = typeof window !== 'undefined' && typeof window.HTMLDialogElement !== 'undefined'
@@ -100,15 +109,24 @@ export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: Rea
     const result = await run(async () => { if (editing.source === 'dream') await deleteDreamJournalEntry(editing.id); else await deleteNotebookEntry(editing.id); return true; }, 'Entry deleted.');
     if (result) reset();
   };
+  const weekDates = notebookWeekDates(weekAnchor || today);
+  const weekMonth = weekDates[0].slice(0, 7) === weekDates[6].slice(0, 7)
+    ? dateLabel(weekDates[0], { month: 'long', year: 'numeric' })
+    : `${dateLabel(weekDates[0], { month: 'short' })} — ${dateLabel(weekDates[6], { month: 'short', year: 'numeric' })}`;
+  const preview = entries[0];
 
   return <div className="oda-notebook-workspace">
     <section className="oda-notebook-calendar-lead min-w-0 space-y-3" aria-label={t('Journal archive')}>
-      <div className="flex justify-between items-center"><h2 className="text-[15px] font-semibold">{t('Entries')} <span className="text-[var(--fg-muted)] font-normal">({entries.length})</span></h2><NButton type="button" variant="ghost" icon={CalendarDays} aria-expanded={showCalendar} aria-controls="notebook-calendar" onClick={() => setShowCalendar(!showCalendar)}>{t('Calendar')}</NButton></div>
-      <div className="oda-notebook-week-region" role="region" aria-label={t('Journal archive')} tabIndex={0}>
+      <div className="oda-hybrid-journal-header flex justify-between items-center"><h2 className="text-[15px] font-semibold">{t('Journal')}</h2><div><NButton type="button" variant="ghost" icon={CalendarDays} aria-expanded={showCalendar} aria-controls="notebook-calendar" onClick={() => setShowCalendar(!showCalendar)}>{t('Calendar')}</NButton><button type="button" className="oda-hybrid-new-entry" disabled={busy} aria-label={c.newEntry} onClick={() => { if (canReplace()) { reset(); setNotice(null); requestAnimationFrame(() => { const field = document.getElementById('notebook-journal-title'); field?.scrollIntoView({ behavior: 'auto', block: 'center' }); field?.focus({ preventScroll: true }); }); } }}><Plus size={19} aria-hidden="true" /></button></div></div>
+      <div className="oda-hybrid-week-nav">
+        <button type="button" aria-label={c.previousWeek} onClick={() => setWeekAnchor(shiftNotebookWeek(weekAnchor || today, -1))}><ChevronLeft size={18} aria-hidden="true" /></button>
+        <button type="button" className="oda-hybrid-week-month" aria-label={`${c.thisWeek} — ${weekMonth}`} title={c.thisWeek} onClick={() => setWeekAnchor(null)}><span aria-live="polite">{weekMonth}</span></button>
+        <button type="button" aria-label={c.nextWeek} onClick={() => setWeekAnchor(shiftNotebookWeek(weekAnchor || today, 1))}><ChevronRight size={18} aria-hidden="true" /></button>
+      </div>
+      <div className="oda-notebook-week-region" role="region" aria-label={t('Journal archive')} aria-describedby="notebook-archive-date-help" tabIndex={0}>
         <div className="oda-notebook-week-strip">
-          {Array.from({ length: 7 }, (_, index) => {
-            const day = new Date(`${today}T12:00:00`); day.setDate(day.getDate() - 6 + index);
-            const key = `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}`;
+          {weekDates.map(key => {
+            const day = new Date(`${key}T12:00:00`);
             return <button key={key} type="button" aria-pressed={selectedDate === key} aria-current={key === today ? 'date' : undefined} aria-label={`${dateLabel(key)}${dates.has(key) ? ` — ${t('Has entries')}` : ''}`} onClick={() => setSelectedDate(selectedDate === key ? '' : key)}>
               <span>{dateLabel(key, { weekday: 'short' })}</span><strong>{day.getDate()}</strong>{dates.has(key) && <i aria-hidden="true" />}
             </button>;
@@ -117,14 +135,20 @@ export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: Rea
       </div>
       <p className="oda-notebook-week-hint text-xs text-[var(--fg-muted)]">{t('Scroll sideways to see all dates')}</p>
       <div className="relative"><Search className="absolute left-3 top-3.5 w-4 h-4 text-[var(--fg-muted)]" aria-hidden="true" strokeWidth={1.8} /><label htmlFor="notebook-journal-search" className="sr-only">{t('Search entries')}</label><NInput id="notebook-journal-search" type="search" className="pl-9 !bg-[var(--bg-muted)] !border-transparent" value={query} onChange={e => setQuery(e.target.value)} placeholder={t('Search')} /></div>
-      {showCalendar && <div id="notebook-calendar"><NotebookCalendar today={today} selected={selectedDate} dates={dates} onSelect={setSelectedDate} /></div>}
+      {showCalendar && <div id="notebook-calendar"><NotebookCalendar today={today} selected={selectedDate} dates={dates} onSelect={key => { setSelectedDate(key); if (key) setWeekAnchor(key); }} /></div>}
       {selectedDate && <div className="flex gap-2 justify-between items-center text-sm"><span>{dateLabel(selectedDate)}</span><button type="button" className={quietButton} onClick={() => setSelectedDate('')}>{t('All dates')}</button></div>}
+      <p id="notebook-archive-date-help" className="oda-hybrid-date-help">{c.archiveDates}</p>
     </section>
+    {preview && <section className="oda-hybrid-entry-preview" aria-labelledby="notebook-entry-preview-title">
+      <header><h2 id="notebook-entry-preview-title">{preview.dateKey === today ? c.todaysEntry : c.savedEntry}</h2><details className="oda-hybrid-entry-actions" onKeyDown={event => { if (event.key === 'Escape') { event.currentTarget.open = false; event.currentTarget.querySelector('summary')?.focus(); } }}><summary aria-label={c.entryActions}><MoreHorizontal size={19} aria-hidden="true" /></summary><div><button type="button" disabled={busy} onClick={event => { const actions = event.currentTarget.closest('details'); actions?.removeAttribute('open'); actions?.querySelector('summary')?.focus(); openEntry(preview); }}>{t('Edit entry')}</button></div></details></header>
+      <h3>{displayText(preview, 'title') || t('Untitled')}</h3>
+      <p className="oda-hybrid-preview-text">{displayText(preview, 'content')}</p>
+      <footer><span>{dateLabel(preview.dateKey, { day: 'numeric', month: 'short' })}</span>{entryTime(preview.createdAt) && <time dateTime={preview.createdAt}>{entryTime(preview.createdAt)}</time>}{preview.source === 'dream' && <span>{t('Dream journal')}</span>}</footer>
+    </section>}
     <div className="oda-notebook-writing-column">
     <div className={`${cardCls} oda-notebook-editor`}>
       <div className="oda-notebook-editor-heading p-5 flex items-start justify-between gap-3">
         <div><p className={smallLabel}>{editing ? dateLabel(editing.dateKey) : dateLabel(today)}</p><h2 className="text-lg font-semibold tracking-tight text-[var(--fg)] mt-0.5">{editing ? t('Edit entry') : t('Today')}</h2></div>
-        <NButton type="button" variant="ghost" icon={Plus} disabled={busy} onClick={() => { if (canReplace()) { reset(); setNotice(null); } }}>{t('New')}</NButton>
       </div>
       <form onSubmit={save} className="oda-notebook-editor-form px-5 pb-5 space-y-4">
         {editing?.source === 'dream' && <p className="text-xs text-[var(--fg-muted)]">{t('From dream journal')}{editing.dreamName ? ` · ${displayText(editing, 'dreamName')}` : ''}</p>}
@@ -148,8 +172,9 @@ export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: Rea
     </div>
 
     <section className="oda-notebook-archive min-w-0 space-y-3" aria-label={t('Journal archive')}>
+      <h2 className="oda-hybrid-archive-heading">{c.allEntries} <span>({entries.length})</span></h2>
       {entries.length === 0 ? <div className="oda-card rounded-[var(--radius-lg)] p-5 text-center"><p className="text-[15px] font-semibold">{query || selectedDate ? t('No entries match.') : t('Nothing written yet')}</p><p className="text-sm text-[var(--fg-muted)] mt-1">{query || selectedDate ? t('Try another word or choose all dates.') : t('Your first entry will appear here.')}</p>{(query || selectedDate) && <button type="button" className={`${quietButton} mt-2`} onClick={() => { setQuery(''); setSelectedDate(''); }}>{t('Clear filters')}</button>}</div> : <div className="oda-notebook-entry-list bg-[var(--bg-muted)] rounded-[var(--radius-md)] divide-y divide-[var(--border)] max-h-[650px] overflow-y-auto">{entries.map(entry => <button type="button" key={entry.viewId} disabled={busy} aria-current={editing?.viewId === entry.viewId ? 'true' : undefined} onClick={() => openEntry(entry)} className={`w-full text-left px-4 py-3 min-h-[56px] cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset disabled:opacity-50 ${editing?.viewId === entry.viewId ? 'bg-[var(--bg-inset)]' : ''}`}>
-        <span className="flex justify-between gap-2 text-xs text-[var(--fg-muted)]"><span>{dateLabel(entry.dateKey, { month: 'short', day: 'numeric', year: 'numeric' })}</span>{entry.source === 'dream' && <span>{t('Dream journal')}</span>}</span>
+        <span className="flex justify-between gap-2 text-xs text-[var(--fg-muted)]"><span>{dateLabel(entry.dateKey, { month: 'short', day: 'numeric', year: 'numeric' })}</span>{entryTime(entry.createdAt) && <time dateTime={entry.createdAt}>{entryTime(entry.createdAt)}</time>}{entry.source === 'dream' && <span>{t('Dream journal')}</span>}</span>
         <span className="text-[15px] font-medium leading-snug block break-words mt-0.5">{displayText(entry, 'title') || t('Untitled')}</span>
         <span className="text-sm text-[var(--fg-muted)] line-clamp-2 block mt-0.5 break-words">{displayText(entry, 'content')}</span>
         {(entry.photoDataUrl || entry.mood) && <span className="flex flex-wrap items-center gap-2 mt-2">{entry.photoDataUrl && <img src={entry.photoDataUrl} alt="" className="w-10 h-10 object-cover rounded-[var(--radius-xs)]" loading="lazy" />}{entry.mood && <span className="text-xs text-[var(--fg-muted)]">{t(moodLabel(entry.mood))}</span>}</span>}

@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { Check, Feather, Mail } from 'lucide-react';
 import { useApp } from '../store/useApp';
-import { N_, useT } from '../i18n';
+import { N_, useLocale, useT } from '../i18n';
+import { notebookHybridCopy } from '../i18n/notebookHybrid';
 import { getNotebookDateKey, getNotebookStats } from '../services/notebook';
 import { JournalWorkspace } from '../components/notebook/JournalWorkspace';
-import { EvidenceTree } from '../components/momentum/EvidenceTree';
-import { keptDecisions } from '../services/momentum';
+import { OriginalSceneImage } from '../components/OriginalSceneImage';
 import { WrittenPractice } from '../components/notebook/WrittenPractice';
 import { Practice369 } from '../components/notebook/Practice369';
 import { AffirmationPractice, GratitudePractice } from '../components/notebook/DailyPractices';
 import '../styles/notebook.css';
+import '../styles/notebookHybrid.css';
+
+const QuotesBrowser = lazy(() => import('../components/notebook/QuotesBrowser').then(module => ({ default: module.QuotesBrowser })));
 
 const SCRIPTING_PROMPTS = [
   { id: 'ordinary-day', label: N_('An ordinary day in my future'), question: N_('It is an ordinary day in the life I am building. Where am I, what do I do, and how do I feel?') },
@@ -24,8 +27,11 @@ const LETTER_PROMPTS = [
 
 export const Notebook: React.FC = () => {
   const t = useT();
+  const [locale] = useLocale();
+  const c = notebookHybridCopy(locale);
   const { data } = useApp();
-  const [section, setSection] = useState<'journal' | 'manifest'>('journal');
+  const [section, setSection] = useState<'journal' | 'manifest' | 'quotes'>('journal');
+  const [quotesOpened, setQuotesOpened] = useState(false);
   const [today, setToday] = useState(getNotebookDateKey);
   useEffect(() => {
     const refresh = () => setToday(getNotebookDateKey());
@@ -36,8 +42,8 @@ export const Notebook: React.FC = () => {
   }, []);
   if (!data) return <p role="status" className="text-sm text-[var(--fg-muted)]">{t('Opening your notebook…')}</p>;
   const stats = getNotebookStats(data);
-  const tabs = [{ id: 'journal' as const, label: t('Journal') }, { id: 'manifest' as const, label: t('Practices') }];
-  return <div className="oda-notebook oda-notebook-fidelity text-[var(--fg)]">
+  const tabs = [{ id: 'journal' as const, label: t('Journal') }, { id: 'manifest' as const, label: t('Practices') }, { id: 'quotes' as const, label: c.quotes }];
+  return <div className="oda-notebook oda-notebook-fidelity oda-notebook-hybrid text-[var(--fg)]">
     <header className="oda-notebook-heading">
       <div>
       <h1 className="oda-display text-[32px] leading-tight text-[var(--fg)]">{t('Notebook')}</h1>
@@ -61,10 +67,10 @@ export const Notebook: React.FC = () => {
 
 
     <nav aria-label={t('Notebook sections')} className="oda-notebook-tabs flex p-1 bg-[var(--bg-muted)] rounded-[var(--radius-sm)]">
-      {tabs.map(({ id, label }) => <button key={id} type="button" aria-pressed={section === id} aria-controls={`notebook-${id}-section`} onClick={() => setSection(id)} className={`flex-1 h-10 rounded-[var(--radius-xs)] text-sm font-medium cursor-pointer transition-colors focus-visible:outline focus-visible:outline-2 ${section === id ? 'bg-[var(--bg)] text-[var(--fg)]' : 'text-[var(--fg-muted)]'}`}>{label}</button>)}
+      {tabs.map(({ id, label }) => <button key={id} type="button" aria-pressed={section === id} aria-controls={`notebook-${id}-section`} onClick={() => { setSection(id); if (id === 'quotes') setQuotesOpened(true); }} className={`flex-1 h-10 rounded-[var(--radius-xs)] text-sm font-medium cursor-pointer transition-colors focus-visible:outline focus-visible:outline-2 ${section === id ? 'bg-[var(--bg)] text-[var(--fg)]' : 'text-[var(--fg-muted)]'}`}>{label}</button>)}
     </nav>
 
-    <section id="notebook-journal-section" hidden={section !== 'journal'} aria-label={t('Journal')}><JournalWorkspace today={today} reflectionArtwork={<EvidenceTree count={keptDecisions(data.missions).length} label={t('Notebook')} />} /></section>
+    <section id="notebook-journal-section" hidden={section !== 'journal'} aria-label={t('Journal')}><JournalWorkspace today={today} reflectionArtwork={<OriginalSceneImage asset="today-scene" sizes="180px" />} /></section>
     <section id="notebook-manifest-section" className="oda-notebook-practices" hidden={section !== 'manifest'} aria-label={t('Practices')}>
       <p className="text-sm text-[var(--fg-muted)] mb-6">{t('Five ways to write. Pick one, use your own words, come back when it helps.')}</p>
       <div className="space-y-6">
@@ -75,5 +81,6 @@ export const Notebook: React.FC = () => {
         <AffirmationPractice active={section === 'manifest'} />
       </div>
     </section>
+    <section id="notebook-quotes-section" hidden={section !== 'quotes'} aria-label={c.quotes}>{quotesOpened && <Suspense fallback={<p role="status">{c.loadingQuotes}</p>}><QuotesBrowser /></Suspense>}</section>
   </div>;
 };
