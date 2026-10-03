@@ -1,0 +1,92 @@
+diff --git a/src/pages/SoundRoom.tsx b/src/pages/SoundRoom.tsx
+index bbaa53b..ad72b9b 100644
+--- a/src/pages/SoundRoom.tsx
++++ b/src/pages/SoundRoom.tsx
+@@ -11,6 +11,7 @@ import {
+ import { soundRoomPlayer } from '../services/soundRoomPlayer';
+ import { BREATH_CYCLE_MS, breathPhase, formatRemaining, TIMER_CHOICES } from '../services/soundRoom';
+ import { soundSynthesizer } from '../utils/soundSynthesizer';
++import { OriginalSceneImage } from '../components/OriginalSceneImage';
+ import '../styles/sound.css';
+ 
+ const TAB_KEY = 'oda_sound_tab_v1';
+@@ -63,14 +64,14 @@ const SECTION_ICONS = { relax: Waves, sleep: Moon, focus: Headphones, breathe: W
+ const SCENE_ASSETS: Record<Scene, string> = {
+   dunes: 'sound-dunes.svg', leaves: 'sound-palms.svg', coast: 'sound-ocean.svg', night: 'sound-palms.svg',
+ };
++const SCENE_ORIGINALS = { dunes: 'dunes', leaves: 'palms', coast: 'foam', night: 'palms' } as const;
+ 
+-/** Original local landscape illustrations; unavailable art falls back to existing owned ODA art. */
+-const SoundScene: React.FC<{ scene: Scene; className?: string; eager?: boolean }> = ({ scene, className = '', eager = false }) => {
+-  const [failed, setFailed] = useState(false);
+-  useEffect(() => setFailed(false), [scene]);
++/** Approved original local art, with responsive delivery and the prior owned scene fallback. */
++const SoundScene: React.FC<{ scene: Scene; className?: string; eager?: boolean; sculpture?: boolean; sizes?: string }> = ({ scene, className = '', eager = false, sculpture = false, sizes = '(min-width: 1000px) 450px, (min-width: 640px) calc(100vw - 64px), 100vw' }) => {
++  const asset = sculpture ? 'sound-sculpture' : SCENE_ORIGINALS[scene];
+   return (
+-    <span className={`oda-sound-scene ${className}`} data-scene={scene} data-artwork={failed ? 'owned-fallback' : scene} aria-hidden="true">
+-      <img src={`${import.meta.env.BASE_URL}${failed ? 'assets/oda/delivery/course-covers/oda-growth-values-640.webp' : `assets/oda/reference-fidelity/${SCENE_ASSETS[scene]}`}`} alt="" loading={eager ? 'eager' : 'lazy'} decoding="async" onError={() => setFailed(true)} />
++    <span className={`oda-sound-scene ${className}`} data-scene={sculpture ? 'sculpture' : scene} data-artwork={asset} aria-hidden="true">
++      <OriginalSceneImage asset={asset} sizes={sizes} eager={eager} fallback={`assets/oda/reference-fidelity/${SCENE_ASSETS[scene]}`} />
+     </span>
+   );
+ };
+@@ -243,7 +244,7 @@ const PlayerBar: React.FC<PlayerControlProps & { visible: boolean }> = ({ volume
+     <div className="oda-sound-player" data-sound-surface="mini" role="region" aria-label={t('Sound player')}>
+       <div className="oda-sound-player-inner">
+         <div className="oda-sound-player-now">
+-          <SoundScene scene={scene} className="oda-sound-player-thumb" />
++          <SoundScene scene={scene} className="oda-sound-player-thumb" sizes="44px" />
+           <div className="oda-sound-player-text">
+             <p className="oda-sound-player-name">{sound ? t(sound.name) : t('Sound Room')}</p>
+             <p className="oda-sound-player-status" aria-live="off">{playerStatus(player, t)}</p>
+@@ -315,7 +316,7 @@ const NowPlayingPanel: React.FC<PlayerControlProps & { primary: boolean; onPrima
+         <h2 className="oda-display">{sound ? t(sound.name) : t('Choose a sound to begin')}</h2>
+         {sound && <p>{t(sound.description)}</p>}
+       </div>
+-      <SoundScene scene={scene} className="oda-sound-now-art" eager />
++      <SoundScene scene={scene} className="oda-sound-now-art" sculpture eager sizes="(min-width: 1000px) 440px, (min-width: 640px) calc(100vw - 96px), calc(100vw - 44px)" />
+       <div className="oda-sound-now-control-surface" ref={controlsRef}>
+       <div className="oda-sound-now-controls">
+         <Headphones size={20} aria-hidden="true" />
+@@ -458,7 +459,7 @@ export const SoundRoom: React.FC = () => {
+         </div>
+ 
+         <div className="oda-sound-panel-body">
+-        <SoundScene key={section.id} scene={SECTION_SCENES[section.id]} className="oda-sound-detail-thumb" />
++        <SoundScene key={section.id} scene={SECTION_SCENES[section.id]} className="oda-sound-detail-thumb" sizes="120px" />
+         <p className="oda-sound-detail-credit">ODA · {t('Sound Room')}</p>
+         {section.id === 'breathe' ? (
+           <BreathePanel sound={section.sounds[0]} soundPlaying={isPlaying('breath_pacer')} />
+diff --git a/src/styles/sound.css b/src/styles/sound.css
+index d070da1..496dc78 100644
+--- a/src/styles/sound.css
++++ b/src/styles/sound.css
+@@ -1,8 +1,9 @@
+-/* SoundRoom reference composition. Original vector scenes are illustrations, not source photographs. */
++/* SoundRoom reference composition with approved original local art and owned scene fallbacks. */
+ .oda-sound { --sound-cyan: #58DFDB; --sound-on-cyan: #113B40; position: relative; color: var(--fg); padding-bottom: 9rem; }
+ .oda-sound button, .oda-sound select, .oda-sound input { -webkit-tap-highlight-color: transparent; }
+ .oda-sound button:focus-visible, .oda-sound select:focus-visible, .oda-sound input:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+ .oda-sound-scene { display: block; position: relative; overflow: hidden; background: #19313C; }
++.oda-sound-scene picture { display: contents; }
+ .oda-sound-scene img { display: block; width: 100%; height: 100%; object-fit: cover; }
+ .oda-sound-scene[data-scene="night"] img { filter: brightness(.68) saturate(.7); }
+ .oda-sound-intro { position: absolute; top: 1.5rem; left: 0; right: 0; z-index: 6; text-align: center; pointer-events: none; }
+@@ -23,6 +24,7 @@
+ .oda-sound-tab:nth-child(3) { z-index: 2; margin-top: calc(-1 * var(--sound-wave-overlap)); height: var(--sound-scene-span); border-radius: 0 0 28% 62% / 0 0 16% 24%; }
+ .oda-sound-tab > .oda-sound-scene { position: absolute; inset: 0; }
+ .oda-sound-tab::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(8 19 28 / .08), rgb(8 19 28 / .18) 45%, rgb(8 19 28 / .5)); }
++.oda-sound-tab:nth-child(1)::after { background: linear-gradient(180deg, rgb(8 19 28 / .5), rgb(8 19 28 / .24) 45%, rgb(8 19 28 / .5)); }
+ .oda-sound-tab-copy { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 0; padding: 1.4rem 1.45rem 2rem; color: #FFFFFF; }
+ .oda-sound-tab:nth-child(2) .oda-sound-tab-copy { padding-top: calc(var(--sound-wave-overlap) + .75rem); }
+ .oda-sound-tab:nth-child(3) .oda-sound-tab-copy { padding: calc(var(--sound-wave-overlap) + .25rem) 1.45rem .8rem; }
+@@ -85,7 +87,7 @@
+ .oda-sound-now-heading h2 { margin-top: .5rem; font-size: 1.5rem; letter-spacing: -.03em; line-height: 1.15; }
+ .oda-sound-now-heading > p:last-child { margin-top: .7rem; max-width: 36ch; font-size: .8rem; line-height: 1.6; color: #E4F4F0; }
+ .oda-sound-now-art { width: calc(100% + 2.2rem); height: clamp(180px, 30svh, 300px); margin: 1.4rem -1.1rem 0; border-radius: 0 0 45% 15% / 0 0 18% 6%; }
+-.oda-sound-now-art img { object-position: center 65%; opacity: .92; }
++.oda-sound-now-art img { object-position: center 45%; opacity: .92; }
+ .oda-sound-now-control-surface { position: relative; margin: -22px auto 0; padding: .75rem; border: 1px solid rgb(194 245 239 / .22); border-radius: 26px; background: rgb(50 99 106 / .8); backdrop-filter: blur(14px); color: #D9EEEA; }
+ .oda-sound-now-controls { display: flex; justify-content: space-around; align-items: center; width: min(100%, 270px); margin-inline: auto; }
+ .oda-sound-now-status { margin-block: .4rem .25rem; font-size: .74rem; line-height: 1.4; text-align: center; font-variant-numeric: tabular-nums; color: #DEEFED; }

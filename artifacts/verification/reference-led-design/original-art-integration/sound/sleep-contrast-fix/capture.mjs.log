@@ -1,0 +1,44 @@
+import { createRequire } from 'node:module';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import { getInitialDemoState } from '/workspace/oda-reference-redesign/src/services/repository.ts';
+const require = createRequire('/workspace/oda-reference-redesign/package.json');
+const { chromium } = require('playwright');
+const out = '/workspace/scratch/oda-reference-redesign/original-art-integration/sound/sleep-contrast-fix';
+const base = 'http://127.0.0.1:4181';
+const selector = '[data-section="sleep"] .oda-sound-tab-detail';
+const report = { at: new Date().toISOString(), sourceBase: '166d0427257eabcb159ca8eb7c58fc4228ef3991', cases: [], errors: [], external: [], limits: ['Author devpreview with synthetic local records; parent owns exact new compiled-build independent QA.', 'Raw raster diagnostics support caption contrast only, not whole-page WCAG certification.'] };
+const browser = await chromium.launch({ executablePath: '/usr/bin/chromium' });
+report.browser = await browser.version();
+try {
+  for (const locale of ['en', 'tr', 'es']) for (const width of [320, 390, 1440]) {
+    const height = width === 1440 ? 1000 : 844; const name = `${locale}-light-${width}`;
+    const seed = getInitialDemoState(); Object.assign(seed.profile, { displayName: 'Synthetic caption contrast review', locale, theme: 'light', onboardingStep: 'completed', firstOpenedAt: new Date().toISOString(), nudgesEnabled: false, dailyWisdomEnabled: false });
+    const context = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce', serviceWorkers: 'block' });
+    await context.route('**/*', route => new URL(route.request().url()).origin === base ? route.continue() : (report.external.push({ name, url: route.request().url() }), route.abort()));
+    await context.addInitScript(({ seed, locale }) => { localStorage.setItem('one_decision_away_app_data_v1', JSON.stringify(seed)); localStorage.setItem('oda_locale', locale); }, { seed, locale });
+    const page = await context.newPage(); page.on('pageerror', error => report.errors.push({ name, message: error.message }));
+    await page.goto(`${base}/app/sound`); await page.locator('.oda-sound').waitFor(); await page.evaluate(() => document.fonts.ready);
+    for (let n = 0; n < 3 && await page.getByRole('dialog').count(); n++) await page.keyboard.press('Escape');
+    await page.waitForFunction(() => [...document.querySelectorAll('.oda-sound-tab:not([data-section="breathe"]) img')].every(img => img.complete && img.naturalWidth > 0));
+    await page.waitForFunction(selector => getComputedStyle(document.querySelector(selector)).backgroundColor === 'rgba(8, 19, 28, 0.35)', selector);
+    const geometry = () => page.evaluate(selector => {
+      const rect = el => { const r = el.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height }; };
+      return { caption: rect(document.querySelector(selector)), tabs: [...document.querySelectorAll('[role="tab"]')].map(rect), nav: rect(document.querySelector('.oda-tabbar')), width: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth };
+    }, selector);
+    const after = await geometry();
+    const baselinePaint = await page.addStyleTag({ content: `${selector} { background: transparent !important; box-shadow: none !important; }` });
+    const before = await geometry(); assert.deepEqual(after, before, 'caption backing must not change layout'); await baselinePaint.evaluate(el => el.remove());
+    await page.waitForFunction(selector => getComputedStyle(document.querySelector(selector)).backgroundColor === 'rgba(8, 19, 28, 0.35)', selector);
+    const text = await page.locator(selector).evaluate(el => { const s = getComputedStyle(el); const r = el.getBoundingClientRect(); return { selector: '[data-section="sleep"] .oda-sound-tab-detail', text: el.textContent, foreground: [255, 255, 255], fontSize: parseFloat(s.fontSize), fontWeight: parseFloat(s.fontWeight), threshold: 4.5, bounds: { x: r.x, y: r.y, width: r.width, height: r.height }, background: s.backgroundColor, boxShadow: s.boxShadow }; });
+    assert.equal(text.background, 'rgba(8, 19, 28, 0.35)'); assert.ok(after.scroll <= after.width + 1); if (width < 768) { assert.ok(after.tabs[2].y + after.tabs[2].height <= after.nav.y + 1); assert.ok(after.tabs[3].y >= height); }
+    const visible = `${name}-visible.png`; const background = `${name}-background-probe.png`;
+    await page.screenshot({ path: `${out}/${visible}`, animations: 'disabled' });
+    const transparentText = await page.addStyleTag({ content: `${selector} { color: transparent !important; -webkit-text-fill-color: transparent !important; text-shadow: none !important; }` });
+    await page.screenshot({ path: `${out}/${background}`, animations: 'disabled' }); await transparentText.evaluate(el => el.remove());
+    report.cases.push({ name, locale, width, height, geometryExact: true, geometry: after, text, visible, background });
+    await context.close(); console.log(`CAPTURE ${name}`);
+  }
+  assert.equal(report.errors.length, 0); assert.equal(report.external.length, 0);
+} catch (error) { report.failure = String(error); throw error; }
+finally { fs.writeFileSync(`${out}/capture-report.json`, JSON.stringify(report, null, 2) + '\n'); await browser.close(); }

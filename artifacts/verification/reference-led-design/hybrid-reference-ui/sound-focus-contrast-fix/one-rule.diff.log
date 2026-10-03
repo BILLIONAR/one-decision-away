@@ -1,0 +1,12 @@
+diff --git a/src/styles/sound.css b/src/styles/sound.css
+index 3c2a34f..95b7d91 100644
+--- a/src/styles/sound.css
++++ b/src/styles/sound.css
+@@ -32,6 +32,7 @@
+ .oda-sound-tab-name { font-size: clamp(2rem, 9.6vw, 2.65rem); font-weight: 700; line-height: 1.06; letter-spacing: -.045em; text-shadow: 0 2px 16px rgb(0 0 0 / .4); }
+ .oda-sound-tab-detail { display: block; max-width: 35ch; margin-top: .5rem; font-size: .76rem; line-height: 1.5; color: #FFFFFF; text-shadow: 0 1px 8px #10232C; }
+ .oda-sound-tab[data-section="sleep"] .oda-sound-tab-detail { background: rgb(8 19 28 / .35); box-shadow: 0 0 0 3px rgb(8 19 28 / .35); }
++.oda-sound-tab[data-section="focus"] :is(.oda-sound-tab-name, .oda-sound-tab-detail) { background: rgb(8 19 28 / .25); box-shadow: 0 0 0 3px rgb(8 19 28 / .25); }
+ .oda-sound-tab[aria-selected="true"] .oda-sound-tab-name::after { content: ''; display: block; width: 26px; height: 3px; margin: .45rem auto 0; border-radius: 99px; background: #FFFFFF; }
+ .oda-sound .oda-sound-tab:focus-visible { outline: none; }
+ .oda-sound-tab:focus-visible .oda-sound-tab-name { outline: 2px solid #FFFFFF; outline-offset: 8px; border-radius: 4px; }

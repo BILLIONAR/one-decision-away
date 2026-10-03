@@ -1,0 +1,46 @@
+from pathlib import Path
+from PIL import Image
+import json
+import math
+
+out = Path('/workspace/scratch/oda-reference-redesign/original-art-integration/sound/sleep-contrast-fix')
+capture = json.loads((out / 'capture-report.json').read_text())
+assert not capture.get('failure') and len(capture['cases']) == 9
+
+def luminance(rgb):
+    channels = [n / 255 for n in rgb]
+    channels = [v / 12.92 if v <= .04045 else ((v + .055) / 1.055) ** 2.4 for v in channels]
+    return channels[0] * .2126 + channels[1] * .7152 + channels[2] * .0722
+
+results = []
+for case in capture['cases']:
+    visible = Image.open(out / case['visible']).convert('RGB')
+    background = Image.open(out / case['background']).convert('RGB')
+    bounds = case['text']['bounds']
+    ratios, all_ratios, low = [], [], []
+    for y in range(max(0, math.floor(bounds['y'])), min(visible.height, math.ceil(bounds['y'] + bounds['height']))):
+        for x in range(max(0, math.floor(bounds['x'])), min(visible.width, math.ceil(bounds['x'] + bounds['width']))):
+            rendered, base = visible.getpixel((x, y)), background.getpixel((x, y))
+            delta = [255 - n for n in base]
+            denominator = sum(n * n for n in delta)
+            alpha = sum((rendered[i] - base[i]) * delta[i] for i in range(3)) / denominator if denominator else 0
+            residual = max(abs(rendered[i] - (base[i] + alpha * delta[i])) for i in range(3))
+            ratio = 1.05 / (luminance(base) + .05)
+            all_ratios.append(ratio)
+            if .9 <= alpha <= 1.01 and residual <= 40:
+                ratios.append(ratio)
+                if ratio < 4.5:
+                    low.append({'x': x, 'y': y, 'background': base, 'ratio': round(ratio, 3)})
+    assert len(ratios) > 30, (case['name'], len(ratios))
+    result = {'name': case['name'], 'text': case['text']['text'], 'fontSize': case['text']['fontSize'], 'bounds': bounds,
+              'coreGlyphSamples': len(ratios), 'minRatio': round(min(ratios), 3), 'p01Ratio': round(sorted(ratios)[int(len(ratios) * .01)], 3),
+              'belowThresholdCorePixels': len(low), 'belowThresholdSamples': low[:8],
+              'fullCaptionBackgroundMin': round(min(all_ratios), 3), 'threshold': 4.5, 'geometryExact': case['geometryExact']}
+    results.append(result)
+
+report = {'method': 'Actual visible/background-probe raw PNG pairs. CSS text shadow excluded; caption backing retained. Reconstructed ≥90% glyph coverage and maximum RGB residual ≤40. Contrast of actual white CSS foreground against actual composited raster background. Supporting local raster evidence, not whole-page WCAG certification.',
+          'base': capture['sourceBase'], 'cases': results, 'minRatio': round(min(result['minRatio'] for result in results), 3),
+          'failures': sum(result['belowThresholdCorePixels'] for result in results)}
+(out / 'raster-report.json').write_text(json.dumps(report, indent=2) + '\n')
+print(json.dumps({'minRatio': report['minRatio'], 'failures': report['failures'], 'cases': [{'name': result['name'], 'samples': result['coreGlyphSamples'], 'minRatio': result['minRatio'], 'wholeCaptionBackgroundMin': result['fullCaptionBackgroundMin']} for result in results]}, indent=2))
+assert report['failures'] == 0, report

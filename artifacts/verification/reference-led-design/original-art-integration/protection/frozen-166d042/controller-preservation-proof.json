@@ -1,0 +1,49 @@
+{
+  "kind": "independent controller/handler/ARIA delta proof",
+  "sourceCommit": "166d0427257eabcb159ca8eb7c58fc4228ef3991",
+  "existingControllerBaselineSource": "8fed790187dd83f74acd8aec8af3f28981df22d6; byte-identical through4c/d14",
+  "tsxFilesBefore": 105,
+  "tsxFilesAfter": 106,
+  "existingTsxFilesUnchanged": 102,
+  "controllersBefore": 194,
+  "controllersAfter": 195,
+  "controlAriaAttributesBefore": 3272,
+  "controlAriaAttributesAfter": 3273,
+  "existingChangedFiles": [
+    {
+      "file": "src/pages/Coach.tsx",
+      "changedControllers": [],
+      "removedAttributes": [],
+      "addedAttributes": []
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "changedControllers": [
+        "SoundScene"
+      ],
+      "removedAttributes": [
+        {
+          "name": "onError",
+          "tag": "img",
+          "valueTokens": "[[19,\"{\"],[21,\"(\"],[22,\")\"],[39,\"=>\"],[80,\"setFailed\"],[21,\"(\"],[112,\"true\"],[22,\")\"],[20,\"}\"]]"
+        }
+      ],
+      "addedAttributes": []
+    },
+    {
+      "file": "src/pages/Today.tsx",
+      "changedControllers": [],
+      "removedAttributes": [],
+      "addedAttributes": []
+    }
+  ],
+  "protectedControllerChanges": [],
+  "onlyExistingControllerChange": "Decorative SoundScene replaces image-local failure state/effect with pure scene asset lookup and OriginalSceneImage; no playback/timer/stateful access handlers changed.",
+  "newController": "OriginalSceneImage has only modern-source/failed-path loading state; effect resets on asset switch; de-duplicated candidates stop after same-scenePNG then existing owned fallbacks fail. All hooks run before null return.",
+  "controlAriaExplanation": "Coach/Today control+ARIA multiset unchanged. Sound only loses decorative img onError, reimplemented in new helper; helper adds decorative img onError and source type=image/webp. Existing guarded click/key/controlled volume/timer/duration/reward/draft/ref/ARIA attributes remain exact.",
+  "responsivePerformance": "srcSet merely declares available variants; helper renders one current scene and no fetch/preload/cache mutation. All paths BASE_URL-relative, explicit intrinsic fallback dimensions, eager limited by consumer and others lazy. SW fixed17 shell unchanged; images cached only on successful requested GETs.",
+  "limits": [
+    "Static committed-source/parser/asset-decode review only; runtime browser/crop/onerror requests are independent QA.",
+    "Fallback mode data attribute is explicit; no fake original-reference or image-identity promise."
+  ]
+}

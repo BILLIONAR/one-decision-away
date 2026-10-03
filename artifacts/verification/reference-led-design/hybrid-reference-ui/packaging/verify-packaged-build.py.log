@@ -1,0 +1,47 @@
+from pathlib import Path
+import hashlib, json, os, subprocess, time, datetime
+
+repo = Path('/workspace/oda-reference-redesign')
+out = Path(__file__).parent
+receipt_path = Path('/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/final/timer-evidence-fix/build-receipt.json')
+baseline = json.loads(receipt_path.read_text())
+def digest(path):
+    raw = path.read_bytes()
+    return {'file': str(path.relative_to(repo)), 'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()}
+def assert_source():
+    for row in baseline['source']:
+        path = repo / row['file']
+        assert digest(path) == row, row['file']
+        raw = subprocess.check_output(['git', 'show', baseline['sourceCommit'] + ':' + row['file']], cwd=repo)
+        assert hashlib.sha256(raw).hexdigest() == row['sha256'], row['file']
+def actual_build():
+    return [digest(p) for p in sorted((repo / 'dist').rglob('*')) if p.is_file()]
+assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=repo).decode().strip() == baseline['sourceCommit']
+assert_source()
+assert actual_build() == baseline['build']
+started = datetime.datetime.now(datetime.timezone.utc).isoformat()
+task_env = os.environ.copy()
+task_env['VITE_BASE_PATH'] = '/one-decision-away/'
+log = out / 'postpack-build.log'
+t = time.monotonic()
+with log.open('wb') as handle:
+    result = subprocess.run(['npm', 'run', 'build'], cwd=repo, env=task_env, stdout=handle, stderr=subprocess.STDOUT)
+assert_source()
+compiled = actual_build()
+differences = [row for row in compiled if row not in baseline['build']]
+missing = [row for row in baseline['build'] if row not in compiled]
+proof = {'sourceCommit': baseline['sourceCommit'], 'kind': 'Postpack compiled-byte equality verification, not a replacement aggregate run',
+         'command': 'VITE_BASE_PATH=/one-decision-away/ npm run build', 'startedAtUtc': started,
+         'exitCode': result.returncode, 'elapsedSeconds': round(time.monotonic() - t, 3),
+         'testedBuildReceipt': str(receipt_path), 'testedBuildReceiptSha256': hashlib.sha256(receipt_path.read_bytes()).hexdigest(),
+         'originalAggregateLogBytes': baseline['logBytes'], 'originalAggregateLogSha256': baseline['logSha256'],
+         'all874SourcesUnchangedAndGitExact': True, 'compiledCount': len(compiled),
+         'cssCount': len([r for r in compiled if r['file'].endswith('.css')]),
+         'compiledBytesEqualTestedBuild': not differences and not missing,
+         'differentOrNew': differences, 'missing': missing, 'log': log.name,
+         'logBytes': log.stat().st_size, 'logSha256': hashlib.sha256(log.read_bytes()).hexdigest(),
+         'evidenceDiscoveryGuard': 'Existing review-local .gitignore excludes evidence; all review files explicitly force-added to Git',
+         'limits': 'Runs normal build after all QA readers close. Does not rerun or replace actual611/0 aggregate. No app source edits/publication.'}
+(out / 'postpack-build-receipt.json').write_text(json.dumps(proof, indent=2) + '\n')
+print(json.dumps({k:v for k,v in proof.items() if k not in ('differentOrNew','missing')}, indent=2))
+assert result.returncode == 0 and proof['compiledBytesEqualTestedBuild']

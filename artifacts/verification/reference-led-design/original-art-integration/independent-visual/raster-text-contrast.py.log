@@ -1,0 +1,18 @@
+import sys,json,math
+from PIL import Image
+m=json.load(open(sys.argv[1]));a=Image.open(m['visible']).convert('RGB');b=Image.open(m['background']).convert('RGB');out=[]
+def luminance(c):
+ v=[n/255 for n in c];v=[n/12.92 if n<=.04045 else ((n+.055)/1.055)**2.4 for n in v];return sum(n*w for n,w in zip(v,[.2126,.7152,.0722]))
+for t in m['texts']:
+ fg=t['foreground'];r=t['bounds'];xs=range(max(0,math.floor(r['x'])),min(a.width,math.ceil(r['x']+r['width'])));ys=range(max(0,math.floor(r['y'])),min(a.height,math.ceil(r['y']+r['height'])));ratios=[];samples=[]
+ for y in ys:
+  for x in xs:
+   vis=a.getpixel((x,y));bg=b.getpixel((x,y));d=[f-v for f,v in zip(fg,bg)];den=sum(n*n for n in d)
+   if den<100:continue
+   alpha=sum((v-z)*n for v,z,n in zip(vis,bg,d))/den
+   residual=sum((v-(z+alpha*n))**2 for v,z,n in zip(vis,bg,d))
+   if alpha>=.90 and alpha<=1.08 and residual<=40:
+    fgl=luminance(fg);bgl=luminance(bg);ratio=(max(fgl,bgl)+.05)/(min(fgl,bgl)+.05);ratios.append(ratio)
+    if ratio<t['threshold']:samples.append({'x':x,'y':y,'background':bg,'ratio':round(ratio,3)})
+ ratios.sort();out.append({**t,'coreGlyphSamples':len(ratios),'minRatio':round(ratios[0],3) if ratios else None,'p01Ratio':round(ratios[int((len(ratios)-1)*.01)],3) if ratios else None,'p05Ratio':round(ratios[int((len(ratios)-1)*.05)],3) if ratios else None,'belowThresholdCorePixels':len(samples),'belowThresholdSamples':samples[:8],'method':'Visible versus foreground-transparent raw viewport PNG;≥90% reconstructed glyph coverage and RGB residual≤40, contrast of actual CSS foreground against actual composited raster background. Text shadow excluded as a contrast aid. This is supporting raster diagnostics, not full WCAG certification.'})
+print(json.dumps(out))

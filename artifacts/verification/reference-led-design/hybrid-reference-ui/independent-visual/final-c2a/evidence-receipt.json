@@ -1,0 +1,1234 @@
+{
+  "source": "c2a5e6497f1bed4cf95951375c9aa86872b169a9",
+  "buildReceipt": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/final/timer-evidence-fix/build-receipt.json",
+  "status": "Complete bounded review; no user layout/publication approval",
+  "counts": {
+    "contexts": 18,
+    "states": 114,
+    "namedCaptures": 87,
+    "diagnosticPNGs": 159,
+    "representativeNativePNGs": 30,
+    "newToastDismissedTodayPNGs": 3,
+    "actualRasterElements": 180,
+    "rasterElementsBelowThreshold": 0,
+    "scopedAxeAnalyses": 114,
+    "axeViolations": 0,
+    "axeIncompleteCounts": {
+      "color-contrast": 70,
+      "aria-prohibited-attr": 3
+    },
+    "httpPayloadBindings": 1281,
+    "pageErrors": 0,
+    "localHTTPErrors": 0,
+    "externalRequests": 0
+  },
+  "browserSourceBuildReadersClosed": true,
+  "artifactWritersClosedAfterReceipt": true,
+  "primaryTodaySupplement": "representative/toast-dismissed/receipt.json",
+  "finalReview": "independent-final-review.md",
+  "personalReview": "personal-review-final.json",
+  "rawReport": "diagnostics/report.json",
+  "commands": "commands.json",
+  "allFiles": [
+    {
+      "file": "capture-toast-dismissed-today.mjs",
+      "bytes": 3373,
+      "sha256": "c9288ee2b2411a1e0dba481ee52936f29aadc4f030a7453f379160d78d3069bc"
+    },
+    {
+      "file": "commands.json",
+      "bytes": 1064,
+      "sha256": "c131cb876524c9237df947aa1625e5a42f16f2ac7f640e5f175896f4a6572bb9"
+    },
+    {
+      "file": "diagnostics/en-dark-1440-course-overview.png",
+      "bytes": 181558,
+      "sha256": "54ef0ba8646969d658e5482ed05b1426122232ee1bf4e090097442312bd4a5d5"
+    },
+    {
+      "file": "diagnostics/en-dark-1440-notebook.png",
+      "bytes": 156235,
+      "sha256": "61a834df96f9722c439f233d3b2a081eea01ddf8e9995619a2f6cec5905ccd1d"
+    },
+    {
+      "file": "diagnostics/en-dark-1440-quotes.png",
+      "bytes": 238924,
+      "sha256": "3f47ea596e8b600c05f228c60bcd0448583482e3b9ff25a06d8a79eaec1924b1"
+    },
+    {
+      "file": "diagnostics/en-dark-1440-sound-discovery-foreground-transparent-probe.png",
+      "bytes": 891913,
+      "sha256": "ddcacf200b076ec452fb0338c65378bcb87d89b2fc1f5d91930052d3bc045bbd"
+    },
+    {
+      "file": "diagnostics/en-dark-1440-sound-discovery-raster-input.json",
+      "bytes": 3099,
+      "sha256": "bca470c85beb81eb8b3eea8bea0d63d5dfdeb1e7deecb38883b2d9cfacf54a21"
+    },
+    {
+      "file": "diagnostics/en-dark-1440-sound-discovery.png",
+      "bytes": 915663,
+      "sha256": "2c8a9a3d53b8aed8c8be1c30fe00f25c3c7b484096fcccb99ee76f8c2e5edee0"
+    },
+    {
+      "file": "diagnostics/en-dark-1440-today-foreground-transparent-probe.png",
+      "bytes": 420497,
+      "sha256": "f3212bf1fb6e0676d8dec012ec1aa1d451c848f657c8c6b43f616f0c4d270d33"
+    },
+    {
+      "file": "diagnostics/en-dark-1440-today-mission.png",
+      "bytes": 335287,
+      "sha256": "fa4e4d8ce015f9f069f11f1c1f6e0231e8aa28d32b1af4f35f035324639bc2ab"
+    },
+    {
+      "file": "diagnostics/en-dark-1440-today-raster-input.json",
+      "bytes": 1466,
+      "sha256": "f9d4465375dc5caa48b7703e45348574bb2ac5cb5c8d13586aef4ceacfefdea3"
+    },
+    {
+      "file": "diagnostics/en-dark-1440-today.png",
+      "bytes": 426671,
+      "sha256": "de4e202ee03b59b06f200ac95e2a898b696999c90324a0ed8362c244fb2b6db7"
+    },
+    {
+      "file": "diagnostics/en-dark-320-course-overview.png",
+      "bytes": 77647,
+      "sha256": "92bed85e4f95e4981478c7c0c02e57725fbb61d0b841c7c1af52552611f8fe71"
+    },
+    {
+      "file": "diagnostics/en-dark-320-notebook.png",
+      "bytes": 62217,
+      "sha256": "eb8c499323441a695e8cff05c286c0fe9aceb20aa73531a51e2568fc38898674"
+    },
+    {
+      "file": "diagnostics/en-dark-320-quotes.png",
+      "bytes": 69767,
+      "sha256": "ab0bd32241643e4e8c366e1a7a8e093ede459ef8c8088f00ca0a7bf9aed15e2a"
+    },
+    {
+      "file": "diagnostics/en-dark-320-sound-discovery-foreground-transparent-probe.png",
+      "bytes": 291875,
+      "sha256": "a6c74f69945e00461413054db90623a882bded1c146c415a094796d905b81cee"
+    },
+    {
+      "file": "diagnostics/en-dark-320-sound-discovery-raster-input.json",
+      "bytes": 3089,
+      "sha256": "99116f723af3f55f12fa85233e42af036a03ea4606b78f3fb1d36714ab9aa109"
+    },
+    {
+      "file": "diagnostics/en-dark-320-sound-discovery.png",
+      "bytes": 314947,
+      "sha256": "e78025c91d3802b7f5c0f61c89b198e76e143683cb962a6e8d4fb4ac4881a696"
+    },
+    {
+      "file": "diagnostics/en-dark-320-today-foreground-transparent-probe.png",
+      "bytes": 128318,
+      "sha256": "e1471f6e37c8e9731a385f7187ad5ab1ca7b4e767446172d9f2a1b3c2754d283"
+    },
+    {
+      "file": "diagnostics/en-dark-320-today-mission.png",
+      "bytes": 67986,
+      "sha256": "f6c3bd7d9bb9c074f2fa9152f537bb0a9257722b9d312213dcd20bbcb2559b3d"
+    },
+    {
+      "file": "diagnostics/en-dark-320-today-raster-input.json",
+      "bytes": 1455,
+      "sha256": "435c31aa94e3d200b989746abd89313d202d009804f5b3764af37ee94549192e"
+    },
+    {
+      "file": "diagnostics/en-dark-320-today.png",
+      "bytes": 135340,
+      "sha256": "8113a1860fb4dd8eed4b653639f860d0675925fcbea748326d5b4daebd0377e7"
+    },
+    {
+      "file": "diagnostics/en-dark-390-course-overview.png",
+      "bytes": 87064,
+      "sha256": "09da543af635b2c1cad0054bf713f7a6cc5f6924d64072a0b1f343b606dd4667"
+    },
+    {
+      "file": "diagnostics/en-dark-390-notebook.png",
+      "bytes": 69308,
+      "sha256": "61b6d64a3bb7fa4424dd8625f255b173eef7ad100590d82e950d590a839f0d7f"
+    },
+    {
+      "file": "diagnostics/en-dark-390-quotes.png",
+      "bytes": 82569,
+      "sha256": "5168cf9416f1cd50b8fe19234cdec58d81f7fc3ccc5c76182535f33d1c4b78fb"
+    },
+    {
+      "file": "diagnostics/en-dark-390-sound-discovery-foreground-transparent-probe.png",
+      "bytes": 389727,
+      "sha256": "b62ca8b1b2ac02953053518c2e507b5a7d37154ca06930de0c406c2deeeb5b4f"
+    },
+    {
+      "file": "diagnostics/en-dark-390-sound-discovery-raster-input.json",
+      "bytes": 3097,
+      "sha256": "09aecb320af5d801a18e2febb34e78b448a9976bb71d0462893796cdcfdd9ff8"
+    },
+    {
+      "file": "diagnostics/en-dark-390-sound-discovery.png",
+      "bytes": 411705,
+      "sha256": "22d0bdbd09128b93cf3909acfd31a0f47d393c338df510d949fb0207d46ccc47"
+    },
+    {
+      "file": "diagnostics/en-dark-390-today-foreground-transparent-probe.png",
+      "bytes": 150325,
+      "sha256": "87d00baccdbb30ae9195dad7e8d1a24a12b865bd10d76cbb12a467f28f70aaf7"
+    },
+    {
+      "file": "diagnostics/en-dark-390-today-mission.png",
+      "bytes": 71549,
+      "sha256": "cd5a3cdb08aa141a5a4ce6105f32718d1d003a90a4caa4df83385c7a0f50341c"
+    },
+    {
+      "file": "diagnostics/en-dark-390-today-raster-input.json",
+      "bytes": 1455,
+      "sha256": "e95e722fc646ba70d44500a12cbb68e7ff4d69123ca44f9362a4c96eccc4ece9"
+    },
+    {
+      "file": "diagnostics/en-dark-390-today.png",
+      "bytes": 157489,
+      "sha256": "1291e4fad50cdf4c6099be0fc7108915cb4ec4e751b78915ef50cd06fc19541e"
+    },
+    {
+      "file": "diagnostics/en-light-1440-coach.png",
+      "bytes": 425820,
+      "sha256": "1afbb49d5428a6cfe92c9c90a6702f827102ae54d2a7fecd8a4619fdb4edc5ac"
+    },
+    {
+      "file": "diagnostics/en-light-1440-course-overview.png",
+      "bytes": 170740,
+      "sha256": "7c86092e4937cfeedb1cdd3dddcb13bac64ed7c300174a5c00cf5e5f6229c25b"
+    },
+    {
+      "file": "diagnostics/en-light-1440-focus.png",
+      "bytes": 173343,
+      "sha256": "9b670391cc22ef75b9757babc097be0609b75789b871a558a02bfa9f51dfda89"
+    },
+    {
+      "file": "diagnostics/en-light-1440-notebook.png",
+      "bytes": 140949,
+      "sha256": "160e5d6e4c0719a7d222fffb432c889ee5169db748f532498eaa6be5f76bde16"
+    },
+    {
+      "file": "diagnostics/en-light-1440-quotes.png",
+      "bytes": 223739,
+      "sha256": "ce317fdb0af7518117c05d79bfb6c0e5fafe6777bb42c50d5d71b5363404c0e8"
+    },
+    {
+      "file": "diagnostics/en-light-1440-sound-detail-player.png",
+      "bytes": 1013295,
+      "sha256": "3e8771c47fce13592ccfc7e3a1a68845e5e4ef825d1ab58ba06e35c44337867d"
+    },
+    {
+      "file": "diagnostics/en-light-1440-sound-discovery-foreground-transparent-probe.png",
+      "bytes": 885173,
+      "sha256": "d96079b4ac6b1396a40633b9eb23f7a0f0fa8334056925b5c3e5c6b4d42ead01"
+    },
+    {
+      "file": "diagnostics/en-light-1440-sound-discovery-raster-input.json",
+      "bytes": 3101,
+      "sha256": "51f167329ce65cda3a3cfa9ac7682cf467bbfedf5f750cd3e08c0e8bd72da985"
+    },
+    {
+      "file": "diagnostics/en-light-1440-sound-discovery.png",
+      "bytes": 906832,
+      "sha256": "53b6cab6d4d36e81b7d757dc9677003fa95491a1fc69f31e8a9d6587a1e6a04b"
+    },
+    {
+      "file": "diagnostics/en-light-1440-sound-expanded-player.png",
+      "bytes": 677390,
+      "sha256": "016ed371fa97424517adb1fe7b5b4ea3f10f8bd14378e7360bef2d3f2b8c2519"
+    },
+    {
+      "file": "diagnostics/en-light-1440-today-foreground-transparent-probe.png",
+      "bytes": 398150,
+      "sha256": "3de77497b8012c7d35fa6588db4fe8fe7fd3df943757c096d67854d0ce291123"
+    },
+    {
+      "file": "diagnostics/en-light-1440-today-mission.png",
+      "bytes": 302660,
+      "sha256": "dc8877a800e1120ee67e24341075f4ea74bcffc42ca291bf947cd37660a95a99"
+    },
+    {
+      "file": "diagnostics/en-light-1440-today-raster-input.json",
+      "bytes": 1465,
+      "sha256": "1696c961a6da768757ab63e04aae374dd189910cf693b70662a00db4216dd36b"
+    },
+    {
+      "file": "diagnostics/en-light-1440-today.png",
+      "bytes": 404378,
+      "sha256": "9e1b1de9dce1fa8d1496cd5a32d0818157a8bd4cdeb27b1bc33980190384b8e8"
+    },
+    {
+      "file": "diagnostics/en-light-320-coach.png",
+      "bytes": 147865,
+      "sha256": "97777b1e77be4732c03f12b6aef810d229c5cbd47f5c10de3c82ad21629fb9ff"
+    },
+    {
+      "file": "diagnostics/en-light-320-course-overview.png",
+      "bytes": 73443,
+      "sha256": "26fe405966e86e3803b02e149fcdd0a4b72511bc6cee9836436f6bfc1ca66f95"
+    },
+    {
+      "file": "diagnostics/en-light-320-focus.png",
+      "bytes": 49962,
+      "sha256": "33606e237175ad483ef2b128a06b014cf8b3d0dfa681e25af76ebde578b1e95c"
+    },
+    {
+      "file": "diagnostics/en-light-320-notebook.png",
+      "bytes": 56799,
+      "sha256": "e85c4d97a33100ce11058d4de7a25d1e378f2262bfa51cc3e06f78fe547c4a8f"
+    },
+    {
+      "file": "diagnostics/en-light-320-quotes.png",
+      "bytes": 64259,
+      "sha256": "74e1bd946854276a6b43084e9857d3c8e8a5ceeff6fedc00c09c2148956de8db"
+    },
+    {
+      "file": "diagnostics/en-light-320-sound-detail-player.png",
+      "bytes": 172220,
+      "sha256": "0d6c872ff0b6a0d69eb9c68209060fed850a1059c4e3d76cab181f2b2cc95c54"
+    },
+    {
+      "file": "diagnostics/en-light-320-sound-discovery-foreground-transparent-probe.png",
+      "bytes": 292093,
+      "sha256": "9c649abccbc8dbe0e9d74a11d2df251dbce0e7f7d60cb1b03765232da60a2f29"
+    },
+    {
+      "file": "diagnostics/en-light-320-sound-discovery-raster-input.json",
+      "bytes": 3091,
+      "sha256": "a22a01270503c0c132f3fa5216bb00b261fd318cf1a188b189ce9211244561bb"
+    },
+    {
+      "file": "diagnostics/en-light-320-sound-discovery.png",
+      "bytes": 315118,
+      "sha256": "75d96d8cb32a1affc45541b03a1629552f0f333f0875c4b4d723d1bb20e1c64c"
+    },
+    {
+      "file": "diagnostics/en-light-320-sound-expanded-player.png",
+      "bytes": 222013,
+      "sha256": "c7a9455aa5d89be2e93571849a0f8509121767acad04aeb85bd962e9bf71ee8b"
+    },
+    {
+      "file": "diagnostics/en-light-320-sound-short568-breathe.png",
+      "bytes": 118415,
+      "sha256": "894783ea0aeea2e3367304d98a1b96a439b117ca98988a7d68446c2319299e52"
+    },
+    {
+      "file": "diagnostics/en-light-320-today-foreground-transparent-probe.png",
+      "bytes": 114272,
+      "sha256": "76b5059b5795097244a318bea14ecaeb60338e99451411324da8a8df6cd52327"
+    },
+    {
+      "file": "diagnostics/en-light-320-today-mission.png",
+      "bytes": 57507,
+      "sha256": "7b805ae3301b02bad041b9b842d13a5a6f3aeb7b319700e381c60619046f4cd5"
+    },
+    {
+      "file": "diagnostics/en-light-320-today-raster-input.json",
+      "bytes": 1454,
+      "sha256": "ccabfc4ceea49ea2b899dea0036c64e3ff8b29d9d8ab986c9752519178807002"
+    },
+    {
+      "file": "diagnostics/en-light-320-today.png",
+      "bytes": 121253,
+      "sha256": "bd21e9330bfe4cd6f9b36baae519c0e35684df787795e8efd4e712bcb0232754"
+    },
+    {
+      "file": "diagnostics/en-light-390-coach.png",
+      "bytes": 165393,
+      "sha256": "0ef4d698462aa92f480595305cded1a9f3affae687556aef03f5988bb4e44b2c"
+    },
+    {
+      "file": "diagnostics/en-light-390-course-overview.png",
+      "bytes": 81923,
+      "sha256": "8152b6991b939a59520b5abd9cf38a9a27f82be44d36f89a38f2e5863e290a1e"
+    },
+    {
+      "file": "diagnostics/en-light-390-focus.png",
+      "bytes": 49909,
+      "sha256": "858b8d090753f5bea95d09826124de0b0d1718c68be2879f41ec04223da95fa0"
+    },
+    {
+      "file": "diagnostics/en-light-390-notebook.png",
+      "bytes": 61962,
+      "sha256": "c62671268a790150b34f97a363bab161d8e1fc5fc40e9d46298a69344201edeb"
+    },
+    {
+      "file": "diagnostics/en-light-390-quotes.png",
+      "bytes": 79014,
+      "sha256": "816dfe3b45543e96cdbce79fdfb8a344fbf8d31b736201870ef310491c7c29a3"
+    },
+    {
+      "file": "diagnostics/en-light-390-sound-detail-player.png",
+      "bytes": 201723,
+      "sha256": "e2640ca29a294f67e661918835c14d4cc18a7360b495fde2a75a2e118180a227"
+    },
+    {
+      "file": "diagnostics/en-light-390-sound-discovery-foreground-transparent-probe.png",
+      "bytes": 389781,
+      "sha256": "cc3fcc065c708a5da6a0c679890ffa3fcf46bd704fb70415370725f187f82c62"
+    },
+    {
+      "file": "diagnostics/en-light-390-sound-discovery-raster-input.json",
+      "bytes": 3099,
+      "sha256": "4e8d20b7d48412667d3e069ad6ef7e76021c34f358965162578ecd11af3b8688"
+    },
+    {
+      "file": "diagnostics/en-light-390-sound-discovery.png",
+      "bytes": 411662,
+      "sha256": "dcfbbc0bd2f21baf5f8cfe815d5a18de804f37fd5f7ad205b730281c80d220ac"
+    },
+    {
+      "file": "diagnostics/en-light-390-sound-expanded-player.png",
+      "bytes": 278058,
+      "sha256": "8ffe82c471daa017dcda23eead12ad6b5f17168e150384ef33ee0fa3758086f2"
+    },
+    {
+      "file": "diagnostics/en-light-390-sound-short568-breathe.png",
+      "bytes": 149338,
+      "sha256": "c37d1b92da1d61269ba11af07ca71bbb46ec5246d7daf197ce6b0a98b0668435"
+    },
+    {
+      "file": "diagnostics/en-light-390-today-first-proof.png",
+      "bytes": 65674,
+      "sha256": "7749735b73a84e25b1d583a3411d054bd1d017855ae97a4e3ab3a88482c386d9"
+    },
+    {
+      "file": "diagnostics/en-light-390-today-foreground-transparent-probe.png",
+      "bytes": 136439,
+      "sha256": "31863545e6e594bb35232d3c7d4afeca731502368c579f9776ab9dc1f2cc6afd"
+    },
+    {
+      "file": "diagnostics/en-light-390-today-mission.png",
+      "bytes": 60394,
+      "sha256": "468f6c647630c425596d04ffb5cfa426cdf2b28e007c2d229484c98ba65735f9"
+    },
+    {
+      "file": "diagnostics/en-light-390-today-raster-input.json",
+      "bytes": 1454,
+      "sha256": "7310bfa5b5af53e77e126028e4ae2cbd5b7ccd23f5764f93493b12b22937020c"
+    },
+    {
+      "file": "diagnostics/en-light-390-today.png",
+      "bytes": 143719,
+      "sha256": "dc0a0ca294a6dc47fec9ab5f6ac5d073086340a7a7e14f38f0aa24e9a81791f5"
+    },
+    {
+      "file": "diagnostics/es-dark-1440-course-overview.png",
+      "bytes": 184235,
+      "sha256": "d10a48d2ee9a1ea1412241997c8b32b897807341b636a6cb8bc44d1dd81eb4e9"
+    },
+    {
+      "file": "diagnostics/es-dark-1440-notebook.png",
+      "bytes": 154401,
+      "sha256": "8449d43662b64cdb8cb67bfd5fe15933bff16abf8ba10c803cb250d5df4155d5"
+    },
+    {
+      "file": "diagnostics/es-dark-1440-quotes.png",
+      "bytes": 226214,
+      "sha256": "c59395cae0e0bba219f31d5b8949f5577346768a54350bcf088f18673571b7a7"
+    },
+    {
+      "file": "diagnostics/es-dark-1440-sound-discovery-foreground-transparent-probe.png",
+      "bytes": 894342,
+      "sha256": "0a1407fd8ab23af09d2b9d4458a0ee88181cace404429d5f9821faec314fae4c"
+    },
+    {
+      "file": "diagnostics/es-dark-1440-sound-discovery-raster-input.json",
+      "bytes": 3179,
+      "sha256": "4d4f73d88fffec2776c9cbb7aed5ffe78b2c0dd86ff1ab8ecd75ab89c35f6ac5"
+    },
+    {
+      "file": "diagnostics/es-dark-1440-sound-discovery.png",
+      "bytes": 924320,
+      "sha256": "e4e88082fd9abae52874eeb770c588ff7c84eec70bc3bb30d7cd62e4e09df2ce"
+    },
+    {
+      "file": "diagnostics/es-dark-1440-today-foreground-transparent-probe.png",
+      "bytes": 417470,
+      "sha256": "a55464aec29a0c56569ba08162f06fa91923a8cb63de7dcd68a40acc9be96a55"
+    },
+    {
+      "file": "diagnostics/es-dark-1440-today-mission.png",
+      "bytes": 291366,
+      "sha256": "6c9086c096904761bcd5bb80463f024e6d3a97f975b09d8bec16164d90467aa8"
+    },
+    {
+      "file": "diagnostics/es-dark-1440-today-raster-input.json",
+      "bytes": 1477,
+      "sha256": "c2f1edef3b7b3744859e93a670fdf0892e2780f0010dc5350b13b6d2b45e9abd"
+    },
+    {
+      "file": "diagnostics/es-dark-1440-today.png",
+      "bytes": 426861,
+      "sha256": "9961a219508de242e0d8ae8e80255210e18a183cc8515745e07c76cd1cb74992"
+    },
+    {
+      "file": "diagnostics/es-dark-320-course-overview.png",
+      "bytes": 75893,
+      "sha256": "eaa9db97f27278de9ed287f335cf676a9a917d22173243da23b052bb9352a2c8"
+    },
+    {
+      "file": "diagnostics/es-dark-320-notebook.png",
+      "bytes": 60395,
+      "sha256": "ac6fbd55aeb740317434a926174630a3a97c6f6327b7d909a91e6682b5aec1de"
+    },
+    {
+      "file": "diagnostics/es-dark-320-quotes.png",
+      "bytes": 66843,
+      "sha256": "ca60ae10f77aa1803cbf38a9d856b31401e2b8b886ffd99c299898c437886cd0"
+    },
+    {
+      "file": "diagnostics/es-dark-320-sound-discovery-foreground-transparent-probe.png",
+      "bytes": 290638,
+      "sha256": "10853e1b64ae75d47aea3aab570f95d3dab8303fa81b73391e2adaa0cb352e9b"
+    },
+    {
+      "file": "diagnostics/es-dark-320-sound-discovery-raster-input.json",
+      "bytes": 3169,
+      "sha256": "c0b62b74bcd58781ddf23ef5207504d29304aa712d7e4eb604282115d36ef272"
+    },
+    {
+      "file": "diagnostics/es-dark-320-sound-discovery.png",
+      "bytes": 320078,
+      "sha256": "0e4c0267ac9fe492622a6101a57aee21a0b0d9f6707453895932d16a60e7f67f"
+    },
+    {
+      "file": "diagnostics/es-dark-320-today-foreground-transparent-probe.png",
+      "bytes": 131186,
+      "sha256": "7b5e468392b223b31b07d273f33ddd6e003bfe6b8d79a45d9d0dd9ca2b240365"
+    },
+    {
+      "file": "diagnostics/es-dark-320-today-mission.png",
+      "bytes": 68509,
+      "sha256": "d65d2cf9679b8356d72575d0dd378bc77a69aedf71ba1950eebc128db461b570"
+    },
+    {
+      "file": "diagnostics/es-dark-320-today-raster-input.json",
+      "bytes": 1464,
+      "sha256": "fba4ea794bf5bc406f3589180bbc4751f1a5b8df15a18374fa8df478f311f942"
+    },
+    {
+      "file": "diagnostics/es-dark-320-today.png",
+      "bytes": 141834,
+      "sha256": "226b17214bf8b1ab34c6baa039631706fca32e653f292dcaf26a7745454b4f94"
+    },
+    {
+      "file": "diagnostics/es-dark-390-course-overview.png",
+      "bytes": 87949,
+      "sha256": "66cd3321e7da7036ccea46d855757394728bc2d54190e1181803a76e17d43178"
+    },
+    {
+      "file": "diagnostics/es-dark-390-notebook.png",
+      "bytes": 66404,
+      "sha256": "03dcb9e3eb050df852b856e494d7991407573736de9e1c215695346a9f9b62ca"
+    },
+    {
+      "file": "diagnostics/es-dark-390-quotes.png",
+      "bytes": 78484,
+      "sha256": "6cafe8bc7a7e91dff71477629599c808129bc095a68062bc0afd72221fa9bba7"
+    },
+    {
+      "file": "diagnostics/es-dark-390-sound-discovery-foreground-transparent-probe.png",
+      "bytes": 387934,
+      "sha256": "12bf13f487a8b593d215bac97715df3701ab25987acd2aa47a2fae6a18ee7779"
+    },
+    {
+      "file": "diagnostics/es-dark-390-sound-discovery-raster-input.json",
+      "bytes": 3174,
+      "sha256": "af87ad1ea801300a7647e29353cdc39c376f505efe48fcbe0a5de50a48041e99"
+    },
+    {
+      "file": "diagnostics/es-dark-390-sound-discovery.png",
+      "bytes": 415390,
+      "sha256": "450184f56bc68faad28cf47ad6ff89b78357ecc1af80452b39d385fd43755013"
+    },
+    {
+      "file": "diagnostics/es-dark-390-today-foreground-transparent-probe.png",
+      "bytes": 152561,
+      "sha256": "42ead53ea9fc0f36fdb7243960f739053d68d59271f7fa422928103e54270122"
+    },
+    {
+      "file": "diagnostics/es-dark-390-today-mission.png",
+      "bytes": 73447,
+      "sha256": "87082bc077950e2c5eb232ebe3b1e100a09abd33a2614d4c8112bafe9f5b7900"
+    },
+    {
+      "file": "diagnostics/es-dark-390-today-raster-input.json",
+      "bytes": 1466,
+      "sha256": "0b61e409df9ba9e72b24b3f28382c956e261da670defadd66c94a222b81f7195"
+    },
+    {
+      "file": "diagnostics/es-dark-390-today.png",
+      "bytes": 162222,
+      "sha256": "1fb05ec69618ffa8209a51b3d5264806f2c8a8ded5e83e20abda51997ecb9e18"
+    },
+    {
+      "file": "diagnostics/es-light-1440-course-overview.png",
+      "bytes": 173806,
+      "sha256": "93138a53e2635afc79ec335f593c33f36b5ee1927a47b62098724c2706c9deb9"
+    },
+    {
+      "file": "diagnostics/es-light-1440-notebook.png",
+      "bytes": 139709,
+      "sha256": "e6ecf1c83c85b367eed72c8e50e0ad2f506d95937504a390a18c50081ba71509"
+    },
+    {
+      "file": "diagnostics/es-light-1440-quotes.png",
+      "bytes": 212421,
+      "sha256": "a6ebb549a626a4600a4b31aaf9dbff2d22e1ced431348b3fa9a4b8bd8aaab2ae"
+    },
+    {
+      "file": "diagnostics/es-light-1440-sound-discovery-foreground-transparent-probe.png",
+      "bytes": 887531,
+      "sha256": "b2f10fc95c48063b7902baf55b2815476ab382275e7b32c0b13990d24d872438"
+    },
+    {
+      "file": "diagnostics/es-light-1440-sound-discovery-raster-input.json",
+      "bytes": 3181,
+      "sha256": "f2ba9f8b9de6a036a25fa45c2eb137ff354649165d9592a9f9600d396a8683ce"
+    },
+    {
+      "file": "diagnostics/es-light-1440-sound-discovery.png",
+      "bytes": 915381,
+      "sha256": "68cd59c39ff3e415b4be68a336caa062356b5e699e2da8a1a79effbe05632b42"
+    },
+    {
+      "file": "diagnostics/es-light-1440-today-foreground-transparent-probe.png",
+      "bytes": 383010,
+      "sha256": "00af0f2158541a03383ec2e7dfaf9d737a2d63a5d742e7817fac17e046797334"
+    },
+    {
+      "file": "diagnostics/es-light-1440-today-mission.png",
+      "bytes": 262048,
+      "sha256": "7c76ae4d2f5e5e631e05fd4e1b527d9eeb925d576c92c2dfcc96484cc9caae68"
+    },
+    {
+      "file": "diagnostics/es-light-1440-today-raster-input.json",
+      "bytes": 1476,
+      "sha256": "1a0a4049ffefc2fe73eb7524d6a1119603155506d8c87cd9a4f9ddbd455389cd"
+    },
+    {
+      "file": "diagnostics/es-light-1440-today.png",
+      "bytes": 392652,
+      "sha256": "8926881789e585758682bb5d02a451a97c0e2d694ef7645fca144764c37a3de3"
+    },
+    {
+      "file": "diagnostics/es-light-320-course-overview.png",
+      "bytes": 71845,
+      "sha256": "1b7d257690b8216f67123ebfece4673e9176edb94b1d4c34329d6a55488bd3f3"
+    },
+    {
+      "file": "diagnostics/es-light-320-notebook.png",
+      "bytes": 54506,
+      "sha256": "6d825cec173e408f41b08a97e4d7a26b5213ed14c4232b3b744fb2d9a5e7c8b5"
+    },
+    {
+      "file": "diagnostics/es-light-320-quotes.png",
+      "bytes": 61905,
+      "sha256": "7694f319a4687d605e6229d32ee43fd0468321ebffdad6fe1fef5aa57e95dd30"
+    },
+    {
+      "file": "diagnostics/es-light-320-sound-discovery-foreground-transparent-probe.png",
+      "bytes": 290861,
+      "sha256": "5047dcaf7fa9e09ddd9cad48018e4ceae27040d431aa286440c3a2f32cee44d8"
+    },
+    {
+      "file": "diagnostics/es-light-320-sound-discovery-raster-input.json",
+      "bytes": 3171,
+      "sha256": "7c22c1c89385315b508a91934813475813ea401e6e7dfb139e1233b225e6ad9b"
+    },
+    {
+      "file": "diagnostics/es-light-320-sound-discovery.png",
+      "bytes": 320173,
+      "sha256": "f86e259417258876d5b3cae70885433bf65bd8925daa3d585f7622ae3e3e32e2"
+    },
+    {
+      "file": "diagnostics/es-light-320-today-foreground-transparent-probe.png",
+      "bytes": 116346,
+      "sha256": "e96b6ff7e0f2ad17add31f2ac1a24af5f5fbfd49ff815f36a30d01508afa2448"
+    },
+    {
+      "file": "diagnostics/es-light-320-today-mission.png",
+      "bytes": 58433,
+      "sha256": "517c5957952f6e3fe81c223a7d8946d4c1a9b3aba0e7f3552042530c3c534b0d"
+    },
+    {
+      "file": "diagnostics/es-light-320-today-raster-input.json",
+      "bytes": 1463,
+      "sha256": "d2bb9a1174064e56acc01057964f334e32f654a729b37572966bb77010261dc4"
+    },
+    {
+      "file": "diagnostics/es-light-320-today.png",
+      "bytes": 126597,
+      "sha256": "9d6eca638f55048b10b5563cadedcd7375b5eccc57c5b57445e6ba5d36e6291d"
+    },
+    {
+      "file": "diagnostics/es-light-390-course-overview.png",
+      "bytes": 82852,
+      "sha256": "57f3c2f409b724af89d720a37d30d91252902c1352eb111f9158433be65c9ce6"
+    },
+    {
+      "file": "diagnostics/es-light-390-notebook.png",
+      "bytes": 59083,
+      "sha256": "1d9b17072fa230a83970a1578af5eb7e2199508c0c82092da678a95c76e372eb"
+    },
+    {
+      "file": "diagnostics/es-light-390-quotes.png",
+      "bytes": 72750,
+      "sha256": "29946c942317933fa22380f6fcb378df82c74126d84967bdc6621b746a2602cf"
+    },
+    {
+      "file": "diagnostics/es-light-390-sound-discovery-foreground-transparent-probe.png",
+      "bytes": 387996,
+      "sha256": "caa0a44b8cabb632574d2173017e293edfb22b172da05de411192d4a6658c89c"
+    },
+    {
+      "file": "diagnostics/es-light-390-sound-discovery-raster-input.json",
+      "bytes": 3176,
+      "sha256": "098868763357600d4a916d8e4a11665b12c17b2000e03b49e427117b18a6967f"
+    },
+    {
+      "file": "diagnostics/es-light-390-sound-discovery.png",
+      "bytes": 415357,
+      "sha256": "3ca2d5d89d4c0dc2351b5f1bf47fbe6d3df90311956d333fc3a031927965ef2a"
+    },
+    {
+      "file": "diagnostics/es-light-390-today-foreground-transparent-probe.png",
+      "bytes": 137543,
+      "sha256": "24dc0ddac5b7d4c6ea69eef1f0a5713bee216a684a4bf9ae939cc7873e875a15"
+    },
+    {
+      "file": "diagnostics/es-light-390-today-mission.png",
+      "bytes": 62610,
+      "sha256": "077f64626cbbe2f37f714322cfe924604c7d13a69f1c71a3b60cc95462e24687"
+    },
+    {
+      "file": "diagnostics/es-light-390-today-raster-input.json",
+      "bytes": 1465,
+      "sha256": "c771400463af77f2e0061998f0649761268b6af19cb8d9b7e951d44d93a85eaa"
+    },
+    {
+      "file": "diagnostics/es-light-390-today.png",
+      "bytes": 147271,
+      "sha256": "1b9032a616fae89640efbf186b1b05964df59ce0d20d6c8eebe43a733f768403"
+    },
+    {
+      "file": "diagnostics/report.json",
+      "bytes": 4365219,
+      "sha256": "aa26276e093747ac7a6b7cc2a81755bab56267e4d8d198ba5256a6761caae8b8"
+    },
+    {
+      "file": "diagnostics/tr-dark-1440-course-overview.png",
+      "bytes": 179921,
+      "sha256": "26ddf423db1671230ca09bb65273a661efd635cd60d11565531cbf05d52391a9"
+    },
+    {
+      "file": "diagnostics/tr-dark-1440-notebook.png",
+      "bytes": 149184,
+      "sha256": "47934d8a899b833b291196f6723fd02e131e8903c2ff2b92bd3dd959019380d2"
+    },
+    {
+      "file": "diagnostics/tr-dark-1440-quotes.png",
+      "bytes": 235601,
+      "sha256": "091e228d94780ca1463e4fa588fe12b679446ef04a0086391f3bf68be2c8c8fe"
+    },
+    {
+      "file": "diagnostics/tr-dark-1440-sound-discovery-foreground-transparent-probe.png",
+      "bytes": 896048,
+      "sha256": "108a91edbe72959d12327db9ee4d54ea01b2dc991bd35db49490a495b5e2d639"
+    },
+    {
+      "file": "diagnostics/tr-dark-1440-sound-discovery-raster-input.json",
+      "bytes": 3142,
+      "sha256": "2014e8748b8950d6db865b147af5b4b4409ecf275b968116f2f304438b508688"
+    },
+    {
+      "file": "diagnostics/tr-dark-1440-sound-discovery.png",
+      "bytes": 920356,
+      "sha256": "98af44f1628c0004340ec0eade4ec432fe02aee554877bb71b1f7b10c20e1e54"
+    },
+    {
+      "file": "diagnostics/tr-dark-1440-today-foreground-transparent-probe.png",
+      "bytes": 405133,
+      "sha256": "40f6a4dc548d1bb8943f8c31ebc84779dbbdf9bd6ecb5e225f6e3d974ab968a1"
+    },
+    {
+      "file": "diagnostics/tr-dark-1440-today-mission.png",
+      "bytes": 322865,
+      "sha256": "01a5465925f0dc0212c8ad5d8fc614d16bdbdb07aaebb0c44f62324f90b73ab8"
+    },
+    {
+      "file": "diagnostics/tr-dark-1440-today-raster-input.json",
+      "bytes": 1468,
+      "sha256": "3685dd0e67516dbc09f332f731ea62331db9214cb8fc9b80b242c98635c0e095"
+    },
+    {
+      "file": "diagnostics/tr-dark-1440-today.png",
+      "bytes": 412411,
+      "sha256": "5fa2cd3d2870b1b236ceefbdcd962bbbf2a74275662b57fe88aeec1004bdfe64"
+    },
+    {
+      "file": "diagnostics/tr-dark-320-course-overview.png",
+      "bytes": 77575,
+      "sha256": "12d2a296cf8c7d2514320eb4a745e2865d26375cc3589ccf03d101d319655439"
+    },
+    {
+      "file": "diagnostics/tr-dark-320-notebook.png",
+      "bytes": 57923,
+      "sha256": "96481043df13d7d76bb3b74a3c3e3769c8b060f5b6ef50c0d12e9c16371a6bdf"
+    },
+    {
+      "file": "diagnostics/tr-dark-320-quotes.png",
+      "bytes": 70373,
+      "sha256": "95e5edc7cdc8a8c813172a87cce4ee154984578bdfb2082d2cad8e318fc33a93"
+    },
+    {
+      "file": "diagnostics/tr-dark-320-sound-discovery-foreground-transparent-probe.png",
+      "bytes": 291159,
+      "sha256": "0a824f1ffbe1d3b9efa725ac073f6788e23c1ec6551419fb279e3d42d34245a3"
+    },
+    {
+      "file": "diagnostics/tr-dark-320-sound-discovery-raster-input.json",
+      "bytes": 3126,
+      "sha256": "c1624c5076700debccf0acb297868172aa1f4e2a378df71f7dfa090a3994da54"
+    },
+    {
+      "file": "diagnostics/tr-dark-320-sound-discovery.png",
+      "bytes": 315630,
+      "sha256": "a8e91a3ce9de89c3b119d84382170e53c0d09c2965457c190fe1cccc69d4cc00"
+    },
+    {
+      "file": "diagnostics/tr-dark-320-today-foreground-transparent-probe.png",
+      "bytes": 129650,
+      "sha256": "18e9ecf5641b72da29e92e53410c5ed261873b00763413fbb281ae13e1e762fb"
+    },
+    {
+      "file": "diagnostics/tr-dark-320-today-mission.png",
+      "bytes": 68478,
+      "sha256": "c8ce45ad53452ebf1bc622311e29b7128af130fb935bdbea48c6afe209ad5714"
+    },
+    {
+      "file": "diagnostics/tr-dark-320-today-raster-input.json",
+      "bytes": 1457,
+      "sha256": "28c0b32f6783b500b73353782d1e5d3325f3c149eba0603602b2c565dd141914"
+    },
+    {
+      "file": "diagnostics/tr-dark-320-today.png",
+      "bytes": 137442,
+      "sha256": "db5830ca3fc81d07338cdb6766158d78e6acc7e6f32e9c453d436031c82860f2"
+    },
+    {
+      "file": "diagnostics/tr-dark-390-course-overview.png",
+      "bytes": 83849,
+      "sha256": "ed318133a8c0371b48ba175bdb95a0377c7830247ee83b443484740851c61a4b"
+    },
+    {
+      "file": "diagnostics/tr-dark-390-notebook.png",
+      "bytes": 64300,
+      "sha256": "a72721326ac09120d9799067b82ff6d2474d6bd8a9cb0a119740721510b47b6a"
+    },
+    {
+      "file": "diagnostics/tr-dark-390-quotes.png",
+      "bytes": 85417,
+      "sha256": "27f79b945a9a43ec27c3fa89e17d9564fd7c074cf0d30d02f4b427cddf7f1b41"
+    },
+    {
+      "file": "diagnostics/tr-dark-390-sound-discovery-foreground-transparent-probe.png",
+      "bytes": 388864,
+      "sha256": "20f181b747bc4f09ea8f8136dd83e60f00ff157f6d091d7ee020997b2a08f271"
+    },
+    {
+      "file": "diagnostics/tr-dark-390-sound-discovery-raster-input.json",
+      "bytes": 3134,
+      "sha256": "ee1ea071dc834e48fec32bd05e1204c34d101d3fb636fd4c39d6c4a4226239e1"
+    },
+    {
+      "file": "diagnostics/tr-dark-390-sound-discovery.png",
+      "bytes": 411728,
+      "sha256": "4a40e91219518d4aab1892fdba920ba4e23dadd2e4042dcacf28bc8585e340a9"
+    },
+    {
+      "file": "diagnostics/tr-dark-390-today-foreground-transparent-probe.png",
+      "bytes": 149397,
+      "sha256": "53a61375cb71189c076a3441302a8d770abbc64d60b07beee5a4656c462e697a"
+    },
+    {
+      "file": "diagnostics/tr-dark-390-today-mission.png",
+      "bytes": 70786,
+      "sha256": "a1152ffc6d5a6f3307427896cdd99c7dc4eabede650a373ac4251620dc067e68"
+    },
+    {
+      "file": "diagnostics/tr-dark-390-today-raster-input.json",
+      "bytes": 1452,
+      "sha256": "bca459985452b52b90dc264bbef07075c858ed585bb15cf26343faf1d584b8f0"
+    },
+    {
+      "file": "diagnostics/tr-dark-390-today.png",
+      "bytes": 156569,
+      "sha256": "12aa20e4d58555fe5a5e167fdeffffbe4592ad601dc8168b1dbb411a038a4f17"
+    },
+    {
+      "file": "diagnostics/tr-light-1440-course-overview.png",
+      "bytes": 169210,
+      "sha256": "71d46fe45487a9ca680b3fd667b5d6cfff551a7028b0208268f1607c0d950414"
+    },
+    {
+      "file": "diagnostics/tr-light-1440-notebook.png",
+      "bytes": 134279,
+      "sha256": "f159acaebcab8e0ae6d5bb1116c1e5262cf6e9ea9c81cbcda8ee388c92a6d629"
+    },
+    {
+      "file": "diagnostics/tr-light-1440-quotes.png",
+      "bytes": 220582,
+      "sha256": "9d1a03c81dfade3aa069cce7b4ccfb7732e4756034ebdbdb3c54e0af80ae9e51"
+    },
+    {
+      "file": "diagnostics/tr-light-1440-sound-discovery-foreground-transparent-probe.png",
+      "bytes": 889130,
+      "sha256": "80d3565700a12ec650c01dbd95327ea7054c9e521d5e7e65260a237472abc6c1"
+    },
+    {
+      "file": "diagnostics/tr-light-1440-sound-discovery-raster-input.json",
+      "bytes": 3144,
+      "sha256": "9ce583514d1f28f9471000e4ff602c18833daab80153ab61a1dbd01efb89b84c"
+    },
+    {
+      "file": "diagnostics/tr-light-1440-sound-discovery.png",
+      "bytes": 912140,
+      "sha256": "2e3aad3e914867c2870c113713c755e472b4f5b6deac971568a3b4f4595b64bf"
+    },
+    {
+      "file": "diagnostics/tr-light-1440-today-foreground-transparent-probe.png",
+      "bytes": 370966,
+      "sha256": "03d7c0dc4eb4f0754ff8d72682b515f3710349c094462aeb0cc126e77ae5502b"
+    },
+    {
+      "file": "diagnostics/tr-light-1440-today-mission.png",
+      "bytes": 290699,
+      "sha256": "2ba0d346723dfa312f5b3d7bade8db422d726628388d0dc5f8134e2875fd5b43"
+    },
+    {
+      "file": "diagnostics/tr-light-1440-today-raster-input.json",
+      "bytes": 1467,
+      "sha256": "6294562ce3cedafdd962e5307d984aedbd10aca5f5224298659369446683e893"
+    },
+    {
+      "file": "diagnostics/tr-light-1440-today.png",
+      "bytes": 378697,
+      "sha256": "4f5b675432ee3793b10d57ca273a635854d0f2780bb5ddd762e60ed3b52cd3ff"
+    },
+    {
+      "file": "diagnostics/tr-light-320-course-overview.png",
+      "bytes": 73463,
+      "sha256": "7fd505bc6ee7a9e187e53c655de6a59b39f73693ec8c6972b49fa959a5fa9455"
+    },
+    {
+      "file": "diagnostics/tr-light-320-notebook.png",
+      "bytes": 52678,
+      "sha256": "ca343768356e1565e4a55b40b515531b75ac4a326f4b2ce08c23f1cd38e77073"
+    },
+    {
+      "file": "diagnostics/tr-light-320-quotes.png",
+      "bytes": 65069,
+      "sha256": "5e5f14f77a1b2c50ab10b990b7fdad016548689e51c68b363162ec73f07c0605"
+    },
+    {
+      "file": "diagnostics/tr-light-320-sound-discovery-foreground-transparent-probe.png",
+      "bytes": 291389,
+      "sha256": "36eb7d07a0d40b87f0ea9edcd31ee5b674d621ca1b6edc4588a0141c0841b69d"
+    },
+    {
+      "file": "diagnostics/tr-light-320-sound-discovery-raster-input.json",
+      "bytes": 3128,
+      "sha256": "34246dce0b8664709a729ea73827b2a173db281db0c2a12eef8bb31b38988f33"
+    },
+    {
+      "file": "diagnostics/tr-light-320-sound-discovery.png",
+      "bytes": 315734,
+      "sha256": "1014608d801df3d8da6e9490d8c22b7dbc21709e20a782039599f6f1eea53989"
+    },
+    {
+      "file": "diagnostics/tr-light-320-today-foreground-transparent-probe.png",
+      "bytes": 114131,
+      "sha256": "6ad6ebf9cfd44653cea78e7cef48ae4004ee7ce92613735e78604cb7d840ec4e"
+    },
+    {
+      "file": "diagnostics/tr-light-320-today-mission.png",
+      "bytes": 57669,
+      "sha256": "ff1a6f3b9cb7277cb7d28d188075b06e527b47200686186f89fc717e19bd67ea"
+    },
+    {
+      "file": "diagnostics/tr-light-320-today-raster-input.json",
+      "bytes": 1456,
+      "sha256": "a9894bc521e0bff104a1a2f7778963fd10ad8ff499f96bc9542edcbf403ced76"
+    },
+    {
+      "file": "diagnostics/tr-light-320-today.png",
+      "bytes": 121890,
+      "sha256": "6e40e0afeec5793fca0a4c47fffe5d792826e2425b3594a0e71c4a7b22789a8e"
+    },
+    {
+      "file": "diagnostics/tr-light-390-course-overview.png",
+      "bytes": 79154,
+      "sha256": "cd980ea7c8a4c03f2f9a7bd2289d8267732d0fa5093aba647ec8f63401af6d28"
+    },
+    {
+      "file": "diagnostics/tr-light-390-notebook.png",
+      "bytes": 57231,
+      "sha256": "1728a321c4b1a20025e5d0517e4aadd6827813be7c0e5ad4a9f93f739f0e41ca"
+    },
+    {
+      "file": "diagnostics/tr-light-390-quotes.png",
+      "bytes": 79854,
+      "sha256": "288baad37ef5feceefe032738027f5aa59fa9fd7e6113b66d6e409b007b2547c"
+    },
+    {
+      "file": "diagnostics/tr-light-390-sound-discovery-foreground-transparent-probe.png",
+      "bytes": 388937,
+      "sha256": "706559d7b364940dcb816816bf70d1e75b7aff8b6cea143265c25a93869557f8"
+    },
+    {
+      "file": "diagnostics/tr-light-390-sound-discovery-raster-input.json",
+      "bytes": 3136,
+      "sha256": "8344402d0c6b1bb4f705e8b3a4370c5cf38b6b17d7b9b389a47b7a1dc6ed0b24"
+    },
+    {
+      "file": "diagnostics/tr-light-390-sound-discovery.png",
+      "bytes": 411626,
+      "sha256": "7bcfa5811ac6546dd9c194138d9d9082f41ca41d94e6db92e928cb99e490f4b9"
+    },
+    {
+      "file": "diagnostics/tr-light-390-today-foreground-transparent-probe.png",
+      "bytes": 135412,
+      "sha256": "0717d7cff858c9074f4651db69e0e30b22e0221e967a140c98feb0dce7b4237a"
+    },
+    {
+      "file": "diagnostics/tr-light-390-today-mission.png",
+      "bytes": 59936,
+      "sha256": "302913e4283e38e1db63c6cb04a435c613ad73b5c107cb4ac508d3f956066045"
+    },
+    {
+      "file": "diagnostics/tr-light-390-today-raster-input.json",
+      "bytes": 1451,
+      "sha256": "83483514f2db8d6ed61fdc7ca43598388b867a8258c9932ec48e24f2f850e8e3"
+    },
+    {
+      "file": "diagnostics/tr-light-390-today.png",
+      "bytes": 142861,
+      "sha256": "e0770a579b2991eabe480b60aaeda6b4ad63a4037cbd4c8172faa8910ab9ee54"
+    },
+    {
+      "file": "diagnostics.log",
+      "bytes": 728,
+      "sha256": "e30f654757386d581f24d68f65c0fb086835a01fab08eb56fda2354251e441f4"
+    },
+    {
+      "file": "independent-final-review.md",
+      "bytes": 5864,
+      "sha256": "792fa538152496a7d1187b2ca2769a992263f8b0b297183c5059ec8780cf3a2e"
+    },
+    {
+      "file": "materials-rubric-final.json",
+      "bytes": 2298,
+      "sha256": "481671b42a5946d5d3db0f7ed8128809e3bd9c29898fc2e5041ce886273ddeda"
+    },
+    {
+      "file": "personal-review-final.json",
+      "bytes": 7238,
+      "sha256": "88f1a9d29faf05d7056db78dc25abdf2c2469fff6d54cb880e457dc92311f683"
+    },
+    {
+      "file": "representative/native/1440/coach.png",
+      "bytes": 425820,
+      "sha256": "1afbb49d5428a6cfe92c9c90a6702f827102ae54d2a7fecd8a4619fdb4edc5ac"
+    },
+    {
+      "file": "representative/native/1440/course-overview.png",
+      "bytes": 170740,
+      "sha256": "7c86092e4937cfeedb1cdd3dddcb13bac64ed7c300174a5c00cf5e5f6229c25b"
+    },
+    {
+      "file": "representative/native/1440/focus.png",
+      "bytes": 173343,
+      "sha256": "9b670391cc22ef75b9757babc097be0609b75789b871a558a02bfa9f51dfda89"
+    },
+    {
+      "file": "representative/native/1440/notebook.png",
+      "bytes": 140949,
+      "sha256": "160e5d6e4c0719a7d222fffb432c889ee5169db748f532498eaa6be5f76bde16"
+    },
+    {
+      "file": "representative/native/1440/quotes.png",
+      "bytes": 223739,
+      "sha256": "ce317fdb0af7518117c05d79bfb6c0e5fafe6777bb42c50d5d71b5363404c0e8"
+    },
+    {
+      "file": "representative/native/1440/sound-detail-player.png",
+      "bytes": 1013295,
+      "sha256": "3e8771c47fce13592ccfc7e3a1a68845e5e4ef825d1ab58ba06e35c44337867d"
+    },
+    {
+      "file": "representative/native/1440/sound-discovery.png",
+      "bytes": 906832,
+      "sha256": "53b6cab6d4d36e81b7d757dc9677003fa95491a1fc69f31e8a9d6587a1e6a04b"
+    },
+    {
+      "file": "representative/native/1440/sound-expanded-player.png",
+      "bytes": 677390,
+      "sha256": "016ed371fa97424517adb1fe7b5b4ea3f10f8bd14378e7360bef2d3f2b8c2519"
+    },
+    {
+      "file": "representative/native/1440/today-mission.png",
+      "bytes": 302660,
+      "sha256": "dc8877a800e1120ee67e24341075f4ea74bcffc42ca291bf947cd37660a95a99"
+    },
+    {
+      "file": "representative/native/1440/today.png",
+      "bytes": 404378,
+      "sha256": "9e1b1de9dce1fa8d1496cd5a32d0818157a8bd4cdeb27b1bc33980190384b8e8"
+    },
+    {
+      "file": "representative/native/320/coach.png",
+      "bytes": 147865,
+      "sha256": "97777b1e77be4732c03f12b6aef810d229c5cbd47f5c10de3c82ad21629fb9ff"
+    },
+    {
+      "file": "representative/native/320/course-overview.png",
+      "bytes": 73443,
+      "sha256": "26fe405966e86e3803b02e149fcdd0a4b72511bc6cee9836436f6bfc1ca66f95"
+    },
+    {
+      "file": "representative/native/320/focus.png",
+      "bytes": 49962,
+      "sha256": "33606e237175ad483ef2b128a06b014cf8b3d0dfa681e25af76ebde578b1e95c"
+    },
+    {
+      "file": "representative/native/320/notebook.png",
+      "bytes": 56799,
+      "sha256": "e85c4d97a33100ce11058d4de7a25d1e378f2262bfa51cc3e06f78fe547c4a8f"
+    },
+    {
+      "file": "representative/native/320/quotes.png",
+      "bytes": 64259,
+      "sha256": "74e1bd946854276a6b43084e9857d3c8e8a5ceeff6fedc00c09c2148956de8db"
+    },
+    {
+      "file": "representative/native/320/sound-detail-player.png",
+      "bytes": 172220,
+      "sha256": "0d6c872ff0b6a0d69eb9c68209060fed850a1059c4e3d76cab181f2b2cc95c54"
+    },
+    {
+      "file": "representative/native/320/sound-discovery.png",
+      "bytes": 315118,
+      "sha256": "75d96d8cb32a1affc45541b03a1629552f0f333f0875c4b4d723d1bb20e1c64c"
+    },
+    {
+      "file": "representative/native/320/sound-expanded-player.png",
+      "bytes": 222013,
+      "sha256": "c7a9455aa5d89be2e93571849a0f8509121767acad04aeb85bd962e9bf71ee8b"
+    },
+    {
+      "file": "representative/native/320/today-mission.png",
+      "bytes": 57507,
+      "sha256": "7b805ae3301b02bad041b9b842d13a5a6f3aeb7b319700e381c60619046f4cd5"
+    },
+    {
+      "file": "representative/native/320/today.png",
+      "bytes": 121253,
+      "sha256": "bd21e9330bfe4cd6f9b36baae519c0e35684df787795e8efd4e712bcb0232754"
+    },
+    {
+      "file": "representative/native/390/coach.png",
+      "bytes": 165393,
+      "sha256": "0ef4d698462aa92f480595305cded1a9f3affae687556aef03f5988bb4e44b2c"
+    },
+    {
+      "file": "representative/native/390/course-overview.png",
+      "bytes": 81923,
+      "sha256": "8152b6991b939a59520b5abd9cf38a9a27f82be44d36f89a38f2e5863e290a1e"
+    },
+    {
+      "file": "representative/native/390/focus.png",
+      "bytes": 49909,
+      "sha256": "858b8d090753f5bea95d09826124de0b0d1718c68be2879f41ec04223da95fa0"
+    },
+    {
+      "file": "representative/native/390/notebook.png",
+      "bytes": 61962,
+      "sha256": "c62671268a790150b34f97a363bab161d8e1fc5fc40e9d46298a69344201edeb"
+    },
+    {
+      "file": "representative/native/390/quotes.png",
+      "bytes": 79014,
+      "sha256": "816dfe3b45543e96cdbce79fdfb8a344fbf8d31b736201870ef310491c7c29a3"
+    },
+    {
+      "file": "representative/native/390/sound-detail-player.png",
+      "bytes": 201723,
+      "sha256": "e2640ca29a294f67e661918835c14d4cc18a7360b495fde2a75a2e118180a227"
+    },
+    {
+      "file": "representative/native/390/sound-discovery.png",
+      "bytes": 411662,
+      "sha256": "dcfbbc0bd2f21baf5f8cfe815d5a18de804f37fd5f7ad205b730281c80d220ac"
+    },
+    {
+      "file": "representative/native/390/sound-expanded-player.png",
+      "bytes": 278058,
+      "sha256": "8ffe82c471daa017dcda23eead12ad6b5f17168e150384ef33ee0fa3758086f2"
+    },
+    {
+      "file": "representative/native/390/today-mission.png",
+      "bytes": 60394,
+      "sha256": "468f6c647630c425596d04ffb5cfa426cdf2b28e007c2d229484c98ba65735f9"
+    },
+    {
+      "file": "representative/native/390/today.png",
+      "bytes": 143719,
+      "sha256": "dc0a0ca294a6dc47fec9ab5f6ac5d073086340a7a7e14f38f0aa24e9a81791f5"
+    },
+    {
+      "file": "representative/receipt.json",
+      "bytes": 13736,
+      "sha256": "da2d880fb23d4d4a1d1274d878986ecc17078c3419ba1b582c8fd90732024569"
+    },
+    {
+      "file": "representative/toast-dismissed/1440/today.png",
+      "bytes": 393229,
+      "sha256": "6b199207b2290bbbf352d42ec5bacea6c68362738756615009656c3cf5afa319"
+    },
+    {
+      "file": "representative/toast-dismissed/320/today.png",
+      "bytes": 121246,
+      "sha256": "b22368394b399eb60b5d910522744ba3ee236e42a5f827b0b00fbf58e3ca61a4"
+    },
+    {
+      "file": "representative/toast-dismissed/390/today.png",
+      "bytes": 143719,
+      "sha256": "dc0a0ca294a6dc47fec9ab5f6ac5d073086340a7a7e14f38f0aa24e9a81791f5"
+    },
+    {
+      "file": "representative/toast-dismissed/receipt.json",
+      "bytes": 1534,
+      "sha256": "3730fee365a468f03ed5600e724a3d5018b9b727b29a0b1414114e6565cfd2f4"
+    },
+    {
+      "file": "run-focused-final.mjs",
+      "bytes": 36078,
+      "sha256": "4d1fd8486fd8f6f40d6cfc7f32d9905d1c5f6e411858dfc1fbf49a87d07d214f"
+    },
+    {
+      "file": "summary.json",
+      "bytes": 6124,
+      "sha256": "70da575385195e88e2b45d77491fa92b24464235f3c3d0091c616387aaf54bfb"
+    },
+    {
+      "file": "toast-dismissed.log",
+      "bytes": 1296,
+      "sha256": "07b1f62a8e70bebe08d2b2bcbc0a2a9a8e5c031854ca435cbfc0135e9561eb49"
+    }
+  ]
+}

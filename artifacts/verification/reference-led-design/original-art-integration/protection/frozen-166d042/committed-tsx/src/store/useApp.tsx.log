@@ -1,0 +1,2730 @@
+import { haptic, isNative } from '../services/native';
+import { disablePush, getPushStatus, isPushActive } from '../services/pushNotifications';
+import { normaliseNudgeTimes } from '../data/dailyNudges';
+import React, { useContext, useEffect, useState, useCallback, useRef } from 'react';
+import { appRouteHref, normalizeAppRoute, readAppRoute } from '../utils/routing';
+import { AppContext } from './AppContext';
+import {
+  UserData,
+  LifeScoreCategories,
+  TwoFuturesData,
+  DefaultFutureData,
+  DriftLogEntry,
+  FutureSelfData,
+  Goal,
+  Mission,
+  MarketItem,
+  MarketCategory,
+  ArchiveReason,
+  ArchivedMarketRecord,
+  BudgetAllocations,
+  LifeBudgetData,
+  Season,
+  RealityBridge,
+  Profile,
+  WalletTransaction,
+  DreamJournalEntry,
+  ActiveFocusSession,
+  FocusSoundTrack,
+  MissionType,
+  MissionArea,
+  MicroHabit,
+  MicroHabitCategory,
+  CustomHabitCategory,
+  DailyCheckIn,
+  DailyMicroHabitRolloverSummary,
+  NotebookEntryInput,
+  NotebookMutationResult,
+  Notebook369Practice,
+  Notebook369Slot,
+  DreamPlan,
+  WeeklyReview,
+} from '../types/models';
+import type { NotebookAction } from '../services/notebook';
+import { clearNotebookDrafts } from '../services/notebookDrafts';
+import { subscribeCourseProgress } from '../services/courseProgress';
+import { createBackupSnapshot, prepareBackupRestore, InvalidBackupError } from '../services/backup';
+import { createRepository, DataRepository } from '../services/repository';
+import { DataSaveConflictError, subscribeDataSaveConflicts } from '../services/dataSnapshots';
+import { subscribeDataWriteRecovery } from '../services/dataWrites';
+import { cloudSync } from '../services/cloudSync';
+import { notificationScheduler } from '../services/notificationScheduler';
+import { getBaseReward, isExemptFromDailyCap, ECONOMY_CONSTANTS, getDailyRewardAmount, getMicroHabitRewardAmount, microHabitRewardId } from '../services/economy';
+import {
+  checkAndApplyDailyMicroHabitRollover,
+  getCurrentDateKey,
+  DailyMicroHabitRolloverResult,
+  calculateBestMicroHabitStreak,
+  calculateMicroHabitStreak,
+} from '../services/microHabitsService';
+import { triggerMissionConfetti, triggerBigRewardConfetti, triggerGoldConfetti, triggerSmallConfetti } from '../utils/confetti';
+import { SEED_MARKET_ITEMS } from '../data/seed';
+import { soundSynthesizer } from '../utils/soundSynthesizer';
+import { voiceGuide } from '../utils/voiceGuide';
+import { getGuidedMeditation } from '../data/guidedMeditations';
+import { t, getLocale, setLocale, isLocale, hasStoredLocale, ensureLocaleLoaded, type Locale } from '../i18n';
+import { localDayKey, usualReminderTime } from '../services/momentum';
+import { applyTheme, resolveTheme, watchSystemTheme, type ThemePref } from '../utils/theme';
+import { BackupRestoreReview } from '../components/BackupRestoreReview';
+import { backupCopy } from '../data/backupCopy';
+
+export interface AppContextType {
+  data: UserData | null;
+  isLoading: boolean;
+  error: string | null;
+  activeRoute: string;
+  toast: { message: string; type?: 'success' | 'info' | 'error' } | null;
+  activeFocusSession: ActiveFocusSession | null;
+  isFocusLocked: boolean;
+  setActiveRoute: (route: string) => void;
+  showToast: (message: string, type?: 'success' | 'info' | 'error') => void;
+  hideToast: () => void;
+  refreshData: (options?: { skipCloudPull?: boolean }) => Promise<void>;
+  startFocusSession: (params: {
+    missionId?: string;
+    missionTitle?: string;
+    missionType?: MissionType;
+    missionArea?: MissionArea;
+    durationMinutes: number;
+    soundTrack?: FocusSoundTrack;
+    volume?: number;
+    guidedMeditationId?: string;
+  }) => void;
+  /** Index of the guided-meditation cue currently being spoken/shown (-1 before the first cue) */
+  activeGuidedCueIndex: number;
+  pauseFocusSession: () => void;
+  resumeFocusSession: () => void;
+  setFocusSoundTrack: (track: FocusSoundTrack) => void;
+  setFocusVolume: (volume: number) => void;
+  addDistractionNote: (note: string) => void;
+  cancelFocusSession: () => void;
+  finishFocusSessionEarly: () => void;
+  completeFocusSession: (reflection?: { completedSummary: string; resistanceNoticed: string; nextStep: string }) => Promise<void>;
+  completeMission: (params: {
+    missionId: string;
+    method: 'self' | 'timer' | 'photo';
+    focusMinutes?: number;
+    note?: string;
+    reflection?: { completedSummary: string; resistanceNoticed: string; nextStep: string };
+  }) => Promise<void>;
+  purchaseItem: (itemId: string) => Promise<void>;
+  createRealityBridge: (bridgeData: Omit<RealityBridge, 'id' | 'createdAt' | 'updatedAt' | 'savingsLogs'>) => Promise<void>;
+  updateRealityBridgeSavings: (bridgeId: string, amount: number, note?: string) => Promise<void>;
+  saveLifeScores: (scores: LifeScoreCategories) => Promise<void>;
+  saveTwoFutures: (twoFuturesData: Partial<TwoFuturesData>) => Promise<void>;
+  saveDefaultFuture: (defaultFuture: Partial<DefaultFutureData>) => Promise<void>;
+  /** Record a drift signal for today (counts as one quiet vote for the default future). */
+  logDriftSignal: (signal: string) => Promise<void>;
+  removeDriftEntry: (entryId: string) => Promise<void>;
+  saveFutureSelf: (futureSelfData: Partial<FutureSelfData>) => Promise<void>;
+  addMission: (mission: Omit<Mission, 'id' | 'createdAt' | 'status' | 'userId'>) => Promise<void>;
+  setOneDecision: (title: string, goalId?: string, estimatedMinutes?: number) => Promise<void>;
+  /** Plan, two-minute start or a smaller wording for a One Decision (no toast). */
+  updateDecision: (missionId: string, patch: Partial<Pick<Mission, 'plan' | 'startedAt' | 'title'>>) => Promise<void>;
+  saveDreamPlan: (itemId: string, plan: Omit<DreamPlan, 'updatedAt'>, makeTodaysDecision?: boolean) => Promise<void>;
+  /** Quiet profile flags for simple mode and the day-14 check-in. */
+  updateMomentumProfile: (patch: Pick<Partial<Profile>, 'simpleModeOff' | 'twoWeekCheckIn' | 'intent' | 'nudgeMode' | 'reminderAskedAt' | 'nextDecisionDraft' | 'nudgesEnabled' | 'nudgeTimes'>) => Promise<void>;
+  saveWeeklyReview: (review: Omit<WeeklyReview, 'createdAt'>) => Promise<void>;
+  addCustomDream: (
+    item: Omit<MarketItem, 'id' | 'createdAt' | 'isCustom'>,
+    pinToVision?: boolean
+  ) => Promise<MarketItem | undefined>;
+  pinExploreDream: (
+    exploreItem: {
+      id: string;
+      name: string;
+      category: MarketCategory;
+      realPriceUsd: number;
+      dreamDollarPrice: number;
+      description: string;
+      imageUrl: string;
+      whyWanted?: string;
+      firstRealStep?: string;
+    },
+    pin?: boolean
+  ) => Promise<MarketItem | undefined>;
+  grantSimulationBonus: (amount?: number, memo?: string) => Promise<void>;
+  toggleInVision: (itemId: string) => Promise<void>;
+  reorderVisionItems: (orderedItemIds: string[]) => Promise<void>;
+  archiveMarketItem: (itemId: string, reason?: ArchiveReason, note?: string) => Promise<void>;
+  restoreMarketItem: (itemId: string, andPinToVision?: boolean) => Promise<void>;
+  deleteArchivedRecord: (recordId: string) => Promise<void>;
+  updateBudget: (budget: BudgetAllocations) => Promise<void>;
+  saveLifeBudget: (lifeBudget: LifeBudgetData) => Promise<void>;
+  addDreamJournalEntry: (entry: Omit<DreamJournalEntry, 'id' | 'createdAt' | 'userId'>) => Promise<void>;
+  deleteDreamJournalEntry: (entryId: string) => Promise<void>;
+  updateDreamJournalEntry: (id: string, patch: Partial<Pick<DreamJournalEntry, 'title' | 'content' | 'mood' | 'photoDataUrl' | 'dreamId' | 'dreamName'>>) => Promise<void>;
+  saveNotebookEntry: (input: NotebookEntryInput) => Promise<NotebookMutationResult>;
+  deleteNotebookEntry: (id: string) => Promise<void>;
+  start369Practice: (intention: string) => Promise<Notebook369Practice>;
+  archive369Practice: (id: string) => Promise<void>;
+  save369Slot: (practiceId: string, dateKey: string, slot: Notebook369Slot, writtenLines: string[]) => Promise<NotebookMutationResult>;
+  saveGratitudeDay: (dateKey: string, items: string[]) => Promise<NotebookMutationResult>;
+  saveNotebookAffirmation: (input: { id?: string; text: string }) => Promise<NotebookMutationResult>;
+  deleteNotebookAffirmation: (id: string) => Promise<void>;
+  isQuickJournalOpen: boolean;
+  openQuickJournal: () => void;
+  closeQuickJournal: () => void;
+  toggleQuickJournal: () => void;
+  addGoal: (goal: Omit<Goal, 'id' | 'createdAt' | 'userId'>) => Promise<Goal | undefined>;
+  updateGoal: (goalId: string, updates: Partial<Omit<Goal, 'id' | 'userId'>>) => Promise<void>;
+  deleteGoal: (goalId: string) => Promise<void>;
+  toggleMicroHabit: (habitId: string) => Promise<void>;
+  addMicroHabit: (params: {
+    title: string;
+    category: MicroHabitCategory;
+    customCategoryId?: string;
+    goalId?: string;
+    durationMinutes?: number;
+    description?: string;
+  }) => Promise<void>;
+  updateMicroHabit: (
+    habitId: string,
+    updates: Partial<Omit<MicroHabit, 'id' | 'createdAt'>>
+  ) => Promise<void>;
+  deleteMicroHabit: (habitId: string) => Promise<void>;
+  addCustomHabitCategory: (params: {
+    name: string;
+    icon: string;
+    color: string;
+    description?: string;
+  }) => Promise<CustomHabitCategory | null>;
+  deleteCustomHabitCategory: (categoryId: string) => Promise<void>;
+  updateCustomHabitCategory: (
+    categoryId: string,
+    params: { name?: string; icon?: string; color?: string; description?: string }
+  ) => Promise<void>;
+  resetMicroHabitsToday: () => Promise<void>;
+  checkDailyMicroHabitsRollover: (force?: boolean) => Promise<DailyMicroHabitRolloverResult | null>;
+  simulateDateKeyChange: (simulatedDateKey?: string) => Promise<void>;
+  lastRolloverSummary: DailyMicroHabitRolloverSummary | null;
+  saveDailyCheckIn: (checkIn: {
+    focus: number;
+    energy: number;
+    mood: number;
+    notes?: string;
+    dateKey?: string;
+  }) => Promise<void>;
+  deleteDailyCheckIn: (checkInId: string) => Promise<void>;
+  joinSeason: (season: Season) => Promise<void>;
+  updateProfile: (profile: Partial<Profile>) => Promise<void>;
+  toggleTheme: () => Promise<void>;
+  setTheme: (theme: ThemePref) => Promise<void>;
+  toggleSoundMute: () => Promise<void>;
+  setSoundMuted: (muted: boolean) => Promise<void>;
+  toggleFocusTabBlink: () => Promise<void>;
+  toggleFocusScreenPulse: () => Promise<void>;
+  simulateFocusTimerAlert: () => void;
+  isSimulatingFocusAlert: boolean;
+  upgradeToPro: () => Promise<void>;
+  toggleProPlan: () => Promise<void>;
+  cancelSubscription: () => Promise<void>;
+  resetToDemo: () => Promise<void>;
+  resetAllData: () => Promise<void>;
+  exportDataJson: () => void;
+  importDataJson: (file: File) => Promise<void>;
+  /** Review newest cloud data. True also means cancellation was handled; do not fall back to an upload. */
+  syncFromCloud: () => Promise<boolean>;
+  /**
+   * First-run finish: saves name + locale, marks onboarding completed, pins the
+   * chosen starter dream as the primary Vision target and locks in today's One Decision.
+   * One save, so the app moves to Today in a single render.
+   */
+  completeOnboarding: (params: {
+    displayName: string;
+    locale: Locale;
+    dream?: {
+      id: string;
+      name: string;
+      category: MarketCategory;
+      realPriceUsd: number;
+      dreamDollarPrice: number;
+      description: string;
+      imageUrl: string;
+      whyWanted?: string;
+      firstRealStep?: string;
+    };
+    decision: string;
+    intent?: Profile['intent'];
+  }) => Promise<void>;
+}
+
+
+const repository: DataRepository = createRepository();
+
+/** Adds today's One Decision, archiving any unfinished one (pure). */
+function withOneDecision(data: UserData, title: string, goalId?: string, estimatedMinutes = 45): UserData {
+  const todayStr = localDayKey();
+  const difficulty = estimatedMinutes < 45 ? 'easy' : estimatedMinutes < 120 ? 'medium' : 'hard';
+  const missions = data.missions.map((m) => (m.isOneDecision && m.status === 'active' ? { ...m, status: 'archived' as const } : m));
+  const decision: Mission = {
+    id: `one-decision-${Date.now()}`,
+    userId: data.profile.id,
+    goalId,
+    title,
+    type: 'daily_quest',
+    area: 'Work',
+    difficulty,
+    estimatedMinutes,
+    isOneDecision: true,
+    scheduledFor: todayStr,
+    status: 'active',
+    createdAt: new Date().toISOString(),
+  };
+  return { ...data, missions: [decision, ...missions] };
+}
+
+export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [data, setData] = useState<UserData | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [activeRoute, setActiveRouteState] = useState<string>(() => {
+    const route = readAppRoute(window.location);
+    // The iPhone app opens straight into ODA; the marketing page is for the web.
+    return isNative() && route === '/' ? '/app' : route;
+  });
+  const [toast, setToast] = useState<{ message: string; type?: 'success' | 'info' | 'error' } | null>(null);
+  const [activeFocusSession, setActiveFocusSession] = useState<ActiveFocusSession | null>(null);
+  const [activeGuidedCueIndex, setActiveGuidedCueIndex] = useState<number>(-1);
+  const [isQuickJournalOpen, setIsQuickJournalOpen] = useState<boolean>(false);
+  const [isSimulatingFocusAlert, setIsSimulatingFocusAlert] = useState<boolean>(false);
+  const [lastRolloverSummary, setLastRolloverSummary] = useState<DailyMicroHabitRolloverSummary | null>(null);
+  const [cloudRestoreReview, setCloudRestoreReview] = useState<{ record: UserData; resolve: (accepted: boolean) => void } | null>(null);
+  const cloudReviewActive = useRef(false);
+
+  useEffect(() => subscribeCourseProgress(canSync => {
+    // Courses save directly into the personal record. Keep other surfaces and
+    // optional debounced cloud sync aligned with that latest saved snapshot.
+    void repository.load().then(latest => {
+      setData(latest);
+      // The originating tab owns backup scheduling. A storage notification or
+      // an edit whose original account expired must not upload to this account.
+      if (canSync?.()) cloudSync.schedulePush(latest);
+    }).catch(() => undefined);
+  }), []);
+
+  const showToast = useCallback((message: string, type: 'success' | 'info' | 'error' = 'success') => {
+    setToast({ message, type });
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+    let refreshing = false;
+    const refreshSavedRecord = () => {
+      if (refreshing) return;
+      refreshing = true;
+      void repository.load().then(latest => {
+        if (mounted) setData(latest);
+      }).catch(() => undefined).finally(() => { refreshing = false; });
+    };
+    const stopConflicts = subscribeDataSaveConflicts(() => {
+      showToast(new DataSaveConflictError('document').message, 'error');
+      refreshSavedRecord();
+    });
+    const stopRecovery = subscribeDataWriteRecovery(() => {
+      const locale = getLocale();
+      showToast(locale === 'tr'
+        ? 'Kayıt depolama alanına erişilemiyor. Değişikliklerin kaydedilmedi. Tekrar dene.'
+        : locale === 'es'
+          ? 'No se puede acceder al almacenamiento. Tus cambios no se guardaron. Inténtalo de nuevo.'
+          : 'Record storage is unavailable. Your changes were not saved. Try again.', 'error');
+      refreshSavedRecord();
+    });
+    return () => { mounted = false; stopConflicts(); stopRecovery(); };
+  }, [showToast]);
+
+  const hideToast = useCallback(() => {
+    setToast(null);
+  }, []);
+
+  const openQuickJournal = useCallback(() => {
+    setIsQuickJournalOpen(true);
+    soundSynthesizer.playTapChime();
+  }, []);
+
+  const closeQuickJournal = useCallback(() => {
+    setIsQuickJournalOpen(false);
+  }, []);
+
+  const toggleQuickJournal = useCallback(() => {
+    setIsQuickJournalOpen((prev) => {
+      const next = !prev;
+      if (next) soundSynthesizer.playTapChime();
+      return next;
+    });
+  }, []);
+
+  // Global Keyboard Shortcut: Cmd + K or Ctrl + K for Quick Dream Journal
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      // Check for Cmd+K (Mac) or Ctrl+K (Windows/Linux)
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsQuickJournalOpen((prev) => {
+          const next = !prev;
+          if (next) soundSynthesizer.playTapChime();
+          return next;
+        });
+      }
+    };
+
+    window.addEventListener('keydown', handleGlobalKeyDown, true);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown, true);
+  }, []);
+
+  // Focus Timer countdown interval
+  useEffect(() => {
+    if (!activeFocusSession || activeFocusSession.isPaused) return;
+
+    const interval = setInterval(() => {
+      setActiveFocusSession((prev) => {
+        if (!prev || prev.isPaused) return prev;
+        if (prev.remainingSeconds <= 1) {
+          // Completed countdown
+          soundSynthesizer.stopAmbient();
+          voiceGuide.stop();
+          soundSynthesizer.playFocusCompleteChime();
+          return {
+            ...prev,
+            remainingSeconds: 0,
+            isPaused: true,
+          };
+        }
+        return {
+          ...prev,
+          remainingSeconds: prev.remainingSeconds - 1,
+        };
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [activeFocusSession?.isPaused]);
+
+  // Guided meditation voice cues — fire each cue once when elapsed time crosses its timestamp
+  useEffect(() => {
+    if (!activeFocusSession?.guidedMeditationId) {
+      if (activeGuidedCueIndex !== -1) setActiveGuidedCueIndex(-1);
+      return;
+    }
+    if (activeFocusSession.isPaused) return;
+    const meditation = getGuidedMeditation(activeFocusSession.guidedMeditationId);
+    if (!meditation) return;
+    const elapsed = activeFocusSession.totalSeconds - activeFocusSession.remainingSeconds;
+    let dueIndex = -1;
+    for (let i = 0; i < meditation.cues.length; i++) {
+      if (meditation.cues[i].atSeconds <= elapsed) dueIndex = i;
+      else break;
+    }
+    if (dueIndex !== activeGuidedCueIndex) {
+      setActiveGuidedCueIndex(dueIndex);
+      if (dueIndex >= 0) voiceGuide.speak(meditation.cues[dueIndex].text, {
+        sessionId: meditation.id, cueIndex: dueIndex,
+        maxDurationSeconds: Math.max(0, (meditation.cues[dueIndex + 1]?.atSeconds ?? activeFocusSession.totalSeconds) - elapsed),
+      });
+      // Keep the next two cues warm so natural-voice playback starts on time
+      const upcoming = meditation.cues.slice(dueIndex + 1, dueIndex + 3);
+      voiceGuide.prefetch(upcoming.map((c) => c.text), upcoming.map((c, offset) => ({
+        sessionId: meditation.id, cueIndex: dueIndex + 1 + offset,
+        maxDurationSeconds: Math.max(0, (meditation.cues[dueIndex + 2 + offset]?.atSeconds ?? activeFocusSession.totalSeconds) - c.atSeconds),
+      })));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeFocusSession?.remainingSeconds, activeFocusSession?.isPaused, activeFocusSession?.guidedMeditationId]);
+
+  // Restore membership/subscription before starting local timers to avoid duplicate push delivery.
+  // Depend on primitive values: `data` is replaced on every save, and re-running this effect
+  // would otherwise query the push server after nearly every tap.
+  const nudgesEnabled = data?.profile.nudgesEnabled === true;
+  const nudgeTimesKey = data ? JSON.stringify(normaliseNudgeTimes(data.profile.nudgeTimes)) : '';
+  const nudgeSmart = data?.profile.nudgeMode === 'smart';
+  const nudgeFollowUp = data ? usualReminderTime(data.missions) : null;
+  useEffect(() => {
+    if (!nudgeTimesKey) return;
+    let active = true;
+    const times = JSON.parse(nudgeTimesKey) as ReturnType<typeof normaliseNudgeTimes>;
+    const configure = () => {
+      if (active) notificationScheduler.configure({ enabled: nudgesEnabled, times, smart: nudgeSmart ? { followUp: nudgeFollowUp } : undefined });
+    };
+    const refresh = async () => {
+      await getPushStatus();
+      // Nudges were switched off elsewhere (another device, a reset): stop server delivery here too.
+      if (active && !nudgesEnabled && isPushActive()) await disablePush().catch(() => undefined);
+      configure();
+    };
+    // Cloud state changes on every sync; only a different member needs a fresh push status.
+    let lastUser: string | null | undefined;
+    const onCloud = () => {
+      const user = cloudSync.getState().session?.user.id ?? null;
+      if (user === lastUser) return;
+      lastUser = user;
+      void refresh().catch(configure);
+    };
+    void cloudSync.init().then(onCloud).catch(configure);
+    const unsubscribe = cloudSync.subscribe(onCloud);
+    window.addEventListener('oda:push-status', configure);
+    return () => {
+      active = false; unsubscribe(); window.removeEventListener('oda:push-status', configure);
+      notificationScheduler.configure({ enabled: false, times });
+    };
+  }, [nudgesEnabled, nudgeTimesKey, nudgeSmart, nudgeFollowUp]);
+
+  // Local reminders point at today's actual decision instead of another quote.
+  const todayDecisionForNudges = data?.missions.find(
+    (m) => m.isOneDecision && (m.scheduledFor === new Date().toISOString().slice(0, 10) || m.status === 'active')
+  );
+  const nudgeDecisionTitle = todayDecisionForNudges?.title ?? null;
+  const nudgeDecisionDone = todayDecisionForNudges?.status === 'completed';
+  useEffect(() => {
+    notificationScheduler.setDecision(nudgeDecisionTitle, nudgeDecisionDone);
+  }, [nudgeDecisionTitle, nudgeDecisionDone]);
+
+  // Tab Title synchronization during Focus Mode & Alert Simulation
+  useEffect(() => {
+    // If user is previewing / testing timer 0 alert in settings
+    if (isSimulatingFocusAlert) {
+      let toggle = false;
+      const titleA = t('✨ [Finished!] Focus Session Simulation — Claim Reward');
+      const titleB = t("🔔 TIME'S UP! [00:00] — Return to Claim D$");
+      document.title = titleA;
+      const simTimer = setInterval(() => {
+        toggle = !toggle;
+        document.title = toggle ? titleB : titleA;
+      }, 850);
+      return () => {
+        clearInterval(simTimer);
+        document.title = 'ODA';
+      };
+    }
+
+    if (!activeFocusSession) {
+      document.title = 'ODA';
+      return;
+    }
+
+    const tabBlinkEnabled = data?.profile?.focusTabBlinkEnabled !== false;
+    const mins = Math.floor(activeFocusSession.remainingSeconds / 60);
+    const secs = activeFocusSession.remainingSeconds % 60;
+    const timeStr = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+    if (activeFocusSession.remainingSeconds === 0) {
+      if (!tabBlinkEnabled) {
+        document.title = t('✨ [Finished!] {title} — ODA', { title: activeFocusSession.missionTitle });
+        return;
+      }
+
+      // Visual Blinking Animation across browser tab title bar
+      let toggle = false;
+      const titleA = t('✨ [Finished!] {title} — Claim Reward', { title: activeFocusSession.missionTitle });
+      const titleB = t("🔔 TIME'S UP! [00:00] — Return to Claim D$");
+      document.title = titleA;
+      const blinkTimer = setInterval(() => {
+        toggle = !toggle;
+        document.title = toggle ? titleB : titleA;
+      }, 850);
+
+      return () => {
+        clearInterval(blinkTimer);
+      };
+    } else if (activeFocusSession.isPaused) {
+      document.title = t('⏸️ [Paused {time}] {title} — ODA', { time: timeStr, title: activeFocusSession.missionTitle });
+    } else {
+      document.title = t('⏱️ [{time}] {title} — ODA', { time: timeStr, title: activeFocusSession.missionTitle });
+    }
+  }, [
+    isSimulatingFocusAlert,
+    activeFocusSession?.remainingSeconds,
+    activeFocusSession?.isPaused,
+    activeFocusSession?.missionTitle,
+    data?.profile?.focusTabBlinkEnabled,
+  ]);
+
+  const startFocusSession = useCallback(
+    (params: {
+      missionId?: string;
+      missionTitle?: string;
+      missionType?: MissionType;
+      missionArea?: MissionArea;
+      durationMinutes: number;
+      soundTrack?: FocusSoundTrack;
+      volume?: number;
+      guidedMeditationId?: string;
+    }) => {
+      const duration = Math.max(1, params.durationMinutes);
+      const totalSecs = duration * 60;
+      const soundTrack: FocusSoundTrack = params.soundTrack || 'binaural';
+      // Guided sessions keep the ambience quieter so the voice sits on top
+      const volume = params.volume ?? (params.guidedMeditationId ? 0.35 : 0.5);
+
+      const newSession: ActiveFocusSession = {
+        id: `focus-${Date.now()}`,
+        missionId: params.missionId,
+        missionTitle: params.missionTitle || t('Deep Work Sprint'),
+        missionType: params.missionType,
+        missionArea: params.missionArea,
+        durationMinutes: duration,
+        remainingSeconds: totalSecs,
+        totalSeconds: totalSecs,
+        isPaused: false,
+        soundTrack,
+        volume,
+        startedAt: new Date().toISOString(),
+        distractionNotes: [],
+        guidedMeditationId: params.guidedMeditationId,
+      };
+
+      voiceGuide.stop();
+      setActiveGuidedCueIndex(-1);
+      if (params.guidedMeditationId) {
+        const med = getGuidedMeditation(params.guidedMeditationId);
+        if (med) voiceGuide.prefetch(med.cues.slice(0, 3).map((c) => c.text), med.cues.slice(0, 3).map((c, cueIndex) => ({
+          sessionId: med.id, cueIndex,
+          maxDurationSeconds: Math.max(0, (med.cues[cueIndex + 1]?.atSeconds ?? totalSecs) - c.atSeconds),
+        })));
+      }
+      setActiveFocusSession(newSession);
+      soundSynthesizer.setVolume(volume);
+      soundSynthesizer.playFocusStartGong();
+      if (soundTrack !== 'silence') {
+        soundSynthesizer.playAmbient(soundTrack);
+      }
+      showToast(
+        params.guidedMeditationId
+          ? t('Guided meditation started: {title} ({minutes}m)', { title: newSession.missionTitle, minutes: duration })
+          : t('Locked into Deep Work: {title} ({minutes}m)', { title: newSession.missionTitle, minutes: duration }),
+        'info'
+      );
+    },
+    [showToast]
+  );
+
+  const pauseFocusSession = useCallback(() => {
+    setActiveFocusSession((prev) => {
+      if (!prev) return null;
+      soundSynthesizer.stopAmbient();
+      voiceGuide.pause();
+      return { ...prev, isPaused: true };
+    });
+  }, []);
+
+  const resumeFocusSession = useCallback(() => {
+    setActiveFocusSession((prev) => {
+      if (!prev) return null;
+      if (prev.soundTrack !== 'silence') {
+        soundSynthesizer.playAmbient(prev.soundTrack);
+      }
+      voiceGuide.resume();
+      return { ...prev, isPaused: false };
+    });
+  }, []);
+
+  const setFocusSoundTrack = useCallback((track: FocusSoundTrack) => {
+    setActiveFocusSession((prev) => {
+      if (!prev) return null;
+      if (!prev.isPaused) {
+        soundSynthesizer.playAmbient(track);
+      }
+      return { ...prev, soundTrack: track };
+    });
+  }, []);
+
+  const setFocusVolume = useCallback((vol: number) => {
+    soundSynthesizer.setVolume(vol);
+    setActiveFocusSession((prev) => (prev ? { ...prev, volume: vol } : null));
+  }, []);
+
+  const addDistractionNote = useCallback((note: string) => {
+    if (!note.trim()) return;
+    setActiveFocusSession((prev) => {
+      if (!prev) return null;
+      return { ...prev, distractionNotes: [...prev.distractionNotes, note.trim()] };
+    });
+  }, []);
+
+  const cancelFocusSession = useCallback(() => {
+    soundSynthesizer.stopAmbient();
+    voiceGuide.stop();
+    setActiveFocusSession(null);
+    showToast(t('Deep work focus session ended.'), 'info');
+  }, [showToast]);
+
+  const finishFocusSessionEarly = useCallback(() => {
+    setActiveFocusSession((prev) => {
+      if (!prev) return null;
+      soundSynthesizer.stopAmbient();
+      voiceGuide.stop();
+      soundSynthesizer.playFocusCompleteChime();
+      return { ...prev, remainingSeconds: 0, isPaused: true };
+    });
+  }, []);
+
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => {
+        setToast(null);
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
+
+  const setActiveRoute = useCallback((route: string) => {
+    setActiveRouteState(normalizeAppRoute(route));
+    window.history.pushState({}, '', appRouteHref(route));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  // Listen to browser back/forward
+  useEffect(() => {
+    const handlePop = () => {
+      setActiveRouteState(readAppRoute(window.location));
+    };
+    window.addEventListener('popstate', handlePop);
+    window.addEventListener('hashchange', handlePop);
+    return () => {
+      window.removeEventListener('popstate', handlePop);
+      window.removeEventListener('hashchange', handlePop);
+    };
+  }, []);
+
+  const refreshData = useCallback(async (options?: { skipCloudPull?: boolean }) => {
+    try {
+      setIsLoading(true);
+      let loaded = await repository.load();
+      // Cloud: if signed in and the cloud copy is newer, prefer it
+      try {
+        await cloudSync.init();
+        const remote = options?.skipCloudPull ? null : await cloudSync.pullIfNewer(loaded);
+        if (remote) {
+          if (await repository.replaceAll(remote, originalRecord => cloudSync.canApplyRemote(remote, originalRecord))) await cloudSync.markRemoteApplied(remote);
+        }
+        // A remote request can overlap a newer local save; render the latest record.
+        loaded = await repository.load();
+      } catch {
+        /* cloud is optional */
+      }
+      // Language: the explicit device choice (localStorage) wins; otherwise follow the profile.
+      // Wait for the dictionary so the first paint is already translated.
+      try {
+        if (!hasStoredLocale() && isLocale(loaded.profile.locale) && loaded.profile.locale !== getLocale()) {
+          setLocale(loaded.profile.locale);
+        }
+        await ensureLocaleLoaded();
+      } catch {
+        /* i18n is best-effort */
+      }
+      setData(loaded);
+
+      if (loaded.lastActiveDateKey) {
+        setLastRolloverSummary({
+          hasChanged: false,
+          currentDateKey: loaded.lastActiveDateKey,
+          resetHabitsCount: (loaded.microHabits || []).filter(
+            (h) => !h.completedDates.includes(loaded.lastActiveDateKey!)
+          ).length,
+          brokenStreaksCount: 0,
+          timestamp: loaded.lastDailyResetTimestamp || new Date().toISOString(),
+        });
+      }
+
+      setError(null);
+    } catch (e: any) {
+      setError(e?.message || t('Failed to load app data'));
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    refreshData();
+  }, [refreshData]);
+
+  const completeMission = useCallback(
+    async (params: {
+      missionId: string;
+      method: 'self' | 'timer' | 'photo';
+      focusMinutes?: number;
+      note?: string;
+      reflection?: { completedSummary: string; resistanceNoticed: string; nextStep: string };
+    }) => {
+      try {
+        const result = await repository.completeMission(params);
+        setData(result.data);
+        showToast(result.message, result.rewardAmount > 0 ? 'success' : 'info');
+        void haptic('success');
+
+        // Trigger celebratory confetti animation
+        if (result.rewardAmount >= 400) {
+          triggerBigRewardConfetti();
+        } else {
+          triggerMissionConfetti();
+        }
+      } catch (err: any) {
+        showToast(err?.message || t('Failed to complete mission'), 'error');
+        throw err;
+      }
+    },
+    [showToast]
+  );
+
+  const completeFocusSession = useCallback(
+    async (reflection?: { completedSummary: string; resistanceNoticed: string; nextStep: string }) => {
+      if (!activeFocusSession || !data) return;
+
+      soundSynthesizer.stopAmbient();
+      const session = activeFocusSession;
+      const actualMinutesSpent =
+        Math.max(1, Math.round((session.totalSeconds - session.remainingSeconds) / 60)) || session.durationMinutes;
+
+      if (session.missionId) {
+        // Complete linked mission
+        await completeMission({
+          missionId: session.missionId,
+          method: 'timer',
+          focusMinutes: actualMinutesSpent,
+          note: session.distractionNotes.length > 0 ? t('Parking lot notes: {notes}', { notes: session.distractionNotes.join('; ') }) : undefined,
+          reflection: reflection || {
+            completedSummary: t('Deep Work Completed: {title}', { title: session.missionTitle }),
+            resistanceNoticed:
+              session.distractionNotes.length > 0
+                ? t('Parked {n} thoughts in distraction lot.', { n: session.distractionNotes.length })
+                : t('Protected flow without checking distractions.'),
+            nextStep: t('Continue next high-leverage block.'),
+          },
+        });
+      } else {
+        // Standalone Focus Session reward
+        const rewardRate = Math.min(300, Math.max(60, Math.round(session.durationMinutes * 4)));
+        const now = new Date().toISOString();
+        const todayStr = now.slice(0, 10);
+
+        const focusTx: WalletTransaction = {
+          id: `tx-focus-${Date.now()}`,
+          walletId: 'wallet-demo',
+          userId: data.profile.id,
+          kind: 'focus_reward',
+          amount: rewardRate,
+          dayKey: todayStr,
+          memo: t('Deep Work Session: {title} ({minutes}m)', { title: session.missionTitle, minutes: actualMinutesSpent }),
+          createdAt: now,
+        };
+
+        const updated: UserData = {
+          ...data,
+          transactions: [focusTx, ...data.transactions],
+          completions: [
+            {
+              id: `comp-focus-${Date.now()}`,
+              missionId: session.id,
+              userId: data.profile.id,
+              completedAt: now,
+              method: 'timer',
+              focusMinutes: actualMinutesSpent,
+              note: session.distractionNotes.join('; '),
+              reflection: reflection || {
+                completedSummary: t('Deep Work Sprint: {title}', { title: session.missionTitle }),
+                resistanceNoticed:
+                  session.distractionNotes.length > 0
+                    ? t('Noticed {n} resistance thoughts.', { n: session.distractionNotes.length })
+                    : t('Maintained uninterrupted deep focus.'),
+                nextStep: t('Hydrate, reflect, and reset.'),
+              },
+              rewardAmount: rewardRate,
+              streakBonus: 0,
+            },
+            ...data.completions,
+          ],
+        };
+
+        await repository.save(updated);
+        setData(updated);
+        showToast(t('Deep Work verified! + D${amount} added to Dream Bank.', { amount: rewardRate.toLocaleString() }), 'success');
+        triggerBigRewardConfetti();
+      }
+
+      setActiveFocusSession(null);
+    },
+    [activeFocusSession, data, completeMission, showToast]
+  );
+
+  const purchaseItem = useCallback(
+    async (itemId: string) => {
+      try {
+        const result = await repository.purchaseItem(itemId);
+        setData(result.data);
+        showToast(result.message, 'success');
+        triggerGoldConfetti();
+      } catch (err: any) {
+        showToast(err?.message || t('Purchase failed'), 'error');
+        throw err;
+      }
+    },
+    [showToast]
+  );
+
+  const createRealityBridge = useCallback(
+    async (bridgeData: Omit<RealityBridge, 'id' | 'createdAt' | 'updatedAt' | 'savingsLogs'>) => {
+      try {
+        const result = await repository.createRealityBridge(bridgeData);
+        setData(result.data);
+        showToast(t('Reality Bridge established with real action plan!'), 'success');
+      } catch (err: any) {
+        showToast(err?.message || t('Failed to create bridge'), 'error');
+        throw err;
+      }
+    },
+    [showToast]
+  );
+
+  const updateRealityBridgeSavings = useCallback(
+    async (bridgeId: string, amount: number, note?: string) => {
+      try {
+        const result = await repository.updateRealityBridgeSavings(bridgeId, amount, note);
+        setData(result.data);
+        showToast(t('Logged ${amount} in real savings progress.', { amount: amount.toLocaleString() }), 'success');
+      } catch (err: any) {
+        showToast(err?.message || t('Failed to update savings'), 'error');
+        throw err;
+      }
+    },
+    [showToast]
+  );
+
+  const saveLifeScores = useCallback(
+    async (scores: LifeScoreCategories) => {
+      if (!data) return;
+      const values = Object.values(scores);
+      const totalScore = Math.round((values.reduce((a, b) => a + b, 0) / (values.length * 10)) * 100);
+
+      const areaLabels: Record<keyof LifeScoreCategories, string> = {
+        money: t('Money'),
+        workAndPurpose: t('Work & Purpose'),
+        health: t('Health'),
+        relationships: t('Relationships'),
+        discipline: t('Discipline'),
+        environment: t('Environment'),
+        learning: t('Learning'),
+        personalMeaning: t('Personal Meaning'),
+      };
+
+      const sorted = (Object.keys(scores) as (keyof LifeScoreCategories)[]).sort(
+        (a, b) => scores[a] - scores[b]
+      );
+      const lowestAreas = [areaLabels[sorted[0]], areaLabels[sorted[1]]];
+
+      let interpretation = '';
+      if (totalScore >= 75) {
+        interpretation =
+          t('Your current actions are largely supporting the future you want. The work now is protecting what works.');
+      } else if (totalScore >= 50) {
+        interpretation =
+          t('Some areas are carrying you; others are quietly asking for attention. A single daily decision can shift the balance.');
+      } else {
+        interpretation = t('Your Future Life Score is {score}/100. Your current actions are not yet supporting the future you described. That is information, not a verdict — and it is exactly what this app is for.', { score: totalScore });
+      }
+
+      const now = new Date().toISOString();
+      const newScoreRecord = {
+        id: `score-${Date.now()}`,
+        userId: data.profile.id,
+        scores,
+        totalScore,
+        lowestAreas,
+        interpretation,
+        createdAt: now,
+      };
+
+      const updated: UserData = {
+        ...data,
+        lifeScores: [newScoreRecord, ...data.lifeScores],
+      };
+
+      await repository.save(updated);
+      setData(updated);
+      showToast(t('Future Life Score recorded.'), 'success');
+    },
+    [data, showToast]
+  );
+
+  const saveTwoFutures = useCallback(
+    async (twoFuturesData: Partial<TwoFuturesData>) => {
+      if (!data) return;
+      const updated: UserData = {
+        ...data,
+        twoFutures: {
+          ...data.twoFutures,
+          ...twoFuturesData,
+          updatedAt: new Date().toISOString(),
+        },
+      };
+      await repository.save(updated);
+      setData(updated);
+      showToast(t('Two Futures vision updated.'), 'success');
+    },
+    [data, showToast]
+  );
+
+  const saveDefaultFuture = useCallback(
+    async (defaultFuture: Partial<DefaultFutureData>) => {
+      if (!data) return;
+      const updated: UserData = {
+        ...data,
+        twoFutures: {
+          ...data.twoFutures,
+          defaultFuture: {
+            ...(data.twoFutures.defaultFuture || {}),
+            ...defaultFuture,
+            lastReviewedAt: new Date().toISOString(),
+          },
+          updatedAt: new Date().toISOString(),
+        },
+      };
+      await repository.save(updated);
+      setData(updated);
+      showToast(t('Default Future updated.'), 'success');
+    },
+    [data, showToast]
+  );
+
+  const logDriftSignal = useCallback(
+    async (signal: string) => {
+      if (!data || !signal.trim()) return;
+      const now = new Date();
+      const dateKey = now.toISOString().slice(0, 10);
+      const existing = data.twoFutures.defaultFuture?.driftLog || [];
+      if (existing.some((e) => e.dateKey === dateKey && e.signal === signal)) {
+        showToast(t('Already logged for today. Awareness noted.'), 'info');
+        return;
+      }
+      const entry: DriftLogEntry = {
+        id: `drift-${now.getTime()}`,
+        dateKey,
+        signal,
+        createdAt: now.toISOString(),
+      };
+      const updated: UserData = {
+        ...data,
+        twoFutures: {
+          ...data.twoFutures,
+          allowingVotes: (data.twoFutures.allowingVotes || 0) + 1,
+          defaultFuture: {
+            ...(data.twoFutures.defaultFuture || {}),
+            driftLog: [entry, ...existing].slice(0, 365),
+          },
+          updatedAt: now.toISOString(),
+        },
+      };
+      await repository.save(updated);
+      setData(updated);
+      showToast(t('Drift noticed. Noticing is the first vote back.'), 'info');
+    },
+    [data, showToast]
+  );
+
+  const removeDriftEntry = useCallback(
+    async (entryId: string) => {
+      if (!data) return;
+      const existing = data.twoFutures.defaultFuture?.driftLog || [];
+      if (!existing.some((e) => e.id === entryId)) return;
+      const updated: UserData = {
+        ...data,
+        twoFutures: {
+          ...data.twoFutures,
+          allowingVotes: Math.max(0, (data.twoFutures.allowingVotes || 0) - 1),
+          defaultFuture: {
+            ...(data.twoFutures.defaultFuture || {}),
+            driftLog: existing.filter((e) => e.id !== entryId),
+          },
+          updatedAt: new Date().toISOString(),
+        },
+      };
+      await repository.save(updated);
+      setData(updated);
+    },
+    [data]
+  );
+
+  const saveFutureSelf = useCallback(
+    async (futureSelfData: Partial<FutureSelfData>) => {
+      if (!data) return;
+      const updated: UserData = {
+        ...data,
+        futureSelf: {
+          ...data.futureSelf,
+          ...futureSelfData,
+          updatedAt: new Date().toISOString(),
+        },
+      };
+      await repository.save(updated);
+      setData(updated);
+      showToast(t('Future Self profile saved.'), 'success');
+    },
+    [data, showToast]
+  );
+
+  const addMission = useCallback(
+    async (missionData: Omit<Mission, 'id' | 'createdAt' | 'status' | 'userId'>) => {
+      if (!data) return;
+      const now = new Date().toISOString();
+      const newMission: Mission = {
+        ...missionData,
+        id: `mission-${Date.now()}`,
+        userId: data.profile.id,
+        status: 'active',
+        createdAt: now,
+      };
+
+      const updated: UserData = {
+        ...data,
+        missions: [newMission, ...data.missions],
+      };
+      await repository.save(updated);
+      setData(updated);
+      showToast(t('Mission created.'), 'success');
+    },
+    [data, showToast]
+  );
+
+  const setOneDecision = useCallback(
+    async (title: string, goalId?: string, estimatedMinutes: number = 45) => {
+      if (!data) return;
+      const updated = withOneDecision(data, title, goalId, estimatedMinutes);
+      await repository.save(updated);
+      setData(updated);
+      showToast(t('Today’s One Decision is locked in. Complete it to earn D$500!'), 'success');
+    },
+    [data, showToast]
+  );
+
+  const updateDecision = useCallback(
+    async (missionId: string, patch: Partial<Pick<Mission, 'plan' | 'startedAt' | 'title'>>) => {
+      if (!data) return;
+      const updated: UserData = {
+        ...data,
+        missions: data.missions.map((m) => (m.id === missionId ? { ...m, ...patch } : m)),
+      };
+      await repository.save(updated);
+      setData(updated);
+    },
+    [data]
+  );
+
+  const saveDreamPlan = useCallback(
+    async (itemId: string, plan: Omit<DreamPlan, 'updatedAt'>, makeTodaysDecision = false) => {
+      if (!data) return;
+      // One write so the plan and the new decision cannot overwrite each other.
+      const base = makeTodaysDecision && plan.step ? withOneDecision(data, plan.step) : data;
+      const updated: UserData = {
+        ...base,
+        dreamPlans: { ...(base.dreamPlans || {}), [itemId]: { ...plan, updatedAt: new Date().toISOString() } },
+      };
+      await repository.save(updated);
+      setData(updated);
+      if (makeTodaysDecision) showToast(t('Today’s One Decision is locked in. Complete it to earn D$500!'), 'success');
+    },
+    [data, showToast]
+  );
+
+  const saveWeeklyReview = useCallback(
+    async (review: Omit<WeeklyReview, 'createdAt'>) => {
+      if (!data) return;
+      const others = (data.weeklyReviews || []).filter((r) => r.weekKey !== review.weekKey);
+      const updated: UserData = { ...data, weeklyReviews: [{ ...review, createdAt: new Date().toISOString() }, ...others].slice(0, 104) };
+      await repository.save(updated);
+      setData(updated);
+    },
+    [data]
+  );
+
+  const updateMomentumProfile = useCallback(
+    async (patch: Pick<Partial<Profile>, 'simpleModeOff' | 'twoWeekCheckIn' | 'intent' | 'nudgeMode' | 'reminderAskedAt' | 'nextDecisionDraft' | 'nudgesEnabled' | 'nudgeTimes'>) => {
+      if (!data) return;
+      const updated: UserData = { ...data, profile: { ...data.profile, ...patch } };
+      await repository.save(updated);
+      setData(updated);
+    },
+    [data]
+  );
+
+  const addCustomDream = useCallback(
+    async (
+      itemData: Omit<MarketItem, 'id' | 'createdAt' | 'isCustom'>,
+      pinToVision: boolean = false
+    ) => {
+      if (!data) return undefined;
+      const newItemId = `custom-dream-${Date.now()}`;
+      const newItem: MarketItem = {
+        ...itemData,
+        id: newItemId,
+        isCustom: true,
+        createdAt: new Date().toISOString(),
+      };
+      const currentInVision = data.inVisionItemIds || [];
+      const updatedInVision = pinToVision
+        ? Array.from(new Set([newItemId, ...currentInVision]))
+        : currentInVision;
+
+      const updated: UserData = {
+        ...data,
+        customMarketItems: [newItem, ...data.customMarketItems],
+        inVisionItemIds: updatedInVision,
+      };
+      await repository.save(updated);
+      setData(updated);
+      showToast(
+        pinToVision
+          ? t('"{name}" added to your Vision Board and Market.', { name: newItem.name })
+          : t('Custom dream "{name}" added to your Dream Market.', { name: newItem.name }),
+        'success'
+      );
+      return newItem;
+    },
+    [data, showToast]
+  );
+
+  const pinExploreDream = useCallback(
+    async (
+      exploreItem: {
+        id: string;
+        name: string;
+        category: MarketCategory;
+        realPriceUsd: number;
+        dreamDollarPrice: number;
+        description: string;
+        imageUrl: string;
+        whyWanted?: string;
+        firstRealStep?: string;
+      },
+      pin: boolean = true
+    ) => {
+      if (!data) return undefined;
+
+      const currentInVision = data.inVisionItemIds || [];
+      const currentCustoms = data.customMarketItems || [];
+
+      // Check if existing custom dream already matches this ID or image URL
+      const existingCustom = currentCustoms.find(
+        (c) => c.id === exploreItem.id || (exploreItem.imageUrl && c.customImageUrl === exploreItem.imageUrl)
+      );
+
+      let targetItemId = existingCustom?.id || exploreItem.id;
+      let updatedCustoms = [...currentCustoms];
+      let targetItem: MarketItem;
+
+      if (existingCustom) {
+        targetItem = existingCustom;
+      } else {
+        targetItem = {
+          id: exploreItem.id,
+          name: exploreItem.name,
+          category: exploreItem.category,
+          realPriceUsd: exploreItem.realPriceUsd,
+          dreamDollarPrice: exploreItem.dreamDollarPrice,
+          description: exploreItem.description,
+          illustrationKey: 'custom_dream',
+          customImageUrl: exploreItem.imageUrl,
+          whyWanted: exploreItem.whyWanted || t('High standard of sovereign living and deep focus.'),
+          firstRealStep: exploreItem.firstRealStep || t('Define concrete execution milestone.'),
+          isCustom: true,
+          createdAt: new Date().toISOString(),
+        };
+        updatedCustoms = [targetItem, ...updatedCustoms];
+      }
+
+      let updatedInVision: string[];
+      if (pin) {
+        updatedInVision = Array.from(new Set([targetItemId, ...currentInVision]));
+      } else {
+        updatedInVision = currentInVision.filter((id) => id !== targetItemId && id !== exploreItem.id);
+      }
+
+      const updated: UserData = {
+        ...data,
+        customMarketItems: updatedCustoms,
+        inVisionItemIds: updatedInVision,
+      };
+
+      await repository.save(updated);
+      setData(updated);
+
+      if (pin) {
+        showToast(t('"{name}" added to your Vision Board and Dream Market! ⭐', { name: exploreItem.name }), 'success');
+        triggerGoldConfetti();
+      } else {
+        showToast(t('"{name}" removed from your Vision Board.', { name: exploreItem.name }), 'info');
+      }
+
+      return targetItem;
+    },
+    [data, showToast]
+  );
+
+  const grantSimulationBonus = useCallback(
+    async (amount: number = 25000, memo: string = t('Executive Life Simulation Grant')) => {
+      if (!data) return;
+      const now = new Date().toISOString();
+      const newTx: WalletTransaction = {
+        id: `tx-grant-${Date.now()}`,
+        walletId: 'wallet-demo',
+        userId: data.profile.id,
+        kind: 'welcome_grant',
+        amount,
+        dayKey: now.slice(0, 10),
+        memo,
+        createdAt: now,
+      };
+      const updated: UserData = {
+        ...data,
+        transactions: [newTx, ...data.transactions],
+      };
+      await repository.save(updated);
+      setData(updated);
+      showToast(t('+D$ {amount} added to your ledger for luxury acquisitions!', { amount: amount.toLocaleString() }), 'success');
+      triggerGoldConfetti();
+    },
+    [data, showToast]
+  );
+
+  const toggleInVision = useCallback(
+    async (itemId: string) => {
+      if (!data) return;
+      const current = data.inVisionItemIds || [];
+      const updatedList = current.includes(itemId)
+        ? current.filter((id) => id !== itemId)
+        : [...current, itemId];
+
+      const updated: UserData = {
+        ...data,
+        inVisionItemIds: updatedList,
+      };
+      await repository.save(updated);
+      setData(updated);
+    },
+    [data]
+  );
+
+  const reorderVisionItems = useCallback(
+    async (orderedItemIds: string[]) => {
+      if (!data) return;
+      const current = data.inVisionItemIds || [];
+      const orderedSet = new Set(orderedItemIds);
+      const remaining = current.filter((id) => !orderedSet.has(id));
+      const finalList = [...orderedItemIds, ...remaining];
+
+      const updated: UserData = {
+        ...data,
+        inVisionItemIds: finalList,
+      };
+      await repository.save(updated);
+      setData(updated);
+    },
+    [data]
+  );
+
+  const archiveMarketItem = useCallback(
+    async (
+      itemId: string,
+      reason: ArchiveReason = 'no_longer_relevant',
+      note?: string
+    ) => {
+      if (!data) return;
+
+      const allItems: MarketItem[] = [...SEED_MARKET_ITEMS, ...data.customMarketItems];
+      const targetItem = allItems.find((i) => i.id === itemId);
+      if (!targetItem) {
+        showToast(t('Nothing found to archive.'), 'error');
+        return;
+      }
+
+      const wasOwned = data.purchases.some((p) => p.itemId === itemId);
+      const wasInVision = (data.inVisionItemIds || []).includes(itemId);
+      const now = new Date().toISOString();
+
+      const newRecord: ArchivedMarketRecord = {
+        id: `arch-${Date.now()}`,
+        itemId,
+        itemSnapshot: {
+          ...targetItem,
+          isArchived: true,
+          archivedAt: now,
+          archiveReason: reason,
+        },
+        archivedAt: now,
+        reason,
+        note: note?.trim() || undefined,
+        wasOwned,
+        wasInVision,
+      };
+
+      // Remove from active vision board & record in archive collections
+      const updatedInVision = (data.inVisionItemIds || []).filter((id) => id !== itemId);
+      const updatedArchivedIds = Array.from(new Set([...(data.archivedMarketItemIds || []), itemId]));
+      const currentRecords = data.archivedMarketRecords || [];
+      const updatedRecords = [newRecord, ...currentRecords.filter((r) => r.itemId !== itemId)];
+
+      const updatedCustoms = data.customMarketItems.map((c) =>
+        c.id === itemId
+          ? { ...c, isArchived: true, archivedAt: now, archiveReason: reason }
+          : c
+      );
+
+      const updated: UserData = {
+        ...data,
+        customMarketItems: updatedCustoms,
+        inVisionItemIds: updatedInVision,
+        archivedMarketItemIds: updatedArchivedIds,
+        archivedMarketRecords: updatedRecords,
+      };
+
+      await repository.save(updated);
+      setData(updated);
+
+      const reasonLabel =
+        reason === 'completed' || reason === 'acquired'
+          ? t('archived as completed / acquired')
+          : reason === 'outgrown'
+          ? t('archived as outgrown')
+          : reason === 'replaced'
+          ? t('archived as replaced by a new goal')
+          : t('archived');
+
+      showToast(
+        t('"{name}" {reason} and removed from the active Vision Board.', { name: targetItem.name, reason: reasonLabel }),
+        'info'
+      );
+    },
+    [data, showToast]
+  );
+
+  const restoreMarketItem = useCallback(
+    async (itemId: string, andPinToVision: boolean = false) => {
+      if (!data) return;
+
+      const allItems: MarketItem[] = [...SEED_MARKET_ITEMS, ...data.customMarketItems];
+      const targetItem =
+        allItems.find((i) => i.id === itemId) ||
+        data.archivedMarketRecords?.find((r) => r.itemId === itemId)?.itemSnapshot;
+
+      const updatedArchivedIds = (data.archivedMarketItemIds || []).filter((id) => id !== itemId);
+      const currentInVision = data.inVisionItemIds || [];
+      const updatedInVision = andPinToVision
+        ? Array.from(new Set([itemId, ...currentInVision]))
+        : currentInVision;
+
+      const updatedRecords = (data.archivedMarketRecords || []).filter((r) => r.itemId !== itemId);
+      const updatedCustoms = data.customMarketItems.map((c) =>
+        c.id === itemId
+          ? { ...c, isArchived: false, archivedAt: undefined, archiveReason: undefined }
+          : c
+      );
+
+      const updated: UserData = {
+        ...data,
+        customMarketItems: updatedCustoms,
+        inVisionItemIds: updatedInVision,
+        archivedMarketItemIds: updatedArchivedIds,
+        archivedMarketRecords: updatedRecords,
+      };
+
+      await repository.save(updated);
+      setData(updated);
+
+      const itemName = targetItem?.name || t('Item');
+      showToast(
+        andPinToVision
+          ? t('"{name}" restored from the archive to your Vision Board.', { name: itemName })
+          : t('"{name}" restored from the archive to the Market.', { name: itemName }),
+        'success'
+      );
+    },
+    [data, showToast]
+  );
+
+  const deleteArchivedRecord = useCallback(
+    async (recordId: string) => {
+      if (!data) return;
+      const targetRecord = data.archivedMarketRecords?.find((r) => r.id === recordId);
+      const updatedRecords = (data.archivedMarketRecords || []).filter((r) => r.id !== recordId);
+      let updatedArchivedIds = data.archivedMarketItemIds || [];
+      if (targetRecord) {
+        updatedArchivedIds = updatedArchivedIds.filter((id) => id !== targetRecord.itemId);
+      }
+      const updated: UserData = {
+        ...data,
+        archivedMarketItemIds: updatedArchivedIds,
+        archivedMarketRecords: updatedRecords,
+      };
+      await repository.save(updated);
+      setData(updated);
+      showToast(t('Archive record deleted.'), 'info');
+    },
+    [data, showToast]
+  );
+
+  const updateBudget = useCallback(
+    async (budget: BudgetAllocations) => {
+      if (!data) return;
+      const updated: UserData = {
+        ...data,
+        budget,
+      };
+      await repository.save(updated);
+      setData(updated);
+      showToast(t('Life simulation budget updated.'), 'success');
+    },
+    [data, showToast]
+  );
+
+  const saveLifeBudget = useCallback(
+    async (lifeBudget: LifeBudgetData) => {
+      if (!data) return;
+      const updated: UserData = {
+        ...data,
+        lifeBudget,
+      };
+      await repository.save(updated);
+      setData(updated);
+      showToast(t('Life simulation allocation saved.'), 'success');
+    },
+    [data, showToast]
+  );
+
+  // Notebook writes always load the latest document inside the repository queue.
+  // These callbacks deliberately do not close over a captured UserData snapshot.
+  const writeNotebook = useCallback(async (action: NotebookAction) => {
+    try {
+      const update = await repository.mutateNotebook(action);
+      setData(update.data);
+      return update.result;
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : t('Notebook could not be saved.'), 'error');
+      throw error;
+    }
+  }, [showToast]);
+
+  const saveNotebookEntry = useCallback(async (input: NotebookEntryInput) =>
+    await writeNotebook({ type: 'save_entry', input }) as NotebookMutationResult, [writeNotebook]);
+
+  const deleteNotebookEntry = useCallback(async (id: string) => {
+    await writeNotebook({ type: 'delete_entry', id });
+  }, [writeNotebook]);
+
+  const start369Practice = useCallback(async (intention: string) =>
+    await writeNotebook({ type: 'start_369', intention }) as Notebook369Practice, [writeNotebook]);
+
+  const archive369Practice = useCallback(async (id: string) => {
+    await writeNotebook({ type: 'archive_369', id });
+  }, [writeNotebook]);
+
+  const save369Slot = useCallback(async (practiceId: string, dateKey: string, slot: Notebook369Slot, writtenLines: string[]) =>
+    await writeNotebook({ type: 'save_369', practiceId, dateKey, slot, writtenLines }) as NotebookMutationResult, [writeNotebook]);
+
+  const saveGratitudeDay = useCallback(async (dateKey: string, items: string[]) =>
+    await writeNotebook({ type: 'save_gratitude', dateKey, items }) as NotebookMutationResult, [writeNotebook]);
+
+  const saveNotebookAffirmation = useCallback(async (input: { id?: string; text: string }) =>
+    await writeNotebook({ type: 'save_affirmation', input }) as NotebookMutationResult, [writeNotebook]);
+
+  const deleteNotebookAffirmation = useCallback(async (id: string) => {
+    await writeNotebook({ type: 'delete_affirmation', id });
+  }, [writeNotebook]);
+
+  const addDreamJournalEntry = useCallback(async (entry: Omit<DreamJournalEntry, 'id' | 'createdAt' | 'userId'>) => {
+    await writeNotebook({ type: 'add_dream', input: entry });
+    showToast(t('Dream Journal entry documented in your timeline!'), 'success');
+  }, [writeNotebook, showToast]);
+
+  const updateDreamJournalEntry = useCallback(async (
+    id: string,
+    patch: Partial<Pick<DreamJournalEntry, 'title' | 'content' | 'mood' | 'photoDataUrl' | 'dreamId' | 'dreamName'>>,
+  ) => { await writeNotebook({ type: 'update_dream', id, patch }); }, [writeNotebook]);
+
+  const deleteDreamJournalEntry = useCallback(async (entryId: string) => {
+    await writeNotebook({ type: 'delete_dream', id: entryId });
+    showToast(t('Journal entry removed.'), 'info');
+  }, [writeNotebook, showToast]);
+
+  const toggleMicroHabit = useCallback(
+    async (habitId: string) => {
+      if (!data) return;
+      const todayStr = getCurrentDateKey();
+      const habits = data.microHabits || [];
+      const habit = habits.find((h) => h.id === habitId);
+      if (!habit) return;
+
+      const isCompletedToday = habit.completedDates.includes(todayStr);
+      void haptic(isCompletedToday ? 'select' : 'tap');
+      let updatedDates: string[];
+      let updatedStreak = habit.streakCount;
+      let newTransactions = [...data.transactions];
+
+      if (isCompletedToday) {
+        // Toggle off
+        updatedDates = habit.completedDates.filter((d) => d !== todayStr);
+        updatedStreak = calculateMicroHabitStreak(updatedDates);
+        soundSynthesizer.playMicroHabitCue(habit.category, 'undo');
+        showToast(t('Untoggled: {title}', { title: t(habit.title) }), 'info');
+      } else {
+        // Toggle on
+        updatedDates = [...habit.completedDates, todayStr];
+        updatedStreak = calculateMicroHabitStreak(updatedDates);
+        
+        // Play category-differentiated acoustic synthesis & haptic pulse (Health / Learning / Discipline / Mindset)
+        soundSynthesizer.playMicroHabitCue(habit.category, 'complete');
+
+        // Check if this completes the last remaining micro-habit of the day
+        const otherUncompletedHabits = habits.filter(
+          (h) => h.id !== habitId && !h.completedDates.includes(todayStr)
+        );
+        const isLastRemaining = habits.length > 0 && otherUncompletedHabits.length === 0;
+
+        if (isLastRemaining) {
+          triggerSmallConfetti();
+          setTimeout(() => {
+            soundSynthesizer.playFocusCompleteChime();
+          }, 450);
+        }
+
+        // A completion earns once per habit/day, within the UTC reward ceiling.
+        const now = new Date().toISOString();
+        const rewardAmount = getMicroHabitRewardAmount(newTransactions, habitId, todayStr, new Date(now));
+        const habitTx: WalletTransaction = {
+          id: microHabitRewardId(habitId, todayStr),
+          walletId: 'wallet-demo',
+          userId: data.profile.id,
+          kind: 'micro_habit_reward',
+          amount: rewardAmount,
+          dayKey: now.slice(0, 10),
+          refType: 'micro_habit',
+          refId: habitId,
+          memo: t('5-Min Micro-Habit Momentum: {title}', { title: habit.title }),
+          createdAt: now,
+        };
+        if (rewardAmount > 0) newTransactions = [habitTx, ...newTransactions];
+
+        if (rewardAmount !== 25) {
+          showToast(t('Saved.'), 'success');
+        } else if (isLastRemaining) {
+          showToast(t('✨ All micro-habits completed today! Full momentum secured! (+ D$25)'), 'success');
+        } else {
+          showToast(t('✓ Micro-Habit completed: "{title}"! (+ D$25 momentum)', { title: t(habit.title) }), 'success');
+        }
+      }
+
+      const bestStreak = calculateBestMicroHabitStreak(
+        updatedDates,
+        updatedStreak,
+        habit.bestStreak
+      );
+
+      const updatedHabits = habits.map((h) =>
+        h.id === habitId
+          ? {
+              ...h,
+              completedDates: updatedDates,
+              streakCount: updatedStreak,
+              bestStreak,
+            }
+          : h
+      );
+
+      const updated: UserData = {
+        ...data,
+        microHabits: updatedHabits,
+        transactions: newTransactions,
+      };
+
+      await repository.save(updated);
+      setData(updated);
+    },
+    [data, showToast]
+  );
+
+  const addGoal = useCallback(
+    async (goalData: Omit<Goal, 'id' | 'createdAt' | 'userId'>): Promise<Goal | undefined> => {
+      if (!data || !goalData.title.trim()) return undefined;
+      const newGoal: Goal = {
+        id: `goal-${Date.now()}`,
+        userId: data.profile.id || 'demo-user',
+        title: goalData.title.trim(),
+        description: goalData.description?.trim(),
+        area: goalData.area,
+        targetDate: goalData.targetDate,
+        status: goalData.status || 'active',
+        createdAt: new Date().toISOString(),
+      };
+      const existing = data.goals || [];
+      const updated: UserData = {
+        ...data,
+        goals: [...existing, newGoal],
+      };
+      await repository.save(updated);
+      setData(updated);
+      showToast(t('Created goal: "{title}"', { title: newGoal.title }), 'success');
+      return newGoal;
+    },
+    [data, showToast]
+  );
+
+  const updateGoal = useCallback(
+    async (goalId: string, updates: Partial<Omit<Goal, 'id' | 'userId'>>) => {
+      if (!data) return;
+      const existing = data.goals || [];
+      const updatedGoals = existing.map((g) =>
+        g.id === goalId ? { ...g, ...updates } : g
+      );
+      const updated: UserData = {
+        ...data,
+        goals: updatedGoals,
+      };
+      await repository.save(updated);
+      setData(updated);
+      showToast(t('Goal updated.'), 'info');
+    },
+    [data, showToast]
+  );
+
+  const deleteGoal = useCallback(
+    async (goalId: string) => {
+      if (!data) return;
+      const existing = data.goals || [];
+      const goalToDelete = existing.find((g) => g.id === goalId);
+      const updatedGoals = existing.filter((g) => g.id !== goalId);
+      const updatedHabits = (data.microHabits || []).map((h) =>
+        h.goalId === goalId ? { ...h, goalId: undefined } : h
+      );
+      const updatedMissions = (data.missions || []).map((m) =>
+        m.goalId === goalId ? { ...m, goalId: undefined } : m
+      );
+      const updated: UserData = {
+        ...data,
+        goals: updatedGoals,
+        microHabits: updatedHabits,
+        missions: updatedMissions,
+      };
+      await repository.save(updated);
+      setData(updated);
+      showToast(t('Goal "{title}" removed.', { title: goalToDelete?.title || '' }), 'info');
+    },
+    [data, showToast]
+  );
+
+  const addMicroHabit = useCallback(
+    async (params: {
+      title: string;
+      category: MicroHabitCategory;
+      customCategoryId?: string;
+      goalId?: string;
+      durationMinutes?: number;
+      description?: string;
+    }) => {
+      if (!data || !params.title.trim()) return;
+      const now = new Date().toISOString();
+      const newHabit: MicroHabit = {
+        id: `habit-${Date.now()}`,
+        title: params.title.trim(),
+        category: params.category,
+        customCategoryId: params.customCategoryId,
+        goalId: params.goalId,
+        durationMinutes: params.durationMinutes || 5,
+        description: params.description?.trim(),
+        completedDates: [],
+        streakCount: 0,
+        bestStreak: 0,
+        createdAt: now,
+      };
+
+      const existingHabits = data.microHabits || [];
+      const updated: UserData = {
+        ...data,
+        microHabits: [...existingHabits, newHabit],
+      };
+
+      await repository.save(updated);
+      setData(updated);
+      showToast(t('Added 5-minute micro-habit: "{title}"', { title: newHabit.title }), 'success');
+    },
+    [data, showToast]
+  );
+
+  const updateMicroHabit = useCallback(
+    async (
+      habitId: string,
+      updates: Partial<Omit<MicroHabit, 'id' | 'createdAt'>>
+    ) => {
+      if (!data) return;
+      const existingHabits = data.microHabits || [];
+      const habitIndex = existingHabits.findIndex((h) => h.id === habitId);
+      if (habitIndex === -1) return;
+
+      const targetHabit = existingHabits[habitIndex];
+      const updatedHabit: MicroHabit = {
+        ...targetHabit,
+        ...updates,
+      };
+
+      const updatedHabits = [...existingHabits];
+      updatedHabits[habitIndex] = updatedHabit;
+
+      const updated: UserData = {
+        ...data,
+        microHabits: updatedHabits,
+      };
+
+      await repository.save(updated);
+      setData(updated);
+      showToast(t('Updated micro-habit: "{title}"', { title: updatedHabit.title }), 'success');
+    },
+    [data, showToast]
+  );
+
+  const deleteMicroHabit = useCallback(
+    async (habitId: string) => {
+      if (!data) return;
+      const existingHabits = data.microHabits || [];
+      const updated: UserData = {
+        ...data,
+        microHabits: existingHabits.filter((h) => h.id !== habitId),
+      };
+      await repository.save(updated);
+      setData(updated);
+      showToast(t('Micro-habit removed.'), 'info');
+    },
+    [data, showToast]
+  );
+
+  const addCustomHabitCategory = useCallback(
+    async (params: {
+      name: string;
+      icon: string;
+      color: string;
+      description?: string;
+    }): Promise<CustomHabitCategory | null> => {
+      if (!data || !params.name.trim()) return null;
+      const cleanName = params.name.trim();
+      const existingCats = data.customHabitCategories || [];
+
+      // Check if duplicate category name exists
+      const duplicate = existingCats.find(
+        (c) => c.name.toLowerCase() === cleanName.toLowerCase()
+      );
+      if (duplicate) {
+        showToast(t('Category "{name}" already exists.', { name: cleanName }), 'info');
+        return duplicate;
+      }
+
+      const id = `cat-${Date.now()}-${cleanName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+      const newCategory: CustomHabitCategory = {
+        id,
+        name: cleanName,
+        icon: params.icon || 'Folder',
+        color: params.color || '#6366f1',
+        description: params.description?.trim(),
+        createdAt: new Date().toISOString(),
+      };
+
+      const updated: UserData = {
+        ...data,
+        customHabitCategories: [...existingCats, newCategory],
+      };
+
+      await repository.save(updated);
+      setData(updated);
+      showToast(t('Created custom category: "{name}"', { name: newCategory.name }), 'success');
+      return newCategory;
+    },
+    [data, showToast]
+  );
+
+  const deleteCustomHabitCategory = useCallback(
+    async (categoryId: string) => {
+      if (!data) return;
+      const existingCats = data.customHabitCategories || [];
+      const catToDelete = existingCats.find((c) => c.id === categoryId);
+      if (!catToDelete) return;
+
+      const updatedCats = existingCats.filter((c) => c.id !== categoryId);
+      const existingHabits = data.microHabits || [];
+      // Reassign habits using this category to 'Mindset' fallback
+      const updatedHabits = existingHabits.map((h) => {
+        if (
+          h.customCategoryId === categoryId ||
+          h.category === catToDelete.name ||
+          h.category === categoryId
+        ) {
+          return {
+            ...h,
+            category: 'Mindset' as const,
+            customCategoryId: undefined,
+          };
+        }
+        return h;
+      });
+
+      const updated: UserData = {
+        ...data,
+        customHabitCategories: updatedCats,
+        microHabits: updatedHabits,
+      };
+
+      await repository.save(updated);
+      setData(updated);
+      showToast(t('Custom category "{name}" removed.', { name: catToDelete.name }), 'info');
+    },
+    [data, showToast]
+  );
+
+  const updateCustomHabitCategory = useCallback(
+    async (
+      categoryId: string,
+      params: { name?: string; icon?: string; color?: string; description?: string }
+    ) => {
+      if (!data) return;
+      const existingCats = data.customHabitCategories || [];
+      const catIndex = existingCats.findIndex((c) => c.id === categoryId);
+      if (catIndex === -1) return;
+
+      const oldCat = existingCats[catIndex];
+      const updatedCat: CustomHabitCategory = {
+        ...oldCat,
+        name: params.name ? params.name.trim() : oldCat.name,
+        icon: params.icon || oldCat.icon,
+        color: params.color || oldCat.color,
+        description:
+          params.description !== undefined ? params.description.trim() : oldCat.description,
+      };
+
+      const updatedCats = [...existingCats];
+      updatedCats[catIndex] = updatedCat;
+
+      // If category name or ID updated, synchronize habits
+      const existingHabits = data.microHabits || [];
+      const updatedHabits = existingHabits.map((h) => {
+        if (h.customCategoryId === categoryId || h.category === oldCat.name) {
+          return {
+            ...h,
+            category: updatedCat.name,
+            customCategoryId: categoryId,
+          };
+        }
+        return h;
+      });
+
+      const updated: UserData = {
+        ...data,
+        customHabitCategories: updatedCats,
+        microHabits: updatedHabits,
+      };
+
+      await repository.save(updated);
+      setData(updated);
+      showToast(t('Updated category "{name}"', { name: updatedCat.name }), 'success');
+    },
+    [data, showToast]
+  );
+
+  const resetMicroHabitsToday = useCallback(async () => {
+    if (!data) return;
+    const todayStr = getCurrentDateKey();
+    const existingHabits = data.microHabits || [];
+    const updatedHabits = existingHabits.map((h) => {
+      const completedDates = h.completedDates.filter((d) => d !== todayStr);
+      return { ...h, completedDates, streakCount: calculateMicroHabitStreak(completedDates) };
+    });
+    const updated: UserData = {
+      ...data,
+      microHabits: updatedHabits,
+    };
+    await repository.save(updated);
+    setData(updated);
+    showToast(t('Reset today’s micro-habits.'), 'info');
+  }, [data, showToast]);
+
+  const checkDailyMicroHabitsRollover = useCallback(
+    async (force = false): Promise<DailyMicroHabitRolloverResult | null> => {
+      if (!data) return null;
+
+      const currentDateKey = getCurrentDateKey();
+      const previousDateKey = data.lastActiveDateKey || (data.profile?.lastOpenedAt ? getCurrentDateKey(new Date(data.profile.lastOpenedAt)) : undefined);
+
+      // If date hasn't changed and not forced, nothing to reset
+      if (previousDateKey === currentDateKey && !force) {
+        return null;
+      }
+
+      const result = checkAndApplyDailyMicroHabitRollover(data, new Date(), force);
+
+      if (result.hasChanged || force) {
+        await repository.save(result.updatedData);
+        setData(result.updatedData);
+
+        const summary: DailyMicroHabitRolloverSummary = {
+          hasChanged: true,
+          previousDateKey: result.previousDateKey,
+          currentDateKey: result.currentDateKey,
+          resetHabitsCount: result.resetHabitsCount,
+          brokenStreaksCount: result.brokenStreaksCount,
+          timestamp: new Date().toISOString(),
+        };
+        setLastRolloverSummary(summary);
+
+        if (result.brokenStreaksCount > 0) {
+          showToast(
+            t('🌅 New day ({date}): {reset} micro-habits reset. {broken} missed streak(s) reset to 0.', { date: result.currentDateKey, reset: result.resetHabitsCount, broken: result.brokenStreaksCount }),
+            'info'
+          );
+        } else {
+          showToast(
+            t('🌅 New day started ({date}): Daily micro-habits reset for today!', { date: result.currentDateKey }),
+            'info'
+          );
+        }
+      }
+
+      return result;
+    },
+    [data, showToast]
+  );
+
+  const simulateDateKeyChange = useCallback(
+    async (simulatedDateKey?: string) => {
+      if (!data) return;
+      let nextDateKey = simulatedDateKey;
+      if (!nextDateKey) {
+        const d = new Date();
+        d.setDate(d.getDate() + 1);
+        nextDateKey = getCurrentDateKey(d);
+      }
+
+      const simulatedRefDate = new Date(`${nextDateKey}T12:00:00`);
+      const result = checkAndApplyDailyMicroHabitRollover(data, simulatedRefDate, true);
+
+      await repository.save(result.updatedData);
+      setData(result.updatedData);
+
+      const summary: DailyMicroHabitRolloverSummary = {
+        hasChanged: true,
+        previousDateKey: data.lastActiveDateKey,
+        currentDateKey: nextDateKey,
+        resetHabitsCount: result.resetHabitsCount,
+        brokenStreaksCount: result.brokenStreaksCount,
+        timestamp: new Date().toISOString(),
+      };
+      setLastRolloverSummary(summary);
+
+      showToast(
+        t('🗓️ DateKey rollover simulated to {date}: Daily micro-habits reset for today!', { date: nextDateKey }),
+        'success'
+      );
+    },
+    [data, showToast]
+  );
+
+  // Scheduled background job: automatically monitors dateKey changes
+  // Runs periodically every 30 seconds and checks when window/document regains focus or visibility
+  useEffect(() => {
+    if (!data) return;
+
+    const performBackgroundDateCheck = () => {
+      const todayKey = getCurrentDateKey();
+      const lastKey = data.lastActiveDateKey;
+
+      if (lastKey && lastKey !== todayKey) {
+        console.log(`[Scheduled Background Job] DateKey rollover detected from ${lastKey} to ${todayKey}. Resetting uncompleted micro-habits...`);
+        checkDailyMicroHabitsRollover(false);
+      }
+    };
+
+    // Periodic scheduled interval (every 30 seconds)
+    const interval = setInterval(performBackgroundDateCheck, 30000);
+
+    // Event listeners for immediate check when user returns to app tab or device wakes up
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        performBackgroundDateCheck();
+      }
+    };
+
+    const handleWindowFocus = () => {
+      performBackgroundDateCheck();
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('focus', handleWindowFocus);
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('focus', handleWindowFocus);
+    };
+  }, [data?.lastActiveDateKey, checkDailyMicroHabitsRollover]);
+
+  const saveDailyCheckIn = useCallback(
+    async (checkIn: {
+      focus: number;
+      energy: number;
+      mood: number;
+      notes?: string;
+      dateKey?: string;
+    }) => {
+      if (!data) return;
+      const todayStr = checkIn.dateKey || getCurrentDateKey();
+      const existingCheckIns = data.checkIns || [];
+      const existingIndex = existingCheckIns.findIndex((c) => c.dateKey === todayStr);
+
+      const now = new Date().toISOString();
+      let updatedCheckIns: DailyCheckIn[];
+      let isFirstToday = false;
+
+      if (existingIndex >= 0) {
+        const updatedEntry: DailyCheckIn = {
+          ...existingCheckIns[existingIndex],
+          focus: checkIn.focus,
+          energy: checkIn.energy,
+          mood: checkIn.mood,
+          notes: checkIn.notes?.trim() || '',
+          updatedAt: now,
+        };
+        updatedCheckIns = [...existingCheckIns];
+        updatedCheckIns[existingIndex] = updatedEntry;
+      } else {
+        isFirstToday = true;
+        const newEntry: DailyCheckIn = {
+          id: `checkin-${Date.now()}`,
+          dateKey: todayStr,
+          focus: checkIn.focus,
+          energy: checkIn.energy,
+          mood: checkIn.mood,
+          notes: checkIn.notes?.trim() || '',
+          createdAt: now,
+        };
+        updatedCheckIns = [newEntry, ...existingCheckIns];
+      }
+
+      let newTransactions = data.transactions || [];
+      if (isFirstToday) {
+        const rewardAmount = getDailyRewardAmount(newTransactions, 50, new Date(now));
+        soundSynthesizer.playSuccessChord();
+        triggerMissionConfetti();
+        const checkInTx: WalletTransaction = {
+          id: `tx-checkin-${Date.now()}`,
+          walletId: 'wallet-demo',
+          userId: data.profile.id,
+          kind: 'check_in_reward',
+          amount: rewardAmount,
+          dayKey: now.slice(0, 10),
+          memo: t('Daily Check-in (Focus: {focus}/10, Energy: {energy}/10, Mood: {mood}/10)', { focus: checkIn.focus, energy: checkIn.energy, mood: checkIn.mood }),
+          createdAt: now,
+        };
+        if (rewardAmount > 0) newTransactions = [checkInTx, ...newTransactions];
+        showToast(rewardAmount === 50 ? t('Daily check-in recorded. +D$50') : t('Saved.'), 'success');
+      } else {
+        soundSynthesizer.playTapChime();
+        showToast(t('Daily Check-in updated.'), 'info');
+      }
+
+      const updated: UserData = {
+        ...data,
+        checkIns: updatedCheckIns,
+        transactions: newTransactions,
+      };
+
+      await repository.save(updated);
+      setData(updated);
+    },
+    [data, showToast]
+  );
+
+  const deleteDailyCheckIn = useCallback(
+    async (checkInId: string) => {
+      if (!data) return;
+      const existingCheckIns = data.checkIns || [];
+      const updated: UserData = {
+        ...data,
+        checkIns: existingCheckIns.filter((c) => c.id !== checkInId),
+      };
+      await repository.save(updated);
+      setData(updated);
+      showToast(t('Daily check-in removed.'), 'info');
+    },
+    [data, showToast]
+  );
+
+  const joinSeason = useCallback(
+    async (season: Season) => {
+      if (!data) return;
+      const updated: UserData = {
+        ...data,
+        activeSeason: season,
+      };
+      await repository.save(updated);
+      setData(updated);
+      showToast(t('Enrolled in 30-Day Season: {title}!', { title: season.title }), 'success');
+    },
+    [data, showToast]
+  );
+
+  // Apply the theme preference (light, dark or follow the phone) and keep the status bar in step.
+  useEffect(() => {
+    const pref = data?.profile?.theme || 'light';
+    applyTheme(pref);
+    return watchSystemTheme(pref);
+  }, [data?.profile?.theme]);
+
+  // Synchronize soundSynthesizer mute state with current profile preference
+  useEffect(() => {
+    const isMuted = !!data?.profile?.soundMuted;
+    soundSynthesizer.setMuted(isMuted);
+  }, [data?.profile?.soundMuted]);
+
+  const updateProfile = useCallback(
+    async (profileData: Partial<Profile>) => {
+      if (!data) return;
+      const updated: UserData = {
+        ...data,
+        profile: {
+          ...data.profile,
+          ...profileData,
+        },
+      };
+      await repository.save(updated);
+      if (updated.profile.theme) applyTheme(updated.profile.theme);
+      soundSynthesizer.setMuted(!!updated.profile.soundMuted);
+      setData(updated);
+      showToast(t('Profile updated.'), 'success');
+    },
+    [data, showToast]
+  );
+
+  const toggleSoundMute = useCallback(async () => {
+    if (!data) return;
+    const currentMuted = !!data.profile.soundMuted;
+    const nextMuted = !currentMuted;
+
+    const updated: UserData = {
+      ...data,
+      profile: {
+        ...data.profile,
+        soundMuted: nextMuted,
+      },
+    };
+    await repository.save(updated);
+    soundSynthesizer.setMuted(!!updated.profile.soundMuted);
+    if (!updated.profile.soundMuted) soundSynthesizer.playTapChime();
+    setData(updated);
+    showToast(
+      nextMuted ? t('UI Sound Effects Muted') : t('UI Sound Effects Active'),
+      'info'
+    );
+  }, [data, showToast]);
+
+  const setSoundMuted = useCallback(
+    async (muted: boolean) => {
+      if (!data) return;
+      if (data.profile.soundMuted === muted) return;
+
+      const updated: UserData = {
+        ...data,
+        profile: {
+          ...data.profile,
+          soundMuted: muted,
+        },
+      };
+      await repository.save(updated);
+      soundSynthesizer.setMuted(!!updated.profile.soundMuted);
+      if (!updated.profile.soundMuted) soundSynthesizer.playTapChime();
+      setData(updated);
+      showToast(
+        muted ? t('UI Sound Effects Muted') : t('UI Sound Effects Active'),
+        'info'
+      );
+    },
+    [data, showToast]
+  );
+
+  const toggleFocusTabBlink = useCallback(async () => {
+    if (!data) return;
+    const current = data.profile.focusTabBlinkEnabled !== false;
+    const nextVal = !current;
+    const updated: UserData = {
+      ...data,
+      profile: {
+        ...data.profile,
+        focusTabBlinkEnabled: nextVal,
+      },
+    };
+    await repository.save(updated);
+    setData(updated);
+    soundSynthesizer.playTapChime();
+    showToast(
+      nextVal
+        ? t('Tab title blink is on.')
+        : t('Tab title blink is off.'),
+      'info'
+    );
+  }, [data, showToast]);
+
+  const toggleFocusScreenPulse = useCallback(async () => {
+    if (!data) return;
+    const current = data.profile.focusScreenPulseEnabled !== false;
+    const nextVal = !current;
+    const updated: UserData = {
+      ...data,
+      profile: {
+        ...data.profile,
+        focusScreenPulseEnabled: nextVal,
+      },
+    };
+    await repository.save(updated);
+    setData(updated);
+    soundSynthesizer.playTapChime();
+    showToast(
+      nextVal
+        ? t('Screen edge pulse is on.')
+        : t('Screen edge pulse is off.'),
+      'info'
+    );
+  }, [data, showToast]);
+
+  const simulateFocusTimerAlert = useCallback(() => {
+    setIsSimulatingFocusAlert(true);
+    if (!data?.profile?.soundMuted) {
+      soundSynthesizer.playFocusCompleteChime();
+    }
+    showToast(
+      t('Previewing the finish alert for 5 seconds.'),
+      'info'
+    );
+    setTimeout(() => {
+      setIsSimulatingFocusAlert(false);
+    }, 5000);
+  }, [data?.profile?.soundMuted, showToast]);
+
+  const toggleTheme = useCallback(async () => {
+    if (!data) return;
+    const currentTheme = resolveTheme(data.profile.theme || 'light');
+    const newTheme: 'light' | 'dark' = currentTheme === 'dark' ? 'light' : 'dark';
+    soundSynthesizer.playTapChime();
+
+    const updated: UserData = {
+      ...data,
+      profile: {
+        ...data.profile,
+        theme: newTheme,
+      },
+    };
+    await repository.save(updated);
+    applyTheme(updated.profile.theme || 'light');
+    setData(updated);
+    showToast(
+      newTheme === 'dark'
+        ? t('🌙 Switched to Midnight Dark theme')
+        : t('☀️ Switched to Editorial Light theme'),
+      'info'
+    );
+  }, [data, showToast]);
+
+  const setTheme = useCallback(
+    async (newTheme: ThemePref) => {
+      if (!data) return;
+      if (data.profile.theme === newTheme) return;
+      soundSynthesizer.playTapChime();
+
+      const updated: UserData = {
+        ...data,
+        profile: {
+          ...data.profile,
+          theme: newTheme,
+        },
+      };
+      await repository.save(updated);
+      applyTheme(updated.profile.theme || 'light');
+      setData(updated);
+    },
+    [data]
+  );
+
+  const upgradeToPro = useCallback(async () => {
+    if (!data) return;
+    const updated: UserData = {
+      ...data,
+      profile: {
+        ...data.profile,
+        isPro: true,
+      },
+      subscription: {
+        ...data.subscription,
+        plan: 'pro',
+        status: 'active',
+        updatedAt: new Date().toISOString(),
+      },
+    };
+    await repository.save(updated);
+    setData(updated);
+    showToast(t('Upgraded to One Decision Pro!'), 'success');
+  }, [data, showToast]);
+
+  const toggleProPlan = useCallback(async () => {
+    if (!data) return;
+    const nextIsPro = !data.profile.isPro;
+    const updated: UserData = {
+      ...data,
+      profile: {
+        ...data.profile,
+        isPro: nextIsPro,
+      },
+      subscription: {
+        ...data.subscription,
+        plan: nextIsPro ? 'pro' : 'free',
+        status: nextIsPro ? 'active' : 'inactive',
+        updatedAt: new Date().toISOString(),
+      },
+    };
+    await repository.save(updated);
+    setData(updated);
+    showToast(
+      nextIsPro ? t('Pro membership activated (Demo).') : t('Switched to Free plan.'),
+      'info'
+    );
+  }, [data, showToast]);
+
+  const cancelSubscription = useCallback(async () => {
+    if (!data) return;
+    const updated: UserData = {
+      ...data,
+      profile: {
+        ...data.profile,
+        isPro: false,
+      },
+      subscription: {
+        ...data.subscription,
+        plan: 'free',
+        status: 'inactive',
+        updatedAt: new Date().toISOString(),
+      },
+    };
+    await repository.save(updated);
+    setData(updated);
+    showToast(t('Pro subscription cancelled.'), 'info');
+  }, [data, showToast]);
+
+  // Data kept outside the main repository must be cleared with it, and a reset
+  // device must stop receiving server push for the old profile.
+  const clearSideStores = useCallback(async () => {
+    await disablePush().catch(() => undefined);
+    for (const key of ['oda_course_selection_v1', 'oda_saved_sourced_quotes_v1']) {
+      try { localStorage.removeItem(key); } catch { /* storage unavailable */ }
+    }
+    clearNotebookDrafts();
+  }, []);
+
+  const resetToDemo = useCallback(async () => {
+    await repository.clear();
+    await refreshData();
+    await clearSideStores();
+    showToast(t('Reset to clean initial state.'), 'info');
+  }, [refreshData, showToast, clearSideStores]);
+
+  const resetAllData = useCallback(async () => {
+    await repository.clear();
+    await refreshData();
+    await clearSideStores();
+    showToast(t('All local data cleared and reset.'), 'info');
+  }, [refreshData, showToast, clearSideStores]);
+
+  const importDataJson = useCallback(
+    async (file: File) => {
+      try {
+        const text = await file.text();
+        const parsed = prepareBackupRestore(JSON.parse(text));
+        // Establish the cloud barrier before committing the local replacement.
+        // If marker storage is blocked, the old record remains untouched.
+        cloudSync.markLocalRestore();
+        await repository.replaceAll(parsed);
+        await refreshData({ skipCloudPull: true });
+        clearNotebookDrafts();
+        // Await the optional upload. A failed/offline upload retains the local-restore
+        // marker, so a reload cannot silently pull the previous cloud copy over it.
+        if (cloudSync.isSignedIn()) await cloudSync.push(await repository.load());
+        showToast(t('Backup restored. Welcome back.'), 'success');
+      } catch (error) {
+        showToast(t(error instanceof InvalidBackupError ? 'That file is not a One Decision Away backup.' : 'Could not read the backup file.'), 'error');
+      }
+    },
+    [refreshData, showToast]
+  );
+
+  const syncFromCloud = useCallback(async () => {
+    // Repeated presses cannot create unresolved review promises or trigger an upload.
+    if (cloudReviewActive.current) return true;
+    cloudReviewActive.current = true;
+    const accountIsCurrent = cloudSync.currentAccountGuard();
+    try {
+      const operationIsCurrent = cloudSync.currentOperationGuard();
+      const remote = await cloudSync.pullIfNewer(data, { forReview: true });
+      // A late read must not become an upload for another account or newer local work.
+      if (!operationIsCurrent()) return true;
+      if (remote) {
+        const accepted = await new Promise<boolean>(resolve => setCloudRestoreReview({ record: remote, resolve }));
+        if (!accepted) return true;
+        if (!await repository.replaceAll(remote, originalRecord => cloudSync.canApplyRemote(remote, originalRecord))) {
+          showToast(backupCopy(getLocale()).cloudChanged, 'info');
+          return true;
+        }
+        const acknowledged = await cloudSync.markRemoteApplied(remote);
+        if (!accountIsCurrent()) return true;
+        // Show the reviewed commit without making a second, unreviewed cloud read.
+        await refreshData({ skipCloudPull: true });
+        if (!accountIsCurrent()) return true;
+        showToast(acknowledged ? t('Synced from cloud.') : backupCopy(getLocale()).cloudAppliedPaused, acknowledged ? 'success' : 'info');
+        return true;
+      }
+      const cloudError = cloudSync.getState().error;
+      if (cloudError) {
+        showToast(cloudError, 'error');
+        return true;
+      }
+    } catch {
+      if (accountIsCurrent()) showToast(t('Cloud backup failed — check your connection.'), 'error');
+      return true;
+    } finally {
+      cloudReviewActive.current = false;
+    }
+    return false;
+  }, [data, refreshData, showToast]);
+
+  const exportDataJson = useCallback(async () => {
+    if (!data) return;
+    try {
+      const latest = await repository.load();
+      const jsonStr = JSON.stringify(createBackupSnapshot(latest), null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      try {
+        a.href = url;
+        a.download = `one-decision-away-backup-${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.appendChild(a);
+        a.click();
+      } finally {
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+      try { localStorage.setItem('oda_last_backup', new Date().toISOString()); } catch { /* The download can succeed even when storage is full. */ }
+      showToast(t('Data exported to JSON file.'), 'success');
+    } catch {
+      showToast(t('Something went wrong. Please try again.'), 'error');
+    }
+  }, [data, showToast]);
+
+  const completeOnboarding = useCallback(
+    async (params: {
+      displayName: string;
+      locale: Locale;
+      dream?: {
+        id: string;
+        name: string;
+        category: MarketCategory;
+        realPriceUsd: number;
+        dreamDollarPrice: number;
+        description: string;
+        imageUrl: string;
+        whyWanted?: string;
+        firstRealStep?: string;
+      };
+      decision: string;
+      intent?: Profile['intent'];
+    }) => {
+      if (!data) return;
+      const nowIso = new Date().toISOString();
+      const todayStr = localDayKey(nowIso);
+
+      // 1. Dream → custom market item pinned first in the Vision Board (same shape as pinExploreDream)
+      let customMarketItems = data.customMarketItems || [];
+      let inVisionItemIds = data.inVisionItemIds || [];
+      if (params.dream) {
+        const dream = params.dream;
+        const existing = customMarketItems.find((c) => c.id === dream.id);
+        if (!existing) {
+          const item: MarketItem = {
+            id: dream.id,
+            name: dream.name,
+            category: dream.category,
+            realPriceUsd: dream.realPriceUsd,
+            dreamDollarPrice: dream.dreamDollarPrice,
+            description: dream.description,
+            illustrationKey: 'custom_dream',
+            customImageUrl: dream.imageUrl,
+            whyWanted: dream.whyWanted || '',
+            firstRealStep: dream.firstRealStep || '',
+            isCustom: true,
+            createdAt: nowIso,
+          };
+          customMarketItems = [item, ...customMarketItems];
+        }
+        inVisionItemIds = Array.from(new Set([dream.id, ...inVisionItemIds]));
+      }
+
+      // 2. Today's One Decision (same rules as setOneDecision)
+      const decision = params.decision.trim();
+      let missions = data.missions;
+      if (decision) {
+        const archived = missions.map((m) =>
+          m.isOneDecision && m.status === 'active' ? { ...m, status: 'archived' as const } : m
+        );
+        const oneDecision: Mission = {
+          id: `one-decision-${Date.now()}`,
+          userId: data.profile.id,
+          title: decision,
+          type: 'daily_quest',
+          area: 'Work',
+          difficulty: 'medium',
+          estimatedMinutes: 45,
+          isOneDecision: true,
+          scheduledFor: todayStr,
+          status: 'active',
+          createdAt: nowIso,
+        };
+        missions = [oneDecision, ...archived];
+      }
+
+      // 3. Profile
+      if (isLocale(params.locale) && getLocale() !== params.locale) setLocale(params.locale);
+      const updated: UserData = {
+        ...data,
+        profile: {
+          ...data.profile,
+          displayName: params.displayName.trim(),
+          locale: params.locale,
+          onboardingStep: 'completed',
+          lastOpenedAt: nowIso,
+          ...(params.intent ? { intent: params.intent } : {}),
+        },
+        customMarketItems,
+        inVisionItemIds,
+        missions,
+      };
+      await repository.save(updated);
+      setData(updated);
+      setActiveRoute('/app');
+    },
+    [data, setActiveRoute]
+  );
+
+  const value: AppContextType = {
+    data,
+    isLoading,
+    error,
+    activeRoute,
+    toast,
+    activeFocusSession,
+    activeGuidedCueIndex,
+    isFocusLocked: activeFocusSession !== null,
+    setActiveRoute,
+    showToast,
+    hideToast,
+    refreshData,
+    startFocusSession,
+    pauseFocusSession,
+    resumeFocusSession,
+    setFocusSoundTrack,
+    setFocusVolume,
+    addDistractionNote,
+    cancelFocusSession,
+    finishFocusSessionEarly,
+    completeFocusSession,
+    completeMission,
+    purchaseItem,
+    createRealityBridge,
+    updateRealityBridgeSavings,
+    saveLifeScores,
+    saveTwoFutures,
+    saveDefaultFuture,
+    logDriftSignal,
+    removeDriftEntry,
+    saveFutureSelf,
+    addMission,
+    setOneDecision,
+    updateDecision,
+    saveDreamPlan,
+    updateMomentumProfile,
+    saveWeeklyReview,
+    addCustomDream,
+    pinExploreDream,
+    grantSimulationBonus,
+    toggleInVision,
+    reorderVisionItems,
+    archiveMarketItem,
+    restoreMarketItem,
+    deleteArchivedRecord,
+    updateBudget,
+    saveLifeBudget,
+    addDreamJournalEntry,
+    deleteDreamJournalEntry,
+    updateDreamJournalEntry,
+    saveNotebookEntry,
+    deleteNotebookEntry,
+    start369Practice,
+    archive369Practice,
+    save369Slot,
+    saveGratitudeDay,
+    saveNotebookAffirmation,
+    deleteNotebookAffirmation,
+    isQuickJournalOpen,
+    openQuickJournal,
+    closeQuickJournal,
+    toggleQuickJournal,
+    addGoal,
+    updateGoal,
+    deleteGoal,
+    toggleMicroHabit,
+    addMicroHabit,
+    updateMicroHabit,
+    deleteMicroHabit,
+    addCustomHabitCategory,
+    deleteCustomHabitCategory,
+    updateCustomHabitCategory,
+    resetMicroHabitsToday,
+    checkDailyMicroHabitsRollover,
+    simulateDateKeyChange,
+    lastRolloverSummary,
+    saveDailyCheckIn,
+    deleteDailyCheckIn,
+    joinSeason,
+    updateProfile,
+    toggleTheme,
+    setTheme,
+    toggleSoundMute,
+    setSoundMuted,
+    toggleFocusTabBlink,
+    toggleFocusScreenPulse,
+    simulateFocusTimerAlert,
+    isSimulatingFocusAlert,
+    upgradeToPro,
+    toggleProPlan,
+    cancelSubscription,
+    resetToDemo,
+    resetAllData,
+    exportDataJson,
+    importDataJson,
+    syncFromCloud,
+    completeOnboarding,
+  };
+
+  return <AppContext.Provider value={value}>
+    {children}
+    <BackupRestoreReview
+      record={cloudRestoreReview?.record ?? null}
+      onBackup={exportDataJson}
+      onCancel={() => { cloudRestoreReview?.resolve(false); setCloudRestoreReview(null); }}
+      onConfirm={() => { cloudRestoreReview?.resolve(true); setCloudRestoreReview(null); }}
+    />
+  </AppContext.Provider>;
+};
+
+export function useApp() {
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error('useApp must be used within an AppProvider');
+  }
+  return context;
+}

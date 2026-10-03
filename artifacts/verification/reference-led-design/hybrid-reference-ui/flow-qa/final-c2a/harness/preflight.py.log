@@ -1,0 +1,51 @@
+from pathlib import Path
+import os, subprocess, json, hashlib, urllib.request, urllib.parse, re
+from datetime import datetime, timezone
+
+if os.environ.get('ODA_HYBRID_FLOW_GO') != '1':
+    raise SystemExit('Not executed: parent source/build GO is required.')
+repo = Path('/workspace/oda-reference-redesign')
+out = Path(os.environ['ODA_QA_OUT'])
+out.mkdir(parents=True, exist_ok=True)
+expected = os.environ['ODA_QA_SOURCE_COMMIT']
+url = os.environ['ODA_FIDELITY_PREVIEW_URL'].rstrip('/') + '/'
+parent_path = Path(os.environ['ODA_PARENT_FROZEN_BUILD_RECEIPT'])
+parent_bytes = parent_path.read_bytes()
+parent = json.loads(parent_bytes)
+sha = lambda data: hashlib.sha256(data).hexdigest()
+actual = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=repo, text=True).strip()
+assert actual == expected == parent['sourceCommit']
+assert parent['exitCode'] == 0
+assert not subprocess.check_output(['git', 'status', '--porcelain'], cwd=repo, text=True).strip()
+assert parent['allSourcesMatchCommittedSource'] and parent['unchangedDuringRun']
+sources, builds = [], []
+for item in parent['source']:
+    data = (repo / item['file']).read_bytes()
+    committed = subprocess.check_output(['git', 'show', f"{expected}:{item['file']}"], cwd=repo)
+    assert sha(data) == item['sha256'] == sha(committed), item['file']
+    sources.append({'file': item['file'], 'bytes': len(data), 'sha256': sha(data)})
+for item in parent['build']:
+    data = (repo / item['file']).read_bytes()
+    assert sha(data) == item['sha256'], item['file']
+    builds.append({'file': item['file'], 'bytes': len(data), 'sha256': sha(data)})
+assert len(sources) == parent['sourceFileCount']
+assert len(builds) == parent['buildFileCount']
+assert sorted(item['file'] for item in builds) == sorted(str(path.relative_to(repo)) for path in (repo / 'dist').rglob('*') if path.is_file())
+served = []
+with urllib.request.urlopen(url) as response:
+    index = response.read()
+    served.append({'url': url, 'status': response.status, 'contentType': response.headers.get('Content-Type'), 'file': 'dist/index.html', 'bytes': len(index), 'sha256': sha(index)})
+assert sha(index) == sha((repo / 'dist/index.html').read_bytes())
+entry = re.search(r'<script\b[^>]*type="module"[^>]*src="([^"]+)"', index.decode()).group(1)
+entry_url = urllib.parse.urljoin(url, entry)
+entry_path = 'dist/' + urllib.parse.urlparse(entry_url).path.split('/one-decision-away/', 1)[1]
+with urllib.request.urlopen(entry_url) as response:
+    data = response.read()
+    assert 'javascript' in response.headers.get('Content-Type', '')
+    served.append({'url': entry_url, 'status': response.status, 'contentType': response.headers.get('Content-Type'), 'file': entry_path, 'bytes': len(data), 'sha256': sha(data)})
+assert sha(data) == sha((repo / entry_path).read_bytes())
+receipt = {'sourceCommit': expected, 'createdAtUtc': datetime.now(timezone.utc).isoformat(), 'parentBuildReceipt': {'file': str(parent_path), 'bytes': len(parent_bytes), 'sha256': sha(parent_bytes)}, 'source': sources, 'build': builds, 'served': served, 'sourceFileCount': len(sources), 'buildFileCount': len(builds), 'allSourcesMatchCommittedSource': True, 'allBuildFilesMatchParent': True, 'cleanSourceBeforeRun': True, 'syntheticOnly': True, 'noBuildInstallDeploy': True}
+with (out / 'preflight-receipt.json').open('x') as stream:
+    json.dump(receipt, stream, indent=2)
+    stream.write('\n')
+print(json.dumps({'sourceCommit': expected, 'sources': len(sources), 'buildFiles': len(builds), 'served': served}))

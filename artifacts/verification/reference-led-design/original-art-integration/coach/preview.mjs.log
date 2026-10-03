@@ -1,0 +1,36 @@
+import fs from 'node:fs';
+import crypto from 'node:crypto';
+import assert from 'node:assert/strict';
+import {chromium} from '/workspace/oda-reference-redesign/node_modules/playwright/index.mjs';
+import {getInitialDemoState} from '/workspace/oda-reference-redesign/src/services/repository.ts';
+const out='/workspace/scratch/oda-reference-redesign/original-art-integration/coach';
+const origin='http://127.0.0.1:4181';
+const report={startedAt:new Date().toISOString(),kind:'Bounded author Coach image review, synthetic local profile',cases:[],errors:[]};
+const browser=await chromium.launch({executablePath:'/usr/bin/chromium'});
+try {
+  for(const theme of ['light','dark']) for(const width of [320,390,1440]) {
+    const seed=getInitialDemoState();
+    Object.assign(seed.profile,{onboardingStep:'completed',displayName:'Synthetic art review',locale:'en',theme,soundMuted:true,nudgesEnabled:false,dailyWisdomEnabled:false,focusTabBlinkEnabled:false,focusScreenPulseEnabled:false});
+    const context=await browser.newContext({viewport:{width,height:width===1440?1000:844},serviceWorkers:'block',reducedMotion:'reduce'});
+    await context.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());
+    await context.addInitScript(({seed,theme})=>{localStorage.setItem('one_decision_away_app_data_v1',JSON.stringify(seed));localStorage.setItem('oda_locale','en');localStorage.setItem('oda_theme',theme);},{seed,theme});
+    const page=await context.newPage();page.on('pageerror',e=>report.errors.push({theme,width,error:e.message}));
+    await page.goto(origin+'/app/coach');
+    await page.waitForFunction(()=>{const img=document.querySelector('.coach-orb img');return img?.complete&&img.naturalWidth>0;});
+    await page.evaluate(()=>document.fonts.ready);
+    const geometry=await page.evaluate(()=>{
+      const orb=document.querySelector('.coach-orb');const img=orb.querySelector('img');const orbit=document.querySelector('.coach-orbit');const hero=document.querySelector('.coach-hero');
+      const rect=el=>{const r=el.getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height};};
+      const s=getComputedStyle(img);return {viewport:innerWidth,pageWidth:document.documentElement.scrollWidth,image:{...rect(img),src:img.currentSrc,naturalWidth:img.naturalWidth,naturalHeight:img.naturalHeight,objectFit:s.objectFit,mode:img.closest('picture').dataset.imageMode},orbit:rect(orbit),hero:rect(hero),orbitState:orbit.dataset.state};
+    });
+    assert.equal(geometry.pageWidth,width);assert.equal(geometry.image.objectFit,'contain');assert.equal(geometry.image.mode,'webp');assert.equal(geometry.orbit.width,width===1440?220:180);assert.equal(geometry.orbitState,'idle');
+    const files=[];
+    for(const [name,locator] of [['coach',null],['orb',page.locator('.coach-orbit')]]) {
+      const file=`en-${theme}-${width}-${name}.png`;if(locator)await locator.screenshot({path:out+'/'+file,animations:'disabled'});else await page.screenshot({path:out+'/'+file,animations:'disabled'});
+      const bytes=fs.readFileSync(out+'/'+file);files.push({file,bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')});
+    }
+    report.cases.push({theme,width,geometry,files});await context.close();
+  }
+  assert.deepEqual(report.errors,[]);report.status='captured';
+} catch(e) {report.status='failed';report.failure=String(e.stack||e);process.exitCode=1;}
+finally {await browser.close();fs.writeFileSync(out+'/preview-report.json',JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));}

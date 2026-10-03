@@ -1,0 +1,13 @@
+{
+  "status": "UNBOUND: prep only; requires frozen helper/callsite inspection after parent GO",
+  "sourceCommit": null,
+  "routeCases": [
+    { "name": "today-320", "route": "/app", "viewport": { "width": 320, "height": 844 }, "ready": "BIND_AFTER_GO", "imageSelector": "BIND_AFTER_GO", "allowedScenes": ["today-scene"] },
+    { "name": "coach-390", "route": "/app/coach", "viewport": { "width": 390, "height": 844 }, "ready": "BIND_AFTER_GO", "imageSelector": "BIND_AFTER_GO", "allowedScenes": ["coach-orb"] },
+    { "name": "sound-390", "route": "/app/sound", "viewport": { "width": 390, "height": 844 }, "ready": "BIND_AFTER_GO", "imageSelector": "BIND_AFTER_GO", "allowedScenes": ["dunes", "palms", "foam", "sound-sculpture"] },
+    { "name": "sound-desktop", "route": "/app/sound", "viewport": { "width": 1440, "height": 1000 }, "ready": "BIND_AFTER_GO", "imageSelector": "BIND_AFTER_GO", "allowedScenes": ["dunes", "palms", "foam", "sound-sculpture"] }
+  ],
+  "fallbackCases": [
+    { "name": "representative-finite-fallback", "route": "BIND_AFTER_GO", "viewport": { "width": 390, "height": 844 }, "scene": "BIND_AFTER_GO", "ready": "BIND_AFTER_GO", "hostSelector": "BIND_AFTER_GO", "imageSelector": "BIND_AFTER_GO", "pngPath": "BIND_AFTER_GO", "suppliedLegacyPath": "BIND_AFTER_GO", "ownedGrowthPath": "BIND_AFTER_GO", "maximumFailureRequests": 0 }
+  ]
+}

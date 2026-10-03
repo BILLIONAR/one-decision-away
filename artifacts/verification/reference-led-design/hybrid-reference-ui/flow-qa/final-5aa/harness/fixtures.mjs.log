@@ -1,0 +1,91 @@
+// No imports from the working repository: fixture construction is invoked only
+// after the caller passes the frozen build's actual factory/catalogue.
+export const FIXED_NOW = '2028-03-01T00:30:00.000Z';
+export const FIXED_TODAY_UTC = '2028-03-01';
+
+export function makeSeed(factory, { locale = 'en', theme = 'light' } = {}) {
+  const data = factory();
+  data.profile = { ...data.profile, displayName: 'Synthetic hybrid reference QA', locale, theme,
+    onboardingStep: 'completed', intent: 'finish', simpleModeOff: true,
+    soundMuted: true, nudgesEnabled: false, dailyWisdomEnabled: false,
+    reminderAskedAt: FIXED_NOW, firstOpenedAt: '2026-01-01T00:00:00.000Z' };
+  data.profile.lastOpenedAt = FIXED_NOW;
+  data.lastActiveDateKey = '2028-03-01';
+  data.lastDailyResetTimestamp = FIXED_NOW;
+  data.completions = [];
+  data.missions = data.missions.filter(mission => !mission.isOneDecision);
+  data.transactions = data.transactions.filter(row => row.kind === 'welcome_grant');
+  data.notebook.entries = [];
+  data.dreamJournal = [];
+  data.courseProgress = { version: 1, lessons: {} };
+  data.microHabits = (data.microHabits || []).map(habit => ({ ...habit, completedDates: [], streakCount: 0, bestStreak: 0 }));
+  return data;
+}
+
+export function completeLessonFixture(lesson) {
+  // Real valid prerequisites: unchecked or wrong-answer fixtures must not fake
+  // completion. Content/practice counts come from the frozen actual catalogue.
+  return { checked: Array(lesson.practiceCount).fill(true), answer: lesson.correct,
+    reflection: `Synthetic saved reflection for ${lesson.id}`, completed: true };
+}
+
+export function returningCourseFixture(seed, catalog, courseId = 'procrastination') {
+  const course = catalog.find(course => course.id === courseId);
+  if (!course || course.lessons.length < 4) throw new Error('Bind an actual course with at least four real stages.');
+  for (const lesson of course.lessons.slice(0, 2)) seed.courseProgress.lessons[lesson.id] = completeLessonFixture(lesson);
+  const current = course.lessons[2];
+  seed.courseProgress.lessons[current.id] = { checked: Array(current.practiceCount).fill(false), answer: null,
+    reflection: 'Synthetic uncompleted saved reflection does not count as a completed lesson', completed: false };
+  return { seed, course, current, completed: course.lessons.slice(0, 2), future: course.lessons[3] };
+}
+
+export function allCoursesCompleteFixture(seed, catalog) {
+  for (const course of catalog) for (const lesson of course.lessons) seed.courseProgress.lessons[lesson.id] = completeLessonFixture(lesson);
+  return { seed, expectedLessons: 103, expectedCourses: 18 };
+}
+
+export function timerUtcFixture(seed, { gapYesterday = false } = {}) {
+  const raw = [
+    ['timer-27', '2028-02-27T12:00:00Z', 'timer', 10],
+    ['timer-28', '2028-02-28T12:00:00Z', 'timer', 20],
+    ['timer-28-extra', '2028-02-28T18:00:00Z', 'timer', 5],
+    // This timestamp is February29 UTC despite the March1 textual prefix.
+    ['timer-29', '2028-03-01T01:00:00+02:00', 'timer', 15],
+    ['timer-29', '2028-03-01T00:05:00Z', 'timer', 45], // Duplicate mission: earliest qualifying record wins.
+    ['self-today', '2028-03-01T00:10:00Z', 'self', 25],
+    ['photo-today', '2028-03-01T00:15:00Z', 'photo', 25],
+    ['zero-today', '2028-03-01T00:20:00Z', 'timer', 0],
+    ['negative-today', '2028-03-01T00:22:00Z', 'timer', -1],
+    ['missing-today', '2028-03-01T00:24:00Z', 'timer', undefined],
+    ['invalid-time', 'invalid-date', 'timer', 25],
+    ['future-time', '2028-03-02T00:00:00Z', 'timer', 25],
+  ].filter(([id]) => !gapYesterday || id !== 'timer-29');
+  seed.completions = raw.map(([missionId, completedAt, method, focusMinutes], index) => ({
+    id: `synthetic-comp-${index}`, userId: seed.profile.id, missionId, completedAt, method, focusMinutes,
+    rewardAmount: 0, streakBonus: 0,
+  }));
+  for (const missionId of new Set(raw.map(row => row[0]))) seed.missions.push({ id: missionId,
+    userId: seed.profile.id, title: `Synthetic history ${missionId}`, type: 'daily_quest', area: 'Work',
+    difficulty: 'easy', isOneDecision: false, status: 'completed', createdAt: '2028-02-26T00:00:00Z' });
+  // Four qualifying distinct missions, fifty minutes, three distinct UTC days.
+  return { seed, expected: { sessions: gapYesterday ? 3 : 4, minutes: gapYesterday ? 35 : 50,
+    streak: gapYesterday ? 0 : 3, timerDays: gapYesterday ? 2 : 3 } };
+}
+
+export function journalLeapFixture(seed) {
+  const entries = [
+    { id: 'synthetic-journal-29', title: 'Synthetic leap-day original', content: 'Original archive words must stay on February29.', dateKey: '2028-02-29', createdAt: '2028-02-29T09:00:00Z' },
+    { id: 'synthetic-journal-28', title: 'Synthetic previous day', content: 'Only February28 archive content.', dateKey: '2028-02-28', createdAt: '2028-02-28T10:00:00Z' },
+    { id: 'synthetic-journal-jan', title: 'Synthetic January archive', content: 'January remains reachable.', dateKey: '2028-01-31', createdAt: '2028-01-31T08:00:00Z' },
+  ].map(entry => ({ ...entry, kind: 'journal', mood: 'focused', updatedAt: entry.createdAt }));
+  seed.notebook.entries = entries;
+  return { seed, entries, writingDay: FIXED_TODAY_UTC, editDate: '2028-02-29' };
+}
+
+export function canonicalDecisionSnapshot(data) {
+  return { completedDecisions: data.missions.filter(row => row.isOneDecision && row.status === 'completed').length,
+    completions: data.completions.length,
+    rewards: data.transactions.filter(row => row.kind === 'one_decision_reward').length,
+    nextDecisionDraft: data.profile.nextDecisionDraft,
+  };
+}

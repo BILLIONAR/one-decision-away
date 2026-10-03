@@ -1,0 +1,25 @@
+import assert from 'node:assert/strict';
+import { admit } from './hybrid-common.mjs';
+import { makeSeed, journalLeapFixture, FIXED_NOW } from './fixtures.mjs';
+const qa=await admit('notebook-native-scroll');
+const {getInitialDemoState}=await import(`${qa.repo}/src/services/repository.ts`);
+const fixture=journalLeapFixture(makeSeed(getInitialDemoState));let active;
+try{
+ const c=await qa.create({seed:fixture.seed,viewport:{width:320,height:844},fixedClock:FIXED_NOW}),p=c.page;active=p;
+ await qa.goto(p,'/app/notebook');await p.locator('#notebook-journal-content').fill('Synthetic dirty words stay while only focusing archive dates.');
+ const strip=p.locator('.oda-notebook-week-strip'),buttons=strip.locator('button');await buttons.first().focus();
+ const positions=[];
+ for(let index=0;index<7;index++){
+  if(index)await p.keyboard.press('Tab');
+  const facts=await buttons.nth(index).evaluate(el=>{const region=el.closest('.oda-notebook-week-region'),r=region.getBoundingClientRect(),b=el.getBoundingClientRect();return {label:el.getAttribute('aria-label'),focused:document.activeElement===el,button:{left:b.left,right:b.right,width:b.width,height:b.height},region:{left:r.left,right:r.right,scrollLeft:region.scrollLeft},scrollWidth:document.documentElement.scrollWidth,documentWidth:document.documentElement.clientWidth};});
+  assert.ok(facts.focused);assert.ok(facts.button.left>=facts.region.left-1&&facts.button.right<=facts.region.right+1,JSON.stringify(facts));
+  assert.ok(facts.button.width>=44&&facts.button.height>=44);assert.ok(facts.scrollWidth<=facts.documentWidth+1);positions.push(facts);
+ }
+ assert.equal(await p.locator('#notebook-journal-content').inputValue(),'Synthetic dirty words stay while only focusing archive dates.');
+ assert.deepEqual((await qa.read(p)).notebook.entries,fixture.entries);
+ assert.ok(await p.locator('.oda-notebook-week-hint').isVisible());
+ qa.pass('Notebook320 native Tab reaches all seven44px archive dates inside scroll region without selecting or changing dirty draft/original records',positions);
+ await qa.capture(p,'notebook-native-week-scroll-320');await c.context.close();
+ for(const record of qa.report.contexts){assert.deepEqual(record.pageErrors,[]);assert.deepEqual(record.blockedExternal,[]);}
+ await qa.close('passed');
+}catch(error){qa.report.failure=String(error.stack||error);process.exitCode=1;if(active&&!active.isClosed())await qa.capture(active,'failure',true).catch(()=>{});console.error(qa.report.failure);await qa.close('failed');}

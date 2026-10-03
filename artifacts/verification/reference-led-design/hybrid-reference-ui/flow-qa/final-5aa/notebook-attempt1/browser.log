@@ -1,0 +1,17 @@
+PASS Selected leap-day archive filters actual entries; header New focuses empty editor and saves on TODAY
+PASS Dirty edit New cancel and previous/next week preserve writing; save edits one original-date record
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   {
++     label: 'March 5, 2028',
++     left: 309,
++     right: 353,
++     tag: 'BUTTON'
++   }
++ ]
+- []
+
+    at Object.fit (file:///workspace/scratch/oda-reference-redesign/hybrid-reference-ui/flow-qa/final-5aa/harness/hybrid-common.mjs:62:67)
+    at async <anonymous> (/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/flow-qa/final-5aa/harness/hybrid-flows.mjs:136:88)

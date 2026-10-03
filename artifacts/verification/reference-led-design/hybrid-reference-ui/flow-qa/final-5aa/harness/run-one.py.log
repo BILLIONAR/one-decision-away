@@ -1,0 +1,25 @@
+from pathlib import Path
+import os, sys, json, hashlib, subprocess, time
+from datetime import datetime, timezone
+
+if os.environ.get('ODA_HYBRID_FLOW_GO') != '1':
+    raise SystemExit('Parent frozen-source/build GO required; preparation is not a test run.')
+repo = Path(os.environ['ODA_QA_REPO'])
+out = Path(os.environ['ODA_QA_OUT'])
+source = os.environ['ODA_QA_SOURCE_COMMIT']
+assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=repo, text=True).strip() == source
+assert not subprocess.check_output(['git', 'status', '--porcelain'], cwd=repo, text=True).strip()
+harness = Path(sys.argv[1]).resolve()
+assert harness.is_relative_to(Path('/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/flow-qa/final-5aa'))
+out.mkdir(parents=True, exist_ok=True)
+command = ['node', '--import', 'tsx', str(harness), *sys.argv[2:]]
+started = datetime.now(timezone.utc).isoformat()
+clock = time.monotonic()
+with (out / 'browser.log').open('xb') as log:
+    result = subprocess.run(command, cwd=repo, env=os.environ.copy(), stdout=log, stderr=subprocess.STDOUT)
+data = (out / 'browser.log').read_bytes()
+receipt = {'sourceCommit': source, 'command': command, 'cwd': str(repo), 'startedAtUtc': started, 'elapsedSeconds': time.monotonic()-clock, 'exitCode': result.returncode, 'syntheticOnly': True, 'harness': {'path': str(harness), 'bytes': harness.stat().st_size, 'sha256': hashlib.sha256(harness.read_bytes()).hexdigest()}, 'log': {'path': str(out/'browser.log'), 'bytes':len(data), 'sha256':hashlib.sha256(data).hexdigest()}, 'env': {key: os.environ[key] for key in ['ODA_HYBRID_FLOW_GO', 'ODA_QA_SOURCE_COMMIT', 'ODA_QA_REPO', 'ODA_QA_URL', 'ODA_QA_OUT', 'ODA_HYBRID_PREFLIGHT']}, 'notRerunOrReplacement': True}
+with (out / 'command-receipt.json').open('x') as stream:
+    json.dump(receipt, stream, indent=2); stream.write('\n')
+print(json.dumps(receipt))
+raise SystemExit(result.returncode)

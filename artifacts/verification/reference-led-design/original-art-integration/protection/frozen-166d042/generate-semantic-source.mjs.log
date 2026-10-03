@@ -1,0 +1,26 @@
+import {createRequire} from 'node:module';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+const root='/workspace/oda-reference-redesign';
+const out='/workspace/scratch/oda-reference-redesign/original-art-integration/protection/frozen-166d042';
+const ts=createRequire(root+'/package.json')('typescript');
+const baseline=JSON.parse(readFileSync(out+'/source-baseline.json','utf8'));
+const tok=s=>{const scanner=ts.createScanner(ts.ScriptTarget.Latest,true,ts.LanguageVariant.JSX,s);const tokens=[];for(let t=scanner.scan();t!==ts.SyntaxKind.EndOfFileToken;t=scanner.scan())tokens.push([t,scanner.getTokenText()]);return JSON.stringify(tokens);};
+const digest=s=>createHash('sha256').update(s).digest('hex');
+const unwrap=n=>{while(n&&ts.isParenthesizedExpression(n))n=n.expression;return n;};
+const isJSX=n=>n&&(ts.isJsxElement(n)||ts.isJsxFragment(n)||ts.isJsxSelfClosingElement(n));
+const controlNames=new Set(['key','ref','id','type','value','defaultValue','checked','defaultChecked','disabled','hidden','maxLength','min','max','step','required','name','multiple','readOnly','tabIndex','role','htmlFor','isOpen','isLoading','busy','native','sessionId','cueIndex','maxDurationSeconds','count','minutes','durationMinutes','label']);
+const files=[];
+for(const item of baseline.tsxSnapshots){
+ const source=readFileSync(item.snapshot,'utf8');if(digest(source)!==item.sha256)throw Error('Baseline snapshot mismatch');
+ const sf=ts.createSourceFile(item.file,source,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);
+ const controllers=[];
+ const read=(name,fn)=>{if(!fn.body||!ts.isBlock(fn.body))return;const statements=fn.body.statements.filter(n=>!(ts.isReturnStatement(n)&&isJSX(unwrap(n.expression))));const value=tok(statements.map(s=>s.getText(sf)).join('\n'));controllers.push({name,parameters:fn.parameters.map(p=>tok(p.getText(sf))),statementTokens:value,statementTokensSha256:digest(value),statementCount:statements.length});};
+ for(const st of sf.statements){if(ts.isFunctionDeclaration(st)&&st.name)read(st.name.text,st);if(ts.isVariableStatement(st))for(const d of st.declarationList.declarations){if(!ts.isIdentifier(d.name)||!d.initializer)continue;if(ts.isArrowFunction(d.initializer)||ts.isFunctionExpression(d.initializer))read(d.name.text,d.initializer);else if(ts.isCallExpression(d.initializer))for(const arg of d.initializer.arguments)if(ts.isArrowFunction(arg)||ts.isFunctionExpression(arg))read(d.name.text,arg);}}
+ const controlAttributes=[];const visit=(node)=>{if(ts.isJsxAttribute(node)){const name=node.name.getText(sf);if(name.startsWith('on')||name.startsWith('aria-')||controlNames.has(name)){const opening=node.parent.parent;const tag=opening.tagName?.getText(sf)??'unknown';let owner=node.parent;while(owner&&!ts.isFunctionDeclaration(owner)&&!ts.isArrowFunction(owner)&&!ts.isFunctionExpression(owner))owner=owner.parent;let ownerName=owner?.name?.getText(sf);if(!ownerName&&owner?.parent&&ts.isVariableDeclaration(owner.parent))ownerName=owner.parent.name.getText(sf);controlAttributes.push({tag,name,valueTokens:tok(node.initializer?.getText(sf)??''),raw:node.getText(sf),owner:ownerName??'inline-render'});}}ts.forEachChild(node,visit);};visit(sf);
+ const attrsHash=digest(JSON.stringify(controlAttributes.map(x=>({tag:x.tag,name:x.name,valueTokens:x.valueTokens})).sort((a,b)=>JSON.stringify(a).localeCompare(JSON.stringify(b)))));
+ files.push({file:item.file,sourceSha256:item.sha256,controllers,controlAttributes,controlAttributeMultisetSha256:attrsHash});
+}
+const report={kind:'immutable all-TSX semantic controller/handler baseline',baselineCommit:baseline.baselineCommit,testedFunctionalSourceCommit:baseline.testedFunctionalSourceCommit,tsxFileCount:files.length,controllerCount:files.reduce((n,f)=>n+f.controllers.length,0),controlAttributeCount:files.reduce((n,f)=>n+f.controlAttributes.length,0),methods:['TypeScript parser over actual committed TSX snapshots; retain stable non-render component statements and function parameters.','Retain callback, key/ref, identity/controlled-input, hidden/disabled, duration/session/count and all ARIA attributes by tag and expression tokens.','This is a comparison inventory, not a test pass or requirement for whole JSX/style identity. Future intentional presentational additions may need explicit reviewed exceptions.'],files};
+writeFileSync(out+'/controller-semantic-baseline.json',JSON.stringify(report,null,2)+'\n',{flag:'wx'});
+console.log(JSON.stringify({tsxFiles:report.tsxFileCount,controllers:report.controllerCount,controlAttributes:report.controlAttributeCount,path:out+'/controller-semantic-baseline.json'},null,2));

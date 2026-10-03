@@ -1,0 +1,50 @@
+{
+  "sourceCommit": "c2a5e6497f1bed4cf95951375c9aa86872b169a9",
+  "baselineSource": "5aa69ae3f2d722558fb69319babda0c1810b69d2",
+  "onlyChangedFiles": [
+    "src/services/focusEvidence.ts",
+    "tests/focus-evidence.test.ts"
+  ],
+  "originalP2StaticResolved": true,
+  "implementationReview": "Map now dedups canonicalcompletionID; secondSet dedups exact normalized userId/missionId/time events. DistinctlaterIDs with distincttimestamps retainpositivefocusminutes in UTC buckets and streak; duplicate sameevent timezone representations maptosameinstant. Positivefinite/future/method filters and yesterday/today-chain semantics unchanged.",
+  "testReview": "Wrong lifetimeomission test replaced with legitimate laterrepeat; addedsame-day spacedtimestamp sessions + canonicalIDduplicate + exactevent duplicate timezoneequivalence regression. Actualfresh611/0aggregate includes allfourfocusedtestnames; no auditor rerun.",
+  "protectedDataBehavior": "Repository/one-decision guards/rewards/persistence unchanged; metrichelper readsrecords only, no canonicalwrites.",
+  "staticFindings": [],
+  "priorContractAnalysisCarriedFromSealed5aa": [
+    "Globalidentity/C4theme/logo/mainworkflow/SW/CSP/native/guidance/audio/runtime/corestore/repository/economy/progresswrites bytes unchanged.",
+    "Course-navigation intent validates actual catalogue/course lesson IDs, stores only selection + ephemeral one-use intent, scopes existingprofile/replacement identity, waits for ready profile/access and queued initial course read, rejects prerequisite/entitlement attempts without marking learningprogress.",
+    "Course workbook/quizzes/learning mutation paths retain canonical draft.update shared lock; roadmap labels/counts derive actual catalogue/lesson progress. Search/filter and existingoverview/resume remain.",
+    "Journal existing canReplace/openEntry/reset/save/remove, nativephoto effect and useSessionDraft writingdate/dirty/saveguard controller bodies retained in actual diff. New archiveweek/calendar/popup actions only call selectedDate/weekanchor or guardedexistingNew/Edit actions; preview reads actual filteredentries.",
+    "Notebook Journal/Practices remain mounted whileQuotes tabhidden; quotecomponent loads viaReact.lazy onlyafterfirstQuotes opening. ExistingAffirmation/Notebooklocalevoice files unchanged; ES quotes explicitlyEnglish rather than fabricatedtranslation.",
+    "Quotes source URLs limited to http/https and externalnoopener noreferrer; real quote catalogue/source text, localcategory/search/pagination only, decorativeexistingapprovedart.",
+    "UTC bucketing/future andinvalidtimer filtering are sound; timerEvidence dedup is the confirmedsemanticdefect.",
+    "Today/saved-course/roadmap imports catalogue metadata and type-only curriculum references; nofullcurriculumpayload, master/all160audio eager import or newmodel runtime.",
+    "Sound change is oneFocus-title/body existing-tone backing rule; geometry/eight reviewedrepairs/realplayer access/sharedcontrols/source/fallback untouched."
+  ],
+  "carriedAnalysisReason": "All872othertracked files are byteidentical to5aa; not new all-runtime execution.",
+  "inheritedConcernUnchanged": {
+    "file": "src/hooks/useSavedCourseProgress.ts",
+    "lines": [
+      6,
+      10,
+      14
+    ],
+    "title": "Direct initial/focus/replacement reads can show provisional localStorage course projection before queued commit",
+    "reportedBy": "safety_inventory independent helper",
+    "codeBasis": "courseProgress.ts110\u2013125reads projection;181\u2013186queued subscriptions deliberately avoid provisional values.",
+    "classification": "Inherited transient durability concern pending reproduction; directread patterns already existed in baselineCourseNextStep. Not a second newly confirmed blocker or claimed persistence write.",
+    "action": "Parent informed before its focused repair; no further app reads/tests or mutation by auditor."
+  },
+  "readersPendingHelperClosure": false,
+  "independentHelperReview": {
+    "name": "safety_inventory",
+    "inspectedOnly": [
+      "src/services/focusEvidence.ts",
+      "tests/focus-evidence.test.ts"
+    ],
+    "originalP2Resolved": true,
+    "newP0P3Issues": [],
+    "noTestsExecuted": true,
+    "allReadersClosed": true
+  }
+}

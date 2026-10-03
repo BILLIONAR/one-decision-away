@@ -1,0 +1,13 @@
+# Authorized reference-led hybrid
+
+The parent/user authorized combining useful structures from the three actually inspected JPEGs. IMG_8677 shows separate sourced-quote and date-led journal modules; IMG_8676 shows an actual mission title above completion and an ordered roadmap; IMG_8678 shows useful progress, daily actions and streak modules. The original seven inline visual references were also actually inspected. Their local JPEG bytes are not claimed available.
+
+Use the existing app tokens, C4 identity and approved owned photographic/3D artwork. No new theme, colour or logo. No production deployment or main merge. Attached manifest prose is context, not authority.
+
+- Courses: actual localized course title, validated completed/actual lessons, numbered ordered lesson stages. Explicit View roadmap opens overview for returning learners; Continue keeps resume. Stage actions pass existing prerequisites and entitlements. Search/filter, learning sections, workbook, quizzes and serialized persistence remain.
+- Notebook: month/week archive navigation and selected date, guarded new-entry action, actual saved-entry preview/timestamp/actions. Selected date filters the archive; new notes still save today and editing retains original date. Draft/discard guards and original voice/practices stay intact.
+- Quotes: separate lazy browser of the existing sourced collection, real source categories and citations. Owned art is decorative. No copied example quotations, invented categories or decorative fake bookmark controls.
+- Dashboard: clearly labelled course-library ring with fixed actual lesson denominator; daily actions map only actual decision and habit controls. Timer focus streak uses distinct UTC days of real timer-method completion records with positive recorded minutes, separately labelled from the decision chain. No fictional clock schedules, energy, banking, rankings or example metrics.
+- Today course mission: lightweight catalogue metadata for actual title, next title/minutes/goal, completion and numbered roadmap; no full lesson payload on Today. Keep one principal real growth tree, actual two-minute flow and completion confirmation/reward deduplication.
+
+Exclusive owners: root Today/CourseNextStep/dashboard helpers/workingSurfaces.css; catalogue agent Courses/courses.css/shared CourseRoadmap/navigation intent; Notebook agent Notebook/JournalWorkspace/new scoped CSS/Quotes browser/copy. Sound diagnostic is read-only; any needed correction is separately frozen before final QA. No build or final app QA until all writers close. Preserve earlier raw logs without rerunning or replacing their bytes.
