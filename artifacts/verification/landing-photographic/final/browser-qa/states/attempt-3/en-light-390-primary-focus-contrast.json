@@ -1,0 +1,350 @@
+{
+  "schema_version": "1.0",
+  "analysis_status": "completed",
+  "pass": true,
+  "pass_basis": "Supplied actual changed-outline pixel samples at 3:1, with no analyzer errors, capture clipping, possible ancestor clipping, or nonunit opacity chain. This measures draft outline color contrast only; it does not establish all focus accessibility requirements.",
+  "candidate_status": "draft",
+  "final_qa_claim": false,
+  "metadata": {
+    "path": "/workspace/scratch/oda-landing-photographic/browser-qa/states/attempt-3/en-light-390-primary-focus-input.json",
+    "sha256": "3b5c029fe509de510bbd6399053a24210ee51a0163394e5757db5925f0e33f99",
+    "byte_count": 2708
+  },
+  "method": {
+    "background_source": "Actual pixels from the paired browser capture with text color transparent",
+    "conservative_sample": "All pixels in the enclosing integer box of each caller-supplied glyph/text rect; deduplicated within each run",
+    "changed_glyph_sample": "Pixels within the rects where max(abs(clean.R-background.R), abs(clean.G-background.G), abs(clean.B-background.B)) > 4",
+    "changed_pixel_rgb_delta_cutoff": 4,
+    "foreground": "Analytical sRGB channel compositing of CSS color over each actual background pixel; effective alpha = color alpha * opacity",
+    "luminance": "WCAG sRGB transfer function, coefficients 0.2126/0.7152/0.0722; ratio = (lighter + 0.05)/(darker + 0.05)",
+    "thresholds": {
+      "ordinary_text_ratio": 4.5,
+      "large_text_ratio": 3,
+      "large_regular_minimum_css_px": 24,
+      "large_bold_minimum_css_px": 18.667,
+      "large_bold_minimum_weight": 700
+    },
+    "pixel_box_rounding": "floor(x*dpr), floor(y*dpr), ceil((x+width)*dpr), ceil((y+height)*dpr), clipped to capture bounds",
+    "minimum_comparison": "Full precision ratio; no rounding before threshold comparison",
+    "pixel_location": "PNG pixel indices and CSS pixel-center coordinates relative to region PNG origin",
+    "counting": "Run totals are unique within a run; report totals sum run counts and may duplicate pixels across distinct runs",
+    "focus_sample_semantics": "Only the existing control outline was removed. Actual changed-glyph fields therefore refer to changed-outline samples, not text; conservative boxes also include unchanged control interior."
+  },
+  "limitations": [
+    "Draft-candidate sampled evidence only; no final QA or general accessibility compliance claim.",
+    "A delta mask is an observed capture difference, not an exact glyph outline. It includes antialiasing and can include shadows, strokes, overlapping text, other paint, or capture drift.",
+    "The delta cutoff can omit low-contrast glyph pixels. A missing run-level mask is an explicit error, never a passing result. Individual empty rect masks are reported separately because rects can include whitespace.",
+    "Conservative boxes include nonglyph pixels and their enclosing fractional-edge pixels; their minimum can be lower than contrast at painted glyph pixels.",
+    "Both minima use intended CSS foreground composited over observed background pixels; actual antialiased foreground pixel contrast is not used as a WCAG text-color measurement.",
+    "Capture alignment, unchanged layout/scroll/content/fonts/animations, rect accuracy, DPR, run identity, and style metadata must be ensured by the capture producer; this analyzer cannot prove those conditions.",
+    "Opacity is assumed to be text paint opacity suitable for this compositing model. Ancestor group opacity with its own background can require layer modeling and is not supported by simply multiplying opacities.",
+    "Gradient text, blend modes, filters, complex compositing, and text-decoration effects are not modeled. Input must resolve the visible text color and applicable opacity.",
+    "The reused text/glyph and large_text fields are analyzer-schema compatibility fields; this capture measures the focus outline, not text.",
+    "This report covers supplied draft outline-color samples only. It does not establish focus area/thickness, all keyboard behavior, text contrast, other controls or states, human listening, publication, or broad accessibility/quality compliance."
+  ],
+  "regions": [
+    {
+      "index": 0,
+      "status": "measured",
+      "pass": true,
+      "runs": [
+        {
+          "index": 0,
+          "status": "measured",
+          "pass": true,
+          "actualGlyphMinRatio": 6.064058716199713,
+          "conservativeBoxMinRatio": 1.8697185136663803,
+          "threshold": 3,
+          "rectangles": [
+            {
+              "index": 0,
+              "css_rect": {
+                "x": 12,
+                "y": 396.03125,
+                "width": 236.78125,
+                "height": 68
+              },
+              "sampled_counts": {
+                "box_pixels": 16353,
+                "changed_glyph_pixels": 1807
+              },
+              "conservative_box_minimum": {
+                "contrast_ratio": 1.8697185136663803,
+                "contrast_threshold": 3,
+                "meets_threshold_for_sample": false,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  247,
+                  243,
+                  234
+                ],
+                "observed_clean_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "maximum_observed_rgb_channel_delta": 0,
+                "location": {
+                  "png_x": 28,
+                  "png_y": 404,
+                  "css_center_x": 28.5,
+                  "css_center_y": 404.5
+                },
+                "source_rect_index": 0
+              },
+              "actual_changed_glyph_pixel_minimum": {
+                "contrast_ratio": 6.064058716199713,
+                "contrast_threshold": 3,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  139,
+                  73,
+                  65
+                ],
+                "composited_foreground_rgb": [
+                  247,
+                  243,
+                  234
+                ],
+                "observed_clean_rgb": [
+                  142,
+                  78,
+                  70
+                ],
+                "maximum_observed_rgb_channel_delta": 5,
+                "location": {
+                  "png_x": 15,
+                  "png_y": 411,
+                  "css_center_x": 15.5,
+                  "css_center_y": 411.5
+                },
+                "source_rect_index": 0
+              },
+              "changed_glyph_mask_status": "present",
+              "errors": [],
+              "warnings": [],
+              "requested_png_bounds": {
+                "left": 12,
+                "top": 396,
+                "right_exclusive": 249,
+                "bottom_exclusive": 465
+              },
+              "sampled_png_bounds": {
+                "left": 12,
+                "top": 396,
+                "right_exclusive": 249,
+                "bottom_exclusive": 465
+              },
+              "was_clipped": false
+            }
+          ],
+          "conservative_box_minimum": {
+            "contrast_ratio": 1.8697185136663803,
+            "contrast_threshold": 3,
+            "meets_threshold_for_sample": false,
+            "background_rgb": [
+              224,
+              171,
+              90
+            ],
+            "composited_foreground_rgb": [
+              247,
+              243,
+              234
+            ],
+            "observed_clean_rgb": [
+              224,
+              171,
+              90
+            ],
+            "maximum_observed_rgb_channel_delta": 0,
+            "location": {
+              "png_x": 28,
+              "png_y": 404,
+              "css_center_x": 28.5,
+              "css_center_y": 404.5
+            },
+            "source_rect_index": 0
+          },
+          "actual_changed_glyph_pixel_minimum": {
+            "contrast_ratio": 6.064058716199713,
+            "contrast_threshold": 3,
+            "meets_threshold_for_sample": true,
+            "background_rgb": [
+              139,
+              73,
+              65
+            ],
+            "composited_foreground_rgb": [
+              247,
+              243,
+              234
+            ],
+            "observed_clean_rgb": [
+              142,
+              78,
+              70
+            ],
+            "maximum_observed_rgb_channel_delta": 5,
+            "location": {
+              "png_x": 15,
+              "png_y": 411,
+              "css_center_x": 15.5,
+              "css_center_y": 411.5
+            },
+            "source_rect_index": 0
+          },
+          "sampled_counts": {
+            "provided_rectangles": 1,
+            "analyzed_rectangles": 1,
+            "box_unique_pixels": 16353,
+            "changed_glyph_unique_pixels": 1807
+          },
+          "errors": [],
+          "warnings": [],
+          "selector": ".oda-landing-hero-actions .oda-landing-button-primary",
+          "text": "[focus outline; not text]",
+          "color_rgba": [
+            247,
+            243,
+            234,
+            1
+          ],
+          "opacity": 1,
+          "effective_foreground_alpha": 1,
+          "font_size_css_px": 24,
+          "font_weight": 400,
+          "large_text": true,
+          "contrast_threshold": 3,
+          "measurementKind": "essential_nontext_focus_outline",
+          "isTextMeasurement": false,
+          "typographyFieldsAreThresholdCompatibilityOnly": true,
+          "actualOutlineMinRatio": 6.064058716199713,
+          "thresholdBasis": "3:1 essential UI mark"
+        }
+      ],
+      "errors": [],
+      "warnings": [],
+      "name": "focus-outline",
+      "dpr": 1,
+      "clean_png": {
+        "supplied_path": "/workspace/scratch/oda-landing-photographic/browser-qa/states/attempt-3/en-light-390-primary-focus-clean.png",
+        "path": "/workspace/scratch/oda-landing-photographic/browser-qa/states/attempt-3/en-light-390-primary-focus-clean.png",
+        "sha256": "fc91a5032a87300bc1bc0485c0354200f1200431c2224f4fdeee56964d96b683",
+        "byte_count": 304289,
+        "format": "PNG",
+        "mode": "RGB",
+        "width": 390,
+        "height": 871
+      },
+      "background_png": {
+        "supplied_path": "/workspace/scratch/oda-landing-photographic/browser-qa/states/attempt-3/en-light-390-primary-focus-background.png",
+        "path": "/workspace/scratch/oda-landing-photographic/browser-qa/states/attempt-3/en-light-390-primary-focus-background.png",
+        "sha256": "8b57ca1f1e4c4e056862102054fe3d4fbaf29646ce812de0273888a02319b8b7",
+        "byte_count": 304793,
+        "format": "PNG",
+        "mode": "RGB",
+        "width": 390,
+        "height": 871
+      },
+      "provided_run_count": 1
+    }
+  ],
+  "errors": [],
+  "warnings": [],
+  "summary": {
+    "region_count": 1,
+    "run_count": 1,
+    "measured_run_count": 1,
+    "partial_run_count": 0,
+    "inconclusive_run_count": 0,
+    "box_sample_count_sum_over_runs": 16353,
+    "changed_glyph_sample_count_sum_over_runs": 1807,
+    "sampled_box_threshold_failures": 1,
+    "sampled_changed_glyph_threshold_failures": 0,
+    "error_count": 0,
+    "warning_count": 0
+  },
+  "measurement_kind": "essential_nontext_focus_outline",
+  "is_text_measurement": false,
+  "focus_threshold_basis": "3:1 essential UI focus mark; fontSize24/fontWeight400 are analyzer-schema compatibility values, not text typography.",
+  "outline_geometry": {
+    "focused": true,
+    "focusVisible": true,
+    "originalStyle": "",
+    "outlineStyle": "solid",
+    "outlineColor": "rgb(247, 243, 234)",
+    "color": [
+      247,
+      243,
+      234,
+      1
+    ],
+    "width": 3,
+    "offset": 5,
+    "expansion": 8,
+    "opacity": 1,
+    "opacityChain": [],
+    "boxShadow": "rgb(84, 1, 12) 0px 0px 0px 2px",
+    "dpr": 1,
+    "scroll": {
+      "x": 0,
+      "y": 9
+    },
+    "control": {
+      "x": 20,
+      "y": 404.03125,
+      "width": 220.78125,
+      "height": 52
+    },
+    "region": {
+      "x": 0,
+      "y": 80,
+      "width": 390,
+      "height": 871.625
+    },
+    "requestedOutlineRect": {
+      "x": 12,
+      "y": 396.03125,
+      "width": 236.78125,
+      "height": 68
+    },
+    "regionClipped": false,
+    "controlClipped": false,
+    "ancestorClipCandidates": [
+      {
+        "element": "div",
+        "overflowX": "clip",
+        "overflowY": "clip",
+        "clipPath": "none",
+        "maskImage": "none",
+        "bounds": {
+          "x": 0,
+          "y": -9,
+          "width": 390,
+          "height": 7001.859375
+        },
+        "possiblyClipped": false
+      }
+    ],
+    "documentClip": {
+      "x": 0,
+      "y": 89,
+      "width": 390,
+      "height": 871.625
+    },
+    "styleRestoration": {
+      "originalAttribute": "",
+      "observedBeforeNormalization": "",
+      "observedAfterNormalization": "",
+      "declarationCount": 0,
+      "equivalentEmptyAttribute": false,
+      "computedOutlineShadowGeometryRestored": true
+    }
+  },
+  "actualOutlineMinRatio": 6.064058716199713
+}

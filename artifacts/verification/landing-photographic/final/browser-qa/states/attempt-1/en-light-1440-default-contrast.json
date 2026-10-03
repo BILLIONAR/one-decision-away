@@ -1,0 +1,1965 @@
+{
+  "schema_version": "1.0",
+  "analysis_status": "completed",
+  "pass": true,
+  "pass_basis": "Only acceptance of supplied actual changed-glyph pixel samples: nonempty runs, no errors or clipping warnings, and all actual sampled minima at or above the applicable threshold. Conservative box minima are reported separately. This is not a final QA claim.",
+  "candidate_status": "draft",
+  "final_qa_claim": false,
+  "metadata": {
+    "path": "/workspace/scratch/oda-landing-photographic/browser-qa/states/attempt-1/en-light-1440-default-contrast-input.json",
+    "sha256": "d42a5d8994833fdff23813dc3b772e3d20dc0abb7efcd4c6d8563edd0979f583",
+    "byte_count": 4042
+  },
+  "method": {
+    "background_source": "Actual pixels from the paired browser capture with text color transparent",
+    "conservative_sample": "All pixels in the enclosing integer box of each caller-supplied glyph/text rect; deduplicated within each run",
+    "changed_glyph_sample": "Pixels within the rects where max(abs(clean.R-background.R), abs(clean.G-background.G), abs(clean.B-background.B)) > 4",
+    "changed_pixel_rgb_delta_cutoff": 4,
+    "foreground": "Analytical sRGB channel compositing of CSS color over each actual background pixel; effective alpha = color alpha * opacity",
+    "luminance": "WCAG sRGB transfer function, coefficients 0.2126/0.7152/0.0722; ratio = (lighter + 0.05)/(darker + 0.05)",
+    "thresholds": {
+      "ordinary_text_ratio": 4.5,
+      "large_text_ratio": 3.0,
+      "large_regular_minimum_css_px": 24.0,
+      "large_bold_minimum_css_px": 18.667,
+      "large_bold_minimum_weight": 700.0
+    },
+    "pixel_box_rounding": "floor(x*dpr), floor(y*dpr), ceil((x+width)*dpr), ceil((y+height)*dpr), clipped to capture bounds",
+    "minimum_comparison": "Full precision ratio; no rounding before threshold comparison",
+    "pixel_location": "PNG pixel indices and CSS pixel-center coordinates relative to region PNG origin",
+    "counting": "Run totals are unique within a run; report totals sum run counts and may duplicate pixels across distinct runs"
+  },
+  "limitations": [
+    "Draft-candidate sampled evidence only; no final QA or general accessibility compliance claim.",
+    "A delta mask is an observed capture difference, not an exact glyph outline. It includes antialiasing and can include shadows, strokes, overlapping text, other paint, or capture drift.",
+    "The delta cutoff can omit low-contrast glyph pixels. A missing run-level mask is an explicit error, never a passing result. Individual empty rect masks are reported separately because rects can include whitespace.",
+    "Conservative boxes include nonglyph pixels and their enclosing fractional-edge pixels; their minimum can be lower than contrast at painted glyph pixels.",
+    "Both minima use intended CSS foreground composited over observed background pixels; actual antialiased foreground pixel contrast is not used as a WCAG text-color measurement.",
+    "Capture alignment, unchanged layout/scroll/content/fonts/animations, rect accuracy, DPR, run identity, and style metadata must be ensured by the capture producer; this analyzer cannot prove those conditions.",
+    "Opacity is assumed to be text paint opacity suitable for this compositing model. Ancestor group opacity with its own background can require layer modeling and is not supported by simply multiplying opacities.",
+    "Gradient text, blend modes, filters, complex compositing, and text-decoration effects are not modeled. Input must resolve the visible text color and applicable opacity.",
+    "The report applies only to provided PNG regions, text runs, and captured states. It does not cover other viewports, interactions, text missing from metadata, nontext contrast, human listening, or broad quality review."
+  ],
+  "regions": [
+    {
+      "index": 0,
+      "status": "measured",
+      "pass": true,
+      "runs": [
+        {
+          "index": 0,
+          "status": "measured",
+          "pass": true,
+          "actualGlyphMinRatio": 7.31440701706621,
+          "conservativeBoxMinRatio": 7.31440701706621,
+          "threshold": 4.5,
+          "rectangles": [
+            {
+              "index": 0,
+              "css_rect": {
+                "x": 24,
+                "y": 16.203125,
+                "width": 9.921875,
+                "height": 18
+              },
+              "sampled_counts": {
+                "box_pixels": 190,
+                "changed_glyph_pixels": 56
+              },
+              "conservative_box_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "maximum_observed_rgb_channel_delta": 0,
+                "location": {
+                  "png_x": 24,
+                  "png_y": 16,
+                  "css_center_x": 24.5,
+                  "css_center_y": 16.5
+                },
+                "source_rect_index": 0
+              },
+              "actual_changed_glyph_pixel_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  210,
+                  155,
+                  82
+                ],
+                "maximum_observed_rgb_channel_delta": 16,
+                "location": {
+                  "png_x": 26,
+                  "png_y": 20,
+                  "css_center_x": 26.5,
+                  "css_center_y": 20.5
+                },
+                "source_rect_index": 0
+              },
+              "changed_glyph_mask_status": "present",
+              "errors": [],
+              "warnings": [],
+              "requested_png_bounds": {
+                "left": 24,
+                "top": 16,
+                "right_exclusive": 34,
+                "bottom_exclusive": 35
+              },
+              "sampled_png_bounds": {
+                "left": 24,
+                "top": 16,
+                "right_exclusive": 34,
+                "bottom_exclusive": 35
+              },
+              "was_clipped": false
+            },
+            {
+              "index": 1,
+              "css_rect": {
+                "x": 33.90625,
+                "y": 16.203125,
+                "width": 7.84375,
+                "height": 18
+              },
+              "sampled_counts": {
+                "box_pixels": 171,
+                "changed_glyph_pixels": 50
+              },
+              "conservative_box_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "maximum_observed_rgb_channel_delta": 0,
+                "location": {
+                  "png_x": 33,
+                  "png_y": 16,
+                  "css_center_x": 33.5,
+                  "css_center_y": 16.5
+                },
+                "source_rect_index": 1
+              },
+              "actual_changed_glyph_pixel_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  211,
+                  154,
+                  82
+                ],
+                "maximum_observed_rgb_channel_delta": 17,
+                "location": {
+                  "png_x": 34,
+                  "png_y": 20,
+                  "css_center_x": 34.5,
+                  "css_center_y": 20.5
+                },
+                "source_rect_index": 1
+              },
+              "changed_glyph_mask_status": "present",
+              "errors": [],
+              "warnings": [],
+              "requested_png_bounds": {
+                "left": 33,
+                "top": 16,
+                "right_exclusive": 42,
+                "bottom_exclusive": 35
+              },
+              "sampled_png_bounds": {
+                "left": 33,
+                "top": 16,
+                "right_exclusive": 42,
+                "bottom_exclusive": 35
+              },
+              "was_clipped": false
+            },
+            {
+              "index": 2,
+              "css_rect": {
+                "x": 41.734375,
+                "y": 16.203125,
+                "width": 8.046875,
+                "height": 18
+              },
+              "sampled_counts": {
+                "box_pixels": 171,
+                "changed_glyph_pixels": 41
+              },
+              "conservative_box_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "maximum_observed_rgb_channel_delta": 0,
+                "location": {
+                  "png_x": 41,
+                  "png_y": 16,
+                  "css_center_x": 41.5,
+                  "css_center_y": 16.5
+                },
+                "source_rect_index": 2
+              },
+              "actual_changed_glyph_pixel_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  199,
+                  140,
+                  76
+                ],
+                "maximum_observed_rgb_channel_delta": 31,
+                "location": {
+                  "png_x": 43,
+                  "png_y": 23,
+                  "css_center_x": 43.5,
+                  "css_center_y": 23.5
+                },
+                "source_rect_index": 2
+              },
+              "changed_glyph_mask_status": "present",
+              "errors": [],
+              "warnings": [],
+              "requested_png_bounds": {
+                "left": 41,
+                "top": 16,
+                "right_exclusive": 50,
+                "bottom_exclusive": 35
+              },
+              "sampled_png_bounds": {
+                "left": 41,
+                "top": 16,
+                "right_exclusive": 50,
+                "bottom_exclusive": 35
+              },
+              "was_clipped": false
+            },
+            {
+              "index": 3,
+              "css_rect": {
+                "x": 49.765625,
+                "y": 16.203125,
+                "width": 8.046875,
+                "height": 18
+              },
+              "sampled_counts": {
+                "box_pixels": 171,
+                "changed_glyph_pixels": 44
+              },
+              "conservative_box_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "maximum_observed_rgb_channel_delta": 0,
+                "location": {
+                  "png_x": 49,
+                  "png_y": 16,
+                  "css_center_x": 49.5,
+                  "css_center_y": 16.5
+                },
+                "source_rect_index": 3
+              },
+              "actual_changed_glyph_pixel_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  199,
+                  140,
+                  76
+                ],
+                "maximum_observed_rgb_channel_delta": 31,
+                "location": {
+                  "png_x": 51,
+                  "png_y": 23,
+                  "css_center_x": 51.5,
+                  "css_center_y": 23.5
+                },
+                "source_rect_index": 3
+              },
+              "changed_glyph_mask_status": "present",
+              "errors": [],
+              "warnings": [],
+              "requested_png_bounds": {
+                "left": 49,
+                "top": 16,
+                "right_exclusive": 58,
+                "bottom_exclusive": 35
+              },
+              "sampled_png_bounds": {
+                "left": 49,
+                "top": 16,
+                "right_exclusive": 58,
+                "bottom_exclusive": 35
+              },
+              "was_clipped": false
+            },
+            {
+              "index": 4,
+              "css_rect": {
+                "x": 57.796875,
+                "y": 16.203125,
+                "width": 6.609375,
+                "height": 18
+              },
+              "sampled_counts": {
+                "box_pixels": 152,
+                "changed_glyph_pixels": 40
+              },
+              "conservative_box_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "maximum_observed_rgb_channel_delta": 0,
+                "location": {
+                  "png_x": 57,
+                  "png_y": 16,
+                  "css_center_x": 57.5,
+                  "css_center_y": 16.5
+                },
+                "source_rect_index": 4
+              },
+              "actual_changed_glyph_pixel_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  214,
+                  159,
+                  84
+                ],
+                "maximum_observed_rgb_channel_delta": 12,
+                "location": {
+                  "png_x": 58,
+                  "png_y": 23,
+                  "css_center_x": 58.5,
+                  "css_center_y": 23.5
+                },
+                "source_rect_index": 4
+              },
+              "changed_glyph_mask_status": "present",
+              "errors": [],
+              "warnings": [],
+              "requested_png_bounds": {
+                "left": 57,
+                "top": 16,
+                "right_exclusive": 65,
+                "bottom_exclusive": 35
+              },
+              "sampled_png_bounds": {
+                "left": 57,
+                "top": 16,
+                "right_exclusive": 65,
+                "bottom_exclusive": 35
+              },
+              "was_clipped": false
+            },
+            {
+              "index": 5,
+              "css_rect": {
+                "x": 64.390625,
+                "y": 16.203125,
+                "width": 7.59375,
+                "height": 18
+              },
+              "sampled_counts": {
+                "box_pixels": 152,
+                "changed_glyph_pixels": 43
+              },
+              "conservative_box_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "maximum_observed_rgb_channel_delta": 0,
+                "location": {
+                  "png_x": 64,
+                  "png_y": 16,
+                  "css_center_x": 64.5,
+                  "css_center_y": 16.5
+                },
+                "source_rect_index": 5
+              },
+              "actual_changed_glyph_pixel_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  146,
+                  76,
+                  46
+                ],
+                "maximum_observed_rgb_channel_delta": 95,
+                "location": {
+                  "png_x": 66,
+                  "png_y": 23,
+                  "css_center_x": 66.5,
+                  "css_center_y": 23.5
+                },
+                "source_rect_index": 5
+              },
+              "changed_glyph_mask_status": "present",
+              "errors": [],
+              "warnings": [],
+              "requested_png_bounds": {
+                "left": 64,
+                "top": 16,
+                "right_exclusive": 72,
+                "bottom_exclusive": 35
+              },
+              "sampled_png_bounds": {
+                "left": 64,
+                "top": 16,
+                "right_exclusive": 72,
+                "bottom_exclusive": 35
+              },
+              "was_clipped": false
+            },
+            {
+              "index": 6,
+              "css_rect": {
+                "x": 75.609375,
+                "y": 16.203125,
+                "width": 11.5625,
+                "height": 18
+              },
+              "sampled_counts": {
+                "box_pixels": 247,
+                "changed_glyph_pixels": 63
+              },
+              "conservative_box_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "maximum_observed_rgb_channel_delta": 0,
+                "location": {
+                  "png_x": 75,
+                  "png_y": 16,
+                  "css_center_x": 75.5,
+                  "css_center_y": 16.5
+                },
+                "source_rect_index": 6
+              },
+              "actual_changed_glyph_pixel_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  142,
+                  72,
+                  43
+                ],
+                "maximum_observed_rgb_channel_delta": 99,
+                "location": {
+                  "png_x": 76,
+                  "png_y": 23,
+                  "css_center_x": 76.5,
+                  "css_center_y": 23.5
+                },
+                "source_rect_index": 6
+              },
+              "changed_glyph_mask_status": "present",
+              "errors": [],
+              "warnings": [],
+              "requested_png_bounds": {
+                "left": 75,
+                "top": 16,
+                "right_exclusive": 88,
+                "bottom_exclusive": 35
+              },
+              "sampled_png_bounds": {
+                "left": 75,
+                "top": 16,
+                "right_exclusive": 88,
+                "bottom_exclusive": 35
+              },
+              "was_clipped": false
+            },
+            {
+              "index": 7,
+              "css_rect": {
+                "x": 87.15625,
+                "y": 16.203125,
+                "width": 7.421875,
+                "height": 18
+              },
+              "sampled_counts": {
+                "box_pixels": 152,
+                "changed_glyph_pixels": 41
+              },
+              "conservative_box_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "maximum_observed_rgb_channel_delta": 0,
+                "location": {
+                  "png_x": 87,
+                  "png_y": 16,
+                  "css_center_x": 87.5,
+                  "css_center_y": 16.5
+                },
+                "source_rect_index": 7
+              },
+              "actual_changed_glyph_pixel_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  182,
+                  120,
+                  66
+                ],
+                "maximum_observed_rgb_channel_delta": 51,
+                "location": {
+                  "png_x": 87,
+                  "png_y": 23,
+                  "css_center_x": 87.5,
+                  "css_center_y": 23.5
+                },
+                "source_rect_index": 7
+              },
+              "changed_glyph_mask_status": "present",
+              "errors": [],
+              "warnings": [],
+              "requested_png_bounds": {
+                "left": 87,
+                "top": 16,
+                "right_exclusive": 95,
+                "bottom_exclusive": 35
+              },
+              "sampled_png_bounds": {
+                "left": 87,
+                "top": 16,
+                "right_exclusive": 95,
+                "bottom_exclusive": 35
+              },
+              "was_clipped": false
+            },
+            {
+              "index": 8,
+              "css_rect": {
+                "x": 98.203125,
+                "y": 16.203125,
+                "width": 3.796875,
+                "height": 18
+              },
+              "sampled_counts": {
+                "box_pixels": 76,
+                "changed_glyph_pixels": 31
+              },
+              "conservative_box_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "maximum_observed_rgb_channel_delta": 0,
+                "location": {
+                  "png_x": 98,
+                  "png_y": 16,
+                  "css_center_x": 98.5,
+                  "css_center_y": 16.5
+                },
+                "source_rect_index": 8
+              },
+              "actual_changed_glyph_pixel_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  162,
+                  96,
+                  55
+                ],
+                "maximum_observed_rgb_channel_delta": 75,
+                "location": {
+                  "png_x": 100,
+                  "png_y": 20,
+                  "css_center_x": 100.5,
+                  "css_center_y": 20.5
+                },
+                "source_rect_index": 8
+              },
+              "changed_glyph_mask_status": "present",
+              "errors": [],
+              "warnings": [],
+              "requested_png_bounds": {
+                "left": 98,
+                "top": 16,
+                "right_exclusive": 102,
+                "bottom_exclusive": 35
+              },
+              "sampled_png_bounds": {
+                "left": 98,
+                "top": 16,
+                "right_exclusive": 102,
+                "bottom_exclusive": 35
+              },
+              "was_clipped": false
+            },
+            {
+              "index": 9,
+              "css_rect": {
+                "x": 101.984375,
+                "y": 16.203125,
+                "width": 3.78125,
+                "height": 18
+              },
+              "sampled_counts": {
+                "box_pixels": 95,
+                "changed_glyph_pixels": 32
+              },
+              "conservative_box_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "maximum_observed_rgb_channel_delta": 0,
+                "location": {
+                  "png_x": 101,
+                  "png_y": 16,
+                  "css_center_x": 101.5,
+                  "css_center_y": 16.5
+                },
+                "source_rect_index": 9
+              },
+              "actual_changed_glyph_pixel_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  110,
+                  33,
+                  26
+                ],
+                "maximum_observed_rgb_channel_delta": 138,
+                "location": {
+                  "png_x": 101,
+                  "png_y": 20,
+                  "css_center_x": 101.5,
+                  "css_center_y": 20.5
+                },
+                "source_rect_index": 9
+              },
+              "changed_glyph_mask_status": "present",
+              "errors": [],
+              "warnings": [],
+              "requested_png_bounds": {
+                "left": 101,
+                "top": 16,
+                "right_exclusive": 106,
+                "bottom_exclusive": 35
+              },
+              "sampled_png_bounds": {
+                "left": 101,
+                "top": 16,
+                "right_exclusive": 106,
+                "bottom_exclusive": 35
+              },
+              "was_clipped": false
+            },
+            {
+              "index": 10,
+              "css_rect": {
+                "x": 105.75,
+                "y": 16.203125,
+                "width": 5.703125,
+                "height": 18
+              },
+              "sampled_counts": {
+                "box_pixels": 133,
+                "changed_glyph_pixels": 26
+              },
+              "conservative_box_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "maximum_observed_rgb_channel_delta": 0,
+                "location": {
+                  "png_x": 105,
+                  "png_y": 16,
+                  "css_center_x": 105.5,
+                  "css_center_y": 16.5
+                },
+                "source_rect_index": 10
+              },
+              "actual_changed_glyph_pixel_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  175,
+                  112,
+                  63
+                ],
+                "maximum_observed_rgb_channel_delta": 59,
+                "location": {
+                  "png_x": 106,
+                  "png_y": 23,
+                  "css_center_x": 106.5,
+                  "css_center_y": 23.5
+                },
+                "source_rect_index": 10
+              },
+              "changed_glyph_mask_status": "present",
+              "errors": [],
+              "warnings": [],
+              "requested_png_bounds": {
+                "left": 105,
+                "top": 16,
+                "right_exclusive": 112,
+                "bottom_exclusive": 35
+              },
+              "sampled_png_bounds": {
+                "left": 105,
+                "top": 16,
+                "right_exclusive": 112,
+                "bottom_exclusive": 35
+              },
+              "was_clipped": false
+            },
+            {
+              "index": 11,
+              "css_rect": {
+                "x": 111.4375,
+                "y": 16.203125,
+                "width": 6.609375,
+                "height": 18
+              },
+              "sampled_counts": {
+                "box_pixels": 152,
+                "changed_glyph_pixels": 40
+              },
+              "conservative_box_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "maximum_observed_rgb_channel_delta": 0,
+                "location": {
+                  "png_x": 111,
+                  "png_y": 16,
+                  "css_center_x": 111.5,
+                  "css_center_y": 16.5
+                },
+                "source_rect_index": 11
+              },
+              "actual_changed_glyph_pixel_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  197,
+                  138,
+                  74
+                ],
+                "maximum_observed_rgb_channel_delta": 33,
+                "location": {
+                  "png_x": 111,
+                  "png_y": 23,
+                  "css_center_x": 111.5,
+                  "css_center_y": 23.5
+                },
+                "source_rect_index": 11
+              },
+              "changed_glyph_mask_status": "present",
+              "errors": [],
+              "warnings": [],
+              "requested_png_bounds": {
+                "left": 111,
+                "top": 16,
+                "right_exclusive": 119,
+                "bottom_exclusive": 35
+              },
+              "sampled_png_bounds": {
+                "left": 111,
+                "top": 16,
+                "right_exclusive": 119,
+                "bottom_exclusive": 35
+              },
+              "was_clipped": false
+            },
+            {
+              "index": 12,
+              "css_rect": {
+                "x": 118.03125,
+                "y": 16.203125,
+                "width": 5.046875,
+                "height": 18
+              },
+              "sampled_counts": {
+                "box_pixels": 114,
+                "changed_glyph_pixels": 34
+              },
+              "conservative_box_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "maximum_observed_rgb_channel_delta": 0,
+                "location": {
+                  "png_x": 118,
+                  "png_y": 16,
+                  "css_center_x": 118.5,
+                  "css_center_y": 16.5
+                },
+                "source_rect_index": 12
+              },
+              "actual_changed_glyph_pixel_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  189,
+                  128,
+                  70
+                ],
+                "maximum_observed_rgb_channel_delta": 43,
+                "location": {
+                  "png_x": 120,
+                  "png_y": 20,
+                  "css_center_x": 120.5,
+                  "css_center_y": 20.5
+                },
+                "source_rect_index": 12
+              },
+              "changed_glyph_mask_status": "present",
+              "errors": [],
+              "warnings": [],
+              "requested_png_bounds": {
+                "left": 118,
+                "top": 16,
+                "right_exclusive": 124,
+                "bottom_exclusive": 35
+              },
+              "sampled_png_bounds": {
+                "left": 118,
+                "top": 16,
+                "right_exclusive": 124,
+                "bottom_exclusive": 35
+              },
+              "was_clipped": false
+            },
+            {
+              "index": 13,
+              "css_rect": {
+                "x": 126.703125,
+                "y": 16.203125,
+                "width": 8.125,
+                "height": 18
+              },
+              "sampled_counts": {
+                "box_pixels": 171,
+                "changed_glyph_pixels": 46
+              },
+              "conservative_box_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "maximum_observed_rgb_channel_delta": 0,
+                "location": {
+                  "png_x": 126,
+                  "png_y": 16,
+                  "css_center_x": 126.5,
+                  "css_center_y": 16.5
+                },
+                "source_rect_index": 13
+              },
+              "actual_changed_glyph_pixel_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  141,
+                  69,
+                  43
+                ],
+                "maximum_observed_rgb_channel_delta": 102,
+                "location": {
+                  "png_x": 132,
+                  "png_y": 20,
+                  "css_center_x": 132.5,
+                  "css_center_y": 20.5
+                },
+                "source_rect_index": 13
+              },
+              "changed_glyph_mask_status": "present",
+              "errors": [],
+              "warnings": [],
+              "requested_png_bounds": {
+                "left": 126,
+                "top": 16,
+                "right_exclusive": 135,
+                "bottom_exclusive": 35
+              },
+              "sampled_png_bounds": {
+                "left": 126,
+                "top": 16,
+                "right_exclusive": 135,
+                "bottom_exclusive": 35
+              },
+              "was_clipped": false
+            },
+            {
+              "index": 14,
+              "css_rect": {
+                "x": 134.8125,
+                "y": 16.203125,
+                "width": 7.59375,
+                "height": 18
+              },
+              "sampled_counts": {
+                "box_pixels": 171,
+                "changed_glyph_pixels": 44
+              },
+              "conservative_box_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "maximum_observed_rgb_channel_delta": 0,
+                "location": {
+                  "png_x": 134,
+                  "png_y": 16,
+                  "css_center_x": 134.5,
+                  "css_center_y": 16.5
+                },
+                "source_rect_index": 14
+              },
+              "actual_changed_glyph_pixel_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  171,
+                  107,
+                  60
+                ],
+                "maximum_observed_rgb_channel_delta": 64,
+                "location": {
+                  "png_x": 136,
+                  "png_y": 23,
+                  "css_center_x": 136.5,
+                  "css_center_y": 23.5
+                },
+                "source_rect_index": 14
+              },
+              "changed_glyph_mask_status": "present",
+              "errors": [],
+              "warnings": [],
+              "requested_png_bounds": {
+                "left": 134,
+                "top": 16,
+                "right_exclusive": 143,
+                "bottom_exclusive": 35
+              },
+              "sampled_png_bounds": {
+                "left": 134,
+                "top": 16,
+                "right_exclusive": 143,
+                "bottom_exclusive": 35
+              },
+              "was_clipped": false
+            },
+            {
+              "index": 15,
+              "css_rect": {
+                "x": 142.390625,
+                "y": 16.203125,
+                "width": 7.296875,
+                "height": 18
+              },
+              "sampled_counts": {
+                "box_pixels": 152,
+                "changed_glyph_pixels": 34
+              },
+              "conservative_box_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "maximum_observed_rgb_channel_delta": 0,
+                "location": {
+                  "png_x": 142,
+                  "png_y": 16,
+                  "css_center_x": 142.5,
+                  "css_center_y": 16.5
+                },
+                "source_rect_index": 15
+              },
+              "actual_changed_glyph_pixel_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  154,
+                  86,
+                  51
+                ],
+                "maximum_observed_rgb_channel_delta": 85,
+                "location": {
+                  "png_x": 144,
+                  "png_y": 23,
+                  "css_center_x": 144.5,
+                  "css_center_y": 23.5
+                },
+                "source_rect_index": 15
+              },
+              "changed_glyph_mask_status": "present",
+              "errors": [],
+              "warnings": [],
+              "requested_png_bounds": {
+                "left": 142,
+                "top": 16,
+                "right_exclusive": 150,
+                "bottom_exclusive": 35
+              },
+              "sampled_png_bounds": {
+                "left": 142,
+                "top": 16,
+                "right_exclusive": 150,
+                "bottom_exclusive": 35
+              },
+              "was_clipped": false
+            },
+            {
+              "index": 16,
+              "css_rect": {
+                "x": 149.671875,
+                "y": 16.203125,
+                "width": 3.375,
+                "height": 18
+              },
+              "sampled_counts": {
+                "box_pixels": 95,
+                "changed_glyph_pixels": 33
+              },
+              "conservative_box_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "maximum_observed_rgb_channel_delta": 0,
+                "location": {
+                  "png_x": 149,
+                  "png_y": 16,
+                  "css_center_x": 149.5,
+                  "css_center_y": 16.5
+                },
+                "source_rect_index": 16
+              },
+              "actual_changed_glyph_pixel_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  166,
+                  100,
+                  57
+                ],
+                "maximum_observed_rgb_channel_delta": 71,
+                "location": {
+                  "png_x": 150,
+                  "png_y": 20,
+                  "css_center_x": 150.5,
+                  "css_center_y": 20.5
+                },
+                "source_rect_index": 16
+              },
+              "changed_glyph_mask_status": "present",
+              "errors": [],
+              "warnings": [],
+              "requested_png_bounds": {
+                "left": 149,
+                "top": 16,
+                "right_exclusive": 154,
+                "bottom_exclusive": 35
+              },
+              "sampled_png_bounds": {
+                "left": 149,
+                "top": 16,
+                "right_exclusive": 154,
+                "bottom_exclusive": 35
+              },
+              "was_clipped": false
+            },
+            {
+              "index": 17,
+              "css_rect": {
+                "x": 153.03125,
+                "y": 16.203125,
+                "width": 6.609375,
+                "height": 18
+              },
+              "sampled_counts": {
+                "box_pixels": 133,
+                "changed_glyph_pixels": 36
+              },
+              "conservative_box_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "maximum_observed_rgb_channel_delta": 0,
+                "location": {
+                  "png_x": 153,
+                  "png_y": 16,
+                  "css_center_x": 153.5,
+                  "css_center_y": 16.5
+                },
+                "source_rect_index": 17
+              },
+              "actual_changed_glyph_pixel_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  158,
+                  90,
+                  52
+                ],
+                "maximum_observed_rgb_channel_delta": 81,
+                "location": {
+                  "png_x": 154,
+                  "png_y": 23,
+                  "css_center_x": 154.5,
+                  "css_center_y": 23.5
+                },
+                "source_rect_index": 17
+              },
+              "changed_glyph_mask_status": "present",
+              "errors": [],
+              "warnings": [],
+              "requested_png_bounds": {
+                "left": 153,
+                "top": 16,
+                "right_exclusive": 160,
+                "bottom_exclusive": 35
+              },
+              "sampled_png_bounds": {
+                "left": 153,
+                "top": 16,
+                "right_exclusive": 160,
+                "bottom_exclusive": 35
+              },
+              "was_clipped": false
+            },
+            {
+              "index": 18,
+              "css_rect": {
+                "x": 159.625,
+                "y": 16.203125,
+                "width": 3.359375,
+                "height": 18
+              },
+              "sampled_counts": {
+                "box_pixels": 76,
+                "changed_glyph_pixels": 27
+              },
+              "conservative_box_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "maximum_observed_rgb_channel_delta": 0,
+                "location": {
+                  "png_x": 159,
+                  "png_y": 16,
+                  "css_center_x": 159.5,
+                  "css_center_y": 16.5
+                },
+                "source_rect_index": 18
+              },
+              "actual_changed_glyph_pixel_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  166,
+                  100,
+                  57
+                ],
+                "maximum_observed_rgb_channel_delta": 71,
+                "location": {
+                  "png_x": 160,
+                  "png_y": 20,
+                  "css_center_x": 160.5,
+                  "css_center_y": 20.5
+                },
+                "source_rect_index": 18
+              },
+              "changed_glyph_mask_status": "present",
+              "errors": [],
+              "warnings": [],
+              "requested_png_bounds": {
+                "left": 159,
+                "top": 16,
+                "right_exclusive": 163,
+                "bottom_exclusive": 35
+              },
+              "sampled_png_bounds": {
+                "left": 159,
+                "top": 16,
+                "right_exclusive": 163,
+                "bottom_exclusive": 35
+              },
+              "was_clipped": false
+            },
+            {
+              "index": 19,
+              "css_rect": {
+                "x": 162.96875,
+                "y": 16.203125,
+                "width": 8.046875,
+                "height": 18
+              },
+              "sampled_counts": {
+                "box_pixels": 190,
+                "changed_glyph_pixels": 58
+              },
+              "conservative_box_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "maximum_observed_rgb_channel_delta": 0,
+                "location": {
+                  "png_x": 162,
+                  "png_y": 16,
+                  "css_center_x": 162.5,
+                  "css_center_y": 16.5
+                },
+                "source_rect_index": 19
+              },
+              "actual_changed_glyph_pixel_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  187,
+                  126,
+                  69
+                ],
+                "maximum_observed_rgb_channel_delta": 45,
+                "location": {
+                  "png_x": 162,
+                  "png_y": 20,
+                  "css_center_x": 162.5,
+                  "css_center_y": 20.5
+                },
+                "source_rect_index": 19
+              },
+              "changed_glyph_mask_status": "present",
+              "errors": [],
+              "warnings": [],
+              "requested_png_bounds": {
+                "left": 162,
+                "top": 16,
+                "right_exclusive": 172,
+                "bottom_exclusive": 35
+              },
+              "sampled_png_bounds": {
+                "left": 162,
+                "top": 16,
+                "right_exclusive": 172,
+                "bottom_exclusive": 35
+              },
+              "was_clipped": false
+            },
+            {
+              "index": 20,
+              "css_rect": {
+                "x": 171,
+                "y": 16.203125,
+                "width": 7.84375,
+                "height": 18
+              },
+              "sampled_counts": {
+                "box_pixels": 152,
+                "changed_glyph_pixels": 39
+              },
+              "conservative_box_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "maximum_observed_rgb_channel_delta": 0,
+                "location": {
+                  "png_x": 171,
+                  "png_y": 16,
+                  "css_center_x": 171.5,
+                  "css_center_y": 16.5
+                },
+                "source_rect_index": 20
+              },
+              "actual_changed_glyph_pixel_minimum": {
+                "contrast_ratio": 7.31440701706621,
+                "contrast_threshold": 4.5,
+                "meets_threshold_for_sample": true,
+                "background_rgb": [
+                  224,
+                  171,
+                  90
+                ],
+                "composited_foreground_rgb": [
+                  84.0,
+                  1.0,
+                  12.0
+                ],
+                "observed_clean_rgb": [
+                  211,
+                  154,
+                  82
+                ],
+                "maximum_observed_rgb_channel_delta": 17,
+                "location": {
+                  "png_x": 171,
+                  "png_y": 23,
+                  "css_center_x": 171.5,
+                  "css_center_y": 23.5
+                },
+                "source_rect_index": 20
+              },
+              "changed_glyph_mask_status": "present",
+              "errors": [],
+              "warnings": [],
+              "requested_png_bounds": {
+                "left": 171,
+                "top": 16,
+                "right_exclusive": 179,
+                "bottom_exclusive": 35
+              },
+              "sampled_png_bounds": {
+                "left": 171,
+                "top": 16,
+                "right_exclusive": 179,
+                "bottom_exclusive": 35
+              },
+              "was_clipped": false
+            }
+          ],
+          "conservative_box_minimum": {
+            "contrast_ratio": 7.31440701706621,
+            "contrast_threshold": 4.5,
+            "meets_threshold_for_sample": true,
+            "background_rgb": [
+              224,
+              171,
+              90
+            ],
+            "composited_foreground_rgb": [
+              84.0,
+              1.0,
+              12.0
+            ],
+            "observed_clean_rgb": [
+              224,
+              171,
+              90
+            ],
+            "maximum_observed_rgb_channel_delta": 0,
+            "location": {
+              "png_x": 24,
+              "png_y": 16,
+              "css_center_x": 24.5,
+              "css_center_y": 16.5
+            },
+            "source_rect_index": 0
+          },
+          "actual_changed_glyph_pixel_minimum": {
+            "contrast_ratio": 7.31440701706621,
+            "contrast_threshold": 4.5,
+            "meets_threshold_for_sample": true,
+            "background_rgb": [
+              224,
+              171,
+              90
+            ],
+            "composited_foreground_rgb": [
+              84.0,
+              1.0,
+              12.0
+            ],
+            "observed_clean_rgb": [
+              210,
+              155,
+              82
+            ],
+            "maximum_observed_rgb_channel_delta": 16,
+            "location": {
+              "png_x": 26,
+              "png_y": 20,
+              "css_center_x": 26.5,
+              "css_center_y": 20.5
+            },
+            "source_rect_index": 0
+          },
+          "sampled_counts": {
+            "provided_rectangles": 21,
+            "analyzed_rectangles": 21,
+            "box_unique_pixels": 2793,
+            "changed_glyph_unique_pixels": 814
+          },
+          "errors": [],
+          "warnings": [],
+          "selector": "button.oda-landing-button oda-landing-button-primary",
+          "text": "Choose my first decision",
+          "color_rgba": [
+            84.0,
+            1.0,
+            12.0,
+            1.0
+          ],
+          "opacity": 1.0,
+          "effective_foreground_alpha": 1.0,
+          "font_size_css_px": 14.0,
+          "font_weight": 600.0,
+          "large_text": false,
+          "contrast_threshold": 4.5
+        }
+      ],
+      "errors": [],
+      "warnings": [],
+      "name": "primary",
+      "dpr": 1.0,
+      "clean_png": {
+        "supplied_path": "/workspace/scratch/oda-landing-photographic/browser-qa/states/attempt-1/en-light-1440-default-primary-clean.png",
+        "path": "/workspace/scratch/oda-landing-photographic/browser-qa/states/attempt-1/en-light-1440-default-primary-clean.png",
+        "sha256": "44c1bc2ffbfdf5377808187635d7532c09ea29b255b7ed8e99d03a8de14330a0",
+        "byte_count": 2985,
+        "format": "PNG",
+        "mode": "RGB",
+        "width": 237,
+        "height": 52
+      },
+      "background_png": {
+        "supplied_path": "/workspace/scratch/oda-landing-photographic/browser-qa/states/attempt-1/en-light-1440-default-primary-background.png",
+        "path": "/workspace/scratch/oda-landing-photographic/browser-qa/states/attempt-1/en-light-1440-default-primary-background.png",
+        "sha256": "fa6d462dd9390c8502fd1215e8695a9b780ea8d3486e65bf60079245635f04c0",
+        "byte_count": 552,
+        "format": "PNG",
+        "mode": "RGB",
+        "width": 237,
+        "height": 52
+      },
+      "provided_run_count": 1
+    }
+  ],
+  "errors": [],
+  "warnings": [],
+  "summary": {
+    "region_count": 1,
+    "run_count": 1,
+    "measured_run_count": 1,
+    "partial_run_count": 0,
+    "inconclusive_run_count": 0,
+    "box_sample_count_sum_over_runs": 2793,
+    "changed_glyph_sample_count_sum_over_runs": 814,
+    "sampled_box_threshold_failures": 0,
+    "sampled_changed_glyph_threshold_failures": 0,
+    "error_count": 0,
+    "warning_count": 0
+  }
+}

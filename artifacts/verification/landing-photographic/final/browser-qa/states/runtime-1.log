@@ -1,0 +1,26 @@
+{"check":"en-light-1440 exact approved photo served","photo":"hero-dolomites-1920.webp"}
+{"check":"en-light-1440 default text contrast","minRatio":7.31440701706621}
+{"check":"en-light-1440 hover text contrast","minRatio":8.926522191565276}
+{"check":"en-light-1440 active text contrast","minRatio":6.2264624122421415}
+{"check":"en-light-1440 primary keyboard focus outline","minRatio":12.091173390891338,"width":3,"offset":5}
+{"firstAttemptFailure":{"name":"AssertionError","message":"Exact original inline style must be restored\n\n'' !== null\n","stack":"AssertionError [ERR_ASSERTION]: Exact original inline style must be restored\n\n'' !== null\n\n    at actualFocusContrast (file:///workspace/scratch/oda-landing-photographic/browser-qa/focus-capture.mjs:50:10)\n    at async file:///workspace/scratch/oda-landing-photographic/browser-qa/states.mjs:48:489","classification":"pending evidence review"},"report":"/workspace/scratch/oda-landing-photographic/browser-qa/states/attempt-1/report.json"}
+{"pass":false,"report":"/workspace/scratch/oda-landing-photographic/browser-qa/states/attempt-1/report.json","seal":"/workspace/scratch/oda-landing-photographic/browser-qa/states/attempt-1/seal.json","cases":1,"pngs":10}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Exact original inline style must be restored
+
+'' !== null
+
+    at actualFocusContrast (file:///workspace/scratch/oda-landing-photographic/browser-qa/focus-capture.mjs:50:10)
+    at async file:///workspace/scratch/oda-landing-photographic/browser-qa/states.mjs:48:489 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '',
+  expected: null,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

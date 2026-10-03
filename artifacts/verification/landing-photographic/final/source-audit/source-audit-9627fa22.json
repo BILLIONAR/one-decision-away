@@ -1,0 +1,187 @@
+{
+  "audit": "ODA photographic landing independent corrected source/protection audit",
+  "createdUtc": "2026-10-03T21:38:51.182005+00:00",
+  "sourceCommit": "9627fa22c379f15755d9388d7fbaf49c27c6457c",
+  "priorReviewedSourceCommit": "f02ce3344c3b75090e99e7e3e9c1f988251c3f24",
+  "baselineCommit": "9e07fb13ee1f3ba1b06ec0a69d64fa536bd6a429",
+  "branch": "design/landing-photographic-oda",
+  "worktree": "/workspace/oda-landing-photographic",
+  "workingTreeClean": true,
+  "result": "PASS for focused static correction, protected-source invariance and exact evidence binding. Corrected photo contrast/sharpness acceptance remains pending independent browser/visual QA; no publication approval.",
+  "correction": {
+    "paths": [
+      "M\tsrc/pages/Landing.tsx",
+      "M\tsrc/styles/landing.css"
+    ],
+    "diffStat": "2 files changed, 6 insertions(+), 3 deletions(-)",
+    "LandingEqualsPriorAfterRemovingOnlyHeroSizesChange": true,
+    "desktopHeroSizes": "(max-width: 1060px) 1304px, 100vw",
+    "desktopPictureAndPreloadMatch": true,
+    "mobileSrcsetSizesAndMediaUnchanged": true,
+    "desktopScrim": "95% at 0,87% at 29,76% at 50,6% at 73,transparent at 100",
+    "tabletScrim": "95% at 0,87% at 30,76% at 60,6% at 82,transparent at 100",
+    "mobilePositionAndScrimUnchanged": true,
+    "rationale": "Higher shared landscape sizing selects adequate tablet cover pixels; stronger landing-only desktop/tablet scrims address observed gold-text contrast failures."
+  },
+  "protection": {
+    "baselineNonArtifactFiles": 900,
+    "candidateNonArtifactFiles": 912,
+    "protectedUnchangedFiles": 898,
+    "independentByteHashMismatches": [],
+    "rootProofPath": "/workspace/scratch/oda-landing-photographic/source-protection.json",
+    "rootProofBytes": 159587,
+    "rootProofSha256": "8d48a84c9c5abbc284ef2c7c31d715c0f5b18953bc5ad4e0e246c7655c674ce8",
+    "allSourceChangesVsBaseline": [
+      "A\tbrand-assets/landing-photo/wolfgang-moritzer/README.txt",
+      "A\tbrand-assets/landing-photo/wolfgang-moritzer/asset-manifest.json",
+      "A\tbrand-assets/landing-photo/wolfgang-moritzer/consumer-source-receipt.json",
+      "A\tbrand-assets/landing-photo/wolfgang-moritzer/derivatives.json",
+      "A\tbrand-assets/landing-photo/wolfgang-moritzer/derive.py",
+      "A\tbrand-assets/landing-photo/wolfgang-moritzer/oda-hero-wolfgang-moritzer-original.jpg",
+      "A\tpublic/assets/oda/landing-photo/hero-dolomites-1280.webp",
+      "A\tpublic/assets/oda/landing-photo/hero-dolomites-1920.webp",
+      "A\tpublic/assets/oda/landing-photo/hero-dolomites-2560.webp",
+      "A\tpublic/assets/oda/landing-photo/hero-dolomites-768.webp",
+      "A\tpublic/assets/oda/landing-photo/hero-dolomites-mobile-480.webp",
+      "A\tpublic/assets/oda/landing-photo/hero-dolomites-mobile-960.webp",
+      "M\tsrc/pages/Landing.tsx",
+      "M\tsrc/styles/landing.css"
+    ]
+  },
+  "sourceHashes": {
+    "src/pages/Landing.tsx": "4735e69fccbda7ece5f4a7770f71f86983b37b75e18d3670bd59bcf86c3924d0",
+    "src/styles/landing.css": "46f7fa87046c34950ae88045a179660e2589fd00d2791baeae4ae42dcb5d47ed"
+  },
+  "css": {
+    "parsedSelectors": 343,
+    "unscopedSelectors": [],
+    "customPropertyScopes": [
+      ".oda-landing",
+      ".oda-landing-nav"
+    ],
+    "addedRuleTarget": ".oda-landing-hero::before inside max-width1060 media; max-width640 override remains later in cascade"
+  },
+  "semanticAndAssetContinuity": [
+    "Copy, i18n, legal claims, course metadata, click handlers, navigation, storage, local DailyPreview state and accessibility controls remain unchanged from prior reviewed candidate.",
+    "Protected core app, appearance, logo, schema, signing, dependency and workflow files remain byte-identical to production baseline.",
+    "All six responsive WebPs and original JPEG remain exact prior bytes/hashes. Existing local base-aware URLs, decorative image semantics, eager/high image priority, attribution and on-demand cache behavior are unchanged.",
+    "No full-photo-set first-load download is introduced. Actual selected requests/duplicate avoidance remain part of corrected browser QA.",
+    "Independent helper narration_course_delta confirmed frozen corrected semantic/protected app-source invariance."
+  ],
+  "priorAppQaContinuity": {
+    "sourceCommitActuallyTested": "f02ce3344c3b75090e99e7e3e9c1f988251c3f24",
+    "reportPath": "/workspace/scratch/oda-landing-photographic/browser-qa/final-app/report.json",
+    "reportBytes": 103009,
+    "reportSha256": "7d80ddfbe15545735a0d4892345d11ef2b1f8cf916b66518518539ae061df03a",
+    "recordedPassingChecks": 27,
+    "protectedCapturesVerified": 9,
+    "pngByteHashMismatches": [],
+    "protectedGeometryTextStyleDifferences": [],
+    "pixelComparisonPath": "/workspace/scratch/oda-landing-photographic/browser-qa/final-app/pixel-comparison.json",
+    "pixelComparisonSha256": "1dedbe82016738cf68bec802ca9547a3669de93541ec932f4e82f86b11984ce5",
+    "pixelComparisonResults": [
+      {
+        "route": "today",
+        "width": 1440,
+        "differentPixels": 15,
+        "maximumChannelDelta": 2,
+        "boundingBox": [
+          299,
+          752,
+          302,
+          802
+        ]
+      },
+      {
+        "route": "notebook",
+        "width": 1440,
+        "differentPixels": 0,
+        "maximumChannelDelta": 0,
+        "boundingBox": null
+      },
+      {
+        "route": "coach",
+        "width": 1440,
+        "differentPixels": 0,
+        "maximumChannelDelta": 0,
+        "boundingBox": null
+      },
+      {
+        "route": "today",
+        "width": 390,
+        "differentPixels": 0,
+        "maximumChannelDelta": 0,
+        "boundingBox": null
+      },
+      {
+        "route": "notebook",
+        "width": 390,
+        "differentPixels": 0,
+        "maximumChannelDelta": 0,
+        "boundingBox": null
+      },
+      {
+        "route": "coach",
+        "width": 390,
+        "differentPixels": 0,
+        "maximumChannelDelta": 0,
+        "boundingBox": null
+      },
+      {
+        "route": "today",
+        "width": 320,
+        "differentPixels": 0,
+        "maximumChannelDelta": 0,
+        "boundingBox": null
+      },
+      {
+        "route": "notebook",
+        "width": 320,
+        "differentPixels": 0,
+        "maximumChannelDelta": 0,
+        "boundingBox": null
+      },
+      {
+        "route": "coach",
+        "width": 320,
+        "differentPixels": 0,
+        "maximumChannelDelta": 0,
+        "boundingBox": null
+      }
+    ],
+    "appSourceInvarianceEstablished": true,
+    "qualification": "Supporting prior runtime evidence is retained at its actual f02 commit. These checks were not rerun on corrected commit; no claim of new browser observations is made. Landing photo-specific failures require fresh corrected browser QA."
+  },
+  "correctedBuildBinding": {
+    "performedBy": "parent; no independent rerun",
+    "receiptPath": "/workspace/scratch/oda-landing-photographic/corrected-build/build-receipt.json",
+    "receiptBytes": 247888,
+    "receiptSha256": "2b6537d8a50cfbf75ba27781a061ee9d68d161c90734e42f8cc80ec8e3550f6f",
+    "sourceEntriesVerified": 912,
+    "sourceMismatches": [],
+    "buildEntriesVerified": 451,
+    "buildMismatches": [],
+    "aggregateLogPath": "/workspace/scratch/oda-landing-photographic/corrected-build/aggregate-check.log",
+    "aggregateLogBytes": 79289,
+    "aggregateLogSha256": "e7d71eac74795db5e3b18e410843977f44fb01628c890daeb45640a4cc88cdd3",
+    "exitCode": 0,
+    "passed": 621,
+    "failed": 0,
+    "actualAggregateSummaryLines": [
+      "\u2139 tests 621",
+      "\u2139 pass 621",
+      "\u2139 fail 0"
+    ],
+    "recordedCleanAndUnchangedDuringRun": true
+  },
+  "historyPreserved": {
+    "priorSourceAuditPath": "/workspace/scratch/oda-landing-photographic/final-source-audit/source-audit-f02ce334.json",
+    "priorSourceAuditBytes": 9858,
+    "priorSourceAuditSha256": "57910ef68152343e9e0b61c23d891aaa189ba22321b70b24180b4803edf7ae0d",
+    "priorAggregateLogPath": "/workspace/scratch/oda-landing-photographic/final-build/aggregate-check.log",
+    "priorAggregateLogBytes": 79287,
+    "priorAggregateLogSha256": "7055974c9a8b9f879d22f45843cdd8a07cfd49c9b7db8441baa9d5fc05c3781e"
+  },
+  "pending": "Independent corrected browser crop/sharpness, selected request count, rendered contrast, clipping, focus and final parent/user checkpoint before publication.",
+  "methods": "Read-only git/source diff and normalization, PostCSS scope parse, protected checkout/photo byte hashes, prior evidence file binding and exact corrected receipt/log/dist verification. Only new scratch audit receipt written. No app edit, build, test, browser, install or deployment performed."
+}

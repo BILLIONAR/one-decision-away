@@ -1,0 +1,197 @@
+{
+  "audit": "ODA photographic landing independent final source/protection audit",
+  "createdUtc": "2026-10-03T21:27:05.022465+00:00",
+  "worktree": "/workspace/oda-landing-photographic",
+  "branch": "design/landing-photographic-oda",
+  "sourceCommit": "f02ce3344c3b75090e99e7e3e9c1f988251c3f24",
+  "baselineCommit": "9e07fb13ee1f3ba1b06ec0a69d64fa536bd6a429",
+  "workingTreeStatus": "",
+  "frozenSourceConfirmed": true,
+  "result": "PASS for static source/protection and exact evidence binding; runtime browser/visual QA remains separate; no publication authorization supplied for this landing",
+  "changedNonArtifactPaths": [
+    "A\tbrand-assets/landing-photo/wolfgang-moritzer/README.txt",
+    "A\tbrand-assets/landing-photo/wolfgang-moritzer/asset-manifest.json",
+    "A\tbrand-assets/landing-photo/wolfgang-moritzer/consumer-source-receipt.json",
+    "A\tbrand-assets/landing-photo/wolfgang-moritzer/derivatives.json",
+    "A\tbrand-assets/landing-photo/wolfgang-moritzer/derive.py",
+    "A\tbrand-assets/landing-photo/wolfgang-moritzer/oda-hero-wolfgang-moritzer-original.jpg",
+    "A\tpublic/assets/oda/landing-photo/hero-dolomites-1280.webp",
+    "A\tpublic/assets/oda/landing-photo/hero-dolomites-1920.webp",
+    "A\tpublic/assets/oda/landing-photo/hero-dolomites-2560.webp",
+    "A\tpublic/assets/oda/landing-photo/hero-dolomites-768.webp",
+    "A\tpublic/assets/oda/landing-photo/hero-dolomites-mobile-480.webp",
+    "A\tpublic/assets/oda/landing-photo/hero-dolomites-mobile-960.webp",
+    "M\tsrc/pages/Landing.tsx",
+    "M\tsrc/styles/landing.css"
+  ],
+  "newArtifactPaths": [
+    "A\tartifacts/verification/landing-photographic/early/README.md",
+    "A\tartifacts/verification/landing-photographic/early/capture.mjs",
+    "A\tartifacts/verification/landing-photographic/early/landing-en-1440.png",
+    "A\tartifacts/verification/landing-photographic/early/landing-en-320.png",
+    "A\tartifacts/verification/landing-photographic/early/landing-en-390.png",
+    "A\tartifacts/verification/landing-photographic/early/report.json"
+  ],
+  "protection": {
+    "baselineFilesExcludingArtifacts": 900,
+    "candidateFilesExcludingArtifacts": 912,
+    "changedBaselineFiles": [
+      "src/pages/Landing.tsx",
+      "src/styles/landing.css"
+    ],
+    "protectedUnchangedFiles": 898,
+    "independentProtectedByteHashMismatches": [],
+    "receiptProtectedSetExactlyMatchesBaselineMinusLanding": true,
+    "rootReceiptPath": "/workspace/scratch/oda-landing-photographic/source-protection.json",
+    "rootReceiptBytes": 159587,
+    "rootReceiptSha256": "8d48a84c9c5abbc284ef2c7c31d715c0f5b18953bc5ad4e0e246c7655c674ce8"
+  },
+  "focusedFileHashes": {
+    "src/pages/Landing.tsx": "d3fa3d81dc73f3393c032d800e25fed6bf65edb890f298f3bb3dfb9d529d0960",
+    "src/styles/landing.css": "b71d3968b8c10aa836dcfd37907d058770f737c7d8f04ee0a3052ff05c8b0889",
+    "src/data/landingCopy.ts": "f6e65dcd03bde9b75677d7b9fb071cb3e93858cfee12a515b23784219d12eef7",
+    "src/data/courseCatalog.ts": "a79ccef04d5d264b4f7fb3a02da47cc71f3c15b3a842e2c5b8aebdbc6decc6c3",
+    "src/data/legal.ts": "7e0bdcf72fe9567dcb07ebe0ba2fadfaa083d3bf5b154488db41160484bf7598",
+    "src/components/LanguagePicker.tsx": "c536d540364c894a3ab6b771dfcd2e36f603319ff2c97cf3c9e94c7d53626a57",
+    "src/components/Logo.tsx": "ae8bc3bd1cd776aeab4d82bf1d0bf55b0eed25d3aac6cd7883d828a49e3381de",
+    "src/App.tsx": "5a26c5377532d754c334de1d77c2bcdaf4f884dde73d65a0593604081c802058",
+    "public/sw.js": "3d1d678be9568882eebd4a7594fdb3fef8ed60d0ffe92bba7eb764f01ba60b5c",
+    "package.json": "614199dd79f59c8b11a3dfc9b9a7ff4c8206666a92b8e1ec9da611647aa4d8f1",
+    "package-lock.json": "d08110baa951e3a716d06e24009dd278eca19a85eea967d0dd1d1c6dcf2eab22",
+    ".github/workflows/deploy-pages.yml": "bfa989f1cd1384bf74b6f8b821cb615dba6fa0a3aa95b195bd0565c0284503a6"
+  },
+  "claimsRoutesStorageI18n": [
+    "All localized landing copy, primary English behavior, course metadata, legal claims/text, language selector and locale persistence remain byte-identical to baseline.",
+    "Landing catalogue/resource definitions, click/navigation/storage handlers and moveTo focus/reduced-motion logic are unchanged. Course selection uses the existing key and base-aware router.",
+    "DailyPreview appears once below photo with unchanged local useState, localized three-step content, aria-pressed controls and live region; no personal decision, timer or reward write.",
+    "Official photo attribution is the sole new external link; target blank with noopener noreferrer. No application claim attributes a product result to the photograph.",
+    "No rejected dashboard style, global app palette/token, protected logo, account, payment, schema, credential, dependency, workflow or signing change is introduced."
+  ],
+  "css": {
+    "parsedSelectors": 342,
+    "unscopedSelectors": [],
+    "customPropertyDeclarationScopes": [
+      ".oda-landing",
+      ".oda-landing-nav"
+    ],
+    "globalAtRulesAdded": [],
+    "mobilePhotoPosition": "65% 50%",
+    "mobileScrim": "burgundy alpha 80% at 0,72% at 36,62% at 64,4% at 80,transparent at 89",
+    "numeralPositionIssue": "resolved: position absolute on scoped course-number selector"
+  },
+  "photoAssets": [
+    {
+      "path": "brand-assets/landing-photo/wolfgang-moritzer/oda-hero-wolfgang-moritzer-original.jpg",
+      "bytes": 639103,
+      "sha256": "830bd84d81a7cd41135ff6ec0c1c77a57087506964945aabea0521e3cf600a37",
+      "dimensions": [
+        3243,
+        1842
+      ],
+      "format": "JPEG",
+      "manifestMatch": true
+    },
+    {
+      "path": "public/assets/oda/landing-photo/hero-dolomites-768.webp",
+      "bytes": 30084,
+      "sha256": "20dbf5ce959737644e3a9be2e3b7059cf1a70d690b0ded1e9b2af82105bbe18e",
+      "dimensions": [
+        768,
+        436
+      ],
+      "format": "WEBP",
+      "manifestMatch": true
+    },
+    {
+      "path": "public/assets/oda/landing-photo/hero-dolomites-1280.webp",
+      "bytes": 67698,
+      "sha256": "601306e81d3a2e97ec3ca0aedca8ef6aebac16917cd6684d133e58adcd46ee2e",
+      "dimensions": [
+        1280,
+        727
+      ],
+      "format": "WEBP",
+      "manifestMatch": true
+    },
+    {
+      "path": "public/assets/oda/landing-photo/hero-dolomites-1920.webp",
+      "bytes": 130032,
+      "sha256": "f4113a2958fa93bb86114051b1057c926ce3783166d57328f504e1f5fe0b5d6a",
+      "dimensions": [
+        1920,
+        1091
+      ],
+      "format": "WEBP",
+      "manifestMatch": true
+    },
+    {
+      "path": "public/assets/oda/landing-photo/hero-dolomites-2560.webp",
+      "bytes": 203044,
+      "sha256": "54ab5a9edab599290038f366f64ea6efddbf874400baca70f3d2fae5779addc4",
+      "dimensions": [
+        2560,
+        1454
+      ],
+      "format": "WEBP",
+      "manifestMatch": true
+    },
+    {
+      "path": "public/assets/oda/landing-photo/hero-dolomites-mobile-480.webp",
+      "bytes": 34224,
+      "sha256": "06fb23b4111b18fbcc3943ed1a06ac92008d1fc45da232264db02ea89ad08030",
+      "dimensions": [
+        480,
+        737
+      ],
+      "format": "WEBP",
+      "manifestMatch": true
+    },
+    {
+      "path": "public/assets/oda/landing-photo/hero-dolomites-mobile-960.webp",
+      "bytes": 96748,
+      "sha256": "dec5efea5f40cc355328dfd3464d1e651f19aacaa634cc5dca430dbc0b71474a",
+      "dimensions": [
+        960,
+        1474
+      ],
+      "format": "WEBP",
+      "manifestMatch": true
+    }
+  ],
+  "publicDerivativeTotalBytes": 561830,
+  "photoPerformanceSemantics": [
+    "Master/provenance outside public runtime; compiled dist excludes original JPEG. Only six optimized responsive local WebPs are public.",
+    "Source URLs use import.meta.env.BASE_URL. Desktop/mobile srcsets match their preload srcsets/sizes and media. Empty alt and aria-hidden mark photo as decorative.",
+    "Hero is eager with high fetch priority and async decoding. Numeric source/img dimensions provided; background container sized by live content and min-height/padding.",
+    "Service worker is unchanged; shell pre-cache excludes photographs and only requested asset URLs enter on-demand cache. No new blanket photo download or cache schema.",
+    "Real selected request count, duplicate fetch avoidance, rendering sharpness/crop, failure fallback, overlay contrast and layout stability require separate browser evidence."
+  ],
+  "buildEvidence": {
+    "performedBy": "parent; no independent rerun",
+    "receiptPath": "/workspace/scratch/oda-landing-photographic/final-build/build-receipt.json",
+    "receiptBytes": 247888,
+    "receiptSha256": "b466f2b9281e4dd03b106e9fcc1bcaaf0f45d7a9e4a4fe492fd1ac7abaa6796f",
+    "sourceCommitMatches": true,
+    "sourceFilesVerified": 912,
+    "sourceMismatches": [],
+    "buildFilesVerified": 451,
+    "buildMismatches": [],
+    "recordedCleanAndUnchangedDuringRun": true,
+    "aggregateLogPath": "/workspace/scratch/oda-landing-photographic/final-build/aggregate-check.log",
+    "aggregateLogBytes": 79287,
+    "aggregateLogSha256": "7055974c9a8b9f879d22f45843cdd8a07cfd49c9b7db8441baa9d5fc05c3781e",
+    "recordedExitCode": 0,
+    "passed": 621,
+    "failed": 0,
+    "actualAggregateSummaryLines": [
+      "\u2139 pass 11",
+      "\u2139 fail 0",
+      "\u2139 tests 621",
+      "\u2139 pass 621",
+      "\u2139 fail 0"
+    ]
+  },
+  "independentSemanticReview": "narration_course_delta confirmed no semantic regression at frozen f02ce334; Landing hash exactly matches reviewed draft.",
+  "pendingCheckpoint": "Parent independent browser/mobile/visual QA and user review before any new landing publication. Early PNG artifacts are explicitly labelled draft and do not substitute for final runtime QA.",
+  "methods": "Read-only git frozen-tree comparison, checkout byte/hash verification, PostCSS parse, Pillow dimension/format inspection, receipt/log/dist binding. Only nonsensitive audit receipt written in scratch; no app edit/build/test/browser/install/deploy performed."
+}

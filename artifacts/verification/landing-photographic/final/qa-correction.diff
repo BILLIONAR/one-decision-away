@@ -1,0 +1,52 @@
+diff --git a/src/pages/Landing.tsx b/src/pages/Landing.tsx
+index 264cb6b..0f1d441 100644
+--- a/src/pages/Landing.tsx
++++ b/src/pages/Landing.tsx
+@@ -11,6 +11,8 @@ import '../styles/landing.css';
+ 
+ const photoBase = `${import.meta.env.BASE_URL}assets/oda/landing-photo/`;
+ const heroSources = [768, 1280, 1920, 2560].map(width => `${photoBase}hero-dolomites-${width}.webp ${width}w`).join(', ');
++// The tall tablet hero needs enough landscape pixels to cover its 740px minimum height.
++const heroSizes = '(max-width: 1060px) 1304px, 100vw';
+ const mobileHeroSources = [480, 960].map(width => `${photoBase}hero-dolomites-mobile-${width}.webp ${width}w`).join(', ');
+ const photoSource = 'https://unsplash.com/photos/landscape-photo-of-mountain-range-during-golden-hour-pn_Pp9P8P2U';
+ 
+@@ -70,7 +72,7 @@ export const Landing: React.FC = () => {
+ 
+   return (
+     <div className="oda-landing" lang={locale}>
+-      <link rel="preload" as="image" href={`${photoBase}hero-dolomites-1920.webp`} imageSrcSet={heroSources} imageSizes="100vw" media="(min-width: 641px)" />
++      <link rel="preload" as="image" href={`${photoBase}hero-dolomites-1920.webp`} imageSrcSet={heroSources} imageSizes={heroSizes} media="(min-width: 641px)" />
+       <link rel="preload" as="image" href={`${photoBase}hero-dolomites-mobile-480.webp`} imageSrcSet={mobileHeroSources} imageSizes="100vw" media="(max-width: 640px)" />
+       <button type="button" onClick={() => moveTo('oda-landing-main')} className="oda-landing-skip">{c.skip}</button>
+       <header className="oda-landing-nav"><div className="oda-landing-shell oda-landing-nav-content">
+@@ -87,7 +89,7 @@ export const Landing: React.FC = () => {
+         <section className="oda-landing-hero" aria-labelledby="landing-title">
+           <picture className="oda-landing-hero-photo" aria-hidden="true">
+             <source media="(max-width: 640px)" srcSet={mobileHeroSources} sizes="100vw" width={960} height={1474} />
+-            <img src={`${photoBase}hero-dolomites-1920.webp`} srcSet={heroSources} sizes="100vw" width={1920} height={1091} alt="" loading="eager" fetchPriority="high" decoding="async" />
++            <img src={`${photoBase}hero-dolomites-1920.webp`} srcSet={heroSources} sizes={heroSizes} width={1920} height={1091} alt="" loading="eager" fetchPriority="high" decoding="async" />
+           </picture>
+           <div className="oda-landing-shell oda-landing-hero-inner">
+           <div className="oda-landing-hero-copy">
+diff --git a/src/styles/landing.css b/src/styles/landing.css
+index 5274370..b62f0bb 100644
+--- a/src/styles/landing.css
++++ b/src/styles/landing.css
+@@ -311,7 +311,7 @@
+   inset: 0;
+   z-index: -1;
+   pointer-events: none;
+-  background: linear-gradient(90deg, rgb(84 1 12 / 95%) 0%, rgb(84 1 12 / 87%) 29%, rgb(84 1 12 / 56%) 47%, rgb(84 1 12 / 6%) 73%, transparent 100%), linear-gradient(0deg, rgb(84 1 12 / 22%), transparent 28%);
++  background: linear-gradient(90deg, rgb(84 1 12 / 95%) 0%, rgb(84 1 12 / 87%) 29%, rgb(84 1 12 / 76%) 50%, rgb(84 1 12 / 6%) 73%, transparent 100%), linear-gradient(0deg, rgb(84 1 12 / 22%), transparent 28%);
+ }
+ .oda-landing-hero-inner { position: relative; display: flex; align-items: center; min-height: 740px; padding-block: 86px 105px; }
+ .oda-landing-hero-copy { max-width: 600px; }
+@@ -352,6 +352,7 @@
+   .oda-landing-shell { width: calc(100% - 60px); }
+   .oda-landing-example { gap: 45px; }
+   .oda-landing-hero-copy { max-width: 560px; }
++  .oda-landing-hero::before { background: linear-gradient(90deg, rgb(84 1 12 / 95%) 0%, rgb(84 1 12 / 87%) 30%, rgb(84 1 12 / 76%) 60%, rgb(84 1 12 / 6%) 82%, transparent 100%), linear-gradient(0deg, rgb(84 1 12 / 22%), transparent 28%); }
+ }
+ @media (max-width: 640px) {
+   .oda-landing-shell { width: calc(100% - 40px); }

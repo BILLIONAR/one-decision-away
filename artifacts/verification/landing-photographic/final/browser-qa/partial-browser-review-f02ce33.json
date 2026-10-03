@@ -1,0 +1,813 @@
+{
+  "sourceCommit": "f02ce3344c3b75090e99e7e3e9c1f988251c3f24",
+  "status": "blocked; partial matrix retained, no acceptance or publication",
+  "synthetic": true,
+  "physicalDevice": false,
+  "published": false,
+  "blockers": [
+    {
+      "case": "ES1440",
+      "selector": "headline em",
+      "actualGlyphMinRatio": 2.650062700355952,
+      "threshold": 3,
+      "evidence": "final/landing-es-light-1440-contrast.json"
+    },
+    {
+      "case": "TR768",
+      "selector": "headline em",
+      "actualGlyphMinRatio": 2.062535,
+      "threshold": 3,
+      "evidence": "boundary/remaining-768/landing-tr-light-768-contrast.json"
+    },
+    {
+      "case": "ES768",
+      "selector": "headline em",
+      "actualGlyphMinRatio": 1.42067,
+      "threshold": 3,
+      "evidence": "boundary/remaining-es-768/landing-es-light-768-contrast.json"
+    },
+    {
+      "case": "768 source softness",
+      "physicalCoverScale": 1.6972477064220184,
+      "evidence": "boundary/remaining-768/landing-en-light-768-hero.png"
+    }
+  ],
+  "passedSupportingEvidence": {
+    "appOnlyChecks": 27,
+    "protectedGeometryStylesTextMatches": 9,
+    "protectedPixelExact": 8,
+    "today1440AntialiasDifference": {
+      "pixels": 15,
+      "maxChannelDelta": 2,
+      "box": [
+        299,
+        752,
+        302,
+        802
+      ]
+    },
+    "dprAndFallbackChecks": 5
+  },
+  "diagnosticCorrections": [
+    "First EN320 element screenshot contained blank below-viewport strip; credit glyph mask missing. Actual PNG/error retained. Supported page full-document clip correction yielded complete valid sample; no app change.",
+    "One resume invocation used scratch cwd, missing tsx loader before browser launch. Original log retained; resumed from app cwd.",
+    "768 initial1280source expectation was a QA assumption. Actual768photo bytes were verified; softness later personally confirmed.",
+    "React19 hoisted preload links may persist after landing visit; direct app routes were separately verified photo-free."
+  ],
+  "personalPixelReview": [
+    "approved original JPEG via view_image",
+    "EN1440/390/320 clean top",
+    "ES1440 clean full hero at contrast failure",
+    "EN768 full hero original-resolution softness",
+    "EN390 DPR2 full hero original-resolution",
+    "Today1440/Notebook390/Coach320 protected PNGs"
+  ],
+  "browserOwnership": "all browser processes closed; own preview4197 retained pending next GO",
+  "files": [
+    {
+      "file": "attempt-1/final/landing-en-light-1440-contrast-input.json",
+      "bytes": 53572,
+      "sha256": "d1e4ee7f9ed39db82eff8dfc47625e6bff31d96a3310e37be98139bb7876e8e4"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-1440-contrast.json",
+      "bytes": 911443,
+      "sha256": "0945849b0b558d76653c47912e494946a5e2dc03fc9caad886bcbe68efc89044"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-1440-full.png",
+      "bytes": 1479741,
+      "sha256": "9e33772d903156ae7247eda4c59cbb0da8de8fd2e4197020eb2d6bc39e06ba54"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-1440-hero-background.png",
+      "bytes": 971402,
+      "sha256": "4ea03cc59124f94deaae6346b6c8592be9b20b974348cb4ec502a385df6ff496"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-1440-hero-clean.png",
+      "bytes": 1042525,
+      "sha256": "e59f33c68d20c8e2ab3e1597873cdfffd70e757cde35e3ddfbb5055c58229ad9"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-1440-nav-background.png",
+      "bytes": 4749,
+      "sha256": "317964465b392b46b1f3fa9a4cbe4291de642818b4d8282b0e5b8448921d03c4"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-1440-nav-clean.png",
+      "bytes": 12002,
+      "sha256": "dbe27154b62017fd34e058cc70a13100a441fea5df0349e361ebd6935286d4b4"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-1440.png",
+      "bytes": 1063884,
+      "sha256": "c68bdca2c2243a98617239360333c8bf9e8f1a912968f20e6d22b16452040b1a"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-320-contrast-input.json",
+      "bytes": 47534,
+      "sha256": "85a15354b8be861cb2750c5a0023adcd30bd7c2b975b14336f84498e42536732"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-320-contrast.json",
+      "bytes": 794528,
+      "sha256": "638dd4672396c53e444283bf4495251c68c7554e030218f082d73176cd032e5f"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-320-hero-background.png",
+      "bytes": 188364,
+      "sha256": "dfc6a5e35080f4a165a175b6f71d9b966b4c6c1d2b4ca235a200663f51ffc21a"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-320-hero-clean.png",
+      "bytes": 226252,
+      "sha256": "7cbb6824b38e77f61d38bd9cde81348e45225ac9ae690eb383cd8198660104af"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-320-nav-background.png",
+      "bytes": 2112,
+      "sha256": "5bc303a03a267a35e1f5660f18ef28121026e4cb58e8164f4a4edd366f1a9a32"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-320-nav-clean.png",
+      "bytes": 5395,
+      "sha256": "f3809fcbc56df2e30b6c1d8473692a1dd7be795334bc8606d3f3510f77002972"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-320.png",
+      "bytes": 228342,
+      "sha256": "9be28d123680e1b3f003f07ad1396fc702fec16288b4459b5155c47131396c0c"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-390-contrast-input.json",
+      "bytes": 50023,
+      "sha256": "176eedadef63d9c6288c8ef628365bf9a01af1f3ae32100d0971d0978a31b049"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-390-contrast.json",
+      "bytes": 857815,
+      "sha256": "f765c1f19d2d00faf64f6280a01b2dae4fc932013671d38b552a93ab758cae75"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-390-full.png",
+      "bytes": 687348,
+      "sha256": "ee07eb8038adbf983cbca5b4727e19d1c3cd9b6059456263a6f18c5f2496c09f"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-390-hero-background.png",
+      "bytes": 262434,
+      "sha256": "754f75e50e06684c827930c6a6c421b0271096cef0401a3efa741c7fecf73ae2"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-390-hero-clean.png",
+      "bytes": 306258,
+      "sha256": "d5cee2f1532a9b829329d64f4da2efd01cb55114ff1315cdbffe43938f83ad87"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-390-keyboard-skip.png",
+      "bytes": 270666,
+      "sha256": "3c5e461eb87f66200e7887e4183d64b456880ce1b690d562f4205489f2416a95"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-390-nav-background.png",
+      "bytes": 2582,
+      "sha256": "7441478c0d73b5fed4f4ba640c5005d744060202fc2b84394044275f44aa9145"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-390-nav-clean.png",
+      "bytes": 6699,
+      "sha256": "cfdfe8d4c265b6c38765d9c8a26c212ecdb43b383cde1dcaf76648d5518392aa"
+    },
+    {
+      "file": "attempt-1/final/landing-en-light-390.png",
+      "bytes": 272020,
+      "sha256": "4eedf34553a82e7c7f1402da02671aadfb00f7f18dd94d595b13a074c25591f6"
+    },
+    {
+      "file": "attempt-1/final/report.json",
+      "bytes": 2124675,
+      "sha256": "0d3d9def99113049b6fe0a10863678a8d06af3614b1143205a0facb3b61d97bd"
+    },
+    {
+      "file": "attempt-1/final-run.log",
+      "bytes": 3307,
+      "sha256": "09ae30c3cfa383137e8ea17fd3efa0918db3138084a9fb77adaecef49a4a1f5e"
+    },
+    {
+      "file": "attempt-1/qa.mjs",
+      "bytes": 20009,
+      "sha256": "1de5b49e8816ac25161df5389b2929ba7e117844b592fd41735948d34e023c4a"
+    },
+    {
+      "file": "attempt-1/resume-invocation-error.log",
+      "bytes": 1004,
+      "sha256": "dc4adbec6c42ca70f4fff309220efc1c1a44e5923de75609e045d12cc2fc464b"
+    },
+    {
+      "file": "attempt-1/resumed-contrast-error.log",
+      "bytes": 850,
+      "sha256": "f6257dc09111585a9003bcb573b1ddfbaf641777b9f9b66e111cf914e1efa56e"
+    },
+    {
+      "file": "attempt-1/resumed-harness.mjs",
+      "bytes": 20278,
+      "sha256": "4e120dd9c04fb51186d1ed2c7b57b5c656cf0f1f2396c56a68815bfbc5ea4a69"
+    },
+    {
+      "file": "final/landing-en-dark-1440.png",
+      "bytes": 1063886,
+      "sha256": "6414a6ab2811cc57bd65ce022f8986500da28561beca273361bdaeb8fb6dfd71"
+    },
+    {
+      "file": "final/landing-en-light-320-contrast-input.json",
+      "bytes": 47534,
+      "sha256": "85a15354b8be861cb2750c5a0023adcd30bd7c2b975b14336f84498e42536732"
+    },
+    {
+      "file": "final/landing-en-light-320-contrast.json",
+      "bytes": 815510,
+      "sha256": "e569b43e281f1563329c89d81d312c1dc9175ca6acdf6a8a7e230d3fd205eafe"
+    },
+    {
+      "file": "final/landing-en-light-320-full.png",
+      "bytes": 623883,
+      "sha256": "34dbeb3986d3558549b7046fd825802d2141614a302b12a0f9666e8081fb344d"
+    },
+    {
+      "file": "final/landing-en-light-320-hero-background.png",
+      "bytes": 204219,
+      "sha256": "f3fa48c6cddab55300c353ceb2e0caa1968796eb12507f9f10d085104be5045c"
+    },
+    {
+      "file": "final/landing-en-light-320-hero-clean.png",
+      "bytes": 244225,
+      "sha256": "3f7377f28da3c0e5cc2283f421ba6ac60ded3a621fcae0ad4bcb0bf1bcbd7960"
+    },
+    {
+      "file": "final/landing-en-light-320-nav-background.png",
+      "bytes": 2113,
+      "sha256": "c08692fd1e72bb812f57111db8e6deb8aee7be34d42e87ea926ed2c264ebba6a"
+    },
+    {
+      "file": "final/landing-en-light-320-nav-clean.png",
+      "bytes": 5395,
+      "sha256": "f3809fcbc56df2e30b6c1d8473692a1dd7be795334bc8606d3f3510f77002972"
+    },
+    {
+      "file": "final/landing-en-light-320.png",
+      "bytes": 228342,
+      "sha256": "9be28d123680e1b3f003f07ad1396fc702fec16288b4459b5155c47131396c0c"
+    },
+    {
+      "file": "final/landing-es-light-1440-contrast-input.json",
+      "bytes": 55822,
+      "sha256": "720ff288205396acbf075e73d3829fd3e1c380805ed965892c1223010723bd34"
+    },
+    {
+      "file": "final/landing-es-light-1440-contrast.json",
+      "bytes": 951573,
+      "sha256": "3a8089f1dcb42a7c6d4f91b944ac73e3de9e4b9554ae6bdb0d8c595b2dd2f493"
+    },
+    {
+      "file": "final/landing-es-light-1440-hero-background.png",
+      "bytes": 971116,
+      "sha256": "82a3ffa9f8e09d0bfe97e69c271d7857ecba3ee1da30be5d0a469a7309ce2945"
+    },
+    {
+      "file": "final/landing-es-light-1440-hero-clean.png",
+      "bytes": 1041790,
+      "sha256": "494d65e868cefe3947b12c709ed54ba4187234714289c3b6e83fe4c34bbc96f1"
+    },
+    {
+      "file": "final/landing-es-light-1440-nav-background.png",
+      "bytes": 4751,
+      "sha256": "d52159b5d624a3ed7c013025e8074c405879529e66e1aa5779aed53a23b7503b"
+    },
+    {
+      "file": "final/landing-es-light-1440-nav-clean.png",
+      "bytes": 11955,
+      "sha256": "0d6f93190faead84bbf57a835922b51cdd2389fbd9a1e7d6693371beae988044"
+    },
+    {
+      "file": "final/landing-es-light-1440.png",
+      "bytes": 1063622,
+      "sha256": "f88a6f59f2915937f4c401ce20ff1a3fd53473bbb596fa6c755dbe8e8ac7ab49"
+    },
+    {
+      "file": "final/landing-tr-dark-1440.png",
+      "bytes": 1071216,
+      "sha256": "99bef0837bb6f110553b8e39b1848a4de88923f1aef7aada0fcdb94ef70b89b8"
+    },
+    {
+      "file": "final/landing-tr-light-1440-contrast-input.json",
+      "bytes": 52096,
+      "sha256": "7fb2db0bf8f38f0d58232dd4b920f517199a9f6d24958507c9b9d54a352b2573"
+    },
+    {
+      "file": "final/landing-tr-light-1440-contrast.json",
+      "bytes": 887494,
+      "sha256": "6cd0d00e36b92c9c1ac70c6f863c0ba9caee2db65e6e74a4bfd0a000131190c9"
+    },
+    {
+      "file": "final/landing-tr-light-1440-hero-background.png",
+      "bytes": 979196,
+      "sha256": "dad4010c35a52ae75cdbdc2d14132c3a747dad272cfd1068b23e42b066c9e79b"
+    },
+    {
+      "file": "final/landing-tr-light-1440-hero-clean.png",
+      "bytes": 1049542,
+      "sha256": "f33b8efd60781149de961b729373cbe5e93f5a486fb86abbe3ab7145b20953fe"
+    },
+    {
+      "file": "final/landing-tr-light-1440-nav-background.png",
+      "bytes": 4745,
+      "sha256": "38daaeebee0b4d90cdd56dee652d2341085e54a56648ec23ce8d13a31851280f"
+    },
+    {
+      "file": "final/landing-tr-light-1440-nav-clean.png",
+      "bytes": 12010,
+      "sha256": "89f1642f8ca7fdeef7e7d3a20d43b9dfce3afefca174e110cdd92841e2e2fae3"
+    },
+    {
+      "file": "final/landing-tr-light-1440.png",
+      "bytes": 1071215,
+      "sha256": "30bc8dfd70473ab14aa6e2c3097fadc29702feb5b85f8c7116522ef8b8dcd301"
+    },
+    {
+      "file": "final/report.json",
+      "bytes": 3190065,
+      "sha256": "034217af143f3cebf2e4a330fc02ef7684c96c5f26d25168288acb9049474a7f"
+    },
+    {
+      "file": "final-app/pixel-comparison.json",
+      "bytes": 1223,
+      "sha256": "1dedbe82016738cf68bec802ca9547a3669de93541ec932f4e82f86b11984ce5"
+    },
+    {
+      "file": "final-app/protected-coach-1440.png",
+      "bytes": 425775,
+      "sha256": "f8e2d063503a36afe647e59a3b01fef2595dbbc9cd4595503544e17834ef64b6"
+    },
+    {
+      "file": "final-app/protected-coach-320.png",
+      "bytes": 147865,
+      "sha256": "97777b1e77be4732c03f12b6aef810d229c5cbd47f5c10de3c82ad21629fb9ff"
+    },
+    {
+      "file": "final-app/protected-coach-390.png",
+      "bytes": 165393,
+      "sha256": "0ef4d698462aa92f480595305cded1a9f3affae687556aef03f5988bb4e44b2c"
+    },
+    {
+      "file": "final-app/protected-notebook-1440.png",
+      "bytes": 143367,
+      "sha256": "9173d1bcafd641d4284cacced789fc05d35e5d9fafb8e70e5b2bdf90419a65a9"
+    },
+    {
+      "file": "final-app/protected-notebook-320.png",
+      "bytes": 56815,
+      "sha256": "3ddaa545773fb9f8bbd596c1523d385b5706f98cc24f2032174572558d795b34"
+    },
+    {
+      "file": "final-app/protected-notebook-390.png",
+      "bytes": 59172,
+      "sha256": "28adce25ef17a9332fc07dfdeed1dd1b114485020e1d8b9ee9bbbe32bd7b5a8e"
+    },
+    {
+      "file": "final-app/protected-today-1440.png",
+      "bytes": 434531,
+      "sha256": "8d4bfdd0967c9709931f7792bda3e1c4f3a0d201d4be7f3c3d91a7b82ba94f47"
+    },
+    {
+      "file": "final-app/protected-today-320.png",
+      "bytes": 127227,
+      "sha256": "e2a87313711419499dd7b4ea330f43880c9e022e15563e374102bf1180c3099a"
+    },
+    {
+      "file": "final-app/protected-today-390.png",
+      "bytes": 159198,
+      "sha256": "6f93805cbeec517bea363a6e848e30e956ba54241638286dce1f7dba0e3de533"
+    },
+    {
+      "file": "final-app/report.json",
+      "bytes": 103009,
+      "sha256": "7d80ddfbe15545735a0d4892345d11ef2b1f8cf916b66518518539ae061df03a"
+    },
+    {
+      "file": "final-photo/landing-390-photo-failed-contrast-input.json",
+      "bytes": 50063,
+      "sha256": "f63b737625d2707d06df37a772267700ce53fb710f9d6a18cdee319a5c59c671"
+    },
+    {
+      "file": "final-photo/landing-390-photo-failed-contrast.json",
+      "bytes": 856228,
+      "sha256": "c832b48beecd2a407324a323196a2c200ca1e4e75313b779a4cfb5660529f2fb"
+    },
+    {
+      "file": "final-photo/landing-390-photo-failed-hero-background.png",
+      "bytes": 6268,
+      "sha256": "3693ccf20658446d6ed46b6e62330c74255082da28da84fe0b56b7d38fab0117"
+    },
+    {
+      "file": "final-photo/landing-390-photo-failed-hero-clean.png",
+      "bytes": 46792,
+      "sha256": "1367b333ad64b605da461a0c1b2ccf37bd1c3c96fbe47c0c8fc36078c3c85595"
+    },
+    {
+      "file": "final-photo/landing-390-photo-failed-nav-background.png",
+      "bytes": 2582,
+      "sha256": "7441478c0d73b5fed4f4ba640c5005d744060202fc2b84394044275f44aa9145"
+    },
+    {
+      "file": "final-photo/landing-390-photo-failed-nav-clean.png",
+      "bytes": 6699,
+      "sha256": "cfdfe8d4c265b6c38765d9c8a26c212ecdb43b383cde1dcaf76648d5518392aa"
+    },
+    {
+      "file": "final-photo/landing-390-photo-failed.png",
+      "bytes": 50854,
+      "sha256": "3c1d3a5a9900ae3cd898f0b49779d668d964284699300b3583a399929220e50a"
+    },
+    {
+      "file": "final-photo/landing-en-light-320-dpr2.png",
+      "bytes": 760317,
+      "sha256": "7ad757f15f95e36e094bad876143fe4ea3ab5137c6bb81aeaa73349c5afa9de3"
+    },
+    {
+      "file": "final-photo/landing-en-light-390-dpr2.png",
+      "bytes": 906809,
+      "sha256": "55de998090a96e05fc1dc3ffeb5b7443f9a4472945793cf18c97712dd09581b3"
+    },
+    {
+      "file": "final-photo/landing-hero-320-dpr2.png",
+      "bytes": 755003,
+      "sha256": "f5fc464da9bcc9619a5d9bd16cf94a485576025e0528999aa60193a4ab17a749"
+    },
+    {
+      "file": "final-photo/landing-hero-390-dpr2.png",
+      "bytes": 1030324,
+      "sha256": "3d4003af30479277d4bb4e8445e8f9d269c17d93391574455a0cf4eb28876739"
+    },
+    {
+      "file": "final-photo/landing-hero-390-photo-failed.png",
+      "bytes": 46792,
+      "sha256": "1367b333ad64b605da461a0c1b2ccf37bd1c3c96fbe47c0c8fc36078c3c85595"
+    },
+    {
+      "file": "final-photo/report.json",
+      "bytes": 1027144,
+      "sha256": "26e8f261838adcc8da1e1bd9f59fadf58ab08de16a38b19b67ddb7d71b291fc0"
+    },
+    {
+      "file": "boundary/attempt1-harness.mjs",
+      "bytes": 11369,
+      "sha256": "fa92413a2e2a911c4018312e61303fa53207c1d2666729e98b05f40857cfccda"
+    },
+    {
+      "file": "boundary/boundary-review-f02ce33.json",
+      "bytes": 23575,
+      "sha256": "5ad5ba41663db219a908d943b78768ca08f74a0de6e9a4bfba09913fd3c738d1"
+    },
+    {
+      "file": "boundary/landing-en-light-360-contrast-input.json",
+      "bytes": 47404,
+      "sha256": "fef8ac983f7fb35c4dcdb52733326786081d92d610ed4f3d38f1018d516df7ce"
+    },
+    {
+      "file": "boundary/landing-en-light-360-contrast.json",
+      "bytes": 815449,
+      "sha256": "3aff428fcb8e7539ef61193a1de56fb9a9597edd1e325e563141c9a2e3f050ec"
+    },
+    {
+      "file": "boundary/landing-en-light-360-hero-background.png",
+      "bytes": 239926,
+      "sha256": "728947d4b77cd70a9e0f81533afc0c5d424a310422f31310495f592f0e8d9eb5"
+    },
+    {
+      "file": "boundary/landing-en-light-360-hero-clean.png",
+      "bytes": 282218,
+      "sha256": "9ee5bb7115c12d2b74f8d3fbf53a56e4147369bec8c8e7d09fb7d085a74829a2"
+    },
+    {
+      "file": "boundary/landing-en-light-360-hero.png",
+      "bytes": 282594,
+      "sha256": "e924dca328aabe88908d94408d75e2f926d6fb77c1652ca4d46415d24339016b"
+    },
+    {
+      "file": "boundary/landing-en-light-360-nav-background.png",
+      "bytes": 2154,
+      "sha256": "538c586bc3c952ab4c5eb73fe4ef1797812e7d69b6a0183181aa11f56e1423d8"
+    },
+    {
+      "file": "boundary/landing-en-light-360-nav-clean.png",
+      "bytes": 5452,
+      "sha256": "2bd1d5325962c14a4efe2c773cce4907ee4a097783b6c320d5f9514e0fd31a17"
+    },
+    {
+      "file": "boundary/landing-en-light-360.png",
+      "bytes": 253735,
+      "sha256": "b49d4509a20eeda84e7657daf839a6054e9e16c894c5d126bd291be6a6de76c1"
+    },
+    {
+      "file": "boundary/landing-en-light-768-hero.png",
+      "bytes": 501773,
+      "sha256": "f02593b22720d0b53b8f0cce35f44ff992f62b574fe187d3bf1d57e5eb51f253"
+    },
+    {
+      "file": "boundary/landing-en-light-768.png",
+      "bytes": 521461,
+      "sha256": "b317484b780917977ec658032b02d9d97ca39b5fecb5f5f25787990c03756d48"
+    },
+    {
+      "file": "boundary/landing-es-light-360-contrast-input.json",
+      "bytes": 49344,
+      "sha256": "7989b380671c2c8d5ee45b446d0372a33b12dacbf75c11640f675f4e11cba780"
+    },
+    {
+      "file": "boundary/landing-es-light-360-contrast.json",
+      "bytes": 860175,
+      "sha256": "5ccc17cda30ce9f118d29c80cfaeb9f7a7f270dd4ee08d57f6140c73117516f2"
+    },
+    {
+      "file": "boundary/landing-es-light-360-hero-background.png",
+      "bytes": 250682,
+      "sha256": "8fff87e2685b8eefc61f340b45bb8f3ed70effc340b93101f73e179224de6aea"
+    },
+    {
+      "file": "boundary/landing-es-light-360-hero-clean.png",
+      "bytes": 296305,
+      "sha256": "d6fe1e977c027fcecc809d824b4c63d10089b9e44db4ce2cc7861122a637880b"
+    },
+    {
+      "file": "boundary/landing-es-light-360-hero.png",
+      "bytes": 296652,
+      "sha256": "c78d1c1703ef1a1000189b2f67cc4f336edf387a33fdd2d04653aef02c81d83d"
+    },
+    {
+      "file": "boundary/landing-es-light-360-nav-background.png",
+      "bytes": 2157,
+      "sha256": "e95367738bcf7fe0c94a580d7231777980ebc241510a1616852185f45bd220e1"
+    },
+    {
+      "file": "boundary/landing-es-light-360-nav-clean.png",
+      "bytes": 5224,
+      "sha256": "5e18b8a95071bf29f8287ac2b74a4f75ba7cae41c6a28e595f9c3986b121c1a4"
+    },
+    {
+      "file": "boundary/landing-es-light-360.png",
+      "bytes": 247701,
+      "sha256": "2d428a446859a4cbdc95f213e7c39d317d4937a8661131a88657b1dd0ee78b0f"
+    },
+    {
+      "file": "boundary/landing-tr-light-360-contrast-input.json",
+      "bytes": 45963,
+      "sha256": "b9e9fed30a2b6de58503158397841ebd3efe23668f2cb9aad1d075a67f206ec3"
+    },
+    {
+      "file": "boundary/landing-tr-light-360-contrast.json",
+      "bytes": 789100,
+      "sha256": "a732d4fd918220f346697d05f1e8efc9777e614cacfd6b4ac6fcf72ff9f3ec11"
+    },
+    {
+      "file": "boundary/landing-tr-light-360-hero-background.png",
+      "bytes": 230767,
+      "sha256": "8ad9087abc7e5d576e8548bf5ec5473e0fc9b539e9cf784cfe8df389d22b8690"
+    },
+    {
+      "file": "boundary/landing-tr-light-360-hero-clean.png",
+      "bytes": 272108,
+      "sha256": "0fafef7c43eeba80bbba7dfd0802adb0261ca6217e18e96373084160301e436f"
+    },
+    {
+      "file": "boundary/landing-tr-light-360-hero.png",
+      "bytes": 260319,
+      "sha256": "6b0967615c0f76cd435c0d58fcc7d79549ead7a80562b4e96ac2218cd26c38cc"
+    },
+    {
+      "file": "boundary/landing-tr-light-360-nav-background.png",
+      "bytes": 2155,
+      "sha256": "73db6595820c7b90f699603afecd7b5f32380ad509f06b065844266423bd9c9d"
+    },
+    {
+      "file": "boundary/landing-tr-light-360-nav-clean.png",
+      "bytes": 5143,
+      "sha256": "b4c6db0c72bbddaabefc4c8372b6fe45bd6a177802319c847fd94499759e7ddb"
+    },
+    {
+      "file": "boundary/landing-tr-light-360.png",
+      "bytes": 262569,
+      "sha256": "0fcb612f64695c3fa9d5653e87509d736ef67cc58cad1ef3f00f09dd1a1c3b98"
+    },
+    {
+      "file": "boundary/remaining-768/attempt-harness.mjs",
+      "bytes": 11997,
+      "sha256": "fe66fcc2ae1fcc664f8615245085a7fbbc4587b14c2365af9b6041dc891ece37"
+    },
+    {
+      "file": "boundary/remaining-768/landing-en-light-768-contrast-input.json",
+      "bytes": 50401,
+      "sha256": "d7d1eae27e80c6c4e8edaecb2d4e5f3697e267bd4bdd7fd8486176c456f5cf2f"
+    },
+    {
+      "file": "boundary/remaining-768/landing-en-light-768-contrast.json",
+      "bytes": 858433,
+      "sha256": "386a7418ab7ee850a75d538ba8826ff2c6848893c267e741a35b2d23a481633d"
+    },
+    {
+      "file": "boundary/remaining-768/landing-en-light-768-hero-background.png",
+      "bytes": 445752,
+      "sha256": "f4e24638e7e4390fc9674445c7b5d275137732dda248476dd6b1404999362f1d"
+    },
+    {
+      "file": "boundary/remaining-768/landing-en-light-768-hero-clean.png",
+      "bytes": 501773,
+      "sha256": "f02593b22720d0b53b8f0cce35f44ff992f62b574fe187d3bf1d57e5eb51f253"
+    },
+    {
+      "file": "boundary/remaining-768/landing-en-light-768-hero.png",
+      "bytes": 501773,
+      "sha256": "f02593b22720d0b53b8f0cce35f44ff992f62b574fe187d3bf1d57e5eb51f253"
+    },
+    {
+      "file": "boundary/remaining-768/landing-en-light-768-nav-background.png",
+      "bytes": 4394,
+      "sha256": "09dde82a57f11f0d79eba029b8281f2eca896e9d154e7a4f99ccafd26c5db48a"
+    },
+    {
+      "file": "boundary/remaining-768/landing-en-light-768-nav-clean.png",
+      "bytes": 9802,
+      "sha256": "11c46800f315529630b305f8c730d1d63392ee8ff59c8c0d3cb25765edf10df4"
+    },
+    {
+      "file": "boundary/remaining-768/landing-en-light-768.png",
+      "bytes": 521461,
+      "sha256": "b317484b780917977ec658032b02d9d97ca39b5fecb5f5f25787990c03756d48"
+    },
+    {
+      "file": "boundary/remaining-768/landing-tr-light-768-contrast-input.json",
+      "bytes": 48793,
+      "sha256": "42b1b92a3cba698ac6c47d16eec5d6b4f3a18a1c0f9162cd646a4993d1651b63"
+    },
+    {
+      "file": "boundary/remaining-768/landing-tr-light-768-contrast.json",
+      "bytes": 831697,
+      "sha256": "36b18f4b02e84bfd7ea8083014211dc82c8738643d34a83768ebb66689989193"
+    },
+    {
+      "file": "boundary/remaining-768/landing-tr-light-768-hero-background.png",
+      "bytes": 447234,
+      "sha256": "902dcbb8479b8d3e1f00ad9994708df03960a8ccf4c4addd03d2929d711eff4b"
+    },
+    {
+      "file": "boundary/remaining-768/landing-tr-light-768-hero-clean.png",
+      "bytes": 502654,
+      "sha256": "69ad7f63d63a752b3bf8cb668a992aba2dc66ffa16412877322b188c1d81ebb6"
+    },
+    {
+      "file": "boundary/remaining-768/landing-tr-light-768-hero.png",
+      "bytes": 502654,
+      "sha256": "69ad7f63d63a752b3bf8cb668a992aba2dc66ffa16412877322b188c1d81ebb6"
+    },
+    {
+      "file": "boundary/remaining-768/landing-tr-light-768-nav-background.png",
+      "bytes": 4384,
+      "sha256": "dc93e58097c7101eb795bb41a2aa3e3a395af41b276f4180655e10794cfd7b98"
+    },
+    {
+      "file": "boundary/remaining-768/landing-tr-light-768-nav-clean.png",
+      "bytes": 9718,
+      "sha256": "b95848545d849d974c16d5eab0d54f5e07b26701bb566aacfb7298bc3f714792"
+    },
+    {
+      "file": "boundary/remaining-768/landing-tr-light-768.png",
+      "bytes": 522846,
+      "sha256": "e671db634dd8e3baee33824b4f7f7986bdfc6d66c150f12c5a400ca036c83f7f"
+    },
+    {
+      "file": "boundary/remaining-768/report.json",
+      "bytes": 2184680,
+      "sha256": "31170ca68eff2167eb1947e5f8a3e31cb31f7039cb05cd4d4355d0c754aaa6b9"
+    },
+    {
+      "file": "boundary/remaining-768/run.log",
+      "bytes": 1208,
+      "sha256": "30d8d2b52561b870e2ba69ebb4a5f99241b9b1c1e6e16e812990e1f07b43daff"
+    },
+    {
+      "file": "boundary/remaining-es-768/attempt-harness.mjs",
+      "bytes": 11984,
+      "sha256": "537d628e8aab2cc39e462db448f3d7ae08c99cf9c4f6b3e8abbc0e17b0bae54f"
+    },
+    {
+      "file": "boundary/remaining-es-768/landing-es-light-768-contrast-input.json",
+      "bytes": 52981,
+      "sha256": "f49d61907a495291c5d46d521a0c4b3d0b2be8a6e90dea65a8c9b00c6f63e877"
+    },
+    {
+      "file": "boundary/remaining-es-768/landing-es-light-768-contrast.json",
+      "bytes": 903933,
+      "sha256": "303bce76b53289c114aea46dc4e5130b49815912b0aed86e06ca45693b457590"
+    },
+    {
+      "file": "boundary/remaining-es-768/landing-es-light-768-hero-background.png",
+      "bytes": 445474,
+      "sha256": "37539323c623c4ba30cf6553523cf04cda68c9961ba2c57cd83e5840df6d4f9d"
+    },
+    {
+      "file": "boundary/remaining-es-768/landing-es-light-768-hero-clean.png",
+      "bytes": 502097,
+      "sha256": "123471d9b3118b915c843e9df7fe5aa8801b2b5fcd080a4a37ba33679388b89d"
+    },
+    {
+      "file": "boundary/remaining-es-768/landing-es-light-768-hero.png",
+      "bytes": 502097,
+      "sha256": "123471d9b3118b915c843e9df7fe5aa8801b2b5fcd080a4a37ba33679388b89d"
+    },
+    {
+      "file": "boundary/remaining-es-768/landing-es-light-768-nav-background.png",
+      "bytes": 4391,
+      "sha256": "d778b779cf09fd0cc3db5ff00175566bcb7875dedb7cffa026bd89efb6785e02"
+    },
+    {
+      "file": "boundary/remaining-es-768/landing-es-light-768-nav-clean.png",
+      "bytes": 9822,
+      "sha256": "34f8bbcb524249ed9af6ab30f3964cb0eec55bbf0543c146a61d5940196f777f"
+    },
+    {
+      "file": "boundary/remaining-es-768/landing-es-light-768.png",
+      "bytes": 521884,
+      "sha256": "8270ea1bd92fccb1c89df09943d117bdee3174eaf170762fd831dd3e2ed4a70d"
+    },
+    {
+      "file": "boundary/remaining-es-768/report.json",
+      "bytes": 1164124,
+      "sha256": "3a6c7c4dc15f7beedcdbb9f0695afb5416f076ee69a2bf173c8f942ca73719d9"
+    },
+    {
+      "file": "boundary/remaining-es-768/run.log",
+      "bytes": 1124,
+      "sha256": "2e8b7ef608a91fbe5aedafb16c39f95165ab6e0705bd001aac6c1f828f343a3d"
+    },
+    {
+      "file": "boundary/report.json",
+      "bytes": 3225942,
+      "sha256": "dd566f9079bf3284b639b73fe67096b9b055a5e884e064c2d703d842117c8e7f"
+    },
+    {
+      "file": "boundary/run.log",
+      "bytes": 1068,
+      "sha256": "1a14145d94e3da40fac6ddab1afb5ed6888d9368a1306fe27e9bc3063c8edb61"
+    },
+    {
+      "file": "boundary/seal.py",
+      "bytes": 6032,
+      "sha256": "5993e51b1993efabefbeec3f188f8df5f7e7dddf1ef3b1e93cdc969f6d31eda3"
+    },
+    {
+      "file": "f02-harness/baseline-index.json",
+      "bytes": 112584,
+      "sha256": "0a686638b0dcb58ed62433844526460713e8b21af668e4a1213ce99922a3427c"
+    },
+    {
+      "file": "f02-harness/contrast-capture.mjs",
+      "bytes": 4792,
+      "sha256": "b8aeefacdf1602c827e5cdfe6cea631fc12daf6078759c2ebba802020e82ef9a"
+    },
+    {
+      "file": "f02-harness/contrast_pixels.py",
+      "bytes": 28760,
+      "sha256": "1fefe9282b7c1a89e9c03dbc5503d1b408a88892a2cfa094a0516cdf41e44f32"
+    },
+    {
+      "file": "f02-harness/fixture.mjs",
+      "bytes": 1670,
+      "sha256": "6ac5a12b79cc1cc87bc0dc26ce643387dfd349f488923a7ac7c4ad13f30f5ad2"
+    },
+    {
+      "file": "f02-harness/photo-specific.mjs",
+      "bytes": 9297,
+      "sha256": "55dc4b24835d3898a8ffdeaa0b50746de0a1063131a474b910c9da64d0bc12e6"
+    },
+    {
+      "file": "f02-harness/qa.mjs",
+      "bytes": 20339,
+      "sha256": "46e2c1334f4668ab6578907026ec5e2cc7266c58930b8837315fe1a8fdaef657"
+    },
+    {
+      "file": "final-run.log",
+      "bytes": 850,
+      "sha256": "f6257dc09111585a9003bcb573b1ddfbaf641777b9f9b66e111cf914e1efa56e"
+    },
+    {
+      "file": "photo-run.log",
+      "bytes": 23,
+      "sha256": "1888ea528d28a5e88736be3735f4b0f0571ea4e73c30784db2966182a433f501"
+    },
+    {
+      "file": "app-run.log",
+      "bytes": 91,
+      "sha256": "9e77ab7766253bf26670221102933091b6b7cc0b339d30e0a4522bfa7cfa0ece"
+    }
+  ]
+}

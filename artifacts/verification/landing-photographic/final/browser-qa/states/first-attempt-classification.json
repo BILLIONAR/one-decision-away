@@ -1,0 +1,22 @@
+{
+  "sourceCommit": "9627fa22c379f15755d9388d7fbaf49c27c6457c",
+  "classification": "harness_bookkeeping_artifact",
+  "firstFailure": {
+    "file": "/workspace/scratch/oda-landing-photographic/browser-qa/states/attempt-1/report.json",
+    "bytes": 286508,
+    "sha256": "4ffcbd4a54c4a3fddb207956ffe47a5ec240ffbd40e41c313c3f0cca994c0dc7"
+  },
+  "secondFailure": {
+    "file": "/workspace/scratch/oda-landing-photographic/browser-qa/states/attempt-2/report.json",
+    "bytes": 286508,
+    "sha256": "3ac58bd9ec3ec9a8f0467f1e47f7a88b6464c8b6ba2300946cec9b1eac998e98"
+  },
+  "reason": "Absent inline style was read as an empty attribute with zero declarations. Original strict attribute-identity assertion stopped the nav capture; no failed visual contrast measurement was observed. Parent authorized isolated DOM normalization with exact restored computed outline/shadow/focus/geometry and transparent informational warnings. Attempt-3 completed nav1440 and all mobile states/focus; desktop passed states and primary focus were retained from sealed attempt-2.",
+  "correction": "Normalize empty style to absent; record original, observed before/after normalization, declaration count and computed-state restoration. Do not treat semantically empty attribute bookkeeping as a color-contrast failure.",
+  "sourceAndBuildUnchanged": true,
+  "remainingScopeLimits": [
+    "Paired actual browser PNGs with computed styles; no image regeneration.",
+    "Focus outline samples are essential nontext UI mark measurements at 3:1; text uses its applicable threshold.",
+    "This is scoped synthetic-browser evidence, not broad QA, focus-area compliance, human listening, native-device testing, or publication."
+  ]
+}
