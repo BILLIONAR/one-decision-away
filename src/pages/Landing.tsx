@@ -11,6 +11,8 @@ import '../styles/landing.css';
 
 const photoBase = `${import.meta.env.BASE_URL}assets/oda/landing-photo/`;
 const heroSources = [768, 1280, 1920, 2560].map(width => `${photoBase}hero-dolomites-${width}.webp ${width}w`).join(', ');
+// The tall tablet hero needs enough landscape pixels to cover its 740px minimum height.
+const heroSizes = '(max-width: 1060px) 1304px, 100vw';
 const mobileHeroSources = [480, 960].map(width => `${photoBase}hero-dolomites-mobile-${width}.webp ${width}w`).join(', ');
 const photoSource = 'https://unsplash.com/photos/landscape-photo-of-mountain-range-during-golden-hour-pn_Pp9P8P2U';
 
@@ -70,7 +72,7 @@ export const Landing: React.FC = () => {
 
   return (
     <div className="oda-landing" lang={locale}>
-      <link rel="preload" as="image" href={`${photoBase}hero-dolomites-1920.webp`} imageSrcSet={heroSources} imageSizes="100vw" media="(min-width: 641px)" />
+      <link rel="preload" as="image" href={`${photoBase}hero-dolomites-1920.webp`} imageSrcSet={heroSources} imageSizes={heroSizes} media="(min-width: 641px)" />
       <link rel="preload" as="image" href={`${photoBase}hero-dolomites-mobile-480.webp`} imageSrcSet={mobileHeroSources} imageSizes="100vw" media="(max-width: 640px)" />
       <button type="button" onClick={() => moveTo('oda-landing-main')} className="oda-landing-skip">{c.skip}</button>
       <header className="oda-landing-nav"><div className="oda-landing-shell oda-landing-nav-content">
@@ -87,7 +89,7 @@ export const Landing: React.FC = () => {
         <section className="oda-landing-hero" aria-labelledby="landing-title">
           <picture className="oda-landing-hero-photo" aria-hidden="true">
             <source media="(max-width: 640px)" srcSet={mobileHeroSources} sizes="100vw" width={960} height={1474} />
-            <img src={`${photoBase}hero-dolomites-1920.webp`} srcSet={heroSources} sizes="100vw" width={1920} height={1091} alt="" loading="eager" fetchPriority="high" decoding="async" />
+            <img src={`${photoBase}hero-dolomites-1920.webp`} srcSet={heroSources} sizes={heroSizes} width={1920} height={1091} alt="" loading="eager" fetchPriority="high" decoding="async" />
           </picture>
           <div className="oda-landing-shell oda-landing-hero-inner">
           <div className="oda-landing-hero-copy">

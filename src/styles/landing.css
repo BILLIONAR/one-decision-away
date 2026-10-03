@@ -311,7 +311,7 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: linear-gradient(90deg, rgb(84 1 12 / 95%) 0%, rgb(84 1 12 / 87%) 29%, rgb(84 1 12 / 56%) 47%, rgb(84 1 12 / 6%) 73%, transparent 100%), linear-gradient(0deg, rgb(84 1 12 / 22%), transparent 28%);
+  background: linear-gradient(90deg, rgb(84 1 12 / 95%) 0%, rgb(84 1 12 / 87%) 29%, rgb(84 1 12 / 76%) 50%, rgb(84 1 12 / 6%) 73%, transparent 100%), linear-gradient(0deg, rgb(84 1 12 / 22%), transparent 28%);
 }
 .oda-landing-hero-inner { position: relative; display: flex; align-items: center; min-height: 740px; padding-block: 86px 105px; }
 .oda-landing-hero-copy { max-width: 600px; }
@@ -352,6 +352,7 @@
   .oda-landing-shell { width: calc(100% - 60px); }
   .oda-landing-example { gap: 45px; }
   .oda-landing-hero-copy { max-width: 560px; }
+  .oda-landing-hero::before { background: linear-gradient(90deg, rgb(84 1 12 / 95%) 0%, rgb(84 1 12 / 87%) 30%, rgb(84 1 12 / 76%) 60%, rgb(84 1 12 / 6%) 82%, transparent 100%), linear-gradient(0deg, rgb(84 1 12 / 22%), transparent 28%); }
 }
 @media (max-width: 640px) {
   .oda-landing-shell { width: calc(100% - 40px); }
