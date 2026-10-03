@@ -21,7 +21,7 @@ export const CourseNextStep: React.FC = () => {
   const c = dailyLoopCopy(locale);
   const entryCopy = courseEntryCopy(locale);
   const hybrid = dashboardHybridCopy(locale);
-  const progress = useSavedCourseProgress(data?.courseProgress);
+  const progress = useSavedCourseProgress(data);
   const catalog = courseCatalogFor(locale);
   const selected = readSelected();
   const suggested = courseForIntent(data?.profile.intent);

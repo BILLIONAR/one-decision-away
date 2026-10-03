@@ -76,7 +76,7 @@ export const Today: React.FC = () => {
   const loop = dailyLoopCopy(locale);
   const growth = growthCopy(locale);
   const hybrid = dashboardHybridCopy(locale);
-  const courseProgress = useSavedCourseProgress(data?.courseProgress);
+  const courseProgress = useSavedCourseProgress(data);
 
   const [completingMission, setCompletingMission] = useState<Mission | null>(null);
   const [newDecisionTitle, setNewDecisionTitle] = useState('');
