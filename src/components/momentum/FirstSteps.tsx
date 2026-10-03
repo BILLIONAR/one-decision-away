@@ -81,6 +81,7 @@ export const KeptMomentCard: React.FC = () => {
     try {
       await updateMomentumProfile({ nextDecisionDraft: { text, forDay: tomorrowKey() } });
       setDraft('');
+      showToast(t('Saved.'), 'success');
     } catch {
       setDraftError(true);
     } finally {
