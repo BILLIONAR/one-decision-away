@@ -1,0 +1,15 @@
+import hashlib,json
+from pathlib import Path
+from PIL import Image
+root=Path('/workspace/oda-reference-redesign/artifacts/verification/reference-led-design');packet=root/'fidelity-rework'
+def inventory(folder,own):
+ rows=[]
+ for p in sorted(folder.rglob('*')):
+  if p.is_file() and p!=own:
+   data=p.read_bytes();row={'file':str(p.relative_to(folder)),'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()}
+   if p.suffix.lower()=='.png':
+    with Image.open(p) as im:im.load();row['png']={'width':im.width,'height':im.height,'mode':im.mode}
+   rows.append(row)
+ return {'sourceCommit':'3ddb98b57669ceed6f220583aa01aa523d6b6a47','scope':'All review files recursively; excludes only this manifest itself. Nested manifests included.','files':rows,'fileCount':len(rows),'pngCount':sum('png' in e for e in rows),'totalBytes':sum(e['bytes'] for e in rows),'syntheticFixtures':True,'visualAcceptance':False,'deployment':False}
+for folder in (packet,root):
+ own=folder/'evidence-manifest.json';d=inventory(folder,own);own.write_text(json.dumps(d,indent=2)+'\n');print(json.dumps({'manifest':str(own),'files':d['fileCount'],'pngs':d['pngCount'],'MB':round(d['totalBytes']/1e6,2),'sha256':hashlib.sha256(own.read_bytes()).hexdigest()}))

@@ -1,0 +1,789 @@
+{
+  "sourceCommit": "8fed790187dd83f74acd8aec8af3f28981df22d6",
+  "sealedAtUtc": "2026-10-02T21:53:08.644333+00:00",
+  "sourceFilesUnchangedDuringQA": 696,
+  "buildFilesUnchangedDuringQA": 394,
+  "sourceClean": true,
+  "changedSourceFilesFrom3ddb": [
+    "src/pages/Focus.tsx",
+    "src/pages/SoundRoom.tsx",
+    "src/pages/Today.tsx",
+    "src/styles/coach.css",
+    "src/styles/notebook.css",
+    "src/styles/sound.css",
+    "src/styles/workingSurfaces.css"
+  ],
+  "protectedFilesByteIdentical": [
+    {
+      "file": "src/services/soundRoomPlayer.ts",
+      "bytes": 9438,
+      "sha256": "2911dd8b1ccc510f3a6757f43ddb3aa2b9d52d3d209e12ee2f0cf44c96a039f4"
+    },
+    {
+      "file": "src/services/soundRoomAccess.ts",
+      "bytes": 1744,
+      "sha256": "e34e384f12abbc6b8185a377e9aa3c212832182d97b9f773ee973d9abe4c1199"
+    },
+    {
+      "file": "src/services/soundRoom.ts",
+      "bytes": 2618,
+      "sha256": "f5d65b15d8b0da6aa42bb81073efb0670d8569eb9866cffb105e71e52c070175"
+    },
+    {
+      "file": "src/utils/soundSynthesizer.ts",
+      "bytes": 52114,
+      "sha256": "db278da38a4a0d1b540268e10cee36b92522fcf0194c690b07e866e400b1ff92"
+    },
+    {
+      "file": "src/services/purchases.ts",
+      "bytes": 20920,
+      "sha256": "20166152294fdaba6c351e282c1b738a47b775256677030af518a417e1da257d"
+    },
+    {
+      "file": "src/services/entitlements.ts",
+      "bytes": 2401,
+      "sha256": "ee4a9c923f94154d4a3e4809980929474ab3289929d56ee067790010fa691219"
+    },
+    {
+      "file": "src/utils/recordedNarration.ts",
+      "bytes": 14251,
+      "sha256": "9bacb11df80eea39cc677afd9660450c24a06ee765b2063730cb849d2586ecca"
+    },
+    {
+      "file": "src/utils/voiceGuide.ts",
+      "bytes": 18931,
+      "sha256": "f087d6c852415be301e04518e560dabe73cf6f5b4e91b217b936cd69502a547c"
+    },
+    {
+      "file": "src/services/notebookDrafts.ts",
+      "bytes": 1619,
+      "sha256": "7d63e63c1761ebc9c842326390ecaa1a3afa9ba11fd20015f152250c4ec43538"
+    },
+    {
+      "file": "src/services/onboardingDraft.ts",
+      "bytes": 1951,
+      "sha256": "55f585edd37f6cb6af9621b75e18b5dc974627b3a43cf163f7608a9edbd58f78"
+    },
+    {
+      "file": "src/components/Onboarding.tsx",
+      "bytes": 20388,
+      "sha256": "6c4ed805aac7b96df0f96982ae717ba31fc94eef0df81c1a7ee260c7c4fb3a43"
+    },
+    {
+      "file": "src/components/momentum/TwoMinuteStart.tsx",
+      "bytes": 4126,
+      "sha256": "e156b3661636cc203018da2023b9813b0bcccf332c4c85ac313fbb33d354e050"
+    },
+    {
+      "file": "src/components/momentum/FirstSteps.tsx",
+      "bytes": 8166,
+      "sha256": "55e735b0c09d7ff20612cc300df5386ab0313c8c9a3c1fa258a9b042e2c01fa8"
+    },
+    {
+      "file": "src/components/FocusTimerHub.tsx",
+      "bytes": 26256,
+      "sha256": "eca351bf48077bac9e89e0e03182beccb5d3a0a09290747ec703ee3284299d1c"
+    },
+    {
+      "file": "src/components/FocusLockView.tsx",
+      "bytes": 25325,
+      "sha256": "d1bf8e2c0df5349bad8c7580e6c76a9b01b84353ddb896b1c5a64f93b41acfc1"
+    },
+    {
+      "file": "src/pages/Coach.tsx",
+      "bytes": 24591,
+      "sha256": "8813ba7630205c142aeb273ca606ee07ee50e7e19662131d2c41c7ed4d810e89"
+    },
+    {
+      "file": "src/services/aiCoach.ts",
+      "bytes": 17100,
+      "sha256": "297adf69393524f6fd2599a58a68049350a21db7ec195450ddf154ebb8c19df4"
+    },
+    {
+      "file": "src/services/cloudCoach.ts",
+      "bytes": 8518,
+      "sha256": "cfe576500181c63cda717f70fe209b54b5036936adb0120a380589d9b3a2ca09"
+    },
+    {
+      "file": "src/data/guidedMeditations.ts",
+      "bytes": 23419,
+      "sha256": "c9cc5f56354654f270e6176c32ce1ee2452817bdb07194f5307b70b7e92d745d"
+    },
+    {
+      "file": "src/data/courseCatalog.ts",
+      "bytes": 141553,
+      "sha256": "a79ccef04d5d264b4f7fb3a02da47cc71f3c15b3a842e2c5b8aebdbc6decc6c3"
+    },
+    {
+      "file": "src/components/momentum/EvidenceTree.tsx",
+      "bytes": 2305,
+      "sha256": "54594d05524e4803a3c7c7163086038e19f06db0af2a910760ae20377d3c00fd"
+    },
+    {
+      "file": "src/services/notebook.ts",
+      "bytes": 19995,
+      "sha256": "dab465119b30d1aff002819e85e9989dbad000fc4ffd2a265767136f4ace6e40"
+    },
+    {
+      "file": "src/data/courses.ts",
+      "bytes": 49006,
+      "sha256": "0a4b9a210c6cf0cb3f18c171c173b26b437aeb3572267cde66452558a422a2ec"
+    }
+  ],
+  "englishMP3ClipsByteIdentical": 160,
+  "servedJavaScriptCount": 94,
+  "servedCSSCount": 7,
+  "served": [
+    {
+      "file": "dist/assets/Account-3PNkK5MB.js",
+      "status": 200,
+      "bytes": 11764,
+      "sha256": "8a06b02915d80356ab1aae91f89d864f4772b22aab48d83d1f068864d635f894"
+    },
+    {
+      "file": "dist/assets/Bank-D_zqWKDh.js",
+      "status": 200,
+      "bytes": 29776,
+      "sha256": "e968fa76a8d24ac48edcb79e9bbaafc3911694273aef9c47ddfd87b3517e05ca"
+    },
+    {
+      "file": "dist/assets/Bridge-DGnBxMlM.js",
+      "status": 200,
+      "bytes": 6529,
+      "sha256": "30d11f6602f567a01d7ea7964c800ca0ecb1973f39f4cd079d762ee96f753487"
+    },
+    {
+      "file": "dist/assets/Budget-Bl1p531R.js",
+      "status": 200,
+      "bytes": 4451,
+      "sha256": "bd1020560053d2a5f3a4bba5ec16db230818c3aea89bd1ce3356c96d5c378ca3"
+    },
+    {
+      "file": "dist/assets/Coach-6QKBAJWv.css",
+      "status": 200,
+      "bytes": 6866,
+      "sha256": "c130ce045a080dd4a2485e100a1cd56ef70dab9767e80afc7974367a4c338680"
+    },
+    {
+      "file": "dist/assets/Coach-HuFb0yGa.js",
+      "status": 200,
+      "bytes": 49373,
+      "sha256": "f6a4f0a73cc79ff763315dc25961a039ac4f9963e2deb434426816fa6b594323"
+    },
+    {
+      "file": "dist/assets/CourseCover-lK9KLafs.js",
+      "status": 200,
+      "bytes": 6182,
+      "sha256": "713ace1f1d6f9072555e76a8b451e2e36f2b0aa5594d351be8ccceeef6e39add"
+    },
+    {
+      "file": "dist/assets/Courses-BKn5AeI_.css",
+      "status": 200,
+      "bytes": 34158,
+      "sha256": "cd0bbf47752b5e89bf671bad7502a82ce36b0c3a0db4fa1ad0711a6dc5d22459"
+    },
+    {
+      "file": "dist/assets/Courses-D5qVIDKo.js",
+      "status": 200,
+      "bytes": 112197,
+      "sha256": "368e12eb725321e080bcb9565643d7218771fb35f40e4ca761f3f87dbde8c691"
+    },
+    {
+      "file": "dist/assets/DailyMicroHabits-pN67xT3s.js",
+      "status": 200,
+      "bytes": 56818,
+      "sha256": "2c5eb13139867cf6d577633235e7cdc424c08fbba7c47daee693eea1f6604180"
+    },
+    {
+      "file": "dist/assets/DreamArt-C1WlZPuA.js",
+      "status": 200,
+      "bytes": 12840,
+      "sha256": "e723ba84e6faf5b6acc5ea683bb461ebb775f0c7f5d7918bd6dffa5ec3f3a044"
+    },
+    {
+      "file": "dist/assets/Dreams-dFv9l3QK.js",
+      "status": 200,
+      "bytes": 53111,
+      "sha256": "8a1caaa1f8f249c016a36c0f9e4232b8acfb1c2fddd91c36fc0b79036dfa1e8f"
+    },
+    {
+      "file": "dist/assets/Evidence-CUbR4Kp5.js",
+      "status": 200,
+      "bytes": 5448,
+      "sha256": "b184e87000eb5bdeff66863c497a52dcf9d6bde98c7709b64f4c8a3d1dee2e89"
+    },
+    {
+      "file": "dist/assets/Focus-QmkMKmpd.js",
+      "status": 200,
+      "bytes": 873,
+      "sha256": "22f8152f4315186c43e1363e71405b4f12ebacd188ec1dd9dbb62345114fce51"
+    },
+    {
+      "file": "dist/assets/FocusTimerHub-B6CCmAaE.js",
+      "status": 200,
+      "bytes": 15211,
+      "sha256": "096686a1cb2ddc3ca761eb0ae9a34a2e4a9492d141d572521ac7759e8690b85c"
+    },
+    {
+      "file": "dist/assets/FutureSelf-DFKVgQDD.js",
+      "status": 200,
+      "bytes": 6863,
+      "sha256": "624417ee3e408a86c5550d5e0e26964d6e3780b79255f1d9002cc37e122d3e01"
+    },
+    {
+      "file": "dist/assets/Legal-CHj86DaZ.js",
+      "status": 200,
+      "bytes": 1997,
+      "sha256": "430df2001549bcbd99759bf68b638aabb97114717f10755b20aa555bad2f1d9f"
+    },
+    {
+      "file": "dist/assets/LifeScore-KfmwIyO2.js",
+      "status": 200,
+      "bytes": 5719,
+      "sha256": "1cbf089a2973e999b865a6408bbe827ba831199ab28389405f66e88c857165cf"
+    },
+    {
+      "file": "dist/assets/Me-DqpDmbjN.js",
+      "status": 200,
+      "bytes": 16306,
+      "sha256": "94269f9f3e8c0c4d763307997a25bb5330a9b77c7b70e4c1150b404dcb01d3d5"
+    },
+    {
+      "file": "dist/assets/MissionFlows-CGzGEMA4.js",
+      "status": 200,
+      "bytes": 8100,
+      "sha256": "d5b3a8ee71c6b77fea151836f36fe45555411f276f61bc1661a4b2092f00b21d"
+    },
+    {
+      "file": "dist/assets/Missions-CWANMNWw.js",
+      "status": 200,
+      "bytes": 5652,
+      "sha256": "81df0cdbd5414b61d011601297ff1e43f5af781c3c2dc1124cbdbe08f6bccaf6"
+    },
+    {
+      "file": "dist/assets/Notebook-BkOktFbP.css",
+      "status": 200,
+      "bytes": 14255,
+      "sha256": "e03ef5707da685b7e7365918ae716760e61946ebc3467736c7e9e4ca9c3d546b"
+    },
+    {
+      "file": "dist/assets/Notebook-DVkwgVkI.js",
+      "status": 200,
+      "bytes": 51754,
+      "sha256": "941f708d5b21293afd10d305323f25faaa5671cc807fce09cf0727482c4c24ab"
+    },
+    {
+      "file": "dist/assets/Progress-BouKXyl_.js",
+      "status": 200,
+      "bytes": 75840,
+      "sha256": "8377831ef53982842a9e24ecc9ef1b1335c0cc1412330934a16b5b6b8f2dec35"
+    },
+    {
+      "file": "dist/assets/PublicTwoFutures-BQckBt_3.js",
+      "status": 200,
+      "bytes": 11239,
+      "sha256": "7d78751b41cb16faaa1b9cdf5854fc76f62be22fff0296cfb9afec6fa3ea5693"
+    },
+    {
+      "file": "dist/assets/Seasons-DbdteM-h.js",
+      "status": 200,
+      "bytes": 3645,
+      "sha256": "4157334172e945435dd32a0dcf4a7ae4a1078b2bcf3b54052c1806ad49aa0080"
+    },
+    {
+      "file": "dist/assets/Settings-BBN5iLAQ.js",
+      "status": 200,
+      "bytes": 41218,
+      "sha256": "9da628a6d83162483ed8559c854ea93bb7d79b73c27a5bc3e4ae07973d8e290a"
+    },
+    {
+      "file": "dist/assets/SoundRoom-2Qq0HNE8.css",
+      "status": 200,
+      "bytes": 18772,
+      "sha256": "20563ebb3f1f4b22048df22877a13904cc95844b22cfe98233d55a5e2bde6fae"
+    },
+    {
+      "file": "dist/assets/SoundRoom-4PbUblcf.js",
+      "status": 200,
+      "bytes": 26674,
+      "sha256": "9dde922be30dc0c4f9471d04b7647d1048120e4f9fc68f8cbd7d007849eb0ef0"
+    },
+    {
+      "file": "dist/assets/Support-BWKPMtjt.js",
+      "status": 200,
+      "bytes": 3541,
+      "sha256": "9aa640ccfbcfb815a8891a4e429f048c69fbb04fea5be21c12799c8484a5cba0"
+    },
+    {
+      "file": "dist/assets/Today-CE5XfpKh.js",
+      "status": 200,
+      "bytes": 140649,
+      "sha256": "018a709ece595569dd5f13554098ca6d77b092bc903c590d94abab93a558275c"
+    },
+    {
+      "file": "dist/assets/Today-D76Bu5Fr.css",
+      "status": 200,
+      "bytes": 4803,
+      "sha256": "5efc5db34efe27058e8c3c8be002710c4819470eabc278f5e2d62de5d5878b55"
+    },
+    {
+      "file": "dist/assets/Tools-BHV8Kz_d.js",
+      "status": 200,
+      "bytes": 5598,
+      "sha256": "1dd90fcccb5c663b02b4aae09990bd249a228a02800dd6a5186dff6ee9bf2cb8"
+    },
+    {
+      "file": "dist/assets/TwoFutures-DGjO1YlO.js",
+      "status": 200,
+      "bytes": 19689,
+      "sha256": "26ef7a2efb4e4e23541c2a41ffb65e5027795a229c088960ab145c459e8d51b4"
+    },
+    {
+      "file": "dist/assets/Upgrade-BqeC1L_F.js",
+      "status": 200,
+      "bytes": 19677,
+      "sha256": "1b7c7b7463bdc21098b57767e28063871defb4e7bc67e6f53491231fb9d7c374"
+    },
+    {
+      "file": "dist/assets/account-67xziiZI.js",
+      "status": 200,
+      "bytes": 2946,
+      "sha256": "4b36f5b410a55c3b29d1778a91364733f58534f56fb927f6acb1e91cb3a5b6a1"
+    },
+    {
+      "file": "dist/assets/aiCoach.worker-C60CQ1Xm.js",
+      "status": 200,
+      "bytes": 6039341,
+      "sha256": "2911a3e0a34aff2f379a4c39914cd5321e83b48fb0c190e04e9813dd9d19559a"
+    },
+    {
+      "file": "dist/assets/archive-DucR-pix.js",
+      "status": 200,
+      "bytes": 427,
+      "sha256": "30a97406390357c9ff8214d2804c0e8d1d53e65579fd6d2e45ae4a09f5e2405a"
+    },
+    {
+      "file": "dist/assets/arrow-up-right-C_aPLH6Q.js",
+      "status": 200,
+      "bytes": 341,
+      "sha256": "d9272c7e21d6f50906e0ad164fd037a4d18631c813dacf0e570ef7a0abe2d3ef"
+    },
+    {
+      "file": "dist/assets/calendar-days-Dp0d1vJc.js",
+      "status": 200,
+      "bytes": 668,
+      "sha256": "b13008028a5e547cea72d5d1bcb1207b7750349ca7327600c09bb0c888c04983"
+    },
+    {
+      "file": "dist/assets/charts-Bzd-XkHo.js",
+      "status": 200,
+      "bytes": 431582,
+      "sha256": "2d7b9b31411e27fb1b9b31b24e3ed0884969780d21dbe5da936cf583f3e7f820"
+    },
+    {
+      "file": "dist/assets/chevron-right-Ca7QdoIc.js",
+      "status": 200,
+      "bytes": 304,
+      "sha256": "903b9de5210a4c0c790894060e68cb15436e741029ec347963594013d3e48f4d"
+    },
+    {
+      "file": "dist/assets/circle-check-DvP3xnIW.js",
+      "status": 200,
+      "bytes": 352,
+      "sha256": "03c007815497a8e266cedc538fb2de2dc67575b2ba8f5ff545dfe28c4d008ffb"
+    },
+    {
+      "file": "dist/assets/courseEntryCopy-ClIZWujk.js",
+      "status": 200,
+      "bytes": 1345,
+      "sha256": "5c956cd2c43cf451c4bbe07a796a00e2623cc2d01d9fdad99afc9976c6462d4e"
+    },
+    {
+      "file": "dist/assets/courses-CKtnra3s.js",
+      "status": 200,
+      "bytes": 2510751,
+      "sha256": "065e50aeb656d6a99eba1fb1ea1091bd330fdf9be272670136d23a158ce49d6b"
+    },
+    {
+      "file": "dist/assets/de-FmFgRqLi.js",
+      "status": 200,
+      "bytes": 33,
+      "sha256": "49751e83c2dabf8a8ead01b84ca4a250f0f305b4845f33a0cd4ffe880e409d63"
+    },
+    {
+      "file": "dist/assets/es-qQNFzrdv.js",
+      "status": 200,
+      "bytes": 573845,
+      "sha256": "92990cb37ff89f11df72023a4ab7d593b65d633604a335732deda681614f54d2"
+    },
+    {
+      "file": "dist/assets/fr-FmFgRqLi.js",
+      "status": 200,
+      "bytes": 33,
+      "sha256": "49751e83c2dabf8a8ead01b84ca4a250f0f305b4845f33a0cd4ffe880e409d63"
+    },
+    {
+      "file": "dist/assets/genai-DNIGCYRr.js",
+      "status": 200,
+      "bytes": 409926,
+      "sha256": "8a6e1b7ad484e6f05eb9a1a9c350f45654173834e8a5954adcb6822f390bc2b4"
+    },
+    {
+      "file": "dist/assets/growth-CtfcX3mW.js",
+      "status": 200,
+      "bytes": 2073,
+      "sha256": "18302f2287d962e3923bb4a8924f7e79d99b1a95f0bae11a29dc54e4174ecf63"
+    },
+    {
+      "file": "dist/assets/headphones-Cl0667k9.js",
+      "status": 200,
+      "bytes": 411,
+      "sha256": "522aebaa6ce8ed978f35828f08c003dea7e3c042a564192a4c3542958e61fb54"
+    },
+    {
+      "file": "dist/assets/index-BD7SNJOJ.css",
+      "status": 200,
+      "bytes": 110586,
+      "sha256": "d4273caa7b5def85ab9338b27d53a7767168e2a55aba942d9dbb7a8b4d0fb57f"
+    },
+    {
+      "file": "dist/assets/index-BMm9S-UO.js",
+      "status": 200,
+      "bytes": 5959047,
+      "sha256": "fdea32eebf4492e73dd3c40dd045456a6cb22e10ef2d522a1c6769b1644782cd"
+    },
+    {
+      "file": "dist/assets/index-BdL_ka3C.js",
+      "status": 200,
+      "bytes": 8719,
+      "sha256": "3215d32fb77a63ef9ec3fec96c30d41ef594f07cf0bb9930b5ca10618fea4c9a"
+    },
+    {
+      "file": "dist/assets/index-Bv_6RSaL.js",
+      "status": 200,
+      "bytes": 715,
+      "sha256": "62cf65f45ee0c2993acb928459364874371f9067cfc856909b7ad997fefef5a7"
+    },
+    {
+      "file": "dist/assets/index-CGNcvf-V.js",
+      "status": 200,
+      "bytes": 380,
+      "sha256": "d32df0dd84d18d3d9c4ab8bd998bb9f90507eeef7eae1511861e6a53d43c672d"
+    },
+    {
+      "file": "dist/assets/index-CUPRjJyF.js",
+      "status": 200,
+      "bytes": 669,
+      "sha256": "0d31a29a48a1f63d0a37adf216ecd4ceeaaa0ea633b725b579ba350f42748f75"
+    },
+    {
+      "file": "dist/assets/index-Cvg2WzED.js",
+      "status": 200,
+      "bytes": 951679,
+      "sha256": "9a3e7544c3b238a5cb42e496dcd7dfad3c1d832dfc25a322efb97d207bc922cf"
+    },
+    {
+      "file": "dist/assets/index-CwU6NZcE.js",
+      "status": 200,
+      "bytes": 475,
+      "sha256": "2707941c9c4ca55b88fddb6c653e0160afc0501d40562284d98e114b0361a549"
+    },
+    {
+      "file": "dist/assets/index-DwGIRT4I.js",
+      "status": 200,
+      "bytes": 448,
+      "sha256": "4497210bbf425e150360055c625a603ed19567c0e14939dd861a5932b567cfe1"
+    },
+    {
+      "file": "dist/assets/it-FmFgRqLi.js",
+      "status": 200,
+      "bytes": 33,
+      "sha256": "49751e83c2dabf8a8ead01b84ca4a250f0f305b4845f33a0cd4ffe880e409d63"
+    },
+    {
+      "file": "dist/assets/lock-keyhole-BhWwTf2E.js",
+      "status": 200,
+      "bytes": 429,
+      "sha256": "b57c2f0c7833f8f09828802f96d976776f2ef116d824beedbc47d88e6aa0e636"
+    },
+    {
+      "file": "dist/assets/mail-CNADbJjU.js",
+      "status": 200,
+      "bytes": 387,
+      "sha256": "0e761afc282b2da60704bfd14917a9bc0b47e06b02a56c6fdada071cf470137b"
+    },
+    {
+      "file": "dist/assets/media-2mgEiOLR.js",
+      "status": 200,
+      "bytes": 23753,
+      "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+    },
+    {
+      "file": "dist/assets/moon-HWUupe6d.js",
+      "status": 200,
+      "bytes": 391,
+      "sha256": "e5550ea3bd2811299bad93e9cc3675aa9228d6cfbefbbddc5ff8caf70aaf2094"
+    },
+    {
+      "file": "dist/assets/motion-HNvQpnN_.js",
+      "status": 200,
+      "bytes": 128884,
+      "sha256": "3b8beefe6f5abed46ca686013afdcd2ea9c013557b337d8e606719a91894be70"
+    },
+    {
+      "file": "dist/assets/music-CBqvnlXt.js",
+      "status": 200,
+      "bytes": 751,
+      "sha256": "a4eeb33f4cd7f805c6a1d1386dba1cc5ec442d65e0cb384b72107d72c7733012"
+    },
+    {
+      "file": "dist/assets/pen-line-ugB9WsKp.js",
+      "status": 200,
+      "bytes": 451,
+      "sha256": "1b3fd14060d0306adb15b4b8aedce4466e470a1f92758806a12dfc2f907bda7f"
+    },
+    {
+      "file": "dist/assets/pencil-ulj94xCb.js",
+      "status": 200,
+      "bytes": 450,
+      "sha256": "89b2c7681e14015f48093f0148df5c60ead71ae43dc9b6596c8925d9533680ac"
+    },
+    {
+      "file": "dist/assets/purchaseIdentityBinding-tFcjnp2u.js",
+      "status": 200,
+      "bytes": 776,
+      "sha256": "0be60da02104ddc2cf5c35fd01c384f90c63a4ca056336be444d1aae5dc7c6a9"
+    },
+    {
+      "file": "dist/assets/purchases-Ck6UEDGP.js",
+      "status": 200,
+      "bytes": 10508,
+      "sha256": "27c1657b3842fdbfff0b49bcd3770bad417496c066ca9eaf759cfc42b3690d98"
+    },
+    {
+      "file": "dist/assets/react-5GCfeWye.js",
+      "status": 200,
+      "bytes": 229422,
+      "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+    },
+    {
+      "file": "dist/assets/refresh-cw-BjM0kHlz.js",
+      "status": 200,
+      "bytes": 495,
+      "sha256": "edca79c291010abf41be6f9f2b3e4626cbf51e0de88d2611f2d374e82f971571"
+    },
+    {
+      "file": "dist/assets/rewards-ypITM6qL.js",
+      "status": 200,
+      "bytes": 4172,
+      "sha256": "5d06ebecfac9cd232eb0a5883997e0be78329e4bfe0c2399005322127cac217a"
+    },
+    {
+      "file": "dist/assets/rotate-ccw-Coo_9IDA.js",
+      "status": 200,
+      "bytes": 374,
+      "sha256": "6a579048b53f0880592558ff6da662f959e1e4c5d77963897710eb9ad6d570fa"
+    },
+    {
+      "file": "dist/assets/route-pLowQ3ws.js",
+      "status": 200,
+      "bytes": 428,
+      "sha256": "4a850ac2710415ce3692ae367435b2b276c8712f83b14a820b734fb6eebd68f5"
+    },
+    {
+      "file": "dist/assets/ru-FmFgRqLi.js",
+      "status": 200,
+      "bytes": 33,
+      "sha256": "49751e83c2dabf8a8ead01b84ca4a250f0f305b4845f33a0cd4ffe880e409d63"
+    },
+    {
+      "file": "dist/assets/search-DsD6Jt0e.js",
+      "status": 200,
+      "bytes": 348,
+      "sha256": "307e0a2174448c4d1466be8f99023502aa3592d11e3335e4791c7fb70adb7906"
+    },
+    {
+      "file": "dist/assets/share-2-D8aO141A.js",
+      "status": 200,
+      "bytes": 531,
+      "sha256": "175a31433790a4437dc524d27da087be642bffa5f321f320ea733bff3c56be83"
+    },
+    {
+      "file": "dist/assets/shuffle-CVqTYEpH.js",
+      "status": 200,
+      "bytes": 557,
+      "sha256": "cf0a884c8ee31e880cc06f1d567a456164c18442d069a2742cfa1affcbf6e89c"
+    },
+    {
+      "file": "dist/assets/sparkles-f0F0OoCo.js",
+      "status": 200,
+      "bytes": 668,
+      "sha256": "3e1568d371c8385db5c91820e75cc923c815804c5851ee4c124d1df5687c7af5"
+    },
+    {
+      "file": "dist/assets/square-CAI_ncb6.js",
+      "status": 200,
+      "bytes": 321,
+      "sha256": "f1e4c3e0487d6ead47a92751167e67e063e38467e1e52fb3ea676dc890c9f17d"
+    },
+    {
+      "file": "dist/assets/sun-moon-DMmu-2V5.js",
+      "status": 200,
+      "bytes": 565,
+      "sha256": "820545e4af85385f14e068621f407dedd324fe3f2c137a23908f8dcf67e4eb71"
+    },
+    {
+      "file": "dist/assets/supabase--wUpN4Ei.js",
+      "status": 200,
+      "bytes": 228140,
+      "sha256": "4eabff7c823396ed92c53d7ef1e3048817d69196726a12688e7e62483013d1dd"
+    },
+    {
+      "file": "dist/assets/support-Bo24JgXT.js",
+      "status": 200,
+      "bytes": 11791,
+      "sha256": "267ce0dba2bf35550f86656c97ecedf4105dcce27daffd6470aa10097383e290"
+    },
+    {
+      "file": "dist/assets/timer-DH0vc_zs.js",
+      "status": 200,
+      "bytes": 412,
+      "sha256": "aaf7c45c4305243b2522062c8937ee3bf78dc1d24b5232052882abfa2f991be4"
+    },
+    {
+      "file": "dist/assets/tr-COHWLD3Y.js",
+      "status": 200,
+      "bytes": 561390,
+      "sha256": "2732c892675ea69e982a265497e037025ce1e8cc81a99d1cf3d4c07333bee939"
+    },
+    {
+      "file": "dist/assets/trash-2-D95NDIW9.js",
+      "status": 200,
+      "bytes": 502,
+      "sha256": "24837bfb573f3e552e1212f8b093166f76e02e8aa36852aca3d42f0f0d1c24e7"
+    },
+    {
+      "file": "dist/assets/trending-up-CFKiF5Bh.js",
+      "status": 200,
+      "bytes": 694,
+      "sha256": "63f303687e25d37955df1ab78c806187667551f69dfd1d4c56796a4bf6241ec2"
+    },
+    {
+      "file": "dist/assets/useCloudState-BdwOUa2g.js",
+      "status": 200,
+      "bytes": 200,
+      "sha256": "da15f8dcfd3730915f010652031518748b9de215323141404bb414adc777f9e4"
+    },
+    {
+      "file": "dist/assets/user-round-EMWmd5Im.js",
+      "status": 200,
+      "bytes": 356,
+      "sha256": "02beb81abebe5a36163b3bfe8fff32a0946c8130779237b80934f176a4c510a8"
+    },
+    {
+      "file": "dist/assets/waves-DU0KNezY.js",
+      "status": 200,
+      "bytes": 602,
+      "sha256": "15fa719ea2075cee8dc39b7dbf5b6d57d50407c24ee5f35b90113335bf055adb"
+    },
+    {
+      "file": "dist/assets/web-BXihzfXc.js",
+      "status": 200,
+      "bytes": 899,
+      "sha256": "61461c14182ac87f0d75f7ea7370912107098a81efb4963497a48b6006465bae"
+    },
+    {
+      "file": "dist/assets/web-BfS3_SXw.js",
+      "status": 200,
+      "bytes": 10186,
+      "sha256": "ccd801d1abf06dd8bcd3c57c443018b8b30678bda831c64b8bd6ebed8bcec822"
+    },
+    {
+      "file": "dist/assets/web-CbraA3OF.js",
+      "status": 200,
+      "bytes": 4648,
+      "sha256": "0e49cca97bb2f68f6fb544b58daf2813dafd25199ba0f61ca16008f05ce46f31"
+    },
+    {
+      "file": "dist/assets/web-DbyV-29C.js",
+      "status": 200,
+      "bytes": 1055,
+      "sha256": "df575f19e062153a7a970b41cce7de58db5310c9dc0554bc299dc565f58d1229"
+    },
+    {
+      "file": "dist/assets/web-wWOmXwHF.js",
+      "status": 200,
+      "bytes": 176,
+      "sha256": "30717ec1f32b8122acd3254bbae368341051d98eb8cfd448fa0b9531cdff621e"
+    },
+    {
+      "file": "dist/assets/wind-PqUPliRF.js",
+      "status": 200,
+      "bytes": 420,
+      "sha256": "a535de3f7c6eb457837a100e6b8de47475f08dd1ccf87eaa1095b829fb4bcca8"
+    },
+    {
+      "file": "dist/assets/workingSurfaces-C_QYHkGt.css",
+      "status": 200,
+      "bytes": 11937,
+      "sha256": "4dec722fe0a469df625ed536ff93a18a9e1dfc7a8dd945eaae13e4670ab576cb"
+    },
+    {
+      "file": "dist/sw.js",
+      "status": 200,
+      "bytes": 6485,
+      "sha256": "51e9575be78bfaa1cf9d2de7a461d819c6fae141cbfe196b4985c34aa04511ef"
+    },
+    {
+      "file": "dist/theme-init.js",
+      "status": 200,
+      "bytes": 740,
+      "sha256": "bcfb6eb36d90eb505920c80e174d179045456b548e1accff53bf56b19a44caa5"
+    }
+  ],
+  "commands": [
+    {
+      "kind": "focus-coach",
+      "exitCode": 1,
+      "commandReceipt": "focus-coach/command-receipt.json",
+      "logSha256": "bb978a3f45de86148edc6d63887a2f70a651d38401f1bb1b2637f5b0965bfa89"
+    },
+    {
+      "kind": "focus-coach-corrected",
+      "exitCode": 0,
+      "commandReceipt": "focus-coach-corrected/command-receipt.json",
+      "logSha256": "9f00ecedfcfa01744b34c9b8ed0df3263095e52b9471b80a0dbe5cddad6c7e0a"
+    },
+    {
+      "kind": "sound",
+      "exitCode": 0,
+      "commandReceipt": "sound/command-receipt.json",
+      "logSha256": "8739443f87a104a49f766c2850a56e1abf531bbc9f7e09b3325e84fffe3c2aee"
+    },
+    {
+      "kind": "today",
+      "exitCode": 1,
+      "commandReceipt": "today/command-receipt.json",
+      "logSha256": "9a98275b90eed3ec11ff64a807662dd353f52aded087fe2c8627cfb187e45f5c"
+    },
+    {
+      "kind": "today-corrected",
+      "exitCode": 0,
+      "commandReceipt": "today-corrected/command-receipt.json",
+      "logSha256": "17338d408bff46c4f9faee930014bf144e5a3fa406241794ca147d5cf84e9dda"
+    }
+  ],
+  "parentAggregateLogVerified": {
+    "bytes": 76418,
+    "sha256": "75a60c1d508c657dd755763910f4fe0e3fb06d912e300697dcf77d269f35b553",
+    "passed": 597,
+    "failed": 0
+  },
+  "readersClosed": true,
+  "limits": [
+    "Fresh focused runs: Sound8, correctedToday8, correctedFocusCoach4. Initial two selector failures preserved separately.",
+    "Protected prior narration/course/Notebook/calendar/dialog behaviors are carried as prior executed evidence with source continuity, not newly executed tests.",
+    "Compiled chunk bytes differ with content-addressed references; no old/new compiled-byte equality claim.",
+    "Visual Breathe initial-fold sliver remains a parent-reported blocker requiring a separate CSS attempt; art-dependent material HOLD remains."
+  ]
+}

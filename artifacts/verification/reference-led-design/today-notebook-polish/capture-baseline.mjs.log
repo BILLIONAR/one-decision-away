@@ -1,0 +1,44 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { createHash } from 'node:crypto';
+import { chromium } from '/workspace/oda-reference-redesign/node_modules/playwright/index.mjs';
+import { getInitialDemoState } from '/workspace/oda-reference-redesign/src/services/repository.ts';
+
+const repo = '/workspace/oda-reference-redesign';
+const out = process.env.ODA_BASELINE_OUT || '/workspace/scratch/oda-reference-redesign/polish/baseline-attempt02';
+fs.mkdirSync(out, { recursive: true });
+const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+const oldReceipt = JSON.parse(fs.readFileSync(repo+'/artifacts/verification/reference-led-design/hybrid-reference-ui/projection-fix/final/build-receipt.json','utf8'));
+if (!oldReceipt.build.every(item => {const p=repo+'/'+item.file;return fs.existsSync(p)&&fs.statSync(p).size===item.bytes&&hash(fs.readFileSync(p))===item.sha256;})) throw new Error('Old compiled build does not match receipt');
+const base='http://127.0.0.1:4193/one-decision-away/';
+const report={synthetic:true,compiledSource:oldReceipt.sourceCommit,buildFilesMatched:oldReceipt.build.length,startedAtUtc:new Date().toISOString(),cases:[],externalBlocked:[],pageErrors:[]};
+const browser=await chromium.launch({executablePath:'/usr/bin/chromium'});
+try {
+ for (const [locale,width] of [['en',1440],['es',1440],['en',320]]) {
+  const context=await browser.newContext({viewport:{width,height:width===1440?1000:844},reducedMotion:'reduce',serviceWorkers:'block'});
+  await context.route('**/*',route=>{const u=new URL(route.request().url());if(u.origin===new URL(base).origin)return route.continue();report.externalBlocked.push(u.origin+u.pathname);return route.abort();});
+  const seed=getInitialDemoState(),now=new Date().toISOString(),today=now.slice(0,10);
+  Object.assign(seed.profile,{displayName:'Synthetic polish review',onboardingStep:'completed',locale,theme:'light',firstOpenedAt:now,soundMuted:true,nudgesEnabled:false,dailyWisdomEnabled:false});
+  seed.missions=[{id:'polish-active',userId:seed.profile.id,title:'Read two pages',type:'daily_quest',area:'Work',difficulty:'easy',isOneDecision:true,status:'active',scheduledFor:today,createdAt:now,plan:{obstacle:'reach for my phone',ifThen:'read NASA notes with iPhone nearby',plannedAt:now}}];
+  seed.dreamJournal=[{id:'polish-entry',userId:seed.profile.id,title:'Synthetic saved entry',content:'Owned synthetic record for polish checks.',createdAt:now}];
+  await context.addInitScript(seed=>{localStorage.setItem('one_decision_away_app_data_v1',JSON.stringify(seed));localStorage.setItem('oda_locale',seed.profile.locale);localStorage.setItem('oda_theme','light');},seed);
+  const page=await context.newPage();page.on('pageerror',e=>report.pageErrors.push(e.message));
+  const c={locale,width,states:[]};
+  for(const route of ['today','notebook']) {
+   await page.goto(base+(route==='today'?'#/app':'#/app/notebook'));
+   try {await page.locator(route==='today'?'.oda-decision-plan':'#notebook-journal-content').waitFor({timeout:10000});}
+   catch(error){await page.screenshot({path:out+'/failed-state.png',animations:'disabled'});fs.writeFileSync(out+'/failed-state.txt',await page.locator('body').innerText());throw error;}
+   await page.evaluate(()=>document.fonts.ready);
+   await page.waitForTimeout(150);
+   const file=`${locale}-${width}-${route}.png`;await page.screenshot({path:out+'/'+file,animations:'disabled'});
+   const observed=await page.evaluate(route=>{
+    const rect=e=>{const r=e?.getBoundingClientRect();return r?{x:r.x,y:r.y,width:r.width,height:r.height,bottom:r.bottom,right:r.right}:null;};
+    return route==='today'?{decision:document.querySelector('.oda-decision-text')?.textContent,plan:document.querySelector('.oda-decision-plan')?.textContent}: {stats:[...document.querySelectorAll('.oda-notebook-stat')].map(e=>e.textContent),calendar:rect(document.querySelector('.oda-notebook-calendar-lead')),preview:rect(document.querySelector('.oda-hybrid-entry-preview')),weekRegion:rect(document.querySelector('.oda-notebook-week-region')),todayButton:rect(document.querySelector('.oda-notebook-week-strip [aria-current="date"]'))};
+   },route);
+   c.states.push({route,file,bytes:fs.statSync(out+'/'+file).size,sha256:hash(fs.readFileSync(out+'/'+file)),observed});
+   if(route==='notebook'&&width===1440){await page.locator('#notebook-journal-content').fill('Unsaved synthetic draft');await page.locator('#notebook-journal-search').fill('no-match-synthetic-query');const file=`${locale}-${width}-no-match.png`;await page.screenshot({path:out+'/'+file,animations:'disabled'});c.states.push({route:'no-match',file,bytes:fs.statSync(out+'/'+file).size,sha256:hash(fs.readFileSync(out+'/'+file)),observed:await page.evaluate(()=>({draft:document.querySelector('#notebook-journal-content').value,noMatchText:document.body.innerText.includes('No entries match'),clearButtons:[...document.querySelectorAll('button')].filter(e=>['Clear filters','Borrar filtros'].includes(e.textContent.trim())).map(e=>({text:e.textContent,y:e.getBoundingClientRect().y}))}))});}
+  }
+  report.cases.push(c);await context.close();
+ }
+} finally {await browser.close();report.finishedAtUtc=new Date().toISOString();fs.writeFileSync(out+'/report.json',JSON.stringify(report,null,2)+'\n');}
+console.log(JSON.stringify({compiledSource:report.compiledSource,buildFilesMatched:report.buildFilesMatched,cases:report.cases,pageErrors:report.pageErrors}));

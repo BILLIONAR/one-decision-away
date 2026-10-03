@@ -1,0 +1,16 @@
+import hashlib,json,shutil
+from pathlib import Path
+root=Path('/workspace/oda-reference-redesign');scratch=Path('/workspace/scratch/oda-reference-redesign/scoped-layout-repair');dest=root/'artifacts/verification/reference-led-design/scoped-layout-repair'
+assert not dest.exists(), 'Never replace an existing review packet'
+dest.mkdir();mapping=[]
+for src in sorted(scratch.rglob('*')):
+ if not src.is_file() or src.suffix=='.pyc' or '__pycache__' in src.parts:continue
+ rel=src.relative_to(scratch)
+ if rel.parts[0] in ('packaging','pushed-review-verification.json'):continue
+ target=dest/rel;original=target
+ if target.suffix in ('.mjs','.py','.tsx','.ts','.diff'):target=target.with_name(target.name+'.log')
+ target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(src,target)
+ data=src.read_bytes();assert data==target.read_bytes()
+ mapping.append({'scratch':str(rel),'review':str(target.relative_to(dest)),'renamed':original!=target,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()})
+(dest/'archive-name-map.json').write_text(json.dumps(mapping,indent=2)+'\n')
+print(json.dumps({'copiedFiles':len(mapping),'dest':str(dest)}))

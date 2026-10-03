@@ -1,0 +1,772 @@
+✖ a matching current durable document uploads and records current plus historical confirmation (19.628189ms)
+✖ a stale rendered profile payload cannot roll acknowledged cloud work backward (11.040166ms)
+✖ a stale rendered notebook payload cannot roll acknowledged cloud work backward (8.934969ms)
+✖ a stale rendered futureSelf payload cannot roll acknowledged cloud work backward (3.862277ms)
+✖ missing authoritative local record rejects a push before any cloud query (6.475035ms)
+✖ invalid-json authoritative local record rejects a push before any cloud query (3.027984ms)
+✖ invalid-document authoritative local record rejects a push before any cloud query (7.275866ms)
+✖ a course-only stale caller uses the existing latest-course normalization and can upload (6.291847ms)
+✔ an ordinary repository save invalidates current confirmation immediately and retains history (3.030518ms)
+✔ a durable Notebook action invalidates confirmation without waiting for its debounce (5.200614ms)
+✔ a durable course save invalidates confirmation without requiring the AppProvider event listener (2.165679ms)
+✔ a save suppressed by its account guard still makes the current durable document dirty (3.727975ms)
+✖ a failed durable repository write preserves previous current confirmation (3.311784ms)
+✖ a failed durable notebook write preserves previous current confirmation (2.735963ms)
+✖ a failed durable course write preserves previous current confirmation (5.542963ms)
+✖ dirty startup does not automatically restore the same acknowledged cloud baseline over newer device work (6.24832ms)
+✔ an old in-flight upload retains its remote baseline while the latest durable document remains dirty (3.957142ms)
+✖ the latest queued durable payload updates after an older in-flight upload without reverting cloud or device (4.178466ms)
+✖ confirmation bootstrap after a clean reload is tied to the actual persisted document (2004.631622ms)
+✖ confirmation bootstrap after a dirty reload preserves device work and historical cloud time (4.79544ms)
+✔ a coherently hydrated external-tab edit cannot inherit another tab’s current-document confirmation (3.557045ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 6
+ℹ fail 15
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2358.401587
+
+✖ failing tests:
+
+test at tests/cloud-current-record.test.ts:1:5643
+✖ a matching current durable document uploads and records current plus historical confirmation (19.628189ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:116:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:6157
+✖ a stale rendered profile payload cannot roll acknowledged cloud work backward (11.040166ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:129:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:6157
+✖ a stale rendered notebook payload cannot roll acknowledged cloud work backward (8.934969ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:129:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:6157
+✖ a stale rendered futureSelf payload cannot roll acknowledged cloud work backward (3.862277ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:129:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:6977
+✖ missing authoritative local record rejects a push before any cloud query (6.475035ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   'A'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:141:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'A' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:6977
+✖ invalid-json authoritative local record rejects a push before any cloud query (3.027984ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   'A'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:141:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'A' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:6977
+✖ invalid-document authoritative local record rejects a push before any cloud query (7.275866ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:140:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:7716
+✖ a course-only stale caller uses the existing latest-course normalization and can upload (6.291847ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:153:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:10511
+✖ a failed durable repository write preserves previous current confirmation (3.311784ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:194:41)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:10511
+✖ a failed durable notebook write preserves previous current confirmation (2.735963ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:194:41)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:10511
+✖ a failed durable course write preserves previous current confirmation (5.542963ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:194:41)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:11367
+✖ dirty startup does not automatically restore the same acknowledged cloud baseline over newer device work (6.24832ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + {
+  +   archivedMarketItemIds: [],
+  +   archivedMarketRecords: [],
+  +   budget: {
+  +     business: 20,
+  +     education: 10,
+  +     giving: 5,
+  +     health: 10,
+  +     housing: 30,
+  +     lifestyle: 5,
+  +     savings: 10,
+  +     travel: 10
+  +   },
+  +   checkIns: [],
+  +   completions: [],
+  +   courseProgress: {
+  +     lessons: {},
+  +     version: 1
+  +   },
+  +   customHabitCategories: [
+  +     {
+  +       color: '#6366f1',
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       description: 'Uninterrupted deep work sprint blocks & distraction defense',
+  +       icon: 'Zap',
+  +       id: 'custom-cat-deep-focus',
+  +       name: 'Deep Focus'
+  +     },
+  +     {
+  +       color: '#e11d48',
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       description: 'Generative thinking, design ideation, writing & rapid prototyping',
+  +       icon: 'Palette',
+  +       id: 'custom-cat-creativity',
+  +       name: 'Creativity'
+  +     }
+  +   ],
+  +   customMarketItems: [],
+  +   dailyPrimaryGoals: [],
+  +   dreamJournal: [],
+  +   futureSelf: {
+  +     boundaries: [],
+  +     coreValues: [],
+  +     dailyStandards: [],
+  +     habits: [],
+  +     identityStatement: '',
+  +     noLongerDoes: [],
+  +     oldSelfBehaviors: [],
+  +     oldSelfExcuses: [],
+  +     oldSelfLabels: [],
+  +     oldSelfPatterns: [],
+  +     skills: [],
+  +     title: '',
+  +     updatedAt: '2026-10-02T11:37:40.767Z'
+  +   },
+  +   goals: [
+  +     {
+  +       area: 'Work',
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       description: 'Create an independent digital service generating reliable monthly cash flow & sovereignty.',
+  +       id: 'goal-seed-1',
+  +       status: 'active',
+  +       targetDate: '2026-12-31',
+  +       title: 'Build a sustainable online income',
+  +       userId: 'demo-user'
+  +     },
+  +     {
+  +       area: 'Health',
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       description: 'Build sustained cellular energy, VO2 max capacity, and morning metabolic alertness.',
+  +       id: 'goal-seed-2',
+  +       status: 'active',
+  +       targetDate: '2026-11-30',
+  +       title: 'Feel strong and healthy',
+  +       userId: 'demo-user'
+  +     },
+  +     {
+  +       area: 'Personal Meaning',
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       description: 'Guard attention against reactive digital noise, building daily cognitive discipline.',
+  +       id: 'goal-seed-3',
+  +       status: 'active',
+  +       targetDate: '2026-12-31',
+  +       title: 'Focus on what matters',
+  +       userId: 'demo-user'
+  +     },
+  +     {
+  +       area: 'Money',
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       description: 'Systematically fund dream purchases and eliminate consumer impulse spending.',
+  +       id: 'goal-seed-4',
+  +       status: 'active',
+  +       targetDate: '2027-06-30',
+  +       title: 'Save for real dreams',
+  +       userId: 'demo-user'
+  +     }
+  +   ],
+  +   inVisionItemIds: [],
+  +   lastActiveDateKey: '2026-10-02',
+  +   lastDailyResetTimestamp: '2026-10-02T11:37:40.767Z',
+  +   lifeScores: [],
+  +   microHabits: [
+  +     {
+  +       bestStreak: 0,
+  +       category: 'Health',
+  +       completedDates: [],
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       description: 'First thing after waking, before coffee.',
+  +       durationMinutes: 5,
+  +       goalId: 'goal-seed-2',
+  +       id: 'habit-seed-1',
+  +       streakCount: 0,
+  +       title: 'Drink a glass of water'
+  +     },
+  +     {
+  +       bestStreak: 0,
+  +       category: 'Mindset',
+  +       completedDates: [],
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       description: 'A book, not a feed.',
+  +       durationMinutes: 3,
+  +       goalId: 'goal-seed-3',
+  +       id: 'habit-seed-2',
+  +       streakCount: 0,
+  +       title: 'Read for 10 minutes'
+  +     },
+  +     {
+  +       bestStreak: 0,
+  +       category: 'Discipline',
+  +       completedDates: [],
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       description: 'Start the day on your own terms.',
+  +       durationMinutes: 5,
+  +       goalId: 'goal-seed-3',
+  +       id: 'habit-seed-6',
+  +       streakCount: 0,
+  +       title: 'No phone for the first 30 minutes'
+  +     }
+  +   ],
+  +   missions: [
+  +     {
+  +       area: 'Money',
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       difficulty: 'easy',
+  +       estimatedMinutes: 20,
+  +       id: 'mission-seed-2',
+  +       isOneDecision: false,
+  +       recurring: 'weekly',
+  +       status: 'active',
+  +       title: "Review this week's spending",
+  +       type: 'weekly_mission',
+  +       userId: 'demo-user'
+  +     },
+  +     {
+  +       area: 'Health',
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       difficulty: 'easy',
+  +       estimatedMinutes: 30,
+  +       id: 'mission-seed-3',
+  +       isOneDecision: false,
+  +       recurring: 'daily',
+  +       status: 'active',
+  +       title: 'Move your body for 30 minutes',
+  +       type: 'daily_quest',
+  +       userId: 'demo-user'
+  +     },
+  +     {
+  +       area: 'Work',
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       difficulty: 'hard',
+  +       estimatedMinutes: 120,
+  +       id: 'mission-seed-5',
+  +       isOneDecision: false,
+  +       status: 'active',
+  +       title: 'Finish one thing you have been putting off',
+  +       type: 'monthly_boss_fight',
+  +       userId: 'demo-user'
+  +     }
+  +   ],
+  +   notebook: {
+  +     activityDays: [],
+  +     affirmations: [],
+  +     entries: [],
+  +     gratitudeDays: [],
+  +     practices369: [],
+  +     revision: 0,
+  +     version: 1
+  +   },
+  +   offlineQueue: [],
+  +   profile: {
+  +     createdAt: '2026-10-02T11:37:40.767Z',
+  +     dailyWisdomEnabled: true,
+  +     dailyWisdomTime: '08:30',
+  +     displayName: 'Current durable writing',
+  +     firstOpenedAt: '2026-10-02T11:37:40.767Z',
+  +     focusScreenPulseEnabled: true,
+  +     focusTabBlinkEnabled: true,
+  +     id: 'demo-user',
+  +     lastOpenedAt: '2026-10-02T11:37:40.767Z',
+  +     locale: 'en',
+  +     onboardingStep: 'welcome',
+  +     reminderTime: '08:00',
+  +     soundMuted: false,
+  +     theme: 'system'
+  +   },
+  +   purchases: [],
+  +   realityBridges: [],
+  +   seasonProgress: [
+  +     {
+  +       completedMissionIds: [],
+  +       isCompleted: false,
+  +       seasonId: 'season-finish'
+  +     }
+  +   ],
+  +   subscription: {
+  +     cancelAtPeriodEnd: false,
+  +     plan: 'free',
+  +     status: 'active',
+  +     updatedAt: '2026-10-02T11:37:40.767Z',
+  +     userId: 'demo-user'
+  +   },
+  +   transactions: [
+  +     {
+  +       amount: 250,
+  +       createdAt: '2026-10-02T11:37:40.767Z',
+  +       dayKey: '2026-10-02',
+  +       id: 'tx-welcome-grant',
+  +       kind: 'welcome_grant',
+  +       memo: 'Welcome grant for beginning your journey',
+  +       userId: 'demo-user',
+  +       walletId: 'wallet-demo'
+  +     }
+  +   ],
+  +   twoFutures: {
+  +     allowingAnswers: {},
+  +     allowingVotes: 0,
+  +     antiVision: '',
+  +     buildingAnswers: {},
+  +     buildingVotes: 0,
+  +     updatedAt: '2026-10-02T11:37:40.767Z',
+  +     vision: ''
+  +   }
+  + }
+  - null
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:202:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { profile: { id: 'demo-user', displayName: 'Current durable writing', onboardingStep: 'welcome', locale: 'en', theme: 'system', soundMuted: false, focusTabBlinkEnabled: true, focusScreenPulseEnabled: true, reminderTime: '08:00', dailyWisdomEnabled: true, dailyWisdomTime: '08:30', firstOpenedAt: '2026-10-02T11:37:40.767Z', lastOpenedAt: '2026-10-02T11:37:40.767Z', createdAt: '2026-10-02T11:37:40.767Z' }, lifeScores: [], twoFutures: { allowingAnswers: {}, buildingAnswers: {}, antiVision: '', vision: '', buildingVotes: 0, allowingVotes: 0, updatedAt: '2026-10-02T11:37:40.767Z' }, futureSelf: { title: '', coreValues: [], dailyStandards: [], habits: [], skills: [], boundaries: [], noLongerDoes: [], identityStatement: '', oldSelfBehaviors: [], oldSelfExcuses: [], oldSelfPatterns: [], oldSelfLabels: [], updatedAt: '2026-10-02T11:37:40.767Z' }, goals: [ [Object], [Object], [Object], [Object] ], missions: [ [Object], [Object], [Object] ], completions: [], transactions: [ [Object] ], customMarketItems: [], purchases: [], realityBridges: [], budget: { housing: 30, health: 10, education: 10, business: 20, travel: 10, savings: 10, giving: 5, lifestyle: 5 }, seasonProgress: [ [Object] ], subscription: { userId: 'demo-user', plan: 'free', status: 'active', cancelAtPeriodEnd: false, updatedAt: '2026-10-02T11:37:40.767Z' }, inVisionItemIds: [], archivedMarketItemIds: [], archivedMarketRecords: [], dreamJournal: [], notebook: { version: 1, revision: 0, entries: [], practices369: [], gratitudeDays: [], affirmations: [], activityDays: [] }, courseProgress: { version: 1, lessons: {} }, microHabits: [ [Object], [Object], [Object] ], customHabitCategories: [ [Object], [Object] ], checkIns: [], dailyPrimaryGoals: [], lastActiveDateKey: '2026-10-02', lastDailyResetTimestamp: '2026-10-02T11:37:40.767Z', offlineQueue: [] },
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:12745
+✖ the latest queued durable payload updates after an older in-flight upload without reverting cloud or device (4.178466ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:228:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:13728
+✖ confirmation bootstrap after a clean reload is tied to the actual persisted document (2004.631622ms)
+  Error: Current document confirmation was not published after hydration
+      at Timeout._onTimeout (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:91:63)
+      at listOnTimeout (node:internal/timers:635:17)
+      at process.processTimers (node:internal/timers:571:7)
+
+test at tests/cloud-current-record.test.ts:1:14335
+✖ confirmation bootstrap after a dirty reload preserves device work and historical cloud time (4.79544ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + {
+  +   archivedMarketItemIds: [],
+  +   archivedMarketRecords: [],
+  +   budget: {
+  +     business: 20,
+  +     education: 10,
+  +     giving: 5,
+  +     health: 10,
+  +     housing: 30,
+  +     lifestyle: 5,
+  +     savings: 10,
+  +     travel: 10
+  +   },
+  +   checkIns: [],
+  +   completions: [],
+  +   courseProgress: {
+  +     lessons: {},
+  +     version: 1
+  +   },
+  +   customHabitCategories: [
+  +     {
+  +       color: '#6366f1',
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       description: 'Uninterrupted deep work sprint blocks & distraction defense',
+  +       icon: 'Zap',
+  +       id: 'custom-cat-deep-focus',
+  +       name: 'Deep Focus'
+  +     },
+  +     {
+  +       color: '#e11d48',
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       description: 'Generative thinking, design ideation, writing & rapid prototyping',
+  +       icon: 'Palette',
+  +       id: 'custom-cat-creativity',
+  +       name: 'Creativity'
+  +     }
+  +   ],
+  +   customMarketItems: [],
+  +   dailyPrimaryGoals: [],
+  +   dreamJournal: [],
+  +   futureSelf: {
+  +     boundaries: [],
+  +     coreValues: [],
+  +     dailyStandards: [],
+  +     habits: [],
+  +     identityStatement: '',
+  +     noLongerDoes: [],
+  +     oldSelfBehaviors: [],
+  +     oldSelfExcuses: [],
+  +     oldSelfLabels: [],
+  +     oldSelfPatterns: [],
+  +     skills: [],
+  +     title: '',
+  +     updatedAt: '2026-10-02T11:37:42.787Z'
+  +   },
+  +   goals: [
+  +     {
+  +       area: 'Work',
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       description: 'Create an independent digital service generating reliable monthly cash flow & sovereignty.',
+  +       id: 'goal-seed-1',
+  +       status: 'active',
+  +       targetDate: '2026-12-31',
+  +       title: 'Build a sustainable online income',
+  +       userId: 'demo-user'
+  +     },
+  +     {
+  +       area: 'Health',
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       description: 'Build sustained cellular energy, VO2 max capacity, and morning metabolic alertness.',
+  +       id: 'goal-seed-2',
+  +       status: 'active',
+  +       targetDate: '2026-11-30',
+  +       title: 'Feel strong and healthy',
+  +       userId: 'demo-user'
+  +     },
+  +     {
+  +       area: 'Personal Meaning',
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       description: 'Guard attention against reactive digital noise, building daily cognitive discipline.',
+  +       id: 'goal-seed-3',
+  +       status: 'active',
+  +       targetDate: '2026-12-31',
+  +       title: 'Focus on what matters',
+  +       userId: 'demo-user'
+  +     },
+  +     {
+  +       area: 'Money',
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       description: 'Systematically fund dream purchases and eliminate consumer impulse spending.',
+  +       id: 'goal-seed-4',
+  +       status: 'active',
+  +       targetDate: '2027-06-30',
+  +       title: 'Save for real dreams',
+  +       userId: 'demo-user'
+  +     }
+  +   ],
+  +   inVisionItemIds: [],
+  +   lastActiveDateKey: '2026-10-02',
+  +   lastDailyResetTimestamp: '2026-10-02T11:37:42.787Z',
+  +   lifeScores: [],
+  +   microHabits: [
+  +     {
+  +       bestStreak: 0,
+  +       category: 'Health',
+  +       completedDates: [],
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       description: 'First thing after waking, before coffee.',
+  +       durationMinutes: 5,
+  +       goalId: 'goal-seed-2',
+  +       id: 'habit-seed-1',
+  +       streakCount: 0,
+  +       title: 'Drink a glass of water'
+  +     },
+  +     {
+  +       bestStreak: 0,
+  +       category: 'Mindset',
+  +       completedDates: [],
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       description: 'A book, not a feed.',
+  +       durationMinutes: 3,
+  +       goalId: 'goal-seed-3',
+  +       id: 'habit-seed-2',
+  +       streakCount: 0,
+  +       title: 'Read for 10 minutes'
+  +     },
+  +     {
+  +       bestStreak: 0,
+  +       category: 'Discipline',
+  +       completedDates: [],
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       description: 'Start the day on your own terms.',
+  +       durationMinutes: 5,
+  +       goalId: 'goal-seed-3',
+  +       id: 'habit-seed-6',
+  +       streakCount: 0,
+  +       title: 'No phone for the first 30 minutes'
+  +     }
+  +   ],
+  +   missions: [
+  +     {
+  +       area: 'Money',
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       difficulty: 'easy',
+  +       estimatedMinutes: 20,
+  +       id: 'mission-seed-2',
+  +       isOneDecision: false,
+  +       recurring: 'weekly',
+  +       status: 'active',
+  +       title: "Review this week's spending",
+  +       type: 'weekly_mission',
+  +       userId: 'demo-user'
+  +     },
+  +     {
+  +       area: 'Health',
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       difficulty: 'easy',
+  +       estimatedMinutes: 30,
+  +       id: 'mission-seed-3',
+  +       isOneDecision: false,
+  +       recurring: 'daily',
+  +       status: 'active',
+  +       title: 'Move your body for 30 minutes',
+  +       type: 'daily_quest',
+  +       userId: 'demo-user'
+  +     },
+  +     {
+  +       area: 'Work',
+  +       createdAt: '2026-01-01T00:00:00Z',
+  +       difficulty: 'hard',
+  +       estimatedMinutes: 120,
+  +       id: 'mission-seed-5',
+  +       isOneDecision: false,
+  +       status: 'active',
+  +       title: 'Finish one thing you have been putting off',
+  +       type: 'monthly_boss_fight',
+  +       userId: 'demo-user'
+  +     }
+  +   ],
+  +   notebook: {
+  +     activityDays: [],
+  +     affirmations: [],
+  +     entries: [],
+  +     gratitudeDays: [],
+  +     practices369: [],
+  +     revision: 0,
+  +     version: 1
+  +   },
+  +   offlineQueue: [],
+  +   profile: {
+  +     createdAt: '2026-10-02T11:37:42.787Z',
+  +     dailyWisdomEnabled: true,
+  +     dailyWisdomTime: '08:30',
+  +     displayName: 'Current durable writing',
+  +     firstOpenedAt: '2026-10-02T11:37:42.787Z',
+  +     focusScreenPulseEnabled: true,
+  +     focusTabBlinkEnabled: true,
+  +     id: 'demo-user',
+  +     lastOpenedAt: '2026-10-02T11:37:42.787Z',
+  +     locale: 'en',
+  +     onboardingStep: 'welcome',
+  +     reminderTime: '08:00',
+  +     soundMuted: false,
+  +     theme: 'system'
+  +   },
+  +   purchases: [],
+  +   realityBridges: [],
+  +   seasonProgress: [
+  +     {
+  +       completedMissionIds: [],
+  +       isCompleted: false,
+  +       seasonId: 'season-finish'
+  +     }
+  +   ],
+  +   subscription: {
+  +     cancelAtPeriodEnd: false,
+  +     plan: 'free',
+  +     status: 'active',
+  +     updatedAt: '2026-10-02T11:37:42.787Z',
+  +     userId: 'demo-user'
+  +   },
+  +   transactions: [
+  +     {
+  +       amount: 250,
+  +       createdAt: '2026-10-02T11:37:42.787Z',
+  +       dayKey: '2026-10-02',
+  +       id: 'tx-welcome-grant',
+  +       kind: 'welcome_grant',
+  +       memo: 'Welcome grant for beginning your journey',
+  +       userId: 'demo-user',
+  +       walletId: 'wallet-demo'
+  +     }
+  +   ],
+  +   twoFutures: {
+  +     allowingAnswers: {},
+  +     allowingVotes: 0,
+  +     antiVision: '',
+  +     buildingAnswers: {},
+  +     buildingVotes: 0,
+  +     updatedAt: '2026-10-02T11:37:42.787Z',
+  +     vision: ''
+  +   }
+  + }
+  - null
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:252:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { profile: { id: 'demo-user', displayName: 'Current durable writing', onboardingStep: 'welcome', locale: 'en', theme: 'system', soundMuted: false, focusTabBlinkEnabled: true, focusScreenPulseEnabled: true, reminderTime: '08:00', dailyWisdomEnabled: true, dailyWisdomTime: '08:30', firstOpenedAt: '2026-10-02T11:37:42.787Z', lastOpenedAt: '2026-10-02T11:37:42.787Z', createdAt: '2026-10-02T11:37:42.787Z' }, lifeScores: [], twoFutures: { allowingAnswers: {}, buildingAnswers: {}, antiVision: '', vision: '', buildingVotes: 0, allowingVotes: 0, updatedAt: '2026-10-02T11:37:42.787Z' }, futureSelf: { title: '', coreValues: [], dailyStandards: [], habits: [], skills: [], boundaries: [], noLongerDoes: [], identityStatement: '', oldSelfBehaviors: [], oldSelfExcuses: [], oldSelfPatterns: [], oldSelfLabels: [], updatedAt: '2026-10-02T11:37:42.787Z' }, goals: [ [Object], [Object], [Object], [Object] ], missions: [ [Object], [Object], [Object] ], completions: [], transactions: [ [Object] ], customMarketItems: [], purchases: [], realityBridges: [], budget: { housing: 30, health: 10, education: 10, business: 20, travel: 10, savings: 10, giving: 5, lifestyle: 5 }, seasonProgress: [ [Object] ], subscription: { userId: 'demo-user', plan: 'free', status: 'active', cancelAtPeriodEnd: false, updatedAt: '2026-10-02T11:37:42.787Z' }, inVisionItemIds: [], archivedMarketItemIds: [], archivedMarketRecords: [], dreamJournal: [], notebook: { version: 1, revision: 0, entries: [], practices369: [], gratitudeDays: [], affirmations: [], activityDays: [] }, courseProgress: { version: 1, lessons: {} }, microHabits: [ [Object], [Object], [Object] ], customHabitCategories: [ [Object], [Object] ], checkIns: [], dailyPrimaryGoals: [], lastActiveDateKey: '2026-10-02', lastDailyResetTimestamp: '2026-10-02T11:37:42.787Z', offlineQueue: [] },
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

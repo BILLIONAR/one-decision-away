@@ -1,0 +1,28 @@
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import { Upgrade } from '/workspace/oda-purchase-identity-fix/src/pages/Upgrade';
+import { setLocale, ensureLocaleLoaded } from '/workspace/oda-purchase-identity-fix/src/i18n';
+import { fixture } from './mock';
+
+const controls = { ...fixture, setLocale: async (locale: 'en' | 'tr' | 'es') => { setLocale(locale); await ensureLocaleLoaded(locale); } };
+(window as any).ODA_PURCHASE_FIXTURE = controls;
+document.getElementById('fixture-controls')!.innerHTML = `
+  <summary>Synthetic native purchase fixture — local mocks only</summary>
+  <label>Language <select id="fixture-locale"><option>en</option><option>tr</option><option>es</option></select></label>
+  <button data-action="confirmed">Confirm A</button><button data-action="pending">Pending B</button><button data-action="failed">Fail B</button>
+  <button data-action="back">Confirm A again</button><button data-action="purchase">Complete buy: pending</button>
+  <button data-action="restore">Complete restore: restored</button><button data-action="identity">Complete verification</button>
+  <button data-action="reset">Reset</button><p>Prices, accounts, eligibility and purchase results are synthetic. RevenueCat, Apple and cloud services are never called.</p>`;
+document.getElementById('fixture-locale')!.addEventListener('change', event => void controls.setLocale((event.target as HTMLSelectElement).value as any));
+document.getElementById('fixture-controls')!.addEventListener('click', event => {
+  const action = (event.target as HTMLElement).dataset.action;
+  try {
+    if (action === 'confirmed' || action === 'back') controls.transition('A');
+    else if (action === 'pending' || action === 'failed') controls.transition('B', action);
+    else if (action === 'purchase') controls.release('purchase', 'pending');
+    else if (action === 'restore') controls.release('restore', 'restored');
+    else if (action === 'identity') controls.resolveIdentity(true);
+    else if (action === 'reset') controls.reset();
+  } catch (error) { document.getElementById('fixture-message')!.textContent = String(error); }
+});
+createRoot(document.getElementById('root')!).render(<Upgrade />);

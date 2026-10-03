@@ -1,0 +1,82 @@
+TAP version 13
+# Subtest: native Settings and Account use the shared code flow with device copy in en
+ok 1 - native Settings and Account use the shared code flow with device copy in en
+  ---
+  duration_ms: 12.185189
+  type: 'test'
+  ...
+# Subtest: native Settings and Account use the shared code flow with device copy in tr
+ok 2 - native Settings and Account use the shared code flow with device copy in tr
+  ---
+  duration_ms: 22.735993
+  type: 'test'
+  ...
+# Subtest: native Settings and Account use the shared code flow with device copy in es
+ok 3 - native Settings and Account use the shared code flow with device copy in es
+  ---
+  duration_ms: 21.33387
+  type: 'test'
+  ...
+# Subtest: web backup keeps its inline magic-link form and Account keeps link copy
+ok 4 - web backup keeps its inline magic-link form and Account keeps link copy
+  ---
+  duration_ms: 3.888718
+  type: 'test'
+  ...
+# Subtest: native configured signed-in backup retains sync and sign-out actions
+ok 5 - native configured signed-in backup retains sync and sign-out actions
+  ---
+  duration_ms: 2.530512
+  type: 'test'
+  ...
+# Subtest: unconfigured native cloud does not offer a sign-in request
+ok 6 - unconfigured native cloud does not offer a sign-in request
+  ---
+  duration_ms: 1.720505
+  type: 'test'
+  ...
+# Subtest: actual cloud request and verification use one injected auth adapter and trim input
+ok 7 - actual cloud request and verification use one injected auth adapter and trim input
+  ---
+  duration_ms: 1.048418
+  type: 'test'
+  ...
+# Subtest: root hosting retains history paths, including direct reloads
+ok 8 - root hosting retains history paths, including direct reloads
+  ---
+  duration_ms: 1.361872
+  type: 'test'
+  ...
+# Subtest: project hosting keeps every navigation on the same static document
+ok 9 - project hosting keeps every navigation on the same static document
+  ---
+  duration_ms: 0.426526
+  type: 'test'
+  ...
+# Subtest: landing URLs and non-route fragments do not become unknown routes
+ok 10 - landing URLs and non-route fragments do not become unknown routes
+  ---
+  duration_ms: 0.185581
+  type: 'test'
+  ...
+# Subtest: back/forward hash entries resolve to canonical route IDs
+ok 11 - back/forward hash entries resolve to canonical route IDs
+  ---
+  duration_ms: 0.200263
+  type: 'test'
+  ...
+# Subtest: icons and service worker URLs stay under their deployment base
+ok 12 - icons and service worker URLs stay under their deployment base
+  ---
+  duration_ms: 0.233443
+  type: 'test'
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 429.295859

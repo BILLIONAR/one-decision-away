@@ -1,0 +1,89 @@
+{
+  "kind": "independent AST controller/handler preservation proof",
+  "sourceCommit": "8fed790187dd83f74acd8aec8af3f28981df22d6",
+  "baselineCommit": "635209e1731ba53e2567c0f39b011183912d7ac8",
+  "tsxFiles": 105,
+  "unchangedTsxFiles": 102,
+  "controllerCountBefore": 192,
+  "controllerCountAfter": 194,
+  "controlAttributeCountBefore": 3270,
+  "controlAttributeCountAfter": 3272,
+  "changedFiles": [
+    {
+      "file": "src/pages/Focus.tsx",
+      "addedControllers": [],
+      "removedControllers": [],
+      "changedControllers": [],
+      "unchangedControllers": [
+        "Focus"
+      ],
+      "beforeAttributes": 1,
+      "afterAttributes": 1
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "addedControllers": [
+        "PlayerControls",
+        "playerStatus"
+      ],
+      "removedControllers": [],
+      "changedControllers": [
+        "SoundCard",
+        "PlayerBar",
+        "NowPlayingPanel",
+        "SoundRoom"
+      ],
+      "unchangedControllers": [
+        "readTab",
+        "usePlayer",
+        "useReducedMotion",
+        "useTick",
+        "SoundScene",
+        "BreathePanel"
+      ],
+      "beforeAttributes": 86,
+      "afterAttributes": 96
+    },
+    {
+      "file": "src/pages/Today.tsx",
+      "addedControllers": [],
+      "removedControllers": [],
+      "changedControllers": [],
+      "unchangedControllers": [
+        "readRitualsOpen",
+        "writeRitualsOpen",
+        "Today"
+      ],
+      "beforeAttributes": 105,
+      "afterAttributes": 97
+    }
+  ],
+  "originalSoundRoomNonRenderStatementsRetainedInOrder": true,
+  "originalSoundRoomStatementTokensSha256": "4e5c6aef3ce36bbb513ae1b08e3ce3bee4091e8e2f95b544c561c597568e59b7",
+  "removedPresentationStatementsForComparison": [
+    "[volume, setVolume]",
+    "[expandedPrimary, setExpandedPrimary]",
+    "expandedPrimaryRef",
+    "pendingFocus",
+    "soundRootRef",
+    "onPrimaryVisible",
+    "onVolumeChange",
+    "focus transfer useEffect with [expandedPrimary]"
+  ],
+  "existingCriticalCallbackAttributesUnchanged": 13,
+  "onlyReplacedExistingCallback": [
+    {
+      "tag": "input",
+      "name": "onChange",
+      "tokens": "[[19,\"{\"],[21,\"(\"],[80,\"event\"],[22,\")\"],[39,\"=>\"],[19,\"{\"],[87,\"const\"],[80,\"next\"],[64,\"=\"],[80,\"Number\"],[21,\"(\"],[80,\"event\"],[25,\".\"],[80,\"target\"],[25,\".\"],[80,\"value\"],[22,\")\"],[27,\";\"],[80,\"setVolume\"],[21,\"(\"],[80,\"next\"],[22,\")\"],[27,\";\"],[80,\"soundRoomPlayer\"],[25,\".\"],[80,\"setVolume\"],[21,\"(\"],[80,\"next\"],[22,\")\"],[27,\";\"],[20,\"}\"],[20,\"}\"]]",
+      "raw": "onChange={(event) => {\n                const next = Number(event.target.value);\n                setVolume(next);\n                soundRoomPlayer.setVolume(next);\n              }}"
+    }
+  ],
+  "callbackReplacementReview": "Volume onChange now delegates Number(event.target.value) to lifted onVolumeChange; that callback still setVolume(next) and soundRoomPlayer.setVolume(next). Shared control instances retain existing input min/max/step and existing timer options/setTimer handler. No player access bypass.",
+  "methods": [
+    "Parse actual immutable committed source snapshots using TypeScript scanner/parser; no execution of app or test harness.",
+    "Compare all 105 files and controller/control+ARIA inventories; compare unchanged original SoundRoom controller statements after excluding specifically authorized presentation-state/focus additions.",
+    "Callback token preservation check intentionally allows exactly the existing volume event to delegate into a shared callback.",
+    "Additional manual lifecycle/JSX/CSS review is recorded in the sealed final source receipt."
+  ]
+}

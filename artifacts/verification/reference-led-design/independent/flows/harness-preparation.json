@@ -1,0 +1,27 @@
+{
+  "at": "pre-source-freeze",
+  "syntheticOnly": true,
+  "changes": "Scratch output/env paths; current repo dependency import paths; explicit launch args removed; fresh frozen-build receipt replaces historical receipt assertion. No app edits or original-report overwrites.",
+  "harnesses": {
+    "first-use.mjs": {
+      "original": "/workspace/oda-reference-redesign/artifacts/verification/english-guidance-first-use/browser/independent-first-use/independent-first-use-harness.mjs",
+      "originalSha256": "df3b971bdacca92667e807d5244a6a72c70ad00df3d809baa302eea86d49bf9d",
+      "scratchSha256": "d754281e3e80e966602204e2aebe6e56c5ceb4c77763caccfba613e448a0a55a"
+    },
+    "courses.mjs": {
+      "original": "/workspace/oda-reference-redesign/scripts/qa-course-learning.mjs",
+      "originalSha256": "2b6229482e2ce32306fe6b8c068ca6dfc0f49a7033c548717d15a61ac01ba8c3",
+      "scratchSha256": "0ab5924507348f88280b5a06207da50d61cb5a96d589f1a87f3018b48d7b42ce"
+    },
+    "common.mjs": {
+      "original": "/workspace/scratch/oda-guidance-browser/common.mjs",
+      "originalSha256": "d71bdf0516cf677e19a5402e2945ed4e3a872f9655f855d70be505a284581a29",
+      "scratchSha256": "3486e9178e219d7ab682c6e72142ce0b5c155f685080f1bb96a006fd1cdd8eb6"
+    },
+    "guidance.mjs": {
+      "original": "/workspace/scratch/oda-guidance-browser/lifecycle.mjs",
+      "originalSha256": "de0c2730621d667ae38b8db62c0ce45c6593fbb8f5253776c9a0bbecadc56da3",
+      "scratchSha256": "32c4356b1ca3e2c4f08972a33ab5a7e7533b3358512263f77451288b08ac6f79"
+    }
+  }
+}

@@ -1,0 +1,346 @@
+import assert from 'node:assert/strict';
+import { readFile, writeFile } from 'node:fs/promises';
+import { createHash, webcrypto } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+
+const root = process.argv[2] || '/workspace/oda-cloud-upload-guard';
+const mode = process.argv[3] || 'guard';
+const output = '/workspace/scratch/oda-cloud-upload-review';
+class MemoryStorage {
+  values = new Map<string, string>();
+  failKey: string | null = null;
+  failReadKey: string | null = null;
+  getItem(key: string) { if (key === this.failReadKey) throw new Error('Synthetic storage read failure'); return this.values.get(key) ?? null; }
+  setItem(key: string, value: string) { if (key === this.failKey) throw new Error('Synthetic acknowledgement storage failure'); this.values.set(key, String(value)); }
+  removeItem(key: string) { this.values.delete(key); }
+}
+const storage = new MemoryStorage();
+Object.defineProperty(globalThis, 'localStorage', { configurable: true, value: storage });
+Object.defineProperty(globalThis, 'crypto', { configurable: true, value: webcrypto });
+let liveNetworkCalls = 0;
+Object.defineProperty(globalThis, 'fetch', { configurable: true, value: async () => { liveNetworkCalls++; throw new Error('Provider networking forbidden'); } });
+let timerId = 0;
+const timers = new Map<number, () => void>();
+Object.defineProperty(globalThis, 'window', { configurable: true, value: {
+  setTimeout(fn: () => void) { const id = ++timerId; timers.set(id, fn); return id; },
+  clearTimeout(id: number) { timers.delete(id); }, location: { origin: 'https://fixture.invalid' },
+}});
+const { cloudSync } = await import(`${root}/src/services/cloudSync.ts`);
+const { getInitialDemoState, LocalDemoRepository } = await import(`${root}/src/services/repository.ts`);
+const { APP_DATA_STORAGE_KEY } = await import(`${root}/src/services/storageKeys.ts`);
+const { REPLACEMENT_EPOCH_KEY } = await import(`${root}/src/services/dataSnapshots.ts`);
+const internal = cloudSync as any;
+const repository = new LocalDemoRepository();
+const clone = <T>(value: T): T => structuredClone(value);
+const session = (id: string) => ({ user: { id, email: `${id}@fixture.invalid` }, access_token: `synthetic-${id}` });
+const deferred = <T>() => { let resolve!: (value: T) => void; let reject!: (reason: unknown) => void; const promise = new Promise<T>((r, j) => { resolve = r; reject = j; }); return { promise, resolve, reject }; };
+const entry = (id: string) => ({ id, kind: 'journal', title: id, content: `Private synthetic ${id}`, dateKey: '2026-10-02', createdAt: '2026-10-02T00:00:00.000Z', updatedAt: '2026-10-02T00:00:00.000Z' });
+const document = (name: string) => { const data = clone(getInitialDemoState()); data.profile.displayName = name; data.profile.onboardingStep = 'completed'; data.notebook.entries = [entry(name)]; return data; };
+type Row = { user_id: string; data: any; updated_at: string };
+type Response = { data?: any; error: any };
+function fixture(ids: string[] = ['A'], initial = 'A') {
+  storage.values.clear(); storage.failKey = null; storage.failReadKey = null; timers.clear();
+  Object.defineProperty(globalThis, 'crypto', { configurable: true, value: webcrypto });
+  const local = document('device');
+  storage.setItem(APP_DATA_STORAGE_KEY, JSON.stringify(local));
+  const rows = new Map<string, Row>(ids.map(id => [id, { user_id: id, data: document(`remote-${id}`), updated_at: '2030-01-01T00:00:00.000Z' }]));
+  const calls: any[] = [];
+  let authCallback: any;
+  let readError: Error | null = null;
+  let throwRead = false;
+  let readHold: ReturnType<typeof deferred<Response>> | null = null;
+  let writeHold: ReturnType<typeof deferred<void>> | null = null;
+  let beforeWrite: (() => void) | null = null;
+  let writeResponse: Response | ((row: Row) => Response) | null = null;
+  const startedRead = deferred<void>();
+  const startedWrite = deferred<void>();
+  const client = {
+    auth: {
+      async getSession() { return { data: { session: initial ? session(initial) : null }, error: null }; },
+      onAuthStateChange(fn: any) { authCallback = fn; return { data: { subscription: { unsubscribe() {} } } }; },
+      async verifyOtp() { authCallback?.('SIGNED_IN', session('A')); return { error: null }; },
+      async signOut() { authCallback?.('SIGNED_OUT', null); return { error: null }; },
+    },
+    from(table: string) {
+      assert.equal(table, 'oda_user_data');
+      let action = 'SELECT'; let payload: Row; let single = false;
+      const filters = new Map<string, any>();
+      const query: any = {
+        select(columns: string) { assert.match(columns, /^data,\s*updated_at$/); return query; },
+        eq(key: string, value: any) { assert.ok(['user_id', 'updated_at'].includes(key), `Unexpected filter ${key}`); filters.set(key, value); return query; },
+        insert(row: Row) { action = 'INSERT'; payload = clone(row); return query; },
+        update(row: Row) { action = 'UPDATE'; payload = clone(row); return query; },
+        upsert(row: Row) { action = 'UPSERT'; payload = clone(row); return query; },
+        maybeSingle() { single = true; return execute(); },
+        single() { single = true; return execute(); },
+        then(resolve: any, reject: any) { return execute().then(resolve, reject); },
+      };
+      let execution: Promise<Response> | null = null;
+      async function execute() {
+        if (execution) return execution;
+        execution = run(); return execution;
+      }
+      async function run(): Promise<Response> {
+        const id = filters.get('user_id') || payload?.user_id;
+        calls.push({ kind: action, id, filters: Object.fromEntries(filters), data: payload ? clone(payload.data) : undefined, updated_at: payload?.updated_at });
+        if (action === 'SELECT') {
+          startedRead.resolve();
+          if (throwRead) throw readError || new Error('Synthetic thrown SELECT');
+          if (readError) return { data: null, error: readError };
+          if (readHold) return readHold.promise;
+          return { data: rows.has(id) ? clone(rows.get(id)) : null, error: null };
+        }
+        startedWrite.resolve();
+        if (writeHold) await writeHold.promise;
+        beforeWrite?.(); beforeWrite = null;
+        if (writeResponse && typeof writeResponse !== 'function') return clone(writeResponse);
+        let next: Row;
+        if (action === 'INSERT') {
+          if (rows.has(id)) return { data: null, error: { code: '23505', message: 'Synthetic duplicate insert' } };
+          next = payload;
+        } else if (action === 'UPDATE') {
+          const old = rows.get(id);
+          if (!old || old.updated_at !== filters.get('updated_at')) return { data: [], error: null };
+          next = { ...old, ...payload, user_id: id };
+        } else { next = payload; }
+        rows.set(id, clone(next));
+        if (typeof writeResponse === 'function') return writeResponse(next);
+        return { data: action === 'UPSERT' ? undefined : single ? clone(next) : [clone(next)], error: null };
+      }
+      return query;
+    },
+  };
+  Object.assign(internal, { client, config: { url: 'https://synthetic-a.invalid', anonKey: 'public-fixture' }, session: null,
+    pushTimer: null, listeners: new Set(), syncing: false, error: null, initialized: false, initializing: null, sessionHydrated: false,
+    pushQueue: Promise.resolve(false), scopeRevision: 0, authSubscription: null, pendingPulls: new WeakMap(), uploadBlocked: false });
+  return { local, rows, calls, startedRead, startedWrite,
+    authChange(id: string | null) { authCallback?.(id ? 'SIGNED_IN' : 'SIGNED_OUT', id ? session(id) : null); },
+    holdRead() { readHold = deferred<Response>(); return readHold; },
+    releaseReads() { readHold = null; },
+    errorRead(error: Error | null, thrown = false) { readError = error; throwRead = thrown; },
+    holdWrite() { writeHold = deferred<void>(); return writeHold; },
+    beforeWrite(fn: () => void) { beforeWrite = fn; },
+    respondWrite(response: Response | ((row: Row) => Response) | null) { writeResponse = response; },
+  };
+}
+type F = ReturnType<typeof fixture>;
+const mutations = (f: F) => f.calls.filter(c => c.kind !== 'SELECT');
+const raw = () => storage.getItem(APP_DATA_STORAGE_KEY)!;
+const ack = () => storage.getItem('oda_cloud_last_sync:local_scope');
+async function edit(name = 'edited-device') { const data = await repository.load(); data.profile.displayName = name; await repository.save(data); return data; }
+async function flush() { const fns = [...timers.values()]; timers.clear(); fns.forEach(fn => fn()); await internal.pushQueue; }
+async function restore(f: F, review = false) {
+  const remote = await cloudSync.pullIfNewer(await repository.load(), review ? { forReview: true } : undefined);
+  assert.ok(remote, 'Remote review expected');
+  assert.equal(await repository.replaceAll(remote, (original: string | null) => cloudSync.canApplyRemote(remote, original)), true);
+  await cloudSync.markRemoteApplied(remote); return remote;
+}
+const results: any[] = [];
+async function probe(name: string, run: () => Promise<any>) {
+  if (mode === 'baseline') name = `Known defect reproduced (before fix): ${name}`;
+  try { results.push({ name, passed: true, evidence: await run() }); }
+  catch (error) { results.push({ name, passed: false, error: error instanceof Error ? error.stack : String(error) }); }
+}
+
+await probe('Fresh existing cloud: ordinary first save preserves unseen remote and local', async () => {
+  const f = fixture(); await cloudSync.init(); const before = clone(f.rows.get('A'));
+  await edit(); await flush();
+  if (mode === 'baseline') { assert.equal(mutations(f).length, 1); assert.equal(f.rows.get('A')!.data.profile.displayName, 'edited-device'); }
+  else { assert.equal(mutations(f).length, 0); assert.deepEqual(f.rows.get('A'), before); assert.equal(cloudSync.getState().lastSyncAt, null); assert.ok(cloudSync.getState().error); }
+  assert.equal(JSON.parse(raw()).profile.displayName, 'edited-device'); return { calls: f.calls, state: cloudSync.getState() };
+});
+await probe('Declined cloud preview then ordinary edit never authorizes remote replacement', async () => {
+  const f = fixture(); await cloudSync.init(); const preview = await cloudSync.pullIfNewer(f.local); assert.ok(preview); assert.equal(ack(), null);
+  await edit(); await flush();
+  if (mode === 'baseline') assert.equal(f.rows.get('A')!.data.profile.displayName, 'edited-device');
+  else { assert.equal(mutations(f).length, 0); assert.equal(f.rows.get('A')!.data.profile.displayName, 'remote-A'); assert.equal(ack(), null); }
+  return { calls: f.calls };
+});
+await probe('One-second remote advance after own upload is preserved on next push', async () => {
+  const f = fixture([]); await cloudSync.init(); assert.equal(await cloudSync.push(f.local), true);
+  const old = f.rows.get('A')!; old.updated_at = new Date(Date.parse(old.updated_at) + 1000).toISOString(); old.data.notebook.entries.push(entry('other-device'));
+  const before = clone(old); const data = await edit();
+  assert.equal(await cloudSync.push(data), mode === 'baseline');
+  if (mode !== 'baseline') assert.deepEqual(f.rows.get('A'), before);
+  return { calls: f.calls, state: cloudSync.getState() };
+});
+
+if (mode !== 'baseline') {
+  await probe('Absent remote uses represented atomic INSERT and exact returned timestamp ack', async () => {
+    const f = fixture([]); await cloudSync.init(); const before = raw(); assert.equal(await cloudSync.push(f.local), true);
+    assert.deepEqual(f.calls.map(c => c.kind), ['SELECT', 'INSERT']); assert.equal(raw(), before);
+    assert.equal(cloudSync.getState().lastSyncAt, f.rows.get('A')!.updated_at); assert.ok(ack());
+    return { calls: f.calls, acknowledgement: JSON.parse(ack()!) };
+  });
+  await probe('Identical existing content without explicit acknowledgement still holds', async () => {
+    const f = fixture(); f.rows.get('A')!.data = clone(f.local); await cloudSync.init();
+    assert.equal(await cloudSync.push(f.local), false); assert.equal(mutations(f).length, 0); assert.equal(ack(), null); return { state: cloudSync.getState() };
+  });
+  await probe('Legacy owner/timestamp metadata cannot authorize upload', async () => {
+    const f = fixture(); await cloudSync.init(); const version = f.rows.get('A')!.updated_at;
+    const key = 'oda_cloud_last_sync:https%3A%2F%2Fsynthetic-a.invalid:A'; storage.setItem(key, version);
+    storage.setItem('oda_cloud_last_sync:local_scope', JSON.stringify({ key, epoch: null, updatedAt: version }));
+    assert.equal(await cloudSync.push(f.local), false); assert.equal(mutations(f).length, 0); return { state: cloudSync.getState() };
+  });
+  for (const thrown of [false, true]) await probe(`${thrown ? 'Thrown' : 'Resolved'} offline SELECT blocks without mutation and retry rereads`, async () => {
+    const f = fixture(); await cloudSync.init(); const before = raw(); const remote = clone(f.rows.get('A'));
+    f.errorRead(new Error('Synthetic offline'), thrown); assert.equal(await cloudSync.push(f.local), false); assert.equal(mutations(f).length, 0); assert.equal(ack(), null); assert.equal(raw(), before);
+    f.errorRead(null); assert.equal(await cloudSync.push(f.local), false); assert.equal(f.calls.filter(c => c.kind === 'SELECT').length, 2); assert.deepEqual(f.rows.get('A'), remote); return { calls: f.calls };
+  });
+  await probe('Accepted cloud commit acknowledges raw version; later ordinary edit uses conditional UPDATE', async () => {
+    const f = fixture(); await cloudSync.init(); await restore(f); const acknowledged = JSON.parse(ack()!); const version = f.rows.get('A')!.updated_at;
+    const data = await edit(); assert.equal(await cloudSync.push(data), true); const update = f.calls.find(c => c.kind === 'UPDATE');
+    assert.equal(update.filters.user_id, 'A'); assert.equal(update.filters.updated_at, version); assert.ok(Date.parse(update.updated_at) > Date.parse(version)); assert.ok(ack());
+    return { acknowledged, calls: f.calls };
+  });
+  for (const kind of ['version', 'same-version-content', 'older-version', 'array-order']) await probe(`Acknowledged remote ${kind} change holds both copies`, async () => {
+    const f = fixture(); await cloudSync.init(); await restore(f); const data = await edit(); const row = f.rows.get('A')!;
+    if (kind === 'version') row.updated_at = '2040-01-01T00:00:00.000Z';
+    else if (kind === 'older-version') row.updated_at = '2020-01-01T00:00:00.000Z';
+    else if (kind === 'array-order') { row.data.notebook.entries.push(entry('ordered-second')); /* First acknowledge ordered array. */ f.rows.set('A', row); await restore(f, true); await edit(); row.data.notebook.entries.reverse(); }
+    else row.data.profile.displayName = 'same-version-other-device';
+    const before = clone(row); const latest = await repository.load(); assert.equal(await cloudSync.push(kind === 'array-order' ? latest : data), false); assert.equal(mutations(f).length, 0); assert.deepEqual(f.rows.get('A'), before); return { calls: f.calls };
+  });
+  await probe('Canonical equivalent object key order does not block known remote', async () => {
+    const f = fixture(); await cloudSync.init(); await restore(f); const row = f.rows.get('A')!;
+    row.data = Object.fromEntries(Object.entries(row.data).reverse()); row.data.profile = Object.fromEntries(Object.entries(row.data.profile).reverse());
+    const data = await edit(); assert.equal(await cloudSync.push(data), true); assert.equal(mutations(f).length, 1); return { calls: f.calls };
+  });
+  await probe('A B A shared-device cycle cannot reuse A acknowledgement after B owns the record', async () => {
+    const f = fixture(['A', 'B']); await cloudSync.init(); await restore(f); f.authChange('B'); await restore(f); f.authChange('A');
+    assert.equal(cloudSync.getState().lastSyncAt, null); assert.equal(await cloudSync.push(await repository.load()), false); assert.equal(mutations(f).length, 0); return { calls: f.calls };
+  });
+  for (const change of ['account', 'project', 'local', 'import', 'same-id-relogin']) await probe(`Pending SELECT after ${change} cannot mutate or acknowledge`, async () => {
+    const f = fixture([]); await cloudSync.init(); const held = f.holdRead(); const pending = cloudSync.push(f.local); await f.startedRead.promise;
+    if (change === 'account') f.authChange('B');
+    else if (change === 'project') cloudSync.setConfig('https://synthetic-b.invalid', 'public-fixture');
+    else if (change === 'local') await edit();
+    else if (change === 'import') cloudSync.markLocalRestore();
+    else { f.authChange(null); f.authChange('A'); }
+    const before = new Map(storage.values); const status = cloudSync.getState(); held.resolve({ data: null, error: null }); assert.equal(await pending, false);
+    assert.equal(mutations(f).length, 0); assert.deepEqual(storage.values, before);
+    if (change === 'account' || change === 'project' || change === 'same-id-relogin') assert.deepEqual(cloudSync.getState(), status);
+    else assert.equal(cloudSync.getState().syncing, false); return { calls: f.calls };
+  });
+  await probe('Conditional UPDATE loses timestamp race: zero rows means conflict, remote winner kept', async () => {
+    const f = fixture(); await cloudSync.init(); await restore(f); const data = await edit();
+    f.beforeWrite(() => { const row = f.rows.get('A')!; row.updated_at = '2040-01-01T00:00:00.000Z'; row.data.profile.displayName = 'concurrent-winner'; });
+    const previousAck = ack(); assert.equal(await cloudSync.push(data), false); assert.equal(f.rows.get('A')!.data.profile.displayName, 'concurrent-winner'); assert.equal(ack(), previousAck); assert.ok(cloudSync.getState().error); return { calls: f.calls };
+  });
+  await probe('Racing absent-row INSERT conflict never upserts winner', async () => {
+    const f = fixture([]); await cloudSync.init(); f.beforeWrite(() => f.rows.set('A', { user_id: 'A', data: document('racing-winner'), updated_at: '2040-01-01T00:00:00.000Z' }));
+    assert.equal(await cloudSync.push(f.local), false); assert.equal(f.rows.get('A')!.data.profile.displayName, 'racing-winner'); assert.equal(ack(), null); assert.equal(mutations(f)[0].kind, 'INSERT'); return { calls: f.calls };
+  });
+  for (const response of [{ data: [], error: null }, { data: null, error: null }, { error: null }, { data: [{ data: {}, updated_at: 'invalid' }], error: null }, { data: [{ data: document('wrong-content'), updated_at: '2030-01-01T00:00:00Z' }], error: null }]) await probe(`Unreliable write representation ${JSON.stringify(response).slice(0, 70)} cannot report acknowledged success`, async () => {
+    const f = fixture([]); await cloudSync.init(); f.respondWrite(response); assert.equal(await cloudSync.push(f.local), false); assert.equal(ack(), null); assert.equal(cloudSync.getState().lastSyncAt, null); return { calls: f.calls, state: cloudSync.getState() };
+  });
+  await probe('Explicit import cannot overwrite unseen existing cloud and keeps restore token', async () => {
+    const f = fixture(); await cloudSync.init(); cloudSync.markLocalRestore(); const tokenKey = [...storage.values.keys()].find(k => k.startsWith('oda_cloud_pending_restore:'))!; const token = storage.getItem(tokenKey); const before = raw();
+    assert.equal(await cloudSync.push(f.local), false); assert.equal(mutations(f).length, 0); assert.equal(storage.getItem(tokenKey), token); assert.equal(raw(), before); return { state: cloudSync.getState() };
+  });
+  await probe('Explicit import inserts absent row and clears only matching import token', async () => {
+    const f = fixture([]); await cloudSync.init(); cloudSync.markLocalRestore(); const tokenKey = [...storage.values.keys()].find(k => k.startsWith('oda_cloud_pending_restore:'))!;
+    assert.equal(await cloudSync.push(f.local), true); assert.equal(storage.getItem(tokenKey), null); return { calls: f.calls };
+  });
+  await probe('Acknowledgement storage failure reports hold without claiming sync', async () => {
+    const f = fixture([]); await cloudSync.init(); storage.failKey = 'oda_cloud_last_sync:local_scope'; assert.equal(await cloudSync.push(f.local), false); assert.equal(ack(), null); assert.equal(cloudSync.getState().lastSyncAt, null); assert.ok(cloudSync.getState().error); return { state: cloudSync.getState() };
+  });
+  await probe('Accepted cloud commit plus acknowledgement storage read failure returns false without throwing', async () => {
+    const f = fixture(); await cloudSync.init(); const reviewed = await cloudSync.pullIfNewer(f.local, { forReview: true }); assert.ok(reviewed);
+    assert.equal(await repository.replaceAll(reviewed, (original: string | null) => cloudSync.canApplyRemote(reviewed, original)), true); const committed = raw();
+    storage.failReadKey = APP_DATA_STORAGE_KEY;
+    assert.equal(await cloudSync.markRemoteApplied(reviewed), false); storage.failReadKey = null;
+    assert.equal(raw(), committed); assert.equal(ack(), null); assert.ok(cloudSync.getState().error); return { state: cloudSync.getState() };
+  });
+  await probe('Thrown stale SELECT after later local save preserves latest status', async () => {
+    const f = fixture(); await cloudSync.init(); const held = f.holdRead(); const pending = cloudSync.push(f.local); await f.startedRead.promise;
+    await edit(); internal.error = 'Status for newer local action'; held.reject(new Error('Obsolete read failed')); assert.equal(await pending, false);
+    assert.equal(mutations(f).length, 0); assert.equal(cloudSync.getState().error, 'Status for newer local action'); assert.equal(cloudSync.getState().syncing, false); return { state: cloudSync.getState() };
+  });
+  await probe('Digest rejection fails closed before mutation', async () => {
+    const f = fixture(); await cloudSync.init(); await restore(f); const before = clone(f.rows.get('A')); const previousAck = ack();
+    Object.defineProperty(globalThis, 'crypto', { configurable: true, value: { subtle: { async digest() { throw new Error('Synthetic digest failure'); } } } });
+    assert.equal(await cloudSync.push(await repository.load()), false); assert.equal(mutations(f).length, 0); assert.deepEqual(f.rows.get('A'), before); assert.equal(ack(), previousAck); assert.ok(cloudSync.getState().error); return { state: cloudSync.getState() };
+  });
+  for (const change of ['account', 'local', 'import']) await probe(`Awaited hash after ${change} cannot authorize stale mutation`, async () => {
+    const f = fixture(); await cloudSync.init(); await restore(f); const held = deferred<ArrayBuffer>(); const started = deferred<void>();
+    Object.defineProperty(globalThis, 'crypto', { configurable: true, value: { subtle: { digest(algorithm: string, bytes: Uint8Array) { started.resolve(); void webcrypto.subtle.digest(algorithm, bytes).then(held.resolve); return held.promise; } } } });
+    // Keep hashing pending until the controlled mutation, even when native digest resolves early.
+    let release!: () => void; const gate = new Promise<void>(done => { release = done; });
+    Object.defineProperty(globalThis, 'crypto', { configurable: true, value: { subtle: { async digest(algorithm: string, bytes: Uint8Array) { started.resolve(); const digest = await webcrypto.subtle.digest(algorithm, bytes); await gate; return digest; } } } });
+    const pending = cloudSync.push(await repository.load()); await started.promise;
+    if (change === 'account') f.authChange('B'); else if (change === 'local') await edit(); else cloudSync.markLocalRestore();
+    const before = new Map(storage.values); const state = cloudSync.getState(); release(); assert.equal(await pending, false); assert.equal(mutations(f).length, 0); assert.deepEqual(storage.values, before);
+    if (change === 'account') assert.deepEqual(cloudSync.getState(), state); else assert.equal(cloudSync.getState().syncing, false); return { calls: f.calls };
+  });
+  for (const change of ['account', 'import']) await probe(`Late write completion after ${change} cannot acknowledge or clear newer state`, async () => {
+    const f = fixture([]); await cloudSync.init(); cloudSync.markLocalRestore(); const held = f.holdWrite(); const pending = cloudSync.push(f.local); await f.startedWrite.promise;
+    if (change === 'account') f.authChange('B'); else if (change === 'local') await edit(); else cloudSync.markLocalRestore();
+    const beforeAck = ack(); const state = cloudSync.getState(); const tokens = [...storage.values].filter(([k]) => k.startsWith('oda_cloud_pending_restore:')); held.resolve(); assert.equal(await pending, false);
+    assert.equal(ack(), beforeAck); assert.deepEqual([...storage.values].filter(([k]) => k.startsWith('oda_cloud_pending_restore:')), tokens);
+    if (change === 'account') assert.deepEqual(cloudSync.getState(), state); return { calls: f.calls };
+  });
+  await probe('Later ordinary save retains returned baseline permission without falsely displaying current sync', async () => {
+    const f = fixture([]); await cloudSync.init(); const held = f.holdWrite(); const first = cloudSync.push(f.local); await f.startedWrite.promise;
+    const latest = await edit(); const savedLatest = raw(); held.resolve(); assert.equal(await first, true);
+    assert.equal(raw(), savedLatest); assert.equal(cloudSync.getState().lastSyncAt, null); assert.equal(JSON.parse(ack()!).updatedAt, null);
+    assert.equal(JSON.parse(ack()!).remoteVersion, f.rows.get('A')!.updated_at);
+    assert.equal(await cloudSync.push(latest), true); assert.equal(f.rows.get('A')!.data.profile.displayName, 'edited-device');
+    assert.deepEqual(mutations(f).map(c => c.kind), ['INSERT', 'UPDATE']); assert.equal(cloudSync.getState().lastSyncAt, f.rows.get('A')!.updated_at); return { calls: f.calls };
+  });
+  await probe('Changed acknowledgment owner during hash cannot use captured earlier owner permission', async () => {
+    const f = fixture(); await cloudSync.init(); await restore(f); const started = deferred<void>(); const held = deferred<void>();
+    Object.defineProperty(globalThis, 'crypto', { configurable: true, value: { subtle: { async digest(algorithm: string, bytes: Uint8Array) { started.resolve(); await held.promise; return webcrypto.subtle.digest(algorithm, bytes); } } } });
+    const pending = cloudSync.push(await repository.load()); await started.promise;
+    const marker = JSON.parse(ack()!); marker.key = 'oda_cloud_last_sync:https%3A%2F%2Fsynthetic-a.invalid:B'; storage.setItem('oda_cloud_last_sync:local_scope', JSON.stringify(marker)); const before = ack();
+    held.resolve(); assert.equal(await pending, false); assert.equal(mutations(f).length, 0); assert.equal(ack(), before); return { calls: f.calls };
+  });
+  await probe('Changed acknowledgment owner after sent upload cannot be overwritten by late response', async () => {
+    const f = fixture([]); await cloudSync.init(); const held = f.holdWrite(); const pending = cloudSync.push(f.local); await f.startedWrite.promise;
+    const marker = JSON.stringify({ key: 'synthetic-new-owner-B', epoch: null, updatedAt: null }); storage.setItem('oda_cloud_last_sync:local_scope', marker);
+    held.resolve(); assert.equal(await pending, false); assert.equal(ack(), marker); assert.equal(cloudSync.getState().lastSyncAt, null); return { calls: f.calls };
+  });
+  await probe('Remote preview ownership drift rejects accepted write-lock replacement', async () => {
+    const f = fixture(); await cloudSync.init(); const reviewed = await cloudSync.pullIfNewer(f.local, { forReview: true }); assert.ok(reviewed);
+    storage.setItem('oda_cloud_last_sync:local_scope', JSON.stringify({ key: 'other-owner-B', epoch: null, updatedAt: null })); const before = raw(); const marker = ack();
+    assert.equal(cloudSync.canApplyRemote(reviewed), false); assert.equal(await repository.replaceAll(reviewed, (original: string | null) => cloudSync.canApplyRemote(reviewed, original)), false);
+    assert.equal(await cloudSync.markRemoteApplied(reviewed), false); assert.equal(raw(), before); assert.equal(ack(), marker); return { calls: f.calls };
+  });
+  await probe('Replacement epoch after sent upload cannot inherit old remote baseline', async () => {
+    const f = fixture([]); await cloudSync.init(); const held = f.holdWrite(); const pending = cloudSync.push(f.local); await f.startedWrite.promise;
+    assert.equal(await repository.replaceAll(document('newly-replaced-device')), true); const before = raw(); held.resolve(); assert.equal(await pending, false);
+    assert.equal(raw(), before); assert.equal(ack(), null); assert.equal(cloudSync.getState().lastSyncAt, null); return { calls: f.calls };
+  });
+  for (const version of ['2040-01-01T00:00:00.999999Z', '2040-01-01T00:00:00.000001+00:00']) await probe(`Regressed clock still advances past fractional remote version ${version}`, async () => {
+    const f = fixture(); f.rows.get('A')!.updated_at = version; await cloudSync.init(); await restore(f); const oldNow = Date.now;
+    Date.now = () => Date.parse('2020-01-01T00:00:00.000Z');
+    try { assert.equal(await cloudSync.push(await repository.load()), true); assert.ok(Date.parse(f.rows.get('A')!.updated_at) >= Date.parse(version) + 1); }
+    finally { Date.now = oldNow; }
+    return { calls: f.calls };
+  });
+  await probe('Legacy normalized restore acknowledges exact fetched cloud, then safely uploads preserved courses', async () => {
+    const f = fixture(); delete f.rows.get('A')!.data.courseProgress; await cloudSync.init(); await restore(f);
+    assert.ok(JSON.parse(raw()).courseProgress); assert.ok(ack()); assert.equal(await cloudSync.push(await repository.load()), true); assert.equal(mutations(f)[0].kind, 'UPDATE'); return { calls: f.calls };
+  });
+  await probe('Manual review exposes equal or older unacknowledged server row', async () => {
+    const f = fixture(); await cloudSync.init(); f.rows.get('A')!.updated_at = '2020-01-01T00:00:00.000Z';
+    const row = await cloudSync.pullIfNewer(f.local, { forReview: true }); assert.ok(row); assert.equal(ack(), null); return { calls: f.calls };
+  });
+  await probe('Manual review sees changed content at identical version while default freshness remains unchanged', async () => {
+    const f = fixture(); await cloudSync.init(); await restore(f); const row = f.rows.get('A')!; row.data.profile.displayName = 'same-version-change';
+    assert.equal(await cloudSync.pullIfNewer(await repository.load()), null);
+    assert.ok(await cloudSync.pullIfNewer(await repository.load(), { forReview: true })); return { calls: f.calls };
+  });
+  await probe('Legacy same-timestamp mutation after SELECT remains declared bounded limitation', async () => {
+    const f = fixture(); await cloudSync.init(); await restore(f); const data = await edit();
+    f.beforeWrite(() => { f.rows.get('A')!.data.profile.displayName = 'same-timestamp-concurrent-legacy'; });
+    assert.equal(await cloudSync.push(data), true); assert.equal(f.rows.get('A')!.data.profile.displayName, 'edited-device'); return { reproducedUnprotectedLegacyRace: true, calls: f.calls };
+  });
+}
+
+const source: Record<string, string> = {};
+for (const file of ['src/services/cloudSync.ts', 'src/services/repository.ts', 'src/store/useApp.tsx']) source[file] = createHash('sha256').update(await readFile(`${root}/${file}`)).digest('hex');
+const report = { label: 'Independent actual-service synthetic conditional-query review', mode, root, head: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(), source, total: results.length, passed: results.filter(r => r.passed).length, failed: results.filter(r => !r.passed).length, liveNetworkCalls, providerOrNativeTested: false, results };
+await writeFile(`${output}/${mode}-report.json`, JSON.stringify(report, null, 2) + '\n');
+console.log(JSON.stringify({ ...report, results: results.map(r => ({ name: r.name, passed: r.passed, error: r.error })) }, null, 2));
+if (report.failed || liveNetworkCalls) process.exitCode = 1;

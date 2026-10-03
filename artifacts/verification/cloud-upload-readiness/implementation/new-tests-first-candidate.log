@@ -1,0 +1,68 @@
+✔ fresh OTP sign-in cannot overwrite existing cloud work on the first ordinary save (5.592057ms)
+✔ an absent cloud row is inserted once and acknowledges the returned server version and exact data (12.982526ms)
+✔ offline SELECT throws and reconnect retain both records (1.577609ms)
+✔ offline SELECT resolved and reconnect retain both records (0.908225ms)
+✔ shared device A→B→A cannot reuse the historical acknowledgement of A after B owns the record (13.175738ms)
+✔ a stale upload SELECT after account cannot write or alter current-scope status (1.298035ms)
+✔ a stale upload SELECT after project cannot write or alter current-scope status (0.562001ms)
+✔ a stale upload SELECT after logout-return cannot write or alter current-scope status (0.621201ms)
+✔ a stale upload SELECT after local-edit cannot write or alter current-scope status (0.69347ms)
+✔ a stale upload SELECT after import cannot write or alter current-scope status (0.730315ms)
+✔ same-version remote content changed at the fresh read cannot authorize overwrite (4.091205ms)
+✔ canonical acknowledgement treats reordered object keys as equal, but retains array order (6.579501ms)
+✔ a changed remote version between SELECT and UPDATE yields zero rows and never acknowledges success (4.895181ms)
+✔ an absent-row insert race preserves the winning cloud record and holds the import token (1.018692ms)
+✔ empty returned write representation never acknowledges or clears import intent (0.776736ms)
+✔ missing returned write representation never acknowledges or clears import intent (0.459836ms)
+✖ invalid-data returned write representation never acknowledges or clears import intent (4.866317ms)
+✔ invalid-version returned write representation never acknowledges or clears import intent (1.469695ms)
+✔ multiple returned write representation never acknowledges or clears import intent (0.89842ms)
+✔ a legacy timestamp-only acknowledgement cannot authorize an existing-row upload (0.618937ms)
+✔ previewing or declining a cloud restore creates no acknowledgement and later saves remain held (4.10202ms)
+✔ accepted cloud restore acknowledges the raw fetched JSON, including omitted legacy course data (3.153024ms)
+✔ an explicit import facing unacknowledged existing cloud keeps bytes/token and cannot bypass review protection (0.794473ms)
+✔ an explicit import into absent cloud can insert and clear only its still-current token (1.878183ms)
+✔ a late write response cannot acknowledge a new account or clear a newer import token (0.762044ms)
+✔ a write response cannot clear an import created while that same account upload waited (1.800806ms)
+✔ acknowledgement storage failure does not report sync success or clear imported intent (1.47979ms)
+✔ hash failure cannot mutate cloud or acknowledge the local record (2.440275ms)
+✔ awaited remote fingerprint after account cannot authorize a stale write (3.704404ms)
+✔ awaited remote fingerprint after local-edit cannot authorize a stale write (3.519028ms)
+✔ awaited remote fingerprint after import cannot authorize a stale write (5.770317ms)
+✔ a malformed-data SELECT pauses upload without choosing a winner (0.649293ms)
+✔ a invalid-version SELECT pauses upload without choosing a winner (0.435469ms)
+✔ successful upload acknowledges the actual returned server version rather than the attempted client timestamp (8.2101ms)
+✔ a rejected reviewed restore cannot establish cloud acknowledgement (1.90241ms)
+✔ a regressed clock advances the conditional write beyond remote microseconds 2040-01-01T00:00:00.999999Z (3.250231ms)
+✔ a regressed clock advances the conditional write beyond remote microseconds 2040-01-01T00:00:00.000001+00:00 (3.426958ms)
+✔ manual review exposes unacknowledged/changed cloud at -1000ms while default startup policy remains unchanged (3.667047ms)
+✔ manual review exposes unacknowledged/changed cloud at 0ms while default startup policy remains unchanged (7.098462ms)
+✔ manual review exposes unacknowledged/changed cloud at 1000ms while default startup policy remains unchanged (4.655138ms)
+✔ known limitation: a legacy same-version mutation after SELECT can pass timestamp-only CAS (2.485353ms)
+ℹ tests 41
+ℹ suites 0
+ℹ pass 40
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 435.62229
+
+✖ failing tests:
+
+test at tests/cloud-upload-readiness.test.ts:1:13802
+✖ invalid-data returned write representation never acknowledges or clears import intent (4.866317ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-guard/tests/cloud-upload-readiness.test.ts:295:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

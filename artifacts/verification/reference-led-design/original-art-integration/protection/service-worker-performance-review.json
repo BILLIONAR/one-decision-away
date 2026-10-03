@@ -1,0 +1,40 @@
+{
+  "kind": "read-only immutable service worker image-loading review",
+  "sourceCommit": "4c873b0df32c4489a8b95260122ae3ae9efd936d",
+  "swSha256": "51e9575be78bfaa1cf9d2de7a461d819c6fae141cbfe196b4985c34aa04511ef",
+  "registration": "src/main.tsx registers after load in production browser only; existing logic unchanged.",
+  "installShellUrls": [
+    "",
+    "index.html",
+    "support.html",
+    "theme-init.js",
+    "manifest.webmanifest",
+    "icon-192.png",
+    "icon-512.png",
+    "icon-192-maskable.png",
+    "icon-512-maskable.png",
+    "apple-touch-icon.png",
+    "brand/oda-c4.png",
+    "brand/oda-app-c4-v1-192.png",
+    "brand/oda-app-c4-v1-512.png",
+    "brand/oda-app-c4-v1-maskable-192.png",
+    "brand/oda-app-c4-v1-maskable-512.png",
+    "brand/oda-apple-c4-v1-180.png",
+    "brand/oda-favicon-c4-v1-32.png"
+  ],
+  "installUrlCount": 17,
+  "bulkImagePrecache": false,
+  "runtimeNewImageCaching": "Only same-scope requested non-narration /assets/ GETs are cache-first; successful responses stored. No scan of public directory or reference/metadata manifest.",
+  "narrationCacheOwnershipPreserved": true,
+  "performanceConstraints": [
+    "No imported image bytes or eager/preload loop over all6assets. Existing fixed install shell unchanged.",
+    "Keep original14.5MBZIP/masters scratch-only. Deliver bounded responsiveWebP/PNG and accurate sizes with explicit intrinsic dimensions to avoid layout shift; lazy-load noninitial artwork.",
+    "WebP errors must retry same-scene PNG once and then terminate safely; no repeated source-error loop or third-party/paid/wrong-art fallback.",
+    "Existing image cache-first has no eviction/version refresh. Add immutable/versioned new delivery names and do not overwrite existing public URLs; no SW rewrite is authorized.",
+    "Fresh browser image currentSrc/actualnetwork transfer and missing-format/PNG/transparent-alpha proof required after freeze; static SW reading does not certify runtime."
+  ],
+  "findings": [],
+  "limits": [
+    "No browser, build, test or app mutation; review uses committed4c bytes while source writers are active."
+  ]
+}

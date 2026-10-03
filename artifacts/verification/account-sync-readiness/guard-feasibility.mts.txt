@@ -1,0 +1,95 @@
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { writeFile } from 'node:fs/promises';
+
+// Scratch protocol feasibility only. These are not app-source implementations.
+const root = '/workspace/oda-native-settings-otp';
+let liveFetchCalls = 0;
+Object.defineProperty(globalThis, 'fetch', { configurable: true, value: async () => { liveFetchCalls++; throw new Error('No live network permitted'); } });
+const values = new Map<string, string>();
+Object.defineProperty(globalThis, 'localStorage', { configurable: true, value: { getItem: (key: string) => values.get(key) ?? null, setItem: (key: string, value: string) => values.set(key, value), removeItem: (key: string) => values.delete(key) } });
+const { PGlite } = await import(`${root}/node_modules/@electric-sql/pglite/dist/index.js`);
+const { createClient } = await import(`${root}/node_modules/@supabase/supabase-js/dist/index.mjs`);
+const { getInitialDemoState } = await import(`${root}/src/services/repository.ts`);
+const db = new PGlite();
+await db.exec('create table diagnostic_rows (user_id text primary key, data jsonb not null, updated_at timestamptz not null)');
+const canonical = (value: any): string => JSON.stringify(value === null || typeof value !== 'object' ? value : Array.isArray(value) ? value.map(item => JSON.parse(canonical(item))) : Object.fromEntries(Object.keys(value).sort().map(key => [key, JSON.parse(canonical(value[key]))])));
+const fingerprint = (data: unknown) => createHash('sha256').update(canonical(data)).digest('hex');
+const nextVersion = (old: string, now: number) => new Date(Math.max(now, Date.parse(old) + 1)).toISOString();
+const before = { writing: 'Original acknowledged remote work' };
+const changed = { writing: 'New work saved by a writer retaining the same timestamp' };
+const local = { writing: 'Device edit' };
+const oldVersion = '2030-01-01T00:00:00.123456Z';
+const newVersion = nextVersion(oldVersion, Date.parse('2026-10-02T00:00:00Z'));
+async function reset(data = before, stamp = oldVersion) { await db.exec('truncate diagnostic_rows'); await db.query('insert into diagnostic_rows values ($1,$2::jsonb,$3::timestamptz)', ['A', JSON.stringify(data), stamp]); }
+async function row() { return (await db.query('select data, updated_at::text as updated_at from diagnostic_rows where user_id=$1', ['A'])).rows[0] as any; }
+const results: any[] = [];
+async function probe(name: string, run: () => Promise<Record<string, unknown>>) { try { results.push({ name, passed: true, evidence: await run() }); } catch (error) { results.push({ name, passed: false, error: error instanceof Error ? error.stack : String(error) }); } }
+try {
+  await probe('Canonical fingerprint accepts JSON object-key reorder and distinguishes changed work', async () => {
+    assert.equal(fingerprint({ b: [2, 1], a: { z: 1, y: null } }), fingerprint({ a: { y: null, z: 1 }, b: [2, 1] }));
+    assert.notEqual(fingerprint(before), fingerprint(changed));
+    return { jsonObjectKeyOrderingStable: true, changedContentDetected: true };
+  });
+  await probe('Timestamp-only conditional UPDATE overwrites changed content keeping the old timestamp', async () => {
+    await reset(changed);
+    const update = await db.query('update diagnostic_rows set data=$1::jsonb, updated_at=$2::timestamptz where user_id=$3 and updated_at=$4::timestamptz returning data,updated_at', [JSON.stringify(local), newVersion, 'A', oldVersion]);
+    assert.equal(update.rows.length, 1); assert.deepEqual((await row()).data, local);
+    return { affectedRows: 1, timestampOnlyGuardUnsafeForSameTimestampChanges: true };
+  });
+  await probe('Acknowledged fingerprint + fresh read holds a same-version content change already present at SELECT', async () => {
+    await reset(changed); const fresh = await row();
+    const canWrite = Date.parse(fresh.updated_at) === Date.parse(oldVersion) && fingerprint(fresh.data) === fingerprint(before);
+    assert.equal(canWrite, false); assert.deepEqual((await row()).data, changed);
+    return { timestampMatchesAcknowledgment: true, fingerprintRejectsChangedRemote: true, noUpdateIssued: true };
+  });
+  await probe('Fingerprint pre-read still cannot protect timestamp-preserving write between SELECT and UPDATE', async () => {
+    await reset(); const selected = await row(); assert.equal(fingerprint(selected.data), fingerprint(before));
+    await db.query('update diagnostic_rows set data=$1::jsonb where user_id=$2', [JSON.stringify(changed), 'A']);
+    const update = await db.query('update diagnostic_rows set data=$1::jsonb,updated_at=$2::timestamptz where user_id=$3 and updated_at=$4::timestamptz returning data', [JSON.stringify(local), newVersion, 'A', oldVersion]);
+    assert.equal(update.rows.length, 1); assert.deepEqual((await row()).data, local);
+    return { affectedRows: 1, sameTimestampConcurrentLegacyWriterRemainsOutsideBoundedProtection: true };
+  });
+  await probe('Atomic timestamp+JSONB equality prevents that same-timestamp write between SELECT and UPDATE', async () => {
+    await reset(); const selected = await row();
+    await db.query('update diagnostic_rows set data=$1::jsonb where user_id=$2', [JSON.stringify(changed), 'A']);
+    const update = await db.query('update diagnostic_rows set data=$1::jsonb,updated_at=$2::timestamptz where user_id=$3 and updated_at=$4::timestamptz and data=$5::jsonb returning data', [JSON.stringify(local), newVersion, 'A', oldVersion, JSON.stringify(selected.data)]);
+    assert.equal(update.rows.length, 0); assert.deepEqual((await row()).data, changed);
+    return { affectedRows: 0, exactContentAtomicPredicatePreservesRemote: true };
+  });
+  await probe('Competing writer advancing version causes zero affected rows and retains both records', async () => {
+    await reset(); await db.query('update diagnostic_rows set data=$1::jsonb,updated_at=$2::timestamptz where user_id=$3', [JSON.stringify(changed), newVersion, 'A']);
+    const update = await db.query('update diagnostic_rows set data=$1::jsonb,updated_at=$2::timestamptz where user_id=$3 and updated_at=$4::timestamptz returning data', [JSON.stringify(local), nextVersion(newVersion, 0), 'A', oldVersion]);
+    assert.equal(update.rows.length, 0); assert.deepEqual((await row()).data, changed); assert.deepEqual(local, { writing: 'Device edit' });
+    return { affectedRows: 0, remotePreserved: true, localPreserved: true };
+  });
+  await probe('Racing atomic insert rejects duplicate key rather than upserting another writer', async () => {
+    await db.exec('truncate diagnostic_rows'); const selected = await db.query('select * from diagnostic_rows where user_id=$1', ['A']); assert.equal(selected.rows.length, 0);
+    await db.query('insert into diagnostic_rows values ($1,$2::jsonb,$3::timestamptz)', ['A', JSON.stringify(changed), oldVersion]);
+    await assert.rejects(db.query('insert into diagnostic_rows values ($1,$2::jsonb,$3::timestamptz)', ['A', JSON.stringify(local), newVersion]), (error: any) => error.code === '23505');
+    assert.deepEqual((await row()).data, changed);
+    return { duplicateCode: '23505', existingRemoteUnmodified: true };
+  });
+  await probe('New writer timestamp strictly advances old future or microsecond timestamp under PostgreSQL comparison', async () => {
+    const samples = ['2020-01-01T00:00:00Z', oldVersion, '2040-01-01T00:00:00.999999Z'];
+    const versions = [];
+    for (const old of samples) { const next = nextVersion(old, Date.parse('2026-10-02T00:00:00Z')); const result = await db.query('select $1::timestamptz > $2::timestamptz as newer', [next, old]); assert.equal((result.rows[0] as any).newer, true); versions.push({ old, next }); }
+    return { versions };
+  });
+  await probe('Installed PostgREST client supports insert/conditional update returning affected rows; full JSON predicates grow the URL', async () => {
+    const client = createClient('https://synthetic-project.invalid', 'public-mock-key', { auth: { autoRefreshToken: false, persistSession: false, detectSessionInUrl: false } });
+    const insert = client.from('oda_user_data').insert({ user_id: 'A', data: local, updated_at: newVersion }).select('data,updated_at') as any;
+    const update = client.from('oda_user_data').update({ data: local, updated_at: newVersion }).eq('user_id', 'A').eq('updated_at', oldVersion).select('data,updated_at') as any;
+    const appData = getInitialDemoState();
+    const full = client.from('oda_user_data').update({ data: local, updated_at: newVersion }).eq('user_id', 'A').eq('updated_at', oldVersion).filter('data', 'eq', JSON.stringify(appData)).select('data,updated_at') as any;
+    assert.equal(insert.method, 'POST'); assert.equal(update.method, 'PATCH'); assert.match(update.headers.get('Prefer'), /return=representation/);
+    assert.equal(full.url.searchParams.get('data'), `eq.${JSON.stringify(appData)}`);
+    const large = client.from('oda_user_data').update({ data: local, updated_at: newVersion }).eq('user_id', 'A').eq('updated_at', oldVersion).filter('data', 'eq', JSON.stringify({ writing: 'x'.repeat(128_000) })).select('data,updated_at') as any;
+    assert.ok(large.url.href.length > 128_000);
+    return { insertMethod: insert.method, updateMethod: update.method, returningRepresentation: true, emptyAppDocumentBytes: Buffer.byteLength(JSON.stringify(appData)), timestampOnlyUrlCharacters: update.url.href.length, fullAppJsonUrlCharacters: full.url.href.length, largeJsonUrlCharacters: large.url.href.length, installedClientDefaultUrlLengthWarning: update.urlLengthLimit, requestsExecuted: 0 };
+  });
+} finally { await db.close(); }
+const report = { label: 'Synthetic proposed-protocol feasibility; scratch SQL and request construction, not app implementation', total: results.length, passed: results.filter(r => r.passed).length, failed: results.filter(r => !r.passed).length, liveFetchCalls, productionDbOrNativeTested: false, results };
+await writeFile('/workspace/scratch/oda-account-sync-readiness/guard-feasibility-report.json', JSON.stringify(report, null, 2) + '\n');
+console.log(JSON.stringify(report, null, 2));
+if (report.failed || liveFetchCalls) process.exitCode = 1;

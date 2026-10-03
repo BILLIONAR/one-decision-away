@@ -1,0 +1,12 @@
+{
+  "previousSourceCommit": "b6b8f76bb5f4507ee6f5f927092c8c58cb41b569",
+  "finalSourceCommit": "ca4c949b0773272ce8ba4c8f3d2fec7d6a51e4ec",
+  "all386BuildFilesByteIdentical": true,
+  "buildFiles": 386,
+  "changedBuildFiles": [],
+  "onlySourceChangeSinceIndependentBuiltRun": [
+    "scripts/qa-mobile-core-quality.mjs"
+  ],
+  "allThreeAppFileHashesMatchReviewedSource": true,
+  "explanation": "Only the reusable QA harness URL factory changed to use the existing production hash-route contract. Prior independent browser checks used correct hash routes; this build bridge verifies their 386 served/build files remain exact final-build bytes."
+}

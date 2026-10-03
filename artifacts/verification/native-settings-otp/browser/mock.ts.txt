@@ -1,0 +1,69 @@
+type Outcome = { ok?: boolean; message?: string; reject?: boolean; hold?: boolean };
+let native = true;
+let route = '/app/settings';
+let revision = 0;
+let epoch = 0;
+let cloud = { configured: true, session: null as any, lastSyncAt: null, syncing: false, error: null, scopeRevision: 1 };
+const cloudListeners = new Set<(state: typeof cloud) => void>();
+const routeListeners = new Set<() => void>();
+const calls: { kind: string; email?: string; code?: string; route?: string }[] = [];
+const plans: Record<string, Outcome[]> = { send: [], verify: [] };
+const pending: { kind: string; resolve: (outcome: Outcome) => void }[] = [];
+const toasts: { text: string; kind: string }[] = [];
+function routeEmit() { revision++; routeListeners.forEach(listener => listener()); }
+function cloudEmit(patch: Record<string, unknown>) { cloud = { ...cloud, ...patch }; cloudListeners.forEach(listener => listener(cloud)); }
+async function outcome(kind: string) {
+  let plan = plans[kind].shift() ?? { ok: true, message: 'Synthetic response; no email was sent.' };
+  if (plan.hold) plan = await new Promise<Outcome>(resolve => pending.push({ kind, resolve }));
+  if (plan.reject) throw new Error('Synthetic rejected auth request.');
+  return { ok: plan.ok ?? true, message: plan.message ?? 'Synthetic auth response.' };
+}
+export const cloudSync = {
+  getState: () => cloud,
+  subscribe: (listener: (state: typeof cloud) => void) => { cloudListeners.add(listener); return () => { cloudListeners.delete(listener); }; },
+  init: async () => { calls.push({ kind: 'cloud-init' }); },
+  getConfig: () => ({ url: 'https://fixture.invalid', anonKey: 'synthetic-placeholder-not-a-key' }),
+  setConfig: () => { throw new Error('Configuration writes are outside this fixture.'); },
+  signInWithEmail: async (email: string) => { calls.push({ kind: 'send', email }); return outcome('send'); },
+  verifyEmailCode: async (email: string, code: string) => {
+    calls.push({ kind: 'verify', email, code });
+    const result = await outcome('verify');
+    if (result.ok) cloudEmit({ session: { user: { id: 'synthetic-auth-user', email } }, scopeRevision: cloud.scopeRevision + 1 });
+    return result;
+  },
+  currentAccountGuard: () => { const scope = cloud.scopeRevision; return () => scope === cloud.scopeRevision; },
+  currentOperationGuard: () => { const scope = cloud.scopeRevision; return () => scope === cloud.scopeRevision; },
+  push: async () => { calls.push({ kind: 'fake-push' }); return true; },
+  signOut: async () => cloudEmit({ session: null, scopeRevision: cloud.scopeRevision + 1 }),
+  deleteAccount: async () => { throw new Error('Account deletion is outside this fixture.'); },
+};
+export const app = {
+  data: { missions: [], habits: [], notebookEntries: [], courses: {} },
+  setActiveRoute: (value: string) => { calls.push({ kind: 'route', route: value }); route = value; routeEmit(); },
+  showToast: (text: string, kind: string) => toasts.push({ text, kind }),
+  exportDataJson: () => calls.push({ kind: 'fake-backup-download' }),
+  importDataJson: async () => { throw new Error('Backup writes are outside this fixture.'); },
+  syncFromCloud: async () => false,
+};
+export const isNative = () => native;
+export const disablePush = async () => { calls.push({ kind: 'fake-disable-push' }); };
+export const routeStore = { subscribe: (listener: () => void) => { routeListeners.add(listener); return () => { routeListeners.delete(listener); }; },
+  getSnapshot: () => revision, route: () => route, epoch: () => epoch };
+export const fixture = {
+  snapshot: () => ({ native, route, epoch, cloud, calls: [...calls], toasts: [...toasts], pending: pending.map(({ resolve, ...item }) => item),
+    providerCalls: 0, emailsSent: 0, sharedCloudListeners: cloudListeners.size }),
+  next: (kind: 'send' | 'verify', plan: Outcome) => plans[kind].push(plan),
+  release: (kind: string, plan: Outcome) => {
+    const index = pending.findIndex(item => item.kind === kind);
+    if (index < 0) throw new Error(`No pending ${kind}.`);
+    pending.splice(index, 1)[0].resolve(plan);
+  },
+  navigate: app.setActiveRoute,
+  reset: (isNative = true, startRoute = '/app/settings') => {
+    if (pending.length) throw new Error('Complete held requests before resetting.');
+    native = isNative; route = startRoute; epoch++;
+    calls.length = 0; toasts.length = 0; plans.send.length = 0; plans.verify.length = 0;
+    cloudEmit({ configured: true, session: null, scopeRevision: cloud.scopeRevision + 1, error: null });
+    routeEmit();
+  },
+};

@@ -1,0 +1,369 @@
+{
+  "label": "Synthetic local account-sync readiness diagnostic; current code, not a fix",
+  "createdAt": "2026-10-02T09:55:59.653Z",
+  "root": "/workspace/oda-native-settings-otp",
+  "head": "dcb05c3622b92a7545054df535915de408743bb2",
+  "source": {
+    "src/services/cloudSync.ts": "50a24f6690106cebbc1b38dfabb0edb84d4ca34f28b26dde4b919537b62a4bde",
+    "src/services/repository.ts": "a65560692f655d05b37a367e5acbeff1b6dd2974f2f951ff70e419c1c9dcfc8a",
+    "src/store/useApp.tsx": "f9830c38ec908641d33ea8f26c92ae4d5d2a21068d2b3d19a99fd70c4708fb0c",
+    "supabase/schema.sql": "8153be0174245710a11c05b9d38fda1eb6abab2eddc83cfa39b2c76a2466627a"
+  },
+  "total": 12,
+  "passed": 12,
+  "failed": 0,
+  "reproducedRisks": 7,
+  "liveNetworkCalls": 0,
+  "realNativeOrProviderTested": false,
+  "results": [
+    {
+      "name": "Fresh OTP to existing remote: first ordinary edit overwrites unseen cloud work",
+      "classification": "P1 reproduced risk",
+      "passed": true,
+      "evidence": {
+        "readsAfterOTP": 0,
+        "fullDocumentUploads": 1,
+        "remoteOnlyBefore": [
+          "remote-only-A"
+        ],
+        "remoteAfter": [
+          "device-writing"
+        ],
+        "calls": [
+          {
+            "kind": "getSession"
+          },
+          {
+            "kind": "authSubscribe"
+          },
+          {
+            "kind": "verifyOtp",
+            "userId": "A"
+          },
+          {
+            "kind": "UPSERT",
+            "userId": "A",
+            "entries": [
+              "device-writing"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Fresh OTP to empty account: current full-document backup creates cloud row",
+      "classification": "expected current behavior",
+      "passed": true,
+      "evidence": {
+        "remoteCreated": true,
+        "deviceRecordPreserved": true,
+        "calls": [
+          {
+            "kind": "getSession"
+          },
+          {
+            "kind": "authSubscribe"
+          },
+          {
+            "kind": "verifyOtp",
+            "userId": "A"
+          },
+          {
+            "kind": "UPSERT",
+            "userId": "A",
+            "entries": [
+              "device-writing"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Successful initial pull applies existing cloud record with account guard",
+      "classification": "existing protection passes",
+      "passed": true,
+      "evidence": {
+        "cloudRecordApplied": true,
+        "noUpload": true,
+        "lastSyncAt": "2030-01-01T00:00:00.000Z",
+        "calls": [
+          {
+            "kind": "getSession"
+          },
+          {
+            "kind": "authSubscribe"
+          },
+          {
+            "kind": "SELECT",
+            "userId": "A"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Edit while initial SELECT is pending: stale pull blocked, but automatic push loses remote work",
+      "classification": "P1 reproduced risk",
+      "passed": true,
+      "evidence": {
+        "latePullPreventedLocalOverwrite": true,
+        "unreviewedAutomaticUploadStillReplacedRemote": true,
+        "calls": [
+          {
+            "kind": "getSession"
+          },
+          {
+            "kind": "authSubscribe"
+          },
+          {
+            "kind": "SELECT",
+            "userId": "A"
+          },
+          {
+            "kind": "UPSERT",
+            "userId": "A",
+            "entries": [
+              "device-writing"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Failed offline pull then reconnect and ordinary save overwrites unseen cloud work",
+      "classification": "P1 reproduced risk",
+      "passed": true,
+      "evidence": {
+        "onlyReadWasOfflineFailure": true,
+        "remotePreservedWhileOffline": true,
+        "remoteLostOnNextOnlineSave": true,
+        "calls": [
+          {
+            "kind": "getSession"
+          },
+          {
+            "kind": "authSubscribe"
+          },
+          {
+            "kind": "SELECT",
+            "userId": "A"
+          },
+          {
+            "kind": "UPSERT_OFFLINE",
+            "userId": "A",
+            "entries": [
+              "device-writing"
+            ]
+          },
+          {
+            "kind": "UPSERT",
+            "userId": "A",
+            "entries": [
+              "device-writing"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Synced account edits offline; remote advances elsewhere; next connected edit loses remote change",
+      "classification": "P1 reproduced risk",
+      "passed": true,
+      "evidence": {
+        "noReconnectRetryUntilAnotherSave": true,
+        "noCloudReadBeforeLaterUpload": true,
+        "remoteNewWritingLost": true,
+        "calls": [
+          {
+            "kind": "getSession"
+          },
+          {
+            "kind": "authSubscribe"
+          },
+          {
+            "kind": "UPSERT",
+            "userId": "A",
+            "entries": [
+              "device-writing"
+            ]
+          },
+          {
+            "kind": "UPSERT_OFFLINE",
+            "userId": "A",
+            "entries": [
+              "device-writing"
+            ]
+          },
+          {
+            "kind": "UPSERT",
+            "userId": "A",
+            "entries": [
+              "device-writing"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Account switch preserves intentional shared-device data but first B edit replaces unseen B remote",
+      "classification": "P1 reproduced risk",
+      "passed": true,
+      "evidence": {
+        "sharedDeviceDatasetKeptOnSwitch": true,
+        "accountANotUploaded": true,
+        "remoteBReplaced": true,
+        "calls": [
+          {
+            "kind": "getSession"
+          },
+          {
+            "kind": "authSubscribe"
+          },
+          {
+            "kind": "verifyOtp",
+            "userId": "B"
+          },
+          {
+            "kind": "UPSERT",
+            "userId": "B",
+            "entries": [
+              "device-writing"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "A delayed automatic save cannot upload into B after account switch",
+      "classification": "existing protection passes",
+      "passed": true,
+      "evidence": {
+        "delayedWrongAccountUploadPrevented": true,
+        "calls": [
+          {
+            "kind": "getSession"
+          },
+          {
+            "kind": "authSubscribe"
+          },
+          {
+            "kind": "verifyOtp",
+            "userId": "B"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Declining manual restore avoids immediate fallback but later ordinary save still replaces cloud",
+      "classification": "P1 reproduced risk",
+      "passed": true,
+      "evidence": {
+        "declinedRestoreDidNotUploadImmediately": true,
+        "laterAutoSaveReplacedRemote": true,
+        "calls": [
+          {
+            "kind": "getSession"
+          },
+          {
+            "kind": "authSubscribe"
+          },
+          {
+            "kind": "SELECT",
+            "userId": "A"
+          },
+          {
+            "kind": "UPSERT",
+            "userId": "A",
+            "entries": [
+              "device-writing"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Explicit local restore retains local-wins barrier and intentional cloud replacement",
+      "classification": "expected current behavior",
+      "passed": true,
+      "evidence": {
+        "explicitRestoreIntentPreserved": true,
+        "noAccidentalPullOverImport": true,
+        "calls": [
+          {
+            "kind": "getSession"
+          },
+          {
+            "kind": "authSubscribe"
+          },
+          {
+            "kind": "UPSERT",
+            "userId": "A",
+            "entries": [
+              "explicit-import-writing"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Remote write within freshness tolerance is missed; manual fallback can overwrite it",
+      "classification": "P1 reproduced risk",
+      "passed": true,
+      "evidence": {
+        "remoteNewerByMilliseconds": 1000,
+        "ignoredByCurrentTolerance": true,
+        "manualFallbackReplacedRemote": true,
+        "calls": [
+          {
+            "kind": "getSession"
+          },
+          {
+            "kind": "authSubscribe"
+          },
+          {
+            "kind": "UPSERT",
+            "userId": "A",
+            "entries": [
+              "device-writing"
+            ]
+          },
+          {
+            "kind": "SELECT",
+            "userId": "A"
+          },
+          {
+            "kind": "UPSERT",
+            "userId": "A",
+            "entries": [
+              "device-writing"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Late A SELECT after switch to B cannot replace shared-device data",
+      "classification": "existing protection passes",
+      "passed": true,
+      "evidence": {
+        "staleAccountReadDiscarded": true,
+        "sharedDeviceBytesUnchanged": true,
+        "calls": [
+          {
+            "kind": "getSession"
+          },
+          {
+            "kind": "authSubscribe"
+          },
+          {
+            "kind": "SELECT",
+            "userId": "A"
+          },
+          {
+            "kind": "verifyOtp",
+            "userId": "B"
+          }
+        ]
+      }
+    }
+  ]
+}

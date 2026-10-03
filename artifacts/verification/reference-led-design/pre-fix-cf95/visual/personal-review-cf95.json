@@ -1,0 +1,67 @@
+{
+  "sourceCommit": "cf95c6eda4264385a4f70b41f7df0dee7832ebe7",
+  "kind": "Independent actual PNG visual inspection, pre-calendar-fix snapshot",
+  "inspectedPngFiles": [
+    "final/en-light-390-today.png",
+    "final/en-light-320-sound-discovery.png",
+    "final/en-light-390-sound-player.png",
+    "final/en-light-320-notebook-calendar.png",
+    "calendar-probe/calendar-320-keyboard-sunday.png",
+    "calendar-probe/calendar-390-initial.png",
+    "reviewed/en-light-1440-today.png",
+    "reviewed/en-light-1440-sound-discovery.png",
+    "reviewed/en-light-1440-coach.png",
+    "reviewed/en-light-1440-notebook.png",
+    "reviewed/tr-dark-320-today.png",
+    "reviewed/tr-dark-320-sound-player.png",
+    "reviewed/es-dark-390-coach.png",
+    "reviewed/tr-light-390-notebook.png",
+    "reviewed/en-light-1440-course-overview.png",
+    "reviewed/es-light-320-course-workbook.png",
+    "reviewed/tr-dark-390-focus-guided.png",
+    "reviewed/en-dark-1440-focus-custom.png",
+    "reviewed/es-dark-320-notebook.png",
+    "reviewed/en-dark-390-sound-breathe.png",
+    "reviewed/es-light-390-courses.png",
+    "reviewed/tr-dark-1440-today-growth.png"
+  ],
+  "actualReferencePixelsInspected": [
+    "IMG_8669.jpeg",
+    "IMG_8668.jpeg",
+    "IMG_8667.jpeg",
+    "IMG_8666.jpeg",
+    "IMG_8665.jpeg",
+    "IMG_8664.jpeg",
+    "IMG_8663.jpeg"
+  ],
+  "findings": [
+    {
+      "severity": "P2",
+      "title": "Hidden mobile weekend calendar columns lack a visible scroll cue",
+      "status": "Accepted by parent; focused fix pending",
+      "evidence": "calendar-probe/report.json"
+    },
+    {
+      "severity": "P3",
+      "title": "Inherited daily-practice title intentionally ellipsized at320 in EN/ES",
+      "status": "Full accessible label remains; no new control label clipping found",
+      "scope": "Avoid broad zero-clipped-text claim"
+    }
+  ],
+  "automation": {
+    "contexts": 18,
+    "states": 198,
+    "screenshots": 234,
+    "axeScans": 80,
+    "axeViolations": 0,
+    "sourceSnapshotCount": 579,
+    "buildFiles": 388,
+    "sourceStable": true,
+    "buildStable": true,
+    "buttonSelectRangeTargetsBelow44": 0,
+    "pageAndLocalHttpErrors": 0
+  },
+  "visualAssessment": "Shared pearl/lavender shell is consistent; navy decision/focus/Coach and teal SoundPlayer remain local. Current real tree/data are retained; white/light quote stays readable. English and Turkish/Spanish visible labels wrap within320/390 viewports. Decorative original orb is not a listening claim. Owned scenic/course imagery and abstract curved Sound scenes adapt inspiration without importing social/phone chrome or sample third-party metrics.",
+  "manualAxeLimits": "Gradient backgrounds require manual review; inherited workbook generic div aria-labelledby warning is incomplete, with visible heading providing meaning. Solid backgrounds measured minimum4.712:1. Scoped axe is not complete WCAG certification.",
+  "releaseStatus": "No overall final visual pass while accepted P2 remains unresolved. No deployment."
+}

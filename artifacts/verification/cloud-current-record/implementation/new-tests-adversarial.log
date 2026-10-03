@@ -1,0 +1,127 @@
+✔ a matching current durable document uploads and records current plus historical confirmation (27.149885ms)
+✔ a stale rendered profile payload cannot roll acknowledged cloud work backward (5.71982ms)
+✔ a stale rendered notebook payload cannot roll acknowledged cloud work backward (5.491103ms)
+✔ a stale rendered futureSelf payload cannot roll acknowledged cloud work backward (5.010857ms)
+✔ missing authoritative local record rejects a push before any cloud query (5.111368ms)
+✔ invalid-json authoritative local record rejects a push before any cloud query (3.599961ms)
+✔ invalid-document authoritative local record rejects a push before any cloud query (3.132723ms)
+✔ a course-only stale caller uses the existing latest-course normalization and can upload (7.228825ms)
+✔ an ordinary repository save invalidates current confirmation immediately and retains history (6.306428ms)
+✔ a durable Notebook action invalidates confirmation without waiting for its debounce (3.883309ms)
+✔ a durable course save invalidates confirmation without requiring the AppProvider event listener (5.552766ms)
+✔ a save suppressed by its account guard still makes the current durable document dirty (3.548112ms)
+✔ a failed durable repository write preserves previous current confirmation (3.856088ms)
+✔ a failed durable notebook write preserves previous current confirmation (5.448218ms)
+✔ a failed durable course write preserves previous current confirmation (2.720228ms)
+✔ dirty startup does not automatically restore the same acknowledged cloud baseline over newer device work (3.458135ms)
+✔ an old in-flight upload retains its remote baseline while the latest durable document remains dirty (9.624802ms)
+✔ the latest queued durable payload updates after an older in-flight upload without reverting cloud or device (9.146488ms)
+✖ a cloud-restore fingerprint resolve after account drift returns false without publishing obsolete status (9.196784ms)
+✔ a cloud-restore fingerprint reject after account drift returns false without publishing obsolete status (7.123485ms)
+✖ a cloud-restore fingerprint resolve after project drift returns false without publishing obsolete status (4.424158ms)
+✔ a cloud-restore fingerprint reject after project drift returns false without publishing obsolete status (4.606194ms)
+✖ a cloud-restore fingerprint resolve after local-record drift returns false without publishing obsolete status (5.650856ms)
+✖ a cloud-restore fingerprint reject after local-record drift returns false without publishing obsolete status (10.035705ms)
+✔ a rejected current cloud-restore fingerprint returns false, preserves durable data and reports unconfirmed backup (4.153949ms)
+✔ cloud-restore acknowledgement owner-quota failure returns a boolean and keeps the durable restored record (3.685751ms)
+✔ cloud-restore acknowledgement document-read failure returns a boolean and keeps the durable restored record (6.94893ms)
+✖ a clean-reload confirmation fingerprint resolve after account B cannot publish account A status (4.766166ms)
+✔ a clean-reload confirmation fingerprint reject after account B cannot publish account A status (3.216079ms)
+✔ confirmation bootstrap after a clean reload is tied to the actual persisted document (4.850854ms)
+✔ confirmation bootstrap after a dirty reload preserves device work and historical cloud time (5.777367ms)
+✔ a coherently hydrated external-tab edit cannot inherit another tab’s current-document confirmation (6.945905ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 27
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 421.545428
+
+✖ failing tests:
+
+test at tests/cloud-current-record.test.ts:1:15057
+✖ a cloud-restore fingerprint resolve after account drift returns false without publishing obsolete status (9.196784ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:276:75)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:15057
+✖ a cloud-restore fingerprint resolve after project drift returns false without publishing obsolete status (4.424158ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:276:75)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:15057
+✖ a cloud-restore fingerprint resolve after local-record drift returns false without publishing obsolete status (5.650856ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  2 !== 0
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:276:75)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:15057
+✖ a cloud-restore fingerprint reject after local-record drift returns false without publishing obsolete status (10.035705ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:276:75)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cloud-current-record.test.ts:1:17568
+✖ a clean-reload confirmation fingerprint resolve after account B cannot publish account A status (4.766166ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (/workspace/oda-cloud-upload-current-record/tests/cloud-current-record.test.ts:317:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

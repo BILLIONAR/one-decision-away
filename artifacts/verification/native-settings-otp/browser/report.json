@@ -1,0 +1,674 @@
+{
+  "at": "2026-10-02T10:12:34.403Z",
+  "baseURL": "http://127.0.0.1:4190",
+  "browser": "151.0.7922.173",
+  "sourceHashes": {
+    "src/components/BackupAndCloudSettings.tsx": "b9eea2340144bda9ae1cffbb387703ffe8a2bd3fc391265509d799ffd9e50cd3",
+    "src/pages/Account.tsx": "8fe6847b30ac3f488bb7e78323e99835fc186e3ae4adf0eab631a7f32526a533",
+    "src/services/useCloudState.ts": "ddd8f7f8e54fda8f90feb37a150c94d0faceecf7e6c11900bb77116e9a00e0a9",
+    "src/i18n/account.ts": "6e6affef8aeda166429da564a87ae6395e1986a77fff4f311164054e51f6439f"
+  },
+  "css": {
+    "path": "assets/index-D6Ptr9gO.css",
+    "sha256": "a5e714416151984e402601fc542cbea6426cec029d2a1f2d9619762421ecb336"
+  },
+  "checks": [
+    {
+      "name": "Native Settings routes to Account without calling signIn or retaining a magic-link email form",
+      "passed": true
+    },
+    {
+      "name": "Invalid email remains local validation and does not send a request",
+      "passed": true
+    },
+    {
+      "name": "Rejected send releases busy state and renders retryable native code error",
+      "passed": true
+    },
+    {
+      "name": "Send error retries use the trimmed same address and open code entry",
+      "passed": true
+    },
+    {
+      "name": "Code input sanitizes nondigits and invalid length does not reach auth",
+      "passed": true
+    },
+    {
+      "name": "Synthetic invalid code. preserves code entry and permits retry",
+      "passed": true
+    },
+    {
+      "name": "Synthetic expired code. preserves code entry and permits retry",
+      "passed": true
+    },
+    {
+      "name": "Rejected verification renders retryable error and releases busy state",
+      "passed": true
+    },
+    {
+      "name": "Resend failure retains code entry and reuses sentTo",
+      "passed": true
+    },
+    {
+      "name": "Successful resend uses the same email, clears previous code and advises latest code",
+      "passed": true
+    },
+    {
+      "name": "Held verification disables concurrent controls and success updates real useCloudState from shared session",
+      "passed": true
+    },
+    {
+      "name": "Back to Settings renders the same signed-in synthetic account without separate auth state",
+      "passed": true
+    },
+    {
+      "name": "Held send can return to Settings; its late response does not navigate or resurrect Account",
+      "passed": true
+    },
+    {
+      "name": "Web Settings preserves Send link and web Account preserves magic-link request/success copy",
+      "passed": true
+    },
+    {
+      "name": "en 320px: native Settings route/code/resend/back copy and controls fit",
+      "passed": true,
+      "problems": [],
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Back to Settings",
+          "x": 16,
+          "right": 116.265625,
+          "width": 100.265625,
+          "height": 44
+        },
+        {
+          "text": "account-code",
+          "x": 57,
+          "right": 181.71875,
+          "width": 124.71875,
+          "height": 44
+        },
+        {
+          "text": "Sign in",
+          "x": 189.71875,
+          "right": 263,
+          "width": 73.28125,
+          "height": 44
+        },
+        {
+          "text": "Send a new code",
+          "x": 57,
+          "right": 156.125,
+          "width": 99.125,
+          "height": 44
+        },
+        {
+          "text": "Use a different email",
+          "x": 57,
+          "right": 176.296875,
+          "width": 119.296875,
+          "height": 40
+        }
+      ],
+      "treeLoaded": true,
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "en 390px: native Settings route/code/resend/back copy and controls fit",
+      "passed": true,
+      "problems": [],
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Back to Settings",
+          "x": 16,
+          "right": 116.265625,
+          "width": 100.265625,
+          "height": 44
+        },
+        {
+          "text": "account-code",
+          "x": 57,
+          "right": 251.71875,
+          "width": 194.71875,
+          "height": 44
+        },
+        {
+          "text": "Sign in",
+          "x": 259.71875,
+          "right": 333,
+          "width": 73.28125,
+          "height": 44
+        },
+        {
+          "text": "Send a new code",
+          "x": 57,
+          "right": 156.125,
+          "width": 99.125,
+          "height": 44
+        },
+        {
+          "text": "Use a different email",
+          "x": 172.125,
+          "right": 291.421875,
+          "width": 119.296875,
+          "height": 40
+        }
+      ],
+      "treeLoaded": true,
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "tr 320px: native Settings route/code/resend/back copy and controls fit",
+      "passed": true,
+      "problems": [],
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Ayarlara dön",
+          "x": 16,
+          "right": 96.28125,
+          "width": 80.28125,
+          "height": 44
+        },
+        {
+          "text": "account-code",
+          "x": 57,
+          "right": 166.859375,
+          "width": 109.859375,
+          "height": 44
+        },
+        {
+          "text": "Giriş yap",
+          "x": 174.859375,
+          "right": 263,
+          "width": 88.140625,
+          "height": 44
+        },
+        {
+          "text": "Yeni kod gönder",
+          "x": 57,
+          "right": 150.796875,
+          "width": 93.796875,
+          "height": 44
+        },
+        {
+          "text": "Başka bir e-posta kullan",
+          "x": 57,
+          "right": 197.625,
+          "width": 140.625,
+          "height": 40
+        }
+      ],
+      "treeLoaded": true,
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "tr 390px: native Settings route/code/resend/back copy and controls fit",
+      "passed": true,
+      "problems": [],
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Ayarlara dön",
+          "x": 16,
+          "right": 96.28125,
+          "width": 80.28125,
+          "height": 44
+        },
+        {
+          "text": "account-code",
+          "x": 57,
+          "right": 236.859375,
+          "width": 179.859375,
+          "height": 44
+        },
+        {
+          "text": "Giriş yap",
+          "x": 244.859375,
+          "right": 333,
+          "width": 88.140625,
+          "height": 44
+        },
+        {
+          "text": "Yeni kod gönder",
+          "x": 57,
+          "right": 150.796875,
+          "width": 93.796875,
+          "height": 44
+        },
+        {
+          "text": "Başka bir e-posta kullan",
+          "x": 166.796875,
+          "right": 307.421875,
+          "width": 140.625,
+          "height": 40
+        }
+      ],
+      "treeLoaded": true,
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "es 320px: native Settings route/code/resend/back copy and controls fit",
+      "passed": true,
+      "problems": [],
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Volver a Ajustes",
+          "x": 16,
+          "right": 116.390625,
+          "width": 100.390625,
+          "height": 44
+        },
+        {
+          "text": "account-code",
+          "x": 57,
+          "right": 140.46875,
+          "width": 83.46875,
+          "height": 44
+        },
+        {
+          "text": "Iniciar sesión",
+          "x": 148.46875,
+          "right": 263,
+          "width": 114.53125,
+          "height": 44
+        },
+        {
+          "text": "Enviar un código nuevo",
+          "x": 57,
+          "right": 192.640625,
+          "width": 135.640625,
+          "height": 44
+        },
+        {
+          "text": "Usar otro correo",
+          "x": 57,
+          "right": 154.375,
+          "width": 97.375,
+          "height": 40
+        }
+      ],
+      "treeLoaded": true,
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "es 390px: native Settings route/code/resend/back copy and controls fit",
+      "passed": true,
+      "problems": [],
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Volver a Ajustes",
+          "x": 16,
+          "right": 116.390625,
+          "width": 100.390625,
+          "height": 44
+        },
+        {
+          "text": "account-code",
+          "x": 57,
+          "right": 210.46875,
+          "width": 153.46875,
+          "height": 44
+        },
+        {
+          "text": "Iniciar sesión",
+          "x": 218.46875,
+          "right": 333,
+          "width": 114.53125,
+          "height": 44
+        },
+        {
+          "text": "Enviar un código nuevo",
+          "x": 57,
+          "right": 192.640625,
+          "width": 135.640625,
+          "height": 44
+        },
+        {
+          "text": "Usar otro correo",
+          "x": 208.640625,
+          "right": 306.015625,
+          "width": 97.375,
+          "height": 40
+        }
+      ],
+      "treeLoaded": true,
+      "fontStatus": "loaded"
+    },
+    {
+      "name": "Zero page errors, external requests, failed local assets, emails or provider calls",
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    "native-code-en-320.png",
+    "native-code-en-390.png",
+    "native-code-tr-320.png",
+    "native-code-tr-390.png",
+    "native-code-es-320.png",
+    "native-code-es-390.png"
+  ],
+  "layouts": [
+    {
+      "locale": "en",
+      "width": 320,
+      "screenshot": "native-code-en-320.png",
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Back to Settings",
+          "x": 16,
+          "right": 116.265625,
+          "width": 100.265625,
+          "height": 44
+        },
+        {
+          "text": "account-code",
+          "x": 57,
+          "right": 181.71875,
+          "width": 124.71875,
+          "height": 44
+        },
+        {
+          "text": "Sign in",
+          "x": 189.71875,
+          "right": 263,
+          "width": 73.28125,
+          "height": 44
+        },
+        {
+          "text": "Send a new code",
+          "x": 57,
+          "right": 156.125,
+          "width": 99.125,
+          "height": 44
+        },
+        {
+          "text": "Use a different email",
+          "x": 57,
+          "right": 176.296875,
+          "width": 119.296875,
+          "height": 40
+        }
+      ],
+      "treeLoaded": true,
+      "fontStatus": "loaded"
+    },
+    {
+      "locale": "en",
+      "width": 390,
+      "screenshot": "native-code-en-390.png",
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Back to Settings",
+          "x": 16,
+          "right": 116.265625,
+          "width": 100.265625,
+          "height": 44
+        },
+        {
+          "text": "account-code",
+          "x": 57,
+          "right": 251.71875,
+          "width": 194.71875,
+          "height": 44
+        },
+        {
+          "text": "Sign in",
+          "x": 259.71875,
+          "right": 333,
+          "width": 73.28125,
+          "height": 44
+        },
+        {
+          "text": "Send a new code",
+          "x": 57,
+          "right": 156.125,
+          "width": 99.125,
+          "height": 44
+        },
+        {
+          "text": "Use a different email",
+          "x": 172.125,
+          "right": 291.421875,
+          "width": 119.296875,
+          "height": 40
+        }
+      ],
+      "treeLoaded": true,
+      "fontStatus": "loaded"
+    },
+    {
+      "locale": "tr",
+      "width": 320,
+      "screenshot": "native-code-tr-320.png",
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Ayarlara dön",
+          "x": 16,
+          "right": 96.28125,
+          "width": 80.28125,
+          "height": 44
+        },
+        {
+          "text": "account-code",
+          "x": 57,
+          "right": 166.859375,
+          "width": 109.859375,
+          "height": 44
+        },
+        {
+          "text": "Giriş yap",
+          "x": 174.859375,
+          "right": 263,
+          "width": 88.140625,
+          "height": 44
+        },
+        {
+          "text": "Yeni kod gönder",
+          "x": 57,
+          "right": 150.796875,
+          "width": 93.796875,
+          "height": 44
+        },
+        {
+          "text": "Başka bir e-posta kullan",
+          "x": 57,
+          "right": 197.625,
+          "width": 140.625,
+          "height": 40
+        }
+      ],
+      "treeLoaded": true,
+      "fontStatus": "loaded"
+    },
+    {
+      "locale": "tr",
+      "width": 390,
+      "screenshot": "native-code-tr-390.png",
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Ayarlara dön",
+          "x": 16,
+          "right": 96.28125,
+          "width": 80.28125,
+          "height": 44
+        },
+        {
+          "text": "account-code",
+          "x": 57,
+          "right": 236.859375,
+          "width": 179.859375,
+          "height": 44
+        },
+        {
+          "text": "Giriş yap",
+          "x": 244.859375,
+          "right": 333,
+          "width": 88.140625,
+          "height": 44
+        },
+        {
+          "text": "Yeni kod gönder",
+          "x": 57,
+          "right": 150.796875,
+          "width": 93.796875,
+          "height": 44
+        },
+        {
+          "text": "Başka bir e-posta kullan",
+          "x": 166.796875,
+          "right": 307.421875,
+          "width": 140.625,
+          "height": 40
+        }
+      ],
+      "treeLoaded": true,
+      "fontStatus": "loaded"
+    },
+    {
+      "locale": "es",
+      "width": 320,
+      "screenshot": "native-code-es-320.png",
+      "viewport": 320,
+      "documentScroll": 320,
+      "mainScroll": 320,
+      "mainWidth": 320,
+      "controls": [
+        {
+          "text": "Volver a Ajustes",
+          "x": 16,
+          "right": 116.390625,
+          "width": 100.390625,
+          "height": 44
+        },
+        {
+          "text": "account-code",
+          "x": 57,
+          "right": 140.46875,
+          "width": 83.46875,
+          "height": 44
+        },
+        {
+          "text": "Iniciar sesión",
+          "x": 148.46875,
+          "right": 263,
+          "width": 114.53125,
+          "height": 44
+        },
+        {
+          "text": "Enviar un código nuevo",
+          "x": 57,
+          "right": 192.640625,
+          "width": 135.640625,
+          "height": 44
+        },
+        {
+          "text": "Usar otro correo",
+          "x": 57,
+          "right": 154.375,
+          "width": 97.375,
+          "height": 40
+        }
+      ],
+      "treeLoaded": true,
+      "fontStatus": "loaded"
+    },
+    {
+      "locale": "es",
+      "width": 390,
+      "screenshot": "native-code-es-390.png",
+      "viewport": 390,
+      "documentScroll": 390,
+      "mainScroll": 390,
+      "mainWidth": 390,
+      "controls": [
+        {
+          "text": "Volver a Ajustes",
+          "x": 16,
+          "right": 116.390625,
+          "width": 100.390625,
+          "height": 44
+        },
+        {
+          "text": "account-code",
+          "x": 57,
+          "right": 210.46875,
+          "width": 153.46875,
+          "height": 44
+        },
+        {
+          "text": "Iniciar sesión",
+          "x": 218.46875,
+          "right": 333,
+          "width": 114.53125,
+          "height": 44
+        },
+        {
+          "text": "Enviar un código nuevo",
+          "x": 57,
+          "right": 192.640625,
+          "width": 135.640625,
+          "height": 44
+        },
+        {
+          "text": "Usar otro correo",
+          "x": 208.640625,
+          "right": 306.015625,
+          "width": 97.375,
+          "height": 40
+        }
+      ],
+      "treeLoaded": true,
+      "fontStatus": "loaded"
+    }
+  ],
+  "errors": [],
+  "externalAttempts": [],
+  "failedRequests": [],
+  "providerCalls": 0,
+  "emailsSent": 0,
+  "limits": [
+    "Real BackupAndCloudSettings, Account, useCloudState, shared UI, translations and current built CSS/fonts/tree assets.",
+    "One synthetic cloudSync session is shared by both screens; useApp routes, native detection and notification calls are deliberately mocked.",
+    "Local auth responses only: no emails, Supabase/Apple/providers, packages, native configuration or physical-device claims.",
+    "Chromium on the selected saved Linux cloud executor. This verifies client behavior, not real email delivery or native authentication."
+  ]
+}

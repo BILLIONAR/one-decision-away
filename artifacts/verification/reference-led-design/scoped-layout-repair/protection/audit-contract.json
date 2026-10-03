@@ -1,0 +1,35 @@
+{
+  "kind": "bounded writer and final-review contract",
+  "baselineCommit": "635209e1731ba53e2567c0f39b011183912d7ac8",
+  "allowedAppPaths": [
+    "src/pages/SoundRoom.tsx",
+    "src/styles/sound.css",
+    "src/pages/Today.tsx",
+    "src/pages/Focus.tsx",
+    "src/styles/workingSurfaces.css",
+    "src/styles/notebook.css",
+    "src/components/notebook/JournalWorkspace.tsx",
+    "src/styles/coach.css"
+  ],
+  "clarification": "AppShell and Coach.tsx are byte-identical. Existing data-app-route permits route-scoped nav CSS; root edits only coach.css. JournalWorkspace is optional presentation-class only.",
+  "byteInvariantScopes": [
+    "All 348 protected service/store/data/audio-runtime/workflow/native/config/hosting/SW files.",
+    "All 160 owned narration MP3s and all other public assets.",
+    "AppShell, Coach.tsx, index/CSP, theme initialization, global tokens/palette/logo, growth CSS and all app files outside the bounded allowlist."
+  ],
+  "semanticReview": [
+    "Today and Focus presentation can reorder JSX while preserving controllers, real counts, timer/reward/draft/data semantics, callbacks, keys/refs, controlled inputs and ARIA.",
+    "Journal presentation classes preserve selected-date filtering and writing date, draft/dirty continuity, native/fallback photo behavior, save/edit/delete, Notebook locale read-aloud and optional reflectionArtwork SSR dependency boundary.",
+    "SoundRoom may add authorized presentation visibility/shared-control state; review this explicitly rather than imposing raw whole-component token identity. Preserve hook order, subscriptions/effect cleanup, pause/resume, volume/timer, active state truth, keyboard/ARIA, existing soundRoomPlayer and guidance loading/cancellation semantics.",
+    "Preserve 71-calendar keyboard/scroll accessibility and 4a8 timer selected-label sizing, FocusLock accessibility/end-early, photo fallback and unsupported/denied fullscreen fixes."
+  ],
+  "freshProofRequired": [
+    "New exact source/build/aggregate receipt; prior historical 597/0 alone is insufficient.",
+    "Fresh actual affected control dimensions of at least 44px, including tomorrow input, Dismiss and TR Notebook Delete where applicable; previous 22/40/36.78px findings are not repaired by evidence rebind.",
+    "Fresh 320/390 and desktop EN/TR/ES light/dark affected-state clipping, serious/critical axe, controller/navigation and mobile behavior; keep raw failures and incomplete axe findings.",
+    "Sound artwork visual hold and user/parent visual QA approval remain open; functional review cannot imply publication approval."
+  ],
+  "notAuthorized": [
+    "App edits by auditor, tests/builds, installation, provider/network/credential changes, new art generation, release or publication."
+  ]
+}

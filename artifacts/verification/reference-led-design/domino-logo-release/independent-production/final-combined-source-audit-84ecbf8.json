@@ -1,0 +1,308 @@
+{
+  "kind": "sealed independent supplemental final combined source/protection audit",
+  "reviewedAtUtc": "2026-10-03T19:15:19.506860+00:00",
+  "reviewer": "/root/production_delta_audit",
+  "independentContinuityReviewer": "/root/production_delta_audit/narration_course_delta",
+  "sourceCommit": "84ecbf8776146b766a30964bf8e6487234dd1dd4",
+  "previousReviewEvidenceCommit": "dc7208922ecbe026a2523ee4c571735e3f375bae",
+  "previousProductionCommit": "350aa158f30c773a373f2895e267119f9f2eb17a",
+  "branch": "design/reference-led-oda",
+  "status": "PASS bounded final source/protection and aggregate-evidence binding; independent browser/icon review and actual deployment remain pending",
+  "workingTreeStatus": "",
+  "sourceDelta": {
+    "changedPaths": 43,
+    "modifiedPriorPaths": 22,
+    "newPaths": 21,
+    "priorTrackedCount": 6473,
+    "priorTrackedUnchanged": 6451,
+    "deletedPriorPaths": [],
+    "changes": [
+      {
+        "status": "M",
+        "file": "README.md"
+      },
+      {
+        "status": "A",
+        "file": "brand-assets/domino8/GENERATION-PROMPT.txt"
+      },
+      {
+        "status": "A",
+        "file": "brand-assets/domino8/ODA-Icon8-Comparison.png"
+      },
+      {
+        "status": "A",
+        "file": "brand-assets/domino8/ODA-Icon8-Reconstruction-Master-1254.png"
+      },
+      {
+        "status": "A",
+        "file": "brand-assets/domino8/ODA-Icon8-Small-Size-QA.png"
+      },
+      {
+        "status": "A",
+        "file": "brand-assets/domino8/README.txt"
+      },
+      {
+        "status": "A",
+        "file": "brand-assets/domino8/SHA256SUMS.txt"
+      },
+      {
+        "status": "A",
+        "file": "brand-assets/domino8/derivatives.json"
+      },
+      {
+        "status": "A",
+        "file": "brand-assets/ios/c4/AppIcon-512@2x.png"
+      },
+      {
+        "status": "A",
+        "file": "brand-assets/ios/c4/splash-2732x2732.png"
+      },
+      {
+        "status": "A",
+        "file": "brand-assets/ios/domino8/AppIcon-512@2x.png"
+      },
+      {
+        "status": "A",
+        "file": "brand-assets/ios/domino8/splash-2732x2732.png"
+      },
+      {
+        "status": "M",
+        "file": "docs/BRAND.md"
+      },
+      {
+        "status": "M",
+        "file": "index.html"
+      },
+      {
+        "status": "M",
+        "file": "ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png"
+      },
+      {
+        "status": "M",
+        "file": "ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732-1.png"
+      },
+      {
+        "status": "M",
+        "file": "ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732-2.png"
+      },
+      {
+        "status": "M",
+        "file": "ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732.png"
+      },
+      {
+        "status": "M",
+        "file": "public/apple-touch-icon.png"
+      },
+      {
+        "status": "A",
+        "file": "public/brand/domino8/oda-app-domino8-v1-192.png"
+      },
+      {
+        "status": "A",
+        "file": "public/brand/domino8/oda-app-domino8-v1-512.png"
+      },
+      {
+        "status": "A",
+        "file": "public/brand/domino8/oda-app-domino8-v1-maskable-192.png"
+      },
+      {
+        "status": "A",
+        "file": "public/brand/domino8/oda-app-domino8-v1-maskable-512.png"
+      },
+      {
+        "status": "A",
+        "file": "public/brand/domino8/oda-apple-domino8-v1-180.png"
+      },
+      {
+        "status": "A",
+        "file": "public/brand/domino8/oda-favicon-domino8-v1-32.png"
+      },
+      {
+        "status": "A",
+        "file": "public/brand/domino8/oda-mark-domino8-v1-256.png"
+      },
+      {
+        "status": "A",
+        "file": "public/brand/domino8/og-image-domino8-v1.png"
+      },
+      {
+        "status": "M",
+        "file": "public/icon-192-maskable.png"
+      },
+      {
+        "status": "M",
+        "file": "public/icon-192.png"
+      },
+      {
+        "status": "M",
+        "file": "public/icon-512-maskable.png"
+      },
+      {
+        "status": "M",
+        "file": "public/icon-512.png"
+      },
+      {
+        "status": "M",
+        "file": "public/manifest.webmanifest"
+      },
+      {
+        "status": "M",
+        "file": "public/sw.js"
+      },
+      {
+        "status": "A",
+        "file": "scripts/brand-domino8-assets.mjs"
+      },
+      {
+        "status": "M",
+        "file": "scripts/brand.mjs"
+      },
+      {
+        "status": "M",
+        "file": "src/brand/current.ts"
+      },
+      {
+        "status": "M",
+        "file": "src/components/Logo.tsx"
+      },
+      {
+        "status": "A",
+        "file": "src/components/brand/LogoDomino8.tsx"
+      },
+      {
+        "status": "M",
+        "file": "src/pages/Settings.tsx"
+      },
+      {
+        "status": "M",
+        "file": "src/services/notificationScheduler.ts"
+      },
+      {
+        "status": "M",
+        "file": "src/styles/coach.css"
+      },
+      {
+        "status": "M",
+        "file": "supabase/functions/send-nudges/push-worker.test.ts"
+      },
+      {
+        "status": "M",
+        "file": "tests/service-worker.test.ts"
+      }
+    ]
+  },
+  "protection": {
+    "byteIdenticalPriorSrcFiles": 302,
+    "byteIdenticalNarrationFiles": 165,
+    "narrationChanged": [],
+    "priorPublicBrandAssetsRetained": 32,
+    "priorPublicBrandChanged": [],
+    "priorBrandComponentsRetained": [
+      "src/components/brand/LogoC4.tsx",
+      "src/components/brand/LogoV2.tsx",
+      "src/components/brand/LogoV3.tsx",
+      "src/components/brand/LogoV4.tsx"
+    ],
+    "priorBrandComponentsChanged": [],
+    "TodayPaletteAppShellUnchanged": true,
+    "functionalNarrationFirstUseCourseRewardsDataCloudPurchasesFocusSoundControllersUnchanged": true,
+    "SettingsAndSchedulerExactlyIconPathOnly": {
+      "src/pages/Settings.tsx": true,
+      "src/services/notificationScheduler.ts": true
+    },
+    "coachCssOnlyLogoBackdropExclusion": true,
+    "serviceWorkerOnlyGenerationAndLogoPathChanges": true,
+    "serviceWorkerGeneration": "v6",
+    "serviceWorkerNarrationExclusionRoutingNotificationRestrictionsUnchanged": true,
+    "nativeConfigAndSigningFilesChecked": 16,
+    "nativeConfigAndSigningChanged": [],
+    "workflowDependencyBuildBackendConfigFilesChecked": 19,
+    "workflowDependencyBuildBackendConfigChanged": [],
+    "preservedNativeC4Archives": [
+      {
+        "priorFile": "ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png",
+        "archiveFile": "brand-assets/ios/c4/AppIcon-512@2x.png",
+        "sha256": "7720d317a6b1080637f64eef24510ea9e84f80413be46c7f5bdbd4221c399956",
+        "equalsPriorGitBytes": true
+      },
+      {
+        "priorFile": "ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732.png",
+        "archiveFile": "brand-assets/ios/c4/splash-2732x2732.png",
+        "sha256": "5582e41575bde0b04c0229e99d56a0ee8e4cebd0e97a4a4ec26bce5b3392536e",
+        "equalsPriorGitBytes": true
+      }
+    ]
+  },
+  "freshBuildEvidence": {
+    "receiptFile": "/workspace/scratch/oda-reference-redesign/domino-logo/final-build/build-receipt.json",
+    "receiptBytes": 244395,
+    "receiptSha256": "2936d984840ee67a2a9696f24111a32b4a14b411a798b56c518ec9b949894c6e",
+    "sourceCount": 900,
+    "sourceWorkingAndGitBlobMismatches": [],
+    "compiledCount": 445,
+    "compiledMismatches": [],
+    "aggregateCommand": "VITE_BASE_PATH=/one-decision-away/ npm run check",
+    "aggregateExit": 0,
+    "aggregatePasses": 621,
+    "aggregateFailures": 0,
+    "actualRawLogBytes": 79264,
+    "actualRawLogSha256": "17e93008892990c226a74dc59af7d68d515fdb5ff1c177d348b6c16fa7bddb0f",
+    "matchesRecordedBytesAndHash": true,
+    "actual621PassAnd0FailSummaryRead": true,
+    "rerunOrModifiedByAuditor": false
+  },
+  "sourceProvenance": {
+    "file": "brand-assets/domino8/ODA-Icon8-Reconstruction-Master-1254.png",
+    "actualSha256": "49ebd132ec6f67282a95a9e941631fccfd3e1d72bd5049a45179c277dcf78a96",
+    "matchesDeclaredSource": true,
+    "READMEExplicitlySaysReconstructionNotRecoveredOriginal": true,
+    "parentAcceptedReconstructionPerCurrentDelegation": true,
+    "derivativeCount": 10,
+    "derivativeHashErrors": [],
+    "visualQualityOrPlatformMaskingNotCertifiedByThisSourceAuditor": true
+  },
+  "priorAccumulatedAudit": {
+    "file": "/workspace/scratch/oda-reference-redesign/domino-logo/independent-production/production-delta-audit.json",
+    "bytes": 8861,
+    "sha256": "aa3866f52358cc03522e9ee79f822de29dcf6e2a94277fc808169a899696e2df",
+    "unchanged": true
+  },
+  "parentSavedDeploymentPreflight": {
+    "readOnlyReceiptFile": "/workspace/scratch/oda-reference-redesign/domino-logo/deployment/repository-preflight.json",
+    "observedAt": "2026-10-03T18:49:06.867Z",
+    "mainReported": "350aa158f30c773a373f2895e267119f9f2eb17a",
+    "protectedReported": false,
+    "requiredContextsReported": [],
+    "rulesetsReported": [],
+    "workflowSourceEqualsPreviousProduction": true,
+    "normalMainPushTestsBuildThenPages": true,
+    "previousLivePublicAssetsSavedHashesMatchGitMain": [
+      {
+        "file": "sw.js",
+        "match": true
+      },
+      {
+        "file": "brand/oda-app-c4-v1-192.png",
+        "match": true
+      },
+      {
+        "file": "manifest.webmanifest",
+        "match": true
+      }
+    ],
+    "previousLiveHTMLSavedBytesHashMatchReceipt": true,
+    "freshRemoteReadsOrMutationsByThisAuditor": false
+  },
+  "findings": [],
+  "pending": [
+    "Independent final browser/logo asset visual QA; no pending check is represented as passed here.",
+    "Parent final publication checkpoint under explicit live-WEB approval; no App Store release.",
+    "Normal protected-path merge/main publication and CI completion, followed by actual served-content/assets/key-route verification. A commit push is not deployment proof."
+  ],
+  "limits": [
+    "Read-only Git/source/build/log/provenance/parent-receipt verification. No app edit, generator execution, build/test rerun, browser, install, deploy, credential access or external mutation.",
+    "Inherited same-timestamp legacy remote-writer race and real provider/physical iPhone/WebKit/audio listening limits remain as previously documented.",
+    "Native icon configuration in source is not proof of physically installed app, native build/signing, App Store acceptance or release."
+  ],
+  "allAuditorReadersClosed": true
+}

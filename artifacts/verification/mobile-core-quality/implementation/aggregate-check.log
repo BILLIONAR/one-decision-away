@@ -1,0 +1,818 @@
+
+> oda-one-decision-away@1.0.0 check
+> npm run lint && node scripts/validate-i18n.mjs && node --import tsx scripts/test-i18n.ts && node --import tsx scripts/test-notebook.ts && node --import tsx scripts/test-notebook-voice.ts && node --import tsx scripts/test-routing.ts && npm test && npm run build
+
+
+> oda-one-decision-away@1.0.0 lint
+> tsc --noEmit
+
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice
+tr: 6823 entries; missing keys 0; placeholder differences 0
+es: 6823 entries; missing keys 0; placeholder differences 0
+English-first startup, saved choices, EN/TR/ES switching, fallback and repeated placeholders passed.
+✔ old backups normalize without copying or losing any legacy Dream Journal field (2.130352ms)
+✔ new writing of every kind including affirmation earns 25 once; intention alone does not (2.780825ms)
+✔ edit, no-op, delete and recreate preserve immutable once-per-day reward claims (0.433065ms)
+✔ local writing day and existing UTC reward ceiling are separate and cap-safe (0.688622ms)
+✔ 369 only counts matching written intentions, allows partial saves and retains archived histories (1.800983ms)
+✔ 369 derives a real 33-day streak and preserves the achieved target after a gap (1.652823ms)
+✔ 369 matches Turkish dotted/dotless uppercase pairs without stripping meaningful accents (0.417441ms)
+✔ calendar streaks use local days across DST, not elapsed 24-hour periods (0.583463ms)
+✔ validation rejects blank entries, future dates, past creation and excess slots without altering input (0.43602ms)
+✔ legacy edits preserve photos, links and original date; unified JSON roundtrip is lossless (6.557185ms)
+✔ real repository serializes concurrent writes, protects from stale saves, and honors explicit restore (10.797847ms)
+✔ stale whole-document saves do not resurrect deleted legacy entries or lose new ones (1.417033ms)
+✔ Notebook rebases after a delayed load against a concurrent profile and ledger save (0.935204ms)
+✔ concurrent mission and Notebook reward evaluation share the same 2500 ceiling (7.503325ms)
+✔ failed storage saves reject, do not push cloud or claim rewards, and queue recovers (1.300296ms)
+✔ unreadable saved JSON is preserved, never silently replaced with seed data (0.196958ms)
+✔ explicit local restore blocks older cloud data across failed uploads and is account/project scoped (16.741731ms)
+✔ an old in-flight cloud upload cannot overwrite a newer restored snapshot or clear its marker (4.923464ms)
+✔ a signed-out import binds to the first later connection and stays isolated from other accounts (4.91317ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 71.065807
+Notebook voice uses device speech only, preserves preferences and handles unavailable speech.
+✔ root hosting retains history paths, including direct reloads (0.961394ms)
+✔ project hosting keeps every navigation on the same static document (0.828222ms)
+✔ landing URLs and non-route fragments do not become unknown routes (0.173462ms)
+✔ back/forward hash entries resolve to canonical route IDs (0.137548ms)
+✔ icons and service worker URLs stay under their deployment base (0.175295ms)
+✔ service worker precaches only its project directory (14.573626ms)
+✔ standalone support remains available offline without replacing the application shell (5.54184ms)
+✔ activation preserves sibling apps and this version media cache (1.393888ms)
+✔ notification defaults and legacy targets open the project hash route (1.038951ms)
+✔ installed app metadata refreshes instead of retaining the cached identity (1.82553ms)
+✔ installed app metadata remains available offline (1.067434ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 34.926883
+
+> oda-one-decision-away@1.0.0 test
+> node --import tsx --test tests/*.test.ts supabase/functions/send-nudges/core.test.ts supabase/functions/send-nudges/push-worker.test.ts
+
+✔ 600 scheduled selections are unique across 100 local calendar days and repeat only in the next cycle (2.964613ms)
+✔ calendar-day index is independent of server timezone, DST boundaries and midnight UTC (0.29793ms)
+✔ sender blocks private-network endpoints, embedded credentials, lookalike hosts and unexpected ports (0.287846ms)
+✔ payload identifies adaptation/translation and routes stay valid for root and project hosting (1.17057ms)
+✔ cron authenticator requires a substantial matching secret (10.64798ms)
+✔ push event displays the real server payload without an open client (1.952122ms)
+✔ unexpected push fields cannot become arbitrary notification options (4.310608ms)
+✔ does not load a runtime before explicit initialization and blocks unsupported devices (1.614732ms)
+✔ context retains the latest user turn, merges interrupted turns, and ignores injected roles (0.503111ms)
+✔ streams accumulated visible content and disables reasoning output (1.566258ms)
+✔ aborting initialization disposes the downloading runtime and allows retry (2.987628ms)
+[ODA Coach] Generation failed: Error: GPU device lost: out of memory
+    at Object.generate (/workspace/oda-mobile-core-quality/tests/ai-coach.test.ts:117:35)
+    at <anonymous> (/workspace/oda-mobile-core-quality/src/services/aiCoach.ts:256:68)
+    at Object.stream (/workspace/oda-mobile-core-quality/src/services/aiCoach.ts:300:5)
+    at TestContext.<anonymous> (/workspace/oda-mobile-core-quality/tests/ai-coach.test.ts:122:30)
+    at async Test.run (node:internal/test_runner/test:1389:7)
+    at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+✔ cancellation drains generation, suppresses late text, and releases the next request (2.30765ms)
+✔ generation failures are actionable, never become a canned coach reply, and require restart (2.66532ms)
+✔ unload cancels an active operation, releases memory and supports a fresh initialization (0.576552ms)
+✔ ambient renders are long independent stereo textures with finite bounded levels (195.8576ms)
+✔ scene identities differ in spectrum and amplitude dynamics (37.275589ms)
+✔ loop overlaps join continuous adjacent noise without a boundary spike (44.95073ms)
+✔ seeds reproduce review samples and produce a new texture when changed (110.459435ms)
+✔ one Sound Room track keeps one title across categories, including intentional noise reuse (0.39715ms)
+✔ fresh startup seeds and absent records do not prompt for a backup (2.371266ms)
+✔ empty notebook, lesson, experiment and weekly-review shells are not saved personal work (1.075827ms)
+✔ the first saved journal, scripting or future letter qualifies without three older records (1.972022ms)
+✔ a saved intention, gratitude note or affirmation qualifies before any decision completion (0.903717ms)
+✔ an interrupted first lesson answer of zero, practice checkbox or reflection qualifies (0.864387ms)
+✔ the first course plan, paused attempt or saved review qualifies independently of lesson completion (0.837967ms)
+✔ one saved weekly review with no kept decisions qualifies (0.275266ms)
+✔ one completion, kept decision, vision choice or dream-journal entry preserves existing eligibility (0.917948ms)
+✔ a valid downloaded backup suppresses until the exact fourteen-day boundary (0.650203ms)
+✔ invalid, absent and future export or cloud timestamps never suppress protection (0.649132ms)
+✔ freshness compares actual ISO instants and accepts leap days without calendar normalization (0.211199ms)
+✔ only configured, signed-in, recent scoped cloud success with no error suppresses the reminder (0.4164ms)
+✔ a recent export still protects work when cloud sync fails, and session dismissal remains respected (0.376859ms)
+✔ eligibility does not alter saved work or cloud status, and all three locales explain protection without promising sync (0.571263ms)
+✔ restore safety: weekly review text cannot be an object (3.442426ms)
+✔ restore safety: life score records need sortable timestamps (4.03375ms)
+✔ restore safety: bridge records need their rendered amounts (0.783755ms)
+✔ restore safety: a pinned dream name cannot be a React object child (1.093003ms)
+✔ legacy course storage migrates into the personal record without changing other data (6.886043ms)
+✔ course edits, completion, experiment plans and logs roundtrip through JSON backup (4.257147ms)
+✔ a stale save from another feature retains newer lesson notes and practice logs (2.229731ms)
+✔ a legacy backup keeps local courses; an explicit empty course backup clears them (2.44001ms)
+✔ validation rejects malformed personal, notebook and course data before any storage write (5.47643ms)
+✔ quota failures keep the entire previous record and legacy key intact, and a retry succeeds (1.911761ms)
+✔ unreadable main data is never replaced by a course-only save (0.600918ms)
+✔ lesson edits and re-completion retain the real-world experiment history (0.324901ms)
+✔ course mutations wait for the shared write lock and rebase onto a concurrent notebook commit (1.07822ms)
+✔ ledger and notebook rewards retain one UTC ceiling when the local decision day differs (16.587737ms)
+✔ cloud upload captures current courses and invalid cloud backups leave local storage untouched (21.822522ms)
+✔ cloud previews do not change last-sync or local data until the reviewed record is committed (4.399722ms)
+✔ Bank chart keeps UTC ledger Today and date labels aligned at New York evening (25.26906ms)
+✔ Bank seven-day earnings window is Sep 25 through Oct 1 for the UTC ledger day (3.159608ms)
+✔ Savings includes the first displayed UTC day in net and pace, excluding opening history (4.655119ms)
+✔ Savings net includes mixed first-day credits, spending and the current UTC day (3.233049ms)
+✔ Bank chart formats ledger dates in selected tr UI locale (20.13139ms)
+✔ Bank chart formats ledger dates in selected es UI locale (17.662097ms)
+✔ a welcome grant preserves the balance and supplies zero practice evidence (2.172105ms)
+✔ mixed financial deposits cannot inflate distinct kept days or completed decisions (6.270291ms)
+✔ practice week follows local calendar boundaries and repeated days count once (0.251701ms)
+✔ reward labels distinguish symbolic unlocking from actual D$ pace estimates in every locale (0.468789ms)
+✔ client and server agree on the message limits (0.651045ms)
+✔ the request keeps the last 12 messages, trims each to 1500 characters and drops empty ones (0.260834ms)
+✔ context is sent only when there is something to send, and is trimmed (0.206943ms)
+✔ responses map to a result or a typed error (1.032691ms)
+✔ the shared context holds only today, the last kept decisions and short journal lines (7.012924ms)
+✔ a matching current durable document uploads and records current plus historical confirmation (23.073439ms)
+✔ a stale rendered profile payload cannot roll acknowledged cloud work backward (7.095689ms)
+✔ a stale rendered notebook payload cannot roll acknowledged cloud work backward (6.716196ms)
+✔ a stale rendered futureSelf payload cannot roll acknowledged cloud work backward (5.094503ms)
+✔ missing authoritative local record rejects a push before any cloud query (3.211726ms)
+✔ invalid-json authoritative local record rejects a push before any cloud query (3.337587ms)
+✔ invalid-document authoritative local record rejects a push before any cloud query (3.443126ms)
+✔ a course-only stale caller uses the existing latest-course normalization and can upload (7.306027ms)
+✔ an ordinary repository save invalidates current confirmation immediately and retains history (3.288893ms)
+✔ a durable Notebook action invalidates confirmation without waiting for its debounce (3.846817ms)
+✔ a durable course save invalidates confirmation without requiring the AppProvider event listener (3.925647ms)
+✔ a save suppressed by its account guard still makes the current durable document dirty (2.907216ms)
+✔ a failed durable repository write preserves previous current confirmation (3.102471ms)
+✔ a failed durable notebook write preserves previous current confirmation (4.008151ms)
+✔ a failed durable course write preserves previous current confirmation (2.469043ms)
+✔ dirty startup does not automatically restore the same acknowledged cloud baseline over newer device work (2.935589ms)
+✔ an old in-flight upload retains its remote baseline while the latest durable document remains dirty (5.198481ms)
+✔ the latest queued durable payload updates after an older in-flight upload without reverting cloud or device (7.593863ms)
+✔ a cloud-restore fingerprint resolve after account drift returns false without publishing obsolete status (4.325741ms)
+✔ a cloud-restore fingerprint reject after account drift returns false without publishing obsolete status (3.309434ms)
+✔ a cloud-restore fingerprint resolve after project drift returns false without publishing obsolete status (5.913272ms)
+✔ a cloud-restore fingerprint reject after project drift returns false without publishing obsolete status (4.381395ms)
+✔ a cloud-restore fingerprint resolve after local-record drift returns false without publishing obsolete status (4.719406ms)
+✔ a cloud-restore fingerprint reject after local-record drift returns false without publishing obsolete status (5.031929ms)
+✔ a rejected current cloud-restore fingerprint returns false, preserves durable data and reports unconfirmed backup (5.214614ms)
+✔ cloud-restore acknowledgement owner-quota failure returns a boolean and keeps the durable restored record (4.454876ms)
+✔ cloud-restore acknowledgement document-read failure returns a boolean and keeps the durable restored record (3.750902ms)
+✔ a clean-reload confirmation fingerprint resolve after account B cannot publish account A status (4.56276ms)
+✔ a clean-reload confirmation fingerprint reject after account B cannot publish account A status (2.265876ms)
+✔ confirmation bootstrap after a clean reload is tied to the actual persisted document (3.632052ms)
+✔ confirmation bootstrap after a dirty reload preserves device work and historical cloud time (3.786005ms)
+✔ a coherently hydrated external-tab edit cannot inherit another tab’s current-document confirmation (2.594493ms)
+✔ a pending cloud SELECT cannot replace data after account switch (2.787084ms)
+✔ a pending cloud SELECT cannot replace data after project switch (0.435949ms)
+✔ a pending cloud SELECT cannot replace data after logout and reauthentication as the same account (0.675251ms)
+✔ a pending cloud SELECT cannot replace data after an explicit local import barrier (0.708812ms)
+✔ a pending cloud SELECT cannot replace data after newer saved personal writing (0.981845ms)
+✔ a reviewed cloud restore is checked inside the write lock after account switch (8.831704ms)
+✔ a reviewed cloud restore is checked inside the write lock after project switch (1.782235ms)
+✔ a reviewed cloud restore is checked inside the write lock after logout and reauthentication as the same account (1.318774ms)
+✔ a reviewed cloud restore is checked inside the write lock after an explicit local import barrier (1.391194ms)
+✔ a reviewed cloud restore is checked inside the write lock after newer saved personal writing (1.477695ms)
+✔ an unchanged reviewed cloud record commits once and records its scoped sync (3.75701ms)
+✔ manual sync cannot fall back to uploading a captured previous-account snapshot (0.42993ms)
+✔ a delayed automatic backup remains bound to its original account (0.313574ms)
+✔ an old upload success cannot mark or emit the new cloud scope (2.719752ms)
+✔ an old upload failure cannot mark or emit the new cloud scope (6.959383ms)
+✔ fresh OTP sign-in cannot overwrite existing cloud work on the first ordinary save (7.004752ms)
+✔ an absent cloud row is inserted once and acknowledges the returned server version and exact data (11.196551ms)
+✔ offline SELECT throws and reconnect retain both records (1.978201ms)
+✔ offline SELECT resolved and reconnect retain both records (1.874704ms)
+✔ shared device A→B→A cannot reuse the historical acknowledgement of A after B owns the record (14.326433ms)
+✔ a stale upload SELECT after account cannot write or alter current-scope status (1.537995ms)
+✔ a stale upload SELECT after project cannot write or alter current-scope status (0.962765ms)
+✔ a stale upload SELECT after logout-return cannot write or alter current-scope status (0.949576ms)
+✔ a stale upload SELECT after local-edit cannot write or alter current-scope status (0.979351ms)
+✔ a stale upload SELECT after import cannot write or alter current-scope status (1.068936ms)
+✔ same-version remote content changed at the fresh read cannot authorize overwrite (3.641506ms)
+✔ canonical acknowledgement treats reordered object keys as equal, but retains array order (7.922069ms)
+✔ a changed remote version between SELECT and UPDATE yields zero rows and never acknowledges success (3.199308ms)
+✔ an absent-row insert race preserves the winning cloud record and holds the import token (1.49471ms)
+✔ empty returned write representation never acknowledges or clears import intent (1.232504ms)
+✔ missing returned write representation never acknowledges or clears import intent (1.100154ms)
+✔ invalid-data returned write representation never acknowledges or clears import intent (1.261308ms)
+✔ invalid-version returned write representation never acknowledges or clears import intent (1.616324ms)
+✔ multiple returned write representation never acknowledges or clears import intent (1.609834ms)
+✔ a legacy timestamp-only acknowledgement cannot authorize an existing-row upload (1.334488ms)
+✔ previewing or declining a cloud restore creates no acknowledgement and later saves remain held (2.216531ms)
+✔ accepted cloud restore acknowledges the raw fetched JSON, including omitted legacy course data (5.316469ms)
+✔ an explicit import facing unacknowledged existing cloud keeps bytes/token and cannot bypass review protection (1.280446ms)
+✔ an explicit import into absent cloud can insert and clear only its still-current token (2.345877ms)
+✔ a late write response cannot acknowledge a new account or clear a newer import token (5.053261ms)
+✔ a write response cannot clear an import created while that same account upload waited (1.875105ms)
+✔ acknowledgement storage failure does not report sync success or clear imported intent (3.062901ms)
+✔ hash failure cannot mutate cloud or acknowledge the local record (3.420056ms)
+✔ awaited remote fingerprint after account cannot authorize a stale write (3.31357ms)
+✔ awaited remote fingerprint after local-edit cannot authorize a stale write (2.439328ms)
+✔ awaited remote fingerprint after import cannot authorize a stale write (2.269362ms)
+✔ a malformed-data SELECT pauses upload without choosing a winner (0.88596ms)
+✔ a invalid-version SELECT pauses upload without choosing a winner (0.70043ms)
+✔ successful upload acknowledges the actual returned server version rather than the attempted client timestamp (2.087496ms)
+✔ a rejected reviewed restore cannot establish cloud acknowledgement (1.614902ms)
+✔ a regressed clock advances the conditional write beyond remote microseconds 2040-01-01T00:00:00.999999Z (5.168846ms)
+✔ a regressed clock advances the conditional write beyond remote microseconds 2040-01-01T00:00:00.000001+00:00 (3.204366ms)
+✔ a valid returned document differing from the sent snapshot cannot establish upload permission (2.197583ms)
+✔ a represented conditional write that fails to advance its version cannot be acknowledged (2.423605ms)
+✔ an absent-row insert is not attempted when payload hashing is unavailable (1.043638ms)
+✔ another owner recorded during hashing invalidates an earlier acknowledgement without changing device bytes (2.767364ms)
+✔ another owner recorded during an upload response cannot be overwritten by its late acknowledgement (1.755504ms)
+✔ an acknowledgement storage-read failure after durable restore returns false and preserves the restored record (1.34266ms)
+✔ a rejected SELECT after a newer local save cannot replace that newer status (0.968214ms)
+✔ a manual preview stays paused without acknowledging cloud work until an accepted commit (2.588704ms)
+✔ manual review exposes unacknowledged/changed cloud at -1000ms while default startup policy remains unchanged (2.203081ms)
+✔ manual review exposes unacknowledged/changed cloud at 0ms while default startup policy remains unchanged (2.01048ms)
+✔ manual review exposes unacknowledged/changed cloud at 1000ms while default startup policy remains unchanged (1.921325ms)
+✔ known limitation: a legacy same-version mutation after SELECT can pass timestamp-only CAS (3.781248ms)
+✔ levels and monthly limits match the plan (1.632298ms)
+✔ the highest active RevenueCat entitlement wins; expired ones do not count (1.073804ms)
+✔ the tier cache is fresh for ten minutes (0.15207ms)
+✔ requests are validated, trimmed and may be empty for a status check (0.486216ms)
+✔ crisis words in English, Turkish and Spanish are caught; everyday worry is not (2.562064ms)
+✔ the prompt sets the persona, safety rules and reply language; context reaches only the coach level (0.246012ms)
+✔ the function keeps secrets and message text out of code and logs (0.322587ms)
+✔ no AI provider secret is referenced from the app bundle code (24.612797ms)
+✔ lightweight course previews and restore metadata match each real edition (2.279036ms)
+✔ English editions keep every course and lesson ID of the Turkish edition (1.186424ms)
+✔ every English lesson goes deeper and tells an example story (3.16151ms)
+✔ every course and lesson has a real, distinct photo with alt text (4.446283ms)
+✔ technique cards name their origin, give doable steps and say honestly what the evidence supports (0.749594ms)
+✔ every course states its purpose, scope and outcome, with usable lesson durations (0.325252ms)
+✔ the bibliography distinguishes research from guidance and includes usable HTTPS references and limitations (0.967693ms)
+✔ every lesson cites existing sources and every advertised research source is used (0.369949ms)
+✔ each lesson has two reading paragraphs, three distinct practice instructions and reflection support (3.574795ms)
+✔ each lesson offers three distinct answers, one valid correct index and explanatory feedback (1.01862ms)
+✔ every lesson has one visual; charts quote a source the lesson cites (0.58812ms)
+✔ Spanish editions mirror the English structure (4.628218ms)
+✔ Spanish source ids are unique (0.209207ms)
+✔ stable course IDs keep their ordered lesson IDs for stored progress (3.673411ms)
+✔ every course and lesson has a real, distinct photo with Turkish alt text (1.300639ms)
+✔ technique cards name their origin, give doable steps and say honestly what the evidence supports (1.005503ms)
+✔ every course states its purpose, scope and outcome, with usable lesson durations (0.392695ms)
+✔ the bibliography distinguishes research from guidance and includes usable HTTPS references and limitations (1.012914ms)
+✔ every lesson cites existing sources and every advertised research source is used (0.570394ms)
+✔ each lesson has two reading paragraphs, three distinct practice instructions and reflection support (3.699882ms)
+✔ each lesson offers three distinct answers, one valid correct index and explanatory feedback (1.06355ms)
+✔ every lesson has one visual; charts quote a source the lesson cites (0.717446ms)
+✔ every untouched course previews its real edition without creating saved learning (3.47457ms)
+✔ a saved tick, answer zero, reflection or completion constitutes learning, unlike a blank record (1.795288ms)
+✔ saved progress resumes each of the 103 actual lessons across all three editions and Today agrees (33.42857ms)
+✔ a later draft cannot skip unfinished prerequisite lessons (0.474599ms)
+✔ workbook-only plans stay available for review without inventing lesson progress (0.718528ms)
+✔ ordinary saves retain an explicit view while account and same-account backup replacement invalidate it (0.153712ms)
+✔ course entry instructions have matching localized keys and keep the actual lesson-number placeholder (0.457703ms)
+✔ all 18 courses have distinct, actionable guides in every supported language (1.487382ms)
+✔ studio is optional and initially collapsed; completed courses open their transfer practice (38.92461ms)
+✔ new plans preserve optionality and keep an independent copy of private fields (0.678818ms)
+✔ untrusted backup data cannot introduce unknown courses, malformed dates, duplicate entries, or oversized notes (0.83185ms)
+✔ retrying the same journal entry is idempotent; paused and adapted entries retain honest observations (0.452215ms)
+✔ journal keeps the most recent bounded entries and does not mutate input during normalization (0.51541ms)
+✔ calendar validation handles leap days, impossible dates, and week/month/year transitions (0.17177ms)
+✔ due review needs a usable plan; completing review sets a fresh revisit without losing reflection (0.223058ms)
+✔ course progress saves and completed lessons keep the plan, journal, and review after an interrupted round trip (4.007908ms)
+✔ a practice plan cannot unlock lessons or manufacture completion (0.328277ms)
+✔ a localized portable artifact retains ordinary private text without embedding executable HTML (0.263979ms)
+✔ rapid edits remain visible and are replayed in order under serialized persistence (8.18411ms)
+✔ failed drafts survive later edits and a retry rebases them over unrelated saved work (0.8851ms)
+✔ same-tab save notifications retain newer input while an earlier batch is committing (0.421969ms)
+✔ unexpected persistence exceptions preserve private work and allow a later successful save (1.006784ms)
+✔ retry clicked while a failed write is settling starts a fresh persistence attempt (1.125734ms)
+✔ malformed and unsupported records recover to separate empty states (1.564789ms)
+✔ unknown IDs and properties are discarded; checklists are resized with strict booleans (0.463331ms)
+✔ negative, fractional, nonnumeric and out-of-range answers do not satisfy a lesson (0.564605ms)
+✔ notes are bounded while their newlines and ordinary content survive (0.156197ms)
+✔ tampered completion cannot bypass the exercise, answer or preceding lessons (0.263429ms)
+✔ valid completed prefixes survive independently for different courses (0.221766ms)
+✔ draft updates are immutable and cannot mark a lesson complete (0.223188ms)
+✔ completion follows the real course in order and is idempotent (1.129189ms)
+✔ editing a completed prerequisite revalidates later lessons without losing drafts (0.305442ms)
+✔ caller-supplied lesson and course objects cannot change the answer or bypass a course (0.261536ms)
+✔ saving and reloading preserve a completed lesson and an unfinished draft (1.317334ms)
+✔ blocked storage and quota failures are reported without throwing (0.600079ms)
+✔ a decision kept today takes priority over array order and an older active carry-over (2.194061ms)
+✔ a newly chosen decision after a kept one remains actionable today (0.301656ms)
+✔ yesterday’s completion, archived decisions, invalid timestamps and future plans never masquerade as today (0.202166ms)
+✔ daily decisions use the local calendar around UTC midnight in both timezone directions (0.616583ms)
+✔ a missed weekly review remains available on Wednesday and follows local Sunday boundaries (0.154734ms)
+✔ weekly evidence counts actual distinct days and bounds entries to the reviewed calendar week (9.283635ms)
+✔ an unfinished decision can be reviewed without inventing completed progress (0.217179ms)
+✔ saving and editing a daily reflection preserves other pages, rewards once, and survives JSON backup replacement (1.296773ms)
+✔ course continuation resumes selected work before the suggested course and advances to the actual incomplete lesson (0.310871ms)
+✔ course continuation recognizes an interrupted first answer of zero and never offers an already completed course (0.440787ms)
+✔ daily loop copy has explicit matching nonempty English, Turkish and Spanish strings (0.291512ms)
+✔ concurrent retries of a kept daily decision record evidence and reward exactly once (16.923141ms)
+✔ deep backup safety: reject unparseable notebook day before replacing any storage (8.850579ms)
+✔ deep backup safety: reject impossible calendar day before replacing any storage (0.955727ms)
+✔ deep backup safety: reject object mood rendered in journal before replacing any storage (0.90495ms)
+✔ deep backup safety: reject object prompt assigned to editor before replacing any storage (0.974485ms)
+✔ deep backup safety: reject unknown kind hidden by every writing surface before replacing any storage (0.906662ms)
+✔ deep backup safety: reject unparseable gratitude day before replacing any storage (0.761683ms)
+✔ deep backup safety: reject invalid writing activity day before replacing any storage (0.638697ms)
+✔ deep backup safety: reject invalid ledger day before replacing any storage (0.577544ms)
+✔ deep backup safety: reject object activity transaction reference before replacing any storage (0.975787ms)
+✔ deep backup safety: reject invalid 369 start day before replacing any storage (0.775114ms)
+✔ deep backup safety: reject invalid 369 history day before replacing any storage (0.798288ms)
+✔ deep backup safety: reject object archive marker hiding a practice before replacing any storage (0.572587ms)
+✔ deep backup safety: reject object 369 day timestamp before replacing any storage (0.613269ms)
+✔ deep backup safety: reject dream instant producing an invalid display day before replacing any storage (0.615722ms)
+✔ deep backup safety: reject invalid course attempt day silently dropping a note before replacing any storage (1.027475ms)
+✔ deep backup safety: reject invalid course review due date before replacing any storage (0.658376ms)
+✔ deep backup safety: reject invalid course review completion date before replacing any storage (0.628231ms)
+✔ deep backup safety: legitimate exported writing, legacy moods, and leap days roundtrip and render (40.019709ms)
+✔ deep backup safety: legacy backups without a notebook retain dream fields and local courses (0.476741ms)
+✔ an earlier account sync timestamp cannot hide another account cloud record (19.042751ms)
+✔ a legacy unscoped timestamp is not proof that this account is synchronized (1.92914ms)
+✔ an account deletion response cannot sign out a later signed-in account (1.099695ms)
+✔ an account deletion response cannot clear a new project connection (0.315728ms)
+✔ a late cloud coach reply cannot be accepted in another account scope (18.446678ms)
+✔ account deletion cannot start with another account after awaiting the client (1.778583ms)
+✔ cloud coach context consent is isolated between accounts and projects (0.33026ms)
+✔ a token refresh keeps the current account coach request valid (0.671316ms)
+✔ a project change while reading a coach response also expires its content (0.649944ms)
+✔ stopping the coach cancels a response body still being downloaded (0.525085ms)
+✔ a queued backup cannot upload a local document rolled back while it waited (10.253463ms)
+✔ the latest queued backup still uploads after a preceding slower backup (7.942815ms)
+✔ returning to an earlier account cannot reuse its timestamp for another account local record (4.805456ms)
+✔ a replaced dataset cannot inherit this account historical synchronization proof (2.868102ms)
+✔ an owner-metadata quota failure cannot advertise a newer synchronized local record (7.746458ms)
+✔ every localized course can complete and carry its notes into the other editions (18.318024ms)
+✔ practice calendar keeps the local day across UTC midnight and daylight-saving weeks (0.526538ms)
+✔ a transient personal-record read failure cannot replace already saved course work with an empty fallback (2.071366ms)
+✔ a blocked-save session retains private edits and warning after its only view unmounts, then retries successfully (0.520659ms)
+✔ explicit replacement cancels a queued old draft while allowing new edits to save after the lock releases (1.245456ms)
+✔ a transient legacy-course read failure cannot overwrite the previous separate course record (0.486336ms)
+✔ a different tab replacement discards old private draft before replay even when its storage event has not arrived (1.873657ms)
+✔ other-tab provisional replacement notifications wait for rollback before inspecting epochs or discarding private drafts (1.226958ms)
+✔ same-tab course publication runs under the lock before another tab can project a provisional replacement (0.614981ms)
+✔ purchases and payments committed within one clock tick keep distinct identities (4.378629ms)
+✔ habit completion dates agree with the local Today calendar on either side of UTC midnight (1.531319ms)
+✔ habit yesterday and streaks count actual calendar dates through both DST changes (0.358383ms)
+✔ habits roll over at local midnight and keep the previous local day history (1.993388ms)
+✔ rollover fallback converts the last-opened instant to its local day (0.351703ms)
+✔ date-only values display their saved day while timestamps retain instant conversion (16.536055ms)
+✔ calendar formatting rejects normalized impossible days and keeps invalid values readable (0.29683ms)
+✔ habit reward identity survives undo, reload and UTC midnight without paying the same local day twice (0.384161ms)
+✔ local midnight cannot earn the same habit twice in the UTC reward day (0.144068ms)
+✔ habit and check-in rewards share the notebook UTC ceiling, including partial and exhausted budgets (0.465355ms)
+✔ a profile save captured before a decision completion retains the kept decision and its evidence (16.109961ms)
+✔ concurrent purchases retain both dreams and both payments (3.287467ms)
+✔ concurrent purchase checks reject a second claim for the same dream (1.384506ms)
+✔ concurrent purchases check affordability against the payment that committed first (1.299126ms)
+✔ concurrent savings additions retain both amounts and log entries (1.745522ms)
+✔ disjoint profile changes from the same baseline both survive (0.995928ms)
+✔ conflicting edits to the same profile field reject before any write and notify the UI (1.237153ms)
+✔ an intentional mission deletion and reorder survive a disjoint newer settings save (0.888445ms)
+✔ concurrent edits to the mission array reject rather than inventing a merged list (0.848875ms)
+✔ even an identical explicit restore invalidates snapshots that were captured before it (1.780736ms)
+✔ a profile write queued behind a restore cannot resurrect pre-restore writing (2.100861ms)
+✔ legacy records missing transactions can merge a settings edit after a course-only write (0.787502ms)
+✔ clearing and recreating the personal record invalidates earlier editable snapshots (1.719313ms)
+✔ deleting imported own magic keys while another nested field changes never revives them (0.902266ms)
+✔ mission evidence, generated bridges and savings logs keep unique IDs in a single clock tick (2.499394ms)
+✔ all 160 shipped English cue identities/text hashes match the 11 runtime sessions (3.621613ms)
+✔ every public MP3 byte count/checksum matches delivered metadata and no model/runtime is shipped (32.049993ms)
+✔ all shipped decoded/container durations fit the original cue windows with at least250ms margin (0.336489ms)
+✔ service worker leaves narration to the verified on-demand cache and does not precache MP3s (0.243689ms)
+✔ levels are ordered free < essentials < pro < coach (1.75042ms)
+✔ coach message allowances follow the product spec (0.142916ms)
+✔ essential courses exist, and Turning Day is not one of them (it is free for all) (0.317931ms)
+✔ nothing is locked where subscriptions cannot be bought (web), at any level (0.273874ms)
+✔ free level: Turning Day in full, first lessons of the rest, first sounds of each category (0.160023ms)
+✔ essentials opens the six core courses and the whole Sound Room, not the rest (0.209137ms)
+✔ pro and coach open every lesson and sound (0.236288ms)
+✔ six products: two per paid level, ids match the App Store spec (0.330501ms)
+✔ RevenueCat entitlements resolve to the highest active level (0.276148ms)
+✔ annual saving is computed from real prices only (0.229447ms)
+✔ Stop cancels a cue still waiting for synthesis without starting audio (2.174812ms)
+✔ deferred synthesis starts at the latest requested volume 0 (0.493738ms)
+✔ deferred audio resume starts at the latest requested volume 0 (0.416801ms)
+✔ deferred Settings preview preserves requested volume 0 (0.336159ms)
+✔ deferred synthesis starts at the latest requested volume 0.35 (0.261436ms)
+✔ deferred audio resume starts at the latest requested volume 0.35 (0.286383ms)
+✔ deferred Settings preview preserves requested volume 0.35 (0.213824ms)
+✔ a volume change during loading preserves stop protection (0.31736ms)
+✔ a volume change during loading preserves pause-resume protection (0.287625ms)
+✔ a volume change during loading preserves new-session protection (0.441379ms)
+✔ a newer cue owns playback when an older synthesis resolves later (0.322438ms)
+✔ Pause then Resume cannot resurrect a cue waiting for synthesis (0.255006ms)
+✔ Stop also cancels a cue waiting for the audio context to resume (0.235897ms)
+✔ a new cue supersedes one waiting for the audio context to resume (0.358873ms)
+✔ Pause and Resume invalidate pending context-resume playback (0.356169ms)
+✔ replacement immediately stops active audio while the new clip is pending (0.283189ms)
+✔ stale source completion cannot clear or end the new cue (0.374447ms)
+✔ Pause and Resume preserve an already-started cue without starting it twice (0.280144ms)
+✔ unavailable synthesis reports failure without creating an audio source (1.067887ms)
+✔ a failed audio context resume reports failure without starting playback (0.236248ms)
+✔ a failed source start reports failure and never announces playback (0.423691ms)
+✔ English narration cache stays the same when UI locale changes (34.545361ms)
+✔ a Settings preview resolving after Stop cannot start playback (0.294456ms)
+✔ a Settings preview resolving after a newer cue cannot interrupt it (0.382209ms)
+✔ every approved PNG and both approval manifests remain unchanged (16.562937ms)
+✔ served responsive variants match actual lossless bitstream dimensions, hashes, and complete-frame geometry (32.943896ms)
+✔ all real course covers and tree stages have deployment-scoped responsive sources and retain PNG fallbacks (20.764768ms)
+✔ modern-image failures retry the original; PNG and malformed failures reach the existing final fallback (0.190058ms)
+✔ 3D decorative growth preserves 60 kept decisions and 30 extra blossoms (1.257344ms)
+✔ 3D display normalizes invalid counts without changing the evidence source (0.253604ms)
+✔ static legal pages match src/data/legal.ts (run npx tsx scripts/build-legal.ts) (2.369658ms)
+✔ every language has the same sections and names the company (0.195697ms)
+✔ privacy policy covers what App Review checks (0.294456ms)
+✔ local day keys and day gaps follow the calendar, not UTC (1.091623ms)
+✔ evidence lists kept decisions newest first and counts the last seven days (6.772134ms)
+✔ comeback is kind after a lapse and silent otherwise (0.249998ms)
+✔ fresh starts land on the first of the month and on Mondays (0.152762ms)
+✔ simple mode lasts a week or until three kept decisions, and can be switched off (0.286945ms)
+✔ the day-14 question appears once, only for people who used decisions (0.276018ms)
+✔ the weekly look-back is offered on Sunday and Monday, once per week, and its change lasts a week (0.60082ms)
+✔ the chain forgives one missed day a week, but not two in a row or two in a week (0.856317ms)
+✔ smart reminders aim 30 minutes before the usual kept time, once there is enough history (0.417452ms)
+✔ every sign-up intent points at a real course and offers three easy decisions (101.984924ms)
+✔ the reminder voice keeps one line per day and never threatens a streak (1.637649ms)
+✔ every iOS project and application build configuration enforces the Safari 16.4 baseline (1.077711ms)
+✔ Capacitor sync keeps a compatible generated Swift package floor without lowering the app minimum (135.380583ms)
+✔ installed native dependency library floors are compatible with the Swift wrapper and app (0.443892ms)
+✔ native metadata cannot override the application minimum with an older target (0.787623ms)
+✔ native Settings and Account use the shared code flow with device copy in en (11.6444ms)
+✔ native Settings and Account use the shared code flow with device copy in tr (18.535672ms)
+✔ native Settings and Account use the shared code flow with device copy in es (16.649427ms)
+✔ web backup keeps its inline magic-link form and Account keeps link copy (3.436893ms)
+✔ native configured signed-in backup retains sync and sign-out actions (2.546596ms)
+✔ unconfigured native cloud does not offer a sign-in request (1.772033ms)
+✔ actual cloud request and verification use one injected auth adapter and trim input (1.04375ms)
+✔ interrupted setup restores fields without allowing a nameless final step (1.219766ms)
+✔ a fresh preview seeds only an empty decision and never overwrites restored or typed text (0.121734ms)
+✔ unknown, malformed and oversized setup drafts are safely bounded (0.151509ms)
+✔ trial length comes only from a free intro offer (1.081867ms)
+✔ native reminders: a week ahead, past times skipped, stable ids (0.995417ms)
+✔ native planner rejects malformed times and keeps a bounded week inside its namespace (1.005232ms)
+✔ interrupted native scheduling leaves the newest state and preserves other notifications (7.839869ms)
+✔ a native plugin error does not prevent the next reminder replacement (0.546517ms)
+✔ startup waits for restored account rather than temporarily identifying anonymous (1.810451ms)
+✔ known sign-out and rapid identity changes are announced immediately, same-ID retry events remain usable (0.193413ms)
+✔ failed authentication hydration stays unbound and never identifies anonymous or reads SDK entitlement (0.218702ms)
+✔ dispose during initial hydration prevents any late entitlement initialization (0.142065ms)
+✔ retry hydrates a currently unknown account before requesting identity or offerings (0.228326ms)
+✔ retry with failed hydration cannot bind anonymous or make a subscription request (0.149787ms)
+✔ cloud initialization callers share the real restoration promise and never finish early (40.121584ms)
+✔ actual failed cloud restoration remains unknown and a later retry can establish the same account (0.899683ms)
+✔ a resolved auth error is unknown identity rather than a verified anonymous account (0.494148ms)
+✔ unbound init leaves cached native A untouched and exposes prices without personal claims (3.138242ms)
+✔ explicitly binding cached A confirms it without login or logout (1.26805ms)
+✔ desired B is recorded during native setup before any cached A customer read (7.687288ms)
+✔ failed logout clears A claims synchronously and leaves purchase and restore denied (1.289903ms)
+✔ staged A, B, A login requests serialize native identity mutation (2.343017ms)
+✔ an A purchase settling after desired B success cannot grant B (1.114338ms)
+✔ an A purchase settling after desired B cancellation cannot grant B (0.922447ms)
+✔ a failed same-ID login can retry without treating desired ID as confirmed ID (0.583234ms)
+✔ an offline refresh for confirmed same A preserves its verified entitlement (0.83184ms)
+✔ listener payload is only invalidation and canonical aliases do not impersonate another account (0.929097ms)
+✔ late A offerings cannot install A packages or personal claims into desired B (0.887785ms)
+✔ late A trial eligibility cannot restore a free-trial claim during a B transition (0.727591ms)
+✔ a held A customer load from initialization cannot overwrite a later desired B (0.748614ms)
+✔ an A restore settling after desired B fails without applying A customer info (0.963438ms)
+✔ defer during a held purchase drops trust without native calls and explicit cached-A rebind refreshes it (2.074821ms)
+✔ defer during first native setup cancels the old A load and leaves cached A for an explicit rebind (0.446426ms)
+✔ defer and immediate same-A rebind cannot accept the older held A customer snapshot (0.890569ms)
+✔ canonical A listener refresh rejects its held snapshot if native identity externally drifts to B (0.60111ms)
+✔ initial getAppUserID failure at verification read 1 leaves A unconfirmed/free and retryable (0.774913ms)
+✔ initial getAppUserID failure at verification read 2 leaves A unconfirmed/free and retryable (0.34359ms)
+✔ initial getAppUserID failure at verification read 3 leaves A unconfirmed/free and retryable (0.334676ms)
+✔ initial getAppUserID failure at verification read 4 leaves A unconfirmed/free and retryable (0.375519ms)
+✔ initial isAnonymous failure at verification read 1 leaves A unconfirmed/free and retryable (0.176477ms)
+✔ initial isAnonymous failure at verification read 2 leaves A unconfirmed/free and retryable (0.178871ms)
+✔ initial isAnonymous failure at verification read 3 leaves A unconfirmed/free and retryable (0.175726ms)
+✔ initial isAnonymous failure at verification read 4 leaves A unconfirmed/free and retryable (0.265212ms)
+✔ native paid gates apply before SDK init and after defer while the free samples stay open (0.361838ms)
+✔ web and keyless native gates stay open before init and after defer without loading an SDK (0.240985ms)
+✔ purchase cannot commit A after desired B arrives in nested verification microtask depth 2 (3.199764ms)
+✔ purchase cannot commit A after desired B arrives in nested verification microtask depth 3 (0.836697ms)
+✔ restore cannot commit A after desired B arrives in nested verification microtask depth 2 (0.832671ms)
+✔ restore cannot commit A after desired B arrives in nested verification microtask depth 3 (0.799451ms)
+✔ init cannot commit A after desired B arrives in nested verification microtask depth 2 (0.835746ms)
+✔ init cannot commit A after desired B arrives in nested verification microtask depth 3 (0.723826ms)
+✔ offerings failure is retryable without configuring or listening twice (2.593326ms)
+✔ concurrent initialization shares one pending configure and plan load (5.418213ms)
+✔ failed configuration can retry, while a completed setup remains single (0.476872ms)
+✔ listener setup failure retries the listener without configuring again (0.406024ms)
+✔ a successful empty offering may retry when plans become available (0.394988ms)
+✔ free intro pricing is advertised only for confirmed eligible customers (0.651036ms)
+✔ missing or failed eligibility checks keep regular prices and unknown trial status (0.547298ms)
+✔ an interrupted eligibility refresh after identity change clears the earlier free-trial claim (0.276428ms)
+✔ cancelled, pending and failed purchase errors remain distinct and never grant access (0.768694ms)
+✔ a successful store response without the requested entitlement remains unconfirmed (0.276679ms)
+✔ confirmed entitlement grants access and later SDK updates retain the real highest level (1.535825ms)
+✔ restore distinguishes store failure, successful no-plan check, and active entitlement (0.766069ms)
+✔ web and unconfigured native flows never load a purchase SDK or create a purchase (0.183118ms)
+✔ free duration uses valid store units and cycles, without inventing 30-day months (0.102695ms)
+✔ scoped EN/TR/ES uncertain purchase feedback makes no charge or reminder guarantee (0.274335ms)
+✔ preserves the first 300 passages and appends exactly 100 each from faith, science and philosophy in order (1.656277ms)
+✔ all 600 sourced passages have unique IDs and bilingual text without recycling legacy lines (35.841072ms)
+✔ six notifications stay distinct for 100 full days, then repeat, and match the server snapshot across a year boundary (5.317461ms)
+✔ local day remains stable from morning to evening; six-time migration preserves existing preferences (0.969117ms)
+✔ legacy three-reminder profiles keep their evening time and gain six distinct reminders (0.263789ms)
+✔ migration resolves default collisions only in missing slots and reserves later saved slots first (0.276279ms)
+✔ every thinker passage links to a Gutenberg book whose text is kept in docs/quote-sources (15.884524ms)
+✔ construction does no fetch/decode; current/upcoming preload reuses the current request (25.437642ms)
+✔ Stop aborts loading and no late response starts a source (0.881064ms)
+✔ Pause cancels original load; Resume retries current cue with a frozen slot and latest volume (1.021046ms)
+✔ Pause→Stop discards current loading retry and Resume does not resurrect it (0.595451ms)
+✔ new session cancels old load and only the new session owns audio (0.914554ms)
+✔ active pause/resume continues the same cue offset without repeating its start or accepting stale end (1.116881ms)
+✔ Replay replaces current source at offset zero and reuses decoded audio (0.44258ms)
+✔ latest volume 0 wins after delayed clip loading and changes active gain (0.609363ms)
+✔ latest volume 0.35 wins after delayed clip loading and changes active gain (0.36327ms)
+✔ latest volume after deferred context resume and Stop/new cue protects pending resume (1.805263ms)
+✔ expired loading budget and decoder duration mismatch never start audio (0.775284ms)
+✔ missing bytes, bad checksum/source text and nonrunning device fail without invoking a provider (0.901385ms)
+✔ verified persisted bytes permit offline replay in a new player; corrupt cached bytes are rejected (2.573626ms)
+✔ a definitive recording failure cannot retry on Pause→Resume over a device fallback (0.336139ms)
+✔ resumed load failure retains only bounded fallback metadata, never a resumable recording (0.476451ms)
+✔ root hosting retains history paths, including direct reloads (1.246628ms)
+✔ project hosting keeps every navigation on the same static document (0.490532ms)
+✔ landing URLs and non-route fragments do not become unknown routes (0.210689ms)
+✔ back/forward hash entries resolve to canonical route IDs (0.206413ms)
+✔ icons and service worker URLs stay under their deployment base (0.236047ms)
+✔ each person reads and writes only their own backup; anonymous visitors get nothing (2053.98453ms)
+✔ an oversized backup is refused (1487.817484ms)
+✔ cloud coach counters: people read only their own rows and cannot write or call the increment (1199.073976ms)
+✔ the monthly increment stops exactly at the limit and a refund gives one back (1159.404785ms)
+✔ a strict Content Security Policy ships with the page (1.193778ms)
+✔ index.html has no inline scripts (the CSP forbids them) (0.272542ms)
+✔ no raw HTML or eval sinks in the app code (18.234187ms)
+✔ links that open a new tab cannot reach back into ODA (6.754916ms)
+✔ no secret keys in the shipped code (18.509032ms)
+✔ production builds carry no source maps (0.375128ms)
+✔ service worker precaches only its project directory (23.899714ms)
+✔ standalone support remains available offline without replacing the application shell (7.435036ms)
+✔ activation preserves sibling apps and this version media cache (2.022633ms)
+✔ notification defaults and legacy targets open the project hash route (3.145131ms)
+✔ installed app metadata refreshes instead of retaining the cached identity (2.693768ms)
+✔ installed app metadata remains available offline (1.646493ms)
+✔ native free direct starts and toggles cannot start an all-paid track (4.046586ms)
+✔ downgrade hard-stops owned restricted playing selection without page subscribers (59.186688ms)
+✔ downgrade hard-stops owned restricted paused selection without page subscribers (22.221878ms)
+✔ downgrade hard-stops owned restricted expired selection without page subscribers (13.67887ms)
+✔ owned paid playing selection revokes on identityConfirmed even with a paid cached tier (0.745568ms)
+✔ owned paid paused selection revokes on identityConfirmed even with a paid cached tier (0.795344ms)
+✔ owned paid expired selection revokes on identityConfirmed even with a paid cached tier (3.230251ms)
+✔ owned paid playing selection revokes on identityRevision even with a paid cached tier (0.434869ms)
+✔ owned paid paused selection revokes on identityRevision even with a paid cached tier (0.507068ms)
+✔ owned paid expired selection revokes on identityRevision even with a paid cached tier (1.22866ms)
+✔ same-account confirmed paid access survives offerings loading or failed offline refresh (0.650525ms)
+✔ admission reads current purchase state even if a notification has not been emitted (0.271561ms)
+✔ live resume and timer change reconcile access even without a purchase notification (0.686659ms)
+✔ invalid or mismatched provenance rejects {"sectionId":"relax"} without replacing audio (62.55024ms)
+✔ invalid or mismatched provenance rejects {"indexInCategory":3} without replacing audio (36.655567ms)
+✔ invalid or mismatched provenance rejects {"sectionId":"focus","indexInCategory":0} without replacing audio (36.298185ms)
+✔ invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":-1} without replacing audio (53.674662ms)
+✔ invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":0.5} without replacing audio (57.417609ms)
+✔ invalid or mismatched provenance rejects {"sectionId":"relax","indexInCategory":99} without replacing audio (68.529863ms)
+✔ essentials admits all catalog origins and preserves the timer and user volume (459.015706ms)
+✔ pro admits all catalog origins and preserves the timer and user volume (413.308ms)
+✔ coach admits all catalog origins and preserves the timer and user volume (282.923912ms)
+✔ each category first two entries remain free, including duplicate 432 and brown-noise origins (161.46792ms)
+✔ omitted-origin admission allows any-free aliases and denies exclusively paid tracks (41.59891ms)
+✔ web and unconfigured purchases keep paid sounds open through identity transitions (0.67404ms)
+✔ external Focus tibetan_bowls replacement survives Sound Room downgrade (1.932335ms)
+✔ external Focus waves replacement survives Sound Room downgrade (66.743968ms)
+✔ purchase event during an engine start cannot publish a revoked playing selection (0.763306ms)
+✔ purchase event during player publication cannot re-arm the revoked timer (0.652698ms)
+✔ external waves replacement during player publication retains its untimed graph (23.134184ms)
+✔ external tibetan_bowls replacement during player publication retains its untimed graph (1.587523ms)
+✔ an unavailable AudioContext rejects the actual engine start without claiming playback (0.373376ms)
+✔ failed buffer allocation retains entitlement ownership of the existing paid graph (35.057156ms)
+✔ failed no replacement retains entitlement ownership of the existing paid graph (0.455209ms)
+✔ same-track no-op cannot take revocation ownership of an external Focus graph (0.490773ms)
+✔ pause publication from SoundRoom cannot fade or time the reentrant external tibetan_bowls graph (2.168433ms)
+✔ pause publication from Focus cannot fade or time the reentrant external tibetan_bowls graph (2.914923ms)
+✔ pause publication from SoundRoom cannot fade or time the reentrant external waves graph (52.694137ms)
+✔ pause publication from Focus cannot fade or time the reentrant external waves graph (35.546076ms)
+✔ setTimer publication from SoundRoom cannot fade or time the reentrant external tibetan_bowls graph (3.434609ms)
+✔ setTimer publication from Focus cannot fade or time the reentrant external tibetan_bowls graph (2.386584ms)
+✔ setTimer publication from SoundRoom cannot fade or time the reentrant external waves graph (40.209917ms)
+✔ setTimer publication from Focus cannot fade or time the reentrant external waves graph (33.603746ms)
+✔ ordinary PlayerBar timer and pause controls still act on the current external Focus graph (50.023355ms)
+✔ silence or an absent audio context cannot publish a playing selection (0.444022ms)
+✔ breath pacer runs at about 5.5 breaths a minute (1.002137ms)
+✔ breathPhase: inhale first, then exhale, then repeats (0.923939ms)
+✔ breathPhase is safe with odd input (0.157408ms)
+✔ formatRemaining (0.214434ms)
+✔ timer fades: a minute for sleep, short otherwise, never over half the timer (0.202377ms)
+✔ arming a timer retains the independent three-second attack and actual stereo loop (88.020511ms)
+✔ mute and volume respond immediately at the beginning of a timer fade (52.148422ms)
+✔ mute and volume respond immediately at the middle of a timer fade (19.693085ms)
+✔ mute and volume respond immediately at the end of a timer fade (21.398067ms)
+✔ running fades can shorten but do not extend, and timer cancellation preserves user volume (66.340297ms)
+✔ shortening a running fade with a delay cannot restore a louder envelope (54.132175ms)
+✔ browsers without cancelAndHold retain the current level when shortening a fade (241.994715ms)
+✔ track switches release the previous graph and repeated switches/stops bound resources (908.992673ms)
+✔ stop/restart of a tone cancels its initial bowl and recurring callbacks (1.058703ms)
+✔ natural bowl endings disconnect their tails while the current ambient drone continues (0.62749ms)
+✔ Sound Room timer arming, pause/resume and expiry keep player state and start fade intact (66.891257ms)
+✔ external restart of the same track clears the Sound Room countdown and timer selection (107.542472ms)
+✔ public support is generated from the same localized help as the app (3.707643ms)
+✔ each store locale links to the shipped public support artifact (0.248056ms)
+✔ growth keeps an exact capped ledger through every stage boundary and beyond the canopy (10.890793ms)
+✔ approved tree pixels and normalized roots match their independent asset manifest (8.594011ms)
+✔ rendered paywall claims a free trial only for confirmed eligibility (42.375596ms)
+✔ rendered failed offerings include an explicit retry action (6.935388ms)
+✔ web paywall keeps free access and does not offer a purchase CTA (6.685521ms)
+✔ unconfirmed identity shows truthful verification retry and disables buy and restore even with cached prices (14.570996ms)
+✔ pending identity verification does not render a trial or an enabled restore action (2.884427ms)
+✔ guided narration keeps original English text and voice with en UI (13.673046ms)
+✔ guided narration keeps original English text and voice with tr UI (24.956323ms)
+✔ guided narration keeps original English text and voice with es UI (20.460216ms)
+✔ English inventory accepts language tags and rejects names or unrelated prefixes (1.335291ms)
+✔ an explicitly selected English voice wins over a preferred device name (0.827262ms)
+✔ guided speech truthfully reports unavailable with empty inventory (0.711587ms)
+✔ guided speech truthfully reports unavailable with non-English inventory (0.453346ms)
+✔ late English voice installation refreshes availability and unsubscribe removes listeners (0.785049ms)
+✔ Notebook retains verbatim tr text, matching device voice and saved meditation preferences (0.845039ms)
+✔ Notebook retains verbatim es text, matching device voice and saved meditation preferences (0.628361ms)
+✔ Notebook preserves implicit device language when its voice list has not loaded (0.414277ms)
+✔ unsupported device speech does not report available or queued playback (0.337811ms)
+✔ empty or disabled cues leave the device queue empty (0.393596ms)
+✔ nonzero device volume changes apply to the next utterance without pretending to change active speech (0.724527ms)
+✔ zero device volume cancels the owned paused utterance and Resume cannot revive it (9.354768ms)
+✔ Stop while device speech is paused lets a new session resume the device queue (0.646829ms)
+✔ device cancel failures produce an honest false result (0.303379ms)
+✔ device enqueue failures produce an honest false result (0.246884ms)
+✔ new cues and Stop detach utterance handlers and ignore captured stale callbacks (2.974413ms)
+✔ pause and resume keep the active browser cue, restore speaking state and reject replay while paused (0.582432ms)
+✔ stop prevents a delayed provider failure from reviving an obsolete English device cue (0.417983ms)
+✔ pause-resume prevents a delayed provider failure from reviving an obsolete English device cue (0.173482ms)
+✔ new-cue prevents a delayed provider failure from reviving an obsolete English device cue (0.195646ms)
+✔ current provider failure falls back to English device speech; a non-English inventory cannot substitute (0.515911ms)
+✔ the optional recorder remains dormant until registration and receives identified current/upcoming cues (0.597345ms)
+✔ registered recorder missing clip uses truthful English device fallback without a provider (0.318512ms)
+✔ registered recorder overlong clip uses truthful English device fallback without a provider (0.162696ms)
+✔ registered recorder wrong language uses truthful English device fallback without a provider (0.199101ms)
+✔ registered recorder missing text hash uses truthful English device fallback without a provider (0.160684ms)
+✔ registered recorder missing checksum uses truthful English device fallback without a provider (0.194615ms)
+✔ registered recorder missing version uses truthful English device fallback without a provider (0.149506ms)
+✔ registered recorder wrong cue identity uses truthful English device fallback without a provider (0.208686ms)
+✔ registered recorder expired cue slot uses truthful English device fallback without a provider (0.234234ms)
+✔ registered recorder unbounded cue slot uses truthful English device fallback without a provider (0.203097ms)
+✔ a recorder hash/source verification failure falls back, and absent English speech reports unavailable (0.283149ms)
+✔ new cues stop clips and stale recorded callbacks/failures cannot change current playback (0.348187ms)
+✔ recorded pause invalidates pending start/fallback even after resume, and Stop invalidates callbacks (0.255047ms)
+✔ current recorded load failure falls back to English and unregistering restores device narration (0.374647ms)
+✔ synchronous recorded verification and playback errors truthfully queue English fallback (0.286604ms)
+✔ a recorded request that already ended cannot later fall back and revive the cue (0.181544ms)
+✔ actual playback mode stays loading until recorded start and reports English device fallback (0.374627ms)
+✔ a resumed recording failure uses only installed English device speech and rejects stale resume fallback (0.351342ms)
+✔ registered recorded volume receives current preference and live zero/nonzero changes (0.239432ms)
+ℹ tests 597
+ℹ suites 0
+ℹ pass 597
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10205.05149
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice
+
+> oda-one-decision-away@1.0.0 build
+> vite build
+
+vite v6.4.3 building for production...
+<script src="/one-decision-away/theme-init.js"> in "/index.html" can't be bundled without type="module" attribute
+transforming...
+✓ 3384 modules transformed.
+rendering chunks...
+[plugin vite:reporter] 
+(!) /workspace/oda-mobile-core-quality/src/services/cloudSync.ts is dynamically imported by /workspace/oda-mobile-core-quality/src/main.tsx but also statically imported by /workspace/oda-mobile-core-quality/src/components/BackupAndCloudSettings.tsx, /workspace/oda-mobile-core-quality/src/components/BackupReminder.tsx, /workspace/oda-mobile-core-quality/src/components/DailyNudgesSettings.tsx, /workspace/oda-mobile-core-quality/src/pages/Account.tsx, /workspace/oda-mobile-core-quality/src/pages/Coach.tsx, /workspace/oda-mobile-core-quality/src/pages/Upgrade.tsx, /workspace/oda-mobile-core-quality/src/services/cloudCoach.ts, /workspace/oda-mobile-core-quality/src/services/courseProgress.ts, /workspace/oda-mobile-core-quality/src/services/pushNotifications.ts, /workspace/oda-mobile-core-quality/src/services/repository.ts, /workspace/oda-mobile-core-quality/src/services/useCloudState.ts, /workspace/oda-mobile-core-quality/src/store/useApp.tsx, dynamic import will not move module into another chunk.
+
+computing gzip size...
+dist/index.html                                                       3.43 kB │ gzip:     1.13 kB
+dist/assets/hanken-grotesk-vietnamese-wght-normal-CHiFlh_0.woff2      9.32 kB
+dist/assets/hanken-grotesk-latin-ext-wght-normal-Dg-wlmqe.woff2      19.59 kB
+dist/assets/newsreader-vietnamese-opsz-normal-BjhtXyW2.woff2         27.25 kB
+dist/assets/newsreader-vietnamese-opsz-italic-DTr-ymY4.woff2         27.90 kB
+dist/assets/hanken-grotesk-latin-wght-normal-CaVRRdDk.woff2          34.70 kB
+dist/assets/newsreader-latin-ext-opsz-normal-BQn1nviT.woff2          86.61 kB
+dist/assets/newsreader-latin-ext-opsz-italic-CSPGnFdO.woff2          95.54 kB
+dist/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2             132.00 kB
+dist/assets/newsreader-latin-opsz-italic-kJKFiXvB.woff2             146.87 kB
+dist/assets/aiCoach.worker-C60CQ1Xm.js                            6,039.34 kB
+dist/assets/Today-D76Bu5Fr.css                                        4.80 kB │ gzip:     1.29 kB
+dist/assets/SoundRoom-CqaeVc25.css                                   10.94 kB │ gzip:     2.71 kB
+dist/assets/Courses-dAxxx90S.css                                     26.09 kB │ gzip:     4.85 kB
+dist/assets/index-D6Ptr9gO.css                                      108.09 kB │ gzip:    22.67 kB
+dist/assets/de-FmFgRqLi.js                                            0.03 kB │ gzip:     0.05 kB
+dist/assets/fr-FmFgRqLi.js                                            0.03 kB │ gzip:     0.05 kB
+dist/assets/it-FmFgRqLi.js                                            0.03 kB │ gzip:     0.05 kB
+dist/assets/ru-FmFgRqLi.js                                            0.03 kB │ gzip:     0.05 kB
+dist/assets/web-Bb5PnSZm.js                                           0.18 kB │ gzip:     0.16 kB
+dist/assets/useCloudState-BZ-Vfxzr.js                                 0.20 kB │ gzip:     0.18 kB
+dist/assets/chevron-right-L419cfE5.js                                 0.30 kB │ gzip:     0.25 kB
+dist/assets/square-DTKLnwnq.js                                        0.32 kB │ gzip:     0.26 kB
+dist/assets/arrow-up-right-CogUSDHg.js                                0.34 kB │ gzip:     0.27 kB
+dist/assets/search-CGrEtlc0.js                                        0.35 kB │ gzip:     0.28 kB
+dist/assets/circle-check-C4y64iqD.js                                  0.35 kB │ gzip:     0.28 kB
+dist/assets/user-round-DWAhX0_W.js                                    0.36 kB │ gzip:     0.28 kB
+dist/assets/rotate-ccw-DYi7taXp.js                                    0.37 kB │ gzip:     0.29 kB
+dist/assets/index-B0DLlssZ.js                                         0.38 kB │ gzip:     0.27 kB
+dist/assets/mail-BUURFNCq.js                                          0.39 kB │ gzip:     0.31 kB
+dist/assets/moon-B8RewYVp.js                                          0.39 kB │ gzip:     0.31 kB
+dist/assets/headphones-C_S11X3-.js                                    0.41 kB │ gzip:     0.29 kB
+dist/assets/timer-ZFG3x1n6.js                                         0.41 kB │ gzip:     0.29 kB
+dist/assets/wind-DLOKaJEG.js                                          0.42 kB │ gzip:     0.30 kB
+dist/assets/archive-CfOVfMZU.js                                       0.43 kB │ gzip:     0.31 kB
+dist/assets/route-BSXu5UvT.js                                         0.43 kB │ gzip:     0.31 kB
+dist/assets/lock-keyhole-DOalIDXV.js                                  0.43 kB │ gzip:     0.33 kB
+dist/assets/index-FR12ypau.js                                         0.45 kB │ gzip:     0.28 kB
+dist/assets/pencil-Bw1wqzdY.js                                        0.45 kB │ gzip:     0.33 kB
+dist/assets/pen-line-BzLAdnw5.js                                      0.45 kB │ gzip:     0.33 kB
+dist/assets/index-CIPtpDJy.js                                         0.48 kB │ gzip:     0.29 kB
+dist/assets/refresh-cw-DPTaImZi.js                                    0.50 kB │ gzip:     0.33 kB
+dist/assets/trash-2-kGzGZh8m.js                                       0.50 kB │ gzip:     0.32 kB
+dist/assets/Focus-DuWhWGss.js                                         0.53 kB │ gzip:     0.33 kB
+dist/assets/share-2-q0ZAmnxr.js                                       0.53 kB │ gzip:     0.34 kB
+dist/assets/shuffle-D_PilrKf.js                                       0.56 kB │ gzip:     0.35 kB
+dist/assets/sun-moon-CiH6Xxbl.js                                      0.57 kB │ gzip:     0.38 kB
+dist/assets/waves-CsPRzkOM.js                                         0.60 kB │ gzip:     0.32 kB
+dist/assets/sparkles-BIxX_zXr.js                                      0.67 kB │ gzip:     0.39 kB
+dist/assets/calendar-days-Duj1V7s0.js                                 0.67 kB │ gzip:     0.37 kB
+dist/assets/index-Bpv5qIJp.js                                         0.67 kB │ gzip:     0.42 kB
+dist/assets/trending-up-BF78eyIM.js                                   0.69 kB │ gzip:     0.34 kB
+dist/assets/index-DwZDrcRo.js                                         0.72 kB │ gzip:     0.41 kB
+dist/assets/music-DPqRK9Qv.js                                         0.75 kB │ gzip:     0.39 kB
+dist/assets/purchaseIdentityBinding-tFcjnp2u.js                       0.78 kB │ gzip:     0.34 kB
+dist/assets/web-BY6ZfZlR.js                                           0.90 kB │ gzip:     0.43 kB
+dist/assets/web-Bi-ni2Sr.js                                           1.06 kB │ gzip:     0.52 kB
+dist/assets/courseEntryCopy-ClIZWujk.js                               1.35 kB │ gzip:     0.72 kB
+dist/assets/Legal-DuYQl-z6.js                                         2.00 kB │ gzip:     0.91 kB
+dist/assets/growth-CtfcX3mW.js                                        2.07 kB │ gzip:     0.92 kB
+dist/assets/account-C2xHxVWw.js                                       2.95 kB │ gzip:     1.37 kB
+dist/assets/Support-Bd1NJK_v.js                                       3.54 kB │ gzip:     1.26 kB
+dist/assets/Seasons-Cx5q-O-S.js                                       3.65 kB │ gzip:     1.29 kB
+dist/assets/rewards-qp_nowTD.js                                       4.17 kB │ gzip:     1.81 kB
+dist/assets/Budget-CrLMpXXz.js                                        4.45 kB │ gzip:     1.70 kB
+dist/assets/web-B07dQ1oM.js                                           4.65 kB │ gzip:     1.40 kB
+dist/assets/Evidence-mjsPR1D0.js                                      5.45 kB │ gzip:     2.00 kB
+dist/assets/Tools-B9-6hf_R.js                                         5.60 kB │ gzip:     2.18 kB
+dist/assets/Missions-CpBKpgl4.js                                      5.65 kB │ gzip:     2.05 kB
+dist/assets/LifeScore-DIjissD-.js                                     5.72 kB │ gzip:     1.92 kB
+dist/assets/Bridge-BFEPYSej.js                                        6.53 kB │ gzip:     1.96 kB
+dist/assets/FutureSelf-BbO-v5y0.js                                    6.86 kB │ gzip:     1.94 kB
+dist/assets/MissionFlows-BVLV8WNI.js                                  8.10 kB │ gzip:     2.50 kB
+dist/assets/index-Ci4F8FHs.js                                         8.72 kB │ gzip:     3.31 kB
+dist/assets/web-B6fcvkfk.js                                          10.19 kB │ gzip:     2.10 kB
+dist/assets/purchases-D_E9nsBh.js                                    10.51 kB │ gzip:     3.49 kB
+dist/assets/PublicTwoFutures-hx9bgbMX.js                             11.24 kB │ gzip:     3.71 kB
+dist/assets/Account-YtdFCeIS.js                                      11.76 kB │ gzip:     3.62 kB
+dist/assets/support-BsLFr1ar.js                                      11.79 kB │ gzip:     4.95 kB
+dist/assets/DreamArt-QOM1MpIS.js                                     12.84 kB │ gzip:     2.50 kB
+dist/assets/FocusTimerHub-C1LEDwYT.js                                14.88 kB │ gzip:     4.25 kB
+dist/assets/Me-CIPY_DGj.js                                           16.31 kB │ gzip:     5.70 kB
+dist/assets/Upgrade-DqMf3rwz.js                                      19.68 kB │ gzip:     6.40 kB
+dist/assets/TwoFutures-M7wxfEQ-.js                                   19.69 kB │ gzip:     5.43 kB
+dist/assets/SoundRoom-COdjV4DD.js                                    22.10 kB │ gzip:     8.39 kB
+dist/assets/media-2mgEiOLR.js                                        23.75 kB │ gzip:     9.29 kB
+dist/assets/Bank-Xecf0Ed9.js                                         29.78 kB │ gzip:     8.21 kB
+dist/assets/Settings-C6mLbzHb.js                                     41.22 kB │ gzip:    12.89 kB
+dist/assets/Coach-CL71N973.js                                        48.50 kB │ gzip:    15.86 kB
+dist/assets/Notebook-CgtZHVDa.js                                     49.24 kB │ gzip:    14.33 kB
+dist/assets/Dreams-7cI2IaVx.js                                       53.11 kB │ gzip:    14.99 kB
+dist/assets/DailyMicroHabits-QHqsPxtg.js                             56.82 kB │ gzip:    14.79 kB
+dist/assets/Progress-ByZt_5M5.js                                     75.84 kB │ gzip:    18.19 kB
+dist/assets/Courses-BolwnlVd.js                                     118.04 kB │ gzip:    37.99 kB
+dist/assets/motion-HNvQpnN_.js                                      128.88 kB │ gzip:    42.38 kB
+dist/assets/Today-D0LkpLfM.js                                       140.16 kB │ gzip:    43.47 kB
+dist/assets/supabase--wUpN4Ei.js                                    228.14 kB │ gzip:    59.28 kB
+dist/assets/react-5GCfeWye.js                                       229.42 kB │ gzip:    71.53 kB
+dist/assets/genai-DNIGCYRr.js                                       409.93 kB │ gzip:    72.77 kB
+dist/assets/charts-Bzd-XkHo.js                                      431.58 kB │ gzip:   124.87 kB
+dist/assets/tr-Bxmf0hre.js                                          561.31 kB │ gzip:   219.30 kB
+dist/assets/es-D_dh5elY.js                                          573.76 kB │ gzip:   217.65 kB
+dist/assets/index-BHJu62wr.js                                       950.99 kB │ gzip:   308.55 kB
+dist/assets/courses-CKtnra3s.js                                   2,510.75 kB │ gzip:   813.28 kB
+dist/assets/index-BMm9S-UO.js                                     5,959.05 kB │ gzip: 2,123.39 kB
+
+(!) Some chunks are larger than 700 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 10.05s
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

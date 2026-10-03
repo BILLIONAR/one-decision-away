@@ -1,0 +1,71 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { createRequire } from 'node:module';
+import { createHash } from 'node:crypto';
+import { getInitialDemoState } from '/workspace/oda-mobile-core-quality/src/services/repository.ts';
+const repo='/workspace/oda-mobile-core-quality',out='/tmp/oda-mobile-quality-focused',base='http://127.0.0.1:4311';
+const require=createRequire(path.join(repo,'package.json'));const {chromium}=require('playwright');
+const key='one_decision_away_app_data_v1';
+const sha=file=>createHash('sha256').update(fs.readFileSync(path.join(repo,file))).digest('hex');
+const files=['src/components/FocusLockView.tsx','src/components/notebook/JournalWorkspace.tsx','src/components/ui.tsx','src/components/AppErrorBoundary.tsx'];
+const report={base,at:new Date().toISOString(),browser:'',sourceHashes:Object.fromEntries(files.map(file=>[file,sha(file)])),cases:[],productDefects:[],errors:[],externalBlocked:[],screenshots:[],limits:['Actual app, real AppProvider/repository/UI handlers in Chromium on saved Linux cloud executor. Only synthetic records and dialog-method absence are injected.','No native keyboard/device or unsupported real-device claims. All requests outside the local preview are blocked. No providers, payments, secrets, app edits or deployment.']};
+const seed=()=>{
+ const result=getInitialDemoState();Object.assign(result.profile,{displayName:'Synthetic keyboard audit',onboardingStep:'completed',locale:'en',soundMuted:true,nudgesEnabled:false,dailyWisdomEnabled:false,focusTabBlinkEnabled:false,focusScreenPulseEnabled:false,firstOpenedAt:new Date().toISOString()});result.missions=[];
+ result.dreamJournal=[{id:'synthetic-photo-entry',userId:result.profile.id,title:'Synthetic photo entry',content:'A synthetic saved reflection with its own pixel image.',mood:'focused',createdAt:new Date().toISOString(),photoDataUrl:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII='}];return result;
+};
+const browser=await chromium.launch({executablePath:'/usr/bin/chromium'});report.browser=await browser.version();
+const open=async(name,missing=[])=>{
+ const context=await browser.newContext({viewport:{width:390,height:844},serviceWorkers:'block',reducedMotion:'reduce'});
+ await context.route('**/*',route=>{if(new URL(route.request().url()).origin===base)return route.continue();report.externalBlocked.push({case:name,url:route.request().url(),resourceType:route.request().resourceType()});return route.abort();});
+ await context.addInitScript(({key,seed,missing})=>{if(!localStorage.getItem(key))localStorage.setItem(key,JSON.stringify(seed));localStorage.setItem('oda_locale','en');for(const method of missing)HTMLDialogElement.prototype[method]=undefined;},{key,seed:seed(),missing});
+ const page=await context.newPage();page.on('pageerror',error=>report.errors.push({case:name,message:error.message}));return{context,page};
+};
+const saved=page=>page.evaluate(key=>localStorage.getItem(key),key);
+const capture=async(page,name)=>{await page.screenshot({path:path.join(out,name),fullPage:true,animations:'disabled'});report.screenshots.push(name);};
+const expect=async(name,predicate,evidence)=>{let failure;try{assert.equal(await predicate(),true,name);}catch(error){failure=error.message;}report.cases.push({name,baselinePassed:!failure,failure:failure??null,evidence});console.log(`${failure?'BASELINE FAIL':'PASS'}: ${name}`);return Boolean(failure);};
+try{
+ {
+  const{context,page}=await open('focus-end-confirmation');await page.goto(`${base}/app/focus`);await page.getByRole('heading',{name:'Focus',exact:true}).waitFor();
+  await page.getByRole('button',{name:'Ambient',exact:true}).click();await page.getByRole('button',{name:/^Silence/}).click();
+  await page.getByPlaceholder('What will you focus on? Optional').fill('Synthetic silent keyboard focus');
+  await page.getByRole('button',{name:'Start 25 min',exact:true}).click();await page.getByRole('button',{name:'End early',exact:true}).waitFor();
+  const trigger=page.getByRole('button',{name:'End early',exact:true});await trigger.focus();await page.keyboard.press('Enter');
+  const heading=page.getByRole('heading',{name:'End early?',exact:true});await heading.waitFor();
+  const focus=await heading.evaluate(h=>({inside:h.parentElement.contains(document.activeElement),active:document.activeElement.outerHTML,role:h.parentElement.closest('[role="dialog"],dialog')?.getAttribute('role')??null,dialogCount:document.querySelectorAll('dialog[open],[role="dialog"]').length}));
+  await expect('End early confirmation moves keyboard focus inside',async()=>focus.inside,focus);
+  await expect('End early confirmation exposes a named accessible dialog',async()=>await page.getByRole('dialog',{name:'End early?',exact:true}).count()===1,focus);
+  const tabs=[];for(let i=0;i<6;i++){await page.keyboard.press('Tab');tabs.push(await heading.evaluate(h=>({inside:h.parentElement.contains(document.activeElement),tag:document.activeElement.tagName,name:document.activeElement.getAttribute('aria-label')||document.activeElement.textContent?.trim()||document.activeElement.getAttribute('placeholder')})));}
+  await expect('Tab remains inside End early confirmation',async()=>tabs.every(item=>item.inside),tabs);
+  await page.keyboard.press('Escape');const stillOpen=await heading.count();await expect('Escape dismisses End early confirmation without ending the session',async()=>stillOpen===0,{stillOpen});
+  await capture(page,'focus-confirmation-keyboard.png');
+  assert.equal(stillOpen,1,'Expected baseline overlay must still be visible for background-action probe');
+  const pause=page.getByRole('button',{name:'Pause',exact:true});await pause.focus();await page.keyboard.press('Space');
+  const backgroundMutation={confirmationVisible:await heading.isVisible(),pausedBehindConfirmation:await page.getByText('Paused',{exact:true}).first().isVisible()};
+  assert.equal(backgroundMutation.pausedBehindConfirmation,true);await capture(page,'focus-background-paused.png');
+  report.productDefects.push({id:'focus-end-dialog',severity:'P2',source:'src/components/FocusLockView.tsx:512',reproduced:true,focus,tabs,stillOpenAfterEscape:stillOpen,backgroundMutation,fixIdea:'Give the existing End early panel modal semantics and shared focus/escape/return behavior while preserving its existing visual classes. Focus Keep going; Escape cancels only the confirmation; restore focus to End early.'});
+  await context.close();
+ }
+ {
+  const{context,page}=await open('notebook-native-control');await page.goto(`${base}/app/notebook`);await page.getByRole('heading',{name:'Notebook',exact:true}).waitFor();
+  await page.getByRole('button',{name:/Synthetic photo entry/}).click();const trigger=page.getByRole('button',{name:'View journal photo',exact:true});await trigger.click();
+  await page.getByRole('dialog',{name:'Journal photo',exact:true}).waitFor();await page.keyboard.press('Escape');await page.getByRole('dialog',{name:'Journal photo',exact:true}).waitFor({state:'hidden'});
+  await expect('Supported native photo dialog opens, closes and preserves Notebook',async()=>await page.getByRole('heading',{name:'Notebook',exact:true}).isVisible(),{focusReturned:await trigger.evaluate(element=>element===document.activeElement)});await context.close();
+ }
+ const photoFailures=[];
+ for(const method of ['showModal','close']){
+  const name=`notebook-missing-${method}`;const{context,page}=await open(name,[method]);await page.goto(`${base}/app`);await page.locator('#set-one-decision').waitFor();const before=await saved(page);
+  await page.goto(`${base}/app/notebook`);
+  if(method==='showModal'){await page.getByRole('heading',{name:'Notebook',exact:true}).waitFor();await page.getByRole('button',{name:/Synthetic photo entry/}).click();await page.getByRole('button',{name:'View journal photo',exact:true}).click();}
+  const recovery=page.getByRole('button',{name:'Download a recovery copy',exact:true});await recovery.waitFor();const after=await saved(page);assert.equal(after,before,'Feature-absence failure must preserve the actual saved record');
+  const failed=await expect(`Notebook remains usable without dialog.${method}`,async()=>await page.getByRole('heading',{name:'Notebook',exact:true}).count()===1,{method,recoveryRendered:true,savedRecordPreserved:after===before});assert.equal(failed,true);
+  await capture(page,`${name}-recovery.png`);
+  const downloaded=page.waitForEvent('download');await recovery.click();const download=await downloaded;const file=await download.path();const record=JSON.parse(fs.readFileSync(file,'utf8'));assert.equal(record.format,'oda-recovery-v1');assert.equal(record.appRecord,after);
+  photoFailures.push({method,recoveryRendered:true,recordPreserved:true,recoveryDownloadPreservesExactRecord:true,errors:report.errors.filter(item=>item.case===name)});
+  await expect(`${name}: recovery download retains the exact saved record`,async()=>record.appRecord===after,{format:record.format});
+  await page.getByRole('link',{name:'Help and support',exact:true}).click();await page.locator('h1').first().waitFor();assert.ok(page.url().endsWith('/support.html'));assert.equal(await saved(page),after);
+  await expect(`${name}: recovery support remains reachable without resetting data`,async()=>page.url().endsWith('/support.html'),{url:page.url(),recordPreserved:true});await context.close();
+ }
+ report.productDefects.push({id:'notebook-photo-dialog-capability',severity:'P2',source:'src/components/notebook/JournalWorkspace.tsx:62',reproduced:true,variants:photoFailures,fixIdea:'Route the photo viewer through the existing feature-detected Modal/fallback primitive, preserving the image and panel appearance. Do not call showModal/close on missing methods; prevent Notebook mount or View photo from escalating to whole-app recovery.'});
+}catch(error){report.harnessFailure=String(error.stack||error);console.error(error);process.exitCode=2;
+}finally{report.sourceUnchanged=files.every(file=>sha(file)===report.sourceHashes[file]);fs.writeFileSync(path.join(out,'baseline-report.json'),JSON.stringify(report,null,2)+'\n');await browser.close();console.log(JSON.stringify({out,defects:report.productDefects.length,baselineFailures:report.cases.filter(item=>!item.baselinePassed).length,harnessFailure:report.harnessFailure??null,sourceUnchanged:report.sourceUnchanged}));if(!report.harnessFailure&&report.cases.some(item=>!item.baselinePassed))process.exitCode=1;}

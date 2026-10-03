@@ -1,0 +1,40 @@
+✔ a matching current durable document uploads and records current plus historical confirmation (23.393989ms)
+✔ a stale rendered profile payload cannot roll acknowledged cloud work backward (5.043827ms)
+✔ a stale rendered notebook payload cannot roll acknowledged cloud work backward (4.174811ms)
+✔ a stale rendered futureSelf payload cannot roll acknowledged cloud work backward (3.331513ms)
+✔ missing authoritative local record rejects a push before any cloud query (3.676406ms)
+✔ invalid-json authoritative local record rejects a push before any cloud query (2.736643ms)
+✔ invalid-document authoritative local record rejects a push before any cloud query (3.123439ms)
+✔ a course-only stale caller uses the existing latest-course normalization and can upload (7.001551ms)
+✔ an ordinary repository save invalidates current confirmation immediately and retains history (3.702256ms)
+✔ a durable Notebook action invalidates confirmation without waiting for its debounce (5.076636ms)
+✔ a durable course save invalidates confirmation without requiring the AppProvider event listener (3.190861ms)
+✔ a save suppressed by its account guard still makes the current durable document dirty (4.328824ms)
+✔ a failed durable repository write preserves previous current confirmation (3.233977ms)
+✔ a failed durable notebook write preserves previous current confirmation (2.796173ms)
+✔ a failed durable course write preserves previous current confirmation (3.311113ms)
+✔ dirty startup does not automatically restore the same acknowledged cloud baseline over newer device work (5.48905ms)
+✔ an old in-flight upload retains its remote baseline while the latest durable document remains dirty (5.813131ms)
+✔ the latest queued durable payload updates after an older in-flight upload without reverting cloud or device (8.40836ms)
+✔ a cloud-restore fingerprint resolve after account drift returns false without publishing obsolete status (4.711653ms)
+✔ a cloud-restore fingerprint reject after account drift returns false without publishing obsolete status (3.283922ms)
+✔ a cloud-restore fingerprint resolve after project drift returns false without publishing obsolete status (3.22348ms)
+✔ a cloud-restore fingerprint reject after project drift returns false without publishing obsolete status (4.707106ms)
+✔ a cloud-restore fingerprint resolve after local-record drift returns false without publishing obsolete status (3.694183ms)
+✔ a cloud-restore fingerprint reject after local-record drift returns false without publishing obsolete status (4.146457ms)
+✔ a rejected current cloud-restore fingerprint returns false, preserves durable data and reports unconfirmed backup (4.10843ms)
+✔ cloud-restore acknowledgement owner-quota failure returns a boolean and keeps the durable restored record (4.356596ms)
+✔ cloud-restore acknowledgement document-read failure returns a boolean and keeps the durable restored record (2.943055ms)
+✔ a clean-reload confirmation fingerprint resolve after account B cannot publish account A status (3.70542ms)
+✔ a clean-reload confirmation fingerprint reject after account B cannot publish account A status (2.670053ms)
+✔ confirmation bootstrap after a clean reload is tied to the actual persisted document (3.406677ms)
+✔ confirmation bootstrap after a dirty reload preserves device work and historical cloud time (5.101433ms)
+✔ a coherently hydrated external-tab edit cannot inherit another tab’s current-document confirmation (3.945454ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 358.34657

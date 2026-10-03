@@ -1,0 +1,181 @@
+/* Icon 8 palette, authorized for Today only. The existing route attribute also
+   scopes its shell and dialogs; navigating away restores the shared theme. */
+.oda-reference-app[data-app-route="/app"] {
+  --bg: #F7F2EA;
+  --bg-elevated: #FFFDF8;
+  --bg-muted: #F7F2EA;
+  --bg-inset: #E8D9CB;
+  --surface: #FFFDF8;
+  --ink: #2D1717;
+  --fg: #2D1717;
+  --fg-muted: #756057;
+  --fg-subtle: #756057;
+  --ink-faint: #756057;
+  --border: #E8D9CB;
+  --surface-border: #E8D9CB;
+  --border-strong: #756057;
+  --accent: #A50C24;
+  --on-accent: #FFF8EB;
+  --accent-soft: #F7F2EA;
+  --brand-burgundy: #54010C;
+  --brand-burgundy-soft: #F7F2EA;
+  --on-burgundy: #FFF8EB;
+  --forest: #54010C;
+  --on-forest: #FFF8EB;
+  --color-coral: #A50C24;
+  --color-sage: #A50C24;
+  --color-slate: #2D1717;
+  --color-sand: #756057;
+  --color-navy: #54010C;
+  --gold: #E0AB5A;
+  --gold-soft: #FCEBB6;
+  --tint-sage: #F7F2EA;
+  --ink-sage: #A50C24;
+  --tint-rose: #F7F2EA;
+  --ink-rose: #A50C24;
+  --tint-blue: #F7F2EA;
+  --ink-blue: #A50C24;
+  --tint-sand: #FCEBB6;
+  --ink-sand: #54010C;
+  --primary-grad: #C51624;
+  --on-primary: #FFF8EB;
+  --primary-glow: 0 4px 12px -6px rgb(84 1 12 / 30%);
+  --surface-shadow: 0 8px 26px -14px rgb(84 1 12 / 16%), 0 1px 2px rgb(84 1 12 / 3%);
+  --glass-shadow: 0 7px 24px -12px rgb(84 1 12 / 22%);
+  --glass: #FFFDF8;
+  --glass-border: #E8D9CB;
+  --shadow-md: 0 22px 44px -26px rgb(84 1 12 / 32%), 0 2px 6px rgb(84 1 12 / 5%);
+  --shadow-lg: 0 30px 60px -30px rgb(84 1 12 / 40%), 0 4px 10px rgb(84 1 12 / 6%);
+  --ring-a: #E0AB5A;
+  --ring-b: #A50C24;
+  --ring-track: #E8D9CB;
+  --nav-active: #711326;
+  --oda-palette-gold: #E0AB5A;
+  --oda-focus: #C51624;
+  --oda-focus-gap: #FFFDF8;
+  /* Gold against the light track is only 1.50:1. This burgundy companion track
+     preserves readable progress boundaries without changing any real values. */
+  --oda-progress-track: #711326;
+  /* The approved ivory ground keeps the existing light semantic signals even
+     when a user retains the shared dark preference on other screens. */
+  --success: #20745F;
+  --success-soft: #E0F1EB;
+  --danger: #B8333C;
+  --danger-soft: #FCEBED;
+  --money: #20745F;
+  --money-soft: #E0F1EB;
+  background: #F7F2EA;
+}
+.oda-reference-app[data-app-route="/app"] ::selection {
+  background: #711326;
+  color: #FFF8EB;
+}
+
+.oda-reference-app[data-app-route="/app"] .oda-sidebar {
+  box-shadow: 0 8px 28px -18px rgb(84 1 12 / 18%);
+}
+.oda-reference-app[data-app-route="/app"] .oda-sidebar-avatar {
+  border-color: #E8D9CB;
+  background: radial-gradient(circle at 30% 20%, #FFFDF8, #FCEBB6);
+}
+.oda-reference-app[data-app-route="/app"] :is(.oda-nav-active, .oda-tab[aria-current="page"]) {
+  background: #711326;
+  color: #FFF8EB;
+  box-shadow: inset 0 0 0 1px #711326;
+  --oda-focus: #FCEBB6;
+  --oda-focus-gap: #711326;
+}
+.oda-reference-app[data-app-route="/app"] .oda-nav-active::before {
+  background: #E0AB5A;
+}
+.oda-reference-app[data-app-route="/app"] .oda-tab[aria-current="page"] {
+  box-shadow: inset 0 -2px 0 #E0AB5A;
+}
+
+.oda-reference-app[data-app-route="/app"] .oda-fidelity-today :is(.oda-decision, .oda-growth-panel, .oda-growth-week) {
+  --bg: #54010C;
+  --bg-elevated: #711326;
+  --bg-muted: #711326;
+  --surface: #54010C;
+  --fg: #FFF8EB;
+  --fg-muted: #E4C8C0;
+  --fg-subtle: #E4C8C0;
+  --accent: #E0AB5A;
+  --on-accent: #54010C;
+  --accent-soft: #711326;
+  --border: #8A3542;
+  --border-strong: #E4C8C0;
+  --surface-border: #8A3542;
+  --brand-burgundy: #E0AB5A;
+  --primary-grad: #C51624;
+  --on-primary: #FFF8EB;
+  --oda-focus: #FCEBB6;
+  --oda-focus-gap: #54010C;
+  background: linear-gradient(145deg, #54010C, #6A0715);
+}
+.oda-reference-app[data-app-route="/app"] .oda-fidelity-today .oda-decision-input {
+  --oda-focus: #C51624;
+  --oda-focus-gap: #FFFDF8;
+  background: #FFFDF8;
+  color: #2D1717;
+  border-color: #E0AB5A;
+}
+.oda-reference-app[data-app-route="/app"] .oda-fidelity-today .oda-decision-input::placeholder {
+  color: #756057;
+}
+.oda-reference-app[data-app-route="/app"] .oda-fidelity-today .oda-decision-input:focus {
+  background: #FFFDF8;
+  border-color: #C51624;
+}
+.oda-reference-app[data-app-route="/app"] .oda-fidelity-today .oda-decision-action {
+  background: #C51624;
+  color: #FFF8EB;
+}
+.oda-reference-app[data-app-route="/app"] :is(.oda-btn-primary, .oda-loop-primary, .oda-decision-action):hover:not(:disabled) {
+  background: #D71827;
+  color: #FFF8EB;
+  filter: none;
+}
+.oda-reference-app[data-app-route="/app"] .oda-fidelity-today .oda-decision-action:disabled {
+  background: #711326;
+  color: #E4C8C0;
+  box-shadow: inset 0 0 0 1px #8A3542;
+  cursor: not-allowed;
+  opacity: 1;
+}
+.oda-reference-app[data-app-route="/app"] .oda-decision-action-arrow {
+  background: rgb(255 248 235 / 16%);
+}
+.oda-reference-app[data-app-route="/app"] .oda-fidelity-today .oda-decision-done {
+  background: #711326;
+  color: #E0AB5A;
+  border-color: #E0AB5A;
+}
+.oda-reference-app[data-app-route="/app"] .oda-fidelity-today .oda-growth-day[data-kept="false"] {
+  border-color: #E4C8C0;
+}
+
+/* Text links stay ruby on ivory; gold is reserved for progress and dark panels. */
+.oda-reference-app[data-app-route="/app"] .oda-hybrid-ring {
+  background: conic-gradient(#E0AB5A var(--progress), var(--oda-progress-track) 0);
+}
+.oda-reference-app[data-app-route="/app"] .oda-growth-course-progress {
+  background: var(--oda-progress-track);
+}
+.oda-reference-app[data-app-route="/app"] .oda-growth-course-progress > span {
+  background: #E0AB5A;
+}
+.oda-reference-app[data-app-route="/app"] .oda-hybrid-focus-bar > span {
+  background: #E0AB5A;
+  box-shadow: inset 0 0 0 1px #A50C24;
+}
+
+.oda-reference-app[data-app-route="/app"] :is(button, a, input, textarea, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--oda-focus);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--oda-focus-gap);
+}
+.oda-reference-app[data-app-route="/app"] .oda-modal::backdrop,
+.oda-reference-app[data-app-route="/app"] .oda-modal-fallback {
+  background: rgb(45 23 23 / 56%);
+}

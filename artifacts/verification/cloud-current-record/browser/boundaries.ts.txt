@@ -1,0 +1,16 @@
+export const isNative = () => true;
+export const haptic = async () => {};
+export const syncStatusBar = async () => {};
+export const disablePush = async () => {};
+export const getPushStatus = async () => ({ active: false, enabled: false });
+export const isPushActive = () => false;
+export const notificationScheduler = { configure() {}, setDecision() {} };
+const silent = new Proxy({}, { get: () => () => {} });
+export const soundSynthesizer = silent;
+export const voiceGuide = silent;
+export const triggerMissionConfetti = () => {};
+export const triggerBigRewardConfetti = () => {};
+export const triggerGoldConfetti = () => {};
+export const triggerSmallConfetti = () => {};
+export const boundaryAttempts = { providerConstruction: 0, authDelivery: 0, authVerification: 0 };
+export const createClient = () => { boundaryAttempts.providerConstruction++; throw new Error('Provider construction is forbidden in this synthetic fixture.'); };

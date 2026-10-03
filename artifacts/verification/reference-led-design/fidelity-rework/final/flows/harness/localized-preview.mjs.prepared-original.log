@@ -1,0 +1,51 @@
+import assert from 'node:assert/strict';
+import { base, out, save, launch, initApp, instrument, snapshot, gotoFocus, openGuided, preview, routeSafe } from './common.mjs';
+import { guidanceCopy } from '/workspace/oda-reference-redesign/src/i18n/guidance.ts';
+
+const report = { at: new Date().toISOString(), base, synthetic: true, checks: [], errors: [], blockedRequests: [], cases: [], screenshots: [], limits: ['Real Chromium MP3 decoder and trusted preview clicks; no independently listened naturalness or physical-device claim.'] };
+const browser = await launch(); report.browser = await browser.version();
+let active;
+try {
+  for (const locale of ['en', 'tr', 'es']) for (const width of [320, 390]) {
+    const label = `${locale}-${width}`;
+    const context = await browser.newContext({ viewport: { width, height: 844 }, reducedMotion: 'reduce', serviceWorkers: 'block' });
+    await initApp(context, locale); await instrument(context); await routeSafe(context, report);
+    const requests = [];
+    context.on('request', request => { if (request.url().endsWith('.mp3')) requests.push(request.url()); });
+    const page = await context.newPage(); active = page;
+    page.on('pageerror', error => report.errors.push({ label, message: error.message }));
+    await gotoFocus(page); await openGuided(page);
+    assert.deepEqual(requests, []);
+    const row = page.locator('[data-guided-session="gm-relax"]');
+    const button = preview(page, 'gm-relax');
+    assert.ok((await button.innerText()).includes(guidanceCopy(locale).preview));
+    assert.equal(await button.locator('svg.lucide-volume2').count(), 1);
+    await button.click();
+    await page.waitForFunction(() => window.__guidanceQA.sources.length === 1);
+    await page.waitForFunction(() => document.querySelector('[data-guidance-mode]')?.dataset.guidanceMode === 'recorded');
+    const state = await snapshot(page);
+    assert.equal(requests.length, 1);
+    assert.ok(requests[0].includes('gm-relax-00.en-US.'));
+    assert.equal(state.sources[0].contextState, 'running');
+    assert.deepEqual(state.speech, []);
+    assert.equal(await page.locator('html').getAttribute('lang'), locale);
+    await row.scrollIntoViewIfNeeded();
+    const name = `trusted-recorded-preview-${label}.png`;
+    await page.screenshot({ path: `${out}/${name}`, fullPage: false, animations: 'disabled' }); report.screenshots.push(name);
+    await preview(page, 'gm-relax').click();
+    const stopped = await snapshot(page);
+    assert.equal(stopped.sources[0].stopped, true);
+    report.checks.push({ name: `${label}: truthful localized Preview voice + speaker icon starts only one English recorded current cue and Stop retires it`, requests, source: state.sources[0], stopped: stopped.sources[0].stopped });
+    report.cases.push({ label, passed: true });
+    console.log(`PASS ${label}: localized Preview voice / actual English current clip / stopped source`);
+    await context.close();
+  }
+  assert.deepEqual(report.errors, []); assert.deepEqual(report.blockedRequests, []);
+  report.status = 'passed';
+} catch (error) {
+  report.status = 'failed'; report.failure = String(error.stack || error); process.exitCode = 1; console.error(report.failure);
+  if (active && !active.isClosed()) await active.screenshot({ path: `${out}/localized-preview-failure.png`, fullPage: false }).catch(() => {});
+} finally {
+  await browser.close(); report.finishedAt = new Date().toISOString(); save('localized-preview-report', report);
+  console.log(JSON.stringify({ status: report.status, cases: report.cases.length, checks: report.checks.length }));
+}

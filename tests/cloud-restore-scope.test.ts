@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { beforeEach, test } from 'node:test';
 import { APP_DATA_STORAGE_KEY } from '../src/services/storageKeys';
 import { queueDataWrite } from '../src/services/dataWrites';
+import { cloudCrudFixture } from './helpers/cloudCrudFixture';
 
 class MemoryStorage {
   values = new Map<string, string>();
@@ -36,15 +37,11 @@ function setup() {
   const read = deferred<any>();
   const started = deferred<void>();
   const uploads: any[] = [];
-  internal.client = {
-    auth: { signOut: async () => undefined },
-    from: () => ({
-      select: () => ({ eq: (_key: string, userId: string) => ({ maybeSingle: () => {
-        assert.equal(userId, 'account-a'); started.resolve(); return read.promise;
-      } }) }),
-      upsert: async (row: any) => { uploads.push(row); return { error: null }; },
-    }),
-  };
+  const crud = cloudCrudFixture({
+    read: async userId => { assert.equal(userId, 'account-a'); started.resolve(); return read.promise; },
+    write: async row => { uploads.push(row); return { error: null }; },
+  });
+  internal.client = { ...crud.client, auth: { signOut: async () => undefined } };
   const respond = () => read.resolve({ data: { data: remote, updated_at: '2030-01-01T00:00:00Z' }, error: null });
   return { local, remote, read, started, uploads, respond };
 }
@@ -91,7 +88,7 @@ for (const [name, mutate] of mutations) test(`a reviewed cloud restore is checke
   const previous = new Map(storage.values);
   release.resolve(); await lock;
   assert.equal(await replacement, false);
-  cloudSync.markRemoteApplied(reviewed);
+  await cloudSync.markRemoteApplied(reviewed);
   assert.equal(storage.getItem('oda_cloud_last_sync'), null);
   assert.deepEqual(storage.values, previous);
 });
@@ -102,7 +99,7 @@ test('an unchanged reviewed cloud record commits once and records its scoped syn
   await fixture.started.promise; fixture.respond();
   const reviewed = (await pending)!;
   assert.equal(await new LocalDemoRepository().replaceAll(reviewed, originalRecord => cloudSync.canApplyRemote(reviewed, originalRecord)), true);
-  cloudSync.markRemoteApplied(reviewed);
+  await cloudSync.markRemoteApplied(reviewed);
   assert.equal(JSON.parse(storage.getItem(APP_DATA_STORAGE_KEY)!).profile.displayName, fixture.remote.profile.displayName);
   assert.equal(cloudSync.getState().lastSyncAt, '2030-01-01T00:00:00Z');
 });
@@ -140,17 +137,18 @@ for (const error of [null, new Error('Account A upload failed')]) test(`an old u
   const fixture = setup();
   const upload = deferred<any>();
   const started = deferred<void>();
-  internal.client.from = () => ({ upsert: () => { started.resolve(); return upload.promise; } });
+  internal.client = cloudCrudFixture({ write: async () => { started.resolve(); return upload.promise; } }).client;
   let notifications = 0;
   const unsubscribe = cloudSync.subscribe(() => { notifications++; });
   try {
     const pending = cloudSync.push(fixture.local);
     await started.promise;
-    assert.equal(notifications, 1);
+    assert.ok(notifications >= 1); // Capture/dirty status can publish before the provider write.
+    const beforeScopeChange = notifications;
     Object.assign(internal, { session: session('account-b'), config: config('https://project-b.example'), syncing: true, error: 'Current account status' });
     upload.resolve({ error });
     assert.equal(await pending, false);
-    assert.equal(notifications, 1);
+    assert.equal(notifications, beforeScopeChange, 'the obsolete completion must emit no new-scope status');
     assert.equal(cloudSync.getState().error, 'Current account status');
     assert.equal(cloudSync.getState().syncing, true);
     assert.equal(storage.getItem('oda_cloud_last_sync'), null);

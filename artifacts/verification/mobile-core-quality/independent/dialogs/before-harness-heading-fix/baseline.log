@@ -1,0 +1,13 @@
+locator.waitFor: Error: strict mode violation: getByRole('heading', { name: 'Focus', exact: true }) resolved to 2 elements:
+    1) <h1 class="oda-display text-[32px] leading-tight text-[var(--fg)]">Focus</h1> aka locator('h1')
+    2) <h2 class="text-[15px] font-semibold text-[var(--fg)]">Focus</h2> aka locator('h2')
+
+Call log:
+[2m  - waiting for getByRole('heading', { name: 'Focus', exact: true }) to be visible[22m
+
+    at /tmp/oda-mobile-quality-focused/audit.mjs:29:155 {
+  log: [
+    "  - waiting for getByRole('heading', { name: 'Focus', exact: true }) to be visible"
+  ]
+}
+{"out":"/tmp/oda-mobile-quality-focused","defects":0,"baselineFailures":0,"harnessFailure":"locator.waitFor: Error: strict mode violation: getByRole('heading', { name: 'Focus', exact: true }) resolved to 2 elements:\n    1) <h1 class=\"oda-display text-[32px] leading-tight text-[var(--fg)]\">Focus</h1> aka locator('h1')\n    2) <h2 class=\"text-[15px] font-semibold text-[var(--fg)]\">Focus</h2> aka locator('h2')\n\nCall log:\n\u001b[2m  - waiting for getByRole('heading', { name: 'Focus', exact: true }) to be visible\u001b[22m\n\n    at /tmp/oda-mobile-quality-focused/audit.mjs:29:155","sourceUnchanged":true}

@@ -1,0 +1,66 @@
+"""Read-only baseline-pixel projection, never a corrected browser-render claim."""
+import hashlib
+import json
+import math
+from pathlib import Path
+from PIL import Image
+
+OUT = Path(__file__).parent
+DIAGNOSTIC = OUT.parent / 'focus-contrast-diagnostic' / 'results'
+report = json.loads((DIAGNOSTIC / 'report.json').read_text())
+tone = (8, 19, 28)
+backing_alpha = .25
+
+def luminance(rgb):
+    values = [n / 255 for n in rgb]
+    values = [n / 12.92 if n <= .04045 else ((n + .055) / 1.055) ** 2.4 for n in values]
+    return sum(n * weight for n, weight in zip(values, (.2126, .7152, .0722)))
+
+items = []
+for case in report['cases']:
+    state = case['states'][0]
+    visible = Image.open(DIAGNOSTIC / state['visible']['file']).convert('RGB')
+    background = Image.open(DIAGNOSTIC / state['backgroundProbe']['file']).convert('RGB')
+    for text in state['texts']:
+        rect = text['bounds']
+        xs = range(max(0, math.floor(rect['x'])), min(visible.width, math.ceil(rect['x'] + rect['width'])))
+        ys = range(max(0, math.floor(rect['y'])), min(visible.height, math.ceil(rect['y'] + rect['height'])))
+        ratios = []
+        foreground = text['foreground']
+        for y in ys:
+            for x in xs:
+                old_visible = visible.getpixel((x, y))
+                old_background = background.getpixel((x, y))
+                delta = [f - b for f, b in zip(foreground, old_background)]
+                denominator = sum(n * n for n in delta)
+                if denominator < 100:
+                    continue
+                glyph_alpha = sum((v - b) * d for v, b, d in zip(old_visible, old_background, delta)) / denominator
+                residual = sum((v - (b + glyph_alpha * d)) ** 2 for v, b, d in zip(old_visible, old_background, delta))
+                if .90 <= glyph_alpha <= 1.08 and residual <= 40:
+                    projected = [round(b * (1 - backing_alpha) + t * backing_alpha) for b, t in zip(old_background, tone)]
+                    ratios.append((luminance(foreground) + .05) / (luminance(projected) + .05))
+        if len(ratios) != text['coreGlyphSamples']:
+            raise ValueError('Baseline glyph mask mismatch: ' + case['id'] + text['selector'])
+        items.append({
+            'case': case['id'], 'selector': text['selector'], 'threshold': text['threshold'],
+            'baselineMinimum': text['minRatio'], 'baselineCoreGlyphSamples': len(ratios),
+            'projectedMinimum': round(min(ratios), 3),
+            'projectedBelowThreshold': sum(ratio < text['threshold'] for ratio in ratios),
+        })
+
+output = {
+    'method': '25% RGB(8,19,28) compositing projection over the existing 4bf foreground-transparent PNG at independently recorded core-glyph coordinates; rounded to nearest RGB channel. Text shadows excluded. This is not a render of corrected CSS, geometry measurement or WCAG certification.',
+    'source': report['source'], 'contexts': len(report['cases']), 'textRegions': len(items),
+    'backingAlpha': backing_alpha, 'backingRgb': tone,
+    'minimumProjectedTitle': min(i['projectedMinimum'] for i in items if i['threshold'] == 3),
+    'minimumProjectedDescription': min(i['projectedMinimum'] for i in items if i['threshold'] == 4.5),
+    'projectedBelowThresholdTotal': sum(i['projectedBelowThreshold'] for i in items),
+    'items': items,
+    'baselineArtifacts': [
+        {'file': str(path), 'bytes': path.stat().st_size, 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()}
+        for path in sorted(DIAGNOSTIC.iterdir()) if path.is_file()
+    ],
+}
+(OUT / 'baseline-pixel-projection.json').write_text(json.dumps(output, indent=2) + '\n')
+print(json.dumps({key: output[key] for key in ['contexts', 'textRegions', 'minimumProjectedTitle', 'minimumProjectedDescription', 'projectedBelowThresholdTotal']}))

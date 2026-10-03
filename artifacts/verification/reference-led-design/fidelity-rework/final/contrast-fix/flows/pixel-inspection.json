@@ -1,0 +1,71 @@
+{
+  "sourceCommit": "3ddb98b57669ceed6f220583aa01aa523d6b6a47",
+  "at": "2026-10-02T20:50:23.844671+00:00",
+  "method": "Supported view_image of actual new PNGs, not filename/caption inference.",
+  "viewed": [
+    {
+      "file": "first-use/completed-first-proof-en-320.png",
+      "bytes": 19068,
+      "sha256": "1eff7f3cd69edd8df6cc05c20b17291969ae754e2858dbc8d3d1fee161aa3cd6"
+    },
+    {
+      "file": "first-use/completed-first-proof-en-390.png",
+      "bytes": 17628,
+      "sha256": "67c3fcba0ededd82eb6d217a2f15a4ba3d24ca30931383febaeb0f190101fa8b"
+    },
+    {
+      "file": "first-use/completed-first-proof-tr-320.png",
+      "bytes": 14469,
+      "sha256": "33efd73955162709617cb675903426d9d32e1f4f91069172f0233acf92ac2efc"
+    },
+    {
+      "file": "first-use/completed-first-proof-tr-390.png",
+      "bytes": 14162,
+      "sha256": "e250c83d04eb389aeb8626f3bbbc51c8c033ea4ec734ac7d3e4d110d73c69b88"
+    },
+    {
+      "file": "first-use/completed-first-proof-es-320.png",
+      "bytes": 18130,
+      "sha256": "a624ea16afe259dff06cc850b861f4ecab5a465b033b056ccdf00eea76bf8d3b"
+    },
+    {
+      "file": "first-use/completed-first-proof-es-390.png",
+      "bytes": 16925,
+      "sha256": "05ed0c9870757deda867a90ba639db104646f1058c9e39de866e4ab47fba05a9"
+    },
+    {
+      "file": "first-use/saved-optional-plan-en-320.png",
+      "bytes": 26173,
+      "sha256": "dfa06c73206a76365947102b812d832fc952fe62421bff28f51b3fb2419c2dd9"
+    },
+    {
+      "file": "first-use/saved-optional-plan-tr-390.png",
+      "bytes": 30537,
+      "sha256": "565d5aa4e873be426e8ac09d14caba115c169589c195cfbce27de3ccf038201d"
+    },
+    {
+      "file": "first-use/saved-optional-plan-es-320.png",
+      "bytes": 27071,
+      "sha256": "654b435c3c28a763ea812fa7518a6d4716e7f72e6e94e91d65675ea1252195f9"
+    }
+  ],
+  "findingsResolved": [
+    {
+      "previousSeverity": "P2",
+      "issue": "Saved optional plan contrast",
+      "resolution": "Dark background and readable light text; no serious/critical axe findings at all six EN/TR/ES320390 states."
+    },
+    {
+      "previousSeverity": "P2",
+      "issue": "Completed first-proof reading column crowded to right edge",
+      "resolution": "Actual tree stays compact beside normal word-wrapped heading/body; all rendered glyphs remain inside reading column/card, all six locale/width PNGs inspected."
+    }
+  ],
+  "noNewFunctionalBlocker": true,
+  "limits": [
+    "Nine newly captured PNGs actually inspected; no all-PNG human-review claim.",
+    "The narrower320 proof card wraps the paragraph across several normal lines; content fits without glyph clipping.",
+    "Current tests use synthetic signed-out Chromium profiles; no physical-device or all-clip listening claim.",
+    "Strict Sound material/fidelity gate remains held."
+  ]
+}

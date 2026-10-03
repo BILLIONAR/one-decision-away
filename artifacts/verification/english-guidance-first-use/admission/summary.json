@@ -1,0 +1,66 @@
+{
+  "status": "passed",
+  "failures": [],
+  "sessionCount": 11,
+  "cueCount": 160,
+  "fullDecodedClipCount": 160,
+  "sourceFileSha256": "c9cc5f56354654f270e6176c32ce1ee2452817bdb07194f5307b70b7e92d745d",
+  "sourceGitBlob": "ff74fc1e21ab0207c345eb4d326fbd3ba5a84ccf",
+  "repositoryHead": "b6d29b638132715af6d22b1ea433403fd03137ac",
+  "decodedDurationSecondsIncludingWithinClipPauses": 1226.5297916666666,
+  "scheduledSessionMinutes": 87,
+  "totalMp3Bytes": 19843328,
+  "minimumConservativeMarginSeconds": 3.6880000000000006,
+  "minimumMarginClip": "clips/gm-motivation-00.en-US.v1.mp3",
+  "maximumDecodedPeak": 0.7970311641693115,
+  "clippedSamples": 0,
+  "nonFiniteClips": 0,
+  "license": {
+    "declared": "Apache-2.0",
+    "includedFileSha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "includedFileBytes": 11358,
+    "noticeSha256": "595413fd51f8a0f69b7ad04f043818ebb044b5864627810d3e4595ed6537062e",
+    "modelsOrRuntimeShipped": false,
+    "scope": "Included licence/NOTICE completeness and upstream declared licences verified; no legal-rights guarantee for synthesized outputs.",
+    "upstreamDeclarationChecks": [
+      {
+        "component": "ONNX model",
+        "url": "https://huggingface.co/onnx-community/Kokoro-82M-v1.0-ONNX/blob/1939ad2a8e416c0acfeecc08a694d14ef25f2231/README.md",
+        "observed": "pinned model card declares apache-2.0"
+      },
+      {
+        "component": "kokoro-js",
+        "url": "https://github.com/hexgrad/kokoro/blob/main/kokoro.js/package.json",
+        "observed": "upstream package declares version 1.2.1 and Apache-2.0"
+      },
+      {
+        "component": "upstream licence",
+        "url": "https://github.com/hexgrad/kokoro/blob/main/LICENSE",
+        "observed": "Apache License 2.0 full licence text"
+      },
+      {
+        "component": "licence specification",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+        "observed": "official Apache text read through web transport; executor raw-byte fetch unavailable (403 tunnel)"
+      }
+    ]
+  },
+  "approvedSleepCue1Sha256": "03608bdc2b04dd5935d1fbee79a2a8d4fcb9bb831dfb302e7a9fd2557988d5b4",
+  "elapsedAuditSeconds": 6.897697345000779,
+  "limits": [
+    "All 160 MP3s fully decoded; no human listening or independent transcription performed.",
+    "Input text hashes do not prove every spoken word or pronunciation.",
+    "Original WAVs are not in this bundle; raw-to-MP3 waveform correlation and generation records were not independently rechecked.",
+    "Archive SHA/size admission prerequisite was verified by the parent, not recalculated here."
+  ],
+  "tools": {
+    "ffmpeg": "ffmpeg version 7.1.5-0+deb13u1 Copyright (c) 2000-2026 the FFmpeg developers",
+    "ffprobe": "ffprobe version 7.1.5-0+deb13u1 Copyright (c) 2007-2026 the FFmpeg developers"
+  },
+  "bundleFileTypes": {
+    ".txt": 2,
+    ".json": 3,
+    ".md": 1,
+    ".mp3": 160
+  }
+}

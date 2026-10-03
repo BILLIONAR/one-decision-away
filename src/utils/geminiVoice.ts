@@ -4,7 +4,7 @@
  * otherwise VoiceGuide falls back to the browser's built-in voice.
  */
 
-import { t, N_, getLocaleMeta } from '../i18n';
+import { N_ } from '../i18n';
 
 export const GEMINI_TTS_VOICES = [
   { id: 'Kore', label: N_('Kore — warm, steady (recommended)') },
@@ -19,20 +19,18 @@ export const GEMINI_TTS_VOICES = [
 
 const TTS_MODEL = 'gemini-2.5-flash-preview-tts';
 const STYLE_PREFIX =
-  'Speak very slowly and softly, with calm, warm pauses, like a gentle meditation guide leading a quiet session: ';
-/** Language hint for the TTS model so narration follows the active locale (prompt text, not user-visible). */
-function stylePrefix(): string {
-  const meta = getLocaleMeta();
-  return meta.code === 'en' ? STYLE_PREFIX : `Speak in ${meta.name} (${meta.speech}). ${STYLE_PREFIX}`;
-}
+  'Speak in English (en-US). Speak very slowly and softly, with calm, warm pauses, like a gentle meditation guide leading a quiet session: ';
 
 type PcmClip = { sampleRate: number; samples: Float32Array };
 
-class GeminiVoice {
+export class GeminiVoice {
   private cache = new Map<string, Promise<PcmClip | null>>();
   private ctx: AudioContext | null = null;
   private currentSource: AudioBufferSourceNode | null = null;
   private gain: GainNode | null = null;
+  private requestedVolume = 1;
+  private playbackGeneration = 0;
+  private paused = false;
 
   private getContext(): AudioContext {
     if (!this.ctx) {
@@ -45,7 +43,7 @@ class GeminiVoice {
   }
 
   private cacheKey(text: string, voice: string) {
-    return `${getLocaleMeta().code}::${voice}::${text}`;
+    return `en-US::${voice}::${text}`;
   }
 
   /** Warm the cache for upcoming cues (fire and forget). */
@@ -62,7 +60,7 @@ class GeminiVoice {
       const ai = new GoogleGenAI({ apiKey });
       const res = await ai.models.generateContent({
         model: TTS_MODEL,
-        contents: [{ role: 'user', parts: [{ text: stylePrefix() + text }] }],
+        contents: [{ role: 'user', parts: [{ text: STYLE_PREFIX + text }] }],
         config: {
           responseModalities: ['AUDIO'],
           speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: voice } } },
@@ -90,8 +88,8 @@ class GeminiVoice {
   }
 
   /**
-   * Play a cue. Resolves true if Gemini audio played (or started), false if unavailable
-   * so the caller can fall back to the browser voice.
+   * Play an English cue. Resolves true only when playback starts, false for a
+   * failed or superseded request. VoiceGuide separately guards browser fallback.
    */
   public async speak(
     text: string,
@@ -101,36 +99,44 @@ class GeminiVoice {
     onStart?: () => void,
     onEnd?: () => void
   ): Promise<boolean> {
+    const generation = ++this.playbackGeneration;
+    this.stopCurrentSource();
+    if (this.paused) return false;
+    this.setVolume(volume);
     const key = this.cacheKey(text, voice);
     if (!this.cache.has(key)) this.cache.set(key, this.synthesize(text, apiKey, voice));
     const clip = await this.cache.get(key)!;
-    if (!clip) return false;
+    if (!clip || generation !== this.playbackGeneration || this.paused) return false;
 
     try {
       const ctx = this.getContext();
       if (ctx.state === 'suspended') await ctx.resume();
-      this.stop();
+      if (generation !== this.playbackGeneration || this.paused) return false;
       const buffer = ctx.createBuffer(1, clip.samples.length, clip.sampleRate);
       buffer.copyToChannel(clip.samples, 0);
       const src = ctx.createBufferSource();
       src.buffer = buffer;
-      this.gain!.gain.value = Math.max(0, Math.min(1, volume));
+      this.gain!.gain.value = this.requestedVolume;
       src.connect(this.gain!);
       src.onended = () => {
-        if (this.currentSource === src) this.currentSource = null;
+        if (this.currentSource !== src) return;
+        this.currentSource = null;
+        try { src.disconnect(); } catch { /* The context may already be closed. */ }
         onEnd?.();
       };
       this.currentSource = src;
-      onStart?.();
       src.start();
+      if (this.currentSource === src && generation === this.playbackGeneration && !this.paused) onStart?.();
       return true;
     } catch {
+      if (generation === this.playbackGeneration) this.stopCurrentSource();
       return false;
     }
   }
 
   public setVolume(volume: number) {
-    if (this.gain) this.gain.gain.value = Math.max(0, Math.min(1, volume));
+    this.requestedVolume = Math.max(0, Math.min(1, volume));
+    if (this.gain) this.gain.gain.value = this.requestedVolume;
   }
 
   public isPlaying(): boolean {
@@ -138,18 +144,32 @@ class GeminiVoice {
   }
 
   public pause() {
+    this.paused = true;
+    this.playbackGeneration++;
     this.ctx?.suspend().catch(() => {});
   }
 
   public resume() {
-    this.ctx?.resume().catch(() => {});
+    this.paused = false;
+    const ctx = this.ctx;
+    ctx?.resume().then(() => {
+      // A later pause wins even when an earlier resume settles afterward.
+      if (this.paused) ctx.suspend().catch(() => {});
+    }).catch(() => {});
   }
 
   public stop() {
+    this.playbackGeneration++;
+    this.paused = false;
+    this.stopCurrentSource();
+  }
+
+  private stopCurrentSource() {
     if (this.currentSource) {
       try {
         this.currentSource.onended = null;
         this.currentSource.stop();
+        this.currentSource.disconnect();
       } catch {
         /* ignore */
       }
@@ -159,11 +179,14 @@ class GeminiVoice {
 
   /** Quick connectivity/key check used by Settings. */
   public async test(apiKey: string, voice: string): Promise<boolean> {
-    const phrase = t('Welcome. Take a slow breath, and let the day soften.');
+    const generation = ++this.playbackGeneration;
+    this.stopCurrentSource();
+    if (this.paused) return false;
+    const phrase = 'Welcome. Take a slow breath, and let the day soften.';
     const clip = await this.synthesize(phrase, apiKey, voice);
-    if (!clip) return false;
+    if (!clip || generation !== this.playbackGeneration || this.paused) return false;
     this.cache.set(this.cacheKey(phrase, voice), Promise.resolve(clip));
-    return this.speak(phrase, apiKey, voice, 1);
+    return this.speak(phrase, apiKey, voice, this.requestedVolume);
   }
 }
 

@@ -1,0 +1,18 @@
+PASS en-1440: only interface plan prefix is sentence-case; raw lowercase title, NASA/iPhone and plan unchanged
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   {
++     left: 1444.84375,
++     right: 1580.84375,
++     text: 'Lesson 6: The next 7 days · Turn the beginning into evidence, 9 min, Not available yet'
++   }
++ ]
+- []
+
+    at fit (/workspace/scratch/oda-reference-redesign/polish/independent-browser/polish-browser.mjs:80:665)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at process.processImmediate (node:internal/timers:502:9)
+    at async matrix (/workspace/scratch/oda-reference-redesign/polish/independent-browser/polish-browser.mjs:90:39)
+    at async <anonymous> (/workspace/scratch/oda-reference-redesign/polish/independent-browser/polish-browser.mjs:142:74)

@@ -1,0 +1,84 @@
+import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
+import { mkdirSync, writeFileSync } from 'node:fs';
+
+const repo = process.env.ODA_QA_REPO;
+const require = createRequire(`${repo}/package.json`);
+const { chromium } = require('playwright');
+const { getInitialDemoState } = await import(`${repo}/src/services/repository.ts`);
+const { readPersonalRecordFixture } = await import(`${repo}/scripts/qa-personal-record-fixtures.mjs`);
+const base = process.env.ODA_QA_URL;
+const out = process.env.ODA_QA_OUT;
+mkdirSync(out, { recursive: true });
+const origin = new URL(base).origin;
+const report = { at: new Date().toISOString(), base, synthetic: true, checks: [], errors: [], blockedExternal: [], screenshots: [], limits: ['Disposable synthetic signed-out Chromium profiles; no physical iPhone, real account/provider or listening-quality claim.'] };
+const browser = await chromium.launch({ executablePath: '/usr/bin/chromium' });
+report.browser = await browser.version();
+let active;
+const pass = (name, evidence) => { report.checks.push({ name, evidence }); console.log(`PASS ${name}`); };
+try {
+  for (const locale of ['en', 'tr', 'es']) for (const width of [320, 390]) {
+    const label = `${locale}-${width}`;
+    const seed = getInitialDemoState();
+    seed.profile = { ...seed.profile, displayName: 'Synthetic Notebook flow QA', onboardingStep: 'completed', locale, theme: 'light', soundMuted: true, nudgesEnabled: false, dailyWisdomEnabled: false };
+    seed.notebook.entries = [];
+    seed.dreamJournal = [];
+    const context = await browser.newContext({ viewport: { width, height: 844 }, reducedMotion: 'reduce', serviceWorkers: 'block' });
+    await context.route('**/*', route => {
+      if (new URL(route.request().url()).origin === origin && ['GET', 'HEAD'].includes(route.request().method())) return route.continue();
+      report.blockedExternal.push({ label, url: route.request().url(), method: route.request().method() }); return route.abort();
+    });
+    await context.addInitScript(({ seed, locale }) => {
+      if (!localStorage.getItem('one_decision_away_app_data_v1')) localStorage.setItem('one_decision_away_app_data_v1', JSON.stringify(seed));
+      localStorage.setItem('oda_locale', locale);
+      localStorage.setItem('oda_theme', 'light');
+    }, { seed, locale });
+    const page = await context.newPage(); active = page;
+    page.setDefaultTimeout(8000);
+    page.on('pageerror', error => report.errors.push({ label, message: error.message }));
+    await page.goto(`${base}/app/notebook`);
+    await page.locator('#notebook-journal-content').waitFor();
+    const title = `Synthetic ${label} — preserved title`;
+    const words = `Synthetic ${label}: my existing words remain.  `;
+    await page.locator('#notebook-journal-title').fill(title);
+    await page.locator('#notebook-journal-content').fill(words);
+    await page.locator('#notebook-journal-mood').selectOption('focused');
+    await page.waitForFunction(({ id, words }) => JSON.parse(sessionStorage.getItem(`oda-notebook-draft-v1:${id}:journal:content`)) === words, { id: seed.profile.id, words });
+    page.once('dialog', dialog => dialog.accept());
+    await page.reload();
+    await page.locator('#notebook-journal-content').waitFor();
+    assert.equal(await page.locator('#notebook-journal-title').inputValue(), title);
+    assert.equal(await page.locator('#notebook-journal-content').inputValue(), words);
+    assert.equal(await page.locator('#notebook-journal-mood').inputValue(), 'focused');
+    pass(`${label}: unsubmitted title, writing and mood survive reload exactly`);
+    await page.screenshot({ path: `${out}/notebook-draft-${label}.png`, fullPage: true, animations: 'disabled' }); report.screenshots.push(`notebook-draft-${label}.png`);
+    await page.locator('.oda-notebook-editor-form button[type="submit"]').click();
+    await page.waitForFunction(title => JSON.parse(localStorage.getItem('one_decision_away_app_data_v1')).notebook.entries.some(entry => entry.title === title), title);
+    const saved = await readPersonalRecordFixture(page);
+    const entry = saved.notebook.entries.find(entry => entry.title === title);
+    assert.ok(entry);
+    assert.equal(entry.content, words.trim());
+    assert.equal(entry.mood, 'focused');
+    assert.equal(await page.locator('#notebook-journal-content').inputValue(), '');
+    pass(`${label}: explicit Save commits the canonical entry and resets the draft`, { id: entry.id, mood: entry.mood, content: entry.content });
+    await page.reload();
+    await page.locator('#notebook-journal-content').waitFor();
+    await page.locator('.oda-notebook-entry-list button').filter({ hasText: title }).click();
+    assert.equal(await page.locator('#notebook-journal-title').inputValue(), title);
+    assert.equal(await page.locator('#notebook-journal-content').inputValue(), words.trim());
+    assert.equal((await readPersonalRecordFixture(page)).notebook.entries.filter(item => item.id === entry.id).length, 1);
+    pass(`${label}: saved archive entry reopens after reload without duplicate records`);
+    await page.screenshot({ path: `${out}/notebook-saved-${label}.png`, fullPage: true, animations: 'disabled' }); report.screenshots.push(`notebook-saved-${label}.png`);
+    await context.close();
+  }
+  assert.deepEqual(report.errors, []);
+  report.status = 'passed';
+} catch (error) {
+  report.status = 'failed'; report.failure = String(error.stack || error); process.exitCode = 1;
+  if (active && !active.isClosed()) await active.screenshot({ path: `${out}/failure.png`, fullPage: true }).catch(() => {});
+  console.error(report.failure);
+} finally {
+  await browser.close(); report.finishedAt = new Date().toISOString();
+  writeFileSync(`${out}/notebook-report.json`, `${JSON.stringify(report, null, 2)}\n`);
+  console.log(JSON.stringify({ status: report.status, checks: report.checks.length, errors: report.errors.length, screenshots: report.screenshots.length }));
+}

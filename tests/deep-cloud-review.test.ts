@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { beforeEach, test } from 'node:test';
 import { APP_DATA_STORAGE_KEY } from '../src/services/storageKeys';
+import { cloudCrudFixture } from './helpers/cloudCrudFixture';
 
 class MemoryStorage {
   values = new Map<string, string>();
@@ -32,7 +33,7 @@ test('an earlier account sync timestamp cannot hide another account cloud record
   local.profile.lastOpenedAt = '2020-01-01T00:00:00Z';
   local.profile.displayName = 'Account A local record';
   storage.setItem(APP_DATA_STORAGE_KEY, JSON.stringify(local));
-  internal.client = { from: () => ({ upsert: async () => ({ error: null }) }) };
+  internal.client = cloudCrudFixture().client;
   assert.equal(await cloudSync.push(local), true);
   const accountATimestamp = cloudSync.getState().lastSyncAt;
   assert.ok(accountATimestamp);
@@ -187,11 +188,11 @@ test('a queued backup cannot upload a local document rolled back while it waited
   const firstUpload = deferred<{ error: null }>();
   const uploading = deferred<void>();
   const uploads: string[] = [];
-  internal.client = { from: () => ({ upsert: (row: { data: { profile: { displayName: string } } }) => {
+  internal.client = cloudCrudFixture({ write: async row => {
     uploads.push(row.data.profile.displayName);
     if (uploads.length === 1) { uploading.resolve(); return firstUpload.promise; }
-    return Promise.resolve({ error: null });
-  } }) };
+    return { error: null };
+  } }).client;
   const pendingFirst = cloudSync.push(initial);
   await uploading.promise;
   const uncommitted = structuredClone(initial);
@@ -211,11 +212,11 @@ test('the latest queued backup still uploads after a preceding slower backup', a
   const firstUpload = deferred<{ error: null }>();
   const uploading = deferred<void>();
   const uploads: string[] = [];
-  internal.client = { from: () => ({ upsert: (row: { data: { profile: { displayName: string } } }) => {
+  internal.client = cloudCrudFixture({ write: async row => {
     uploads.push(row.data.profile.displayName);
     if (uploads.length === 1) { uploading.resolve(); return firstUpload.promise; }
-    return Promise.resolve({ error: null });
-  } }) };
+    return { error: null };
+  } }).client;
   const pendingFirst = cloudSync.push(initial);
   await uploading.promise;
   const latest = structuredClone(initial);
@@ -232,7 +233,7 @@ test('returning to an earlier account cannot reuse its timestamp for another acc
   const recordA = structuredClone(getInitialDemoState());
   recordA.profile.displayName = 'Account A synchronized record';
   storage.setItem(APP_DATA_STORAGE_KEY, JSON.stringify(recordA));
-  internal.client = { from: () => ({ upsert: async () => ({ error: null }) }) };
+  internal.client = cloudCrudFixture().client;
   assert.equal(await cloudSync.push(recordA), true);
   const accountATimestamp = cloudSync.getState().lastSyncAt!;
   const recordB = structuredClone(recordA);
@@ -244,7 +245,7 @@ test('returning to an earlier account cannot reuse its timestamp for another acc
   const remoteB = await cloudSync.pullIfNewer(recordA);
   assert.ok(remoteB);
   assert.equal(await new LocalDemoRepository().replaceAll(remoteB, originalRecord => cloudSync.canApplyRemote(remoteB, originalRecord)), true);
-  cloudSync.markRemoteApplied(remoteB);
+  await cloudSync.markRemoteApplied(remoteB);
   internal.setSession(session('A'));
   const remoteA = await cloudSync.pullIfNewer(remoteB);
   assert.equal(remoteA?.profile.displayName, recordA.profile.displayName);
@@ -253,7 +254,7 @@ test('returning to an earlier account cannot reuse its timestamp for another acc
 test('a replaced dataset cannot inherit this account historical synchronization proof', async () => {
   const original = structuredClone(getInitialDemoState());
   storage.setItem(APP_DATA_STORAGE_KEY, JSON.stringify(original));
-  internal.client = { from: () => ({ upsert: async () => ({ error: null }) }) };
+  internal.client = cloudCrudFixture().client;
   assert.equal(await cloudSync.push(original), true);
   assert.ok(cloudSync.getState().lastSyncAt);
   const replacement = structuredClone(original);
@@ -266,7 +267,7 @@ test('an owner-metadata quota failure cannot advertise a newer synchronized loca
   context.mock.timers.enable({ apis: ['Date'], now: new Date('2026-10-01T00:00:00Z').getTime() });
   const initial = structuredClone(getInitialDemoState());
   storage.setItem(APP_DATA_STORAGE_KEY, JSON.stringify(initial));
-  internal.client = { from: () => ({ upsert: async () => ({ error: null }) }) };
+  internal.client = cloudCrudFixture().client;
   assert.equal(await cloudSync.push(initial), true);
   assert.ok(cloudSync.getState().lastSyncAt);
   context.mock.timers.tick(5000);

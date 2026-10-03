@@ -1,0 +1,36 @@
+PASS Timer evidence retains distinct canonical repeatable sessions across UTC dates, dedupes an exact canonical event and ignores self/photo/invalid/future records
+PASS Daily habit toggles persist after reload and truthful count reverses without touching course completion
+PASS First Today uses lightweight catalogue and no full lessons, narration bulk, model runtime or original masters
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   {
++     label: 'Lesson 2: Shrink the task, find the first move, 6 min, Not available yet',
++     left: 193,
++     right: 329,
++     tag: 'BUTTON'
++   },
++   {
++     label: 'Lesson 3: Attach a plan to your real obstacle, 8 min, Not available yet',
++     left: 345,
++     right: 481,
++     tag: 'BUTTON'
++   },
++   {
++     label: 'Lesson 4: After procrastinating: forgive yourself, 7 min, Not available yet',
++     left: 497,
++     right: 633,
++     tag: 'BUTTON'
++   },
++   {
++     label: 'Lesson 5: Your own procrastination plan, 8 min, Not available yet',
++     left: 649,
++     right: 785,
++     tag: 'BUTTON'
++   }
++ ]
+- []
+
+    at Object.fit (file:///workspace/scratch/oda-reference-redesign/hybrid-reference-ui/flow-qa/final-c2a/harness/hybrid-common.mjs:62:67)
+    at async <anonymous> (/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/flow-qa/final-c2a/harness/hybrid-flows.mjs:112:37)

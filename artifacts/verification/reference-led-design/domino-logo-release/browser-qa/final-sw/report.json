@@ -1,0 +1,1486 @@
+{
+  "mode": "final",
+  "sourceCommit": "84ecbf8776146b766a30964bf8e6487234dd1dd4",
+  "compiledFilesMatchedBefore": 445,
+  "startedAtUtc": "2026-10-03T19:13:53.079Z",
+  "synthetic": true,
+  "physicalDevice": false,
+  "checks": [
+    {
+      "name": "Persisted review profile is settled on v6 and obsolete scoped caches are absent after reload",
+      "pass": true,
+      "before": {
+        "keys": [
+          "oda:%2Fone-decision-away%2F:v6"
+        ],
+        "registrations": [
+          {
+            "scope": "http://127.0.0.1:4194/one-decision-away/",
+            "active": "http://127.0.0.1:4194/one-decision-away/sw.js"
+          }
+        ],
+        "controller": "http://127.0.0.1:4194/one-decision-away/sw.js",
+        "entries": [
+          {
+            "key": "oda:%2Fone-decision-away%2F:v6",
+            "urls": [
+              "http://127.0.0.1:4194/one-decision-away/",
+              "http://127.0.0.1:4194/one-decision-away/support.html",
+              "http://127.0.0.1:4194/one-decision-away/theme-init.js",
+              "http://127.0.0.1:4194/one-decision-away/icon-192.png",
+              "http://127.0.0.1:4194/one-decision-away/icon-512.png",
+              "http://127.0.0.1:4194/one-decision-away/icon-192-maskable.png",
+              "http://127.0.0.1:4194/one-decision-away/icon-512-maskable.png",
+              "http://127.0.0.1:4194/one-decision-away/apple-touch-icon.png",
+              "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-mark-domino8-v1-256.png",
+              "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-192.png",
+              "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-512.png",
+              "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-maskable-192.png",
+              "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-maskable-512.png",
+              "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-apple-domino8-v1-180.png",
+              "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-favicon-domino8-v1-32.png",
+              "http://127.0.0.1:4194/one-decision-away/index.html",
+              "http://127.0.0.1:4194/one-decision-away/assets/media-2mgEiOLR.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/index-BH5El-p7.css",
+              "http://127.0.0.1:4194/one-decision-away/assets/react-5GCfeWye.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/index-2RvfW88y.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/hanken-grotesk-latin-wght-normal-CaVRRdDk.woff2",
+              "http://127.0.0.1:4194/one-decision-away/manifest.webmanifest",
+              "http://127.0.0.1:4194/one-decision-away/assets/courseNavigationIntent-C0ky-Yq1.css",
+              "http://127.0.0.1:4194/one-decision-away/assets/workingSurfaces-Ug3LNMJ2.css",
+              "http://127.0.0.1:4194/one-decision-away/assets/Today-BLKGw7K2.css",
+              "http://127.0.0.1:4194/one-decision-away/assets/Today-CrB9_9Fu.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/growth-CtfcX3mW.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/OriginalSceneImage-zmk9pRa_.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/chevron-right-CvStUJC4.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/lock-keyhole-n9M14rAO.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/courseNavigationIntent-CVzJRIDW.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/entitlements-u2O6Yfci.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/square-Djxltt51.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/DreamArt-BtzSfSVO.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/MissionFlows-D4I-4Ojv.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/music-Da6qWoMx.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/trending-up-C79RL-F8.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/moon-CNiY8MHW.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/sparkles-BHgsnNrw.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/DailyMicroHabits-BdTU8MYs.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/trash-2-DHrpPL-3.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/shuffle-B1Rt3IWf.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/motion-HNvQpnN_.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/wind-i2A9CUqy.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/route-CNyzjram.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/share-2-CgoqeSY9.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/waves-Cau5Elof.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/pen-line-bsPNj-HI.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/rotate-ccw-CQm7fL5X.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/circle-check-_6ctcrZC.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/charts-Bzd-XkHo.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/pencil-CocZr5cV.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/oda/original-scenes/today-scene-480.webp",
+              "http://127.0.0.1:4194/one-decision-away/assets/oda/delivery/trees/tree-00-seedling-0-320.webp",
+              "http://127.0.0.1:4194/one-decision-away/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2"
+            ]
+          }
+        ]
+      },
+      "state": {
+        "keys": [
+          "oda:%2Fone-decision-away%2F:v6"
+        ],
+        "registrations": [
+          {
+            "scope": "http://127.0.0.1:4194/one-decision-away/",
+            "active": "http://127.0.0.1:4194/one-decision-away/sw.js"
+          }
+        ],
+        "controller": "http://127.0.0.1:4194/one-decision-away/sw.js",
+        "entries": [
+          {
+            "key": "oda:%2Fone-decision-away%2F:v6",
+            "urls": [
+              "http://127.0.0.1:4194/one-decision-away/",
+              "http://127.0.0.1:4194/one-decision-away/support.html",
+              "http://127.0.0.1:4194/one-decision-away/theme-init.js",
+              "http://127.0.0.1:4194/one-decision-away/icon-192.png",
+              "http://127.0.0.1:4194/one-decision-away/icon-512.png",
+              "http://127.0.0.1:4194/one-decision-away/icon-192-maskable.png",
+              "http://127.0.0.1:4194/one-decision-away/icon-512-maskable.png",
+              "http://127.0.0.1:4194/one-decision-away/apple-touch-icon.png",
+              "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-mark-domino8-v1-256.png",
+              "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-192.png",
+              "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-512.png",
+              "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-maskable-192.png",
+              "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-maskable-512.png",
+              "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-apple-domino8-v1-180.png",
+              "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-favicon-domino8-v1-32.png",
+              "http://127.0.0.1:4194/one-decision-away/assets/media-2mgEiOLR.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/index-BH5El-p7.css",
+              "http://127.0.0.1:4194/one-decision-away/assets/react-5GCfeWye.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/index-2RvfW88y.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/hanken-grotesk-latin-wght-normal-CaVRRdDk.woff2",
+              "http://127.0.0.1:4194/one-decision-away/assets/courseNavigationIntent-C0ky-Yq1.css",
+              "http://127.0.0.1:4194/one-decision-away/assets/workingSurfaces-Ug3LNMJ2.css",
+              "http://127.0.0.1:4194/one-decision-away/assets/Today-BLKGw7K2.css",
+              "http://127.0.0.1:4194/one-decision-away/assets/Today-CrB9_9Fu.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/growth-CtfcX3mW.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/OriginalSceneImage-zmk9pRa_.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/chevron-right-CvStUJC4.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/lock-keyhole-n9M14rAO.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/courseNavigationIntent-CVzJRIDW.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/entitlements-u2O6Yfci.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/square-Djxltt51.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/DreamArt-BtzSfSVO.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/MissionFlows-D4I-4Ojv.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/music-Da6qWoMx.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/trending-up-C79RL-F8.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/moon-CNiY8MHW.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/sparkles-BHgsnNrw.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/DailyMicroHabits-BdTU8MYs.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/trash-2-DHrpPL-3.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/shuffle-B1Rt3IWf.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/motion-HNvQpnN_.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/wind-i2A9CUqy.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/route-CNyzjram.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/share-2-CgoqeSY9.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/waves-Cau5Elof.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/pen-line-bsPNj-HI.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/rotate-ccw-CQm7fL5X.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/circle-check-_6ctcrZC.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/charts-Bzd-XkHo.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/pencil-CocZr5cV.js",
+              "http://127.0.0.1:4194/one-decision-away/assets/oda/original-scenes/today-scene-480.webp",
+              "http://127.0.0.1:4194/one-decision-away/assets/oda/delivery/trees/tree-00-seedling-0-320.webp",
+              "http://127.0.0.1:4194/one-decision-away/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2",
+              "http://127.0.0.1:4194/one-decision-away/index.html",
+              "http://127.0.0.1:4194/one-decision-away/manifest.webmanifest"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Manifest/favicon/apple-touch/visible brand downloads are exact final compiled PNGs",
+      "pass": true,
+      "downloads": [
+        {
+          "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-192.png",
+          "status": 200,
+          "bytes": 37639,
+          "sha256": "0bd5a82bbe820b9de40c43fc140877d9850b0d9fe0749849315ef8a6d3a86e5d",
+          "type": "image/png"
+        },
+        {
+          "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-512.png",
+          "status": 200,
+          "bytes": 200016,
+          "sha256": "6b83ea675f14e0b5a009a604796fac5d9a9ed517524fc6b8828a6a477ba4053c",
+          "type": "image/png"
+        },
+        {
+          "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-maskable-192.png",
+          "status": 200,
+          "bytes": 19253,
+          "sha256": "43d028cc43b857b405b838a4fd439dcde46da198bdb1923f8924fef65f21d14f",
+          "type": "image/png"
+        },
+        {
+          "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-maskable-512.png",
+          "status": 200,
+          "bytes": 119088,
+          "sha256": "5a82bd405721a61eb5974804419c5bebc57d302073fb7697d1aa55bc29669a14",
+          "type": "image/png"
+        },
+        {
+          "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-apple-domino8-v1-180.png",
+          "status": 200,
+          "bytes": 33955,
+          "sha256": "1818fb86ca1c9f90ae5f9881f0841ee333c69d24cfd0b43d6c9126c06b121f61",
+          "type": "image/png"
+        },
+        {
+          "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-favicon-domino8-v1-32.png",
+          "status": 200,
+          "bytes": 1778,
+          "sha256": "42f087aea5bf1e46d85892f1293aed1fe9a07bbb7269db7c5c18cfe20425e916",
+          "type": "image/png"
+        },
+        {
+          "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-mark-domino8-v1-256.png",
+          "status": 200,
+          "bytes": 59244,
+          "sha256": "9c707664f9e972aed37b55f2fc912c455aa2aaff852af2c6d2acee5b1d66015c",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Fresh upgraded Today load fetches zero narration clips",
+      "pass": true
+    },
+    {
+      "name": "New installed shell and secondary-header logo replay offline",
+      "pass": true,
+      "logo": [
+        {
+          "tag": "svg",
+          "source": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-mark-domino8-v1-256.png",
+          "complete": true,
+          "naturalWidth": 256,
+          "naturalHeight": 256
+        },
+        {
+          "tag": "svg",
+          "source": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-mark-domino8-v1-256.png",
+          "complete": true,
+          "naturalWidth": 256,
+          "naturalHeight": 256
+        }
+      ]
+    },
+    {
+      "name": "Existing Notebook saved entry survives upgrade and offline route replay",
+      "pass": true
+    },
+    {
+      "name": "No external account/media attempts or browser page errors",
+      "pass": true
+    }
+  ],
+  "requests": [
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/Today-CrB9_9Fu.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/growth-CtfcX3mW.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/OriginalSceneImage-zmk9pRa_.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/courseNavigationIntent-CVzJRIDW.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/chevron-right-CvStUJC4.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/lock-keyhole-n9M14rAO.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/entitlements-u2O6Yfci.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/courseNavigationIntent-C0ky-Yq1.css",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/MissionFlows-D4I-4Ojv.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/square-Djxltt51.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/DreamArt-BtzSfSVO.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/DailyMicroHabits-BdTU8MYs.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/motion-HNvQpnN_.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/music-Da6qWoMx.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/trending-up-C79RL-F8.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/moon-CNiY8MHW.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/sparkles-BHgsnNrw.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/trash-2-DHrpPL-3.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/pen-line-bsPNj-HI.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/rotate-ccw-CQm7fL5X.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/circle-check-_6ctcrZC.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/charts-Bzd-XkHo.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/pencil-CocZr5cV.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/shuffle-B1Rt3IWf.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/wind-i2A9CUqy.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/route-CNyzjram.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-mark-domino8-v1-256.png",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/share-2-CgoqeSY9.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/waves-Cau5Elof.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/Today-BLKGw7K2.css",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/workingSurfaces-Ug3LNMJ2.css",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/Today-CrB9_9Fu.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/growth-CtfcX3mW.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/OriginalSceneImage-zmk9pRa_.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/courseNavigationIntent-CVzJRIDW.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/chevron-right-CvStUJC4.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/lock-keyhole-n9M14rAO.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/entitlements-u2O6Yfci.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/courseNavigationIntent-C0ky-Yq1.css",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/MissionFlows-D4I-4Ojv.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/square-Djxltt51.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/DreamArt-BtzSfSVO.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/DailyMicroHabits-BdTU8MYs.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/motion-HNvQpnN_.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/music-Da6qWoMx.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/trending-up-C79RL-F8.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/moon-CNiY8MHW.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/sparkles-BHgsnNrw.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/trash-2-DHrpPL-3.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/pen-line-bsPNj-HI.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/rotate-ccw-CQm7fL5X.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/circle-check-_6ctcrZC.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/charts-Bzd-XkHo.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-mark-domino8-v1-256.png",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/pencil-CocZr5cV.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/shuffle-B1Rt3IWf.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/wind-i2A9CUqy.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/route-CNyzjram.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/share-2-CgoqeSY9.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/waves-Cau5Elof.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/Today-BLKGw7K2.css",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/workingSurfaces-Ug3LNMJ2.css",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/growth-CtfcX3mW.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/OriginalSceneImage-zmk9pRa_.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/chevron-right-CvStUJC4.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/lock-keyhole-n9M14rAO.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/courseNavigationIntent-CVzJRIDW.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/courseNavigationIntent-C0ky-Yq1.css",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/Today-CrB9_9Fu.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/entitlements-u2O6Yfci.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/square-Djxltt51.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/MissionFlows-D4I-4Ojv.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/DreamArt-BtzSfSVO.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/music-Da6qWoMx.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/DailyMicroHabits-BdTU8MYs.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/trending-up-C79RL-F8.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/moon-CNiY8MHW.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/sparkles-BHgsnNrw.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/trash-2-DHrpPL-3.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/rotate-ccw-CQm7fL5X.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/pen-line-bsPNj-HI.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/circle-check-_6ctcrZC.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/pencil-CocZr5cV.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/Today-BLKGw7K2.css",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/workingSurfaces-Ug3LNMJ2.css",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/wind-i2A9CUqy.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/courseNavigationIntent-C0ky-Yq1.css",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/motion-HNvQpnN_.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/shuffle-B1Rt3IWf.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/route-CNyzjram.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/workingSurfaces-Ug3LNMJ2.css",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/share-2-CgoqeSY9.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/waves-Cau5Elof.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/Today-BLKGw7K2.css",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/growth-CtfcX3mW.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/OriginalSceneImage-zmk9pRa_.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/lock-keyhole-n9M14rAO.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/chevron-right-CvStUJC4.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/entitlements-u2O6Yfci.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/courseNavigationIntent-CVzJRIDW.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/Today-CrB9_9Fu.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/DreamArt-BtzSfSVO.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/square-Djxltt51.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/MissionFlows-D4I-4Ojv.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/charts-Bzd-XkHo.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/music-Da6qWoMx.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/trending-up-C79RL-F8.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/moon-CNiY8MHW.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/sparkles-BHgsnNrw.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/trash-2-DHrpPL-3.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/shuffle-B1Rt3IWf.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/DailyMicroHabits-BdTU8MYs.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/wind-i2A9CUqy.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/route-CNyzjram.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/motion-HNvQpnN_.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/share-2-CgoqeSY9.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/waves-Cau5Elof.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/pen-line-bsPNj-HI.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/rotate-ccw-CQm7fL5X.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/circle-check-_6ctcrZC.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/pencil-CocZr5cV.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/oda/original-scenes/today-scene-480.webp",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/oda/delivery/trees/tree-00-seedling-0-320.webp",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/charts-Bzd-XkHo.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/oda/original-scenes/today-scene-480.webp",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/oda/delivery/trees/tree-00-seedling-0-320.webp",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/oda/original-scenes/today-scene-480.webp",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/oda/delivery/trees/tree-00-seedling-0-320.webp",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/theme-init.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/manifest.webmanifest",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/index-BH5El-p7.css",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/media-2mgEiOLR.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/react-5GCfeWye.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/manifest.webmanifest",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/hanken-grotesk-latin-wght-normal-CaVRRdDk.woff2",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/index-2RvfW88y.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-favicon-domino8-v1-32.png",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-192.png",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/growth-CtfcX3mW.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/OriginalSceneImage-zmk9pRa_.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/courseNavigationIntent-C0ky-Yq1.css",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/courseNavigationIntent-CVzJRIDW.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/chevron-right-CvStUJC4.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/lock-keyhole-n9M14rAO.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/entitlements-u2O6Yfci.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/MissionFlows-D4I-4Ojv.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/DreamArt-BtzSfSVO.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/square-Djxltt51.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/Today-CrB9_9Fu.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/DailyMicroHabits-BdTU8MYs.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/Today-BLKGw7K2.css",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/workingSurfaces-Ug3LNMJ2.css",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/music-Da6qWoMx.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/trending-up-C79RL-F8.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/moon-CNiY8MHW.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/sparkles-BHgsnNrw.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/trash-2-DHrpPL-3.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/circle-check-_6ctcrZC.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/pen-line-bsPNj-HI.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/pencil-CocZr5cV.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/shuffle-B1Rt3IWf.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/rotate-ccw-CQm7fL5X.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-mark-domino8-v1-256.png",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/wind-i2A9CUqy.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/waves-Cau5Elof.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/route-CNyzjram.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/share-2-CgoqeSY9.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/motion-HNvQpnN_.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/charts-Bzd-XkHo.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/oda/original-scenes/today-scene-480.webp",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/oda/delivery/trees/tree-00-seedling-0-320.webp",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/manifest.webmanifest",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/manifest.webmanifest",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-192.png",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-512.png",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-maskable-192.png",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-maskable-512.png",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-apple-domino8-v1-180.png",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-favicon-domino8-v1-32.png",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-mark-domino8-v1-256.png",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/Notebook-CF5bAaPn.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/calendar-days-BaCKu7AX.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/search-DKkVsP9-.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/arrow-up-right-BbSzw25S.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/archive-BqQ20vJ9.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/headphones-D_RX_Yeh.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/mail-8BmMzSVu.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/Notebook-B2CgyXXC.css",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/calendar-days-BaCKu7AX.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/search-DKkVsP9-.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/arrow-up-right-BbSzw25S.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/Notebook-CF5bAaPn.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/archive-BqQ20vJ9.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/headphones-D_RX_Yeh.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/Notebook-B2CgyXXC.css",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/mail-8BmMzSVu.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/Focus-C40LG2aj.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/FocusTimerHub-xo-CN_kz.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/CourseCover-JJkE5i2v.js",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-mark-domino8-v1-256.png",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/Focus-C40LG2aj.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/FocusTimerHub-xo-CN_kz.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/CourseCover-JJkE5i2v.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/oda/delivery/course-covers/oda-starting-procrastination-400.webp",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/oda/delivery/course-covers/oda-starting-procrastination-400.webp",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/theme-init.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/manifest.webmanifest",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/index-BH5El-p7.css",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/media-2mgEiOLR.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/hanken-grotesk-latin-wght-normal-CaVRRdDk.woff2",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/react-5GCfeWye.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/manifest.webmanifest",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/index-2RvfW88y.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-favicon-domino8-v1-32.png",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-192.png",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/Focus-C40LG2aj.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/FocusTimerHub-xo-CN_kz.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/CourseCover-JJkE5i2v.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/workingSurfaces-Ug3LNMJ2.css",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-mark-domino8-v1-256.png",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/oda/delivery/course-covers/oda-starting-procrastination-400.webp",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/Notebook-B2CgyXXC.css",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/chevron-right-CvStUJC4.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/pen-line-bsPNj-HI.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/calendar-days-BaCKu7AX.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/search-DKkVsP9-.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/trash-2-DHrpPL-3.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/Notebook-CF5bAaPn.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/OriginalSceneImage-zmk9pRa_.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/arrow-up-right-BbSzw25S.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/archive-BqQ20vJ9.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/square-Djxltt51.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/headphones-D_RX_Yeh.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/moon-CNiY8MHW.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/mail-8BmMzSVu.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/pencil-CocZr5cV.js",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/oda/original-scenes/today-scene-320.webp",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/oda/original-scenes/today-scene-320.webp",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/oda/original-scenes/today-scene-640.png",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/oda/original-scenes/today-scene-640.png",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/oda/delivery/course-covers/oda-growth-values-640.webp",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/assets/oda/delivery/course-covers/oda-growth-values-640.webp",
+      "fromServiceWorker": false
+    }
+  ],
+  "externalBlocked": [],
+  "pageErrors": [],
+  "screenshots": [
+    {
+      "file": "upgraded-v6-today-390.png",
+      "bytes": 159030,
+      "sha256": "3f2011ae6f1c190ee055aa2304b945bd9b1392033a701f19c55207b03e39c516"
+    },
+    {
+      "file": "offline-v6-focus-header-390.png",
+      "bytes": 50391,
+      "sha256": "ad6a5a9f5b983d7d02e705d9b547e73f138637cc8f9573820ffd9c379970bc73"
+    },
+    {
+      "file": "offline-v6-notebook-390.png",
+      "bytes": 59172,
+      "sha256": "28adce25ef17a9332fc07dfdeed1dd1b114485020e1d8b9ee9bbbe32bd7b5a8e"
+    }
+  ],
+  "before": {
+    "keys": [
+      "oda:%2Fone-decision-away%2F:v6"
+    ],
+    "registrations": [
+      {
+        "scope": "http://127.0.0.1:4194/one-decision-away/",
+        "active": "http://127.0.0.1:4194/one-decision-away/sw.js"
+      }
+    ],
+    "controller": "http://127.0.0.1:4194/one-decision-away/sw.js",
+    "entries": [
+      {
+        "key": "oda:%2Fone-decision-away%2F:v6",
+        "urls": [
+          "http://127.0.0.1:4194/one-decision-away/",
+          "http://127.0.0.1:4194/one-decision-away/support.html",
+          "http://127.0.0.1:4194/one-decision-away/theme-init.js",
+          "http://127.0.0.1:4194/one-decision-away/icon-192.png",
+          "http://127.0.0.1:4194/one-decision-away/icon-512.png",
+          "http://127.0.0.1:4194/one-decision-away/icon-192-maskable.png",
+          "http://127.0.0.1:4194/one-decision-away/icon-512-maskable.png",
+          "http://127.0.0.1:4194/one-decision-away/apple-touch-icon.png",
+          "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-mark-domino8-v1-256.png",
+          "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-192.png",
+          "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-512.png",
+          "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-maskable-192.png",
+          "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-maskable-512.png",
+          "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-apple-domino8-v1-180.png",
+          "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-favicon-domino8-v1-32.png",
+          "http://127.0.0.1:4194/one-decision-away/index.html",
+          "http://127.0.0.1:4194/one-decision-away/assets/media-2mgEiOLR.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/index-BH5El-p7.css",
+          "http://127.0.0.1:4194/one-decision-away/assets/react-5GCfeWye.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/index-2RvfW88y.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/hanken-grotesk-latin-wght-normal-CaVRRdDk.woff2",
+          "http://127.0.0.1:4194/one-decision-away/manifest.webmanifest",
+          "http://127.0.0.1:4194/one-decision-away/assets/courseNavigationIntent-C0ky-Yq1.css",
+          "http://127.0.0.1:4194/one-decision-away/assets/workingSurfaces-Ug3LNMJ2.css",
+          "http://127.0.0.1:4194/one-decision-away/assets/Today-BLKGw7K2.css",
+          "http://127.0.0.1:4194/one-decision-away/assets/Today-CrB9_9Fu.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/growth-CtfcX3mW.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/OriginalSceneImage-zmk9pRa_.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/chevron-right-CvStUJC4.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/lock-keyhole-n9M14rAO.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/courseNavigationIntent-CVzJRIDW.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/entitlements-u2O6Yfci.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/square-Djxltt51.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/DreamArt-BtzSfSVO.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/MissionFlows-D4I-4Ojv.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/music-Da6qWoMx.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/trending-up-C79RL-F8.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/moon-CNiY8MHW.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/sparkles-BHgsnNrw.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/DailyMicroHabits-BdTU8MYs.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/trash-2-DHrpPL-3.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/shuffle-B1Rt3IWf.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/motion-HNvQpnN_.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/wind-i2A9CUqy.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/route-CNyzjram.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/share-2-CgoqeSY9.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/waves-Cau5Elof.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/pen-line-bsPNj-HI.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/rotate-ccw-CQm7fL5X.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/circle-check-_6ctcrZC.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/charts-Bzd-XkHo.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/pencil-CocZr5cV.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/oda/original-scenes/today-scene-480.webp",
+          "http://127.0.0.1:4194/one-decision-away/assets/oda/delivery/trees/tree-00-seedling-0-320.webp",
+          "http://127.0.0.1:4194/one-decision-away/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2"
+        ]
+      }
+    ]
+  },
+  "afterReload": {
+    "keys": [
+      "oda:%2Fone-decision-away%2F:v6"
+    ],
+    "registrations": [
+      {
+        "scope": "http://127.0.0.1:4194/one-decision-away/",
+        "active": "http://127.0.0.1:4194/one-decision-away/sw.js"
+      }
+    ],
+    "controller": "http://127.0.0.1:4194/one-decision-away/sw.js",
+    "entries": [
+      {
+        "key": "oda:%2Fone-decision-away%2F:v6",
+        "urls": [
+          "http://127.0.0.1:4194/one-decision-away/",
+          "http://127.0.0.1:4194/one-decision-away/support.html",
+          "http://127.0.0.1:4194/one-decision-away/theme-init.js",
+          "http://127.0.0.1:4194/one-decision-away/icon-192.png",
+          "http://127.0.0.1:4194/one-decision-away/icon-512.png",
+          "http://127.0.0.1:4194/one-decision-away/icon-192-maskable.png",
+          "http://127.0.0.1:4194/one-decision-away/icon-512-maskable.png",
+          "http://127.0.0.1:4194/one-decision-away/apple-touch-icon.png",
+          "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-mark-domino8-v1-256.png",
+          "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-192.png",
+          "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-512.png",
+          "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-maskable-192.png",
+          "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-maskable-512.png",
+          "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-apple-domino8-v1-180.png",
+          "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-favicon-domino8-v1-32.png",
+          "http://127.0.0.1:4194/one-decision-away/assets/media-2mgEiOLR.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/index-BH5El-p7.css",
+          "http://127.0.0.1:4194/one-decision-away/assets/react-5GCfeWye.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/index-2RvfW88y.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/hanken-grotesk-latin-wght-normal-CaVRRdDk.woff2",
+          "http://127.0.0.1:4194/one-decision-away/assets/courseNavigationIntent-C0ky-Yq1.css",
+          "http://127.0.0.1:4194/one-decision-away/assets/workingSurfaces-Ug3LNMJ2.css",
+          "http://127.0.0.1:4194/one-decision-away/assets/Today-BLKGw7K2.css",
+          "http://127.0.0.1:4194/one-decision-away/assets/Today-CrB9_9Fu.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/growth-CtfcX3mW.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/OriginalSceneImage-zmk9pRa_.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/chevron-right-CvStUJC4.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/lock-keyhole-n9M14rAO.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/courseNavigationIntent-CVzJRIDW.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/entitlements-u2O6Yfci.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/square-Djxltt51.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/DreamArt-BtzSfSVO.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/MissionFlows-D4I-4Ojv.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/music-Da6qWoMx.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/trending-up-C79RL-F8.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/moon-CNiY8MHW.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/sparkles-BHgsnNrw.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/DailyMicroHabits-BdTU8MYs.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/trash-2-DHrpPL-3.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/shuffle-B1Rt3IWf.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/motion-HNvQpnN_.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/wind-i2A9CUqy.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/route-CNyzjram.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/share-2-CgoqeSY9.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/waves-Cau5Elof.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/pen-line-bsPNj-HI.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/rotate-ccw-CQm7fL5X.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/circle-check-_6ctcrZC.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/charts-Bzd-XkHo.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/pencil-CocZr5cV.js",
+          "http://127.0.0.1:4194/one-decision-away/assets/oda/original-scenes/today-scene-480.webp",
+          "http://127.0.0.1:4194/one-decision-away/assets/oda/delivery/trees/tree-00-seedling-0-320.webp",
+          "http://127.0.0.1:4194/one-decision-away/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2",
+          "http://127.0.0.1:4194/one-decision-away/index.html",
+          "http://127.0.0.1:4194/one-decision-away/manifest.webmanifest"
+        ]
+      }
+    ]
+  },
+  "iconDownloads": [
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-192.png",
+      "status": 200,
+      "bytes": 37639,
+      "sha256": "0bd5a82bbe820b9de40c43fc140877d9850b0d9fe0749849315ef8a6d3a86e5d",
+      "type": "image/png"
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-512.png",
+      "status": 200,
+      "bytes": 200016,
+      "sha256": "6b83ea675f14e0b5a009a604796fac5d9a9ed517524fc6b8828a6a477ba4053c",
+      "type": "image/png"
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-maskable-192.png",
+      "status": 200,
+      "bytes": 19253,
+      "sha256": "43d028cc43b857b405b838a4fd439dcde46da198bdb1923f8924fef65f21d14f",
+      "type": "image/png"
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-app-domino8-v1-maskable-512.png",
+      "status": 200,
+      "bytes": 119088,
+      "sha256": "5a82bd405721a61eb5974804419c5bebc57d302073fb7697d1aa55bc29669a14",
+      "type": "image/png"
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-apple-domino8-v1-180.png",
+      "status": 200,
+      "bytes": 33955,
+      "sha256": "1818fb86ca1c9f90ae5f9881f0841ee333c69d24cfd0b43d6c9126c06b121f61",
+      "type": "image/png"
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-favicon-domino8-v1-32.png",
+      "status": 200,
+      "bytes": 1778,
+      "sha256": "42f087aea5bf1e46d85892f1293aed1fe9a07bbb7269db7c5c18cfe20425e916",
+      "type": "image/png"
+    },
+    {
+      "url": "http://127.0.0.1:4194/one-decision-away/brand/domino8/oda-mark-domino8-v1-256.png",
+      "status": 200,
+      "bytes": 59244,
+      "sha256": "9c707664f9e972aed37b55f2fc912c455aa2aaff852af2c6d2acee5b1d66015c",
+      "type": "image/png"
+    }
+  ],
+  "compiledFilesMatchedAfter": 445,
+  "finishedAtUtc": "2026-10-03T19:14:03.913Z",
+  "upgradeEvidence": {
+    "baselineReport": "../baseline-sw/report.json",
+    "firstAttemptReport": "../attempts/sw-1/report.json",
+    "samePersistentProfile": "../sw-profile",
+    "firstAttemptStartedWith": [
+      "oda:%2Fone-decision-away%2F:v5"
+    ],
+    "firstAttemptResult": "Actual v6 activation reached; immediate reload failed stricter absence-of-any-v5-prefix assertion. Initial failure preserved.",
+    "settledResult": "Subsequent reopening of the same profile observed only v6 both before update and after reload; exact new icon downloads and offline routes passed.",
+    "limitation": "The second run did not begin on v5 and must not be described as a fresh v5-to-v6 upgrade."
+  }
+}

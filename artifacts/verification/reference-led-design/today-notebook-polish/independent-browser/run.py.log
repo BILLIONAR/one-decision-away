@@ -1,0 +1,9 @@
+import os,json,pathlib,subprocess,time,hashlib,datetime,sys
+out=pathlib.Path('/workspace/scratch/oda-reference-redesign/polish/independent-browser')/sys.argv[1];out.mkdir(exist_ok=False)
+harness=pathlib.Path('/workspace/scratch/oda-reference-redesign/polish/independent-browser')/(sys.argv[2] if len(sys.argv)>2 else 'polish-browser.mjs')
+saved=out/'harness.mjs';saved.write_bytes(harness.read_bytes())
+env=os.environ.copy();env.update(ODA_POLISH_BROWSER_GO='1',ODA_POLISH_QA_OUT=str(out),ODA_POLISH_BUILD_RECEIPT=env.get('ODA_POLISH_BUILD_RECEIPT','/workspace/scratch/oda-reference-redesign/polish/final/build-receipt.json'),ODA_POLISH_SOURCE_COMMIT=env.get('ODA_POLISH_SOURCE_COMMIT','34ed44ff5189310e301ad81d1d66f6897a44cb73'),ODA_POLISH_QA_URL='http://127.0.0.1:4193/one-decision-away/')
+start=datetime.datetime.now(datetime.timezone.utc).isoformat();t=time.monotonic()
+with open(out/'browser.log','xb') as f:r=subprocess.run(['node','--import','tsx',str(saved)],cwd='/workspace/oda-reference-redesign',env=env,stdout=f,stderr=subprocess.STDOUT)
+log=(out/'browser.log').read_bytes();receipt={'sourceCommit':env['ODA_POLISH_SOURCE_COMMIT'],'argv':['node','--import','tsx',str(saved)],'startedAtUtc':start,'elapsedSeconds':round(time.monotonic()-t,3),'exitCode':r.returncode,'harness':{'file':'harness.mjs','bytes':saved.stat().st_size,'sha256':hashlib.sha256(saved.read_bytes()).hexdigest()},'log':{'file':'browser.log','bytes':len(log),'sha256':hashlib.sha256(log).hexdigest()},'env':{k:v for k,v in env.items() if k.startswith('ODA_POLISH_')}}
+(out/'command-receipt.json').write_text(json.dumps(receipt,indent=2));print(json.dumps(receipt,indent=2));print(log.decode());raise SystemExit(r.returncode)

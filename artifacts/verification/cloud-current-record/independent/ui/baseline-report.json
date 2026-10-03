@@ -1,0 +1,359 @@
+{
+  "stage": "exact baseline, expected defects reproduced",
+  "revision": "5adcb6a22bda7a087e1718b2cf2eeb105e1248ba",
+  "evidence": "Actual git-object Account/Settings callbacks, shared syncFromCloud and modal confirm/cancel handlers, CloudSync account/operation guards, push queue entry, lastSyncAt/getState, createBackupSnapshot function and Account current-backup expressions extracted/transpiled. Synthetic localStorage, normalizer, repository, query/upload boundary and toasts only. No React mount, actual query/write, provider, credentials or native device.",
+  "beforeSourceSha256": {
+    "src/pages/Account.tsx": "eb38c90df6feca059f1ca06d5f3772b702decb6b2ba826c11b47e12b674c304d",
+    "src/components/BackupAndCloudSettings.tsx": "5991e14426bc8a328363db1a4d3c826a071ce2ab009427dc205f419cbba1738e",
+    "src/store/useApp.tsx": "0576b4a1b6c849049f88e8d9c043143c667e1aabf9357bbfba35fe79f5ac6497",
+    "src/services/cloudSync.ts": "74f6405e6fe70cf89f7ac64473565a8d812ebc8180d3a0dc7e214e8183713dce",
+    "src/services/backup.ts": "0ece443b6e61dfc0508658e5fb24a6373145fc56094f8e9b906fe53bebfdf3b9",
+    "src/data/backupCopy.ts": "92dffa5dab22201491cad85c29d8cc48f65b8b083324a04e00d95d57a8cbdf6e"
+  },
+  "sourceLocations": {
+    "src/pages/Account.tsx:syncNow": 74,
+    "src/components/BackupAndCloudSettings.tsx:handleSyncNow": 64,
+    "src/store/useApp.tsx:syncFromCloud": 2456,
+    "src/pages/Account.tsx:cloudConfirmed": 111,
+    "src/pages/Account.tsx:header": 112,
+    "src/services/cloudSync.ts:currentAccountGuard": 68,
+    "src/services/cloudSync.ts:currentOperationGuard": 78,
+    "src/services/cloudSync.ts:syncKey": 84,
+    "src/services/cloudSync.ts:localEpoch": 88,
+    "src/services/cloudSync.ts:lastSyncAt": 120,
+    "src/services/cloudSync.ts:getState": 241,
+    "src/services/cloudSync.ts:push": 348
+  },
+  "cases": [
+    {
+      "name": "Account: stale render payload reaches actual pushSnapshot entry while authoritative record was already newer",
+      "passed": true,
+      "reproducedKnownDefect": true,
+      "pushes": [
+        {
+          "payload": {
+            "missions": [
+              {
+                "id": "synthetic-old",
+                "title": "old decision"
+              }
+            ],
+            "notebook": {
+              "synthetic": "old note"
+            },
+            "courseProgress": {
+              "synthetic": "unchanged course"
+            },
+            "_odaReplacementEpoch": "same-dataset"
+          },
+          "localRecord": {
+            "missions": [
+              {
+                "id": "synthetic-old",
+                "title": "old decision"
+              },
+              {
+                "id": "synthetic-current",
+                "title": "new saved decision"
+              }
+            ],
+            "notebook": {
+              "synthetic": "old note"
+            },
+            "courseProgress": {
+              "synthetic": "unchanged course"
+            },
+            "_odaReplacementEpoch": "same-dataset"
+          },
+          "userId": "synthetic-account"
+        }
+      ],
+      "toasts": [
+        {
+          "message": "Backed up to cloud.",
+          "type": "success"
+        }
+      ],
+      "reviews": 0,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "events": []
+    },
+    {
+      "name": "Account: pending actual read and cancelled review never invoke fallback",
+      "passed": true,
+      "reproducedKnownDefect": false,
+      "pushes": [],
+      "toasts": [],
+      "reviews": 1,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "events": []
+    },
+    {
+      "name": "Account: actual accepted review applies once and suppresses upload fallback",
+      "passed": true,
+      "reproducedKnownDefect": false,
+      "pushes": [],
+      "toasts": [
+        {
+          "message": "Synced from cloud.",
+          "type": "success"
+        }
+      ],
+      "reviews": 1,
+      "pulls": 1,
+      "replacements": 1,
+      "acks": 1,
+      "refreshes": [
+        {
+          "skipCloudPull": true
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "Account: local record changed after click remains handled without fallback",
+      "passed": true,
+      "reproducedKnownDefect": false,
+      "pushes": [],
+      "toasts": [],
+      "reviews": 0,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "events": []
+    },
+    {
+      "name": "Account: account switch during read remains handled without fallback",
+      "passed": true,
+      "reproducedKnownDefect": false,
+      "pushes": [],
+      "toasts": [],
+      "reviews": 0,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "events": []
+    },
+    {
+      "name": "Account: thrown actual read is handled without fallback and clears review ref",
+      "passed": true,
+      "reproducedKnownDefect": false,
+      "pushes": [],
+      "toasts": [
+        {
+          "message": "Cloud backup failed — check your connection.",
+          "type": "error"
+        }
+      ],
+      "reviews": 0,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "events": []
+    },
+    {
+      "name": "Settings: stale render payload reaches actual pushSnapshot entry while authoritative record was already newer",
+      "passed": true,
+      "reproducedKnownDefect": true,
+      "pushes": [
+        {
+          "payload": {
+            "missions": [
+              {
+                "id": "synthetic-old",
+                "title": "old decision"
+              }
+            ],
+            "notebook": {
+              "synthetic": "old note"
+            },
+            "courseProgress": {
+              "synthetic": "unchanged course"
+            },
+            "_odaReplacementEpoch": "same-dataset"
+          },
+          "localRecord": {
+            "missions": [
+              {
+                "id": "synthetic-old",
+                "title": "old decision"
+              },
+              {
+                "id": "synthetic-current",
+                "title": "new saved decision"
+              }
+            ],
+            "notebook": {
+              "synthetic": "old note"
+            },
+            "courseProgress": {
+              "synthetic": "unchanged course"
+            },
+            "_odaReplacementEpoch": "same-dataset"
+          },
+          "userId": "synthetic-account"
+        }
+      ],
+      "toasts": [
+        {
+          "message": "Backed up to cloud.",
+          "type": "success"
+        }
+      ],
+      "reviews": 0,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "events": []
+    },
+    {
+      "name": "Settings: pending actual read and cancelled review never invoke fallback",
+      "passed": true,
+      "reproducedKnownDefect": false,
+      "pushes": [],
+      "toasts": [],
+      "reviews": 1,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "events": []
+    },
+    {
+      "name": "Settings: actual accepted review applies once and suppresses upload fallback",
+      "passed": true,
+      "reproducedKnownDefect": false,
+      "pushes": [],
+      "toasts": [
+        {
+          "message": "Synced from cloud.",
+          "type": "success"
+        }
+      ],
+      "reviews": 1,
+      "pulls": 1,
+      "replacements": 1,
+      "acks": 1,
+      "refreshes": [
+        {
+          "skipCloudPull": true
+        }
+      ],
+      "events": []
+    },
+    {
+      "name": "Settings: local record changed after click remains handled without fallback",
+      "passed": true,
+      "reproducedKnownDefect": false,
+      "pushes": [],
+      "toasts": [],
+      "reviews": 0,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "events": []
+    },
+    {
+      "name": "Settings: account switch during read remains handled without fallback",
+      "passed": true,
+      "reproducedKnownDefect": false,
+      "pushes": [],
+      "toasts": [],
+      "reviews": 0,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "events": []
+    },
+    {
+      "name": "Settings: thrown actual read is handled without fallback and clears review ref",
+      "passed": true,
+      "reproducedKnownDefect": false,
+      "pushes": [],
+      "toasts": [
+        {
+          "message": "Cloud backup failed — check your connection.",
+          "type": "error"
+        }
+      ],
+      "reviews": 0,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "events": []
+    },
+    {
+      "name": "dirty ordinary same-epoch saved record retains baseline timestamp and Account asserts current backup safe",
+      "passed": true,
+      "reproducedKnownDefect": true,
+      "pushes": [],
+      "toasts": [],
+      "reviews": 0,
+      "pulls": 0,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "events": [],
+      "claim": {
+        "confirmed": true,
+        "title": "Your proof is safe",
+        "summary": "Your decisions, evidence tree and notes are backed up and stay the same on every device where you sign in."
+      },
+      "historicalLastSyncAt": "2026-09-20T10:00:00.000Z"
+    },
+    {
+      "name": "baseline Account exact confirmation expression suppresses safe claim on service error",
+      "passed": true,
+      "reproducedKnownDefect": false,
+      "pushes": [],
+      "toasts": [],
+      "reviews": 0,
+      "pulls": 0,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "events": []
+    },
+    {
+      "name": "repeat click during actual held review remains single-flight and handled",
+      "passed": true,
+      "reproducedKnownDefect": false,
+      "pushes": [],
+      "toasts": [],
+      "reviews": 1,
+      "pulls": 1,
+      "replacements": 0,
+      "acks": 0,
+      "refreshes": [],
+      "events": []
+    }
+  ],
+  "failures": [],
+  "afterSourceSha256": {
+    "src/pages/Account.tsx": "eb38c90df6feca059f1ca06d5f3772b702decb6b2ba826c11b47e12b674c304d",
+    "src/components/BackupAndCloudSettings.tsx": "5991e14426bc8a328363db1a4d3c826a071ce2ab009427dc205f419cbba1738e",
+    "src/store/useApp.tsx": "0576b4a1b6c849049f88e8d9c043143c667e1aabf9357bbfba35fe79f5ac6497",
+    "src/services/cloudSync.ts": "74f6405e6fe70cf89f7ac64473565a8d812ebc8180d3a0dc7e214e8183713dce",
+    "src/services/backup.ts": "0ece443b6e61dfc0508658e5fb24a6373145fc56094f8e9b906fe53bebfdf3b9",
+    "src/data/backupCopy.ts": "92dffa5dab22201491cad85c29d8cc48f65b8b083324a04e00d95d57a8cbdf6e"
+  },
+  "sourceUnchangedDuringProbe": true,
+  "total": 15,
+  "passed": 15,
+  "failed": 0,
+  "reproducedKnownDefects": 3,
+  "fetchCalls": 0
+}

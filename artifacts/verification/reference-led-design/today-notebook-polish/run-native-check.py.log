@@ -1,0 +1,29 @@
+import pathlib, subprocess, hashlib, json, datetime, re
+
+repo = pathlib.Path('/workspace/oda-reference-redesign')
+out = pathlib.Path('/workspace/scratch/oda-reference-redesign/polish/native-course-progress')
+out.mkdir(parents=True, exist_ok=True)
+receipt = json.loads(pathlib.Path('/workspace/scratch/oda-reference-redesign/polish/final/build-receipt.json').read_text())
+def matches(item):
+    data = (repo / item['file']).read_bytes()
+    return len(data) == item['bytes'] and hashlib.sha256(data).hexdigest() == item['sha256']
+assert all(matches(item) for item in receipt['source'] + receipt['build'])
+assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=repo).decode().strip() == receipt['sourceCommit']
+started = datetime.datetime.now(datetime.timezone.utc).isoformat()
+log = out / 'native-regressions.log'
+with log.open('xb') as sink:
+    run = subprocess.run(['node', '--import', 'tsx', '--test', 'scripts/qa-saved-course-progress.ts'], cwd=repo, stdout=sink, stderr=subprocess.STDOUT)
+data = log.read_bytes()
+text = data.decode(errors='replace')
+script = (repo / 'scripts/qa-saved-course-progress.ts').read_bytes()
+result = {'sourceCommit': receipt['sourceCommit'], 'command': 'node --import tsx --test scripts/qa-saved-course-progress.ts',
+    'startedAtUtc': started, 'finishedAtUtc': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'exitCode': run.returncode,
+    'passed': int(re.findall(r'(?:#|ℹ) pass (\d+)', text)[-1]), 'failed': int(re.findall(r'(?:#|ℹ) fail (\d+)', text)[-1]),
+    'log': log.name, 'logBytes': len(data), 'logSha256': hashlib.sha256(data).hexdigest(),
+    'harness': 'scripts/qa-saved-course-progress.ts', 'harnessBytes': len(script), 'harnessSha256': hashlib.sha256(script).hexdigest(),
+    'sourceFilesUnchanged': all(matches(item) for item in receipt['source']), 'compiledFilesUnchanged': all(matches(item) for item in receipt['build']),
+    'limits': ['Native hook regression uses fresh in-memory React/services bundle, separate from compiled whole-app independent QA.', 'Synthetic focus/account inputs; no real account or physical iPhone QA.']}
+(out / 'receipt.json').write_text(json.dumps(result, indent=2) + '\n')
+print(json.dumps(result))
+assert result['sourceFilesUnchanged'] and result['compiledFilesUnchanged']
+raise SystemExit(run.returncode)

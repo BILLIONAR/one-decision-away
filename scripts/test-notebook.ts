@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import type { Notebook369Practice, NotebookMutationResult, UserData } from '../src/types/models';
+import { cloudCrudFixture } from '../tests/helpers/cloudCrudFixture';
 
 class MemoryStorage {
   values = new Map<string, string>();
@@ -321,28 +322,33 @@ test('explicit local restore blocks older cloud data across failed uploads and i
   const internal = cloudSync as any;
   const original = { client: internal.client, session: internal.session, config: internal.config };
   let failUpload = true;
+  let firstAccountHasRemote = true;
   let remoteReads = 0;
   let uploaded: UserData | undefined;
   const remote = fixture();
   remote.profile.displayName = 'Old cloud copy';
   const restored = applyNotebookAction(fixture(), source(), noon('2026-09-19')).data;
-  const mockClient = { from: () => ({
-    upsert: async (row: { data: UserData }) => {
-      if (failUpload) return { error: new Error('offline') };
+  const mockClient = cloudCrudFixture({
+    write: async row => {
       uploaded = structuredClone(row.data);
       return { error: null };
     },
-    select: () => ({ eq: () => ({ maybeSingle: async () => { remoteReads += 1; return { data: { data: remote, updated_at: '2028-01-01T00:00:00Z' }, error: null }; } }) }),
-  }) };
+    read: async userId => {
+      remoteReads += 1;
+      if (userId === 'account-a' && internal.config.url === 'https://project-a.example' && failUpload) return { data: null, error: new Error('offline') };
+      return { data: userId === 'account-a' && !firstAccountHasRemote ? null : { data: remote, updated_at: '2028-01-01T00:00:00Z' }, error: null };
+    },
+  }).client;
   Object.assign(internal, { client: mockClient, session: { user: { id: 'account-a' } }, config: { url: 'https://project-a.example', anonKey: 'test' } });
   try {
     const repo = new LocalDemoRepository();
     await repo.replaceAll(restored);
     cloudSync.markLocalRestore();
     assert.equal(await cloudSync.pullIfNewer(await repo.load()), null);
+    assert.equal(remoteReads, 0);
     assert.equal(await cloudSync.push(restored), false);
     assert.equal(await cloudSync.pullIfNewer(await repo.load()), null);
-    assert.equal(remoteReads, 0);
+    assert.equal(remoteReads, 1, 'an upload checks remote readiness even while an import suppresses startup pull');
     assert.deepEqual((await repo.load()).notebook, restored.notebook);
     // A restore for account A never suppresses account B's normal cloud policy.
     internal.session = { user: { id: 'account-b' } };
@@ -353,6 +359,12 @@ test('explicit local restore blocks older cloud data across failed uploads and i
     assert.equal((await cloudSync.pullIfNewer(null))?.profile.displayName, 'Old cloud copy');
     internal.config = { url: 'https://project-a.example', anonKey: 'test' };
     failUpload = false;
+    const pendingToken = [...storage.values.entries()].find(([key]) => key.startsWith('oda_cloud_pending_restore'))!;
+    assert.equal(await cloudSync.push(restored), false, 'existing unacknowledged cloud work cannot be replaced by an imported device record');
+    assert.equal(uploaded, undefined); assert.equal(storage.getItem(pendingToken[0]), pendingToken[1]);
+    assert.deepEqual((await repo.load()).notebook, restored.notebook);
+    // An observed absent cloud row can accept the import through atomic INSERT.
+    firstAccountHasRemote = false;
     assert.equal(await cloudSync.push(restored), true);
     assert.deepEqual(uploaded?.notebook, restored.notebook);
     assert.deepEqual(uploaded?.dreamJournal, restored.dreamJournal);
@@ -375,26 +387,35 @@ test('an old in-flight cloud upload cannot overwrite a newer restored snapshot o
   const first = new Promise<void>((resolve) => { firstStarted = resolve; });
   const second = new Promise<void>((resolve) => { secondStarted = resolve; });
   const uploads: UserData[] = [];
-  const mockClient = { from: () => ({ upsert: async (row: { data: UserData }) => {
+  const mock = cloudCrudFixture({ write: async row => {
     const index = uploads.length;
     uploads.push(structuredClone(row.data));
     if (index === 0) { firstStarted(); await oldWait; } else { secondStarted(); await newWait; }
     return { error: null };
-  } }) };
-  Object.assign(internal, { client: mockClient, session: { user: { id: 'restore-account' } }, config: { url: 'https://project.example', anonKey: 'test' } });
+  } });
+  Object.assign(internal, { client: mock.client, session: { user: { id: 'restore-account' } }, config: { url: 'https://project.example', anonKey: 'test' } });
   try {
+    const repo = new LocalDemoRepository();
+    await repo.replaceAll(old);
     const pendingOld = cloudSync.push(old);
     await first;
     cloudSync.markLocalRestore();
+    await repo.replaceAll(restored);
     const pendingNew = cloudSync.push(restored);
     assert.equal(uploads.length, 1);
     releaseOld();
-    await pendingOld;
-    await second;
+    assert.equal(await pendingOld, false);
+    assert.equal(await pendingNew, false, 'the late old upload did not acknowledge permission to replace its cloud row');
+    assert.equal(uploads.length, 1);
     assert.equal([...storage.values.keys()].filter((key) => key.startsWith('oda_cloud_pending_restore')).length, 1);
     assert.equal(await cloudSync.pullIfNewer(restored), null);
+    assert.deepEqual((await repo.load()).notebook, restored.notebook);
+    // Model a subsequent SELECT observing absence; no cloud row is deleted by the app.
+    mock.rows.delete('restore-account');
+    const absentRetry = cloudSync.push(restored);
+    await second;
     releaseNew();
-    assert.equal(await pendingNew, true);
+    assert.equal(await absentRetry, true);
     assert.deepEqual(uploads[uploads.length - 1].notebook, restored.notebook);
     assert.equal([...storage.values.keys()].filter((key) => key.startsWith('oda_cloud_pending_restore')).length, 0);
   } finally { releaseOld(); releaseNew(); Object.assign(internal, original); }
@@ -409,18 +430,19 @@ test('a signed-out import binds to the first later connection and stays isolated
   remote.profile.displayName = 'Old cloud copy';
   let remoteReads = 0;
   let failUpload = true;
+  let firstAccountHasRemote = true;
   let uploaded: UserData | undefined;
-  const mockClient = { from: () => ({
-    upsert: async (row: { data: UserData }) => {
-      if (failUpload) return { error: new Error('offline') };
+  const mockClient = cloudCrudFixture({
+    write: async row => {
       uploaded = structuredClone(row.data);
       return { error: null };
     },
-    select: () => ({ eq: () => ({ maybeSingle: async () => {
+    read: async userId => {
       remoteReads += 1;
-      return { data: { data: remote, updated_at: '2028-01-01T00:00:00Z' }, error: null };
-    } }) }),
-  }) };
+      if (userId === 'first-account' && failUpload) return { data: null, error: new Error('offline') };
+      return { data: userId === 'first-account' && !firstAccountHasRemote ? null : { data: remote, updated_at: '2028-01-01T00:00:00Z' }, error: null };
+    },
+  }).client;
   Object.assign(internal, { client: null, session: null, config: null });
   try {
     const repo = new LocalDemoRepository();
@@ -443,6 +465,10 @@ test('a signed-out import binds to the first later connection and stays isolated
     internal.session = { user: { id: 'first-account' } };
     assert.equal(await cloudSync.pullIfNewer(await repo.load()), null);
     failUpload = false;
+    assert.equal(await cloudSync.push(restored), false, 'the first connected account still has unacknowledged cloud work');
+    assert.equal(uploaded, undefined); assert.equal(storage.getItem(boundKey), pendingToken);
+    assert.deepEqual((await repo.load()).notebook, restored.notebook);
+    firstAccountHasRemote = false;
     assert.equal(await cloudSync.push(restored), true);
     assert.deepEqual(uploaded?.notebook, restored.notebook);
     assert.equal(storage.getItem(boundKey), null);

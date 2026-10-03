@@ -1,0 +1,103 @@
+{
+  "label": "Synthetic proposed-protocol feasibility; scratch SQL and request construction, not app implementation",
+  "total": 9,
+  "passed": 9,
+  "failed": 0,
+  "liveFetchCalls": 0,
+  "productionDbOrNativeTested": false,
+  "results": [
+    {
+      "name": "Canonical fingerprint accepts JSON object-key reorder and distinguishes changed work",
+      "passed": true,
+      "evidence": {
+        "jsonObjectKeyOrderingStable": true,
+        "changedContentDetected": true
+      }
+    },
+    {
+      "name": "Timestamp-only conditional UPDATE overwrites changed content keeping the old timestamp",
+      "passed": true,
+      "evidence": {
+        "affectedRows": 1,
+        "timestampOnlyGuardUnsafeForSameTimestampChanges": true
+      }
+    },
+    {
+      "name": "Acknowledged fingerprint + fresh read holds a same-version content change already present at SELECT",
+      "passed": true,
+      "evidence": {
+        "timestampMatchesAcknowledgment": true,
+        "fingerprintRejectsChangedRemote": true,
+        "noUpdateIssued": true
+      }
+    },
+    {
+      "name": "Fingerprint pre-read still cannot protect timestamp-preserving write between SELECT and UPDATE",
+      "passed": true,
+      "evidence": {
+        "affectedRows": 1,
+        "sameTimestampConcurrentLegacyWriterRemainsOutsideBoundedProtection": true
+      }
+    },
+    {
+      "name": "Atomic timestamp+JSONB equality prevents that same-timestamp write between SELECT and UPDATE",
+      "passed": true,
+      "evidence": {
+        "affectedRows": 0,
+        "exactContentAtomicPredicatePreservesRemote": true
+      }
+    },
+    {
+      "name": "Competing writer advancing version causes zero affected rows and retains both records",
+      "passed": true,
+      "evidence": {
+        "affectedRows": 0,
+        "remotePreserved": true,
+        "localPreserved": true
+      }
+    },
+    {
+      "name": "Racing atomic insert rejects duplicate key rather than upserting another writer",
+      "passed": true,
+      "evidence": {
+        "duplicateCode": "23505",
+        "existingRemoteUnmodified": true
+      }
+    },
+    {
+      "name": "New writer timestamp strictly advances old future or microsecond timestamp under PostgreSQL comparison",
+      "passed": true,
+      "evidence": {
+        "versions": [
+          {
+            "old": "2020-01-01T00:00:00Z",
+            "next": "2026-10-02T00:00:00.000Z"
+          },
+          {
+            "old": "2030-01-01T00:00:00.123456Z",
+            "next": "2030-01-01T00:00:00.124Z"
+          },
+          {
+            "old": "2040-01-01T00:00:00.999999Z",
+            "next": "2040-01-01T00:00:01.000Z"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Installed PostgREST client supports insert/conditional update returning affected rows; full JSON predicates grow the URL",
+      "passed": true,
+      "evidence": {
+        "insertMethod": "POST",
+        "updateMethod": "PATCH",
+        "returningRepresentation": true,
+        "emptyAppDocumentBytes": 4980,
+        "timestampOnlyUrlCharacters": 139,
+        "fullAppJsonUrlCharacters": 7530,
+        "largeJsonUrlCharacters": 128176,
+        "installedClientDefaultUrlLengthWarning": 8000,
+        "requestsExecuted": 0
+      }
+    }
+  ]
+}

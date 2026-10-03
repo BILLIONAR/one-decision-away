@@ -1,0 +1,176 @@
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {readFileSync,writeFileSync,mkdirSync,readdirSync,statSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+import {pathToFileURL} from 'node:url';
+
+const repo='/workspace/oda-reference-redesign';
+const out=process.argv[2];
+assert.ok(out && out.startsWith('/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-repro-c2a/'));
+mkdirSync(out,{recursive:true});
+const source='c2a5e6497f1bed4cf95951375c9aa86872b169a9';
+const head='5ff74beeadcc820adce69541d0a811d5335ad0d7';
+const base='http://127.0.0.1:4183/one-decision-away/';
+const key='one_decision_away_app_data_v1';
+const sha=b=>createHash('sha256').update(b).digest('hex');
+const git=(...args)=>execFileSync('git',args,{cwd:repo,encoding:'utf8'}).trim();
+const receipt=JSON.parse(readFileSync('/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/final/timer-evidence-fix/build-receipt.json'));
+function admission(){
+  assert.equal(git('rev-parse','HEAD'),head);
+  assert.equal(git('branch','--show-current'),'design/reference-led-oda');
+  assert.equal(git('status','--porcelain'),'');
+  assert.equal(receipt.sourceCommit,source);
+  const diff=git('diff','--name-only',source,head).split('\n').filter(Boolean);
+  assert.ok(diff.every(p=>p.startsWith('artifacts/')));
+  for(const row of [...receipt.source,...receipt.build]){
+    const bytes=readFileSync(`${repo}/${row.file}`);
+    assert.equal(bytes.length,row.bytes,row.file);assert.equal(sha(bytes),row.sha256,row.file);
+  }
+  return {head,source,branch:git('branch','--show-current'),clean:true,sourceFiles:receipt.source.length,buildFiles:receipt.build.length,onlyEvidenceChangedSinceSource:true,time:new Date().toISOString()};
+}
+const report={task:'Focused inherited provisional course-projection reproduction',synthetic:true,startedAtUtc:new Date().toISOString(),preflight:admission(),cases:[],contexts:[],screenshots:[],limits:[
+  'Tests compiled existing normal local preview, without source edits, rebuild, installs, dependency override or publication.',
+  'Controlled fault injection delays a genuine native IndexedDB readwrite transaction before its put. This amplifies a pending-save window; it does not measure its typical production duration.',
+  'Course editor private optimistic state is intentional and is not treated as saved progress evidence.',
+  'All records are disposable synthetic signed-out fixtures. External requests are blocked and attempts are retained.'
+]};
+const preview=await fetch(base);assert.equal(preview.status,200);
+assert.equal(sha(Buffer.from(await preview.text())),sha(readFileSync(`${repo}/dist/index.html`)));
+report.previewIndexMatchesFrozenDist=true;
+const {getInitialDemoState}=await import(pathToFileURL(`${repo}/src/services/repository.ts`));
+const {courseCatalogFor}=await import(pathToFileURL(`${repo}/src/data/courseCatalog.ts`));
+const course=courseCatalogFor('en').find(c=>c.id==='turning-day');assert.ok(course);
+const first=course.lessons[0],second=course.lessons[1];
+const seed=getInitialDemoState(),now=new Date().toISOString();
+seed.profile={...seed.profile,displayName:'Synthetic course projection QA',locale:'en',theme:'light',onboardingStep:'completed',intent:'finish',simpleModeOff:true,soundMuted:true,nudgesEnabled:false,dailyWisdomEnabled:false,reminderAskedAt:now,firstOpenedAt:'2026-01-01T00:00:00Z',lastOpenedAt:now};
+seed.courseProgress={version:1,lessons:{[first.id]:{checked:Array(first.practiceCount).fill(true),answer:first.correct,reflection:'Synthetic saved prerequisites, lesson not completed',completed:false}}};
+seed.completions=[];seed.missions=seed.missions.filter(m=>!m.isOneDecision);
+seed.transactions=seed.transactions.filter(t=>t.kind==='welcome_grant');seed.notebook.entries=[];seed.dreamJournal=[];
+report.fixture={courseId:course.id,first,second,initialCompleted:0,alreadySavedPrerequisites:true};
+writeFileSync(`${out}/synthetic-seed.json`,JSON.stringify(seed,null,2),{flag:'wx'});
+const require=createRequire(`${repo}/package.json`),{chromium}=require('playwright');
+const browser=await chromium.launch({executablePath:'/usr/bin/chromium'});report.browser=await browser.version();
+async function create(label){
+  const context=await browser.newContext({viewport:{width:1440,height:1000},timezoneId:'UTC',reducedMotion:'reduce',serviceWorkers:'block'});
+  const record={label,requests:[],blockedExternal:[],pageErrors:[]};report.contexts.push(record);
+  await context.route('**/*',route=>{
+    const r=route.request();
+    if(new URL(r.url()).origin!==new URL(base).origin||!['GET','HEAD'].includes(r.method())){record.blockedExternal.push({url:r.url(),method:r.method()});return route.abort();}
+    record.requests.push({url:r.url(),method:r.method(),resourceType:r.resourceType()});return route.continue();
+  });
+  await context.addInitScript(({seed,key,lessonId,selection})=>{
+    if(!localStorage.getItem(key))localStorage.setItem(key,JSON.stringify(seed));
+    localStorage.setItem('oda_locale','en');localStorage.setItem('oda_theme','light');localStorage.setItem('oda_course_selection_v1',selection);
+    window.__projectionEvents={focus:[],storage:[]};
+    addEventListener('focus',e=>window.__projectionEvents.focus.push({at:performance.now(),trusted:e.isTrusted}));
+    addEventListener('storage',e=>{if(e.key===key)window.__projectionEvents.storage.push({at:performance.now(),completed:JSON.parse(e.newValue)?.courseProgress?.lessons?.[lessonId]?.completed??false});});
+    const nativePut=IDBObjectStore.prototype.put,nativeGet=IDBObjectStore.prototype.get;
+    const completed=s=>{try{return !!JSON.parse(s.appData)?.courseProgress?.lessons?.[lessonId]?.completed;}catch{return null;}};
+    window.__projectionGate={armed:false,phase:'idle',release:null,events:[],nativeMutationPuts:0,reads:0};
+    IDBObjectStore.prototype.put=function(value,recordKey){
+      const gate=window.__projectionGate;
+      if(!gate.armed||gate.phase!=='idle'||this.name!=='record'||recordKey!=='current'||completed(value)!==true)return nativePut.apply(this,arguments);
+      gate.phase='held-before-native-put';gate.armed=false;gate.heldAt=performance.now();gate.candidateCompleted=completed(value);
+      const store=this,tx=this.transaction,started=performance.now();
+      gate.transactionMode=tx.mode;gate.database=tx.db.name;gate.events.push({phase:gate.phase,at:started});
+      tx.addEventListener('complete',()=>{gate.phase='native-transaction-complete';gate.events.push({phase:gate.phase,at:performance.now()});});
+      tx.addEventListener('abort',()=>{gate.phase='native-transaction-aborted';gate.events.push({phase:gate.phase,at:performance.now()});});
+      const pump=()=>{
+        const request=nativeGet.call(store,'current');
+        request.onsuccess=()=>{
+          gate.reads++;gate.authorityCompleted=completed(request.result);gate.lastAuthorityReadAt=performance.now();
+          if(gate.release==='abort'||performance.now()-started>20000){gate.abortReason=gate.release==='abort'?'controlled abort':'bounded watchdog';tx.abort();return;}
+          if(gate.release==='commit'){gate.nativeMutationPuts++;gate.nativePutAt=performance.now();nativePut.call(store,value,recordKey);return;}
+          pump();
+        };
+        return request;
+      };
+      return pump();
+    };
+  },{seed,key,lessonId:first.id,selection:course.id});
+  return {context,record};
+}
+async function newPage(context,record,route='/app'){
+  const page=await context.newPage();page.setDefaultTimeout(7000);page.on('pageerror',e=>record.pageErrors.push(e.message));
+  await page.goto(`${base}#${route}`);await page.locator('[data-app-route]').waitFor();await page.evaluate(()=>document.fonts.ready);return page;
+}
+async function nav(page,name,route){
+  await page.locator('.oda-sidebar nav').getByRole('button',{name,exact:true}).click();
+  await page.locator(`[data-app-route="${route}"]`).waitFor();
+}
+async function authority(page){
+  return page.evaluate(({key,lessonId})=>new Promise((resolve,reject)=>{
+    const open=indexedDB.open('oda_personal_record_v1',1);open.onerror=()=>reject(String(open.error));open.onsuccess=()=>{
+      const db=open.result,tx=db.transaction('record','readonly'),get=tx.objectStore('record').get('current');
+      tx.oncomplete=()=>{const snapshot=get.result;db.close();resolve({completed:!!JSON.parse(snapshot.appData)?.courseProgress?.lessons?.[lessonId]?.completed,projectionCompleted:!!JSON.parse(localStorage.getItem(key))?.courseProgress?.lessons?.[lessonId]?.completed});};
+      tx.onabort=()=>{db.close();reject(String(tx.error));};
+    };
+  }),{key,lessonId:first.id});
+}
+async function observe(page){
+  return page.evaluate(({key,firstId})=>({atUtc:new Date().toISOString(),at:performance.now(),route:document.querySelector('[data-app-route]')?.getAttribute('data-app-route'),projectionCompleted:!!JSON.parse(localStorage.getItem(key))?.courseProgress?.lessons?.[firstId]?.completed,
+    savedLibraryCompleted:Number(document.querySelector('.oda-hybrid-progress [role="progressbar"]')?.getAttribute('aria-valuenow')),
+    savedCourseCompleted:Number(document.querySelector('.oda-hybrid-mission [role="progressbar"]')?.getAttribute('aria-valuenow')),
+    nextTitle:document.querySelector('[data-next-lesson-title]')?.textContent,
+    roadmap:[...document.querySelectorAll('.oda-hybrid-mission [data-course-overview-lesson]')].map(e=>({id:e.getAttribute('data-course-overview-lesson'),text:e.textContent})),
+    events:window.__projectionEvents,gate:window.__projectionGate}),{key,firstId:first.id});
+}
+async function waitToday(page,count){
+  await page.waitForFunction(count=>Number(document.querySelector('.oda-hybrid-mission [role="progressbar"]')?.getAttribute('aria-valuenow'))===count,count);
+  return observe(page);
+}
+async function screenshot(page,name){
+  await page.locator('.oda-hybrid-mission').screenshot({path:`${out}/${name}.png`,animations:'disabled'});report.screenshots.push(`${name}.png`);
+}
+async function startMutation(page){
+  await nav(page,'Courses','/app/courses');
+  const complete=page.getByRole('button',{name:'Complete lesson',exact:true});await complete.waitFor();assert.equal(await complete.isEnabled(),true);
+  await page.evaluate(()=>{window.__projectionGate.armed=true;});await complete.click();
+  await page.waitForFunction(()=>window.__projectionGate.phase==='held-before-native-put'&&window.__projectionGate.reads>0);
+  const held=await page.evaluate(()=>window.__projectionGate);assert.equal(held.transactionMode,'readwrite');assert.equal(held.nativeMutationPuts,0);assert.equal(held.authorityCompleted,false);return held;
+}
+async function release(page,mode){
+  await page.evaluate(mode=>{window.__projectionGate.release=mode;},mode);
+  await page.waitForFunction(()=>['native-transaction-complete','native-transaction-aborted'].includes(window.__projectionGate.phase));
+}
+try{
+  for(const mode of ['commit','abort']){
+    const {context,record}=await create(`same-tab-${mode}`);const page=await newPage(context,record);
+    const result={name:`same-tab actual Complete lesson then Today route mount; ${mode}`,baseline:await waitToday(page,0),baselineAuthority:await authority(page)};report.cases.push(result);
+    result.heldBeforeNav=await startMutation(page);
+    await nav(page,'Today','/app');result.pending=await observe(page);
+    await screenshot(page,`same-tab-${mode}-pending`);
+    result.pendingAfterScreenshot=await observe(page);
+    assert.equal(result.pendingAfterScreenshot.gate.phase,'held-before-native-put');assert.equal(result.pendingAfterScreenshot.gate.nativeMutationPuts,0);assert.equal(result.pendingAfterScreenshot.gate.authorityCompleted,false);
+    result.provisionalSavedDisplayConfirmed=result.pending.savedCourseCompleted===1&&result.pending.savedLibraryCompleted===1&&result.pending.nextTitle===second.title;
+    await release(page,mode);result.settled=await waitToday(page,mode==='commit'?1:0);result.settledAuthority=await authority(page);
+    assert.equal(result.settledAuthority.completed,mode==='commit');assert.equal(result.settledAuthority.projectionCompleted,mode==='commit');
+    assert.equal(result.settled.nextTitle,mode==='commit'?second.title:first.title);
+    await screenshot(page,`same-tab-${mode}-settled`);
+    await page.reload();await page.locator('[data-app-route]').waitFor();result.reloaded=await waitToday(page,mode==='commit'?1:0);result.reloadedAuthority=await authority(page);
+    await context.close();console.log(JSON.stringify({case:result.name,confirmed:result.provisionalSavedDisplayConfirmed,pendingCourse:result.pending.savedCourseCompleted,pendingLibrary:result.pending.savedLibraryCompleted,settled:result.settled.savedCourseCompleted,durable:result.settledAuthority.completed}));
+  }
+  const {context,record}=await create('cross-tab-focus-abort');const writer=await newPage(context,record),reader=await newPage(context,record);
+  const result={name:'cross-tab already-mounted Today; focus handler while writer pending; abort',readerBaseline:await waitToday(reader,0),baselineAuthority:await authority(reader)};report.cases.push(result);
+  await writer.bringToFront();result.writerHeld=await startMutation(writer);
+  await reader.waitForFunction(({key,id})=>!!JSON.parse(localStorage.getItem(key))?.courseProgress?.lessons?.[id]?.completed,{key,id:first.id});
+  result.readerBeforeFocus=await observe(reader);await reader.bringToFront();
+  await reader.waitForTimeout(100);result.readerAfterBringToFront=await observe(reader);
+  result.trustedFocusObserved=result.readerAfterBringToFront.events.focus.length>result.readerBeforeFocus.events.focus.length&&result.readerAfterBringToFront.events.focus.at(-1).trusted;
+  if(!result.trustedFocusObserved){await reader.evaluate(()=>dispatchEvent(new Event('focus')));result.focusCoverage='explicit synthetic window focus event because headless bringToFront did not deliver trusted focus';}
+  else result.focusCoverage='trusted browser focus delivered by bringToFront';
+  result.readerPending=await observe(reader);await screenshot(reader,'cross-tab-focus-abort-pending');result.writerPending=await observe(writer);
+  assert.equal(result.writerPending.gate.phase,'held-before-native-put');assert.equal(result.writerPending.gate.nativeMutationPuts,0);assert.equal(result.writerPending.gate.authorityCompleted,false);
+  result.provisionalSavedDisplayConfirmed=result.readerPending.savedCourseCompleted===1&&result.readerPending.savedLibraryCompleted===1&&result.readerPending.nextTitle===second.title;
+  await release(writer,'abort');result.readerSettled=await waitToday(reader,0);result.settledAuthority=await authority(reader);assert.equal(result.settledAuthority.completed,false);await screenshot(reader,'cross-tab-focus-abort-settled');
+  await reader.reload();await reader.locator('[data-app-route]').waitFor();result.readerReloaded=await waitToday(reader,0);await context.close();
+  console.log(JSON.stringify({case:result.name,confirmed:result.provisionalSavedDisplayConfirmed,focusCoverage:result.focusCoverage,beforeFocus:result.readerBeforeFocus.savedCourseCompleted,pending:result.readerPending.savedCourseCompleted,settled:result.readerSettled.savedCourseCompleted}));
+  report.status='completed';
+}catch(error){report.status='failed';report.error={name:error.name,message:error.message,stack:error.stack};console.error(error);process.exitCode=1;}
+finally{
+  await browser.close();report.postflight=admission();report.finishedAtUtc=new Date().toISOString();
+  writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2),{flag:'wx'});
+  const files=readdirSync(out).filter(p=>statSync(`${out}/${p}`).isFile()).map(file=>{const b=readFileSync(`${out}/${file}`);return {file,bytes:b.length,sha256:sha(b)};});
+  writeFileSync(`${out}/manifest.json`,JSON.stringify({files},null,2),{flag:'wx'});
+}

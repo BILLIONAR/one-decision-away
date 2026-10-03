@@ -1,0 +1,10 @@
+{
+  "status": "harness-corrected",
+  "sourceCommit": "84ecbf8776146b766a30964bf8e6487234dd1dd4",
+  "command": "python3 audit-assets.py",
+  "failure": "The initial harness matched CFBundleDisplayName using exact tab whitespace. The unchanged XML used different indentation, causing an assertion before the final receipt was written.",
+  "actualPlistValue": "ODA",
+  "correction": "Parse Info.plist with Python plistlib and compare the actual value instead of indentation.",
+  "applicationFilesChanged": false,
+  "aggregateRerun": false
+}

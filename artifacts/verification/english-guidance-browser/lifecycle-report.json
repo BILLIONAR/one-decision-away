@@ -1,0 +1,3061 @@
+{
+  "at": "2026-10-02T00:59:49.358Z",
+  "base": "http://127.0.0.1:4187/one-decision-away/",
+  "phase": "final built preview",
+  "sourceHashes": {
+    "src/utils/recordedNarration.ts": "9bacb11df80eea39cc677afd9660450c24a06ee765b2063730cb849d2586ecca",
+    "src/utils/voiceGuide.ts": "f087d6c852415be301e04518e560dabe73cf6f5b4e91b217b936cd69502a547c",
+    "src/data/englishNarrationAssets.ts": "498b9f951d20359f347052fbf7208a895355a56a166e486db671c4e3ef44ac45",
+    "src/components/FocusTimerHub.tsx": "c34e772510efcb0bff9628aa141e8286abb31a623fc7cee6cfc8d34e20b0730b",
+    "src/components/FocusLockView.tsx": "3357c65a769c52523f37ebaa608fc6b69a3311e9e408271a2a60f75bca1956ad"
+  },
+  "buildFiles": {
+    "index.html": "6f3ed998209b674b2eb59af7dd77ee549e23e6d6a740990f60b51c1abac9e33d",
+    "assets/Account-CBIxfH_1.js": "75e3aefc07ba8c0bcc7fc38a43a8ec59860f63730fce4f5aacaf38911cb9ddcb",
+    "assets/Bank-DvaL3caZ.js": "b7cae320220ccd94eb92f2bbd47631298e8e16fe751f7a68d6a3dc96c452fc51",
+    "assets/Bridge-BTAXMwiv.js": "9406076d4dc68d8cb9d67c4b818059988818ab2aeffa3a78b6c4fe272ecb3d05",
+    "assets/Budget-Dd_6q76M.js": "d8870d095d6c136f090195a78def627525fffd74e8322b25b28dd7e1f4c1b6fb",
+    "assets/Coach-B6k7_cce.js": "b95d1168423027ebe7be30c82cb6c946543db8e5805a999553c8c1628d4b5caa",
+    "assets/Courses-DglmM9Bu.js": "017166ba79854bcdc974d01054184a68d37adfecbebd5c0a8408ae3779a1553c",
+    "assets/DailyMicroHabits-DhVwaz8z.js": "c7d744e152eaea404d9e71a1393b3b2a58de7455e6aad898162eeffac611ffcd",
+    "assets/DreamArt-COh-bP-S.js": "0ac7aa184e1c30ba3123305c1ed894487670dc6b6d215137e90b0fd01ac5f7e9",
+    "assets/Dreams-BtpfILAa.js": "b1af92d7bb6bb1d8e0a278d0552715a8d95820d2838365929800c3c0a2ba1e2b",
+    "assets/Evidence-Ccl5n6ZE.js": "6ba8a00cfc5ae654d17a1ab1ed456ba96d76c31e8c9e4f39b8e9c5d7099bab65",
+    "assets/Focus-FveWw4av.js": "8d98ddd712964a89f51f42acc8e558d5fb8beb7cc472ef6f6e0e3934e7b8a2e7",
+    "assets/FocusTimerHub-CbZoPsqf.js": "6532bbcb530da12e337e9e826477f4313961fe1c75b65cec566a0005f551bbf5",
+    "assets/FutureSelf-g7AtINhI.js": "4dc894dd13463e05099f25c55df6ab55f31806f74fc0510c90329c718fefbfb5",
+    "assets/Legal-BcCYweFV.js": "bb5ab1f1ac1d52231ea9617ab6d36b9609315d334355e40b0e346573cdb28ef0",
+    "assets/LifeScore-ZZtwZYzl.js": "ab2b5a8b5fbd52b7232165d866152e8a46f3cfec58cfea4db9b9375d7b731cc4",
+    "assets/Me-DY9UyTqa.js": "c9eec3f4e8eae6bb83a7f51562c29a5b32eda0cc0367c319a5d57822b9fd9d88",
+    "assets/MissionFlows-76sSA_94.js": "63391e9321bb480f69faf1db035cc3d71ec9018710767580535d0b564f5dc6f1",
+    "assets/Missions-bPM4Bt3j.js": "eb8600bafd96acce6e425cdc82f7e6456a263cfb505d0511b919ff8d998d4ed7",
+    "assets/Notebook-hayaBYgC.js": "0c27c121781695f78c04140b9e68aa5b4aa06bf9b7eff63365551cf91815301b",
+    "assets/Progress-DsNb77tc.js": "e03f6c60cb404440ed4d5c80a9127504b08cf1d0f6f0e70629457920e8d5d743",
+    "assets/PublicTwoFutures-BCNQL0C_.js": "4b7bbc0249dd1b20f6722e8e85e10c02d97c7e6c998fceb1b5dfcb416b02a977",
+    "assets/Seasons-DpYDNkOU.js": "444a79134fab801b182b1bb7c4ca23da4bc5d870750cff8baffbf341f92d0bb0",
+    "assets/Settings-CexLMXmY.js": "72523d3957038ff96329853d871e59af9e99276e7149faed6ea0b0b4cd4ef816",
+    "assets/SoundRoom-D6WblYwp.js": "551178695ee4ac78092998f0e287d1916eea3c62c43c568169da7b692ce7c7fd",
+    "assets/Support-ZBK88kUK.js": "d8b730a9d92196bc0203973483a4a9d088ec20bd457690fbe74915088c1c3ddd",
+    "assets/Today-DYtYoVRN.js": "d502f3bb3a25ab9ab19de03feb83f5502a62d4c82e98ba6b7269e472dc09de8c",
+    "assets/Tools-U_9qUS4N.js": "ee378f9ec96bc7ca6019ceab244caff7b16f4c39d58a9231e964dfde3e8b0384",
+    "assets/TwoFutures-objtoi8e.js": "95b42bf154c2c91cb8e4590cff3fe1180db6c8e3bc040d1a5485038636f04c3c",
+    "assets/Upgrade-D2EIi0VJ.js": "b048c632d79defdd27d20d3c7093d74148725658e3fe3b2970b1e748f9c81fc2",
+    "assets/aiCoach.worker-C60CQ1Xm.js": "2911a3e0a34aff2f379a4c39914cd5321e83b48fb0c190e04e9813dd9d19559a",
+    "assets/archive-DRbzyrcN.js": "aa0ab808e8e154b2d92f77b90159c09bd84127cce9e7bf239205bff0f2d885aa",
+    "assets/arrow-up-right-CRvWxYe2.js": "82c9a043d805b2e09a226b6cadf4beda1a0be33a69428697c94345b64a356f57",
+    "assets/calendar-days-cuNbkkNs.js": "62f488d61d019c8e6ca1a026688d58f52f691b51bfc309fdaf6d0ec8d453856c",
+    "assets/charts-Bzd-XkHo.js": "2d7b9b31411e27fb1b9b31b24e3ed0884969780d21dbe5da936cf583f3e7f820",
+    "assets/chevron-right-BHoID8yL.js": "562c9b27bed1849b302d8ed2cd52c579651676147de4079f113e30f5220bd428",
+    "assets/circle-check-DOqr1Voc.js": "0e714a8b08e0d9ad6ef9bf369a4563c2ca09adea9cfd9a025f0daf93d2d90c78",
+    "assets/courseEntryCopy-ClIZWujk.js": "5c956cd2c43cf451c4bbe07a796a00e2623cc2d01d9fdad99afc9976c6462d4e",
+    "assets/courses-CKtnra3s.js": "065e50aeb656d6a99eba1fb1ea1091bd330fdf9be272670136d23a158ce49d6b",
+    "assets/de-FmFgRqLi.js": "49751e83c2dabf8a8ead01b84ca4a250f0f305b4845f33a0cd4ffe880e409d63",
+    "assets/es-D_dh5elY.js": "eac1e65c2e0e1c64bacd16a9f3d108852a3d1da14522408a183162437b5f13e4",
+    "assets/fr-FmFgRqLi.js": "49751e83c2dabf8a8ead01b84ca4a250f0f305b4845f33a0cd4ffe880e409d63",
+    "assets/genai-DNIGCYRr.js": "8a6e1b7ad484e6f05eb9a1a9c350f45654173834e8a5954adcb6822f390bc2b4",
+    "assets/growth-CtfcX3mW.js": "18302f2287d962e3923bb4a8924f7e79d99b1a95f0bae11a29dc54e4174ecf63",
+    "assets/headphones-QJ_kvQUK.js": "0291ed378fd87806fc63c3e5c010e517825240ea35a55f9679d2e91c2eafa3ca",
+    "assets/index-BMm9S-UO.js": "fdea32eebf4492e73dd3c40dd045456a6cb22e10ef2d522a1c6769b1644782cd",
+    "assets/index-CNCRC1E7.js": "9ed3d214bce32ea3ca0a0b10021605ac2f4dd3ea6e84a12f56c0bf7e2a96482b",
+    "assets/index-C_-vyzrd.js": "9d76b1882d300c92982741e73dc3fee5a002a712ca68df3850e16e52d9176a08",
+    "assets/index-D-7KJ07y.js": "b714c6294083fecd8b7866108b7007264499fa2f17ec5825982ce9571342b4fd",
+    "assets/index-D40Wkdzf.js": "241e5858b17842a57823fb9f194553ddd21d6c198a9ec7a7b3736102401c767d",
+    "assets/index-FLiIpkO9.js": "55471c3c92a52f923756f2f5d7f662da88ed4fc3f6a38106c8119648d6875d9a",
+    "assets/index-eLN6_Gfz.js": "bc91fca31ce3e01a5fe9878a86772aa0565f85f7438fb2b30275ca4374536eeb",
+    "assets/index-ebo91GRy.js": "f44006d33448ca6dd5eca0aa9b7a46980c1e75c126f9d52884303896c16a6884",
+    "assets/it-FmFgRqLi.js": "49751e83c2dabf8a8ead01b84ca4a250f0f305b4845f33a0cd4ffe880e409d63",
+    "assets/lock-keyhole-TaW9wnIV.js": "133acdf12019f29adb55c7d5cb388aea40cecd05ab9bddc03fed40ac650dd1ef",
+    "assets/log-out-EeSdHIiI.js": "61dfeffbf02c310e67ccf6ce0b2ff9d38341a21e1cd5b817a7bfc9ce695d2976",
+    "assets/mail-CoY83Vnk.js": "8922456e4e6a4e9f97f527a617bd943befc616de649188b64381066df36aac3b",
+    "assets/media-2mgEiOLR.js": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a",
+    "assets/moon-BiMvtj7j.js": "4a00b1699bc1f756e4e3abea04481c046c6dd28723e274f962e5ddeaf6069e32",
+    "assets/motion-HNvQpnN_.js": "3b8beefe6f5abed46ca686013afdcd2ea9c013557b337d8e606719a91894be70",
+    "assets/music-D3myNE3c.js": "daf151805c195342098890ba98d92386a19cf081b66bde0f9262959faef75933",
+    "assets/pen-line-BkWFfKEu.js": "afb41a75686b14f698019695c2e4a62a0bfed10eb791cff22779cc9c373f9240",
+    "assets/pencil-Bzqazg94.js": "b03bc983849d278aba6a4bd413d5f4d61c92b2d7599bf4f2337c8553853b159b",
+    "assets/purchases-CSoKtuLe.js": "324ac5e5ef7ee9043c9b05ce053ea8a393b4d439d7c4ad66dd33845fece3b503",
+    "assets/react-5GCfeWye.js": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f",
+    "assets/refresh-cw-8XVwtnOu.js": "d432db743576b3ab583130b36d98bb7d5c112954cf00cb27f398c9fd8f67d2ba",
+    "assets/rewards-BXZG8RH-.js": "b12339488c26c4a3b067d24d7a4888439399ea899b0332e682bafbb4525fd5f3",
+    "assets/rotate-ccw-7IDOz8u5.js": "db707fb57fa212fdcada7886751e6319227b673b371b109a43c763b97183345b",
+    "assets/route-_4pVfWUq.js": "4b011f8083595d513f110a45e2b51a74ca03b80f430ff93c0605ee61dae44ab8",
+    "assets/ru-FmFgRqLi.js": "49751e83c2dabf8a8ead01b84ca4a250f0f305b4845f33a0cd4ffe880e409d63",
+    "assets/search-LUWl1Ogv.js": "4f8e24c02663318947b9668ecaddd047da63aaaf3b0cd53283426d2c31fb7f0c",
+    "assets/share-2-B25rKpPP.js": "6e6d8f2cb2bcdc546ddeee68d83024890277149fb64dc5d6e206e48184052b8a",
+    "assets/shuffle-C85PTLrp.js": "6dd93fa5ee5a8abd8c4b2340da00bd60eefbfce6e3752d5e090701150e13a4d2",
+    "assets/sparkles-DBXiysuH.js": "dbf873007f042740f2bb738c52626be32e16afc17e7305787338792e72781e62",
+    "assets/square-Cacqw3_j.js": "80d144ce9e94017fbde36040a0f702b57903a9f49a1a77147b05cee4ed649e2c",
+    "assets/sun-moon-DJ6B2E5N.js": "8c2fc7f2e89bf7ff5e44dcdb27726b9a0c2103b3afea438a0dce2f40c4c505c0",
+    "assets/supabase--wUpN4Ei.js": "4eabff7c823396ed92c53d7ef1e3048817d69196726a12688e7e62483013d1dd",
+    "assets/support-ClZvKG50.js": "753138fa82bd5a63c26a33338ec9cc17bd85501ca12dd2e44ac9632f9823334a",
+    "assets/timer-D_d6PDAw.js": "f29c1156778550573f9323ac410e08c8543ac74291cbe26d824558ee361ee000",
+    "assets/tr-Bxmf0hre.js": "fdc833e2f7ec386e09186b898a60fc533a8f1d3d1cc174d236a3d6e00d590edf",
+    "assets/trash-2-C0dsWUAF.js": "57805fd13116e636ddaddd19dc464e635c62d711e73a50bc2c79c091a44f74bc",
+    "assets/trending-up-6B_FKVuw.js": "92dcc3f368b4878515d627262595c6ff85281b9691eea1f5c6345cdf5f393cc1",
+    "assets/useCloudState-BPBpiyGr.js": "9bd1faa858f3c0f31205713991319462925e621f54099b49471691bc93d007e0",
+    "assets/user-round-3cT-c7mw.js": "8b90307d5110d466f00cf87984e3b0d4293a693a5a4a9b77f3607af9e9ae31f2",
+    "assets/waves-BofFnbDU.js": "4951633af09e48729d8cfe269dc7edc47f9f3f78bc5ec3ec2f02d94a1d1139d3",
+    "assets/web-BeLBFW2n.js": "1c7b7569c110e652b12f702cc57c4fce8bfcf387824956f135be53c047e5284c",
+    "assets/web-CcCtWgv8.js": "5cfb58e48df7c4dca3dceba72437bb0ec105e644803db1255a9ca6951071e24b",
+    "assets/web-DDaUZorB.js": "37136aeebb58b7501d76687bfe159e966ebbeab252f0142c81693ec428f493cc",
+    "assets/web-Dxpgs0Pb.js": "5ecc16a413a694b9aa03b581c27ae31246beab5fe944e7748437f1e7c4c70043",
+    "assets/web-xZR4B60_.js": "d748d1366d4bdb647b98fbdf49263a03f9583d088012e5da09a22e5435f0b4b7",
+    "assets/wind-BXBmYM0K.js": "6b2455c6f259ff0ae2808657a6e813ac840b992b0dbcbab3039778aad7dcee39"
+  },
+  "assetManifestSHA256": "2ba3d11b087b8678c5c574c0a5437de4cc6a222a6733cc9155061dde2e54523e",
+  "checks": [
+    {
+      "case": "normal-service-worker-first-load-no-mp3",
+      "label": "Normal service-worker-enabled first use requests zero MP3",
+      "serviceWorkers": {
+        "supported": true,
+        "registrations": [
+          {
+            "scope": "http://127.0.0.1:4187/one-decision-away/",
+            "active": "http://127.0.0.1:4187/one-decision-away/sw.js"
+          }
+        ],
+        "controller": "http://127.0.0.1:4187/one-decision-away/sw.js"
+      }
+    },
+    {
+      "case": "start-pause-resume-replay-mute-stop",
+      "label": "Final build first app load requests zero MP3"
+    },
+    {
+      "case": "start-pause-resume-replay-mute-stop",
+      "label": "Start fetches only current and next two cues",
+      "unique": [
+        "gm-relax-00.en-US.v1.mp3",
+        "gm-relax-01.en-US.v1.mp3",
+        "gm-relax-02.en-US.v1.mp3"
+      ],
+      "requestCount": 3
+    },
+    {
+      "case": "start-pause-resume-replay-mute-stop",
+      "label": "Pause stops and disconnects the recorded source"
+    },
+    {
+      "case": "start-pause-resume-replay-mute-stop",
+      "label": "Resume starts from measured playback offset",
+      "offset": 0.3686167800453517,
+      "duration": 6.5
+    },
+    {
+      "case": "start-pause-resume-replay-mute-stop",
+      "label": "Repeat retires the resumed source and restarts the current cue"
+    },
+    {
+      "case": "start-pause-resume-replay-mute-stop",
+      "label": "Keyboard Home sets visible voice volume to zero"
+    },
+    {
+      "case": "start-pause-resume-replay-mute-stop",
+      "label": "Volume zero sets the active real GainNode to zero"
+    },
+    {
+      "case": "start-pause-resume-replay-mute-stop",
+      "label": "Muted repeat creates only a gain-zero recorded source",
+      "source": {
+        "index": 0,
+        "duration": 6.5,
+        "channels": 1,
+        "sampleRate": 44100,
+        "samples": 286650,
+        "decodeMs": 17.700000002980232,
+        "at": 4033.60000000149,
+        "offset": 0,
+        "gainAtStart": 0,
+        "gainIndex": 0,
+        "contextState": "running",
+        "stopped": false,
+        "disconnected": false
+      }
+    },
+    {
+      "case": "start-pause-resume-replay-mute-stop",
+      "label": "Keyboard volume update reaches the active recorded GainNode"
+    },
+    {
+      "case": "start-pause-resume-replay-mute-stop",
+      "label": "End session stops and disconnects all started recorded sources"
+    },
+    {
+      "case": "start-pause-resume-replay-mute-stop",
+      "label": "No late source or fallback utterance after end"
+    },
+    {
+      "case": "preview-stop-during-delayed-load",
+      "label": "Current recording request is held before decode/start"
+    },
+    {
+      "case": "preview-stop-during-delayed-load",
+      "label": "stop: delayed old cue never starts or invokes fallback",
+      "sources": [],
+      "modes": [
+        {
+          "value": "idle",
+          "at": 1041.7999999970198
+        },
+        {
+          "value": "loading",
+          "at": 1109.8999999985099
+        },
+        {
+          "value": "idle",
+          "at": 1190.5999999977648
+        }
+      ]
+    },
+    {
+      "case": "preview-switch-during-delayed-load",
+      "label": "Current recording request is held before decode/start"
+    },
+    {
+      "case": "preview-switch-during-delayed-load",
+      "label": "switch: delayed old cue never starts or invokes fallback",
+      "sources": [
+        {
+          "index": 0,
+          "duration": 9.199977324263038,
+          "channels": 1,
+          "sampleRate": 44100,
+          "samples": 405719,
+          "decodeMs": 19,
+          "at": 1276.300000000745,
+          "offset": 0,
+          "gainAtStart": 1,
+          "gainIndex": 0,
+          "contextState": "running",
+          "stopped": false,
+          "disconnected": false
+        }
+      ],
+      "modes": [
+        {
+          "value": "idle",
+          "at": 1116.3999999985099
+        },
+        {
+          "value": "loading",
+          "at": 1168.5
+        },
+        {
+          "value": "recorded",
+          "at": 1277.699999999255
+        }
+      ]
+    },
+    {
+      "case": "pause-resume-during-delayed-load",
+      "label": "Guided current cue load is pending before Pause"
+    },
+    {
+      "case": "pause-resume-during-delayed-load",
+      "label": "Paused pending load cannot start recorded or device output"
+    },
+    {
+      "case": "pause-resume-during-delayed-load",
+      "label": "Resume retries the pending current cue in the real audio context",
+      "requests": [
+        {
+          "url": "http://127.0.0.1:4187/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+          "at": 1790902802373,
+          "serviceWorker": false
+        },
+        {
+          "url": "http://127.0.0.1:4187/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-01.en-US.v1.mp3",
+          "at": 1790902802374,
+          "serviceWorker": false
+        },
+        {
+          "url": "http://127.0.0.1:4187/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-02.en-US.v1.mp3",
+          "at": 1790902802377,
+          "serviceWorker": false
+        },
+        {
+          "url": "http://127.0.0.1:4187/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+          "at": 1790902804714,
+          "serviceWorker": false
+        }
+      ],
+      "state": {
+        "sources": [
+          {
+            "index": 2,
+            "duration": 6.5,
+            "channels": 1,
+            "sampleRate": 44100,
+            "samples": 286650,
+            "decodeMs": 15.600000001490116,
+            "at": 3529,
+            "offset": 0,
+            "gainAtStart": 1,
+            "gainIndex": 0,
+            "contextState": "running",
+            "stopped": false,
+            "disconnected": false
+          }
+        ],
+        "decodes": [
+          {
+            "index": 0,
+            "duration": 7.449977324263038,
+            "channels": 1,
+            "sampleRate": 44100,
+            "samples": 328544,
+            "decodeMs": 18
+          },
+          {
+            "index": 1,
+            "duration": 7.949977324263038,
+            "channels": 1,
+            "sampleRate": 44100,
+            "samples": 350594,
+            "decodeMs": 20.399999998509884
+          },
+          {
+            "index": 2,
+            "duration": 6.5,
+            "channels": 1,
+            "sampleRate": 44100,
+            "samples": 286650,
+            "decodeMs": 15.600000001490116
+          }
+        ],
+        "speech": [],
+        "events": [
+          {
+            "action": "recorded-start",
+            "at": 3529,
+            "index": 0
+          }
+        ],
+        "modes": [
+          {
+            "value": "idle",
+            "at": 1079.199999999255
+          },
+          {
+            "value": "loading",
+            "at": 3151.39999999851
+          },
+          {
+            "value": "recorded",
+            "at": 3530.60000000149
+          }
+        ],
+        "gains": [
+          1,
+          0.14000000059604645,
+          0.0012986900983378291,
+          0.0010538269998505712,
+          0.000927776622120291,
+          0.0007046693935990334,
+          1,
+          1,
+          0.25,
+          0.25,
+          140,
+          0.03631770610809326,
+          0.023967353627085686,
+          0.016905393451452255,
+          0.01010317262262106,
+          0.005115848034620285,
+          0.27407145500183105,
+          1,
+          0.25,
+          0.25,
+          140
+        ],
+        "speechVoices": []
+      }
+    },
+    {
+      "case": "offline-verified-cache-replay-after-session-switch",
+      "label": "First playback writes verified current-cue bytes to native CacheStorage",
+      "cacheEntries": [
+        {
+          "name": "oda-narration:%2Fone-decision-away%2F:en-US:v1",
+          "url": "http://127.0.0.1:4187/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3"
+        }
+      ]
+    },
+    {
+      "case": "offline-verified-cache-replay-after-session-switch",
+      "label": "Offline replay re-decodes CacheStorage after another session cleared memory, with zero network requests",
+      "before": 2,
+      "after": 2,
+      "decodes": [
+        {
+          "index": 0,
+          "duration": 6.5,
+          "channels": 1,
+          "sampleRate": 44100,
+          "samples": 286650,
+          "decodeMs": 14.300000000745058
+        },
+        {
+          "index": 1,
+          "duration": 6.5,
+          "channels": 1,
+          "sampleRate": 44100,
+          "samples": 286650,
+          "decodeMs": 17.700000002980232
+        }
+      ]
+    },
+    {
+      "case": "missing-file-no-english-fixture",
+      "label": "Missing MP3 admits only the requested strict English device fallback",
+      "state": {
+        "sources": [],
+        "decodes": [],
+        "speech": [],
+        "events": [],
+        "modes": [
+          {
+            "value": "idle",
+            "at": 1168.199999999255
+          },
+          {
+            "value": "loading",
+            "at": 1235.5999999977648
+          },
+          {
+            "value": "unavailable",
+            "at": 1276.5999999977648
+          }
+        ],
+        "gains": [
+          1
+        ],
+        "speechVoices": [
+          {
+            "lang": "tr-TR",
+            "name": "QA Turkish fixture"
+          }
+        ]
+      }
+    },
+    {
+      "case": "missing-file-no-english-fixture",
+      "label": "No English fixture leaves explicit localized unavailable caption"
+    },
+    {
+      "case": "missing-file-english-device-fixture",
+      "label": "Missing MP3 admits only the requested strict English device fallback",
+      "state": {
+        "sources": [],
+        "decodes": [],
+        "speech": [
+          {
+            "text": "Welcome. Find a comfortable position, and let your eyes gently close.",
+            "lang": "en-US",
+            "voiceLang": "en-US",
+            "voiceName": "QA English fixture",
+            "volume": 1
+          }
+        ],
+        "events": [],
+        "modes": [
+          {
+            "value": "idle",
+            "at": 1135.7000000029802
+          },
+          {
+            "value": "loading",
+            "at": 1202
+          },
+          {
+            "value": "device",
+            "at": 1212.4000000022352
+          }
+        ],
+        "gains": [
+          1
+        ],
+        "speechVoices": [
+          {
+            "lang": "tr-TR",
+            "name": "QA Turkish fixture"
+          },
+          {
+            "lang": "en-US",
+            "name": "QA English fixture"
+          }
+        ]
+      }
+    },
+    {
+      "case": "missing-file-english-device-fixture",
+      "label": "Fallback preserves English source text despite Turkish display locale",
+      "utterance": {
+        "text": "Welcome. Find a comfortable position, and let your eyes gently close.",
+        "lang": "en-US",
+        "voiceLang": "en-US",
+        "voiceName": "QA English fixture",
+        "volume": 1
+      }
+    },
+    {
+      "case": "notebook-en-device-locale-preserved",
+      "label": "Notebook words remain verbatim in the display-locale device voice with zero MP3",
+      "utterance": {
+        "text": "I keep one small promise each day.",
+        "lang": "en-US",
+        "voiceLang": "en-US",
+        "voiceName": "QA English fixture",
+        "volume": 1
+      }
+    },
+    {
+      "case": "notebook-tr-device-locale-preserved",
+      "label": "Notebook words remain verbatim in the display-locale device voice with zero MP3",
+      "utterance": {
+        "text": "Kendime verdiğim sözü tutuyorum.",
+        "lang": "tr-TR",
+        "voiceLang": "tr-TR",
+        "voiceName": "QA Turkish fixture",
+        "volume": 1
+      }
+    },
+    {
+      "case": "notebook-es-device-locale-preserved",
+      "label": "Notebook words remain verbatim in the display-locale device voice with zero MP3",
+      "utterance": {
+        "text": "Cumplo una promesa pequeña cada día.",
+        "lang": "es-ES",
+        "voiceLang": "es-ES",
+        "voiceName": "QA Spanish fixture",
+        "volume": 1
+      }
+    },
+    {
+      "case": "final-layout-en-320",
+      "label": "Final guidance list retains localized fit and no MP3 preload",
+      "width": 320,
+      "scroll": 320,
+      "lang": "en",
+      "rows": 11
+    },
+    {
+      "case": "final-layout-en-390",
+      "label": "Final guidance list retains localized fit and no MP3 preload",
+      "width": 390,
+      "scroll": 390,
+      "lang": "en",
+      "rows": 11
+    },
+    {
+      "case": "final-layout-en-1440",
+      "label": "Final guidance list retains localized fit and no MP3 preload",
+      "width": 1440,
+      "scroll": 1440,
+      "lang": "en",
+      "rows": 11
+    },
+    {
+      "case": "final-layout-tr-320",
+      "label": "Final guidance list retains localized fit and no MP3 preload",
+      "width": 320,
+      "scroll": 320,
+      "lang": "tr",
+      "rows": 11
+    },
+    {
+      "case": "final-layout-tr-390",
+      "label": "Final guidance list retains localized fit and no MP3 preload",
+      "width": 390,
+      "scroll": 390,
+      "lang": "tr",
+      "rows": 11
+    },
+    {
+      "case": "final-layout-es-320",
+      "label": "Final guidance list retains localized fit and no MP3 preload",
+      "width": 320,
+      "scroll": 320,
+      "lang": "es",
+      "rows": 11
+    },
+    {
+      "case": "final-layout-es-390",
+      "label": "Final guidance list retains localized fit and no MP3 preload",
+      "width": 390,
+      "scroll": 390,
+      "lang": "es",
+      "rows": 11
+    }
+  ],
+  "failures": [],
+  "errors": [],
+  "blockedRequests": [],
+  "cases": [
+    {
+      "name": "normal-service-worker-first-load-no-mp3",
+      "passed": true,
+      "elapsedMs": 2521,
+      "evidence": {
+        "requests": [],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/index-eLN6_Gfz.js",
+            "status": 200,
+            "sha256": "bc91fca31ce3e01a5fe9878a86772aa0565f85f7438fb2b30275ca4374536eeb"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/Focus-FveWw4av.js",
+            "status": 200,
+            "sha256": "8d98ddd712964a89f51f42acc8e558d5fb8beb7cc472ef6f6e0e3934e7b8a2e7"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/FocusTimerHub-CbZoPsqf.js",
+            "status": 200,
+            "sha256": "6532bbcb530da12e337e9e826477f4313961fe1c75b65cec566a0005f551bbf5"
+          }
+        ],
+        "pageErrors": [],
+        "serviceWorkers": {
+          "supported": true,
+          "registrations": [
+            {
+              "scope": "http://127.0.0.1:4187/one-decision-away/",
+              "active": "http://127.0.0.1:4187/one-decision-away/sw.js"
+            }
+          ],
+          "controller": "http://127.0.0.1:4187/one-decision-away/sw.js"
+        },
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [],
+          "events": [],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 813.1000000014901
+            }
+          ],
+          "gains": [],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "start-pause-resume-replay-mute-stop",
+      "passed": true,
+      "elapsedMs": 4663,
+      "evidence": {
+        "requests": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+            "at": 1790902794043,
+            "serviceWorker": false
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-01.en-US.v1.mp3",
+            "at": 1790902794043,
+            "serviceWorker": false
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-02.en-US.v1.mp3",
+            "at": 1790902794043,
+            "serviceWorker": false
+          }
+        ],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/index-eLN6_Gfz.js",
+            "status": 200,
+            "sha256": "bc91fca31ce3e01a5fe9878a86772aa0565f85f7438fb2b30275ca4374536eeb"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/Focus-FveWw4av.js",
+            "status": 200,
+            "sha256": "8d98ddd712964a89f51f42acc8e558d5fb8beb7cc472ef6f6e0e3934e7b8a2e7"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/FocusTimerHub-CbZoPsqf.js",
+            "status": 200,
+            "sha256": "6532bbcb530da12e337e9e826477f4313961fe1c75b65cec566a0005f551bbf5"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [
+            {
+              "index": 0,
+              "duration": 6.5,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 286650,
+              "decodeMs": 17.700000002980232,
+              "at": 3194.800000000745,
+              "offset": 0,
+              "gainAtStart": 1,
+              "gainIndex": 0,
+              "contextState": "running",
+              "stopped": true,
+              "disconnected": true,
+              "stoppedAt": 3561.60000000149
+            },
+            {
+              "index": 0,
+              "duration": 6.5,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 286650,
+              "decodeMs": 17.700000002980232,
+              "at": 3818,
+              "offset": 0.3686167800453517,
+              "gainAtStart": 1,
+              "gainIndex": 0,
+              "contextState": "running",
+              "stopped": true,
+              "disconnected": true,
+              "stoppedAt": 3931
+            },
+            {
+              "index": 0,
+              "duration": 6.5,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 286650,
+              "decodeMs": 17.700000002980232,
+              "at": 3933.699999999255,
+              "offset": 0,
+              "gainAtStart": 1,
+              "gainIndex": 0,
+              "contextState": "running",
+              "stopped": true,
+              "disconnected": true,
+              "stoppedAt": 4032.199999999255
+            },
+            {
+              "index": 0,
+              "duration": 6.5,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 286650,
+              "decodeMs": 17.700000002980232,
+              "at": 4033.60000000149,
+              "offset": 0,
+              "gainAtStart": 0,
+              "gainIndex": 0,
+              "contextState": "running",
+              "stopped": true,
+              "disconnected": true,
+              "stoppedAt": 4183.300000000745
+            }
+          ],
+          "decodes": [
+            {
+              "index": 0,
+              "duration": 6.5,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 286650,
+              "decodeMs": 17.700000002980232
+            },
+            {
+              "index": 1,
+              "duration": 7.449977324263038,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 328544,
+              "decodeMs": 18
+            },
+            {
+              "index": 2,
+              "duration": 7.949977324263038,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 350594,
+              "decodeMs": 27.5
+            }
+          ],
+          "speech": [],
+          "events": [
+            {
+              "action": "recorded-start",
+              "at": 3194.800000000745,
+              "index": 0
+            },
+            {
+              "action": "recorded-stop",
+              "at": 3561.60000000149
+            },
+            {
+              "action": "recorded-start",
+              "at": 3818,
+              "index": 1
+            },
+            {
+              "action": "recorded-stop",
+              "at": 3931
+            },
+            {
+              "action": "recorded-start",
+              "at": 3933.699999999255,
+              "index": 2
+            },
+            {
+              "action": "recorded-stop",
+              "at": 4032.199999999255
+            },
+            {
+              "action": "recorded-start",
+              "at": 4033.60000000149,
+              "index": 3
+            },
+            {
+              "action": "recorded-stop",
+              "at": 4183.300000000745
+            }
+          ],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1051.300000000745
+            },
+            {
+              "value": "recorded",
+              "at": 3197.699999999255
+            },
+            {
+              "value": "loading",
+              "at": 3933.60000000149
+            },
+            {
+              "value": "recorded",
+              "at": 3934.60000000149
+            },
+            {
+              "value": "loading",
+              "at": 4033.300000000745
+            },
+            {
+              "value": "recorded",
+              "at": 4034.199999999255
+            },
+            {
+              "value": "idle",
+              "at": 4186
+            }
+          ],
+          "gains": [
+            0.05000000074505806,
+            0.14000000059604645,
+            0.0001327545178355649,
+            0.00012972460535820574,
+            0.00012791118933819234,
+            0.00012408167822286487,
+            1,
+            1,
+            0.25,
+            0.25,
+            140,
+            0.025844553485512733,
+            0.01746978797018528,
+            0.012573079206049442,
+            0.007740636356174946,
+            0.00407654931768775,
+            1,
+            1,
+            0.25,
+            0.25,
+            140,
+            0.2557902932167053,
+            0.1471007913351059,
+            0.09243162721395493,
+            0.04658222943544388,
+            0.01882842741906643
+          ],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "preview-stop-during-delayed-load",
+      "passed": true,
+      "elapsedMs": 1741,
+      "evidence": {
+        "requests": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+            "at": 1790902798601,
+            "serviceWorker": false
+          }
+        ],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/index-eLN6_Gfz.js",
+            "status": 200,
+            "sha256": "bc91fca31ce3e01a5fe9878a86772aa0565f85f7438fb2b30275ca4374536eeb"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/Focus-FveWw4av.js",
+            "status": 200,
+            "sha256": "8d98ddd712964a89f51f42acc8e558d5fb8beb7cc472ef6f6e0e3934e7b8a2e7"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/FocusTimerHub-CbZoPsqf.js",
+            "status": 200,
+            "sha256": "6532bbcb530da12e337e9e826477f4313961fe1c75b65cec566a0005f551bbf5"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [],
+          "events": [],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1041.7999999970198
+            },
+            {
+              "value": "loading",
+              "at": 1109.8999999985099
+            },
+            {
+              "value": "idle",
+              "at": 1190.5999999977648
+            }
+          ],
+          "gains": [
+            1
+          ],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "preview-switch-during-delayed-load",
+      "passed": true,
+      "elapsedMs": 1922,
+      "evidence": {
+        "requests": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+            "at": 1790902800435,
+            "serviceWorker": false
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-dopamine-00.en-US.v1.mp3",
+            "at": 1790902800500,
+            "serviceWorker": false
+          }
+        ],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/index-eLN6_Gfz.js",
+            "status": 200,
+            "sha256": "bc91fca31ce3e01a5fe9878a86772aa0565f85f7438fb2b30275ca4374536eeb"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/Focus-FveWw4av.js",
+            "status": 200,
+            "sha256": "8d98ddd712964a89f51f42acc8e558d5fb8beb7cc472ef6f6e0e3934e7b8a2e7"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/FocusTimerHub-CbZoPsqf.js",
+            "status": 200,
+            "sha256": "6532bbcb530da12e337e9e826477f4313961fe1c75b65cec566a0005f551bbf5"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [
+            {
+              "index": 0,
+              "duration": 9.199977324263038,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 405719,
+              "decodeMs": 19,
+              "at": 1276.300000000745,
+              "offset": 0,
+              "gainAtStart": 1,
+              "gainIndex": 0,
+              "contextState": "running",
+              "stopped": true,
+              "disconnected": true,
+              "stoppedAt": 1797.5999999977648
+            }
+          ],
+          "decodes": [
+            {
+              "index": 0,
+              "duration": 9.199977324263038,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 405719,
+              "decodeMs": 19
+            }
+          ],
+          "speech": [],
+          "events": [
+            {
+              "action": "recorded-start",
+              "at": 1276.300000000745,
+              "index": 0
+            },
+            {
+              "action": "recorded-stop",
+              "at": 1797.5999999977648
+            }
+          ],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1116.3999999985099
+            },
+            {
+              "value": "loading",
+              "at": 1168.5
+            },
+            {
+              "value": "recorded",
+              "at": 1277.699999999255
+            },
+            {
+              "value": "idle",
+              "at": 1798.8999999985099
+            }
+          ],
+          "gains": [
+            1
+          ],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "pause-resume-during-delayed-load",
+      "passed": true,
+      "elapsedMs": 3773,
+      "evidence": {
+        "requests": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+            "at": 1790902802373,
+            "serviceWorker": false
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-01.en-US.v1.mp3",
+            "at": 1790902802374,
+            "serviceWorker": false
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-02.en-US.v1.mp3",
+            "at": 1790902802377,
+            "serviceWorker": false
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+            "at": 1790902804714,
+            "serviceWorker": false
+          }
+        ],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/index-eLN6_Gfz.js",
+            "status": 200,
+            "sha256": "bc91fca31ce3e01a5fe9878a86772aa0565f85f7438fb2b30275ca4374536eeb"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/Focus-FveWw4av.js",
+            "status": 200,
+            "sha256": "8d98ddd712964a89f51f42acc8e558d5fb8beb7cc472ef6f6e0e3934e7b8a2e7"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/FocusTimerHub-CbZoPsqf.js",
+            "status": 200,
+            "sha256": "6532bbcb530da12e337e9e826477f4313961fe1c75b65cec566a0005f551bbf5"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [
+            {
+              "index": 2,
+              "duration": 6.5,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 286650,
+              "decodeMs": 15.600000001490116,
+              "at": 3529,
+              "offset": 0,
+              "gainAtStart": 1,
+              "gainIndex": 0,
+              "contextState": "running",
+              "stopped": true,
+              "disconnected": true,
+              "stoppedAt": 3631.300000000745
+            }
+          ],
+          "decodes": [
+            {
+              "index": 0,
+              "duration": 7.449977324263038,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 328544,
+              "decodeMs": 18
+            },
+            {
+              "index": 1,
+              "duration": 7.949977324263038,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 350594,
+              "decodeMs": 20.399999998509884
+            },
+            {
+              "index": 2,
+              "duration": 6.5,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 286650,
+              "decodeMs": 15.600000001490116
+            }
+          ],
+          "speech": [],
+          "events": [
+            {
+              "action": "recorded-start",
+              "at": 3529,
+              "index": 0
+            },
+            {
+              "action": "recorded-stop",
+              "at": 3631.300000000745
+            }
+          ],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1079.199999999255
+            },
+            {
+              "value": "loading",
+              "at": 3151.39999999851
+            },
+            {
+              "value": "recorded",
+              "at": 3530.60000000149
+            },
+            {
+              "value": "idle",
+              "at": 3635
+            }
+          ],
+          "gains": [
+            1,
+            0.14000000059604645,
+            0.0010042041540145874,
+            0.0008321211207658052,
+            0.00074201007373631,
+            0.0005793397431261837,
+            1,
+            1,
+            0.25,
+            0.25,
+            140,
+            0.03631770610809326,
+            0.023967353627085686,
+            0.016905393451452255,
+            0.01010317262262106,
+            0.005115848034620285,
+            0.7738946080207825,
+            1,
+            0.25,
+            0.25,
+            140
+          ],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "offline-verified-cache-replay-after-session-switch",
+      "passed": true,
+      "elapsedMs": 1800,
+      "evidence": {
+        "requests": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+            "at": 1790902806192,
+            "serviceWorker": false
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-dopamine-00.en-US.v1.mp3",
+            "at": 1790902806335,
+            "serviceWorker": false
+          }
+        ],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/index-eLN6_Gfz.js",
+            "status": 200,
+            "sha256": "bc91fca31ce3e01a5fe9878a86772aa0565f85f7438fb2b30275ca4374536eeb"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/Focus-FveWw4av.js",
+            "status": 200,
+            "sha256": "8d98ddd712964a89f51f42acc8e558d5fb8beb7cc472ef6f6e0e3934e7b8a2e7"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/FocusTimerHub-CbZoPsqf.js",
+            "status": 200,
+            "sha256": "6532bbcb530da12e337e9e826477f4313961fe1c75b65cec566a0005f551bbf5"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [
+            {
+              "index": 0,
+              "duration": 6.5,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 286650,
+              "decodeMs": 14.300000000745058,
+              "at": 1225,
+              "offset": 0,
+              "gainAtStart": 1,
+              "gainIndex": 0,
+              "contextState": "running",
+              "stopped": true,
+              "disconnected": true,
+              "stoppedAt": 1274
+            },
+            {
+              "index": 1,
+              "duration": 6.5,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 286650,
+              "decodeMs": 17.700000002980232,
+              "at": 1408.800000000745,
+              "offset": 0,
+              "gainAtStart": 1,
+              "gainIndex": 0,
+              "contextState": "running",
+              "stopped": true,
+              "disconnected": true,
+              "stoppedAt": 1643.5
+            }
+          ],
+          "decodes": [
+            {
+              "index": 0,
+              "duration": 6.5,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 286650,
+              "decodeMs": 14.300000000745058
+            },
+            {
+              "index": 1,
+              "duration": 6.5,
+              "channels": 1,
+              "sampleRate": 44100,
+              "samples": 286650,
+              "decodeMs": 17.700000002980232
+            }
+          ],
+          "speech": [],
+          "events": [
+            {
+              "action": "recorded-start",
+              "at": 1225,
+              "index": 0
+            },
+            {
+              "action": "recorded-stop",
+              "at": 1274
+            },
+            {
+              "action": "recorded-start",
+              "at": 1408.800000000745,
+              "index": 1
+            },
+            {
+              "action": "recorded-stop",
+              "at": 1643.5
+            }
+          ],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1098.4000000022352
+            },
+            {
+              "value": "loading",
+              "at": 1170
+            },
+            {
+              "value": "recorded",
+              "at": 1226.699999999255
+            },
+            {
+              "value": "idle",
+              "at": 1275.4000000022352
+            },
+            {
+              "value": "loading",
+              "at": 1310.699999999255
+            },
+            {
+              "value": "unavailable",
+              "at": 1330.800000000745
+            },
+            {
+              "value": "loading",
+              "at": 1381.6000000014901
+            },
+            {
+              "value": "recorded",
+              "at": 1411.6000000014901
+            },
+            {
+              "value": "idle",
+              "at": 1644.9000000022352
+            }
+          ],
+          "gains": [
+            1
+          ],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "missing-file-no-english-fixture",
+      "passed": true,
+      "elapsedMs": 1605,
+      "evidence": {
+        "requests": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+            "at": 1790902808122,
+            "serviceWorker": false
+          }
+        ],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/index-eLN6_Gfz.js",
+            "status": 200,
+            "sha256": "bc91fca31ce3e01a5fe9878a86772aa0565f85f7438fb2b30275ca4374536eeb"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/tr-Bxmf0hre.js",
+            "status": 200,
+            "sha256": "fdc833e2f7ec386e09186b898a60fc533a8f1d3d1cc174d236a3d6e00d590edf"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/Focus-FveWw4av.js",
+            "status": 200,
+            "sha256": "8d98ddd712964a89f51f42acc8e558d5fb8beb7cc472ef6f6e0e3934e7b8a2e7"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/FocusTimerHub-CbZoPsqf.js",
+            "status": 200,
+            "sha256": "6532bbcb530da12e337e9e826477f4313961fe1c75b65cec566a0005f551bbf5"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [],
+          "events": [],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1168.199999999255
+            },
+            {
+              "value": "loading",
+              "at": 1235.5999999977648
+            },
+            {
+              "value": "unavailable",
+              "at": 1276.5999999977648
+            }
+          ],
+          "gains": [
+            1
+          ],
+          "speechVoices": [
+            {
+              "lang": "tr-TR",
+              "name": "QA Turkish fixture"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "missing-file-english-device-fixture",
+      "passed": true,
+      "elapsedMs": 1566,
+      "evidence": {
+        "requests": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+            "at": 1790902809647,
+            "serviceWorker": false
+          }
+        ],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/index-eLN6_Gfz.js",
+            "status": 200,
+            "sha256": "bc91fca31ce3e01a5fe9878a86772aa0565f85f7438fb2b30275ca4374536eeb"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/tr-Bxmf0hre.js",
+            "status": 200,
+            "sha256": "fdc833e2f7ec386e09186b898a60fc533a8f1d3d1cc174d236a3d6e00d590edf"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/Focus-FveWw4av.js",
+            "status": 200,
+            "sha256": "8d98ddd712964a89f51f42acc8e558d5fb8beb7cc472ef6f6e0e3934e7b8a2e7"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/FocusTimerHub-CbZoPsqf.js",
+            "status": 200,
+            "sha256": "6532bbcb530da12e337e9e826477f4313961fe1c75b65cec566a0005f551bbf5"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [
+            {
+              "text": "Welcome. Find a comfortable position, and let your eyes gently close.",
+              "lang": "en-US",
+              "voiceLang": "en-US",
+              "voiceName": "QA English fixture",
+              "volume": 1
+            }
+          ],
+          "events": [],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1135.7000000029802
+            },
+            {
+              "value": "loading",
+              "at": 1202
+            },
+            {
+              "value": "device",
+              "at": 1212.4000000022352
+            }
+          ],
+          "gains": [
+            1
+          ],
+          "speechVoices": [
+            {
+              "lang": "tr-TR",
+              "name": "QA Turkish fixture"
+            },
+            {
+              "lang": "en-US",
+              "name": "QA English fixture"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "notebook-en-device-locale-preserved",
+      "passed": true,
+      "elapsedMs": 1346,
+      "evidence": {
+        "requests": [],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/index-eLN6_Gfz.js",
+            "status": 200,
+            "sha256": "bc91fca31ce3e01a5fe9878a86772aa0565f85f7438fb2b30275ca4374536eeb"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/Notebook-hayaBYgC.js",
+            "status": 200,
+            "sha256": "0c27c121781695f78c04140b9e68aa5b4aa06bf9b7eff63365551cf91815301b"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/chevron-right-BHoID8yL.js",
+            "status": 200,
+            "sha256": "562c9b27bed1849b302d8ed2cd52c579651676147de4079f113e30f5220bd428"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/trash-2-C0dsWUAF.js",
+            "status": 200,
+            "sha256": "57805fd13116e636ddaddd19dc464e635c62d711e73a50bc2c79c091a44f74bc"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/pen-line-BkWFfKEu.js",
+            "status": 200,
+            "sha256": "afb41a75686b14f698019695c2e4a62a0bfed10eb791cff22779cc9c373f9240"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/calendar-days-cuNbkkNs.js",
+            "status": 200,
+            "sha256": "62f488d61d019c8e6ca1a026688d58f52f691b51bfc309fdaf6d0ec8d453856c"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/arrow-up-right-CRvWxYe2.js",
+            "status": 200,
+            "sha256": "82c9a043d805b2e09a226b6cadf4beda1a0be33a69428697c94345b64a356f57"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/search-LUWl1Ogv.js",
+            "status": 200,
+            "sha256": "4f8e24c02663318947b9668ecaddd047da63aaaf3b0cd53283426d2c31fb7f0c"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/archive-DRbzyrcN.js",
+            "status": 200,
+            "sha256": "aa0ab808e8e154b2d92f77b90159c09bd84127cce9e7bf239205bff0f2d885aa"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/square-Cacqw3_j.js",
+            "status": 200,
+            "sha256": "80d144ce9e94017fbde36040a0f702b57903a9f49a1a77147b05cee4ed649e2c"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/mail-CoY83Vnk.js",
+            "status": 200,
+            "sha256": "8922456e4e6a4e9f97f527a617bd943befc616de649188b64381066df36aac3b"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/pencil-Bzqazg94.js",
+            "status": 200,
+            "sha256": "b03bc983849d278aba6a4bd413d5f4d61c92b2d7599bf4f2337c8553853b159b"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/headphones-QJ_kvQUK.js",
+            "status": 200,
+            "sha256": "0291ed378fd87806fc63c3e5c010e517825240ea35a55f9679d2e91c2eafa3ca"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/moon-BiMvtj7j.js",
+            "status": 200,
+            "sha256": "4a00b1699bc1f756e4e3abea04481c046c6dd28723e274f962e5ddeaf6069e32"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [
+            {
+              "text": "I keep one small promise each day.",
+              "lang": "en-US",
+              "voiceLang": "en-US",
+              "voiceName": "QA English fixture",
+              "volume": 1
+            }
+          ],
+          "events": [],
+          "modes": [],
+          "gains": [],
+          "speechVoices": [
+            {
+              "lang": "en-US",
+              "name": "QA English fixture"
+            },
+            {
+              "lang": "tr-TR",
+              "name": "QA Turkish fixture"
+            },
+            {
+              "lang": "es-ES",
+              "name": "QA Spanish fixture"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "notebook-tr-device-locale-preserved",
+      "passed": true,
+      "elapsedMs": 1370,
+      "evidence": {
+        "requests": [],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/index-eLN6_Gfz.js",
+            "status": 200,
+            "sha256": "bc91fca31ce3e01a5fe9878a86772aa0565f85f7438fb2b30275ca4374536eeb"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/tr-Bxmf0hre.js",
+            "status": 200,
+            "sha256": "fdc833e2f7ec386e09186b898a60fc533a8f1d3d1cc174d236a3d6e00d590edf"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/chevron-right-BHoID8yL.js",
+            "status": 200,
+            "sha256": "562c9b27bed1849b302d8ed2cd52c579651676147de4079f113e30f5220bd428"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/pen-line-BkWFfKEu.js",
+            "status": 200,
+            "sha256": "afb41a75686b14f698019695c2e4a62a0bfed10eb791cff22779cc9c373f9240"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/trash-2-C0dsWUAF.js",
+            "status": 200,
+            "sha256": "57805fd13116e636ddaddd19dc464e635c62d711e73a50bc2c79c091a44f74bc"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/calendar-days-cuNbkkNs.js",
+            "status": 200,
+            "sha256": "62f488d61d019c8e6ca1a026688d58f52f691b51bfc309fdaf6d0ec8d453856c"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/Notebook-hayaBYgC.js",
+            "status": 200,
+            "sha256": "0c27c121781695f78c04140b9e68aa5b4aa06bf9b7eff63365551cf91815301b"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/search-LUWl1Ogv.js",
+            "status": 200,
+            "sha256": "4f8e24c02663318947b9668ecaddd047da63aaaf3b0cd53283426d2c31fb7f0c"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/arrow-up-right-CRvWxYe2.js",
+            "status": 200,
+            "sha256": "82c9a043d805b2e09a226b6cadf4beda1a0be33a69428697c94345b64a356f57"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/moon-BiMvtj7j.js",
+            "status": 200,
+            "sha256": "4a00b1699bc1f756e4e3abea04481c046c6dd28723e274f962e5ddeaf6069e32"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/archive-DRbzyrcN.js",
+            "status": 200,
+            "sha256": "aa0ab808e8e154b2d92f77b90159c09bd84127cce9e7bf239205bff0f2d885aa"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/square-Cacqw3_j.js",
+            "status": 200,
+            "sha256": "80d144ce9e94017fbde36040a0f702b57903a9f49a1a77147b05cee4ed649e2c"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/headphones-QJ_kvQUK.js",
+            "status": 200,
+            "sha256": "0291ed378fd87806fc63c3e5c010e517825240ea35a55f9679d2e91c2eafa3ca"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/pencil-Bzqazg94.js",
+            "status": 200,
+            "sha256": "b03bc983849d278aba6a4bd413d5f4d61c92b2d7599bf4f2337c8553853b159b"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/mail-CoY83Vnk.js",
+            "status": 200,
+            "sha256": "8922456e4e6a4e9f97f527a617bd943befc616de649188b64381066df36aac3b"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [
+            {
+              "text": "Kendime verdiğim sözü tutuyorum.",
+              "lang": "tr-TR",
+              "voiceLang": "tr-TR",
+              "voiceName": "QA Turkish fixture",
+              "volume": 1
+            }
+          ],
+          "events": [],
+          "modes": [],
+          "gains": [],
+          "speechVoices": [
+            {
+              "lang": "en-US",
+              "name": "QA English fixture"
+            },
+            {
+              "lang": "tr-TR",
+              "name": "QA Turkish fixture"
+            },
+            {
+              "lang": "es-ES",
+              "name": "QA Spanish fixture"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "notebook-es-device-locale-preserved",
+      "passed": true,
+      "elapsedMs": 1444,
+      "evidence": {
+        "requests": [],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/index-eLN6_Gfz.js",
+            "status": 200,
+            "sha256": "bc91fca31ce3e01a5fe9878a86772aa0565f85f7438fb2b30275ca4374536eeb"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/es-D_dh5elY.js",
+            "status": 200,
+            "sha256": "eac1e65c2e0e1c64bacd16a9f3d108852a3d1da14522408a183162437b5f13e4"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/chevron-right-BHoID8yL.js",
+            "status": 200,
+            "sha256": "562c9b27bed1849b302d8ed2cd52c579651676147de4079f113e30f5220bd428"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/pen-line-BkWFfKEu.js",
+            "status": 200,
+            "sha256": "afb41a75686b14f698019695c2e4a62a0bfed10eb791cff22779cc9c373f9240"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/trash-2-C0dsWUAF.js",
+            "status": 200,
+            "sha256": "57805fd13116e636ddaddd19dc464e635c62d711e73a50bc2c79c091a44f74bc"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/calendar-days-cuNbkkNs.js",
+            "status": 200,
+            "sha256": "62f488d61d019c8e6ca1a026688d58f52f691b51bfc309fdaf6d0ec8d453856c"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/Notebook-hayaBYgC.js",
+            "status": 200,
+            "sha256": "0c27c121781695f78c04140b9e68aa5b4aa06bf9b7eff63365551cf91815301b"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/moon-BiMvtj7j.js",
+            "status": 200,
+            "sha256": "4a00b1699bc1f756e4e3abea04481c046c6dd28723e274f962e5ddeaf6069e32"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/archive-DRbzyrcN.js",
+            "status": 200,
+            "sha256": "aa0ab808e8e154b2d92f77b90159c09bd84127cce9e7bf239205bff0f2d885aa"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/square-Cacqw3_j.js",
+            "status": 200,
+            "sha256": "80d144ce9e94017fbde36040a0f702b57903a9f49a1a77147b05cee4ed649e2c"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/headphones-QJ_kvQUK.js",
+            "status": 200,
+            "sha256": "0291ed378fd87806fc63c3e5c010e517825240ea35a55f9679d2e91c2eafa3ca"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/search-LUWl1Ogv.js",
+            "status": 200,
+            "sha256": "4f8e24c02663318947b9668ecaddd047da63aaaf3b0cd53283426d2c31fb7f0c"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/arrow-up-right-CRvWxYe2.js",
+            "status": 200,
+            "sha256": "82c9a043d805b2e09a226b6cadf4beda1a0be33a69428697c94345b64a356f57"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/pencil-Bzqazg94.js",
+            "status": 200,
+            "sha256": "b03bc983849d278aba6a4bd413d5f4d61c92b2d7599bf4f2337c8553853b159b"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/mail-CoY83Vnk.js",
+            "status": 200,
+            "sha256": "8922456e4e6a4e9f97f527a617bd943befc616de649188b64381066df36aac3b"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [
+            {
+              "text": "Cumplo una promesa pequeña cada día.",
+              "lang": "es-ES",
+              "voiceLang": "es-ES",
+              "voiceName": "QA Spanish fixture",
+              "volume": 1
+            }
+          ],
+          "events": [],
+          "modes": [],
+          "gains": [],
+          "speechVoices": [
+            {
+              "lang": "en-US",
+              "name": "QA English fixture"
+            },
+            {
+              "lang": "tr-TR",
+              "name": "QA Turkish fixture"
+            },
+            {
+              "lang": "es-ES",
+              "name": "QA Spanish fixture"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "final-layout-en-320",
+      "passed": true,
+      "elapsedMs": 1269,
+      "evidence": {
+        "requests": [],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/index-eLN6_Gfz.js",
+            "status": 200,
+            "sha256": "bc91fca31ce3e01a5fe9878a86772aa0565f85f7438fb2b30275ca4374536eeb"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/Focus-FveWw4av.js",
+            "status": 200,
+            "sha256": "8d98ddd712964a89f51f42acc8e558d5fb8beb7cc472ef6f6e0e3934e7b8a2e7"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/FocusTimerHub-CbZoPsqf.js",
+            "status": 200,
+            "sha256": "6532bbcb530da12e337e9e826477f4313961fe1c75b65cec566a0005f551bbf5"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [],
+          "events": [],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1078.3999999985099
+            }
+          ],
+          "gains": [],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "final-layout-en-390",
+      "passed": true,
+      "elapsedMs": 1293,
+      "evidence": {
+        "requests": [],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/index-eLN6_Gfz.js",
+            "status": 200,
+            "sha256": "bc91fca31ce3e01a5fe9878a86772aa0565f85f7438fb2b30275ca4374536eeb"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/Focus-FveWw4av.js",
+            "status": 200,
+            "sha256": "8d98ddd712964a89f51f42acc8e558d5fb8beb7cc472ef6f6e0e3934e7b8a2e7"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/FocusTimerHub-CbZoPsqf.js",
+            "status": 200,
+            "sha256": "6532bbcb530da12e337e9e826477f4313961fe1c75b65cec566a0005f551bbf5"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [],
+          "events": [],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1059.300000000745
+            }
+          ],
+          "gains": [],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "final-layout-en-1440",
+      "passed": true,
+      "elapsedMs": 1268,
+      "evidence": {
+        "requests": [],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/index-eLN6_Gfz.js",
+            "status": 200,
+            "sha256": "bc91fca31ce3e01a5fe9878a86772aa0565f85f7438fb2b30275ca4374536eeb"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/Focus-FveWw4av.js",
+            "status": 200,
+            "sha256": "8d98ddd712964a89f51f42acc8e558d5fb8beb7cc472ef6f6e0e3934e7b8a2e7"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/FocusTimerHub-CbZoPsqf.js",
+            "status": 200,
+            "sha256": "6532bbcb530da12e337e9e826477f4313961fe1c75b65cec566a0005f551bbf5"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [],
+          "events": [],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1008.2999999970198
+            }
+          ],
+          "gains": [],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "final-layout-tr-320",
+      "passed": true,
+      "elapsedMs": 1260,
+      "evidence": {
+        "requests": [],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/index-eLN6_Gfz.js",
+            "status": 200,
+            "sha256": "bc91fca31ce3e01a5fe9878a86772aa0565f85f7438fb2b30275ca4374536eeb"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/tr-Bxmf0hre.js",
+            "status": 200,
+            "sha256": "fdc833e2f7ec386e09186b898a60fc533a8f1d3d1cc174d236a3d6e00d590edf"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/Focus-FveWw4av.js",
+            "status": 200,
+            "sha256": "8d98ddd712964a89f51f42acc8e558d5fb8beb7cc472ef6f6e0e3934e7b8a2e7"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/FocusTimerHub-CbZoPsqf.js",
+            "status": 200,
+            "sha256": "6532bbcb530da12e337e9e826477f4313961fe1c75b65cec566a0005f551bbf5"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [],
+          "events": [],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1063.8999999985099
+            }
+          ],
+          "gains": [],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "final-layout-tr-390",
+      "passed": true,
+      "elapsedMs": 1329,
+      "evidence": {
+        "requests": [],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/index-eLN6_Gfz.js",
+            "status": 200,
+            "sha256": "bc91fca31ce3e01a5fe9878a86772aa0565f85f7438fb2b30275ca4374536eeb"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/tr-Bxmf0hre.js",
+            "status": 200,
+            "sha256": "fdc833e2f7ec386e09186b898a60fc533a8f1d3d1cc174d236a3d6e00d590edf"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/Focus-FveWw4av.js",
+            "status": 200,
+            "sha256": "8d98ddd712964a89f51f42acc8e558d5fb8beb7cc472ef6f6e0e3934e7b8a2e7"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/FocusTimerHub-CbZoPsqf.js",
+            "status": 200,
+            "sha256": "6532bbcb530da12e337e9e826477f4313961fe1c75b65cec566a0005f551bbf5"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [],
+          "events": [],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1067.2000000029802
+            }
+          ],
+          "gains": [],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "final-layout-es-320",
+      "passed": true,
+      "elapsedMs": 1210,
+      "evidence": {
+        "requests": [],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/index-eLN6_Gfz.js",
+            "status": 200,
+            "sha256": "bc91fca31ce3e01a5fe9878a86772aa0565f85f7438fb2b30275ca4374536eeb"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/es-D_dh5elY.js",
+            "status": 200,
+            "sha256": "eac1e65c2e0e1c64bacd16a9f3d108852a3d1da14522408a183162437b5f13e4"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/Focus-FveWw4av.js",
+            "status": 200,
+            "sha256": "8d98ddd712964a89f51f42acc8e558d5fb8beb7cc472ef6f6e0e3934e7b8a2e7"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/FocusTimerHub-CbZoPsqf.js",
+            "status": 200,
+            "sha256": "6532bbcb530da12e337e9e826477f4313961fe1c75b65cec566a0005f551bbf5"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [],
+          "events": [],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1015.3000000007451
+            }
+          ],
+          "gains": [],
+          "speechVoices": []
+        }
+      }
+    },
+    {
+      "name": "final-layout-es-390",
+      "passed": true,
+      "elapsedMs": 1274,
+      "evidence": {
+        "requests": [],
+        "responses": [
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/media-2mgEiOLR.js",
+            "status": 200,
+            "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/react-5GCfeWye.js",
+            "status": 200,
+            "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/index-eLN6_Gfz.js",
+            "status": 200,
+            "sha256": "bc91fca31ce3e01a5fe9878a86772aa0565f85f7438fb2b30275ca4374536eeb"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/es-D_dh5elY.js",
+            "status": 200,
+            "sha256": "eac1e65c2e0e1c64bacd16a9f3d108852a3d1da14522408a183162437b5f13e4"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/Focus-FveWw4av.js",
+            "status": 200,
+            "sha256": "8d98ddd712964a89f51f42acc8e558d5fb8beb7cc472ef6f6e0e3934e7b8a2e7"
+          },
+          {
+            "url": "http://127.0.0.1:4187/one-decision-away/assets/FocusTimerHub-CbZoPsqf.js",
+            "status": 200,
+            "sha256": "6532bbcb530da12e337e9e826477f4313961fe1c75b65cec566a0005f551bbf5"
+          }
+        ],
+        "pageErrors": [],
+        "final": {
+          "sources": [],
+          "decodes": [],
+          "speech": [],
+          "events": [],
+          "modes": [
+            {
+              "value": "idle",
+              "at": 1061.699999999255
+            }
+          ],
+          "gains": [],
+          "speechVoices": []
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "lock-recorded-en-390.png",
+    "offline-cache-recorded-en-390.png",
+    "missing-file-unavailable-tr-390.png",
+    "missing-file-device-tr-390.png",
+    "final-guided-en-320.png",
+    "final-guided-en-390.png",
+    "final-guided-en-1440.png",
+    "final-guided-tr-320.png",
+    "final-guided-tr-390.png",
+    "final-guided-es-320.png",
+    "final-guided-es-390.png"
+  ],
+  "limitations": [
+    "Real cloud Chromium WebAudio MP3 playback nodes with normal HTTP and trusted clicks; no autoplay-policy override or permissions.",
+    "Audible output and speech naturalness were not independently listened to; source count, offset, gain and native decoding are instrumented evidence.",
+    "Installed device voice fixtures are explicitly mocked, while recorded playback uses the real decoder and AudioContext.",
+    "Viewport screenshots are emulation, not real iPhone/native iOS testing."
+  ],
+  "buildReceipt": {
+    "path": "artifacts/verification/functional-candidate/build-receipt.json",
+    "sha256": "527e2ffc217c3816c7579e3793c06ad4e50330aae812989e39f34926d49e7407",
+    "sourceBaseMain": "350aa158f30c773a373f2895e267119f9f2eb17a",
+    "branch": "feat/english-guidance-functional",
+    "checkExit": 0
+  },
+  "buildReceiptReviewedSourcesMatch": true,
+  "browserVersion": "151.0.7922.173",
+  "finishedAt": "2026-10-02T01:00:23.114Z",
+  "evidenceVerification": {
+    "at": "2026-10-02T01:00:47.037Z",
+    "receiptSHA256": "527e2ffc217c3816c7579e3793c06ad4e50330aae812989e39f34926d49e7407",
+    "reviewedSourceReceiptMatch": true,
+    "distReceiptMatch": true,
+    "servedJavaScriptResponsesVerified": 131,
+    "uniqueServedJavaScriptFiles": 20,
+    "reused160DecodeEvidence": {
+      "path": "artifacts/verification/english-guidance-first-use/admission/chromium-all160-decode.json",
+      "sha256": "25bd6b540df416b9877b9b305ebd6fffd02578d3c01f5e0d3e2c08e6be518af3",
+      "clips": 160,
+      "candidatePublicAndDistHashesMatchDecodedEvidence": true,
+      "files": [
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+          "sha256": "ef95e5eef613307f261021ca45ce6d2823602c44d33bed35570931f3a8ae4851"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-relax-01.en-US.v1.mp3",
+          "sha256": "583d89be9836473b4fea4eb4dbad00c6be21d1933de07ab55ea857680153c1fd"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-relax-02.en-US.v1.mp3",
+          "sha256": "301c02e9c4b73d37f8bfc7fa05b2633f5b1365a1d2f15eb03faf893ad22cc4e1"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-relax-03.en-US.v1.mp3",
+          "sha256": "d3a0f037aeaf018009cadefc413cd878c87460c47e2bc7e38b77ab54bd7fa360"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-relax-04.en-US.v1.mp3",
+          "sha256": "7ad9299973ce2b7e90b64c997a284e4bc5234e9fbe62c89c6fd6c32fe19d5da4"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-relax-05.en-US.v1.mp3",
+          "sha256": "b9d2bb1ed66fb9a590804d54bbe1626a9c03554f1997cd7eda15d5a3d86b1eec"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-relax-06.en-US.v1.mp3",
+          "sha256": "df1394821651cccc8623ca1cac893f868512588a633008cff80b6efc1379e876"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-relax-07.en-US.v1.mp3",
+          "sha256": "49717cf769e760ccfc53d5fcea1ae3d8359020e59e22c9e51261b856d8aace2b"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-relax-08.en-US.v1.mp3",
+          "sha256": "e68d66877b54184cd3382dc0aff07b8282b2a6e3e5b2328ae8950c2523e18314"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-relax-09.en-US.v1.mp3",
+          "sha256": "3dc2b5f259ea088214f4741d3fe7376b308cb83ce3ae32a12c8b6c018e98ae5f"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-relax-10.en-US.v1.mp3",
+          "sha256": "60e604966436cb7d049b19f745b8d10807a9015dc326f923ab4b34b92f30bef1"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-relax-11.en-US.v1.mp3",
+          "sha256": "b66d0d2dec5bd8b2fdd846af11297dca58951806a88338e5277b7056ea826d08"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-relax-12.en-US.v1.mp3",
+          "sha256": "e4f20a0dec4db31ab24d41d33b4ee625ef49b282e6b04f3ff01901fa49c27028"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-relax-13.en-US.v1.mp3",
+          "sha256": "57486d510eef1a7e854bf47fa553f68807bb1a1445bc6d71c64cb3d4d5fc6ec6"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-relax-14.en-US.v1.mp3",
+          "sha256": "23192db5b8a300318708de5ca1904670cd4584a44a070e6c39cfd685860d8933"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-dopamine-00.en-US.v1.mp3",
+          "sha256": "bb93d82ab653a380aa02e282ffdb9b1c1a8acc95ac2cb075275081982b45f578"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-dopamine-01.en-US.v1.mp3",
+          "sha256": "b6bdf68109156552b15256e96b361d565f5dbd733e0f3eeb35df0b1f88125171"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-dopamine-02.en-US.v1.mp3",
+          "sha256": "483405c7030c193ca926ee11340ca1395821ba43def42a2eff819507b7ae08e6"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-dopamine-03.en-US.v1.mp3",
+          "sha256": "1b9cdb5b02c7fff771b215f571322e833b723daade19e69b89a9e805ce1e1a17"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-dopamine-04.en-US.v1.mp3",
+          "sha256": "748bb226523d66db33ecdac61dcee7caee14ce3af3a4db77a6818cf46a1c9214"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-dopamine-05.en-US.v1.mp3",
+          "sha256": "c56b5d6554104d0005ecf3b1e1eba034fae5c203a5d03f0581df62eb11b3da9d"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-dopamine-06.en-US.v1.mp3",
+          "sha256": "4e9ea515cd627242e37b7bb63024e38afbaa2adc7aa395f8b16037ed9c141e47"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-dopamine-07.en-US.v1.mp3",
+          "sha256": "37b007c48a82a77b6c708eadd7e8544f43a1d8fe6abb7347cfccf0362cdc1f14"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-dopamine-08.en-US.v1.mp3",
+          "sha256": "33ccc978161580b874d692e9db04383707371205522663f4cb7b217457522f8b"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-dopamine-09.en-US.v1.mp3",
+          "sha256": "337ab7384490ee3d766976a3d3ae8b1d6b95e8542864de2268c5c56dbbcbf65c"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-dopamine-10.en-US.v1.mp3",
+          "sha256": "4b611eb89cfa9514ff289dff4e1b2cf2bddcf248edb140a68915d3a1d7e8a8a9"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-dopamine-11.en-US.v1.mp3",
+          "sha256": "7f56a05ad7c3321b8d3e7ce3d3da8b18dd032135dfbe1418652d39247dc5c1e8"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-dopamine-12.en-US.v1.mp3",
+          "sha256": "62e8bcb7ab221ebf90ff6a18bda383c2c679f6927a0cc1f730fd553230a61953"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-dopamine-13.en-US.v1.mp3",
+          "sha256": "2cf9c6a7c3b9fa3f31d129be60a0d1b53ae0d8d5089e330f210ee1e109f03907"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-feel-good-00.en-US.v1.mp3",
+          "sha256": "8ee8cbcc00ec84ef23a374b14b581e331275a354a86e0f270af9ba7c83519383"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-feel-good-01.en-US.v1.mp3",
+          "sha256": "11d456c577dedf2b2b5571c1a54ff39bbdd5e3a70fb19d6bd11896817a6f8b20"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-feel-good-02.en-US.v1.mp3",
+          "sha256": "8aee2003b833668b80aed793d7f428d24e0089d340bb1646a8b5c9fb8aa68160"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-feel-good-03.en-US.v1.mp3",
+          "sha256": "721d9e6b99c3c39d61aa4fe07e0f10298311cad2b15b3a61ab15133eaa89b55b"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-feel-good-04.en-US.v1.mp3",
+          "sha256": "b0750e09a3b6a7e1edc63bc2a4286f592e9da72fcbfbbcd5ec930900d7974267"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-feel-good-05.en-US.v1.mp3",
+          "sha256": "b32fb7df9339e930ebca509fdd2a57206ae7bd5a8dbd500bad1043eb180110ad"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-feel-good-06.en-US.v1.mp3",
+          "sha256": "38b1e621a30cd1b3b9ddc554ffd50a5856211a0e611da23e1e1a2a964224853d"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-feel-good-07.en-US.v1.mp3",
+          "sha256": "a1d2a171b768ca7db70275628f634aa7d4293a91075baa637629031282953135"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-feel-good-08.en-US.v1.mp3",
+          "sha256": "68a42a7d77a537b56758b02ae9b79564b7b347f1da8e1ffe79735608e54bc8bd"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-feel-good-09.en-US.v1.mp3",
+          "sha256": "af9f7eaed95d405ef6b591eef5c8f78f192bb3154811bc84a0c58b86255b81d4"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-feel-good-10.en-US.v1.mp3",
+          "sha256": "ecbb4f805cf28f3c2f6e5db09c73db4b0f470e38f965b6b7d03a21df48831c68"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-feel-good-11.en-US.v1.mp3",
+          "sha256": "78fde1f79c01013231948783981fb7f9ec31d016dcdeaaab7b8d50fea1295255"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-feel-good-12.en-US.v1.mp3",
+          "sha256": "4bd8aa04f5cb9396f8bac63726cf0c4c2217b4d6b65a3cb2a5076dda42bacf74"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-manifest-00.en-US.v1.mp3",
+          "sha256": "4936a7b39d252c5facd5762eac5711b28480839735880ee111d7f80fdbadf463"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-manifest-01.en-US.v1.mp3",
+          "sha256": "2993b31b9d342adb33ed99d4bd90ac4509382b6adaa24104d8ccc8f6416d1a44"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-manifest-02.en-US.v1.mp3",
+          "sha256": "b39ed650f2a2b475f129ea9d8fc5dacfd3363a3154b2b3645dc19f1675265109"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-manifest-03.en-US.v1.mp3",
+          "sha256": "cf30aa74cd7f7ddb6e15eaf31377c0de26f0d997be84e215b4972060ff154943"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-manifest-04.en-US.v1.mp3",
+          "sha256": "a5ff5c7cdd9b326c6a7f6879704f6381c4987b7516bed3d28711f0ea3ab7c777"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-manifest-05.en-US.v1.mp3",
+          "sha256": "781c487908a4f287d85329c12d2f9e2749248956f0fcece57c356f01f6b71071"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-manifest-06.en-US.v1.mp3",
+          "sha256": "b7952774a3e967bab887cafd51ab52aa29af409d960b60f14dd93851445662f3"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-manifest-07.en-US.v1.mp3",
+          "sha256": "0fd8b26cbf98ce9e94763235832ee0cf665261505d4443585d5ea4fced79f4e5"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-manifest-08.en-US.v1.mp3",
+          "sha256": "aaaf07567fd94d4dd6cbfa9091811daff6e61fe5dd1fb0fa331a1f6f886242c8"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-manifest-09.en-US.v1.mp3",
+          "sha256": "a581eedfed1ce2e94c05629ecb42d882175a00b7874ba8d2aec3234dea968404"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-manifest-10.en-US.v1.mp3",
+          "sha256": "0c6048a5a819384a852de990200779bd5a8584f46300474acdb61a32274635c9"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-manifest-11.en-US.v1.mp3",
+          "sha256": "3245a2bf21091b3f5cc8fc4033528244bccee119f8fa7495d2cb3a63396f02d7"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-manifest-12.en-US.v1.mp3",
+          "sha256": "0ccabc5445d652847a60ac5145d1044795350afb1ff59dc7a84088e68251c3bc"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-manifest-13.en-US.v1.mp3",
+          "sha256": "96448260fd41174990e6a804a67ad1691a3c93651cb133f6d0c7e822820e5e9a"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-manifest-14.en-US.v1.mp3",
+          "sha256": "e8101bc27b74dca8e7970039229dfde48828943b9793d0db647e9eb4ab43375b"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-manifest-15.en-US.v1.mp3",
+          "sha256": "f3889265f61c5825c01fbb14d0b855e33caf3423645526b9938aa8f6fb9e2d23"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-manifest-16.en-US.v1.mp3",
+          "sha256": "e03e0334f2b423fc56d6ac5d1b5eaa0fe68763256e53bf64041efd9738faf2cf"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-belief-00.en-US.v1.mp3",
+          "sha256": "9538650c8693f48e25939a9cd0aea4cd673b100f730f32fc796d9cd4ff1a90c6"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-belief-01.en-US.v1.mp3",
+          "sha256": "57cd7f49bb3f7cfda166270af45058b7d1661e4e15a995ee3600341b25807853"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-belief-02.en-US.v1.mp3",
+          "sha256": "fe4df715cc11239247d98015ef1a5156f39a5d2191ca926f7092d32deeece801"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-belief-03.en-US.v1.mp3",
+          "sha256": "8861f75c87e5f1db36a6d16c4647f446976242a7ed5b308ec7540ff3d7929a95"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-belief-04.en-US.v1.mp3",
+          "sha256": "a143022472b7f85988b08436deaaf2aa518318db57c7d342d9f7a6da59f3d6f7"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-belief-05.en-US.v1.mp3",
+          "sha256": "1ae28415e09e3277bbeb2cffd12a2beec40350df0422afd6803a73e8bc67cc59"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-belief-06.en-US.v1.mp3",
+          "sha256": "984a3f9b7f30f85b18f1e3333bd1370eb843d753b6b05f3d96c55cefd067feab"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-belief-07.en-US.v1.mp3",
+          "sha256": "9ce4ef95b1d006d5538e4049bfa94f0a60630c8e50409700572df877bf8776c6"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-belief-08.en-US.v1.mp3",
+          "sha256": "6c543b0c40aec8ce7f0b64cb5134697c65c34bfb6f68d515449ffb84dbcb6b56"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-belief-09.en-US.v1.mp3",
+          "sha256": "55fd5ba996a881aed4171f0a0f21497fd1ca30dd6106671eecaf7cdf11e9816f"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-belief-10.en-US.v1.mp3",
+          "sha256": "97a7f300e520947873f6e8cbdc1a95e87b4101ef37766edb82fd88620cef3506"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-belief-11.en-US.v1.mp3",
+          "sha256": "9ac2d487b93d11be35c312ea504fb9ce72fde52b13de54170abfb50ba7617775"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-belief-12.en-US.v1.mp3",
+          "sha256": "7899eb92b16ade12894cd7f4586fb9b7c68f89cfaf6b452d39871b79655a3f6b"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-belief-13.en-US.v1.mp3",
+          "sha256": "be64166424f82d7b7e1c738d5ddb6a8de739099cff211f64963704df8a306662"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-belief-14.en-US.v1.mp3",
+          "sha256": "0075b6f70f95055d7d515e2e562ac59785a99e3c761baad186d70343f85c9f9d"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-motivation-00.en-US.v1.mp3",
+          "sha256": "74e52d82f2df00850ecc19a3b5f5923e3bf1832967558399b3530ed6e8596bec"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-motivation-01.en-US.v1.mp3",
+          "sha256": "1c489a08f92f2f58f60ad358b1a0cff27cae173282fa3e309575798d99c6649e"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-motivation-02.en-US.v1.mp3",
+          "sha256": "3b57e82a4bf7014375b685dc8f169783be619a0898a84a6e1572e0a22044c885"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-motivation-03.en-US.v1.mp3",
+          "sha256": "6cccfe9783f4d60ca9bdb4f4f51e5bbc4eac7a1548ee447f8dee8d73b9ee4283"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-motivation-04.en-US.v1.mp3",
+          "sha256": "614d8e2b02b229b52ca2d6ffd8b03280cf7da47efa95967767ed4e6a4c22cf5d"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-motivation-05.en-US.v1.mp3",
+          "sha256": "1c6287a258ada4ee092a5bdd2ca156c4a4846ea35ab0d351fa2adc9b03a6d212"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-motivation-06.en-US.v1.mp3",
+          "sha256": "682f8a80002886008f1fe5de6fdd8f3fa1b744ef6affae92298244f5988e6307"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-motivation-07.en-US.v1.mp3",
+          "sha256": "0917a349f70d60aa057aa1cdb1382575f87462e105ecf781372b454fa72f043b"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-motivation-08.en-US.v1.mp3",
+          "sha256": "2db32a02d1ca67d6ab76c995b5e8cc08c829c11e39949dc6f09b2ae537bbaa4e"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-motivation-09.en-US.v1.mp3",
+          "sha256": "7d8af549d787debc4de63d5ade6c0717f72d181b0a7ff565e9ebff75140746a0"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-motivation-10.en-US.v1.mp3",
+          "sha256": "61c0803b620b19d51f6bef89b0005d83c51423be4a84ecf81c8d1b5c6e63e90d"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-motivation-11.en-US.v1.mp3",
+          "sha256": "0204e06814661b8cc97ed3e582a8ab3bfd95bb97c325598018b53d3b93f46b52"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-motivation-12.en-US.v1.mp3",
+          "sha256": "0d57aad0c866b3486fcc74a2828941e7cb63959e30c0b8432437014ad42960f1"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-motivation-13.en-US.v1.mp3",
+          "sha256": "fc1bca39185ce728e38f901a096e55ecdd8383d0aaa3f24331cef8738432a40b"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-gratitude-00.en-US.v1.mp3",
+          "sha256": "a1bcd76273480c4a3810e90c9bd60ba86c7335c0e07a6c81f0d83fbd02369101"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-gratitude-01.en-US.v1.mp3",
+          "sha256": "f254dfdd8eccd4c2637579dfdac0f43182a13aad2954e49936b14d524714c3e1"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-gratitude-02.en-US.v1.mp3",
+          "sha256": "64fa4c9c2b6a22a5afddb9c34b96a18a086816d63ba2c707904988487f634f5a"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-gratitude-03.en-US.v1.mp3",
+          "sha256": "ae1a1a999eee730d430668e012e0c3890b7c8247f826dc4d718e29ef1d986daf"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-gratitude-04.en-US.v1.mp3",
+          "sha256": "cc664350498275aec013ab11ae2bbbcf6e15a9f47a730a0ede2eca3fcd2fc3be"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-gratitude-05.en-US.v1.mp3",
+          "sha256": "e044a18895dce6f3234c807c8a723f83c15c99494d00afe469a8c5685a2c378f"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-gratitude-06.en-US.v1.mp3",
+          "sha256": "b8f5ae0514e999aabbd29be54f4dc7a4910ecf3d7dfc10c9fe000d50a5c852af"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-gratitude-07.en-US.v1.mp3",
+          "sha256": "03c6148acf867f3fddb09dc3de996b3d77334ebf85dc88a2f68d2381e3dda669"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-gratitude-08.en-US.v1.mp3",
+          "sha256": "d1e21b47e4a3e807857e9fe52297991caa08b8a4576a3dfd5a05a897e39f7e3b"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-gratitude-09.en-US.v1.mp3",
+          "sha256": "907a796663fa3b32e39c63023e9213df9581a5ff42c852ccac18465cea5fac1a"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-gratitude-10.en-US.v1.mp3",
+          "sha256": "0537323f6c1208189cba58ec2ec792e4bf9b8e4c5d0e760da570b88218b83682"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-gratitude-11.en-US.v1.mp3",
+          "sha256": "9f2e9908b9dae2f2a9df26a4e93051bd08d87e2a888e3ae5f4ec3eb504e6d2de"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-gratitude-12.en-US.v1.mp3",
+          "sha256": "4a6e518c541de7056e877667e6ac35e6d571985309c16fbd7f5473f7176df419"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-gratitude-13.en-US.v1.mp3",
+          "sha256": "87289b6a59c05e8307698fc5ba736046090d81499824089e71bf09cd4e18ac76"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-confidence-00.en-US.v1.mp3",
+          "sha256": "add27af33bc235c36cf2cb16b7227110471e38ffd60b9120ad2501010344d6f1"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-confidence-01.en-US.v1.mp3",
+          "sha256": "b7691999a41cb62f11063e081f7efc814efba655191811344b9ef236b11846a0"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-confidence-02.en-US.v1.mp3",
+          "sha256": "17d35c3cf5282feba20304c95d419b490a485c8036270e834289015f77edcfa4"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-confidence-03.en-US.v1.mp3",
+          "sha256": "02a63f04a7a85625d9c9126fc88e967c6c8615dc2682b1bc2c2caed76a53e567"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-confidence-04.en-US.v1.mp3",
+          "sha256": "b81496efbfd66e22f2bbc66dffee3f7e838cd3ff3fd7e5aa35efe8dc4bf7a1f2"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-confidence-05.en-US.v1.mp3",
+          "sha256": "e4c988d533ed4486f613090a437612f5ad59489b64edd35240ebe8371a4225cc"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-confidence-06.en-US.v1.mp3",
+          "sha256": "bc388e41d178abaee2af17eff69a9bef15264db6ecf26f5db9228375a9d21381"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-confidence-07.en-US.v1.mp3",
+          "sha256": "801dff8f66f8674d5e068db9c6496af82ade3ab8881f9f7ff3b5d1e3670f4cea"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-confidence-08.en-US.v1.mp3",
+          "sha256": "ef773b1c6cf2b582e9942f3488bd6c62c868d7eda22c7fa73767d5cf650d873a"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-confidence-09.en-US.v1.mp3",
+          "sha256": "6046c1fa2c8f832564aea290f85659521dc7898991708fb034dd297a0e4f8049"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-confidence-10.en-US.v1.mp3",
+          "sha256": "f0c6f2764abda4d72ac048e5f9b439583a70a5ab49e168eccee998d6a82a4291"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-confidence-11.en-US.v1.mp3",
+          "sha256": "587c2838c7694ad48d14099515324ee26d6b142176ea1fc0f7fb75786a55954b"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-confidence-12.en-US.v1.mp3",
+          "sha256": "73550066a3a50bab8bb33c2229ddd690bfd104898abae17930fbad7fa941ba45"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-confidence-13.en-US.v1.mp3",
+          "sha256": "718739f4df2ab1facf914e65f684d78a08092be1751016e8aa8d2e5fb74dfd06"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-focus-00.en-US.v1.mp3",
+          "sha256": "bf76952fbff8df2899fd7ddfea9f29c710ba6c77d08c6f238975356a474fc6e3"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-focus-01.en-US.v1.mp3",
+          "sha256": "45c4381aff6dc332f3132aff07ea4f8d5368a998214c91b95a9045d6f3c76ddd"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-focus-02.en-US.v1.mp3",
+          "sha256": "a8d04cf943b48bc6f6b954145c8024ea9bdaa2fb4b15911cffc558424646ee35"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-focus-03.en-US.v1.mp3",
+          "sha256": "a61b304285796c9ea8b4c440843e10dff2ef951d6121a32cfb1205cad2cd956e"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-focus-04.en-US.v1.mp3",
+          "sha256": "b66a218efaacfa560b9459d82957f63c389c18c66bdf533125ac61f01ff83251"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-focus-05.en-US.v1.mp3",
+          "sha256": "0e4d70a28ab8aba6036f0a6a97bd702353eb1ce755e97e5c52f9a82b1bd82fb5"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-focus-06.en-US.v1.mp3",
+          "sha256": "62fb5c8f80bd26a26113cecaa61e091294a6753acac0db65d10db2bbc1a74763"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-focus-07.en-US.v1.mp3",
+          "sha256": "e156e9fb7157184d9386d0bb4e4457f6f23d8267deff3e5b683ad53b0af91fc8"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-focus-08.en-US.v1.mp3",
+          "sha256": "d213723bc1d436b019b89910c64506b935684747d73d07fd6e408f29261204a3"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-focus-09.en-US.v1.mp3",
+          "sha256": "a214812f3170f980bafa2b6f997fe90baac94359557215a6e0a6c005286eb620"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-focus-10.en-US.v1.mp3",
+          "sha256": "960500ef489af0f3494d8eaccf73718f7ccf7a315ada283d0024f309f848f973"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-focus-11.en-US.v1.mp3",
+          "sha256": "3122b6bfa17cbaa26344497ce670a4133ba5e65adb6c6a93a58809d8e300afde"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-focus-12.en-US.v1.mp3",
+          "sha256": "ab86cdf2e24bce584004b05b0360756c4475e021f60da1322aeacfbb07abd281"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-sleep-00.en-US.v1.mp3",
+          "sha256": "e9a3de9b653eec507ef5d0a6f12913e1e9c68e55a4117efba88d7e46eaca662e"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-sleep-01.en-US.v1.mp3",
+          "sha256": "03608bdc2b04dd5935d1fbee79a2a8d4fcb9bb831dfb302e7a9fd2557988d5b4"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-sleep-02.en-US.v1.mp3",
+          "sha256": "77614bd9f7a5cd234ab3cc248b791016520f1d025c8c7f6253a8482c88cfba42"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-sleep-03.en-US.v1.mp3",
+          "sha256": "dc35e0d0afee3bdef7cbe705cc8db3e34ab39942a0c64c70ba936004ab01a679"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-sleep-04.en-US.v1.mp3",
+          "sha256": "468378db419cfa65b4e7671e08fb3835c9d29c9ef5618a1a9d9b01c5e4adebe6"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-sleep-05.en-US.v1.mp3",
+          "sha256": "d65067da097a026d518261399eb589365d52de03f2c1e22948b352ec18b07a4e"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-sleep-06.en-US.v1.mp3",
+          "sha256": "fc4db94079958ac50018731e003fe6b1a4de6adf702780115c9a15b150369f87"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-sleep-07.en-US.v1.mp3",
+          "sha256": "ccb34484e6d7277447b49c14bef44d956f51f7bb209fbf92f64acccb8b668e86"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-sleep-08.en-US.v1.mp3",
+          "sha256": "4376f8be856d342d1d4dc5b96afdd65744d46ad339936d0322fcd0b9d8e830fe"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-sleep-09.en-US.v1.mp3",
+          "sha256": "82d827549829efa76e8ad66457152d562087ba8baa3f9c5ebb5ecbeee2d4e561"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-sleep-10.en-US.v1.mp3",
+          "sha256": "e0caf325f8f099659b0c86cbfe8efec03498cd388c21edfdd31c225a10b7aa2f"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-sleep-11.en-US.v1.mp3",
+          "sha256": "70403d35cbc715e9294744ec95180e1f1d8bb7a34486d086e08b81d79b9a79a7"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-sleep-12.en-US.v1.mp3",
+          "sha256": "958417733c9129dbe607db7dfce1bb29e7222ff62b63c9a8a948717cf177c57c"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-sleep-13.en-US.v1.mp3",
+          "sha256": "37d495c0c7a61c36098e92b32437d3f8f574b41eb97a04b203cea9e4fee29948"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-two-futures-00.en-US.v1.mp3",
+          "sha256": "c9840a32f68e0218db6ef14f994a659f36002e7d36b27ff77f59379e6957a2ec"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-two-futures-01.en-US.v1.mp3",
+          "sha256": "0435cfd8ec449de2f5cb7d4c03c16ab414d1221a07326714e5a881f1f4cadc3d"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-two-futures-02.en-US.v1.mp3",
+          "sha256": "9cf4052d86896b79349648229e30600e7a304254a6a5058ddf2026135f431045"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-two-futures-03.en-US.v1.mp3",
+          "sha256": "508190169da09fd624b67368ba2abd77fe3bc873e57b13894d8e445b0b025cd4"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-two-futures-04.en-US.v1.mp3",
+          "sha256": "bc89459efb186f9f744ee558f2944b76208952507ec9059fea06e35c0c6b3079"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-two-futures-05.en-US.v1.mp3",
+          "sha256": "c4c2b73d8684722ca82b355e423c9fd9e3c8735689f4d1eb8d2b8443127f2351"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-two-futures-06.en-US.v1.mp3",
+          "sha256": "e35a87cd46d1a1dec0c0bdd6f75782a9656f23d1241b1cba55d440a5171b976f"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-two-futures-07.en-US.v1.mp3",
+          "sha256": "73a1ea23b2f5bb47ccfea15f32384c73ffa9b1dd9f81c0b6918c79349de3b3da"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-two-futures-08.en-US.v1.mp3",
+          "sha256": "0e980768596f97ec740b53e91b40940d8480c59bb0df6dbf17872e58446662c9"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-two-futures-09.en-US.v1.mp3",
+          "sha256": "0a68f438ff8ac8f43d004e5c5c6d960ba2e151aff35f3272a6be93b0abebaa47"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-two-futures-10.en-US.v1.mp3",
+          "sha256": "d1e77cd4f6700ebf8152ee50db50c884f51e9e1670066f93beca575d721f30dd"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-two-futures-11.en-US.v1.mp3",
+          "sha256": "24763a96729a5bd57630fc09e5607628aef9cab4df8ede6b3c8967a2da9bd57c"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-two-futures-12.en-US.v1.mp3",
+          "sha256": "f27178edee80761364f3570dffe58c1915158917be5f8fca955b9ab0bd996fc2"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-two-futures-13.en-US.v1.mp3",
+          "sha256": "a01ac5c00c4775cbb33e5705ea339039a38ab1ae2815c16279d687f2e4061be6"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-two-futures-14.en-US.v1.mp3",
+          "sha256": "88a4511528d4cb3627f78dfde729606954140c9f7a2f57bb5dd8eabc009d1ce8"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-two-futures-15.en-US.v1.mp3",
+          "sha256": "2563f202cb46429dbe87e6fd566fd3c1b184a1def4dc21e059c67fee750cccb5"
+        },
+        {
+          "file": "assets/oda/narration/en-US/v1/clips/gm-two-futures-16.en-US.v1.mp3",
+          "sha256": "27ebf0df9c471c2fcd9e9610290be2de3f551a124e18e8ff12f829748a40d9c0"
+        }
+      ]
+    },
+    "screenshots": [
+      {
+        "file": "lock-recorded-en-390.png",
+        "sha256": "a9d2caba761e1d606e4573c7add624543aef11ca9c64d499be50323d06a39d9e"
+      },
+      {
+        "file": "offline-cache-recorded-en-390.png",
+        "sha256": "7af4b2608e39e0579f248b39a868dfdbd672edc883c3db1a60b316336bb3f14d"
+      },
+      {
+        "file": "missing-file-unavailable-tr-390.png",
+        "sha256": "31f872fc5f1777c45f078ebdadb17ec68c9b7e4c96e07d012264588376783893"
+      },
+      {
+        "file": "missing-file-device-tr-390.png",
+        "sha256": "3820c40c91b76604f6dcc0e91550b3c6074e9b1f618efb16bce9d329757fd83c"
+      },
+      {
+        "file": "final-guided-en-320.png",
+        "sha256": "b9aff2995ecfe737b2dfe3e6f8bccb8d60c6961f602aaad4ca13e947c53128c9"
+      },
+      {
+        "file": "final-guided-en-390.png",
+        "sha256": "ad1e058af04afdc3a92b61fa12f016a40ce9ead70238d143ed3a00244a0bb527"
+      },
+      {
+        "file": "final-guided-en-1440.png",
+        "sha256": "fdeeaca92ebe979882e29277249f4819a5c797face6ae838eb0e9d2c34215b71"
+      },
+      {
+        "file": "final-guided-tr-320.png",
+        "sha256": "ea0047c81be559ece3df99b3e30079a189e2a8a0ff1b6ddb8e3feec52f236e28"
+      },
+      {
+        "file": "final-guided-tr-390.png",
+        "sha256": "705986aedeac5a608f8cf9a37663e69b6574031eeea28fedfa4c5663b8c68f0d"
+      },
+      {
+        "file": "final-guided-es-320.png",
+        "sha256": "38e2322da9234af404488db10f2e89c3e9d1d3c97fefba1de9bc8d09cc9f2622"
+      },
+      {
+        "file": "final-guided-es-390.png",
+        "sha256": "244c1cb4d2e681a8500482d43d79fd90f1f630f4c221825a067768cefeeb4ad8"
+      }
+    ],
+    "inspectedPixels": [
+      "final-guided-en-320.png",
+      "final-guided-tr-320.png",
+      "final-guided-es-390.png",
+      "final-guided-en-1440.png",
+      "lock-recorded-en-390.png"
+    ]
+  },
+  "browserConditions": {
+    "host": "selected cloud Linux execution environment",
+    "executable": "/usr/bin/chromium",
+    "version": "151.0.7922.173",
+    "headless": true,
+    "explicitLaunchArgs": [
+      "--no-sandbox"
+    ],
+    "audio": "Playwright headless default launch; native AudioContext/decoder processing instrumented, audible output not listened to",
+    "autoplayPolicyOverride": false,
+    "certificateBypass": false,
+    "permissionsGranted": [],
+    "providerCalls": 0,
+    "fixtureData": "fresh synthetic signed-out local browser records",
+    "serviceWorkers": "one normal allow/controller check; isolated playback cases block workers; native CacheStorage remains enabled",
+    "network": "normal HTTP4187, external origins and non-GET/HEAD intercepted; none attempted"
+  }
+}

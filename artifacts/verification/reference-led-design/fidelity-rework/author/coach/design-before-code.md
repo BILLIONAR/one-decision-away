@@ -1,0 +1,9 @@
+# Coach and shared shell fidelity design before code
+
+Actual inline reference4 is a dense deep-navy composition with a substantial centered luminous assistant, small supporting tool and conversation modules, localized cyan/violet controls and thin cool borders. Reference5 is a large liquid iridescent magenta/cyan/violet organic sculptural form on a pale lilac field. The before app gives a small corner gradient icon and tall oversized tool cards first-fold dominance.
+
+Rework: center an original 240–300px liquid-fold form inside a blue luminous orbit; frame the actual ODA title/intro compactly and keep real tools/conversation in smaller supporting navy modules. Desktop uses tools beside the main conversation; mobile retains44px controls and readable EN/TR/ES. All Coach effects, provider routing, recognition, cancellation, consent, text lengths and actualstate labels remain unchanged. Decorative lighting reads existing phase/listening/replying state only. No fabricated person, waveform, AI response, health/weather/device integrations or capability.
+
+The shared working shell becomes neutral pearl/white with restrained lavender lines and smaller card/nav radii; Sound and Coach retain their own atmosphere. Old Today/Focus style overrides are removed from shared reference.css so uniquely owned page styles control those compositions. Existing route/skip/focus/navigation handlers remain unchanged.
+
+Exact asset limit: reference4 blue human/AI portrait and reference5 original3D source mesh/render are not in the owned ZIP. The reference JPEGs are inspectable inline but not materialized after a supported Library transfer networkfailure. Original SVG liquid-fold artwork can reproduce palette, sculptural scale, silhouette and lighting; it is not that source3D render and no pixel-identity claim is permitted. No third-party reference column is fabricated.

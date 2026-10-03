@@ -157,7 +157,7 @@ export const SOUND_ROOM_SECTIONS: {
     label: N_('Frequencies'),
     intro: N_('Offered for calm and curiosity, not as medicine.'),
     sounds: [
-      { ...tone432, name: N_('432 Hz'), why: N_('Some musicians prefer tuning to 432 Hz. Claims that it heals are not supported by evidence.') },
+      { ...tone432, why: N_('Some musicians prefer tuning to 432 Hz. Claims that it heals are not supported by evidence.') },
       {
         track: 'solfeggio_528hz',
         name: N_('528 Hz'),

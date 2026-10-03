@@ -1,0 +1,40 @@
+{
+  "kind": "independent narrow calendar follow-up controller/attribute audit",
+  "base": "cf95c6eda4264385a4f70b41f7df0dee7832ebe7",
+  "cwd": "/workspace/oda-reference-redesign",
+  "head": "71f1ce41f77bddb519cc9d18933303cc13336073",
+  "branch": "design/reference-led-oda",
+  "sourceFrozen": true,
+  "testsRun": false,
+  "findings": [],
+  "limits": [
+    "Static code review and exact commit-bound source comparison only; browser geometry, contrast, hit tests and real browser/device behavior remain separate QA evidence."
+  ],
+  "files": [
+    {
+      "file": "src/components/notebook/NotebookCalendar.tsx",
+      "baseSha256": "b2f89bde0cc5b5ae9c33c0c09d5df83209a4795356901fd011dfb43707c0641c",
+      "currentSha256": "9e05a127e9b90ded1a1f257289a2eee28b789172370e92d499557e785603da5f",
+      "controllers": [
+        {
+          "component": "NotebookCalendar",
+          "unchanged": true,
+          "afterKnownDecorativeStatementRemovalUnchanged": true
+        }
+      ],
+      "semanticAttributeChanges": [
+        {
+          "component": "NotebookCalendar",
+          "removed": [],
+          "added": [
+            "role=\"region\"",
+            "aria-label={t('Writing calendar')}",
+            "tabIndex={0}"
+          ]
+        }
+      ],
+      "removedPresentationFunctions": [],
+      "addedPresentationFunctions": []
+    }
+  ]
+}

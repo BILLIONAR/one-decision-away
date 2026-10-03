@@ -1,0 +1,138 @@
+import { createRequire } from 'node:module';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import { getInitialDemoState } from '/workspace/oda-reference-redesign/src/services/repository.ts';
+const require = createRequire('/workspace/oda-reference-redesign/package.json');
+const { chromium } = require('playwright');
+const AxeBuilder = require('@axe-core/playwright').default;
+const out = '/workspace/scratch/oda-reference-redesign/scoped-layout-repair/sound';
+const base = 'http://127.0.0.1:4181';
+const report = { at: new Date().toISOString(), contexts: [], screenshots: [], errors: [], external: [], limits: ['Actual local cloud Chromium with synthetic records and in-memory access fixture; no provider, account or billing operation.', 'No physical mobile device, perceptual audio or material-fidelity pass claim.'] };
+const browser = await chromium.launch({ executablePath: '/usr/bin/chromium' });
+report.browser = await browser.version();
+const cases = [];
+for (const locale of ['en', 'tr', 'es']) for (const width of [320, 390]) cases.push({ locale, width, height: 844, theme: 'light' });
+cases.push({ locale: 'en', width: 390, height: 844, theme: 'dark' }, { locale: 'en', width: 390, height: 568, theme: 'light' }, { locale: 'en', width: 1440, height: 1000, theme: 'light' }, { locale: 'en', width: 390, height: 844, theme: 'light', fallback: true });
+if (process.argv.includes('--remaining')) {
+  const previous = JSON.parse(fs.readFileSync(`${out}/browser-report.json`, 'utf8'));
+  report.contexts = previous.contexts.filter(record => record.checks.lockedCardRoutesUpgradeWithoutGraph);
+  report.screenshots = report.contexts.flatMap(record => record.screenshots);
+  report.continuedFrom = { at: previous.at, completedContexts: report.contexts.length, reason: 'Short viewport requires scrolling actual control surface into usable view, rather than aligning the taller entire artwork panel.' };
+  const completed = new Set(report.contexts.map(record => record.name));
+  const remaining = cases.filter(({ locale, width, height, theme, fallback = false }) => !completed.has(`${locale}-${theme}-${width}x${height}${fallback ? '-observer-fallback' : ''}`));
+  cases.splice(0, cases.length, ...remaining);
+}
+async function snapshot(page) {
+  return page.evaluate(() => ({ ...window.__soundQA.player.getSnapshot(), volume: window.__soundQA.player.getVolume(), starts: window.__soundQA.starts }));
+}
+async function scrollExpanded(page) {
+  await page.locator('.oda-sound-now-panel').evaluate(el => { el.scrollIntoView({ block: 'start' }); window.scrollBy(0, -80); });
+  await page.locator('.oda-sound-now-control-surface').evaluate(el => {
+    const rect = el.getBoundingClientRect(); const mobile = innerWidth < 768;
+    if (rect.top < (mobile ? 64 : 24) || rect.bottom > innerHeight - (mobile ? 96 : 24)) el.scrollIntoView({ block: 'center' });
+  });
+  await page.locator('.oda-sound-now-panel[data-primary="true"]').waitFor();
+  assert.equal(await page.locator('.oda-sound-player').count(), 0, 'mini absent while expanded controls are primary');
+}
+async function axe(page) {
+  const result = await new AxeBuilder({ page }).include('.oda-sound').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+  const violations = result.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.map(n => ({ target: n.target, summary: n.failureSummary })) }));
+  assert.equal(violations.length, 0, JSON.stringify(violations));
+  return violations;
+}
+try {
+  for (const config of cases) {
+    const { locale, width, height, theme, fallback = false } = config;
+    const name = `${locale}-${theme}-${width}x${height}${fallback ? '-observer-fallback' : ''}`;
+    const record = { name, config, checks: {}, screenshots: [] };
+    report.contexts.push(record);
+    const seed = getInitialDemoState();
+    Object.assign(seed.profile, { displayName: 'Synthetic sound repair QA', locale, theme, onboardingStep: 'completed', firstOpenedAt: new Date().toISOString(), soundMuted: false, nudgesEnabled: false, dailyWisdomEnabled: false });
+    const context = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce', serviceWorkers: 'block' });
+    await context.route('**/*', route => new URL(route.request().url()).origin === base ? route.continue() : (report.external.push({ name, url: route.request().url() }), route.abort()));
+    await context.addInitScript(({ seed, locale, fallback }) => {
+      localStorage.setItem('one_decision_away_app_data_v1', JSON.stringify(seed)); localStorage.setItem('oda_locale', locale);
+      if (fallback) window.IntersectionObserver = undefined;
+    }, { seed, locale, fallback });
+    const page = await context.newPage(); page.on('pageerror', error => report.errors.push({ name, message: error.message }));
+    await page.goto(`${base}/app/sound`); await page.locator('.oda-sound').waitFor(); await page.evaluate(() => document.fonts.ready);
+    for (let n = 0; n < 3 && await page.getByRole('dialog').count(); n++) await page.keyboard.press('Escape');
+    await page.waitForFunction(() => [...document.querySelectorAll('.oda-sound-tab:not([data-section="breathe"]) img')].every(img => img.complete && img.naturalWidth > 0));
+    await page.evaluate(async () => {
+      const resources = performance.getEntriesByType('resource').map(entry => entry.name);
+      const moduleUrl = path => resources.find(url => new URL(url).pathname === path) ?? path;
+      const { soundRoomPlayer: player } = await import(moduleUrl('/src/services/soundRoomPlayer.ts'));
+      const { soundSynthesizer: synth } = await import(moduleUrl('/src/utils/soundSynthesizer.ts'));
+      const { purchases } = await import(moduleUrl('/src/services/purchases.ts'));
+      window.__soundQA = { player, purchases, starts: 0 };
+      const original = synth.playAmbient.bind(synth);
+      synth.playAmbient = (...args) => { window.__soundQA.starts++; return original(...args); };
+      window.__soundQA.modules = { player: moduleUrl('/src/services/soundRoomPlayer.ts'), synth: moduleUrl('/src/utils/soundSynthesizer.ts'), purchases: moduleUrl('/src/services/purchases.ts') };
+    });
+    record.modules = await page.evaluate(() => window.__soundQA.modules);
+    assert.equal(await page.locator('[role="tab"]').count(), 4);
+    assert.equal(await page.locator('.oda-sound-player').count(), 0);
+    const geometry = await page.evaluate(() => {
+      const rect = el => ({ top: el.getBoundingClientRect().top, bottom: el.getBoundingClientRect().bottom, height: el.getBoundingClientRect().height });
+      return { scenes: [...document.querySelectorAll('.oda-sound-tab:not([data-section="breathe"])')].map(rect), nav: innerWidth < 768 ? rect(document.querySelector('.oda-tabbar')) : null, width: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth };
+    });
+    assert.ok(geometry.scroll <= geometry.width + 1, 'no horizontal overflow');
+    if (width < 768) assert.ok(geometry.scenes.at(-1).bottom <= geometry.nav.top + 1, 'three scene bands fit above navigation');
+    record.checks.sceneFit = geometry;
+    record.checks.idleAxe = await axe(page);
+    const capture = locale === 'en' && !fallback;
+    const shot = async suffix => { const file = `${name}-${suffix}.png`; await page.screenshot({ path: `${out}/${file}`, animations: 'disabled' }); record.screenshots.push(file); report.screenshots.push(file); };
+    if (capture) await shot('discovery');
+    const firstTab = page.locator('[role="tab"][data-section="relax"]'); await firstTab.focus();
+    await page.keyboard.press('End'); assert.equal(await page.locator('[data-section="breathe"]').getAttribute('aria-selected'), 'true');
+    const breath = await page.locator('[data-section="breathe"]').evaluate(el => { const r = el.getBoundingClientRect(); const target = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2); return { top: r.top, bottom: r.bottom, reachable: el.contains(target) }; });
+    assert.ok(breath.reachable, 'Breathe tab centre is not occluded'); record.checks.breatheReachable = breath;
+    await page.keyboard.press('Home'); assert.equal(await firstTab.getAttribute('aria-selected'), 'true');
+    await page.keyboard.press('ArrowRight'); assert.equal(await page.locator('[data-section="sleep"]').getAttribute('aria-selected'), 'true');
+    await page.keyboard.press('ArrowLeft'); assert.equal(await firstTab.getAttribute('aria-selected'), 'true');
+    assert.equal(await page.locator('[role="tab"][tabindex="0"]').count(), 1); record.checks.fourTabKeyboard = true;
+    await page.locator('.oda-sound-panel .oda-sound-card-button').first().click();
+    await page.locator('.oda-sound-player').waitFor();
+    const started = await snapshot(page); assert.ok(started.playing); assert.equal(started.starts, 1);
+    const disclosure = page.locator('.oda-sound-panel .oda-sound-card-rationale').first(); await disclosure.locator('summary').focus(); await page.keyboard.press('Enter');
+    assert.equal(await disclosure.getAttribute('open'), ''); assert.ok(await disclosure.locator('.oda-sound-card-why').isVisible());
+    assert.equal((await snapshot(page)).starts, 1, 'disclosure does not start a new graph');
+    await page.keyboard.press('Space'); assert.equal(await disclosure.getAttribute('open'), null);
+    record.checks.nativeRationale = true;
+    if (capture && height === 844) { await page.locator('.oda-sound-panel').evaluate(el => { el.scrollIntoView({ block: 'start' }); window.scrollBy(0, -80); }); await shot('sessions'); }
+    await scrollExpanded(page);
+    record.checks.expandedAxe = await axe(page);
+    const expanded = page.locator('[data-sound-surface="expanded"]');
+    const range = expanded.locator('[data-sound-control="volume"]'); await range.focus(); await page.keyboard.press('Home'); await page.keyboard.press('ArrowRight');
+    assert.equal(await range.inputValue(), '0.01'); assert.equal((await snapshot(page)).volume, 0.01);
+    const timer = expanded.locator('[data-sound-control="timer"]'); await timer.selectOption('10');
+    assert.equal((await snapshot(page)).timerMinutes, 10);
+    const native = await timer.evaluate(el => ({ width: el.getBoundingClientRect().width, height: el.getBoundingClientRect().height, minWidth: getComputedStyle(el).minWidth }));
+    assert.ok(native.width >= 118 && native.height >= 44); assert.equal(native.minWidth, '118px'); record.checks.nativeTimer = native;
+    const withTimer = await snapshot(page); assert.equal(withTimer.starts, 1);
+    await timer.focus(); await page.evaluate(() => window.scrollTo(0, 0)); await page.locator('.oda-sound-player').waitFor();
+    await page.waitForFunction(() => document.activeElement?.closest('[data-sound-surface="mini"]') && document.activeElement.dataset.soundControl === 'timer');
+    const mini = page.locator('[data-sound-surface="mini"]'); assert.equal(await mini.locator('[data-sound-control="timer"]').inputValue(), '10'); assert.equal(await mini.locator('[data-sound-control="volume"]').inputValue(), '0.01');
+    const afterHandoff = await snapshot(page); assert.equal(afterHandoff.starts, 1); assert.equal(afterHandoff.endsAt, withTimer.endsAt); assert.equal(afterHandoff.track, started.track);
+    const miniTimer = mini.locator('[data-sound-control="timer"]'); await miniTimer.focus(); await scrollExpanded(page);
+    await page.waitForFunction(() => document.activeElement?.closest('[data-sound-surface="expanded"]') && document.activeElement.dataset.soundControl === 'timer');
+    assert.equal(await timer.inputValue(), '10'); assert.equal(await range.inputValue(), '0.01'); record.checks.sharedValuesAndFocusHandoff = true;
+    await expanded.locator('[data-sound-control="toggle"]').click(); const paused = await snapshot(page); assert.equal(paused.playing, false); assert.ok(paused.pausedRemainingMs > 0);
+    await page.evaluate(() => window.scrollTo(0, 0)); await page.locator('.oda-sound-player').waitFor();
+    const pausedMini = await snapshot(page); assert.equal(pausedMini.pausedRemainingMs, paused.pausedRemainingMs); assert.equal(pausedMini.starts, 1);
+    if (capture) await shot('mini-paused');
+    await scrollExpanded(page); assert.equal((await snapshot(page)).pausedRemainingMs, paused.pausedRemainingMs);
+    await expanded.locator('[data-sound-control="toggle"]').click(); const resumed = await snapshot(page); assert.equal(resumed.playing, true); assert.equal(resumed.starts, 2); assert.equal(resumed.track, started.track);
+    assert.ok(Math.abs(resumed.endsAt - Date.now() - paused.pausedRemainingMs) < 2000); record.checks.pauseResumeAndTimerPreserved = true;
+    if (capture) await shot('expanded-primary');
+    // Synthetic, in-memory entitlement state only. No SDK init/login/purchase is invoked.
+    await page.evaluate(() => window.__soundQA.purchases.set({ available: true, ready: true, identityConfirmed: false, tier: 'free' }));
+    const denied = await page.evaluate(() => window.__soundQA.player.play('tibetan_bowls', { sectionId: 'relax', indexInCategory: 3 })); assert.equal(denied, false);
+    assert.equal((await snapshot(page)).starts, 2); record.checks.directPaidAdmissionDenied = true;
+    await page.locator('.oda-sound-panel .oda-sound-card-button').nth(3).click(); await page.waitForFunction(() => document.querySelector('[data-app-route]')?.getAttribute('data-app-route') === '/app/upgrade');
+    assert.equal((await snapshot(page)).starts, 2); record.checks.lockedCardRoutesUpgradeWithoutGraph = true;
+    await context.close(); console.log(`PASS ${name}`);
+  }
+  assert.equal(report.errors.length, 0); assert.equal(report.external.length, 0);
+} catch (error) { report.failure = String(error); throw error; }
+finally { fs.writeFileSync(`${out}/browser-report.json`, JSON.stringify(report, null, 2) + '\n'); await browser.close(); }

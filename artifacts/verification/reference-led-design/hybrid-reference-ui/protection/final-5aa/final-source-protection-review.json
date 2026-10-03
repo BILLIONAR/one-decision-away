@@ -1,0 +1,126 @@
+{
+  "kind": "sealed independent hybrid source/protection review with confirmed correctness blocker",
+  "sealedAtUtc": "2026-10-03T01:18:45.023935+00:00",
+  "sourceCommit": "5aa69ae3f2d722558fb69319babda0c1810b69d2",
+  "reviewBase": "4bf566f17980fe2eaf26e3f20b277e97cad981b9",
+  "protectedBase": "4c873b0df32c4489a8b95260122ae3ae9efd936d",
+  "status": "BLOCKED: confirmed timer-evidence P2 must be corrected before source approval. Integrity/aggregate pass remains valid historical evidence, not a correctness approval.",
+  "findings": [
+    {
+      "priority": "P2",
+      "file": "src/services/focusEvidence.ts",
+      "line": 14,
+      "title": "Lifetime mission-ID dedup loses legitimate repeatable-quest timer sessions",
+      "evidence": "Map keyed missionId keeps earliestcompletion, omitting laterdistinct timed sessions for ordinary repeatablequests. Existing repository.ts337 preserves repeatable quests and appends distinct IDs at372; economy.ts106 allows spacedrepeatactions. Today.tsx177useshelper for actual focusminutes/streak; focus-evidence.test.ts31 asserts omission.",
+      "verification": "Independent helper static code review plus parent auditor independent inspection of actual repository/ledger/newhelper/test/Today wiring; parent confirmed genuinefinding.",
+      "correctionScope": "Canonical completionidentity plus exactsameMissionID/timestamp duplicate-event suppression, distinct legitimate spaced sessions retained; canonical one-decision/rewards/persistence untouched. No correction by auditor."
+    }
+  ],
+  "additionalInheritedConcern": {
+    "file": "src/hooks/useSavedCourseProgress.ts",
+    "lines": [
+      6,
+      10,
+      14
+    ],
+    "title": "Direct initial/focus/replacement reads can show provisional localStorage course projection before queued commit",
+    "reportedBy": "safety_inventory independent helper",
+    "codeBasis": "courseProgress.ts110\u2013125reads projection;181\u2013186queued subscriptions deliberately avoid provisional values.",
+    "classification": "Inherited transient durability concern pending reproduction; directread patterns already existed in baselineCourseNextStep. Not a second newly confirmed blocker or claimed persistence write.",
+    "action": "Parent informed before its focused repair; no further app reads/tests or mutation by auditor."
+  },
+  "exactGitDelta": {
+    "pathCount": 20,
+    "existingChangedFiles": 8,
+    "newTrackedFiles": 12,
+    "artifactPathsChanged": 0,
+    "newCodeSourceFiles": 9,
+    "newTests": 3,
+    "inventoryClarification": "874is parent alltrackednonartifact inventory; earlier738was selectedinventory. Not136newappfiles."
+  },
+  "sourceBinding": {
+    "sourceFiles": 874,
+    "allActualSourceEqualImmutableGitAndFreshReceipt": true
+  },
+  "compiledBinding": {
+    "files": 437,
+    "css": 7,
+    "allActualNamesBytesHashesEqualFreshReceipt": true
+  },
+  "aggregate": {
+    "passed": 610,
+    "failed": 0,
+    "exitCode": 0,
+    "rawLogBytes": 78088,
+    "rawLogSha256": "b022e2928da37ce2c1cf844a5776e05c31185f53817744aea4ee60e1eb18d454",
+    "actualSummaryAndBuildCompleteVerified": true
+  },
+  "protectedInventory": {
+    "files": 348,
+    "changedInventoryFiles": [],
+    "all348InventoryHashesComparedAndEqual": true,
+    "componentExceptions": "Courses/Notebook/Journal/Today/CourseNextStep full component files are authorized changed presentation/nav/date behavior outside the348coreinventory; no whole-file/controller identity claim for them."
+  },
+  "fixedAssets": {
+    "englishMp3Count": 160,
+    "sessions": 11,
+    "oldPublicCount": 285,
+    "originalDeliveryCount": 40,
+    "allHashesUnchanged": true,
+    "noNewModelAudioMasterAssets": true
+  },
+  "unaffectedContractsReviewed": [
+    "Globalidentity/C4theme/logo/mainworkflow/SW/CSP/native/guidance/audio/runtime/corestore/repository/economy/progresswrites bytes unchanged.",
+    "Course-navigation intent validates actual catalogue/course lesson IDs, stores only selection + ephemeral one-use intent, scopes existingprofile/replacement identity, waits for ready profile/access and queued initial course read, rejects prerequisite/entitlement attempts without marking learningprogress.",
+    "Course workbook/quizzes/learning mutation paths retain canonical draft.update shared lock; roadmap labels/counts derive actual catalogue/lesson progress. Search/filter and existingoverview/resume remain.",
+    "Journal existing canReplace/openEntry/reset/save/remove, nativephoto effect and useSessionDraft writingdate/dirty/saveguard controller bodies retained in actual diff. New archiveweek/calendar/popup actions only call selectedDate/weekanchor or guardedexistingNew/Edit actions; preview reads actual filteredentries.",
+    "Notebook Journal/Practices remain mounted whileQuotes tabhidden; quotecomponent loads viaReact.lazy onlyafterfirstQuotes opening. ExistingAffirmation/Notebooklocalevoice files unchanged; ES quotes explicitlyEnglish rather than fabricatedtranslation.",
+    "Quotes source URLs limited to http/https and externalnoopener noreferrer; real quote catalogue/source text, localcategory/search/pagination only, decorativeexistingapprovedart.",
+    "UTC bucketing/future andinvalidtimer filtering are sound; timerEvidence dedup is the confirmedsemanticdefect.",
+    "Today/saved-course/roadmap imports catalogue metadata and type-only curriculum references; nofullcurriculumpayload, master/all160audio eager import or newmodel runtime.",
+    "Sound change is oneFocus-title/body existing-tone backing rule; geometry/eight reviewedrepairs/realplayer access/sharedcontrols/source/fallback untouched."
+  ],
+  "evidence": {
+    "initialExactFactReceipt": {
+      "file": "/workspace/scratch/oda-reference-redesign/expanded-hybrid/protection/final-5aa/initial-protection-review-with-finding.json",
+      "sha256": "28dc91c74df33f3c19eeb3d95e854475a6cc69f46a6f1ffc5bfb06fb6232f033"
+    },
+    "sourceManifest": "/workspace/scratch/oda-reference-redesign/expanded-hybrid/protection/final-5aa/source-manifest.json",
+    "compiledManifest": "/workspace/scratch/oda-reference-redesign/expanded-hybrid/protection/final-5aa/compiled-binding.json",
+    "exactDiff": "/workspace/scratch/oda-reference-redesign/expanded-hybrid/protection/final-5aa/exact-source.delta.diff.log",
+    "prior4bfRaw597Log": {
+      "bytes": 76415,
+      "sha256": "6ac57fed21791f633162ec3aa6c8f4c3f4f28b563ca68db15dc2e0f9096ec624"
+    },
+    "prior4bfAuditSha256": "6ac09c44e6e135fea6a40d3de2e1928f63fb0878062c70f42822162850c7f966",
+    "priorRawAuditFilesUnchanged": true
+  },
+  "independentHelper": {
+    "name": "safety_inventory",
+    "readersClosed": true,
+    "filesInspected": [
+      "src/services/focusEvidence.ts",
+      "src/hooks/useSavedCourseProgress.ts",
+      "src/components/today/CourseNextStep.tsx",
+      "src/components/CourseRoadmap.tsx",
+      "src/data/courseCatalog.ts",
+      "src/services/courseProgress.ts",
+      "src/pages/Today.tsx",
+      "src/pages/Courses.tsx",
+      "src/services/repository.ts",
+      "src/services/economy.ts",
+      "tests/focus-evidence.test.ts",
+      "src/data/courseEntryCopy.ts",
+      "src/data/starterDecisions.ts",
+      "src/services/courseNavigationIntent.ts",
+      "src/services/dailyLoop.ts"
+    ]
+  },
+  "allAuditorAndHelperSourceBuildArtifactReadersClosed": true,
+  "limits": [
+    "No app edits/build/browser/tests/network/deployment/commit/push.",
+    "Parent may correct afterexplicit readerclosure; future source/hash/aggregate/runtime binding mustuse newcommit. Preserve this5aa blockerreceipt and actual610pass log without rewriting.",
+    "No visual/publication approval, blanket348componentidentity, globalWCAG/physicaldevice/provider/cliphumanQA/freshmodelgetter claim.",
+    "Parent remote main350/reviewd14 status wasreported byparent; auditor performed no networkverification."
+  ]
+}

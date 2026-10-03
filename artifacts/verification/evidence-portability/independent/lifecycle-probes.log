@@ -1,0 +1,148 @@
+{
+  "at": "2026-10-02T14:27:16.517Z",
+  "kind": "Independent controlled lifecycle probes, no network/provider",
+  "sources": [
+    {
+      "file": "src/utils/recordedNarration.ts",
+      "sha256": "9bacb11df80eea39cc677afd9660450c24a06ee765b2063730cb849d2586ecca"
+    },
+    {
+      "file": "src/utils/voiceGuide.ts",
+      "sha256": "f087d6c852415be301e04518e560dabe73cf6f5b4e91b217b936cd69502a547c"
+    },
+    {
+      "file": "public/sw.js",
+      "sha256": "51e9575be78bfaa1cf9d2de7a461d819c6fae141cbfe196b4985c34aa04511ef"
+    }
+  ],
+  "results": [
+    {
+      "name": "Construction dormant; at most current plus two upcoming fetched",
+      "status": "passed",
+      "details": {
+        "requests": [
+          "/assets/oda/narration/en-US/v1/clips/review-0.mp3",
+          "/assets/oda/narration/en-US/v1/clips/review-1.mp3",
+          "/assets/oda/narration/en-US/v1/clips/review-2.mp3"
+        ],
+        "decoded": 3
+      }
+    },
+    {
+      "name": "Volume zero set during async load persists at source start",
+      "status": "passed",
+      "details": {
+        "gain": 0
+      }
+    },
+    {
+      "name": "Stop cancels pending load and prevents late playback",
+      "status": "passed",
+      "details": {
+        "lateStarts": 0
+      }
+    },
+    {
+      "name": "Pause/resume playing cue restores offset with pause-adjusted deadline",
+      "status": "passed",
+      "details": {
+        "offset": 1.4,
+        "ended": 1
+      }
+    },
+    {
+      "name": "Pause during load does not revive stale load, Resume restores current cue",
+      "status": "passed",
+      "details": {
+        "starts": 1
+      }
+    },
+    {
+      "name": "Replay interrupts prior source and ignores captured old ended callback",
+      "status": "passed",
+      "details": {
+        "sources": 2,
+        "staleEndIgnored": true
+      }
+    },
+    {
+      "name": "Session switching aborts old loads, clears decoded session and never plays late old cue",
+      "status": "passed",
+      "details": {
+        "oldStarts": 0,
+        "decodedKeys": [
+          "other:0"
+        ]
+      }
+    },
+    {
+      "name": "Verified persistence remains at 32 clips, decoded memory at 3",
+      "status": "passed",
+      "details": {
+        "persistent": 32,
+        "decoded": 3
+      }
+    },
+    {
+      "name": "Corrupt cached clip is deleted; verified network bytes replace it",
+      "status": "passed",
+      "details": {
+        "networkRetry": 1
+      }
+    },
+    {
+      "name": "missing recording falls back strictly to English device without paid provider",
+      "status": "passed",
+      "details": {
+        "fallback": "en-US",
+        "providerCalls": 0
+      }
+    },
+    {
+      "name": "corrupt recording falls back strictly to English device without paid provider",
+      "status": "passed",
+      "details": {
+        "fallback": "en-US",
+        "providerCalls": 0
+      }
+    },
+    {
+      "name": "decode recording falls back strictly to English device without paid provider",
+      "status": "passed",
+      "details": {
+        "fallback": "en-US",
+        "providerCalls": 0
+      }
+    },
+    {
+      "name": "Device fallback pause/resume never retries a failed recording alongside device narration",
+      "status": "passed",
+      "details": {
+        "mode": "device",
+        "recordedStarts": 0,
+        "deviceSpeaking": true,
+        "devicePaused": false,
+        "retriedLoads": 1
+      }
+    },
+    {
+      "name": "Missing recording after pause during load + Resume falls back to installed English device",
+      "status": "passed",
+      "details": {
+        "mode": "loading",
+        "deviceQueue": 1,
+        "providerCalls": 0
+      }
+    },
+    {
+      "name": "No installed English voice never substitutes Turkish when recorded clip is missing",
+      "status": "passed",
+      "details": {
+        "mode": "unavailable",
+        "spoken": 0
+      }
+    }
+  ],
+  "passed": 15,
+  "failed": 0
+}

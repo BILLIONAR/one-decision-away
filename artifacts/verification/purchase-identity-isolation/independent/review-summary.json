@@ -1,0 +1,196 @@
+{
+  "timestamp": "2026-10-02T09:23:34.385695+00:00",
+  "workspace": "/workspace/oda-purchase-identity-fix",
+  "branch": "fix/purchase-identity-isolation",
+  "baseCommit": "e72724f382501a1178d6cf21d01a437f755a40ed",
+  "assessment": "PASS within the independent identity isolation review: no remaining source blocker found for the recorded hashes. Parent retains final build/visual QA/release checkpoint; this review does not publish.",
+  "sourceSHA256": {
+    "src/services/purchases.ts": "20166152294fdaba6c351e282c1b738a47b775256677030af518a417e1da257d",
+    "src/services/cloudSync.ts": "50a24f6690106cebbc1b38dfabb0edb84d4ca34f28b26dde4b919537b62a4bde",
+    "src/services/purchaseIdentityBinding.ts": "9635abcc38a61f1893e2222e82ceea5038cca03cbecb15df1f76b98421d19d39",
+    "src/pages/Upgrade.tsx": "5347a3452b252fce1050b0ffaa080e1429984b62e2b3365592309a44ceb78998",
+    "src/main.tsx": "0814637533b0ea42e813e4275a3602a7ea0ff2367ad3bf75a27201a4ce2c2cbc",
+    "src/i18n/purchases.ts": "6a2ee05bc421d8c169fa1ef0e732b1e1485f9e6d1e31d1fa1b0316ba234c0521"
+  },
+  "independentRaceProbes": {
+    "total": 29,
+    "passed": 29,
+    "failed": 0,
+    "report": "fixed-final2-report.json"
+  },
+  "independentMicrotaskSchedules": {
+    "total": 18,
+    "staleCustomerCommits": 0,
+    "invalidConfirmations": 0,
+    "staleUIGuards": 0,
+    "report": "fixed-final2-microtask-report.json"
+  },
+  "beforeFixParentRaces": [
+    {
+      "name": "logout rejection cannot retain previous account Pro as ready for null identity",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n\n'pro' !== 'free'\n",
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "pro",
+        "isPro": true,
+        "renewsAt": "2030-01-01",
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "unknown"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "offerings",
+        "eligibility",
+        "logout"
+      ]
+    },
+    {
+      "name": "A then B held login serializes, invalidates A synchronously, and cannot publish A late",
+      "passed": false,
+      "error": "B SDK login started while A SDK mutation was outstanding",
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "pro",
+        "isPro": true,
+        "renewsAt": "2030-01-01",
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "eligible"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "customer:$RCAnonymous:review",
+        "offerings",
+        "anonymous:true",
+        "eligibility",
+        "login:A",
+        "login:B",
+        "eligibility",
+        "eligibility"
+      ],
+      "observations": {
+        "BStartedBeforeAResolved": true,
+        "tierAfterBResolvedBeforeA": "free",
+        "finalSDKIdentity": "A",
+        "finalTier": "pro"
+      }
+    },
+    {
+      "name": "held A purchase cannot grant B or return purchased after B desired",
+      "passed": false,
+      "error": "B login started during purchase mutation",
+      "state": {
+        "available": true,
+        "ready": true,
+        "tier": "pro",
+        "isPro": true,
+        "renewsAt": "2030-01-01",
+        "products": {
+          "oda_pro_annual": {
+            "id": "oda_pro_annual",
+            "tier": "pro",
+            "plan": "annual",
+            "price": "$49.99",
+            "amount": 49.99,
+            "perMonth": "$4.17",
+            "trialDays": 7,
+            "trialEligibility": "eligible"
+          }
+        },
+        "error": null
+      },
+      "calls": [
+        "configure",
+        "listener",
+        "customer:$RCAnonymous:review",
+        "offerings",
+        "anonymous:true",
+        "eligibility",
+        "login:A",
+        "eligibility",
+        "purchase",
+        "login:B",
+        "eligibility"
+      ],
+      "observations": {
+        "BStartedBeforePurchaseResolved": true,
+        "purchaseResult": "purchased"
+      }
+    }
+  ],
+  "interimAwaitRace": {
+    "staleCustomerCommits": 6,
+    "report": "interim-microtask-report.json"
+  },
+  "beforeCapabilityFix": {
+    "report": "fixed-report.json",
+    "failure": "configured native unknown auth retained available=false and therefore opened paid content gates"
+  },
+  "scope": [
+    "synchronous desired identity invalidation",
+    "serialized SDK customer/account operations",
+    "late init/customer/offerings/eligibility/purchase/restore suppression",
+    "alias-safe canonical listener refresh",
+    "initial and later identity read failures",
+    "same-ID and anonymous retry",
+    "offline same-account entitlement preservation",
+    "unknown authentication deferral",
+    "native/web content gates",
+    "generation-bound UI feedback"
+  ],
+  "limits": [
+    "Only synthetic SDK and in-memory auth inputs; no RevenueCat/Supabase provider, credential, account, payment, physical-device or real store calls.",
+    "No source edits, commits, pushes, workflow dispatches, or deployments by this reviewer.",
+    "This report binds uncommitted reviewed source bytes; final release must preserve or revalidate these hashes."
+  ],
+  "packageWorkflowChanges": [],
+  "focusedRegressionTests": {
+    "command": "node --import tsx --test tests/purchases-readiness.test.ts tests/purchases-identity.test.ts tests/purchase-identity-binding.test.ts tests/upgrade-readiness.test.ts",
+    "tests": 63,
+    "passed": 63,
+    "failed": 0,
+    "exitCode": 0,
+    "log": "focused-regression-tests.log",
+    "sha256": "45b312789b0a7f655f49711de67b0bf53ba4ac391b2d676bdda29a90c9ec6449"
+  },
+  "updatedAt": "2026-10-02T09:24:48.763824+00:00",
+  "independentBinderReview": {
+    "sourceAndEvidenceHashMismatches": [],
+    "mainReport": "binder/oda-main-identity-after-fix.json",
+    "mainFailures": [],
+    "binderReport": "binder/oda-binder-after-fix.json",
+    "binderCases": 7,
+    "binderFailures": [],
+    "fetchCalls": 0,
+    "consumerGateReport": "binder/oda-purchase-consumer-gates-after-fix.json",
+    "consumerGateCases": 3,
+    "consumerGateFailures": [],
+    "sdkCalls": 0
+  }
+}

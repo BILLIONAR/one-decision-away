@@ -1,0 +1,670 @@
+TAP version 13
+# Subtest: legacy course storage migrates into the personal record without changing other data
+ok 1 - legacy course storage migrates into the personal record without changing other data
+  ---
+  duration_ms: 5.25714
+  type: 'test'
+  ...
+# Subtest: course edits, completion, experiment plans and logs roundtrip through JSON backup
+ok 2 - course edits, completion, experiment plans and logs roundtrip through JSON backup
+  ---
+  duration_ms: 3.380669
+  type: 'test'
+  ...
+# Subtest: a stale save from another feature retains newer lesson notes and practice logs
+ok 3 - a stale save from another feature retains newer lesson notes and practice logs
+  ---
+  duration_ms: 1.776029
+  type: 'test'
+  ...
+# Subtest: a legacy backup keeps local courses; an explicit empty course backup clears them
+ok 4 - a legacy backup keeps local courses; an explicit empty course backup clears them
+  ---
+  duration_ms: 1.796851
+  type: 'test'
+  ...
+# Subtest: validation rejects malformed personal, notebook and course data before any storage write
+ok 5 - validation rejects malformed personal, notebook and course data before any storage write
+  ---
+  duration_ms: 4.152678
+  type: 'test'
+  ...
+# Subtest: quota failures keep the entire previous record and legacy key intact, and a retry succeeds
+ok 6 - quota failures keep the entire previous record and legacy key intact, and a retry succeeds
+  ---
+  duration_ms: 1.437135
+  type: 'test'
+  ...
+# Subtest: unreadable main data is never replaced by a course-only save
+ok 7 - unreadable main data is never replaced by a course-only save
+  ---
+  duration_ms: 0.451203
+  type: 'test'
+  ...
+# Subtest: lesson edits and re-completion retain the real-world experiment history
+ok 8 - lesson edits and re-completion retain the real-world experiment history
+  ---
+  duration_ms: 0.244079
+  type: 'test'
+  ...
+# Subtest: course mutations wait for the shared write lock and rebase onto a concurrent notebook commit
+ok 9 - course mutations wait for the shared write lock and rebase onto a concurrent notebook commit
+  ---
+  duration_ms: 0.844428
+  type: 'test'
+  ...
+# Subtest: ledger and notebook rewards retain one UTC ceiling when the local decision day differs
+ok 10 - ledger and notebook rewards retain one UTC ceiling when the local decision day differs
+  ---
+  duration_ms: 15.506178
+  type: 'test'
+  ...
+# Subtest: cloud upload captures current courses and invalid cloud backups leave local storage untouched
+ok 11 - cloud upload captures current courses and invalid cloud backups leave local storage untouched
+  ---
+  duration_ms: 12.361011
+  type: 'test'
+  ...
+# Subtest: cloud previews do not change last-sync or local data until the reviewed record is committed
+ok 12 - cloud previews do not change last-sync or local data until the reviewed record is committed
+  ---
+  duration_ms: 7.908744
+  type: 'test'
+  ...
+# Subtest: a pending cloud SELECT cannot replace data after account switch
+ok 13 - a pending cloud SELECT cannot replace data after account switch
+  ---
+  duration_ms: 4.325449
+  type: 'test'
+  ...
+# Subtest: a pending cloud SELECT cannot replace data after project switch
+ok 14 - a pending cloud SELECT cannot replace data after project switch
+  ---
+  duration_ms: 0.742094
+  type: 'test'
+  ...
+# Subtest: a pending cloud SELECT cannot replace data after logout and reauthentication as the same account
+ok 15 - a pending cloud SELECT cannot replace data after logout and reauthentication as the same account
+  ---
+  duration_ms: 0.828144
+  type: 'test'
+  ...
+# Subtest: a pending cloud SELECT cannot replace data after an explicit local import barrier
+ok 16 - a pending cloud SELECT cannot replace data after an explicit local import barrier
+  ---
+  duration_ms: 1.133045
+  type: 'test'
+  ...
+# Subtest: a pending cloud SELECT cannot replace data after newer saved personal writing
+ok 17 - a pending cloud SELECT cannot replace data after newer saved personal writing
+  ---
+  duration_ms: 4.259339
+  type: 'test'
+  ...
+# Subtest: a reviewed cloud restore is checked inside the write lock after account switch
+ok 18 - a reviewed cloud restore is checked inside the write lock after account switch
+  ---
+  duration_ms: 12.314375
+  type: 'test'
+  ...
+# Subtest: a reviewed cloud restore is checked inside the write lock after project switch
+ok 19 - a reviewed cloud restore is checked inside the write lock after project switch
+  ---
+  duration_ms: 2.748352
+  type: 'test'
+  ...
+# Subtest: a reviewed cloud restore is checked inside the write lock after logout and reauthentication as the same account
+ok 20 - a reviewed cloud restore is checked inside the write lock after logout and reauthentication as the same account
+  ---
+  duration_ms: 1.873137
+  type: 'test'
+  ...
+# Subtest: a reviewed cloud restore is checked inside the write lock after an explicit local import barrier
+ok 21 - a reviewed cloud restore is checked inside the write lock after an explicit local import barrier
+  ---
+  duration_ms: 1.861749
+  type: 'test'
+  ...
+# Subtest: a reviewed cloud restore is checked inside the write lock after newer saved personal writing
+ok 22 - a reviewed cloud restore is checked inside the write lock after newer saved personal writing
+  ---
+  duration_ms: 1.736759
+  type: 'test'
+  ...
+# Subtest: an unchanged reviewed cloud record commits once and records its scoped sync
+ok 23 - an unchanged reviewed cloud record commits once and records its scoped sync
+  ---
+  duration_ms: 2.560547
+  type: 'test'
+  ...
+# Subtest: manual sync cannot fall back to uploading a captured previous-account snapshot
+ok 24 - manual sync cannot fall back to uploading a captured previous-account snapshot
+  ---
+  duration_ms: 0.613159
+  type: 'test'
+  ...
+# Subtest: a delayed automatic backup remains bound to its original account
+ok 25 - a delayed automatic backup remains bound to its original account
+  ---
+  duration_ms: 0.486827
+  type: 'test'
+  ...
+# Subtest: an old upload success cannot mark or emit the new cloud scope
+ok 26 - an old upload success cannot mark or emit the new cloud scope
+  ---
+  duration_ms: 3.603297
+  type: 'test'
+  ...
+# Subtest: an old upload failure cannot mark or emit the new cloud scope
+ok 27 - an old upload failure cannot mark or emit the new cloud scope
+  ---
+  duration_ms: 1.906286
+  type: 'test'
+  ...
+# Subtest: fresh OTP sign-in cannot overwrite existing cloud work on the first ordinary save
+ok 28 - fresh OTP sign-in cannot overwrite existing cloud work on the first ordinary save
+  ---
+  duration_ms: 5.539588
+  type: 'test'
+  ...
+# Subtest: an absent cloud row is inserted once and acknowledges the returned server version and exact data
+ok 29 - an absent cloud row is inserted once and acknowledges the returned server version and exact data
+  ---
+  duration_ms: 26.379522
+  type: 'test'
+  ...
+# Subtest: offline SELECT throws and reconnect retain both records
+ok 30 - offline SELECT throws and reconnect retain both records
+  ---
+  duration_ms: 1.863963
+  type: 'test'
+  ...
+# Subtest: offline SELECT resolved and reconnect retain both records
+ok 31 - offline SELECT resolved and reconnect retain both records
+  ---
+  duration_ms: 0.843106
+  type: 'test'
+  ...
+# Subtest: shared device A→B→A cannot reuse the historical acknowledgement of A after B owns the record
+ok 32 - shared device A→B→A cannot reuse the historical acknowledgement of A after B owns the record
+  ---
+  duration_ms: 11.982453
+  type: 'test'
+  ...
+# Subtest: a stale upload SELECT after account cannot write or alter current-scope status
+ok 33 - a stale upload SELECT after account cannot write or alter current-scope status
+  ---
+  duration_ms: 1.766645
+  type: 'test'
+  ...
+# Subtest: a stale upload SELECT after project cannot write or alter current-scope status
+ok 34 - a stale upload SELECT after project cannot write or alter current-scope status
+  ---
+  duration_ms: 0.629924
+  type: 'test'
+  ...
+# Subtest: a stale upload SELECT after logout-return cannot write or alter current-scope status
+ok 35 - a stale upload SELECT after logout-return cannot write or alter current-scope status
+  ---
+  duration_ms: 0.497944
+  type: 'test'
+  ...
+# Subtest: a stale upload SELECT after local-edit cannot write or alter current-scope status
+ok 36 - a stale upload SELECT after local-edit cannot write or alter current-scope status
+  ---
+  duration_ms: 0.678878
+  type: 'test'
+  ...
+# Subtest: a stale upload SELECT after import cannot write or alter current-scope status
+ok 37 - a stale upload SELECT after import cannot write or alter current-scope status
+  ---
+  duration_ms: 0.884599
+  type: 'test'
+  ...
+# Subtest: same-version remote content changed at the fresh read cannot authorize overwrite
+ok 38 - same-version remote content changed at the fresh read cannot authorize overwrite
+  ---
+  duration_ms: 6.139586
+  type: 'test'
+  ...
+# Subtest: canonical acknowledgement treats reordered object keys as equal, but retains array order
+ok 39 - canonical acknowledgement treats reordered object keys as equal, but retains array order
+  ---
+  duration_ms: 9.462227
+  type: 'test'
+  ...
+# Subtest: a changed remote version between SELECT and UPDATE yields zero rows and never acknowledges success
+ok 40 - a changed remote version between SELECT and UPDATE yields zero rows and never acknowledges success
+  ---
+  duration_ms: 3.321329
+  type: 'test'
+  ...
+# Subtest: an absent-row insert race preserves the winning cloud record and holds the import token
+ok 41 - an absent-row insert race preserves the winning cloud record and holds the import token
+  ---
+  duration_ms: 2.14008
+  type: 'test'
+  ...
+# Subtest: empty returned write representation never acknowledges or clears import intent
+ok 42 - empty returned write representation never acknowledges or clears import intent
+  ---
+  duration_ms: 1.352848
+  type: 'test'
+  ...
+# Subtest: missing returned write representation never acknowledges or clears import intent
+ok 43 - missing returned write representation never acknowledges or clears import intent
+  ---
+  duration_ms: 1.417296
+  type: 'test'
+  ...
+# Subtest: invalid-data returned write representation never acknowledges or clears import intent
+ok 44 - invalid-data returned write representation never acknowledges or clears import intent
+  ---
+  duration_ms: 1.632682
+  type: 'test'
+  ...
+# Subtest: invalid-version returned write representation never acknowledges or clears import intent
+ok 45 - invalid-version returned write representation never acknowledges or clears import intent
+  ---
+  duration_ms: 1.18196
+  type: 'test'
+  ...
+# Subtest: multiple returned write representation never acknowledges or clears import intent
+ok 46 - multiple returned write representation never acknowledges or clears import intent
+  ---
+  duration_ms: 1.638111
+  type: 'test'
+  ...
+# Subtest: a legacy timestamp-only acknowledgement cannot authorize an existing-row upload
+ok 47 - a legacy timestamp-only acknowledgement cannot authorize an existing-row upload
+  ---
+  duration_ms: 1.599972
+  type: 'test'
+  ...
+# Subtest: previewing or declining a cloud restore creates no acknowledgement and later saves remain held
+ok 48 - previewing or declining a cloud restore creates no acknowledgement and later saves remain held
+  ---
+  duration_ms: 2.009622
+  type: 'test'
+  ...
+# Subtest: accepted cloud restore acknowledges the raw fetched JSON, including omitted legacy course data
+ok 49 - accepted cloud restore acknowledges the raw fetched JSON, including omitted legacy course data
+  ---
+  duration_ms: 3.971613
+  type: 'test'
+  ...
+# Subtest: an explicit import facing unacknowledged existing cloud keeps bytes/token and cannot bypass review protection
+ok 50 - an explicit import facing unacknowledged existing cloud keeps bytes/token and cannot bypass review protection
+  ---
+  duration_ms: 1.087707
+  type: 'test'
+  ...
+# Subtest: an explicit import into absent cloud can insert and clear only its still-current token
+ok 51 - an explicit import into absent cloud can insert and clear only its still-current token
+  ---
+  duration_ms: 3.509254
+  type: 'test'
+  ...
+# Subtest: a late write response cannot acknowledge a new account or clear a newer import token
+ok 52 - a late write response cannot acknowledge a new account or clear a newer import token
+  ---
+  duration_ms: 2.052899
+  type: 'test'
+  ...
+# Subtest: a write response cannot clear an import created while that same account upload waited
+ok 53 - a write response cannot clear an import created while that same account upload waited
+  ---
+  duration_ms: 1.388632
+  type: 'test'
+  ...
+# Subtest: acknowledgement storage failure does not report sync success or clear imported intent
+ok 54 - acknowledgement storage failure does not report sync success or clear imported intent
+  ---
+  duration_ms: 1.819975
+  type: 'test'
+  ...
+# Subtest: hash failure cannot mutate cloud or acknowledge the local record
+ok 55 - hash failure cannot mutate cloud or acknowledge the local record
+  ---
+  duration_ms: 3.460069
+  type: 'test'
+  ...
+# Subtest: awaited remote fingerprint after account cannot authorize a stale write
+ok 56 - awaited remote fingerprint after account cannot authorize a stale write
+  ---
+  duration_ms: 2.944869
+  type: 'test'
+  ...
+# Subtest: awaited remote fingerprint after local-edit cannot authorize a stale write
+ok 57 - awaited remote fingerprint after local-edit cannot authorize a stale write
+  ---
+  duration_ms: 6.735478
+  type: 'test'
+  ...
+# Subtest: awaited remote fingerprint after import cannot authorize a stale write
+ok 58 - awaited remote fingerprint after import cannot authorize a stale write
+  ---
+  duration_ms: 3.278164
+  type: 'test'
+  ...
+# Subtest: a malformed-data SELECT pauses upload without choosing a winner
+ok 59 - a malformed-data SELECT pauses upload without choosing a winner
+  ---
+  duration_ms: 0.782966
+  type: 'test'
+  ...
+# Subtest: a invalid-version SELECT pauses upload without choosing a winner
+ok 60 - a invalid-version SELECT pauses upload without choosing a winner
+  ---
+  duration_ms: 0.374467
+  type: 'test'
+  ...
+# Subtest: successful upload acknowledges the actual returned server version rather than the attempted client timestamp
+ok 61 - successful upload acknowledges the actual returned server version rather than the attempted client timestamp
+  ---
+  duration_ms: 1.734937
+  type: 'test'
+  ...
+# Subtest: a rejected reviewed restore cannot establish cloud acknowledgement
+ok 62 - a rejected reviewed restore cannot establish cloud acknowledgement
+  ---
+  duration_ms: 1.695427
+  type: 'test'
+  ...
+# Subtest: a regressed clock advances the conditional write beyond remote microseconds 2040-01-01T00:00:00.999999Z
+ok 63 - a regressed clock advances the conditional write beyond remote microseconds 2040-01-01T00:00:00.999999Z
+  ---
+  duration_ms: 5.771308
+  type: 'test'
+  ...
+# Subtest: a regressed clock advances the conditional write beyond remote microseconds 2040-01-01T00:00:00.000001+00:00
+ok 64 - a regressed clock advances the conditional write beyond remote microseconds 2040-01-01T00:00:00.000001+00:00
+  ---
+  duration_ms: 3.852242
+  type: 'test'
+  ...
+# Subtest: a valid returned document differing from the sent snapshot cannot establish upload permission
+ok 65 - a valid returned document differing from the sent snapshot cannot establish upload permission
+  ---
+  duration_ms: 1.733925
+  type: 'test'
+  ...
+# Subtest: a represented conditional write that fails to advance its version cannot be acknowledged
+ok 66 - a represented conditional write that fails to advance its version cannot be acknowledged
+  ---
+  duration_ms: 12.844018
+  type: 'test'
+  ...
+# Subtest: an absent-row insert is not attempted when payload hashing is unavailable
+ok 67 - an absent-row insert is not attempted when payload hashing is unavailable
+  ---
+  duration_ms: 0.867464
+  type: 'test'
+  ...
+# Subtest: another owner recorded during hashing invalidates an earlier acknowledgement without changing device bytes
+ok 68 - another owner recorded during hashing invalidates an earlier acknowledgement without changing device bytes
+  ---
+  duration_ms: 3.00511
+  type: 'test'
+  ...
+# Subtest: another owner recorded during an upload response cannot be overwritten by its late acknowledgement
+ok 69 - another owner recorded during an upload response cannot be overwritten by its late acknowledgement
+  ---
+  duration_ms: 1.071512
+  type: 'test'
+  ...
+# Subtest: an acknowledgement storage-read failure after durable restore returns false and preserves the restored record
+ok 70 - an acknowledgement storage-read failure after durable restore returns false and preserves the restored record
+  ---
+  duration_ms: 1.39374
+  type: 'test'
+  ...
+# Subtest: a rejected SELECT after a newer local save cannot replace that newer status
+ok 71 - a rejected SELECT after a newer local save cannot replace that newer status
+  ---
+  duration_ms: 0.631035
+  type: 'test'
+  ...
+# Subtest: a manual preview stays paused without acknowledging cloud work until an accepted commit
+ok 72 - a manual preview stays paused without acknowledging cloud work until an accepted commit
+  ---
+  duration_ms: 1.245045
+  type: 'test'
+  ...
+# Subtest: manual review exposes unacknowledged/changed cloud at -1000ms while default startup policy remains unchanged
+ok 73 - manual review exposes unacknowledged/changed cloud at -1000ms while default startup policy remains unchanged
+  ---
+  duration_ms: 4.197276
+  type: 'test'
+  ...
+# Subtest: manual review exposes unacknowledged/changed cloud at 0ms while default startup policy remains unchanged
+ok 74 - manual review exposes unacknowledged/changed cloud at 0ms while default startup policy remains unchanged
+  ---
+  duration_ms: 4.14785
+  type: 'test'
+  ...
+# Subtest: manual review exposes unacknowledged/changed cloud at 1000ms while default startup policy remains unchanged
+ok 75 - manual review exposes unacknowledged/changed cloud at 1000ms while default startup policy remains unchanged
+  ---
+  duration_ms: 1.973137
+  type: 'test'
+  ...
+# Subtest: known limitation: a legacy same-version mutation after SELECT can pass timestamp-only CAS
+ok 76 - known limitation: a legacy same-version mutation after SELECT can pass timestamp-only CAS
+  ---
+  duration_ms: 2.50962
+  type: 'test'
+  ...
+# Subtest: deep backup safety: reject unparseable notebook day before replacing any storage
+ok 77 - deep backup safety: reject unparseable notebook day before replacing any storage
+  ---
+  duration_ms: 4.840549
+  type: 'test'
+  ...
+# Subtest: deep backup safety: reject impossible calendar day before replacing any storage
+ok 78 - deep backup safety: reject impossible calendar day before replacing any storage
+  ---
+  duration_ms: 1.125954
+  type: 'test'
+  ...
+# Subtest: deep backup safety: reject object mood rendered in journal before replacing any storage
+ok 79 - deep backup safety: reject object mood rendered in journal before replacing any storage
+  ---
+  duration_ms: 0.868775
+  type: 'test'
+  ...
+# Subtest: deep backup safety: reject object prompt assigned to editor before replacing any storage
+ok 80 - deep backup safety: reject object prompt assigned to editor before replacing any storage
+  ---
+  duration_ms: 0.87812
+  type: 'test'
+  ...
+# Subtest: deep backup safety: reject unknown kind hidden by every writing surface before replacing any storage
+ok 81 - deep backup safety: reject unknown kind hidden by every writing surface before replacing any storage
+  ---
+  duration_ms: 1.136421
+  type: 'test'
+  ...
+# Subtest: deep backup safety: reject unparseable gratitude day before replacing any storage
+ok 82 - deep backup safety: reject unparseable gratitude day before replacing any storage
+  ---
+  duration_ms: 0.829786
+  type: 'test'
+  ...
+# Subtest: deep backup safety: reject invalid writing activity day before replacing any storage
+ok 83 - deep backup safety: reject invalid writing activity day before replacing any storage
+  ---
+  duration_ms: 0.771939
+  type: 'test'
+  ...
+# Subtest: deep backup safety: reject invalid ledger day before replacing any storage
+ok 84 - deep backup safety: reject invalid ledger day before replacing any storage
+  ---
+  duration_ms: 0.642854
+  type: 'test'
+  ...
+# Subtest: deep backup safety: reject object activity transaction reference before replacing any storage
+ok 85 - deep backup safety: reject object activity transaction reference before replacing any storage
+  ---
+  duration_ms: 0.751829
+  type: 'test'
+  ...
+# Subtest: deep backup safety: reject invalid 369 start day before replacing any storage
+ok 86 - deep backup safety: reject invalid 369 start day before replacing any storage
+  ---
+  duration_ms: 1.031912
+  type: 'test'
+  ...
+# Subtest: deep backup safety: reject invalid 369 history day before replacing any storage
+ok 87 - deep backup safety: reject invalid 369 history day before replacing any storage
+  ---
+  duration_ms: 0.900564
+  type: 'test'
+  ...
+# Subtest: deep backup safety: reject object archive marker hiding a practice before replacing any storage
+ok 88 - deep backup safety: reject object archive marker hiding a practice before replacing any storage
+  ---
+  duration_ms: 0.505666
+  type: 'test'
+  ...
+# Subtest: deep backup safety: reject object 369 day timestamp before replacing any storage
+ok 89 - deep backup safety: reject object 369 day timestamp before replacing any storage
+  ---
+  duration_ms: 0.679248
+  type: 'test'
+  ...
+# Subtest: deep backup safety: reject dream instant producing an invalid display day before replacing any storage
+ok 90 - deep backup safety: reject dream instant producing an invalid display day before replacing any storage
+  ---
+  duration_ms: 0.433837
+  type: 'test'
+  ...
+# Subtest: deep backup safety: reject invalid course attempt day silently dropping a note before replacing any storage
+ok 91 - deep backup safety: reject invalid course attempt day silently dropping a note before replacing any storage
+  ---
+  duration_ms: 0.819231
+  type: 'test'
+  ...
+# Subtest: deep backup safety: reject invalid course review due date before replacing any storage
+ok 92 - deep backup safety: reject invalid course review due date before replacing any storage
+  ---
+  duration_ms: 0.776666
+  type: 'test'
+  ...
+# Subtest: deep backup safety: reject invalid course review completion date before replacing any storage
+ok 93 - deep backup safety: reject invalid course review completion date before replacing any storage
+  ---
+  duration_ms: 0.594099
+  type: 'test'
+  ...
+# Subtest: deep backup safety: legitimate exported writing, legacy moods, and leap days roundtrip and render
+ok 94 - deep backup safety: legitimate exported writing, legacy moods, and leap days roundtrip and render
+  ---
+  duration_ms: 31.270237
+  type: 'test'
+  ...
+# Subtest: deep backup safety: legacy backups without a notebook retain dream fields and local courses
+ok 95 - deep backup safety: legacy backups without a notebook retain dream fields and local courses
+  ---
+  duration_ms: 0.576092
+  type: 'test'
+  ...
+# Subtest: an earlier account sync timestamp cannot hide another account cloud record
+ok 96 - an earlier account sync timestamp cannot hide another account cloud record
+  ---
+  duration_ms: 17.11258
+  type: 'test'
+  ...
+# Subtest: a legacy unscoped timestamp is not proof that this account is synchronized
+ok 97 - a legacy unscoped timestamp is not proof that this account is synchronized
+  ---
+  duration_ms: 1.791592
+  type: 'test'
+  ...
+# Subtest: an account deletion response cannot sign out a later signed-in account
+ok 98 - an account deletion response cannot sign out a later signed-in account
+  ---
+  duration_ms: 1.340519
+  type: 'test'
+  ...
+# Subtest: an account deletion response cannot clear a new project connection
+ok 99 - an account deletion response cannot clear a new project connection
+  ---
+  duration_ms: 0.355819
+  type: 'test'
+  ...
+# Subtest: a late cloud coach reply cannot be accepted in another account scope
+ok 100 - a late cloud coach reply cannot be accepted in another account scope
+  ---
+  duration_ms: 21.969794
+  type: 'test'
+  ...
+# Subtest: account deletion cannot start with another account after awaiting the client
+ok 101 - account deletion cannot start with another account after awaiting the client
+  ---
+  duration_ms: 0.317851
+  type: 'test'
+  ...
+# Subtest: cloud coach context consent is isolated between accounts and projects
+ok 102 - cloud coach context consent is isolated between accounts and projects
+  ---
+  duration_ms: 0.287345
+  type: 'test'
+  ...
+# Subtest: a token refresh keeps the current account coach request valid
+ok 103 - a token refresh keeps the current account coach request valid
+  ---
+  duration_ms: 0.559937
+  type: 'test'
+  ...
+# Subtest: a project change while reading a coach response also expires its content
+ok 104 - a project change while reading a coach response also expires its content
+  ---
+  duration_ms: 0.36975
+  type: 'test'
+  ...
+# Subtest: stopping the coach cancels a response body still being downloaded
+ok 105 - stopping the coach cancels a response body still being downloaded
+  ---
+  duration_ms: 0.449431
+  type: 'test'
+  ...
+# Subtest: a queued backup cannot upload a local document rolled back while it waited
+ok 106 - a queued backup cannot upload a local document rolled back while it waited
+  ---
+  duration_ms: 3.779072
+  type: 'test'
+  ...
+# Subtest: the latest queued backup still uploads after a preceding slower backup
+ok 107 - the latest queued backup still uploads after a preceding slower backup
+  ---
+  duration_ms: 12.675542
+  type: 'test'
+  ...
+# Subtest: returning to an earlier account cannot reuse its timestamp for another account local record
+ok 108 - returning to an earlier account cannot reuse its timestamp for another account local record
+  ---
+  duration_ms: 7.33107
+  type: 'test'
+  ...
+# Subtest: a replaced dataset cannot inherit this account historical synchronization proof
+ok 109 - a replaced dataset cannot inherit this account historical synchronization proof
+  ---
+  duration_ms: 1.788618
+  type: 'test'
+  ...
+# Subtest: an owner-metadata quota failure cannot advertise a newer synchronized local record
+ok 110 - an owner-metadata quota failure cannot advertise a newer synchronized local record
+  ---
+  duration_ms: 3.873074
+  type: 'test'
+  ...
+1..110
+# tests 110
+# suites 0
+# pass 110
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1031.196284

@@ -1,0 +1,22 @@
+{
+  "base": "http://127.0.0.1:4311",
+  "at": "2026-10-02T13:22:38.156Z",
+  "browser": "151.0.7922.173",
+  "sourceHashes": {
+    "src/components/FocusLockView.tsx": "3357c65a769c52523f37ebaa608fc6b69a3311e9e408271a2a60f75bca1956ad",
+    "src/components/notebook/JournalWorkspace.tsx": "90b35dd2195f076e2ad0291beea4b45b0e2997698e41ace61b31ef7e39a353b5",
+    "src/components/ui.tsx": "26fcc938ee5d5a32106033b1e58055f70b12f053210388218d2931e666858b46",
+    "src/components/AppErrorBoundary.tsx": "c49623c7531d5e172372c0338b35e5b80433aa096500633e7a269f62ff99ed2b"
+  },
+  "cases": [],
+  "productDefects": [],
+  "errors": [],
+  "externalBlocked": [],
+  "screenshots": [],
+  "limits": [
+    "Actual app, real AppProvider/repository/UI handlers in Chromium on saved Linux cloud executor. Only synthetic records and dialog-method absence are injected.",
+    "No native keyboard/device or unsupported real-device claims. All requests outside the local preview are blocked. No providers, payments, secrets, app edits or deployment."
+  ],
+  "harnessFailure": "locator.waitFor: Error: strict mode violation: getByRole('heading', { name: 'Focus', exact: true }) resolved to 2 elements:\n    1) <h1 class=\"oda-display text-[32px] leading-tight text-[var(--fg)]\">Focus</h1> aka locator('h1')\n    2) <h2 class=\"text-[15px] font-semibold text-[var(--fg)]\">Focus</h2> aka locator('h2')\n\nCall log:\n\u001b[2m  - waiting for getByRole('heading', { name: 'Focus', exact: true }) to be visible\u001b[22m\n\n    at /tmp/oda-mobile-quality-focused/audit.mjs:29:155",
+  "sourceUnchanged": true
+}

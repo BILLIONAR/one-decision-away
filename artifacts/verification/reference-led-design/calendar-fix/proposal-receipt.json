@@ -1,0 +1,62 @@
+{
+  "base": "cf95c6eda4264385a4f70b41f7df0dee7832ebe7",
+  "scope": "Scratch-only proposed P2 calendar discovery fix; repository unchanged",
+  "patchBytes": 4337,
+  "patchSha256": "cbe28edd043f23fd9a865337bd6ebcd5e25beea1e67529d8d40a34703e2471ba",
+  "files": [
+    {
+      "path": "src/components/notebook/NotebookCalendar.tsx",
+      "oldBytes": 3705,
+      "oldSha256": "b2f89bde0cc5b5ae9c33c0c09d5df83209a4795356901fd011dfb43707c0641c",
+      "proposedBytes": 3958,
+      "proposedSha256": "9e05a127e9b90ded1a1f257289a2eee28b789172370e92d499557e785603da5f"
+    },
+    {
+      "path": "src/styles/notebook.css",
+      "oldBytes": 6553,
+      "oldSha256": "8a1b36f1ee5c8c0cbdd0e3515487e029705aa471b66967eb1c8f14f88c0e2748",
+      "proposedBytes": 7086,
+      "proposedSha256": "e38797e8c1bf0410c535d29ee78cfcc96162c3924aa27cb3eddd6b89e663ffc3"
+    },
+    {
+      "path": "src/i18n/locales/tr.ts",
+      "oldBytes": 590034,
+      "oldSha256": "4664d5a84df013e75844a8d34f2542df8d8077563f59039f7f30f5b411586802",
+      "proposedBytes": 590120,
+      "proposedSha256": "d79e692b66d436cda233d4c0a45cfc89e87910ae6841b531043cfce299ebcf33"
+    },
+    {
+      "path": "src/i18n/locales/es.ts",
+      "oldBytes": 602484,
+      "oldSha256": "0ec442fcf4f450a4342524b8ed8d3200ed29b8229298d8e7a76a083fbe2790c9",
+      "proposedBytes": 602575,
+      "proposedSha256": "9cd7b56ac504e8d56a18faedb0e2772ca928cf566d879d13c74304d4088cd81c"
+    }
+  ],
+  "visibleCopy": {
+    "en": "Scroll sideways to see all dates",
+    "tr": "T\u00fcm tarihleri g\u00f6rmek i\u00e7in yana kayd\u0131r\u0131n",
+    "es": "Desliza hacia los lados para ver todas las fechas"
+  },
+  "geometry": {
+    "tableMinimum": 352,
+    "showCueContainerMaximum": 351,
+    "reviewedMobileContainerWidths": [
+      254,
+      324
+    ],
+    "reviewedDesktopContainerWidth": 354
+  },
+  "unchanged": [
+    "All calendar state/effects and month/day navigation handlers",
+    "All date selection, weekday labels, entry markers and 44px targets",
+    "No store/data/provider/native/saved-record changes"
+  ],
+  "requiredVerification": [
+    "320/390 EN/TR/ES light/dark cue visible and wraps without viewport overflow",
+    "1440 desktop 354px calendar content cue hidden",
+    "Named region focus is visible; native horizontal arrow scrolling exposes weekends",
+    "All month navigation/day selection and 44px targets preserved",
+    "i18n source key validation, typecheck and final exact build independent QA"
+  ]
+}

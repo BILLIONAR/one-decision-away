@@ -1,0 +1,36 @@
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import { AppProvider, useApp } from '/workspace/oda-cloud-upload-current-record/src/store/useApp';
+import { BackupAndCloudSettings } from '/workspace/oda-cloud-upload-current-record/src/components/BackupAndCloudSettings';
+import { Account } from '/workspace/oda-cloud-upload-current-record/src/pages/Account';
+import { setLocale, ensureLocaleLoaded } from '/workspace/oda-cloud-upload-current-record/src/i18n';
+import { fixture, bindApp } from './sdk';
+
+const controls = { ...fixture, setLocale: async (locale: 'en' | 'tr' | 'es') => { setLocale(locale); await ensureLocaleLoaded(locale); } };
+(window as any).ODA_CURRENT_RECORD_FIXTURE = controls;
+document.getElementById('fixture-controls')!.innerHTML = `<summary>Synthetic current-record fixture — no provider or email calls</summary>
+  <label>Language <select id="fixture-locale"><option>en</option><option>tr</option><option>es</option></select></label>
+  <button data-action="sign-in">Emit synthetic session</button><button data-action="save">Save local decision</button>
+  <button data-action="settings">Settings</button><button data-action="account">Account</button>
+  <button data-action="read-failure">Fail SDK reads</button><button data-action="read-recover">Recover SDK reads</button>
+  <p>AppProvider, the repository, CloudSync, and review callbacks are real. Only the SDK/native/audio/notification boundaries are synthetic.</p>`;
+document.getElementById('fixture-locale')!.addEventListener('change', event => void controls.setLocale((event.target as HTMLSelectElement).value as any));
+document.getElementById('fixture-controls')!.addEventListener('click', event => {
+  const action = (event.target as HTMLElement).dataset.action;
+  if (action === 'sign-in') controls.signIn();
+  else if (action === 'save') void controls.saveDecision('Synthetic ordinary save');
+  else if (action === 'settings' || action === 'account') controls.navigate(`/app/${action}`);
+  else if (action === 'read-failure' || action === 'read-recover') controls.setReadFailure(action === 'read-failure');
+});
+function Screens() {
+  const app = useApp(); bindApp(app);
+  if (app.isLoading || !app.data) return <p role="status">Loading synthetic record…</p>;
+  return <>
+    {app.activeRoute === '/app/account' ? <Account /> : <BackupAndCloudSettings />}
+    <aside id="fixture-record" aria-label="Synthetic device record" style={{ marginTop: 24, font: '12px system-ui', overflowWrap: 'anywhere' }}>
+      Synthetic device record: {app.data.profile.displayName}. Decisions: {app.data.missions.filter(m => m.isOneDecision).map(m => m.title).join('; ')}
+      {app.toast && <p id="fixture-toast" role="status">{app.toast.message}</p>}
+    </aside>
+  </>;
+}
+createRoot(document.getElementById('root')!).render(<AppProvider><Screens /></AppProvider>);

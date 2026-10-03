@@ -1,0 +1,124 @@
+{
+  "reviewer": "Independent read-only source/protection audit /root/dashboard_palette_scope",
+  "reviewedAtUtc": "2026-10-03T17:11:59.323526+00:00",
+  "status": "passed-source-protection-review-sealed",
+  "sourceCommit": "712d411df93c79ce2f423cfb0be1acc2d3b227f1",
+  "baselineCommit": "159901f8859a644add2e3fd44f4ef20368d797ad",
+  "checkoutHead": "712d411df93c79ce2f423cfb0be1acc2d3b227f1",
+  "branch": "design/reference-led-oda",
+  "workingTreeStatus": "",
+  "changes": {
+    "paths": [
+      "src/pages/Today.tsx",
+      "src/styles/todayPalette.css"
+    ],
+    "onlyTwoAuthorizedPaths": true,
+    "addedLines": 182,
+    "removedLines": 0,
+    "TodayImportOnly": true,
+    "baselineTodaySha256": "ce5cd1e264ca7a72d2fabf12047371e607195f4a5c6dffca42d8ce1df84dd6cc",
+    "candidateTodaySha256": "625f8db399167f8741a60b9e5988e1ed3e7ded09ba562f8d891462fece22fac1",
+    "paletteCssBytes": 5986,
+    "paletteCssSha256": "0eaf8b382321233400c60536fc91040b2293cafce47b858ccda18e5e138bc431"
+  },
+  "protection": {
+    "candidateTrackedFiles": 6407,
+    "baselineTrackedFiles": 6406,
+    "unchangedTrackedFiles": 6405,
+    "unchangedSrcFilesExcludingToday": 305,
+    "unchangedPublicFiles": 325,
+    "unchangedPublicMp3Files": 160,
+    "unchangedTestsAndScripts": 102,
+    "allExistingFilesOutsideTodayByteIdentical": true,
+    "unchangedBrandFiles": 39,
+    "noServiceStoreFunctionalTestDependencyAssetChanges": true,
+    "method": "git ls-tree recursive mode/type/blob identity; exact Today byte comparison after removal of new sole import"
+  },
+  "reference": {
+    "file": "/workspace/scratch/oda-reference-redesign/domino-palette/reference/ODA-8-Telefon-Onizleme.png",
+    "libraryFileId": "libfile_1d1dcd4672208191a9ca1d21998db0c7",
+    "actualBytes": 188093,
+    "actualSha256": "d0e852498e6d69ba74c59d2b15bf386d280087fdd258cf31f3cfa14dbab05d59",
+    "matchesReceipt": true,
+    "actualPixelsInspected": true,
+    "dimensions": [
+      980,
+      820
+    ],
+    "visualObservation": "Burgundy rounded-square icon, tilted metallic gold front domino with luminous edge and vivid ruby red following dominos. Phone preview on right. CSS uses reviewed burgundy/ruby/warm gold palette while keeping reading surfaces ivory."
+  },
+  "cssReview": {
+    "parsedWith": "Installed PostCSS parser, read-only",
+    "ruleCount": 23,
+    "selectorCount": 24,
+    "allSelectorsStartWithTodayRoute": true,
+    "allRulesGuardExistingRouteAttribute": true,
+    "unscopedRules": [],
+    "noAtRulesOrGlobalThemeSelectors": true,
+    "noLayoutTypographyOrResponsiveDeclarations": true,
+    "allowedNonTokenProperties": [
+      "background",
+      "color",
+      "box-shadow",
+      "border-color",
+      "outline",
+      "outline-offset",
+      "filter",
+      "cursor",
+      "opacity"
+    ],
+    "heroSceneMarkupImagePositionFilterAndLayoutUnchanged": true,
+    "logoAndBrandAssetsUnchanged": true,
+    "noNewLogoTokens": true,
+    "sharedShellChangesLimitedToToday": true,
+    "localLightSuccessErrorMoneyTokensOverrideGlobalDarkPreference": true,
+    "realCourseRingAndCourseProgressVariablesAndAriaValuesUnchanged": true,
+    "goldProgressCompanionTrack": "#711326",
+    "focusLight": "2px ruby outline offset2px, ivory2px separation",
+    "focusDark": "2px pale-gold outline offset2px, burgundy2px separation",
+    "disabledVsActive": "Disableddecision711326/E4C8C0 versus activeCTA C51624/FFF8EB",
+    "notes": [
+      "The actual palette CSS overlays existing navy module variables with burgundy variables using stronger route-scoped selectors.",
+      "The existing data-app-route dynamically changes with navigation; selectors cannot match Notebook/Coach/Courses/Sound/Settings. Browser route/raster comparison is a separate final check.",
+      "Goldprogress track contrast is5.56:1. Semantic green/error use existing light values on intended ivory ground, including users retaining dark mode elsewhere.",
+      "No source issues found. This source audit does not substitute for final rendered contrast/mobile/interaction QA."
+    ]
+  },
+  "frozenBuildBinding": {
+    "receipt": "/workspace/scratch/oda-reference-redesign/domino-palette/final-build/build-receipt.json",
+    "receiptSha256": "b0e446cfddff14d79503f1220315054da5e65cebe83bce7a0bad7fd6f4ca97eb",
+    "sourceCommit": "712d411df93c79ce2f423cfb0be1acc2d3b227f1",
+    "sourceFilesChecked": 879,
+    "buildFilesChecked": 437,
+    "mismatches": [],
+    "actualAggregateLogBytes": 79256,
+    "actualAggregateLogSha256": "fe0c0e94658eda2e8b39e8dbcc2d8e66907356866e1c065e58c219a81c7c7e4c",
+    "aggregateLogMatchesReceipt": true,
+    "aggregateCommand": "VITE_BASE_PATH=/one-decision-away/ npm run check",
+    "aggregateExitCode": 0,
+    "aggregatePassed": 621,
+    "aggregateFailed": 0,
+    "testsRerunByThisAuditor": false,
+    "receiptBytes": 239126
+  },
+  "issues": [],
+  "limits": [
+    "Source/protection review is sealed; final independent browser interaction/contrast/screenshot report remains separate and pending.",
+    "No source edits, Git writes, build, test reruns, browser changes or external operations by this auditor.",
+    "Pixel inspection above is selected input reference, not yet final dashboard captures."
+  ],
+  "sealedAtUtc": "2026-10-03T17:12:45.358780+00:00",
+  "parentFrozenBuildConfirmation": {
+    "sourceCommit": "712d411df93c79ce2f423cfb0be1acc2d3b227f1",
+    "cleanCheckout": true,
+    "receiptBytes": 239126,
+    "receiptSha256": "b0e446cfddff14d79503f1220315054da5e65cebe83bce7a0bad7fd6f4ca97eb",
+    "confirmedByParent": true,
+    "independentlyReverified": true
+  },
+  "browserQaStatus": {
+    "separateIndependentReportPending": true,
+    "notSealedByThisSourceAuditor": true,
+    "parentReportedPreliminary": "Exact baseline geometry1440/390/320 and10non-Today routecases;9/10 non-Today PNG identical, Sound390 waveform animation difference; no activeToday axe contrast violations. Interaction/fault/repeat-completion run ongoing."
+  }
+}

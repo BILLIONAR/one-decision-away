@@ -1,0 +1,148 @@
+import assert from 'node:assert/strict';
+import path from 'node:path';
+
+export async function runAcceptance({chromium,report,baseURL,out}) {
+  let browser,page;
+  const check=(name,evidence={})=>{report.checks.push({name,passed:true,...evidence});console.log(`PASS ${report.checks.length}: ${name}`);};
+  const until=async(predicate,message,timeout=12000)=>{const deadline=Date.now()+timeout;while(Date.now()<deadline){if(await predicate())return;await new Promise(resolve=>setTimeout(resolve,30));}throw new Error(message);};
+  const snapshot=()=>page.evaluate(()=>window.ODA_CURRENT_RECORD_FIXTURE.snapshot());
+  const action=(method,...args)=>page.evaluate(({method,args})=>window.ODA_CURRENT_RECORD_FIXTURE[method](...args),{method,args});
+  const translated=source=>action('translate',source);
+  const save=title=>action('saveDecision',title);
+  const navigate=route=>action('navigate',route);
+  const status=state=>({currentDocumentConfirmed:state.cloud.currentDocumentConfirmed,lastSyncAt:state.cloud.lastSyncAt,lastSuccessfulSyncAt:state.cloud.lastSuccessfulSyncAt,error:state.cloud.error,syncing:state.cloud.syncing});
+  const transition=async name=>report.confirmationTransitions.push({name,...status(await snapshot())});
+  const assertDecision=(state,title)=>assert.ok(state.local.missions.some(item=>item.isOneDecision&&item.title===title),'Actual device decision must remain usable');
+  const screenshot=async name=>{await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:path.join(out,name),fullPage:true,animations:'disabled'});report.screenshots.push(name);};
+  const syncClick=async()=>page.getByRole('button',{name:await translated('Sync now'),exact:true}).click();
+  const assertDirty=(state,history)=>{assert.equal(state.cloud.currentDocumentConfirmed,false);assert.equal(state.cloud.lastSyncAt,null);assert.equal(state.cloud.lastSuccessfulSyncAt,history);};
+  const waitConfirmed=()=>until(async()=>{const s=await snapshot();return s.cloud.currentDocumentConfirmed&&!s.cloud.syncing&&!s.cloud.error;},'Latest durable document never reached current confirmation');
+  const confirmDialog=async()=>{const copy=await action('copy');await page.getByRole('dialog').getByRole('button',{name:copy.confirm,exact:true}).click();await page.getByRole('dialog').waitFor({state:'hidden'});};
+  const acknowledge=async()=>{await syncClick();await page.getByRole('dialog').waitFor();await confirmDialog();await waitConfirmed();};
+  const boundary=async name=>report.boundaryObservations.push({case:name,...(await snapshot()).boundaryAttempts});
+  try {
+    browser=await chromium.launch({executablePath:'/usr/bin/chromium'});report.browser=await browser.version();
+    const observe=target=>{target.on('pageerror',error=>report.errors.push(error.message));target.on('response',response=>{if(response.status()>=400)report.failedRequests.push({url:response.url(),status:response.status()});});};
+    const open=async(locale='en',width=390)=>{
+      const context=await browser.newContext({viewport:{width,height:844},deviceScaleFactor:1,serviceWorkers:'block'});
+      await context.route('**/*',route=>{if(new URL(route.request().url()).origin===baseURL)return route.continue();report.externalAttempts.push(route.request().url());return route.abort();});
+      page=await context.newPage();observe(page);
+      await page.clock.install({time:new Date('2026-10-02T12:00:00Z')});await page.clock.pauseAt(new Date('2026-10-02T12:00:01Z'));
+      await page.goto(`${baseURL}/#/app/settings`);
+      await until(()=>page.evaluate(()=>Boolean(window.ODA_CURRENT_RECORD_FIXTURE?.snapshot().ready)),'Actual AppProvider startup did not finish');
+      await action('setLocale',locale);assert.equal((await snapshot()).cloud.session,null);
+      await action('signIn');await until(async()=>Boolean((await snapshot()).cloud.session),'Synthetic SDK session callback did not reach CloudSync');
+      const capabilities=(await snapshot()).capabilities;report.capabilities.push({case:`${locale}-${width}`, ...capabilities});assert.equal(capabilities.indexedDB,true);assert.equal(capabilities.webLocks,true);
+      return context;
+    };
+    let context=await open();
+    const initial=await snapshot();let copy=await action('copy');
+    check('Actual Chromium IndexedDB and Web Locks are available to the real record queue',initial.capabilities);
+    await save('Synthetic ordinary decision');await page.clock.runFor(3100);
+    await until(async()=>{const s=await snapshot();return s.cloud.error===copy.cloudUploadUnreviewed&&!s.cloud.syncing;},'Unreviewed existing row did not pause');
+    let state=await snapshot();assertDecision(state,'Synthetic ordinary decision');assert.deepEqual(state.remote,initial.remote);assert.deepEqual(state.attempts,[]);assert.deepEqual(state.writes,[]);assert.equal(state.cloud.currentDocumentConfirmed,false);
+    check('Ordinary actual AppProvider save pauses unreviewed cloud work and preserves the device decision');
+    await page.getByText(copy.cloudUploadUnreviewed,{exact:true}).waitFor();
+    check('Actual native-branch Settings displays the truthful paused status');
+    await navigate('/app/account');await page.getByRole('alert').filter({hasText:copy.cloudUploadUnreviewed}).waitFor();
+    assert.equal(await page.getByRole('heading',{name:await translated('Your proof is safe'),exact:true}).count(),0);
+    assert.equal(await page.getByText(await translated('Syncs automatically after every change.'),{exact:true}).count(),0);
+    check('Unreviewed Account avoids a current-backup claim');
+    await page.getByRole('button',{name:(await action('accountCopy')).back,exact:true}).click();assert.equal((await snapshot()).route,'/app/settings');
+    check('Account Back returns to the existing Settings route');
+    const cancelRaw=(await snapshot()).localRaw;
+    await syncClick();await page.getByRole('dialog').waitFor();await screenshot('review-cancel-en-390.png');
+    await page.getByRole('dialog').getByRole('button',{name:await translated('Cancel'),exact:true}).click();await page.getByRole('dialog').waitFor({state:'hidden'});
+    state=await snapshot();assert.equal(state.localRaw,cancelRaw);assert.deepEqual(state.remote,initial.remote);assert.deepEqual(state.attempts,[]);
+    check('Actual cloud review Cancel preserves exact device and cloud bytes without fallback upload');
+    await syncClick();await page.getByRole('dialog').waitFor();await screenshot('review-accept-en-390.png');await confirmDialog();await waitConfirmed();
+    state=await snapshot();assert.equal(state.local.profile.displayName,'Synthetic existing cloud record');assert.equal(state.renderedData.profile.displayName,state.local.profile.displayName);assert.deepEqual(state.attempts,[]);assert.equal(state.cloud.lastSyncAt,state.remote.updated_at);
+    check('Actual reviewed cloud replacement establishes current plus historical confirmation without upload');await transition('reviewed-current');
+
+    const history=state.cloud.lastSuccessfulSyncAt, beforeDirtyWrites=state.writes.length;
+    await save('Synthetic current-record dirty decision');state=await snapshot();assertDecision(state,'Synthetic current-record dirty decision');assertDirty(state,history);assert.equal(state.writes.length,beforeDirtyWrites);assert.equal(state.cloud.error,null);assert.equal(state.cloud.syncing,false);
+    check('Durable ordinary save immediately clears current confirmation before its real debounce, retaining historical time');await transition('dirty-before-debounce');
+    await navigate('/app/account');await page.getByText(copy.cloudDeviceSaved,{exact:true}).waitFor();
+    await page.getByText(await action('historyText','account'),{exact:true}).waitFor();assert.equal(await page.getByRole('heading',{name:await translated('Your proof is safe'),exact:true}).count(),0);
+    check('Dirty Account shows device-saved copy and the historical timestamp without calling current work backed up');
+    await syncClick();await waitConfirmed();state=await snapshot();assertDecision(state,'Synthetic current-record dirty decision');assert.ok(state.remote.data.missions.some(item=>item.title==='Synthetic current-record dirty decision'));
+    assert.equal(state.cloud.lastSyncAt,state.remote.updated_at);check('Successful latest actual Account callback restores current confirmation');await transition('latest-current');
+
+    for(const screen of ['settings','account']){
+      await action('refreshApp');await navigate(`/app/${screen}`);const renderBefore=(await snapshot()).renderedData.profile.displayName;
+      assert.equal(await action('saveRepositoryProfile',`Newer acknowledged ${screen} record`,true),true);await waitConfirmed();
+      const newest=await snapshot();assert.equal(newest.renderedData.profile.displayName,renderBefore);assert.notEqual(newest.local.profile.displayName,renderBefore);assert.equal(newest.remote.data.profile.displayName,newest.local.profile.displayName);
+      await syncClick();await until(async()=>{const s=await snapshot();return s.cloud.error===copy.cloudUploadUnconfirmed&&s.toast?.message===copy.cloudUploadUnconfirmed;},'Stale actual callback was not rejected truthfully');
+      state=await snapshot();assert.equal(state.localRaw,newest.localRaw);assert.deepEqual(state.remote,newest.remote);assert.equal(state.writes.length,newest.writes.length);assert.equal(state.attempts.length,newest.attempts.length);
+      report.staleCallbacks.push({screen,renderedName:renderBefore,durableName:state.local.profile.displayName,remoteName:state.remote.data.profile.displayName,readDelta:state.reads.length-newest.reads.length,mutationDelta:state.attempts.length-newest.attempts.length});
+      check(`Actual ${screen} stale-render Sync callback cannot roll newer acknowledged device/cloud work backward`);
+    }
+    await action('refreshApp');await syncClick();await waitConfirmed();check('Fresh render can upload the latest authoritative record and clear stale-callback failure');
+
+    await save('Synthetic first held upload');await action('holdNextWrite');await action('beginPush');
+    await until(async()=>Boolean((await snapshot()).heldWrite?.started),'Synthetic SDK write did not enter its bounded hold');
+    await save('Synthetic later durable decision');state=await snapshot();const newerRaw=state.localRaw;assert.equal(state.cloud.currentDocumentConfirmed,false);
+    await action('releaseWrite');await until(async()=>(await snapshot()).pushes.at(-1)?.done,'Older held SDK write did not finish');
+    state=await snapshot();assert.equal(state.pushes.at(-1).result,true);assert.equal(state.localRaw,newerRaw);assert.ok(state.remote.data.missions.some(item=>item.title==='Synthetic first held upload'));assertDirty(state,state.remote.updated_at);
+    check('Older in-flight upload advances only its baseline while a later real durable save remains unconfirmed');await transition('old-upload-newer-dirty');
+    await syncClick();await waitConfirmed();state=await snapshot();assert.equal(state.localRaw,newerRaw);assert.ok(state.remote.data.missions.some(item=>item.title==='Synthetic later durable decision'));
+    check('Next latest callback uploads the newer durable decision and establishes current confirmation');
+
+    const mainPage=page, beforeConcurrent=await snapshot(),peer=await context.newPage();observe(peer);await peer.goto(`${baseURL}/writer.html`);
+    await until(()=>peer.evaluate(()=>Boolean(window.ODA_RECORD_WRITER?.ready)),'Second real repository writer did not load');
+    await action('holdQueue');await until(async()=>(await snapshot()).queueHeld,'Actual record queue did not obtain Web Lock');
+    await peer.evaluate(()=>window.ODA_RECORD_WRITER.beginNotebookWrite('Synthetic peer-page affirmation'));
+    await action('beginNotebookWrite','Synthetic main-page affirmation');
+    await until(async()=>{const locks=await action('lockSnapshot');return locks.held.filter(lock=>lock.name==='oda-data-writes').length===1&&locks.pending.filter(lock=>lock.name==='oda-data-writes').length>=1;},'Actual Web Locks did not observe concurrent queued writers');
+    const lockEvidence=await action('lockSnapshot');assert.equal((await snapshot()).localRaw,beforeConcurrent.localRaw);
+    await action('releaseQueue');await until(async()=>{const s=await snapshot(),p=await peer.evaluate(()=>window.ODA_RECORD_WRITER.snapshot());return s.mutations.at(-1)?.done&&p.operations.at(-1)?.done;},'Concurrent actual Notebook writes did not complete');
+    state=await snapshot();const peerState=await peer.evaluate(()=>window.ODA_RECORD_WRITER.snapshot());assert.ok(state.mutations.every(item=>!item.error));assert.ok(peerState.operations.every(item=>!item.error));
+    for(const text of ['Synthetic peer-page affirmation','Synthetic main-page affirmation'])assert.ok(state.local.notebook.affirmations.some(item=>item.text===text));
+    const authority=await action('authoritySnapshot');assert.equal(authority.appData,state.localRaw);assert.equal(state.remote.updated_at,beforeConcurrent.remote.updated_at);assertDirty(state,beforeConcurrent.cloud.lastSuccessfulSyncAt);
+    report.concurrentWrites.push({apis:{main:state.capabilities,peer:peerState.capabilities},heldLocks:lockEvidence.held,pendingLocks:lockEvidence.pending,mainOperations:state.mutations,peerOperations:peerState.operations,bothAffirmationsPreserved:true,authorityMatchesProjection:authority.appData===state.localRaw});
+    check('Real separate-page IndexedDB/Web Lock writes serialize and preserve both Notebook edits plus authoritative projection');await peer.close();page=mainPage;
+    await action('refreshApp');await syncClick();await waitConfirmed();
+
+    await navigate('/app/settings');const beforeImport=await snapshot(),imported=structuredClone(beforeImport.local);imported.profile.displayName='Synthetic imported device record';
+    const file={name:'synthetic-current-record-backup.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(imported))};
+    await page.locator('input[type=file]').setInputFiles(file);await page.getByRole('dialog').waitFor();
+    await page.getByRole('dialog').getByRole('button',{name:await translated('Cancel'),exact:true}).click();await page.getByRole('dialog').waitFor({state:'hidden'});
+    assert.equal((await snapshot()).localRaw,beforeImport.localRaw);check('Actual file review Cancel preserves the current authoritative record');
+    await page.locator('input[type=file]').setInputFiles(file);await page.getByRole('dialog').waitFor();await confirmDialog();
+    await until(async()=>{const s=await snapshot();return s.local.profile.displayName===imported.profile.displayName&&s.renderedData.profile.displayName===imported.profile.displayName&&s.cloud.error===copy.cloudUploadImportConflict;},'Actual import did not retain its guarded local replacement');
+    state=await snapshot();assert.deepEqual(state.remote,beforeImport.remote);assert.equal(state.attempts.length,beforeImport.attempts.length);assert.ok(Object.keys(state.importBarriers).length);assertDirty(state,beforeImport.cloud.lastSuccessfulSyncAt);
+    check('Actual import preserves the new device document and its barrier without overwriting acknowledged cloud work');
+    const afterImport=await snapshot();await syncClick();await until(async()=>Boolean((await snapshot()).toast),'Import-bound manual action did not settle');
+    state=await snapshot();assert.equal(state.localRaw,afterImport.localRaw);assert.deepEqual(state.remote,afterImport.remote);assert.equal(state.attempts.length,afterImport.attempts.length);assert.equal(await page.getByRole('dialog').count(),0);
+    check('Existing import barrier blocks manual-review fallback and keeps imported work unconfirmed');
+    await boundary('real-current-record-callbacks-and-browser-writes');await context.close();
+
+    for(const fence of ['account','project']){
+      context=await open();copy=await action('copy');const before=await snapshot();await syncClick();await page.getByRole('dialog').waitFor();
+      if(fence==='account')await action('signIn','synthetic-account-B');else await action('changeProject');
+      await confirmDialog();await until(async()=>{const s=await snapshot();return s.toast?.message===copy.cloudChanged;},'Expired reviewed replacement did not report its scope change');
+      state=await snapshot();assert.equal(state.localRaw,before.localRaw);assert.deepEqual(state.remoteRows,before.remoteRows);assert.deepEqual(state.attempts,[]);assert.equal(state.cloud.currentDocumentConfirmed,false);assert.equal(state.cloud.lastSuccessfulSyncAt,null);
+      check(`Actual reviewed replacement cannot cross a changed ${fence} scope`);await boundary(`${fence}-fence`);await context.close();
+    }
+
+    for(const locale of ['en','tr','es'])for(const width of [320,390]){
+      context=await open(locale,width);copy=await action('copy');await acknowledge();const baseline=await snapshot();
+      await save(`Synthetic ${locale} ${width} dirty decision`);state=await snapshot();assertDirty(state,baseline.cloud.lastSuccessfulSyncAt);assert.equal(state.writes.length,baseline.writes.length);assert.equal(state.cloud.error,null);
+      for(const screen of ['settings','account']){
+        await navigate(`/app/${screen}`);await page.getByText(await action('historyText',screen),{exact:screen==='account'}).waitFor();
+        if(screen==='account'){await page.getByText(copy.cloudDeviceSaved,{exact:true}).waitFor();assert.equal(await page.getByRole('heading',{name:await translated('Your proof is safe'),exact:true}).count(),0);}
+        await page.evaluate(()=>document.fonts.ready);
+        const layout=await page.evaluate(()=>{const main=document.querySelector('main');return{viewport:innerWidth,documentScroll:document.documentElement.scrollWidth,mainScroll:main.scrollWidth,mainWidth:main.clientWidth,fontStatus:document.fonts.status,controls:[...main.querySelectorAll('button,input')].filter(element=>element.getClientRects().length).map(element=>{const rect=element.getBoundingClientRect();return{text:element.textContent||element.id,x:rect.x,right:rect.right,width:rect.width,height:rect.height};})};});
+        const name=`dirty-${screen}-${locale}-${width}.png`;await screenshot(name);report.layouts.push({locale,width,screen,screenshot:name,...layout});
+        const problems=[];if(layout.documentScroll>width+1||layout.mainScroll>layout.mainWidth+1)problems.push('page/component overflow');if(!layout.controls.every(control=>control.x>=0&&control.right<=width+1))problems.push('clipped control');
+        report.checks.push({name:`${locale}${width} ${screen}: current-versus-historical status and controls fit`,passed:problems.length===0,problems,...layout});
+      }
+      await boundary(`${locale}-${width}`);await context.close();
+    }
+    assert.deepEqual(report.errors,[]);assert.deepEqual(report.externalAttempts,[]);assert.deepEqual(report.failedRequests,[]);
+    assert.ok(report.boundaryObservations.every(item=>item.providerConstruction===0&&item.authDelivery===0&&item.authVerification===0));
+    check('Observed provider/email boundaries, page errors, external attempts and failed local assets are zero');
+    assert.equal(report.checks.filter(item=>!item.passed).length,0,'Responsive failures: all final screenshots preserved');
+  }catch(error){report.failure=String(error.stack||error);if(page&&!page.isClosed()){report.failureState=await snapshot().catch(()=>null);await page.screenshot({path:path.join(out,'failure.png'),fullPage:true}).catch(()=>{});report.failureScreenshot='failure.png';}throw error;
+  }finally{if(browser)await browser.close();}
+}

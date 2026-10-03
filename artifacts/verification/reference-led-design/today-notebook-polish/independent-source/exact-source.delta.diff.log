@@ -1,0 +1,399 @@
+diff --git a/src/components/momentum/DecisionPlanModal.tsx b/src/components/momentum/DecisionPlanModal.tsx
+index 8ce0ed2..1895373 100644
+--- a/src/components/momentum/DecisionPlanModal.tsx
++++ b/src/components/momentum/DecisionPlanModal.tsx
+@@ -1,4 +1,4 @@
+-import React, { useEffect, useState } from 'react';
++import React, { useEffect, useRef, useState } from 'react';
+ import { Modal } from '../ui';
+ import { useApp } from '../../store/useApp';
+ import { useT } from '../../i18n';
+@@ -17,6 +17,8 @@ export const DecisionPlanModal: React.FC<{ mission: Mission | null; isOpen: bool
+   const [obstacle, setObstacle] = useState('');
+   const [ifThen, setIfThen] = useState('');
+   const [saving, setSaving] = useState(false);
++  const savingRef = useRef(false);
++  const [saveError, setSaveError] = useState(false);
+ 
+   useEffect(() => {
+     if (!isOpen || !mission) return;
+@@ -24,6 +26,7 @@ export const DecisionPlanModal: React.FC<{ mission: Mission | null; isOpen: bool
+     setTitle(t(mission.title));
+     setObstacle(mission.plan?.obstacle ?? '');
+     setIfThen(mission.plan?.ifThen ?? '');
++    setSaveError(false);
+     // Re-seed only when the sheet opens for a decision.
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [isOpen, mission?.id]);
+@@ -31,10 +34,13 @@ export const DecisionPlanModal: React.FC<{ mission: Mission | null; isOpen: bool
+   if (!mission) return null;
+   const tip = FEELINGS.find(f => f.key === feeling)?.tip;
+   const shrink = feeling === 'overwhelming' || feeling === 'unclear';
++  const close = () => { if (!savingRef.current) onClose(); };
+ 
+   const save = async () => {
+-    if (saving) return;
++    if (savingRef.current) return;
++    savingRef.current = true;
+     setSaving(true);
++    setSaveError(false);
+     try {
+       const nextTitle = title.trim();
+       await updateDecision(mission.id, {
+@@ -43,7 +49,10 @@ export const DecisionPlanModal: React.FC<{ mission: Mission | null; isOpen: bool
+       });
+       showToast(ifThen.trim() ? t('Plan saved. You know what to do when it gets hard.') : t('Saved.'), 'success');
+       onClose();
++    } catch {
++      setSaveError(true);
+     } finally {
++      savingRef.current = false;
+       setSaving(false);
+     }
+   };
+@@ -53,12 +62,12 @@ export const DecisionPlanModal: React.FC<{ mission: Mission | null; isOpen: bool
+   return (
+     <Modal
+       isOpen={isOpen}
+-      onClose={onClose}
++      onClose={close}
+       title={justSet ? t('Make it doable') : t('Your plan for today')}
+       subtitle={t('Thirty seconds now saves you from deciding again later.')}
+     >
+-      <div className="space-y-6 pb-2">
+-        <fieldset className="space-y-3">
++      <div className="space-y-6 pb-2" aria-busy={saving}>
++        <fieldset className="space-y-3" disabled={saving}>
+           <legend className="text-[14px] font-semibold text-[var(--fg)] mb-3">{t('1. How does this decision feel right now?')}</legend>
+           <div className="flex flex-wrap gap-2">
+             {FEELINGS.map(f => (
+@@ -84,17 +93,19 @@ export const DecisionPlanModal: React.FC<{ mission: Mission | null; isOpen: bool
+ 
+         <div className="space-y-1.5">
+           <label htmlFor="plan-obstacle" className="block text-[14px] font-semibold text-[var(--fg)]">{t('2. What could stop you today?')}</label>
+-          <input id="plan-obstacle" value={obstacle} onChange={e => setObstacle(e.target.value)} maxLength={140} placeholder={t('e.g. I’ll pick up my phone first')} className={field} />
++          <input id="plan-obstacle" value={obstacle} onChange={e => setObstacle(e.target.value)} disabled={saving} maxLength={140} placeholder={t('e.g. I’ll pick up my phone first')} className={field} />
+         </div>
+ 
+         <div className="space-y-1.5">
+           <label htmlFor="plan-then" className="block text-[14px] font-semibold text-[var(--fg)]">{t('3. If that happens, I will…')}</label>
+-          <input id="plan-then" value={ifThen} onChange={e => setIfThen(e.target.value)} maxLength={160} placeholder={t('e.g. put the phone in another room and start for two minutes')} className={field} />
++          <input id="plan-then" value={ifThen} onChange={e => setIfThen(e.target.value)} disabled={saving} maxLength={160} placeholder={t('e.g. put the phone in another room and start for two minutes')} className={field} />
+           <p className="text-[12px] leading-relaxed text-[var(--fg-muted)]">{t('Deciding in advance what you will do when the obstacle appears is one of the best-studied ways to follow through.')}</p>
+         </div>
+ 
++        {saveError && <p role="alert" className="text-[14px] leading-relaxed text-[var(--danger)]">{t('Could not save this change. Your writing is still here; please try again.')}</p>}
++
+         <div className="flex flex-col-reverse sm:flex-row gap-2 pt-1">
+-          <button type="button" onClick={onClose} className="h-12 px-5 rounded-[var(--radius-sm)] text-[15px] font-semibold text-[var(--fg-muted)] hover:text-[var(--fg)]">
++          <button type="button" onClick={close} disabled={saving} className="h-12 px-5 rounded-[var(--radius-sm)] text-[15px] font-semibold text-[var(--fg-muted)] hover:text-[var(--fg)] disabled:opacity-50">
+             {justSet ? t('Skip for now') : t('Cancel')}
+           </button>
+           <button type="button" onClick={save} disabled={saving} className="h-12 w-full sm:flex-1 rounded-[var(--radius-sm)] bg-[var(--accent)] text-[var(--bg)] text-[15px] font-semibold disabled:opacity-50">
+diff --git a/src/components/momentum/FirstSteps.tsx b/src/components/momentum/FirstSteps.tsx
+index ec86411..c234b48 100644
+--- a/src/components/momentum/FirstSteps.tsx
++++ b/src/components/momentum/FirstSteps.tsx
+@@ -1,4 +1,4 @@
+-import React, { useState } from 'react';
++import React, { useRef, useState } from 'react';
+ import { Bell, Check, X } from 'lucide-react';
+ import { useApp } from '../../store/useApp';
+ import { useLocale, useT } from '../../i18n';
+@@ -57,6 +57,9 @@ export const KeptMomentCard: React.FC = () => {
+   const [dismissed, setDismissed] = useState(() => readDismissed() === today);
+   const [draft, setDraft] = useState('');
+   const [busy, setBusy] = useState(false);
++  const [savingDraft, setSavingDraft] = useState(false);
++  const draftSavingRef = useRef(false);
++  const [draftError, setDraftError] = useState(false);
+   if (!data || dismissed) return null;
+ 
+   const kept = keptDecisions(data.missions).length;
+@@ -71,9 +74,19 @@ export const KeptMomentCard: React.FC = () => {
+   const saveDraft = async (event: React.FormEvent) => {
+     event.preventDefault();
+     const text = draft.trim();
+-    if (!text) return;
+-    await updateMomentumProfile({ nextDecisionDraft: { text, forDay: tomorrowKey() } });
+-    setDraft('');
++    if (!text || draftSavingRef.current) return;
++    draftSavingRef.current = true;
++    setSavingDraft(true);
++    setDraftError(false);
++    try {
++      await updateMomentumProfile({ nextDecisionDraft: { text, forDay: tomorrowKey() } });
++      setDraft('');
++    } catch {
++      setDraftError(true);
++    } finally {
++      draftSavingRef.current = false;
++      setSavingDraft(false);
++    }
+   };
+ 
+   const acceptReminder = async () => {
+@@ -108,12 +121,13 @@ export const KeptMomentCard: React.FC = () => {
+       </div>
+ 
+       {!hasDraft ? (
+-        <form onSubmit={saveDraft} className="space-y-2">
++        <form onSubmit={saveDraft} className="space-y-2" aria-busy={savingDraft}>
+           <label htmlFor="tomorrow-draft" className="block text-[13px] font-semibold text-[var(--fg)]">{t('Want to choose tomorrow’s decision now?')}</label>
+           <div className="flex flex-col sm:flex-row gap-2">
+-            <input id="tomorrow-draft" value={draft} onChange={e => setDraft(e.target.value)} placeholder={t('Tomorrow I will…')} className="flex-1 min-w-0 h-11 px-3 rounded-[var(--radius-sm)] bg-[var(--bg)] border border-[var(--border)] text-[15px] outline-none focus:border-[var(--accent)]" />
+-            <button type="submit" disabled={!draft.trim()} className="h-11 px-4 rounded-[var(--radius-sm)] bg-[var(--fg)] text-[var(--bg)] text-[14px] font-semibold disabled:opacity-40">{t('Save for tomorrow')}</button>
++            <input id="tomorrow-draft" value={draft} onChange={e => setDraft(e.target.value)} disabled={savingDraft} placeholder={t('Tomorrow I will…')} className="flex-1 min-w-0 h-11 px-3 rounded-[var(--radius-sm)] bg-[var(--bg)] border border-[var(--border)] text-[15px] outline-none focus:border-[var(--accent)]" />
++            <button type="submit" disabled={!draft.trim() || savingDraft} className="h-11 px-4 rounded-[var(--radius-sm)] bg-[var(--fg)] text-[var(--bg)] text-[14px] font-semibold disabled:opacity-40">{t('Save for tomorrow')}</button>
+           </div>
++          {draftError && <p role="alert" className="text-[14px] leading-relaxed text-[var(--danger)]">{t('Could not save this change. Your writing is still here; please try again.')}</p>}
+         </form>
+       ) : (
+         <p className="flex items-center gap-2 text-[13px] text-[var(--fg-muted)]"><Check size={15} className="text-[var(--accent)]" />{t('Tomorrow’s decision is waiting: “{text}”', { text: data.profile.nextDecisionDraft!.text })}</p>
+diff --git a/src/components/notebook/JournalWorkspace.tsx b/src/components/notebook/JournalWorkspace.tsx
+index 0e19e84..3921de8 100644
+--- a/src/components/notebook/JournalWorkspace.tsx
++++ b/src/components/notebook/JournalWorkspace.tsx
+@@ -1,4 +1,4 @@
+-import React, { useEffect, useMemo, useState } from 'react';
++import React, { useEffect, useMemo, useRef, useState } from 'react';
+ import { CalendarDays, ChevronLeft, ChevronRight, MoreHorizontal, Plus, Search, Trash2, X } from 'lucide-react';
+ import { useApp } from '../../store/useApp';
+ import { getSpeechLang, N_, useLocale, useT } from '../../i18n';
+@@ -52,6 +52,7 @@ export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: Rea
+   const [selectedDate, setSelectedDate] = useState('');
+   const [showCalendar, setShowCalendar] = useState(false);
+   const [weekAnchor, setWeekAnchor] = useState<string | null>(null);
++  const weekRegion = useRef<HTMLDivElement>(null);
+   const [validation, setValidation] = useState(false);
+   const [photoOpen, setPhotoOpen] = useState(false);
+   const nativePhotoDialog = typeof window !== 'undefined' && typeof window.HTMLDialogElement !== 'undefined'
+@@ -64,8 +65,33 @@ export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: Rea
+     return entry.source === 'dream' && SEED_TEXT[entry.id]?.[field] === value ? t(value) : value;
+   };
+   const dirty = `${title}\u0000${content}\u0000${mood}` !== baseline;
+-  const entries = useMemo(() => data ? getNotebookEntries(data, { kinds: ['journal'], dateKey: selectedDate || undefined }).filter(entry => !query.trim() || [entry.title, entry.content, entry.dreamName || '', displayText(entry, 'title'), displayText(entry, 'content'), displayText(entry, 'dreamName')].join(' ').toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())) : [], [data, query, selectedDate, t]);
++  const entries = useMemo(() => data ? getNotebookEntries(data, { kinds: ['journal'], dateKey: selectedDate || undefined }).filter(entry => !query.trim() || [entry.title, entry.content, entry.dreamName || '', displayText(entry, 'title'), displayText(entry, 'content'), displayText(entry, 'dreamName')].join(' ').toLocaleLowerCase(locale).includes(query.trim().toLocaleLowerCase(locale))) : [], [data, query, selectedDate, t, locale]);
+   const dates = useMemo(() => new Set(data ? getNotebookEntries(data, { kinds: ['journal'] }).map(entry => entry.dateKey) : []), [data]);
++  const weekDates = useMemo(() => notebookWeekDates(weekAnchor || today), [weekAnchor, today]);
++  const hasData = Boolean(data);
++
++  useEffect(() => {
++    const region = weekRegion.current;
++    if (!region) return;
++    const activeSelector = weekDates.includes(selectedDate) ? 'button[aria-pressed="true"]'
++      : weekDates.includes(today) ? 'button[aria-current="date"]' : null;
++    if (!activeSelector) return;
++    const revealActiveDate = () => {
++      const button = region.querySelector<HTMLButtonElement>(activeSelector);
++      if (!button || region.clientWidth === 0 || region.scrollWidth <= region.clientWidth) return;
++      const viewport = region.getBoundingClientRect();
++      const bounds = button.getBoundingClientRect();
++      const left = viewport.left + region.clientLeft;
++      const right = left + region.clientWidth;
++      if (bounds.left < left) region.scrollLeft += bounds.left - left;
++      else if (bounds.right > right) region.scrollLeft += bounds.right - right;
++    };
++    revealActiveDate();
++    if (typeof ResizeObserver === 'undefined') return;
++    const observer = new ResizeObserver(revealActiveDate);
++    observer.observe(region);
++    return () => observer.disconnect();
++  }, [hasData, weekDates, selectedDate, today, showCalendar]);
+ 
+   useEffect(() => {
+     if (!dirty) return;
+@@ -109,11 +135,11 @@ export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: Rea
+     const result = await run(async () => { if (editing.source === 'dream') await deleteDreamJournalEntry(editing.id); else await deleteNotebookEntry(editing.id); return true; }, 'Entry deleted.');
+     if (result) reset();
+   };
+-  const weekDates = notebookWeekDates(weekAnchor || today);
+   const weekMonth = weekDates[0].slice(0, 7) === weekDates[6].slice(0, 7)
+     ? dateLabel(weekDates[0], { month: 'long', year: 'numeric' })
+     : `${dateLabel(weekDates[0], { month: 'short' })} — ${dateLabel(weekDates[6], { month: 'short', year: 'numeric' })}`;
+   const preview = entries[0];
++  const hasFilters = Boolean(query || selectedDate);
+ 
+   return <div className="oda-notebook-workspace">
+     <section className="oda-notebook-calendar-lead min-w-0 space-y-3" aria-label={t('Journal archive')}>
+@@ -123,7 +149,7 @@ export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: Rea
+         <button type="button" className="oda-hybrid-week-month" aria-label={`${c.thisWeek} — ${weekMonth}`} title={c.thisWeek} onClick={() => setWeekAnchor(null)}><span aria-live="polite">{weekMonth}</span></button>
+         <button type="button" aria-label={c.nextWeek} onClick={() => setWeekAnchor(shiftNotebookWeek(weekAnchor || today, 1))}><ChevronRight size={18} aria-hidden="true" /></button>
+       </div>
+-      <div className="oda-notebook-week-region" role="region" aria-label={t('Journal archive')} aria-describedby="notebook-archive-date-help" tabIndex={0}>
++      <div ref={weekRegion} className="oda-notebook-week-region" role="region" aria-label={t('Journal archive')} aria-describedby="notebook-archive-date-help" tabIndex={0}>
+         <div className="oda-notebook-week-strip">
+           {weekDates.map(key => {
+             const day = new Date(`${key}T12:00:00`);
+@@ -135,6 +161,11 @@ export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: Rea
+       </div>
+       <p className="oda-notebook-week-hint text-xs text-[var(--fg-muted)]">{t('Scroll sideways to see all dates')}</p>
+       <div className="relative"><Search className="absolute left-3 top-3.5 w-4 h-4 text-[var(--fg-muted)]" aria-hidden="true" strokeWidth={1.8} /><label htmlFor="notebook-journal-search" className="sr-only">{t('Search entries')}</label><NInput id="notebook-journal-search" type="search" className="pl-9 !bg-[var(--bg-muted)] !border-transparent" value={query} onChange={e => setQuery(e.target.value)} placeholder={t('Search')} /></div>
++      <div className="flex flex-wrap gap-2 justify-between items-center text-sm">
++        <p id="notebook-filter-result" role="status" className="text-[var(--fg-muted)]">{hasFilters && entries.length === 0 ? t('No entries match.') : `${c.allEntries} (${entries.length})`}</p>
++        {hasFilters && <button id="notebook-clear-filters" type="button" className={quietButton} onClick={() => { setQuery(''); setSelectedDate(''); }}>{t('Clear filters')}</button>}
++      </div>
++      {hasFilters && entries.length === 0 && <p className="text-sm text-[var(--fg-muted)]">{t('Try another word or choose all dates.')}</p>}
+       {showCalendar && <div id="notebook-calendar"><NotebookCalendar today={today} selected={selectedDate} dates={dates} onSelect={key => { setSelectedDate(key); if (key) setWeekAnchor(key); }} /></div>}
+       {selectedDate && <div className="flex gap-2 justify-between items-center text-sm"><span>{dateLabel(selectedDate)}</span><button type="button" className={quietButton} onClick={() => setSelectedDate('')}>{t('All dates')}</button></div>}
+       <p id="notebook-archive-date-help" className="oda-hybrid-date-help">{c.archiveDates}</p>
+@@ -173,7 +204,7 @@ export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: Rea
+ 
+     <section className="oda-notebook-archive min-w-0 space-y-3" aria-label={t('Journal archive')}>
+       <h2 className="oda-hybrid-archive-heading">{c.allEntries} <span>({entries.length})</span></h2>
+-      {entries.length === 0 ? <div className="oda-card rounded-[var(--radius-lg)] p-5 text-center"><p className="text-[15px] font-semibold">{query || selectedDate ? t('No entries match.') : t('Nothing written yet')}</p><p className="text-sm text-[var(--fg-muted)] mt-1">{query || selectedDate ? t('Try another word or choose all dates.') : t('Your first entry will appear here.')}</p>{(query || selectedDate) && <button type="button" className={`${quietButton} mt-2`} onClick={() => { setQuery(''); setSelectedDate(''); }}>{t('Clear filters')}</button>}</div> : <div className="oda-notebook-entry-list bg-[var(--bg-muted)] rounded-[var(--radius-md)] divide-y divide-[var(--border)] max-h-[650px] overflow-y-auto">{entries.map(entry => <button type="button" key={entry.viewId} disabled={busy} aria-current={editing?.viewId === entry.viewId ? 'true' : undefined} onClick={() => openEntry(entry)} className={`w-full text-left px-4 py-3 min-h-[56px] cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset disabled:opacity-50 ${editing?.viewId === entry.viewId ? 'bg-[var(--bg-inset)]' : ''}`}>
++      {entries.length === 0 ? !hasFilters && <div className="oda-card rounded-[var(--radius-lg)] p-5 text-center"><p className="text-[15px] font-semibold">{t('Nothing written yet')}</p><p className="text-sm text-[var(--fg-muted)] mt-1">{t('Your first entry will appear here.')}</p></div> : <div className="oda-notebook-entry-list bg-[var(--bg-muted)] rounded-[var(--radius-md)] divide-y divide-[var(--border)] max-h-[650px] overflow-y-auto">{entries.map(entry => <button type="button" key={entry.viewId} disabled={busy} aria-current={editing?.viewId === entry.viewId ? 'true' : undefined} onClick={() => openEntry(entry)} className={`w-full text-left px-4 py-3 min-h-[56px] cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset disabled:opacity-50 ${editing?.viewId === entry.viewId ? 'bg-[var(--bg-inset)]' : ''}`}>
+         <span className="flex justify-between gap-2 text-xs text-[var(--fg-muted)]"><span>{dateLabel(entry.dateKey, { month: 'short', day: 'numeric', year: 'numeric' })}</span>{entryTime(entry.createdAt) && <time dateTime={entry.createdAt}>{entryTime(entry.createdAt)}</time>}{entry.source === 'dream' && <span>{t('Dream journal')}</span>}</span>
+         <span className="text-[15px] font-medium leading-snug block break-words mt-0.5">{displayText(entry, 'title') || t('Untitled')}</span>
+         <span className="text-sm text-[var(--fg-muted)] line-clamp-2 block mt-0.5 break-words">{displayText(entry, 'content')}</span>
+diff --git a/src/i18n/notebookHybrid.ts b/src/i18n/notebookHybrid.ts
+index 7cdf2f6..4d7dc01 100644
+--- a/src/i18n/notebookHybrid.ts
++++ b/src/i18n/notebookHybrid.ts
+@@ -1,4 +1,6 @@
+ const en = {
++  writingDays: (n: number) => `${n} ${n === 1 ? 'day' : 'days'} written`,
++  streak: (n: number) => `${n} day streak`,
+   quotes: 'Quotes', loadingQuotes: 'Opening sourced passages…',
+   categories: 'Passage categories', all: 'All',
+   faith: 'Faith', philosophy: 'Philosophy', society: 'Society', science: 'Science',
+@@ -15,6 +17,8 @@ const en = {
+   entryActions: 'Entry actions', allEntries: 'Journal archive',
+ };
+ const tr: typeof en = {
++  writingDays: n => `${n} gün yazıldı`,
++  streak: n => `${n} günlük seri`,
+   quotes: 'Alıntılar', loadingQuotes: 'Kaynaklı metinler açılıyor…',
+   categories: 'Metin kategorileri', all: 'Tümü',
+   faith: 'İnanç', philosophy: 'Felsefe', society: 'Toplum', science: 'Bilim',
+@@ -31,6 +35,8 @@ const tr: typeof en = {
+   entryActions: 'Yazı işlemleri', allEntries: 'Günlük arşivi',
+ };
+ const es: typeof en = {
++  writingDays: n => `${n} ${n === 1 ? 'día escrito' : 'días escritos'}`,
++  streak: n => `Racha de ${n} ${n === 1 ? 'día' : 'días'}`,
+   quotes: 'Citas', loadingQuotes: 'Abriendo textos con fuentes…',
+   categories: 'Categorías de textos', all: 'Todas',
+   faith: 'Fe', philosophy: 'Filosofía', society: 'Sociedad', science: 'Ciencia',
+diff --git a/src/pages/Notebook.tsx b/src/pages/Notebook.tsx
+index e7f1e29..b659e63 100644
+--- a/src/pages/Notebook.tsx
++++ b/src/pages/Notebook.tsx
+@@ -54,8 +54,8 @@ export const Notebook: React.FC = () => {
+ 
+     <div className="oda-notebook-stats oda-card rounded-[var(--radius-lg)] px-4 min-h-[56px] py-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-sm">
+       <div className="oda-notebook-stat-values flex flex-wrap gap-x-4 gap-y-1">
+-        <span className="oda-notebook-stat text-[var(--fg)]">{t('{n} day streak', { n: stats.currentStreak })}</span>
+-        <span className="oda-notebook-stat text-[var(--fg-muted)]">{t('{n} days written', { n: stats.totalWritingDays })}</span>
++        <span className="oda-notebook-stat text-[var(--fg)]">{c.streak(stats.currentStreak)}</span>
++        <span className="oda-notebook-stat text-[var(--fg-muted)]">{c.writingDays(stats.totalWritingDays)}</span>
+         <span className="oda-notebook-stat text-[var(--fg-muted)]">{t('Best {n}', { n: stats.bestStreak })}</span>
+       </div>
+       <span className="flex items-center gap-1.5 text-[var(--fg-muted)]" role="status">
+diff --git a/src/pages/Today.tsx b/src/pages/Today.tsx
+index b238a92..67bb4a1 100644
+--- a/src/pages/Today.tsx
++++ b/src/pages/Today.tsx
+@@ -47,6 +47,7 @@ import { decisionChain, evidenceSummary, isSimpleMode, keptDecisions, localDayKe
+ import { EasyDecisionChips, KeptMomentCard } from '../components/momentum/FirstSteps';
+ import { easyDecisions } from '../data/starterDecisions';
+ import { firstRunCopy } from '../i18n/firstRun';
++import { sentenceCaseLabel } from '../utils/sentenceCaseLabel';
+ import '../styles/workingSurfaces.css';
+ 
+ const RITUALS_KEY = 'oda_rituals_open';
+@@ -264,7 +265,7 @@ export const Today: React.FC = () => {
+                 <span className="block text-[13px] text-[var(--fg-muted)]">
+                   {decisionPlan.obstacle ? t('If {obstacle}', { obstacle: decisionPlan.obstacle }) : t('If it gets hard')}
+                 </span>
+-                <span className="block text-[15px] leading-snug text-[var(--fg)]">{t('then I will {plan}', { plan: decisionPlan.ifThen })}</span>
++                <span className="block text-[15px] leading-snug text-[var(--fg)]">{sentenceCaseLabel(t('then I will {plan}', { plan: decisionPlan.ifThen }), locale)}</span>
+               </button>
+             )}
+             {decisionDone ? (
+@@ -392,7 +393,7 @@ export const Today: React.FC = () => {
+         ) : (
+           <button type="button" onClick={() => setActiveRoute('/app/evidence')} className="oda-tile">
+             <span className="oda-tile-icon oda-tint-sage"><Leaf size={18} strokeWidth={1.9} aria-hidden="true" /></span>
+-            <span><span className="block text-[14px] font-semibold">{t('Your evidence')}</span><span className="block text-[12px] text-[var(--fg-muted)]">{t('{n} kept promises', { n: keptCount })}</span></span>
++            <span><span className="block text-[14px] font-semibold">{t('Your evidence')}</span><span className="block text-[12px] text-[var(--fg-muted)]">{keptCount === 1 ? t('1 kept promise') : t('{n} kept promises', { n: keptCount })}</span></span>
+           </button>
+         )}
+         {todayOneDecision ? (
+diff --git a/src/styles/notebookHybrid.css b/src/styles/notebookHybrid.css
+index 817648d..a7b4aae 100644
+--- a/src/styles/notebookHybrid.css
++++ b/src/styles/notebookHybrid.css
+@@ -76,7 +76,7 @@
+   .oda-quotes-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+ }
+ @container oda-notebook (min-width: 850px) {
+-  .oda-notebook-hybrid .oda-notebook-workspace { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
++  .oda-notebook-hybrid .oda-notebook-workspace { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); grid-template-rows: max-content minmax(0, 1fr) auto; }
+   .oda-notebook-hybrid .oda-notebook-calendar-lead { grid-column: 1; grid-row: 1; }
+   .oda-notebook-hybrid .oda-hybrid-entry-preview { grid-column: 1; grid-row: 2; }
+   .oda-notebook-hybrid .oda-notebook-writing-column { grid-column: 2; grid-row: 1 / span 2; align-self: start; }
+diff --git a/src/utils/sentenceCaseLabel.ts b/src/utils/sentenceCaseLabel.ts
+new file mode 100644
+index 0000000..4fe35f0
+--- /dev/null
++++ b/src/utils/sentenceCaseLabel.ts
+@@ -0,0 +1,12 @@
++import type { Locale } from '../i18n';
++
++/** Sentence-case an interface label, keeping punctuation and the rest of its text intact.
++ * This is presentation only: never use it when saving or editing user content.
++ */
++export function sentenceCaseLabel(text: string, locale: Locale): string {
++  const start = /^([\s\p{P}\p{S}]*)(\p{Ll})([\p{L}\p{M}\p{N}]*)/u.exec(text);
++  if (!start) return text;
++  // Preserve intentionally mixed-case names such as iPhone and eBay.
++  if (/\p{Lu}/u.test(start[3])) return text;
++  return start[1] + start[2].toLocaleUpperCase(locale) + text.slice(start[1].length + start[2].length);
++}
+diff --git a/tests/polish-copy.test.ts b/tests/polish-copy.test.ts
+new file mode 100644
+index 0000000..15967f4
+--- /dev/null
++++ b/tests/polish-copy.test.ts
+@@ -0,0 +1,40 @@
++import assert from 'node:assert/strict';
++import test from 'node:test';
++import { sentenceCaseLabel } from '../src/utils/sentenceCaseLabel';
++import { notebookHybridCopy } from '../src/i18n/notebookHybrid';
++
++test('interface sentence case changes only the first letter after whitespace and punctuation', () => {
++  assert.equal(sentenceCaseLabel('  “read two pages with NASA and AI”', 'en'), '  “Read two pages with NASA and AI”');
++  assert.equal(sentenceCaseLabel('\t¿leer dos páginas?\n', 'es'), '\t¿Leer dos páginas?\n');
++  assert.equal(sentenceCaseLabel('then I will read two pages', 'en'), 'Then I will read two pages');
++});
++test('Turkish sentence case handles dotted and dotless I without changing the remaining text', () => {
++  assert.equal(sentenceCaseLabel('“iki sayfa oku”', 'tr'), '“İki sayfa oku”');
++  assert.equal(sentenceCaseLabel('  ıslık çal', 'tr'), '  Islık çal');
++  assert.equal(sentenceCaseLabel('İki sayfa oku', 'tr'), 'İki sayfa oku');
++});
++test('sentence labels preserve acronyms, mixed-case names, numeric starts and empty input', () => {
++  for (const value of ['NASA and AI', 'iPhone settings', 'eBay listing', '2 pages with AI', '', ' \n…', '🙂']) {
++    assert.equal(sentenceCaseLabel(value, 'en'), value);
++  }
++});
++test('interface plan formatting leaves its user-authored payload and source unchanged', () => {
++  const plan = '  read NASA notes, then iPhone settings';
++  const text = `then I will ${plan}`;
++  assert.equal(sentenceCaseLabel(text, 'en'), `Then I will ${plan}`);
++  assert.equal(text, `then I will ${plan}`);
++  assert.equal(plan, '  read NASA notes, then iPhone settings');
++});
++test('Notebook English writing counts use singular only for one', () => {
++  assert.deepEqual([0, 1, 2].map(notebookHybridCopy('en').writingDays), ['0 days written', '1 day written', '2 days written']);
++});
++test('Notebook Spanish writing counts and streaks agree with singular and plural days', () => {
++  const copy = notebookHybridCopy('es');
++  assert.deepEqual([0, 1, 2].map(copy.writingDays), ['0 días escritos', '1 día escrito', '2 días escritos']);
++  assert.deepEqual([0, 1, 2].map(copy.streak), ['Racha de 0 días', 'Racha de 1 día', 'Racha de 2 días']);
++});
++test('Notebook Turkish count forms remain unchanged for zero, one and multiple days', () => {
++  const copy = notebookHybridCopy('tr');
++  assert.deepEqual([0, 1, 2].map(copy.writingDays), ['0 gün yazıldı', '1 gün yazıldı', '2 gün yazıldı']);
++  assert.deepEqual([0, 1, 2].map(copy.streak), ['0 günlük seri', '1 günlük seri', '2 günlük seri']);
++});

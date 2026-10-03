@@ -1,0 +1,16 @@
+{
+  "baseCommit": "fa7c4a3e11758b7dc6177c0e6391321065105ae6",
+  "checkout": "/workspace/oda-evidence-portability",
+  "originalHarness": "artifacts/verification/english-guidance-first-use/independent-narration-review/lifecycle-probes.mts",
+  "originalBytes": 13944,
+  "originalSha256": "652961443e4bf9f7cee92c483d9ff1319bbc9f4337cfa46d62fbddf3e91134b8",
+  "blobUnchangedSince999": true,
+  "baselineCompilerCommand": "node --permission --allow-fs-read=/workspace/oda-evidence-portability --allow-fs-read=/opt/codex/runtimes/codex-primary-runtime/dependencies/node node_modules/typescript/bin/tsc --noEmit",
+  "baselineExitCode": 2,
+  "ts2307Count": 3,
+  "baselineLogSha256": "11692d7843edea674987d3b23c4f846a41efd9820b48a0f667eed24300c949d2",
+  "baselineLogBytes": 713,
+  "physicalDependencyCopy": true,
+  "legacySourceIsolated": "Node process-local read scope confirms current source readable and old source ERR_ACCESS_DENIED; existing worktrees and OS permissions remain unchanged.",
+  "limits": "This simulates the missing legacy checkout while retaining old worktrees; compiler options and app type checks are unchanged. Final npm run check will run normally without a read scope."
+}

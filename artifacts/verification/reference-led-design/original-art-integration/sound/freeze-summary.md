@@ -1,0 +1,15 @@
+# Original sound art integration frozen
+
+Changed only SoundRoom.tsx and sound.css. Dunes/palms/foam replace primary scene media through the root shared OriginalSceneImage; expanded player uses dedicated sound-sculpture. Old local SVG and final owned course-cover fallbacks remain. The320/390 portrait sculpture is recognizably rendered at centre45% in the unchanged clamp180/30svh/300 frame. Detail/mini responsive hints are120px/44px. A first-band-only shade improves the small white heading against the light sky; no global palette, brand or logo changed.
+
+All remaining handlers/hooks/markup and CSS geometry/controls/repairs compare exact against d14/source4c. Ten protected catalog/service/synth/shell/old-art files are byte-exact. The four received raw PNG bytes/hashes match their manifest and remain untouched. Shared helper/metadata dependencies are bound in the receipt and owned by parent/art agent.
+
+TypeScript and diff checks passed. Seven final author contexts passed in contrast-sealed/: light320/390, dark390, short390×568, desktop1440×1000, denied sculptureWebP(nativePNG), and denied originals+dunesSVG(final owned fallback). Zero Axe violations, horizontal overflow, page errors or external requests. Scene bands remain above fixed nav; Breathe starts845 at844-height and569 at568-height. Expanded/mini visibility and shared timer/volume still work. These are synthetic cloud Chromium checks, not physical device or perceptual audio QA.
+
+Actual390 normal discovery fetched three optimized WebPs totaling104,692 bytes (dunes16,480 +palms38,836 +foam49,376); expanded sculpture then fetched58,872 bytes. No original-art PNG on normal first-load; existing user-owned brand/favicons remain unchanged. At320 discovery the three variants total51,758 bytes. Responsive loading is actual observed network evidence, not a physical device performance guarantee.
+
+Personally inspected actual discovery/sculpture PNGs. Sampled adjacent390 H1 sky pixels improved white contrast2.4–3.32 to5.01–6.06 while illuminated ridges remain visible. header-contrast-samples.json includes degraded fallback samples as well; adjacent samples outside glyph/shadow are not a whole-page image-text WCAG certification. Final independent visual gate is pending, and no pixel identity with inspiration photos is claimed.
+
+Prior captures/report were preserved outside contrast-sealed/. initial-preview-unavailable.json records the stopped4181 attempt before parent restarted the one shared normal server. initial-brand-png-filter-observation.json records an overly broad harness PNG filter that included unchanged brand/favicons; corrected filter scopes only original-scene art. No app source fix addressed either harness/server observation. presentation-integration.diff and freeze-receipt.json bind the exact two sources and28 final actual PNGs.
+
+Author writer and all author browser readers are closed. No build, final commit, push, regeneration, install, provider or deployment occurred in this delegated work. Parent visual/QA review and publication approval checkpoint remain.

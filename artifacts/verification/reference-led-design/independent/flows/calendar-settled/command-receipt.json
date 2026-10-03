@@ -1,0 +1,25 @@
+{
+  "kind": "calendar-settled",
+  "command": [
+    "node",
+    "--import",
+    "tsx",
+    "/workspace/scratch/oda-reference-redesign/independent/flows/harness/calendar.mjs"
+  ],
+  "cwd": "/workspace/oda-reference-redesign",
+  "environmentOverrides": {
+    "ODA_QA_URL": "http://127.0.0.1:4183/one-decision-away/#",
+    "ODA_QA_OUT": "/workspace/scratch/oda-reference-redesign/independent/flows/calendar-settled",
+    "ODA_QA_REPO": "/workspace/oda-reference-redesign"
+  },
+  "startedAt": 1790964830.5498054,
+  "elapsedSeconds": 9.905674934387207,
+  "exitCode": 0,
+  "log": {
+    "file": "/workspace/scratch/oda-reference-redesign/independent/flows/calendar-settled/browser.log",
+    "bytes": 2117,
+    "sha256": "e450e0fce45653a6f83958ed7d7150f28fd480a1522167de6db8c7ed440b7e89"
+  },
+  "syntheticOnly": true,
+  "noInstallNoDeploy": true
+}

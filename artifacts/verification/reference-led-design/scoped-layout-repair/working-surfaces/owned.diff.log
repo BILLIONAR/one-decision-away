@@ -1,0 +1,164 @@
+diff --git a/src/pages/Focus.tsx b/src/pages/Focus.tsx
+index c0a413e..005de70 100644
+--- a/src/pages/Focus.tsx
++++ b/src/pages/Focus.tsx
+@@ -18,7 +18,7 @@ export const Focus: React.FC = () => {
+         </div>
+       </header>
+       <div className="oda-focus-workbench">
+-        <figure className="oda-focus-illustration" aria-hidden="true"><CourseCover courseId="focus" eager /><span>“</span></figure>
++        <figure className="oda-focus-illustration" aria-hidden="true"><CourseCover courseId="turning-day" eager /></figure>
+         <FocusTimerHub />
+       </div>
+     </div>
+diff --git a/src/pages/Today.tsx b/src/pages/Today.tsx
+index a9d03bd..da25536 100644
+--- a/src/pages/Today.tsx
++++ b/src/pages/Today.tsx
+@@ -1,7 +1,6 @@
+ import React, { useEffect, useRef, useState } from 'react';
+ import { ArrowRight, AudioLines, Check, ChevronDown, ChevronRight, Leaf, Plus, MessageCircle, GraduationCap, Route, Share2, Waves } from 'lucide-react';
+ import { GrowthTreePanel, GrowthWeek } from '../components/momentum/GrowthDashboard';
+-import { EvidenceTree } from '../components/momentum/EvidenceTree';
+ import { CourseCover } from '../components/CourseCover';
+ import { growthCopy } from '../i18n/growth';
+ import { courseCatalogFor } from '../data/courseCatalog';
+@@ -208,10 +207,9 @@ export const Today: React.FC = () => {
+       </header>
+ 
+       <div className="oda-fidelity-command">
+-      {/* The saved growth stage supplies the illustration; the daily quote stays real. */}
++      {/* The quote has its own scene; the saved growth stage appears once in its evidence panel. */}
+       <figure className="oda-quote oda-fidelity-hero">
+         <div className="oda-fidelity-scene" aria-hidden="true"><CourseCover courseId="meaning" eager /></div>
+-        <div className="oda-fidelity-hero-art" aria-hidden="true"><EvidenceTree count={keptCount} label={growth.growth} /></div>
+         <span aria-hidden="true" className="oda-quote-mark text-5xl">“</span>
+         <div className="oda-fidelity-hero-copy min-w-0">
+           <p className="oda-kicker text-[var(--fg-muted)] mb-2">{d.quote}</p>
+@@ -224,7 +222,6 @@ export const Today: React.FC = () => {
+               {quote.kind && <span className="block mt-1 font-normal">{quote.kind === 'adaptation' ? c.adaptation : c.translation}</span>}
+             </figcaption>
+           )}
+-          <div className="oda-fidelity-live-evidence"><p>{growth.kept(keptCount)}</p><div className="oda-fidelity-week-fact"><span className="oda-fidelity-week-ring" role="progressbar" aria-label={growth.week} aria-valuenow={week.last7} aria-valuemin={0} aria-valuemax={7} style={{ background: `conic-gradient(var(--accent) ${week.last7 / 7 * 360}deg, var(--border) 0deg)` }}><i>{week.last7}/7</i></span><p>{growth.days(week.last7)}</p></div></div>
+         </div>
+       </figure>
+ 
+diff --git a/src/styles/notebook.css b/src/styles/notebook.css
+index 208b5e1..470fa0e 100644
+--- a/src/styles/notebook.css
++++ b/src/styles/notebook.css
+@@ -30,6 +30,7 @@
+ .oda-notebook input:focus-visible, .oda-notebook textarea:focus-visible, .oda-notebook select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-color: var(--accent); }
+ .oda-notebook-editor-actions { padding-top: 1rem; }
+ .oda-notebook-editor-actions button { height: auto; min-height: 44px; padding-block: .65rem; border-radius: 999px; white-space: normal; }
++.oda-notebook-fidelity .oda-notebook-editor-actions > button { min-width: 44px; min-height: 44px; flex-shrink: 0; }
+ .oda-notebook-editor-actions button[type="submit"] { background: var(--accent); color: var(--on-accent); }
+ .oda-notebook-archive { min-width: 0; }
+ .oda-notebook-archive > div:first-child { gap: .6rem; }
+diff --git a/src/styles/workingSurfaces.css b/src/styles/workingSurfaces.css
+index ab64513..c95ac93 100644
+--- a/src/styles/workingSurfaces.css
++++ b/src/styles/workingSurfaces.css
+@@ -6,14 +6,9 @@
+ .oda-fidelity-command { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; gap: 16px; }
+ .oda-fidelity-command .oda-growth-dashboard { display: contents; }
+ .oda-fidelity-command .oda-growth-actions { gap: 16px; }
+-.oda-fidelity-today .oda-fidelity-hero { position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: flex-end; min-height: 450px; padding: 24px; overflow: hidden; border: 1px solid var(--border); border-radius: 18px; background: linear-gradient(155deg, var(--surface) 10%, color-mix(in srgb, var(--tint-blue) 40%, var(--surface)) 52%, var(--surface) 100%); box-shadow: var(--surface-shadow); }
+-.oda-fidelity-hero-art { position: absolute; inset: 0 0 auto; height: 300px; padding: 16px; }
+-.oda-fidelity-hero-art::before { content: ''; position: absolute; width: 220px; height: 245px; left: 50%; top: 18px; transform: translateX(-50%); border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--border)); border-radius: 48% 48% 18% 18%; background: radial-gradient(ellipse at 28% 22%, color-mix(in srgb, var(--surface) 85%, transparent), transparent 65%); box-shadow: inset 0 0 30px color-mix(in srgb, var(--surface) 80%, transparent), 0 18px 32px -25px var(--accent); }
+-.oda-fidelity-hero-art .oda-evidence-tree { width: min(100%, 300px); margin: 0 auto; }
+-.oda-fidelity-hero-art .oda-evidence-tree img { filter: hue-rotate(185deg) saturate(.65); }
+-.oda-fidelity-hero-art::after { content: ''; position: absolute; width: 190px; height: 16px; top: 258px; left: 50%; transform: translateX(-50%); border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border)); border-radius: 50%; background: linear-gradient(var(--surface), var(--accent-soft)); box-shadow: 0 7px 12px -7px var(--accent); z-index: -1; }
++.oda-fidelity-today .oda-fidelity-hero { position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: flex-end; min-height: 320px; padding: 24px; overflow: hidden; border: 1px solid var(--border); border-radius: 18px; background: linear-gradient(155deg, var(--surface) 10%, color-mix(in srgb, var(--tint-blue) 40%, var(--surface)) 52%, var(--surface) 100%); box-shadow: var(--surface-shadow); }
+ .oda-fidelity-today .oda-fidelity-hero .oda-quote-mark { position: absolute; top: 20px; left: 22px; font-size: 54px; color: var(--accent); z-index: 2; }
+-.oda-fidelity-hero-copy { position: relative; z-index: 1; margin-top: 255px; }
++.oda-fidelity-hero-copy { position: relative; z-index: 1; margin-top: 100px; }
+ .oda-fidelity-hero-copy::before { content: ''; position: absolute; inset: -40px -24px -24px; background: linear-gradient(transparent, var(--surface) 38%); z-index: -1; }
+ .oda-fidelity-today .oda-fidelity-hero blockquote { font-family: var(--font-sans); font-size: clamp(1.55rem, 2.5vw, 2.2rem); line-height: 1.25; font-weight: 650; letter-spacing: -.025em; text-transform: uppercase; }
+ .oda-fidelity-hero figcaption { line-height: 1.6; margin-top: 12px; }
+@@ -55,10 +50,9 @@
+ .oda-focus-workbench { display: grid; gap: 16px; align-items: start; }
+ .oda-focus-workbench > #focus-timer-hub { order: 0; }
+ .oda-focus-workbench > .oda-focus-illustration { order: 1; }
+-.oda-focus-illustration { position: relative; margin: 0; overflow: hidden; border: 1px solid var(--border); border-radius: 18px; height: 220px; background: var(--surface); }
++.oda-focus-illustration { position: relative; margin: 0; overflow: hidden; border: 1px solid var(--border); border-radius: 18px; aspect-ratio: 1672 / 941; height: auto; background: var(--surface); }
+ .oda-focus-illustration .oda-course-cover { display: block; width: 100%; height: 100%; }
+-.oda-focus-illustration img { width: 100%; height: 100%; object-fit: cover; }
+-.oda-focus-illustration > span { position: absolute; top: 18px; left: 20px; font-size: 60px; color: #49376E; line-height: 1; }
++.oda-focus-illustration img { width: 100%; height: 100%; object-fit: contain; }
+ .oda-fidelity-focus #focus-timer-hub { border-radius: 18px; padding: 20px; box-shadow: var(--surface-shadow); }
+ .oda-fidelity-focus #focus-timer-hub > div:first-child { padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+ .oda-fidelity-focus #focus-timer-hub button { border-radius: 10px; min-height: 44px; }
+@@ -71,7 +65,7 @@
+ .oda-fidelity-focus .oda-focus-launch > div:last-child > span { font-size: .75rem; }
+ @container oda-working-today (min-width: 900px) {
+   .oda-fidelity-command { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.08fr) minmax(210px, .72fr); grid-template-rows: auto auto; gap: 16px; }
+-  .oda-fidelity-command .oda-fidelity-hero { grid-column: 1; grid-row: 1 / span 2; min-height: 580px; align-self: stretch; }
++  .oda-fidelity-command .oda-fidelity-hero { grid-column: 1; grid-row: 1 / span 2; min-height: 420px; align-self: stretch; }
+   .oda-fidelity-command .oda-growth-actions { grid-column: 2; grid-row: 1 / span 2; }
+   .oda-fidelity-command .oda-growth-panel { grid-column: 3; grid-row: 1; width: 100%; }
+   .oda-fidelity-command .oda-growth-week { grid-column: 3; grid-row: 2; }
+@@ -81,25 +75,17 @@
+   .oda-focus-workbench { grid-template-columns: minmax(190px, .65fr) minmax(0, 1.35fr); }
+   .oda-focus-workbench > .oda-focus-illustration { grid-column: 1; grid-row: 1; }
+   .oda-focus-workbench > #focus-timer-hub { grid-column: 2; grid-row: 1; }
+-  .oda-focus-illustration { height: 520px; }
+ }
+ @media (max-width: 479px) {
+   .oda-fidelity-today > header > div > p { font-size: 11px; }
+   .oda-fidelity-today > header .oda-today-headline { font-size: 1.4rem; }
+   .oda-fidelity-today > header > button { padding-inline: 9px; font-size: .75rem; }
+-  .oda-fidelity-today .oda-fidelity-hero { min-height: 370px; padding: 20px; }
+-  .oda-fidelity-hero-art { height: 230px; padding: 8px; }
+-  .oda-fidelity-hero-art .oda-evidence-tree { width: 240px; }
+-  .oda-fidelity-hero-art::before { width: 180px; height: 205px; top: 10px; }
+-  .oda-fidelity-hero-art::after { width: 155px; height: 13px; top: 202px; }
+-  .oda-fidelity-hero-copy { margin-top: 205px; }
+   .oda-fidelity-today .oda-fidelity-hero blockquote { font-size: 1.5rem; }
+   .oda-fidelity-today .oda-growth-actions .oda-decision { padding: 18px; }
+   .oda-fidelity-today .oda-growth-panel { display: grid; grid-template-columns: minmax(0, 1fr) 130px; align-items: center; gap: 8px; padding: 16px; }
+   .oda-fidelity-today .oda-growth-panel .oda-evidence-tree { grid-column: 2; grid-row: 1 / span 2; width: 130px; }
+   .oda-fidelity-today .oda-growth-caption { grid-column: 1; }
+   .oda-fidelity-today .oda-growth-week { padding: 16px; }
+-  .oda-focus-illustration { height: 180px; }
+ }
+ @media (prefers-reduced-motion: reduce) {
+   .oda-fidelity-today *, .oda-fidelity-focus * { scroll-behavior: auto; }
+@@ -111,9 +97,6 @@
+ .oda-fidelity-scene img { object-fit: cover; object-position: 34% 45%; filter: hue-rotate(145deg) saturate(.55); opacity: .5; }
+ .oda-fidelity-scene::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--surface) 45%, transparent) 35%, var(--surface) 80%); }
+ .oda-fidelity-hero-copy::before { background: linear-gradient(transparent, color-mix(in srgb, var(--surface) 92%, transparent) 38%); }
+-.oda-fidelity-live-evidence { display: grid; gap: 5px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-strong); font-size: .75rem; line-height: 1.5; }
+-.oda-fidelity-live-evidence p:first-child { color: var(--accent); font-weight: 650; }
+-.oda-fidelity-live-evidence p:last-child { color: var(--fg-muted); }
+ .oda-fidelity-today .oda-growth-actions { display: contents; }
+ .oda-fidelity-decision-module { display: grid; min-width: 0; gap: 8px; }
+ .oda-fidelity-today .oda-growth-actions .oda-decision, .oda-fidelity-today .oda-growth-week, .oda-fidelity-today .oda-growth-panel {
+@@ -133,21 +116,17 @@
+   .oda-fidelity-command .oda-course-next-step { grid-column: 3; grid-row: 2; }
+ }
+ @media (max-width: 479px) {
+-  .oda-fidelity-today .oda-fidelity-hero { min-height: 280px; padding: 18px; }
++  .oda-fidelity-today .oda-fidelity-hero { min-height: 210px; padding: 18px; }
+   .oda-fidelity-scene img { opacity: .68; }
+-  .oda-fidelity-hero-art { height: 150px; padding: 0 12px; }
+-  .oda-fidelity-hero-art .oda-evidence-tree { width: 150px; margin: 0 0 0 auto; }
+-  .oda-fidelity-hero-art::before { width: 115px; height: 130px; left: auto; right: 24px; top: 5px; transform: none; }
+-  .oda-fidelity-hero-art::after { width: 108px; height: 12px; left: auto; right: 26px; top: 128px; transform: none; }
+-  .oda-fidelity-hero-copy { margin-top: 110px; }
++  .oda-fidelity-hero-copy { margin-top: 55px; }
+   .oda-fidelity-today .oda-fidelity-hero blockquote { font-size: 1.3rem; }
+-  .oda-fidelity-live-evidence { margin-top: 10px; padding-top: 8px; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 12px; font-size: .68rem; }
+   .oda-fidelity-today .oda-growth-actions .oda-decision { padding: 16px; }
+   .oda-fidelity-today .oda-growth-actions .oda-decision-text { font-size: 1.35rem; }
+ }
+-.oda-fidelity-week-fact { display: flex; align-items: center; gap: 8px; min-width: 0; }
+-.oda-fidelity-week-ring { width: 32px; height: 32px; flex: none; display: grid; place-items: center; border-radius: 50%; }
+-.oda-fidelity-week-ring > i { width: 25px; height: 25px; display: grid; place-items: center; border-radius: 50%; background: var(--surface); color: var(--fg); font-size: 10px; font-style: normal; font-variant-numeric: tabular-nums; }
+ .oda-fidelity-today .oda-evidence-tree.w-20 { width: 5rem; height: 4rem; max-width: 5rem; flex: 0 0 5rem; aspect-ratio: auto; }
+ .oda-fidelity-today .oda-evidence-tree.w-20 + .min-w-0 { flex: 1 1 0%; overflow-wrap: anywhere; }
+ :root[data-theme="dark"] .oda-fidelity-scene img, html.dark .oda-fidelity-scene img { opacity: .3; }
++
++/* Keep protected FirstSteps controls usable when their mobile flex column shrinks. */
++.oda-fidelity-today #tomorrow-draft { min-height: 44px; flex: 1 0 auto; }
++.oda-fidelity-today .oda-fidelity-support > section > button.w-10.h-10 { min-width: 44px; min-height: 44px; flex-shrink: 0; }

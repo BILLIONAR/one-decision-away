@@ -1,0 +1,89 @@
+import { useSyncExternalStore } from 'react';
+
+const products = () => Object.fromEntries(['essentials', 'pro', 'coach'].flatMap((tier, index) => ['monthly', 'annual'].map(plan => {
+  const id = `oda_${tier}_${plan}`;
+  const amount = plan === 'annual' ? [29.99, 49.99, 119.99][index] : [3.99, 5.99, 11.99][index];
+  return [id, { id, tier, plan, price: `$${amount}`, amount, perMonth: plan === 'annual' ? `$${(amount / 12).toFixed(2)}` : null,
+    trialDays: tier === 'pro' && plan === 'annual' ? 7 : null, trialEligibility: 'eligible' }];
+})));
+let account = 'A';
+let state = { available: true, ready: true, identityConfirmed: true, identityRevision: 1,
+  tier: 'free', isPro: false, renewsAt: null, products: products(), error: null as string | null };
+const listeners = new Set<() => void>();
+const operations: { kind: string; account: string; revision: number; resolve: (result: string) => void }[] = [];
+const toasts: { text: string; kind: string }[] = [];
+const calls: { kind: string; account: string; revision: number }[] = [];
+let heldIdentity: { revision: number; resolve: () => void } | null = null;
+function emit(patch: Record<string, unknown>) { state = { ...state, ...patch }; listeners.forEach(listener => listener()); }
+function deferred(kind: string) {
+  const revision = state.identityRevision;
+  calls.push({ kind, account, revision });
+  return new Promise<string>(resolve => operations.push({ kind, account, revision, resolve }));
+}
+export const purchases = {
+  getState: () => state,
+  subscribe: (listener: () => void) => { listeners.add(listener); return () => listeners.delete(listener); },
+  init: async () => { calls.push({ kind: 'init', account, revision: state.identityRevision }); },
+  currentIdentityGuard: () => {
+    const revision = state.identityRevision;
+    return () => state.identityConfirmed && state.identityRevision === revision;
+  },
+  purchase: () => deferred('purchase'),
+  restore: () => deferred('restore'),
+  deferIdentity: () => emit({ identityRevision: state.identityRevision + 1, identityConfirmed: false, ready: true,
+    tier: 'free', isPro: false, renewsAt: null, error: null }),
+  identify: async (id: string | null) => {
+    calls.push({ kind: 'identify', account: id ?? 'anonymous', revision: state.identityRevision });
+    if (account !== id) { account = id ?? 'anonymous'; emit({ identityRevision: state.identityRevision + 1 }); }
+    emit({ identityConfirmed: false, ready: false, tier: 'free', isPro: false, renewsAt: null, error: null });
+    await new Promise<void>(resolve => { heldIdentity = { revision: state.identityRevision, resolve }; });
+  },
+};
+export const MANAGE_SUBSCRIPTIONS_URL = 'https://apps.apple.com/account/subscriptions';
+export const productIdFor = (tier: string, plan: string) => `oda_${tier}_${plan}`;
+export const annualSavingPercent = (monthly: number | undefined, annual: number | undefined) => {
+  if (!monthly || !annual) return null;
+  const value = Math.round((1 - annual / (monthly * 12)) * 100);
+  return value > 0 ? value : null;
+};
+export function usePro() {
+  const value = useSyncExternalStore(purchases.subscribe, purchases.getState, purchases.getState);
+  return { ...value, gating: value.available };
+}
+export const app = {
+  setActiveRoute: (route: string) => calls.push({ kind: `route:${route}`, account, revision: state.identityRevision }),
+  showToast: (text: string, kind: string) => toasts.push({ text, kind }),
+};
+export const cloudSync = {
+  init: async () => { calls.push({ kind: 'cloud-init', account, revision: state.identityRevision }); },
+  isSessionReady: () => true,
+  getState: () => ({ session: { user: { id: account } }, scopeRevision: 1 }),
+};
+export const haptic = async (kind: string) => { calls.push({ kind: `fake-haptic:${kind}`, account, revision: state.identityRevision }); };
+export const openExternal = () => { throw new Error('External navigation is forbidden in this fixture.'); };
+export const fixture = {
+  snapshot: () => ({ account, state, toasts: [...toasts], calls: [...calls], pending: operations.map(({ resolve, ...record }) => record), providerCalls: 0, deliberatelySyntheticNative: true }),
+  transition: (id: string, mode = 'confirmed') => {
+    account = id;
+    emit({ identityRevision: state.identityRevision + 1, identityConfirmed: mode === 'confirmed', ready: mode !== 'pending',
+      tier: 'free', isPro: false, renewsAt: null, error: mode === 'failed' ? 'identity-unconfirmed' : null });
+  },
+  release: (kind: string, result: string) => {
+    const index = operations.findIndex(operation => operation.kind === kind);
+    if (index < 0) throw new Error(`No pending ${kind}.`);
+    operations.splice(index, 1)[0].resolve(result);
+  },
+  resolveIdentity: (confirmed: boolean) => {
+    if (!heldIdentity) throw new Error('No identity retry is pending.');
+    const pending = heldIdentity; heldIdentity = null;
+    if (pending.revision === state.identityRevision) emit({ identityConfirmed: confirmed, ready: true,
+      error: confirmed ? null : 'identity-unconfirmed' });
+    pending.resolve();
+  },
+  reset: () => {
+    if (operations.length || heldIdentity) throw new Error('Complete deferred operations before resetting the fixture.');
+    account = 'A'; toasts.length = 0; calls.length = 0;
+    emit({ identityRevision: state.identityRevision + 1, available: true, ready: true, identityConfirmed: true,
+      tier: 'free', isPro: false, renewsAt: null, products: products(), error: null });
+  },
+};

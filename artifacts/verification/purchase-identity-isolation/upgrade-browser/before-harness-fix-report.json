@@ -1,0 +1,28 @@
+{
+  "at": "2026-10-02T09:35:04.671Z",
+  "baseURL": "http://127.0.0.1:4189",
+  "browser": "",
+  "sourceHashes": {
+    "upgrade": "5347a3452b252fce1050b0ffaa080e1429984b62e2b3365592309a44ceb78998",
+    "purchases": "20166152294fdaba6c351e282c1b738a47b775256677030af518a417e1da257d",
+    "mainCSS": {
+      "path": "assets/index-D6Ptr9gO.css",
+      "sha256": "a5e714416151984e402601fc542cbea6426cec029d2a1f2d9619762421ecb336"
+    },
+    "fixture": "40bf8c58451f40a42dd632d232aac411c870a006f1ad349e74e5c707f98f3f03",
+    "mocks": "745387f947001ea612d837de1217452bf5c4177a5642db8c2de311b45e4b179e"
+  },
+  "checks": [],
+  "screenshots": [],
+  "errors": [],
+  "externalAttempts": [],
+  "providerCalls": 0,
+  "deliberatelySyntheticNative": true,
+  "limits": [
+    "Real Upgrade component, translations, entitlements, course data and current built main CSS/fonts; synthetic store/native/cloud/purchase boundaries.",
+    "Browser verification covers UI state and layout, not native RevenueCat or Apple purchase behavior.",
+    "The synthetic identity guard models the independently tested real service revision/confirmation contract.",
+    "Chromium on the selected saved Linux cloud environment; no physical phone or WebKit claim."
+  ],
+  "failure": "TypeError: Cannot read properties of undefined (reading 'launch')\n    at file:///workspace/scratch/oda-purchase-identity-upgrade-browser/run.mjs:65:28\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)"
+}

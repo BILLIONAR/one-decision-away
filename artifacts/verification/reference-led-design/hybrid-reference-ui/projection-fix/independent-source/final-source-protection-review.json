@@ -1,0 +1,442 @@
+{
+  "kind": "Independent bounded frozen-source/protection/build/existing-evidence review",
+  "status": "pass within stated scope; no source blocker found",
+  "sourceCommit": "d33c0077c549bdf8e61fbf9b8bb20422a768f8e9",
+  "baselineEvidenceCommit": "5ff74beeadcc820adce69541d0a811d5335ad0d7",
+  "baselineFunctionalSourceCommit": "c2a5e6497f1bed4cf95951375c9aa86872b169a9",
+  "branch": "design/reference-led-oda",
+  "reviewedAtUtc": "2026-10-03T03:05:13.439215+00:00",
+  "readOnly": true,
+  "noTestsBuildBrowserInstallOrAppWritesByThisAuditor": true,
+  "gitCleanAtStartAndClosure": true,
+  "exactDiff": {
+    "pathCount": 5,
+    "appExistingChanged": [
+      "src/components/today/CourseNextStep.tsx",
+      "src/hooks/useSavedCourseProgress.ts",
+      "src/pages/Today.tsx"
+    ],
+    "newQaPaths": [
+      "scripts/qa-saved-course-progress.ts",
+      "tests/saved-course-progress.test.ts"
+    ],
+    "insertions": 273,
+    "deletions": 10,
+    "delta": {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-fix/independent-source/exact-source.delta.diff.log",
+      "bytes": 23673,
+      "sha256": "d52e31279d65ea1b37844a7567724ad1379238b00349f95fc236981ed6b22c08"
+    }
+  },
+  "sourceBinding": {
+    "trackedNonartifactSources": 876,
+    "allPhysicalMatchImmutableCommittedGit": true,
+    "allPhysicalMatchAggregateManifest": true,
+    "unchangedExistingC2aSources": 871,
+    "baselineManifest": {
+      "file": "/workspace/scratch/oda-reference-redesign/expanded-hybrid/protection/final-c2a/source-manifest.json",
+      "bytes": 183058,
+      "sha256": "b0f68ca9a901d72e352f76fca087b7325cc2692a5067de46f81cc607214220ba"
+    },
+    "currentManifest": {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-fix/independent-source/source-manifest.json",
+      "bytes": 155903,
+      "sha256": "4baf7af5e9c84b21983a8138ae41d9c7edb1069d45208e624d680c04f2b26359"
+    }
+  },
+  "protection": {
+    "protectedCount": 348,
+    "allProtectedByteIdenticalOriginal635Baseline": true,
+    "protectedBaseline": {
+      "file": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/protected-baseline.json",
+      "bytes": 81576,
+      "sha256": "e43b76249a116b99631ef2cc439874b70308d67a53423b772dee49f1528647ee"
+    },
+    "allDependenciesPackageLockBuildConfigNativeWorkflowServiceWorkerCspStorePersistenceAudioCoreControllersCurrentStylingIdentityUnchangedFromC2a": true,
+    "oldPublicAssets": 285,
+    "originalDeliveryVariants": 40,
+    "allPublicAssets": 325,
+    "englishMp3": 160,
+    "englishSessionPrefixes": 11,
+    "allPublicByteIdenticalC2a": true,
+    "allHistoricalArtifactGitBlobOidsUnchanged": true,
+    "historicalArtifactFiles": 5239,
+    "currentCssByteIdenticalC2a": true,
+    "workflowQualifier": "Automatic push deployment remains main-only; unchanged workflow_dispatch also exists without an explicit branch guard. This review did not invoke it."
+  },
+  "staticHookReview": {
+    "finding": "Confirmed P2 premature public saved-course display corrected by confirmed provider seeding and serialized authoritative refreshes. No new bounded finding.",
+    "confirmedSeedAndNewestGenerationVisibleImmediately": true,
+    "profileEpochCloudRevisionAndUnmountPublicationFences": true,
+    "guardsBeforeQueuedReadAndPublication": true,
+    "coalescingAndListenerCleanup": true,
+    "failedRefreshRetainsConfirmedSeedOrResult": true,
+    "existingQueueHydrationPersistenceUnmodified": true,
+    "noNewDirectSaveMutationReplacementPersistenceOrProviderCall": true,
+    "noUnconditionalCommittedSubscriptionReadLoop": true,
+    "signedOutExplanation": "Initial/focus refreshes require no online account. Expired guarded notifications are dropped; unchanged AppProvider independently reloads canonical data before optional cloud scheduling.",
+    "callerChanges": "Only two arguments pass the provider record; their other state/callbacks/JSX/ARIA/handlers retain bytes."
+  },
+  "aggregate": {
+    "receipt": {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-fix/final/build-receipt.json",
+      "bytes": 238811,
+      "sha256": "054a3bd2eff5f0dbe89a5b72601b7c4cb598d0b85e3dd0d80c6f1eb962ef876d"
+    },
+    "command": "VITE_BASE_PATH=/one-decision-away/ npm run check",
+    "exitCode": 0,
+    "tests": 614,
+    "passed": 614,
+    "failed": 0,
+    "actualRawLog": {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-fix/final/aggregate-check.log",
+      "bytes": 78574,
+      "sha256": "3d6b779d241a660d14e6c9d4723ef14ad73c8f83e0b706f123691ac536831f9d"
+    },
+    "buildCompleteInRawLog": true,
+    "buildFiles": 437,
+    "cssFiles": 7,
+    "actualDistMatchedTwice": true,
+    "binding": {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-fix/independent-source/compiled-binding.json",
+      "bytes": 83245,
+      "sha256": "74c196b406e90dd419c7165b88794dc851d58d953ff76e882705d5a09470aa0b"
+    }
+  },
+  "nativeHookRegressions": {
+    "receipt": {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-fix/final-native-regressions/receipt.json",
+      "bytes": 973,
+      "sha256": "ccb7efd94ed2e6631a0d28c2b744ebf839824f42ec19e641673744fe3180a688"
+    },
+    "rawLog": {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-fix/final-native-regressions/native-regressions.log",
+      "bytes": 1304,
+      "sha256": "06ce2f2a3580a198eb6c609fd677b94f5d4acd18fd32429e17b5a8c9d28986ef"
+    },
+    "harness": {
+      "file": "/workspace/oda-reference-redesign/scripts/qa-saved-course-progress.ts",
+      "bytes": 15376,
+      "sha256": "67f6f60bffb67ad0ee9f9302eacf368ab6da11f3b1f3f37a0fbf27816e14db68"
+    },
+    "actualRawSummary": {
+      "tests": 11,
+      "passed": 11,
+      "failed": 0
+    },
+    "limits": [
+      "Fresh in-memory browser bundle of actual React hook and services; compiled full-app reproduction is separate.",
+      "Provider props, account events and native transaction hold are synthetic; native queue/IndexedDB/React are actual.",
+      "Focus events are explicitly synthetic window events; no OS focus claim."
+    ]
+  },
+  "compiledAppRepairedEvidence": {
+    "report": {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-fix/repaired/attempt-01/report.json",
+      "bytes": 76648,
+      "sha256": "32444d205c5b4168c6e2d3454a36e191b9abaa1db42d96db0b3862a61c9d0716"
+    },
+    "rawLog": {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-fix/repaired/attempt-01/run.log",
+      "bytes": 620,
+      "sha256": "ca7a5d4d598d17039b41b82ef345a63dd6ade43f211857de3ed9eb2b010866e2"
+    },
+    "commandReceipt": {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-fix/repaired/attempt-01/command-receipt.json",
+      "bytes": 744,
+      "sha256": "6e714b45134d101dba2cafc24e6a71e9ea5e905806ccaa44b5f27d377d1b0391"
+    },
+    "harness": {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-fix/repaired/attempt-01/harness.mjs",
+      "bytes": 15997,
+      "sha256": "2fd3a6906dac2120b4564dfa967441b7bd61ce3f05c063a93b312234e6b5bb96"
+    },
+    "caseCount": 3,
+    "actualPendingOldNativeAuthorityAndPublicZero": true,
+    "cases": [
+      {
+        "name": "same-tab actual Complete lesson then Today route mount; commit",
+        "pendingAuthorityCompleted": false,
+        "pendingNativePuts": 0,
+        "pendingPublicCourse": 0,
+        "pendingPublicLibrary": 0,
+        "settledAndReloadedPublic": 1,
+        "focusCoverage": null,
+        "trustedFocusObserved": null
+      },
+      {
+        "name": "same-tab actual Complete lesson then Today route mount; abort",
+        "pendingAuthorityCompleted": false,
+        "pendingNativePuts": 0,
+        "pendingPublicCourse": 0,
+        "pendingPublicLibrary": 0,
+        "settledAndReloadedPublic": 0,
+        "focusCoverage": null,
+        "trustedFocusObserved": null
+      },
+      {
+        "name": "cross-tab already-mounted Today; focus handler while writer pending; abort",
+        "pendingAuthorityCompleted": false,
+        "pendingNativePuts": 0,
+        "pendingPublicCourse": 0,
+        "pendingPublicLibrary": 0,
+        "settledAndReloadedPublic": 0,
+        "focusCoverage": "explicit synthetic window focus event because headless bringToFront did not deliver trusted focus",
+        "trustedFocusObserved": false
+      }
+    ],
+    "limits": [
+      "Tests compiled existing normal local preview, without source edits, rebuild, installs, dependency override or publication.",
+      "Controlled fault injection delays a genuine native IndexedDB readwrite transaction before its put. This amplifies a pending-save window; it does not measure its typical production duration.",
+      "Course editor private optimistic state is intentional and is not treated as saved progress evidence.",
+      "All records are disposable synthetic signed-out fixtures. External requests are blocked and attempts are retained."
+    ]
+  },
+  "independentPrimaryFlowEvidence": {
+    "report": {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-repair-qa/final-d33/primary-attempt1/report.json",
+      "bytes": 116938,
+      "sha256": "061cb76b7dea75f9296c31ee44e0b812ded3db053e33fef725f6baae34e42255"
+    },
+    "rawLog": {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-repair-qa/final-d33/primary-attempt1/run.log",
+      "bytes": 668,
+      "sha256": "d2b528c76dab8f66d6454687b1a325d361bdedd5ebaf06c868bff2deffcaac65"
+    },
+    "commandReceipt": {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-repair-qa/final-d33/primary-attempt1/command-receipt.json",
+      "bytes": 1257,
+      "sha256": "b3ff9a496e5ca4faa9279153e3304f9afe213fd373a5c575c88232dd07e63923"
+    },
+    "checks": 8,
+    "cases": [
+      {
+        "name": "same-tab actual Complete lesson commit,320px",
+        "pendingPolls": 3,
+        "viewportWidth": 320,
+        "noHorizontalOverflow": true,
+        "libraryDenominator": 103,
+        "pendingPublicCourse": 0,
+        "pendingPublicLibrary": 0,
+        "nativeAuthorityCompletedBeforePut": false,
+        "settledAndReloadedPublic": 1,
+        "focusCoverage": null,
+        "trustedFocusObserved": null
+      },
+      {
+        "name": "same-tab actual Complete lesson abort,390px",
+        "pendingPolls": 3,
+        "viewportWidth": 390,
+        "noHorizontalOverflow": true,
+        "libraryDenominator": 103,
+        "pendingPublicCourse": 0,
+        "pendingPublicLibrary": 0,
+        "nativeAuthorityCompletedBeforePut": false,
+        "settledAndReloadedPublic": 0,
+        "focusCoverage": null,
+        "trustedFocusObserved": null
+      },
+      {
+        "name": "Already mounted cross-tab Today focus while writer pending; abort",
+        "pendingPolls": 3,
+        "viewportWidth": 1440,
+        "noHorizontalOverflow": true,
+        "libraryDenominator": 103,
+        "pendingPublicCourse": 0,
+        "pendingPublicLibrary": 0,
+        "nativeAuthorityCompletedBeforePut": false,
+        "settledAndReloadedPublic": 0,
+        "focusCoverage": "explicit synthetic window focus event; headless bringToFront delivered no trusted focus",
+        "trustedFocusObserved": false
+      }
+    ],
+    "reportStatus": "passed",
+    "errors": 0,
+    "actualServedIndexMatchesFrozenDist": true,
+    "limits": [
+      "Actual compiled local app in isolated synthetic signed-out contexts; no production state, install/build/deploy/provider/account/purchase operation.",
+      "Genuine native IDB readwrite transaction is held before native put using bounded native get requests; this amplifies a real pending-save window without claiming its ordinary duration.",
+      "Private course draft/optimistic projection may change while pending; only public saved display and committed IDB authority are checked.",
+      "Headless bringToFront may not deliver trusted focus; any explicit synthetic focus event is labelled, not represented as genuine focus.",
+      "Mobile screenshots are Chromium viewport emulation, not physical iOS testing."
+    ]
+  },
+  "screenshots": [
+    {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-fix/repaired/attempt-01/same-tab-commit-pending.png",
+      "bytes": 44193,
+      "sha256": "17a8463ce3360ce47a1a0196b433b7066fe8eafe6ea42c052a07a2466d920eab",
+      "group": "rootCompiled",
+      "width": 732,
+      "height": 563,
+      "pixelInspectionByThisAuditor": false
+    },
+    {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-fix/repaired/attempt-01/same-tab-commit-settled.png",
+      "bytes": 45820,
+      "sha256": "afdc9acd95138aac3e8209b8fb399114b1fb724de97b6322718f89a5a161a020",
+      "group": "rootCompiled",
+      "width": 732,
+      "height": 563,
+      "pixelInspectionByThisAuditor": false
+    },
+    {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-fix/repaired/attempt-01/same-tab-abort-pending.png",
+      "bytes": 44193,
+      "sha256": "17a8463ce3360ce47a1a0196b433b7066fe8eafe6ea42c052a07a2466d920eab",
+      "group": "rootCompiled",
+      "width": 732,
+      "height": 563,
+      "pixelInspectionByThisAuditor": false
+    },
+    {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-fix/repaired/attempt-01/same-tab-abort-settled.png",
+      "bytes": 44193,
+      "sha256": "17a8463ce3360ce47a1a0196b433b7066fe8eafe6ea42c052a07a2466d920eab",
+      "group": "rootCompiled",
+      "width": 732,
+      "height": 563,
+      "pixelInspectionByThisAuditor": false
+    },
+    {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-fix/repaired/attempt-01/cross-tab-focus-abort-pending.png",
+      "bytes": 44216,
+      "sha256": "30129faef2154b7f1b9fbf8b4b6cd3e5be15d2c2ba6f5bc7b38030d80cd341d1",
+      "group": "rootCompiled",
+      "width": 732,
+      "height": 563,
+      "pixelInspectionByThisAuditor": false
+    },
+    {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-fix/repaired/attempt-01/cross-tab-focus-abort-settled.png",
+      "bytes": 44216,
+      "sha256": "30129faef2154b7f1b9fbf8b4b6cd3e5be15d2c2ba6f5bc7b38030d80cd341d1",
+      "group": "rootCompiled",
+      "width": 732,
+      "height": 563,
+      "pixelInspectionByThisAuditor": false
+    },
+    {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-repair-qa/final-d33/primary-attempt1/same-tab-commit-320-pending.png",
+      "bytes": 33439,
+      "sha256": "22e91c1e3d81865bb464cad0fa8c3f1f21eead1bda782ffc96aa32d7d7b17100",
+      "group": "independentMobile",
+      "width": 280,
+      "height": 691,
+      "pixelInspectionByThisAuditor": false
+    },
+    {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-repair-qa/final-d33/primary-attempt1/same-tab-commit-320-settled.png",
+      "bytes": 33654,
+      "sha256": "a751db169edb2c2fef2a7f8ec07d332439b2d20c181fe373bc283c069cb0feaf",
+      "group": "independentMobile",
+      "width": 280,
+      "height": 691,
+      "pixelInspectionByThisAuditor": false
+    },
+    {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-repair-qa/final-d33/primary-attempt1/same-tab-abort-390-pending.png",
+      "bytes": 34675,
+      "sha256": "26ac640f94a087b2627e47f1f42ddb23e2399fcc484707284c86fcc6780aaf7e",
+      "group": "independentMobile",
+      "width": 350,
+      "height": 602,
+      "pixelInspectionByThisAuditor": false
+    },
+    {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-repair-qa/final-d33/primary-attempt1/same-tab-abort-390-settled.png",
+      "bytes": 35867,
+      "sha256": "dedd1cd41a66be5770175e8dc30d22bb98234405928def7c9cacb68f7623e7f0",
+      "group": "independentMobile",
+      "width": 350,
+      "height": 602,
+      "pixelInspectionByThisAuditor": false
+    },
+    {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-repair-qa/final-d33/primary-attempt1/cross-tab-focus-abort-pending.png",
+      "bytes": 44216,
+      "sha256": "30129faef2154b7f1b9fbf8b4b6cd3e5be15d2c2ba6f5bc7b38030d80cd341d1",
+      "group": "independentMobile",
+      "width": 732,
+      "height": 563,
+      "pixelInspectionByThisAuditor": false
+    },
+    {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-repair-qa/final-d33/primary-attempt1/cross-tab-focus-abort-settled.png",
+      "bytes": 44216,
+      "sha256": "30129faef2154b7f1b9fbf8b4b6cd3e5be15d2c2ba6f5bc7b38030d80cd341d1",
+      "group": "independentMobile",
+      "width": 732,
+      "height": 563,
+      "pixelInspectionByThisAuditor": false
+    }
+  ],
+  "historicalEvidence": {
+    "old611AggregateLog": {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/final/timer-evidence-fix/aggregate-check.log",
+      "bytes": 78158,
+      "sha256": "5c1f5db98ade7925403e2885c235a27369572c481ee669053ce486909842ab66"
+    },
+    "old611AggregateReceipt": {
+      "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/final/timer-evidence-fix/build-receipt.json",
+      "bytes": 238453,
+      "sha256": "1adede11a241c7c434ad3c3429f888f49967b0edf1240606fed8a41b17368942"
+    },
+    "priorC2aProtectionReview": {
+      "file": "/workspace/scratch/oda-reference-redesign/expanded-hybrid/protection/final-c2a/final-source-protection-review.json",
+      "bytes": 5698,
+      "sha256": "ee12158b7fa6e3d1e01dd791f29c48578757608c242a765c2653651248d74065"
+    },
+    "originalDefectProof": [
+      {
+        "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-repro-c2a/reproduce.mjs",
+        "bytes": 15853,
+        "sha256": "732e508d77fd20baaa8115e44c830f55a21d53c462540cb0cbe4b346c9338582"
+      },
+      {
+        "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-repro-c2a/attempt-02/report.json",
+        "bytes": 76690,
+        "sha256": "feea28d9c4201f1f091da2737437727c8cbe280bcfc39a236bea2309d77c1ffb"
+      },
+      {
+        "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-repro-c2a/attempt-02/run.log",
+        "bytes": 569,
+        "sha256": "15d30dd354496341398755eb9917f143b44d4a330f8d5758cf89ce510caf4a24"
+      }
+    ],
+    "attempt01PreBrowserParseFailureFilesRetained": [
+      {
+        "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-repro-c2a/attempt-01/harness-original.mjs",
+        "bytes": 15854,
+        "sha256": "f442daeade27f6134687843bf4640b267470a7a6a6cb69a1af2056a44a560170"
+      },
+      {
+        "file": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-repro-c2a/attempt-01/run.log",
+        "bytes": 3251,
+        "sha256": "8a09bd9684cf29cd0a7cf17500681a4cb123b5e64b62dd3b2e4764099c097e0e"
+      }
+    ],
+    "interpretation": "Original defect and failed pre-browser attempt remain historical evidence; repaired evidence supersedes their saved-display result, not their bytes. No durable corruption or persistent rollback staleness was demonstrated."
+  },
+  "nonsensitiveScope": {
+    "syntheticFixtures": true,
+    "privateCredentialFilesRead": false,
+    "boundedPatternScanFiles": 9,
+    "privateKeyLiveTokenPatternHits": [],
+    "notAnExhaustiveSecretAudit": true
+  },
+  "findings": [],
+  "remainingLimits": [
+    "Parent reports supplemental real backup UI QA passed five checks while its artifacts are being sealed. Those raw files were not reviewed in this bounded receipt; root can link the separate final result.",
+    "Reports are read and hashed; this auditor did not personally view PNG pixels or rerun a browser.",
+    "Headless focus is explicitly synthetic; 320/390 are Chromium viewport emulation, not physical iOS.",
+    "Controlled genuine native transaction hold proves the boundary, not its ordinary production duration.",
+    "Existing unrelated dependency advisory remains unchanged; this is no dependency-alert resolution or compliance claim.",
+    "No visual or publication approval is conferred."
+  ],
+  "readerClosure": {
+    "thisAuditor": "closed after final hashes",
+    "helperSafetyInventory": "closed; independent static diff pass; no executions",
+    "otherRootPeerQa": "outside this auditor; supplemental QA evidence separate"
+  }
+}

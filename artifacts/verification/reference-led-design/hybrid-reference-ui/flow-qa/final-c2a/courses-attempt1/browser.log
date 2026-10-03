@@ -1,0 +1,25 @@
+PASS Returning Today View roadmap opens overview and consumes one-use intent without changing progress
+PASS Completed roadmap stage0 rereads its real lesson instead of being overwritten by resume stage2
+PASS Today Continue resumes actual next lesson, title, minutes, goal and saved reflection
+PASS Valid-scoped incoming future lesson request is stopped by real prerequisite guard and leaves progress unchanged
+PASS Actual practice/quiz draft does not count as completion; explicit valid Complete advances committed Today counter and real next title
+PASS Returning roadmap320 controls fit
+PASS Returning roadmap desktop controls fit
+PASS All103 real completed lessons keep a finished course visible with roadmap access rather than disappearing
+PASS Actual18-course catalogue and search remain reachable after all courses complete
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'https://images.unsplash.com/photo-1553044020-8c90843adf96?auto=format&fit=crop&w=600&h=338&q=70',
++   'https://images.unsplash.com/photo-1553044020-8c90843adf96?auto=format&fit=crop&w=600&h=338&q=70',
++   'https://images.unsplash.com/photo-1552360708-ebcdf76845ac?auto=format&fit=crop&w=600&h=338&q=70',
++   'https://images.unsplash.com/photo-1553044020-8c90843adf96?auto=format&fit=crop&w=600&h=338&q=70',
++   'https://images.unsplash.com/photo-1553044020-8c90843adf96?auto=format&fit=crop&w=600&h=338&q=70',
++   'https://images.unsplash.com/photo-1553044020-8c90843adf96?auto=format&fit=crop&w=600&h=338&q=70',
++   'https://images.unsplash.com/photo-1553044020-8c90843adf96?auto=format&fit=crop&w=600&h=338&q=70',
++   'https://images.unsplash.com/photo-1778958619388-b529cc4e78e8?auto=format&fit=crop&w=600&h=338&q=70'
++ ]
+- []
+
+    at <anonymous> (/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/flow-qa/final-c2a/harness/hybrid-flows.mjs:177:51)

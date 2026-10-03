@@ -1,0 +1,19 @@
+PASS Normal service-worker-enabled first use requests zero MP3
+PASS Final build first app load requests zero MP3
+PASS Start fetches only current and next two cues
+PASS Pause stops and disconnects the recorded source
+PASS Resume starts from measured playback offset
+PASS Repeat retires the resumed source and restarts the current cue
+PASS Keyboard Home sets visible voice volume to zero
+PASS Volume zero sets the active real GainNode to zero
+PASS Muted repeat creates only a gain-zero recorded source
+PASS Keyboard volume update reaches the active recorded GainNode
+PASS End session stops and disconnects all started recorded sources
+PASS No late source or fallback utterance after end
+PASS Current recording request is held before decode/start
+PASS stop: delayed old cue never starts or invokes fallback
+PASS First playback writes verified current-cue bytes to native CacheStorage
+PASS Offline replay re-decodes CacheStorage after another session cleared memory, with zero network requests
+PASS Notebook words remain verbatim in the display-locale device voice with zero MP3
+PASS Notebook words remain verbatim in the display-locale device voice with zero MP3
+PASS 6 final browser cases, 18 checks

@@ -1,0 +1,65 @@
+{
+  "sourceCommit": "8fed790187dd83f74acd8aec8af3f28981df22d6",
+  "synthetic": true,
+  "checks": [
+    {
+      "name": "Expanded primary exposes accessible real controls without a duplicate fixed mini-player"
+    },
+    {
+      "name": "Every actual native timer option and first/final keyboard choice stays operable"
+    },
+    {
+      "name": "Scrolling restores mini-player with unchanged name, volume, timer and running countdown",
+      "evidence": {
+        "graphStartsBefore": 2,
+        "graphStartsAfter": 2
+      }
+    },
+    {
+      "name": "Native timer focus transfers to corresponding expanded control; paused remaining time, timer and volume stay frozen",
+      "evidence": {
+        "graphStartsBefore": 2,
+        "graphStartsAfter": 2
+      }
+    },
+    {
+      "name": "Repeated running handoffs keep the resumed graph and remaining timer",
+      "evidence": {
+        "graphStartsBefore": 4,
+        "graphStartsAfter": 4
+      }
+    },
+    {
+      "name": "Session rationale disclosure uses native keyboard controls without restarting synthesis",
+      "evidence": {
+        "graphStartsBefore": 4,
+        "graphStartsAfter": 4
+      }
+    },
+    {
+      "name": "Fourth Breathe tab and silent-guide toggle remain keyboard-reachable without starting a new graph",
+      "evidence": {
+        "graphStartsBefore": 4,
+        "graphStartsAfter": 4
+      }
+    },
+    {
+      "name": "Trusted Breathe tone action starts and pauses actual synthesis"
+    }
+  ],
+  "screenshots": [
+    "sound-running-mini-390.png",
+    "sound-paused-expanded-390.png",
+    "sound-breathe-390.png"
+  ],
+  "errors": [],
+  "blockedExternal": [],
+  "selectorFreezeReviewed": true,
+  "limitations": [
+    "Actual native Chromium graph-start observation, no synthetic audio clock.",
+    "Browser web access behavior only; native billing protections are explicitly bound by unchanged sources and parent aggregate tests.",
+    "Selectors must be reviewed against the final frozen source before execution."
+  ],
+  "status": "passed",
+  "finishedAt": "2026-10-02T21:48:45.121Z"
+}

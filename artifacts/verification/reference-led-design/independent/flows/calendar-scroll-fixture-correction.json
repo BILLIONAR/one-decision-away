@@ -1,0 +1,7 @@
+{
+  "originalNamespace": "calendar-targeted",
+  "correctedNamespace": "calendar-settled",
+  "reason": "Initial bounds assertion ran immediately while Chromium native ArrowRight/focus scroll was moving. Actual failure PNG showed fully visible selected Sunday4. Corrected harness now waits up to2seconds for the same strict bounds before evaluating; assertion thresholds unchanged and no app edit. If it remains clipped the corrected run fails.",
+  "originalHarnessSha256": "65001d15e042bb2542f54990f5aa4728b4b680970c7f43276322c49dab5195d1",
+  "correctedHarnessSha256": "e6c41c2ca7f516f1ffe6c260ea9e63a23efe533cb24ac6f7643b819634744789"
+}

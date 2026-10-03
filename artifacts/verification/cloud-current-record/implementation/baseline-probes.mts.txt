@@ -1,0 +1,80 @@
+import assert from 'node:assert/strict';
+import { writeFile, readFile } from 'node:fs/promises';
+import { createHash, webcrypto } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+
+const root = '/workspace/oda-cloud-upload-current-record';
+const output = '/workspace/scratch/oda-cloud-current-record';
+class MemoryStorage {
+  values = new Map<string, string>();
+  getItem(key: string) { return this.values.get(key) ?? null; }
+  setItem(key: string, value: string) { this.values.set(key, value); }
+  removeItem(key: string) { this.values.delete(key); }
+}
+const storage = new MemoryStorage();
+Object.defineProperty(globalThis, 'localStorage', { configurable: true, value: storage });
+Object.defineProperty(globalThis, 'crypto', { configurable: true, value: webcrypto });
+const timers = new Map<number, () => void>(); let nextTimer = 0;
+Object.defineProperty(globalThis, 'window', { configurable: true, value: {
+  location: { origin: 'https://synthetic.invalid', pathname: '/app/account', search: '', hash: '' },
+  setTimeout(callback: () => void) { const id = ++nextTimer; timers.set(id, callback); return id; },
+  clearTimeout(id: number) { timers.delete(id); },
+}});
+let networkCalls = 0;
+Object.defineProperty(globalThis, 'fetch', { configurable: true, value: async () => { networkCalls++; throw new Error('Live network forbidden'); } });
+const { cloudSync } = await import(`${root}/src/services/cloudSync.ts`);
+const { LocalDemoRepository, getInitialDemoState } = await import(`${root}/src/services/repository.ts`);
+const { APP_DATA_STORAGE_KEY } = await import(`${root}/src/services/storageKeys.ts`);
+const { cloudCrudFixture } = await import(`${root}/tests/helpers/cloudCrudFixture.ts`);
+const internal = cloudSync as unknown as Record<string, any>;
+const repository = new LocalDemoRepository();
+const clone = <T>(data: T): T => structuredClone(data);
+async function setup() {
+  storage.values.clear(); timers.clear();
+  Object.assign(internal, { session: null, config: null, client: null, scopeRevision: 0, syncing: false, error: null, initialized: true, initializing: null, sessionHydrated: true, authSubscription: null, pushTimer: null, pushQueue: Promise.resolve(false), pendingPulls: new WeakMap() });
+  const initial = clone(getInitialDemoState()); initial.profile.displayName = 'Synthetic member'; initial.profile.onboardingStep = 'completed';
+  await repository.replaceAll(initial);
+  const sent: any[] = [];
+  const fixture = cloudCrudFixture({ write: async row => { sent.push(clone(row)); return { error: null }; } });
+  Object.assign(internal, { session: { user: { id: 'A', email: 'synthetic@fixture.invalid' } }, config: { url: 'https://synthetic-project.invalid', anonKey: 'public-mock-key' }, client: fixture.client });
+  const authoritative = await repository.load(); assert.equal(await cloudSync.push(authoritative), true);
+  return { fixture, sent, initial: clone(authoritative) };
+}
+const entries = (data: any) => data.notebook.entries.map((entry: any) => entry.content);
+const results: any[] = [];
+async function probe(name: string, run: () => Promise<Record<string, unknown>>) {
+  try { results.push({ name, reproduced: true, evidence: await run() }); }
+  catch (error) { results.push({ name, reproduced: false, error: error instanceof Error ? error.stack : String(error) }); }
+}
+await probe('Ordinary committed writing keeps prior cloud-confirmed Account claim before scheduled upload', async () => {
+  const f = await setup(); const oldSync = cloudSync.getState().lastSyncAt; assert.ok(oldSync);
+  await repository.mutateNotebook({ type: 'save_entry', input: { kind: 'journal', content: 'Newer writing saved only on this device' } });
+  const latest = await repository.load(); const state = cloudSync.getState();
+  assert.equal(state.lastSyncAt, oldSync); assert.equal(state.error, null); assert.equal(state.syncing, false);
+  assert.equal(entries(latest).length, 1); assert.equal(entries(f.fixture.rows.get('A')!.data).length, 0); assert.equal(timers.size, 1);
+  const accountSource = execFileSync('git', ['show', 'HEAD:src/pages/Account.tsx'], { cwd: root, encoding: 'utf8' });
+  assert.ok(accountSource.includes('const cloudConfirmed = !!cloud.session && !!cloud.lastSyncAt && !cloud.error;'));
+  return { previousSyncAt: oldSync, displayedSyncAt: state.lastSyncAt, localEntries: entries(latest), remoteEntries: entries(f.fixture.rows.get('A')!.data), pendingTimers: timers.size, cloudConfirmedPredicate: !!state.session && !!state.lastSyncAt && !state.error, accountClaimEvidence: 'Actual service state plus exact Account source predicate; no UI render claimed' };
+});
+await probe('Stale supplied caller snapshot overwrites newer acknowledged cloud work and reports confirmed success', async () => {
+  const f = await setup(); const stale = clone(f.initial);
+  await repository.mutateNotebook({ type: 'save_entry', input: { kind: 'journal', content: 'Newer writing already acknowledged in cloud' } });
+  const newer = await repository.load(); assert.equal(await cloudSync.push(newer), true);
+  const raw = storage.getItem(APP_DATA_STORAGE_KEY); const remoteBefore = clone(f.fixture.rows.get('A')!); assert.equal(entries(remoteBefore.data).length, 1);
+  const pendingOperationGuard = cloudSync.currentOperationGuard();
+  // Real callers' unchanged acknowledged row yields null, allowing their fallback.
+  assert.equal(await cloudSync.pullIfNewer(stale, { forReview: true }), null); assert.equal(pendingOperationGuard(), true);
+  const result = await cloudSync.push(stale); assert.equal(result, true); assert.equal(pendingOperationGuard(), true);
+  const remoteAfter = f.fixture.rows.get('A')!;
+  assert.equal(entries(remoteAfter.data).length, 0); assert.equal(storage.getItem(APP_DATA_STORAGE_KEY), raw); assert.equal(entries(JSON.parse(raw!)).length, 1);
+  const state = cloudSync.getState(); assert.ok(state.lastSyncAt); assert.equal(state.error, null);
+  return { fallbackResult: result, localRawUnchanged: true, remoteBefore: entries(remoteBefore.data), remoteAfter: entries(remoteAfter.data), localAfter: entries(JSON.parse(raw!)), stalePayloadEntryCount: entries(stale).length, operationGuardStillTrue: pendingOperationGuard(), uploadedVersions: f.sent.map(row => row.updated_at), cloudConfirmedPredicate: !!state.session && !!state.lastSyncAt && !state.error };
+});
+const source: any[] = [];
+for (const file of ['src/services/cloudSync.ts', 'src/pages/Account.tsx', 'src/components/BackupAndCloudSettings.tsx', 'src/store/useApp.tsx', 'src/services/repository.ts']) {
+  const bytes = await readFile(`${root}/${file}`); source.push({ file, bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') });
+}
+const report = { label: 'Read-only exact-candidate adversarial diagnosis; synthetic service/storage plus source predicate, no fix', head: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(), total: results.length, reproduced: results.filter(result => result.reproduced).length, failed: results.filter(result => !result.reproduced).length, networkCalls, source, results, limitations: ['Stale React-render reachability is supported by production source trace and parent extracted-caller reproduction; this local service harness does not mount live cross-tab React', 'No UI render, browser screenshots, simulator, native device or provider operations. An initial optional Node SSR attempt stopped at unsupported CSS module import; no renderer workaround was attempted'] };
+await writeFile(`${output}/report.json`, JSON.stringify(report, null, 2) + '\n');
+console.log(JSON.stringify(report, null, 2));
+if (report.failed || networkCalls) process.exitCode = 1;

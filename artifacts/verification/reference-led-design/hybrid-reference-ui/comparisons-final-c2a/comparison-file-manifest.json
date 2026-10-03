@@ -1,0 +1,504 @@
+{
+  "createdAtUtc": "2026-10-03T01:38:40.416505+00:00",
+  "owner": "/root/hybrid_material_review",
+  "status": "Sealed pixel-exact comparison artifacts; no publication or visual approval",
+  "beforeSourceCommit": "4c873b0df32c4489a8b95260122ae3ae9efd936d",
+  "afterSourceCommit": "c2a5e6497f1bed4cf95951375c9aa86872b169a9",
+  "requestedComparisonCount": 7,
+  "expandedPlayerSupplementCount": 1,
+  "comparisonCount": 8,
+  "nativeViewport": [
+    390,
+    844
+  ],
+  "compositeDimensions": [
+    852,
+    1020
+  ],
+  "method": "PIL: decoded RGBA screenshot pixels pasted at integer native-size coordinates onto an annotation canvas; no resizing, cropping of screenshot regions, recolouring, repainting, or image synthesis. Entire 390×844 screenshot region preserved on each side. Pixel equality verified by decoding each saved composite and comparing both complete regions to decoded inputs.",
+  "beforeReport": {
+    "path": "/workspace/oda-reference-redesign/artifacts/verification/reference-led-design/scoped-layout-repair/final/control-clearance-fix/comparisons/input-snapshot/after/report.json",
+    "bytes": 156136,
+    "sha256": "4843dbf70faa6f0c008db2c862bc0630854c70764a1703eff9c57054056b2b1b"
+  },
+  "currentRepresentativeReceipt": {
+    "path": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/independent-visual/final-c2a/representative/receipt.json",
+    "bytes": 13736,
+    "sha256": "da2d880fb23d4d4a1d1274d878986ecc17078c3419ba1b582c8fd90732024569"
+  },
+  "todaySupplementReceipt": {
+    "path": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/independent-visual/final-c2a/representative/toast-dismissed/receipt.json",
+    "bytes": 1534,
+    "sha256": "3730fee365a468f03ed5600e724a3d5018b9b727b29a0b1414114e6565cfd2f4"
+  },
+  "currentBuildReceipt": {
+    "path": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/final/timer-evidence-fix/build-receipt.json",
+    "bytes": 238453,
+    "sha256": "1adede11a241c7c434ad3c3429f888f49967b0edf1240606fed8a41b17368942"
+  },
+  "currentBuildSummary": {
+    "sourceFiles": 874,
+    "compiledFiles": 437,
+    "cssFiles": 7,
+    "aggregatePassedReported": 611,
+    "aggregateFailedReported": 0
+  },
+  "todaySupplementNote": "Only Today comparison uses the newly sealed toast-dismissed 390 capture. Its bytes/hash are identical to the already-preserved 390 native Today screenshot, though this new capture specifically verifies normal toast dismissal. Original native30 set and all baseline screenshots remain unchanged.",
+  "fixtureLimits": [
+    "Before is the final scoped 4c candidate captured Oct 2; after is the current c2a candidate captured Oct 3.",
+    "All captures use isolated synthetic fixtures; no production-user data or identical-fixture promise. Date-dependent quote, dates, entry previews, counters and scroll states can differ.",
+    "Artwork and layout changes are compared; the pictures alone do not certify interactions, keyboard reachability, raster contrast, physical devices, source protection or final parent/user approval."
+  ],
+  "pairs": [
+    {
+      "view": "sound-discovery",
+      "role": "Requested comparison",
+      "before": {
+        "path": "/workspace/oda-reference-redesign/artifacts/verification/reference-led-design/scoped-layout-repair/final/control-clearance-fix/comparisons/input-snapshot/after/sound-discovery.png",
+        "bytes": 353718,
+        "sha256": "b514a0569199efb7ef11997344132988663b7a1e1c89e54d15482c4c0193091d",
+        "sourceCommit": "4c873b0df32c4489a8b95260122ae3ae9efd936d",
+        "capturedAtUtc": "2026-10-02T21:58:07.520Z",
+        "fixtureDate": "2026-10-02",
+        "decodedWidth": 390,
+        "decodedHeight": 844,
+        "snapshotCopy": "input-snapshot/before/sound-discovery.png",
+        "scrollYReported": 0
+      },
+      "after": {
+        "path": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/independent-visual/final-c2a/representative/native/390/sound-discovery.png",
+        "bytes": 411662,
+        "sha256": "dcfbbc0bd2f21baf5f8cfe815d5a18de804f37fd5f7ad205b730281c80d220ac",
+        "sourceCommit": "c2a5e6497f1bed4cf95951375c9aa86872b169a9",
+        "fixtureDate": "2026-10-03",
+        "decodedWidth": 390,
+        "decodedHeight": 844,
+        "snapshotCopy": "input-snapshot/after/sound-discovery.png",
+        "captureKind": "Sealed current representative native screenshot",
+        "toastDismissedSupplement": false,
+        "scrollYReported": null
+      },
+      "comparison": {
+        "path": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/comparisons-final-c2a/sound-discovery-before-after.png",
+        "bytes": 911157,
+        "sha256": "a336dcac0f82137f0acdef143b4a198465ee768cafbef6c95bef0bc4f6af5f94",
+        "width": 852,
+        "height": 1020,
+        "beforePixelRegion": [
+          24,
+          144,
+          414,
+          988
+        ],
+        "afterPixelRegion": [
+          438,
+          144,
+          828,
+          988
+        ],
+        "decodedRGBAPixelEqualityFreshlyVerified": true,
+        "resized": false,
+        "repaintedInsideScreenshotRegions": false
+      },
+      "limits": [
+        "Different Oct 2/Oct 3 synthetic captures; date-dependent quote text, entries, timestamps, counters and viewport scroll states can differ.",
+        "Full native viewport is preserved; below-viewport/offscreen content is not included.",
+        "This visual comparison is not an identical-fixture functional regression test or parent/user acceptance."
+      ]
+    },
+    {
+      "view": "sound-detail-player",
+      "role": "Requested comparison",
+      "before": {
+        "path": "/workspace/oda-reference-redesign/artifacts/verification/reference-led-design/scoped-layout-repair/final/control-clearance-fix/comparisons/input-snapshot/after/sound-detail-player.png",
+        "bytes": 185366,
+        "sha256": "2f2ae8cc5939173c00a972506eb6152adb98781bc4312b6f7632e3525b606a71",
+        "sourceCommit": "4c873b0df32c4489a8b95260122ae3ae9efd936d",
+        "capturedAtUtc": "2026-10-02T21:58:07.520Z",
+        "fixtureDate": "2026-10-02",
+        "decodedWidth": 390,
+        "decodedHeight": 844,
+        "snapshotCopy": "input-snapshot/before/sound-detail-player.png",
+        "scrollYReported": 979
+      },
+      "after": {
+        "path": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/independent-visual/final-c2a/representative/native/390/sound-detail-player.png",
+        "bytes": 201723,
+        "sha256": "e2640ca29a294f67e661918835c14d4cc18a7360b495fde2a75a2e118180a227",
+        "sourceCommit": "c2a5e6497f1bed4cf95951375c9aa86872b169a9",
+        "fixtureDate": "2026-10-03",
+        "decodedWidth": 390,
+        "decodedHeight": 844,
+        "snapshotCopy": "input-snapshot/after/sound-detail-player.png",
+        "captureKind": "Sealed current representative native screenshot",
+        "toastDismissedSupplement": false,
+        "scrollYReported": "Deliberately scrolled native player view"
+      },
+      "comparison": {
+        "path": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/comparisons-final-c2a/sound-detail-player-before-after.png",
+        "bytes": 403851,
+        "sha256": "3d2989be8a0f274582d63da3d90399ec4e83bf9866d9f1381d1314d1c55a2487",
+        "width": 852,
+        "height": 1020,
+        "beforePixelRegion": [
+          24,
+          144,
+          414,
+          988
+        ],
+        "afterPixelRegion": [
+          438,
+          144,
+          828,
+          988
+        ],
+        "decodedRGBAPixelEqualityFreshlyVerified": true,
+        "resized": false,
+        "repaintedInsideScreenshotRegions": false
+      },
+      "limits": [
+        "Different Oct 2/Oct 3 synthetic captures; date-dependent quote text, entries, timestamps, counters and viewport scroll states can differ.",
+        "Full native viewport is preserved; below-viewport/offscreen content is not included.",
+        "This visual comparison is not an identical-fixture functional regression test or parent/user acceptance."
+      ]
+    },
+    {
+      "view": "coach",
+      "role": "Requested comparison",
+      "before": {
+        "path": "/workspace/oda-reference-redesign/artifacts/verification/reference-led-design/scoped-layout-repair/final/control-clearance-fix/comparisons/input-snapshot/after/coach.png",
+        "bytes": 154886,
+        "sha256": "1bf0bfab0fd04d34a2872fbb922efe6be283abce8dae78fe8d540e24adc1bcc1",
+        "sourceCommit": "4c873b0df32c4489a8b95260122ae3ae9efd936d",
+        "capturedAtUtc": "2026-10-02T21:58:07.520Z",
+        "fixtureDate": "2026-10-02",
+        "decodedWidth": 390,
+        "decodedHeight": 844,
+        "snapshotCopy": "input-snapshot/before/coach.png",
+        "scrollYReported": 0
+      },
+      "after": {
+        "path": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/independent-visual/final-c2a/representative/native/390/coach.png",
+        "bytes": 165393,
+        "sha256": "0ef4d698462aa92f480595305cded1a9f3affae687556aef03f5988bb4e44b2c",
+        "sourceCommit": "c2a5e6497f1bed4cf95951375c9aa86872b169a9",
+        "fixtureDate": "2026-10-03",
+        "decodedWidth": 390,
+        "decodedHeight": 844,
+        "snapshotCopy": "input-snapshot/after/coach.png",
+        "captureKind": "Sealed current representative native screenshot",
+        "toastDismissedSupplement": false,
+        "scrollYReported": null
+      },
+      "comparison": {
+        "path": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/comparisons-final-c2a/coach-before-after.png",
+        "bytes": 253905,
+        "sha256": "3cfb46af151b5ce919045cd87fc123f4a76af9d0308d11195270929bd2be4d52",
+        "width": 852,
+        "height": 1020,
+        "beforePixelRegion": [
+          24,
+          144,
+          414,
+          988
+        ],
+        "afterPixelRegion": [
+          438,
+          144,
+          828,
+          988
+        ],
+        "decodedRGBAPixelEqualityFreshlyVerified": true,
+        "resized": false,
+        "repaintedInsideScreenshotRegions": false
+      },
+      "limits": [
+        "Different Oct 2/Oct 3 synthetic captures; date-dependent quote text, entries, timestamps, counters and viewport scroll states can differ.",
+        "Full native viewport is preserved; below-viewport/offscreen content is not included.",
+        "This visual comparison is not an identical-fixture functional regression test or parent/user acceptance."
+      ]
+    },
+    {
+      "view": "today",
+      "role": "Requested comparison",
+      "before": {
+        "path": "/workspace/oda-reference-redesign/artifacts/verification/reference-led-design/scoped-layout-repair/final/control-clearance-fix/comparisons/input-snapshot/after/today.png",
+        "bytes": 119808,
+        "sha256": "2d5a4d21fefb741941024e9d76768b82eb5c12df843317e6b9cf79edf6575eea",
+        "sourceCommit": "4c873b0df32c4489a8b95260122ae3ae9efd936d",
+        "capturedAtUtc": "2026-10-02T21:58:07.520Z",
+        "fixtureDate": "2026-10-02",
+        "decodedWidth": 390,
+        "decodedHeight": 844,
+        "snapshotCopy": "input-snapshot/before/today.png",
+        "scrollYReported": 0
+      },
+      "after": {
+        "path": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/independent-visual/final-c2a/representative/toast-dismissed/390/today.png",
+        "bytes": 143719,
+        "sha256": "dc0a0ca294a6dc47fec9ab5f6ac5d073086340a7a7e14f38f0aa24e9a81791f5",
+        "sourceCommit": "c2a5e6497f1bed4cf95951375c9aa86872b169a9",
+        "fixtureDate": "2026-10-03",
+        "decodedWidth": 390,
+        "decodedHeight": 844,
+        "snapshotCopy": "input-snapshot/after/today.png",
+        "captureKind": "New explicitly sealed toast-dismissed Today supplement",
+        "toastDismissedSupplement": true,
+        "scrollYReported": 0
+      },
+      "comparison": {
+        "path": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/comparisons-final-c2a/today-before-after.png",
+        "bytes": 306941,
+        "sha256": "e96f5aa13b2a0736261449dc2679cf1543a29d74063be752546578505280c2ee",
+        "width": 852,
+        "height": 1020,
+        "beforePixelRegion": [
+          24,
+          144,
+          414,
+          988
+        ],
+        "afterPixelRegion": [
+          438,
+          144,
+          828,
+          988
+        ],
+        "decodedRGBAPixelEqualityFreshlyVerified": true,
+        "resized": false,
+        "repaintedInsideScreenshotRegions": false
+      },
+      "limits": [
+        "Different Oct 2/Oct 3 synthetic captures; date-dependent quote text, entries, timestamps, counters and viewport scroll states can differ.",
+        "Full native viewport is preserved; below-viewport/offscreen content is not included.",
+        "This visual comparison is not an identical-fixture functional regression test or parent/user acceptance."
+      ]
+    },
+    {
+      "view": "notebook",
+      "role": "Requested comparison",
+      "before": {
+        "path": "/workspace/oda-reference-redesign/artifacts/verification/reference-led-design/scoped-layout-repair/final/control-clearance-fix/comparisons/input-snapshot/after/notebook.png",
+        "bytes": 56180,
+        "sha256": "35daf377ac5c2f266d908e85dee727e72eaaeabca6279b7187f7d0c4c344534e",
+        "sourceCommit": "4c873b0df32c4489a8b95260122ae3ae9efd936d",
+        "capturedAtUtc": "2026-10-02T21:58:07.520Z",
+        "fixtureDate": "2026-10-02",
+        "decodedWidth": 390,
+        "decodedHeight": 844,
+        "snapshotCopy": "input-snapshot/before/notebook.png",
+        "scrollYReported": 0
+      },
+      "after": {
+        "path": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/independent-visual/final-c2a/representative/native/390/notebook.png",
+        "bytes": 61962,
+        "sha256": "c62671268a790150b34f97a363bab161d8e1fc5fc40e9d46298a69344201edeb",
+        "sourceCommit": "c2a5e6497f1bed4cf95951375c9aa86872b169a9",
+        "fixtureDate": "2026-10-03",
+        "decodedWidth": 390,
+        "decodedHeight": 844,
+        "snapshotCopy": "input-snapshot/after/notebook.png",
+        "captureKind": "Sealed current representative native screenshot",
+        "toastDismissedSupplement": false,
+        "scrollYReported": null
+      },
+      "comparison": {
+        "path": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/comparisons-final-c2a/notebook-before-after.png",
+        "bytes": 137875,
+        "sha256": "dfbd1efdcf19c1d06e5cc9efcff9d6b169a583c7a96aae3c085d742a47ffec2f",
+        "width": 852,
+        "height": 1020,
+        "beforePixelRegion": [
+          24,
+          144,
+          414,
+          988
+        ],
+        "afterPixelRegion": [
+          438,
+          144,
+          828,
+          988
+        ],
+        "decodedRGBAPixelEqualityFreshlyVerified": true,
+        "resized": false,
+        "repaintedInsideScreenshotRegions": false
+      },
+      "limits": [
+        "Different Oct 2/Oct 3 synthetic captures; date-dependent quote text, entries, timestamps, counters and viewport scroll states can differ.",
+        "Full native viewport is preserved; below-viewport/offscreen content is not included.",
+        "This visual comparison is not an identical-fixture functional regression test or parent/user acceptance."
+      ]
+    },
+    {
+      "view": "focus",
+      "role": "Requested comparison",
+      "before": {
+        "path": "/workspace/oda-reference-redesign/artifacts/verification/reference-led-design/scoped-layout-repair/final/control-clearance-fix/comparisons/input-snapshot/after/focus.png",
+        "bytes": 49732,
+        "sha256": "11956121f7c3f97e272235937a82ab185244d4a10026a2d1e75280d7dcfa9061",
+        "sourceCommit": "4c873b0df32c4489a8b95260122ae3ae9efd936d",
+        "capturedAtUtc": "2026-10-02T21:58:07.520Z",
+        "fixtureDate": "2026-10-02",
+        "decodedWidth": 390,
+        "decodedHeight": 844,
+        "snapshotCopy": "input-snapshot/before/focus.png",
+        "scrollYReported": 0
+      },
+      "after": {
+        "path": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/independent-visual/final-c2a/representative/native/390/focus.png",
+        "bytes": 49909,
+        "sha256": "858b8d090753f5bea95d09826124de0b0d1718c68be2879f41ec04223da95fa0",
+        "sourceCommit": "c2a5e6497f1bed4cf95951375c9aa86872b169a9",
+        "fixtureDate": "2026-10-03",
+        "decodedWidth": 390,
+        "decodedHeight": 844,
+        "snapshotCopy": "input-snapshot/after/focus.png",
+        "captureKind": "Sealed current representative native screenshot",
+        "toastDismissedSupplement": false,
+        "scrollYReported": null
+      },
+      "comparison": {
+        "path": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/comparisons-final-c2a/focus-before-after.png",
+        "bytes": 90777,
+        "sha256": "01289187bdf10c8cd9f49d25c13838d7b9058188f78298b7e1fe766ddb6f2ab1",
+        "width": 852,
+        "height": 1020,
+        "beforePixelRegion": [
+          24,
+          144,
+          414,
+          988
+        ],
+        "afterPixelRegion": [
+          438,
+          144,
+          828,
+          988
+        ],
+        "decodedRGBAPixelEqualityFreshlyVerified": true,
+        "resized": false,
+        "repaintedInsideScreenshotRegions": false
+      },
+      "limits": [
+        "Different Oct 2/Oct 3 synthetic captures; date-dependent quote text, entries, timestamps, counters and viewport scroll states can differ.",
+        "Full native viewport is preserved; below-viewport/offscreen content is not included.",
+        "This visual comparison is not an identical-fixture functional regression test or parent/user acceptance."
+      ]
+    },
+    {
+      "view": "course-overview",
+      "role": "Requested comparison",
+      "before": {
+        "path": "/workspace/oda-reference-redesign/artifacts/verification/reference-led-design/scoped-layout-repair/final/control-clearance-fix/comparisons/input-snapshot/after/course-overview.png",
+        "bytes": 81484,
+        "sha256": "361ac55792df69c413c0f47c81489fc8a24970bf03b7bb57abdd22ba18a420ed",
+        "sourceCommit": "4c873b0df32c4489a8b95260122ae3ae9efd936d",
+        "capturedAtUtc": "2026-10-02T21:58:07.520Z",
+        "fixtureDate": "2026-10-02",
+        "decodedWidth": 390,
+        "decodedHeight": 844,
+        "snapshotCopy": "input-snapshot/before/course-overview.png",
+        "scrollYReported": 0
+      },
+      "after": {
+        "path": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/independent-visual/final-c2a/representative/native/390/course-overview.png",
+        "bytes": 81923,
+        "sha256": "8152b6991b939a59520b5abd9cf38a9a27f82be44d36f89a38f2e5863e290a1e",
+        "sourceCommit": "c2a5e6497f1bed4cf95951375c9aa86872b169a9",
+        "fixtureDate": "2026-10-03",
+        "decodedWidth": 390,
+        "decodedHeight": 844,
+        "snapshotCopy": "input-snapshot/after/course-overview.png",
+        "captureKind": "Sealed current representative native screenshot",
+        "toastDismissedSupplement": false,
+        "scrollYReported": null
+      },
+      "comparison": {
+        "path": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/comparisons-final-c2a/course-overview-before-after.png",
+        "bytes": 162290,
+        "sha256": "8a1301d7dcbd024905b6c9afed5a3273dc7fa72458b041fb0b6c4dc39ba72260",
+        "width": 852,
+        "height": 1020,
+        "beforePixelRegion": [
+          24,
+          144,
+          414,
+          988
+        ],
+        "afterPixelRegion": [
+          438,
+          144,
+          828,
+          988
+        ],
+        "decodedRGBAPixelEqualityFreshlyVerified": true,
+        "resized": false,
+        "repaintedInsideScreenshotRegions": false
+      },
+      "limits": [
+        "Different Oct 2/Oct 3 synthetic captures; date-dependent quote text, entries, timestamps, counters and viewport scroll states can differ.",
+        "Full native viewport is preserved; below-viewport/offscreen content is not included.",
+        "This visual comparison is not an identical-fixture functional regression test or parent/user acceptance."
+      ]
+    },
+    {
+      "view": "sound-expanded-player",
+      "role": "Supplemental expanded player",
+      "before": {
+        "path": "/workspace/oda-reference-redesign/artifacts/verification/reference-led-design/scoped-layout-repair/final/control-clearance-fix/comparisons/input-snapshot/after/sound-expanded-player.png",
+        "bytes": 196915,
+        "sha256": "b35daacf7f0b7435218e3cf13ec717f160489af8e52ae167626366160de5da95",
+        "sourceCommit": "4c873b0df32c4489a8b95260122ae3ae9efd936d",
+        "capturedAtUtc": "2026-10-02T21:58:07.520Z",
+        "fixtureDate": "2026-10-02",
+        "decodedWidth": 390,
+        "decodedHeight": 844,
+        "snapshotCopy": "input-snapshot/before/sound-expanded-player.png",
+        "scrollYReported": 1779
+      },
+      "after": {
+        "path": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/independent-visual/final-c2a/representative/native/390/sound-expanded-player.png",
+        "bytes": 278058,
+        "sha256": "8ffe82c471daa017dcda23eead12ad6b5f17168e150384ef33ee0fa3758086f2",
+        "sourceCommit": "c2a5e6497f1bed4cf95951375c9aa86872b169a9",
+        "fixtureDate": "2026-10-03",
+        "decodedWidth": 390,
+        "decodedHeight": 844,
+        "snapshotCopy": "input-snapshot/after/sound-expanded-player.png",
+        "captureKind": "Sealed current representative native screenshot",
+        "toastDismissedSupplement": false,
+        "scrollYReported": "Deliberately scrolled native player view"
+      },
+      "comparison": {
+        "path": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/comparisons-final-c2a/sound-expanded-player-before-after.png",
+        "bytes": 466832,
+        "sha256": "6f34a2b78dcebb07e9250ab54885cea4bd5c2f1134f4443d9a063eb9706deaff",
+        "width": 852,
+        "height": 1020,
+        "beforePixelRegion": [
+          24,
+          144,
+          414,
+          988
+        ],
+        "afterPixelRegion": [
+          438,
+          144,
+          828,
+          988
+        ],
+        "decodedRGBAPixelEqualityFreshlyVerified": true,
+        "resized": false,
+        "repaintedInsideScreenshotRegions": false
+      },
+      "limits": [
+        "Different Oct 2/Oct 3 synthetic captures; date-dependent quote text, entries, timestamps, counters and viewport scroll states can differ.",
+        "Full native viewport is preserved; below-viewport/offscreen content is not included.",
+        "This visual comparison is not an identical-fixture functional regression test or parent/user acceptance."
+      ]
+    }
+  ],
+  "originalInputsFreshlyRehashedUnchanged": true,
+  "noRepositoryEditsBuildBrowserOrPublication": true
+}

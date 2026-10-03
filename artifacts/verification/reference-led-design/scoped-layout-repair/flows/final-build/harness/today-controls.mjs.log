@@ -1,0 +1,218 @@
+if (process.env.ODA_SCOPED_REPAIR_GO !== '1') throw new Error('Not executed: explicit root source/build GO required.');
+import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { setTimeout as delay } from 'node:timers/promises';
+
+const repo = process.env.ODA_QA_REPO || '/workspace/one-decision-away';
+const require = createRequire(`${repo}/package.json`);
+const { chromium } = require('playwright');
+const AxeBuilder = require('@axe-core/playwright').default;
+const { getInitialDemoState } = await import(`${repo}/src/services/repository.ts`);
+const { firstRunCopy } = await import(`${repo}/src/i18n/firstRun.ts`);
+const { coursesFor } = await import(`${repo}/src/data/courses.ts`);
+const { courseCatalogFor } = await import(`${repo}/src/data/courseCatalog.ts`);
+const { readPersonalRecordFixture } = await import(`${repo}/scripts/qa-personal-record-fixtures.mjs`);
+const base = process.env.ODA_QA_URL || 'http://127.0.0.1:4182/one-decision-away/#';
+const out = resolve(process.env.ODA_QA_OUT || `${repo}/artifacts/verification/english-guidance-first-use/browser/independent-first-use`);
+const APP_KEY = 'one_decision_away_app_data_v1';
+const DRAFT_KEY = 'oda_onboarding_draft_v1';
+mkdirSync(out, { recursive: true });
+const report = {
+  syntheticFixtures: true,
+  noProductionOrExternalWrites: true,
+  base, repo, at: new Date().toISOString(),
+  buildIndex: readFileSync(`${repo}/dist/index.html`, 'utf8').match(/assets\/index-[^" ]+\.js/)?.[0],
+  checks: [], screenshots: [], accessibility: [], layouts: [], pageErrors: [], blockedExternalRequests: [],
+};
+const browser = await chromium.launch({ executablePath: '/usr/bin/chromium', args: [] });
+const pass = name => { report.checks.push(name); console.log(`PASS ${name}`); };
+const fixture = (locale = 'en', completed = false) => {
+  const seed = getInitialDemoState();
+  seed.profile = { ...seed.profile, locale, theme: 'light', displayName: completed ? 'Synthetic QA' : '',
+    onboardingStep: completed ? 'completed' : 'welcome', intent: 'finish', simpleModeOff: true,
+    reminderAskedAt: new Date().toISOString() };
+  seed.missions = seed.missions.filter(m => !m.isOneDecision);
+  seed.completions = [];
+  seed.transactions = seed.transactions.filter(t => t.kind === 'welcome_grant');
+  return seed;
+};
+const create = async ({ locale = 'en', completed = false, draft, seed = fixture(locale, completed) } = {}) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, timezoneId: 'UTC', reducedMotion: 'reduce', serviceWorkers: 'block' });
+  const localRequests = [];
+  await context.route('**/*', async route => {
+    const url = route.request().url();
+    const host = new URL(url).hostname;
+    if (!['localhost', '127.0.0.1', '[::1]'].includes(host)) {
+      report.blockedExternalRequests.push(url); await route.abort(); return;
+    }
+    localRequests.push(url); await route.continue();
+  });
+  await context.addInitScript(({ APP_KEY, DRAFT_KEY, locale, seed, draft }) => {
+    if (!localStorage.getItem(APP_KEY)) localStorage.setItem(APP_KEY, JSON.stringify(seed));
+    localStorage.setItem('oda_locale', locale);
+    if (draft !== undefined && !localStorage.getItem(DRAFT_KEY)) localStorage.setItem(DRAFT_KEY, JSON.stringify({ version: 1, ...draft }));
+  }, { APP_KEY, DRAFT_KEY, locale, seed, draft });
+  const page = await context.newPage();
+  page.setDefaultTimeout(8000);
+  page.on('pageerror', error => report.pageErrors.push(error.message));
+  return { page, context, localRequests };
+};
+const ready = async page => {
+  await page.locator('h1').first().waitFor();
+  await page.evaluate(() => document.fonts.ready);
+  await delay(100);
+};
+const goto = async (page, route = '/app') => { await page.goto(`${base}${route}`); await ready(page); };
+const record = page => readPersonalRecordFixture(page);
+const waitRecord = async (page, predicate) => {
+  const limit = Date.now() + 6000;
+  let snapshot;
+  do { snapshot = await record(page); if (predicate(snapshot)) return snapshot; await delay(100); } while (Date.now() < limit);
+  throw new Error(`Personal record condition was not reached: ${JSON.stringify(snapshot)}`);
+};
+const snapshot = data => ({
+  completions: data.completions.length,
+  decisionRewards: data.transactions.filter(t => t.kind === 'one_decision_reward').length,
+  kept: data.missions.filter(m => m.isOneDecision && m.status === 'completed').length,
+});
+const capture = async (page, name, fullPage = false) => {
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: `${out}/${name}.png`, fullPage }); report.screenshots.push(`${name}.png`);
+};
+const layout = async (page, name, scope) => {
+  const result = await page.evaluate(scope => {
+    const width = document.documentElement.clientWidth;
+    const root = document.querySelector(scope);
+    const outside = [...root.querySelectorAll('button,input,textarea,[data-course-overview-lesson]')].flatMap(el => {
+      const rect = el.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0 && (rect.left < -1 || rect.right > width + 1)
+        ? [{ tag: el.tagName, text: el.textContent?.trim().slice(0, 100), left: rect.left, right: rect.right }] : [];
+    });
+    return { width, scrollWidth: document.documentElement.scrollWidth, outside };
+  }, scope);
+  report.layouts.push({ name, ...result });
+  assert.ok(result.scrollWidth <= result.width + 1, `${name}: document overflows ${JSON.stringify(result)}`);
+  assert.deepEqual(result.outside, [], `${name}: a control or lesson row is clipped`);
+  const axe = await new AxeBuilder({ page }).include(scope).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+  const violations = axe.violations.map(v => ({ id: v.id, impact: v.impact, targets: v.nodes.map(n => n.target) }));
+  report.accessibility.push({ name, violations });
+  assert.equal(violations.filter(v => ['serious', 'critical'].includes(v.impact)).length, 0, `${name}: ${JSON.stringify(violations)}`);
+  pass(`${name}: controls fit and no serious/critical axe findings`);
+};
+const next = page => page.locator('.onboarding-step > .pt-2 > button').first().click();
+const toFinal = async (page, name = 'Synthetic QA') => {
+  await next(page);
+  await page.locator('#onboarding-name').fill(name);
+  await next(page);
+  await page.getByRole('radio').first().click();
+  await next(page);
+  await page.locator('.onboarding-step > .pt-2 > button').last().click();
+  await page.locator('#onboarding-decision').waitFor();
+};
+
+let active;
+try {
+  const today = await create({ completed: true }); active = today.page;
+  await goto(today.page);
+  await today.page.locator('#today-decision-input').fill('Synthetic QA: write one useful sentence');
+  await today.page.getByRole('button', { name: 'Set decision', exact: true }).click();
+  const initial = await waitRecord(today.page, data => data.missions.some(m => m.isOneDecision && m.status === 'active'));
+  const mission = initial.missions.find(m => m.isOneDecision && m.status === 'active');
+  await delay(1000);
+  assert.equal(await today.page.getByRole('dialog').count(), 0);
+  assert.ok(await today.page.getByRole('button', { name: firstRunCopy('en').optionalPlan, exact: true }).isVisible());
+  await today.page.reload(); await ready(today.page); await delay(1000);
+  assert.equal(await today.page.getByRole('dialog').count(), 0);
+  await goto(today.page, '/app/courses'); await goto(today.page); await delay(1000);
+  assert.equal(await today.page.getByRole('dialog').count(), 0);
+  pass('setting, reloading and returning to Today never automatically open obstacle planning after 700 ms');
+  await today.page.getByRole('button', { name: firstRunCopy('en').optionalPlan, exact: true }).click();
+  await today.page.locator('#plan-obstacle').fill('I might reach for my phone');
+  await today.page.locator('#plan-then').fill('I will leave it aside and write one sentence');
+  await today.page.getByRole('button', { name: 'Save plan', exact: true }).click();
+  await waitRecord(today.page, data => data.missions.find(m => m.id === mission.id)?.plan?.ifThen === 'I will leave it aside and write one sentence');
+  await today.page.reload(); await ready(today.page); await delay(1000);
+  assert.equal(await today.page.getByRole('dialog').count(), 0);
+  assert.ok((await today.page.locator('.oda-decision-plan').innerText()).includes('I will leave it aside and write one sentence'));
+  pass('optional obstacle planning opens by explicit action and persists without reopening itself');
+  await layout(today.page, 'Today optional planning 390', '#set-one-decision');
+  await capture(today.page, 'en-today-optional-plan-390', true);
+
+  const beforeTimer = snapshot(await record(today.page));
+  const realNow = Date.now();
+  await today.page.clock.install({ time: new Date(realNow) });
+  await today.page.clock.pauseAt(new Date(realNow + 1000));
+  await today.page.getByRole('button', { name: 'Start · just 2 minutes', exact: true }).click();
+  await today.page.clock.runFor(100);
+  assert.ok((await today.page.getByRole('timer').innerText()).includes('2:00'));
+  await today.page.clock.runFor(118900);
+  assert.ok((await today.page.getByRole('timer').innerText()).includes('0:01'));
+  assert.equal(await today.page.getByRole('button', { name: 'I did it — mark as done', exact: true }).count(), 0);
+  assert.deepEqual(snapshot(await record(today.page)), beforeTimer);
+  await today.page.clock.runFor(1000);
+  assert.ok(await today.page.getByRole('button', { name: 'I did it — mark as done', exact: true }).isVisible());
+  assert.deepEqual(snapshot(await record(today.page)), beforeTimer);
+  pass('real two-minute timer is unfinished at 119 seconds and finished at 120 seconds without automatic completion or reward');
+  await capture(today.page, 'en-two-minute-expired-390', false);
+  await today.page.getByRole('button', { name: 'I did it — mark as done', exact: true }).click();
+  await today.page.clock.runFor(100);
+  assert.deepEqual(snapshot(await record(today.page)), beforeTimer);
+  await today.page.getByRole('dialog').getByRole('button', { name: 'Confirm', exact: true }).evaluate(button => {
+    button.click(); button.click(); button.click();
+  });
+  const completed = await waitRecord(today.page, data => data.missions.find(m => m.id === mission.id)?.status === 'completed');
+  assert.equal(completed.completions.filter(c => c.missionId === mission.id).length, 1);
+  assert.equal(completed.transactions.filter(t => t.kind === 'one_decision_reward').length, 1);
+  assert.equal(completed.missions.filter(m => m.isOneDecision && m.status === 'completed').length, 1);
+  await today.page.clock.resume();
+  await today.page.reload(); await ready(today.page);
+  const afterReload = await record(today.page);
+  assert.equal(afterReload.completions.filter(c => c.missionId === mission.id).length, 1);
+  assert.equal(afterReload.transactions.filter(t => t.kind === 'one_decision_reward').length, 1);
+  for (const tree of await today.page.locator('.oda-evidence-tree[data-kept-count]').all()) {
+    assert.equal(await tree.getAttribute('data-kept-count'), '1');
+    assert.equal(await tree.getAttribute('data-leaves'), '1');
+  }
+  assert.ok((await today.page.locator('.oda-fidelity-live-evidence').innerText()).includes('1 kept decision'));
+  assert.equal(await today.page.locator('.oda-decision-done').count(), 0);
+  report.rewardEvidence = { missionId: mission.id, beforeTimer, afterRepeatConfirm: snapshot(completed), afterReload: snapshot(afterReload), repeatConfirmClicks: 3, leaf: 1, timerSeconds: 120 };
+  pass('three rapid confirmation taps produce exactly one completion, one reward and one leaf, retained after reload');
+  await capture(today.page, 'en-real-kept-one-leaf-390', true);
+  const proof = today.page.locator('#tomorrow-draft').locator('xpath=ancestor::section[1]');
+  const targetBoxes = await proof.locator('button,input').evaluateAll(elements => elements.map(element => {
+    const r = element.getBoundingClientRect(); return { tag: element.tagName, label: element.getAttribute('aria-label') || element.textContent, width: r.width, height: r.height };
+  }));
+  for (const box of targetBoxes) assert.ok(box.width >= 44 && box.height >= 44, JSON.stringify(box));
+  const tomorrow = 'Synthetic QA: keep my chosen tomorrow decision';
+  await today.page.locator('#tomorrow-draft').fill(tomorrow);
+  await proof.getByRole('button', { name: 'Save for tomorrow', exact: true }).click();
+  await waitRecord(today.page, data => data.profile.nextDecisionDraft?.text === tomorrow);
+  await today.page.reload(); await ready(today.page);
+  assert.equal((await record(today.page)).profile.nextDecisionDraft.text, tomorrow);
+  assert.equal(await today.page.locator('#tomorrow-draft').count(), 0);
+  assert.ok((await today.page.getByRole('region', { name: 'Your first piece of proof', exact: true }).innerText()).includes(tomorrow));
+  pass('44px kept-card targets save tomorrow draft explicitly, preserve it after reload and never replace an existing draft');
+  const beforeDismiss = await record(today.page);
+  await today.page.getByRole('region', { name: 'Your first piece of proof', exact: true }).getByRole('button', { name: 'Dismiss', exact: true }).click();
+  assert.deepEqual(await record(today.page), beforeDismiss);
+  await today.page.reload(); await ready(today.page);
+  assert.equal(await today.page.getByRole('region', { name: 'Your first piece of proof', exact: true }).count(), 0);
+  assert.deepEqual(await record(today.page), beforeDismiss);
+  assert.ok((await today.page.locator('.oda-fidelity-live-evidence').innerText()).includes('1 kept decision'));
+  pass('Dismiss survives reload without changing one kept decision, tomorrow draft, reward or completion');
+  await capture(today.page, 'today-dismissed-preserved-390', true);
+  await today.context.close();
+
+  assert.deepEqual(report.pageErrors, []);
+  report.status = 'passed';
+} catch (error) {
+  report.status = 'failed'; report.failure = String(error.stack || error); process.exitCode = 1;
+  if (active && !active.isClosed()) await capture(active, 'failure', true).catch(() => {});
+  console.error(report.failure);
+} finally {
+  report.finishedAt = new Date().toISOString();
+  writeFileSync(`${out}/today-controls-report.json`, JSON.stringify(report, null, 2));
+  await browser.close();
+}

@@ -1,0 +1,70 @@
+{
+  "at": "2026-10-02T18:12:28.496Z",
+  "sourceCommit": "71f1ce41f77bddb519cc9d18933303cc13336073",
+  "base": "http://127.0.0.1:4183/one-decision-away/#",
+  "synthetic": true,
+  "checks": [
+    {
+      "name": "en-320: overflow is localized and discoverable in a named keyboard region without page overflow",
+      "evidence": {
+        "viewport": 320,
+        "document": 320,
+        "width": 254,
+        "scrollWidth": 352
+      }
+    },
+    {
+      "name": "en-320: native keyboard arrows scroll the calendar region",
+      "evidence": {
+        "scrollLeft": 4
+      }
+    },
+    {
+      "name": "en-320: keyboard reaches, selects and clears the weekend date without writing user records",
+      "evidence": {
+        "left": 237.21875,
+        "right": 283,
+        "containerLeft": 33,
+        "containerRight": 287
+      }
+    },
+    {
+      "name": "en-320: previous/next month handlers retain their original round-trip behavior"
+    },
+    {
+      "name": "en-390: overflow is localized and discoverable in a named keyboard region without page overflow",
+      "evidence": {
+        "viewport": 390,
+        "document": 390,
+        "width": 324,
+        "scrollWidth": 352
+      }
+    },
+    {
+      "name": "en-390: native keyboard arrows scroll the calendar region",
+      "evidence": {
+        "scrollLeft": 1
+      }
+    }
+  ],
+  "errors": [],
+  "blockedExternal": [],
+  "screenshots": [
+    "calendar-hint-en-320.png",
+    "calendar-weekend-selected-en-320.png",
+    "calendar-hint-en-390.png"
+  ],
+  "cases": [
+    {
+      "label": "en-320",
+      "passed": true
+    }
+  ],
+  "limits": [
+    "Synthetic Chromium viewport/keyboard checks, not physical iPhone touch/swipe validation."
+  ],
+  "browser": "151.0.7922.173",
+  "status": "failed",
+  "failure": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(bounds.left >= bounds.containerLeft - 1 && bounds.right <= bounds.containerRight + 1)\n\n    at <anonymous> (/workspace/scratch/oda-reference-redesign/independent/flows/harness/calendar.mjs:61:12)",
+  "finishedAt": "2026-10-02T18:12:32.109Z"
+}

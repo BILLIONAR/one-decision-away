@@ -1,10 +1,11 @@
 import { FocusSoundTrack } from '../types/models';
+import { renderAmbientTexture, type AmbientTexture } from './ambientTextures';
 
 /**
  * One Decision Away — Web Audio Focus Sound Synthesizer
- * Zero external audio files required — synthesizes pristine ambient focus audio
+ * Zero external audio files required — synthesizes procedural ambient focus audio
  * (Binaural Beats, Deep Brown Noise, Rainfall, Ocean Waves, Cozy Fireplace,
- * plus sacred meditation frequencies: 432Hz, 528Hz, Theta 6Hz, Tibetan Singing Bowls, 396Hz, 639Hz)
+ * plus meditation tones: 432Hz, 528Hz, Theta 6Hz, Tibetan Singing Bowls, 396Hz, 639Hz)
  * and interactive meditation bells directly in the browser.
  */
 
@@ -12,13 +13,19 @@ import { FocusSoundTrack } from '../types/models';
 export const BREATH_PACER_INHALE_SECONDS = 5.5;
 export const BREATH_PACER_EXHALE_SECONDS = 5.5;
 
-/** Master gain is never ramped to exactly 0 (exponential/linear ramps misbehave there). */
+/** Positive floor for existing exponential tone envelopes. User mute uses exact zero. */
 const SILENT_GAIN = 0.0001;
+export const AMBIENT_SWITCH_SECONDS = 0.18;
+type RetiringTrack = { nodes: (AudioNode | number)[]; envelope: GainNode; timer: number };
 
-class SoundSynthesizer {
+export class SoundSynthesizer {
   private ctx: AudioContext | null = null;
   private currentTrack: FocusSoundTrack = 'silence';
   private gainNode: GainNode | null = null;
+  /** User volume/mute is independent of the current track's attack and timer envelope. */
+  private userGainNode: GainNode | null = null;
+  private preparedTexture: { track: AmbientTexture; buffer: AudioBuffer } | null = null;
+  private retiringTracks = new Set<RetiringTrack>();
   private activeNodes: (AudioNode | number)[] = [];
   private volume: number = 0.5;
   private isMuted: boolean = false;
@@ -26,7 +33,7 @@ class SoundSynthesizer {
   /** Wall-clock ms when the current track's first cycle begins (used to sync visuals, e.g. the breath circle). */
   private trackStartedAt: number | null = null;
   /** A pending or running fade-out, in AudioContext time. */
-  private fadePlan: { startAt: number; duration: number } | null = null;
+  private fadePlan: { startAt: number; duration: number; fromGain: number } | null = null;
   private fadeStopTimer: number | null = null;
 
   public getCurrentTrack(): FocusSoundTrack {
@@ -83,6 +90,7 @@ class SoundSynthesizer {
 
   public setMuted(muted: boolean) {
     this.isMuted = muted;
+    this.applyUserGain();
   }
 
   public isSoundMuted(): boolean {
@@ -90,7 +98,7 @@ class SoundSynthesizer {
   }
 
   public toggleMute(): boolean {
-    this.isMuted = !this.isMuted;
+    this.setMuted(!this.isMuted);
     return this.isMuted;
   }
 
@@ -98,6 +106,9 @@ class SoundSynthesizer {
     if (!this.ctx) {
       const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       this.ctx = new AudioCtx();
+      this.userGainNode = this.ctx.createGain();
+      this.userGainNode.gain.setValueAtTime(this.isMuted ? 0 : this.volume * 0.4, this.ctx.currentTime);
+      this.userGainNode.connect(this.ctx.destination);
     }
     if (this.ctx.state === 'suspended') {
       this.ctx.resume();
@@ -105,31 +116,34 @@ class SoundSynthesizer {
   }
 
   public setVolume(vol: number) {
-    this.volume = Math.max(0, Math.min(1, vol));
-    if (this.gainNode && this.ctx) {
-      this.applyGainPlan();
-    }
+    this.volume = Number.isFinite(vol) ? Math.max(0, Math.min(1, vol)) : 0;
+    this.applyUserGain();
   }
 
   /**
-   * Re-applies the master gain automation: the current volume, then (if one is
-   * planned) the fade-out. Keeps a scheduled sleep fade intact when the volume
-   * changes, and never undoes a fade that is already running.
+   * User controls never rewrite the attack/timer envelope. Zero volume and mute
+   * take effect immediately, including while a sleep fade is running.
    */
-  private applyGainPlan() {
-    if (!this.gainNode || !this.ctx) return;
-    const gain = this.gainNode.gain;
+  private applyUserGain() {
+    if (!this.userGainNode || !this.ctx) return;
+    const gain = this.userGainNode.gain;
     const now = this.ctx.currentTime;
-    const target = Math.max(SILENT_GAIN, this.volume * 0.4);
-    const plan = this.fadePlan;
-    if (plan && now >= plan.startAt) return; // already fading: let it finish
+    const target = this.isMuted ? 0 : this.volume * 0.4;
     gain.cancelScheduledValues(now);
-    gain.setValueAtTime(Math.max(SILENT_GAIN, gain.value), now);
-    gain.setTargetAtTime(target, now, 0.05);
-    if (plan) {
-      gain.setValueAtTime(target, plan.startAt);
-      gain.linearRampToValueAtTime(SILENT_GAIN, plan.startAt + plan.duration);
-    }
+    if (target === 0) gain.setValueAtTime(0, now);
+    else gain.setTargetAtTime(target, now, 0.025);
+  }
+
+  private envelopeValue(now: number) {
+    const plan = this.fadePlan;
+    if (!plan || now < plan.startAt) return this.gainNode?.gain.value ?? 1;
+    const fraction = Math.max(0, Math.min(1, (now - plan.startAt) / plan.duration));
+    return plan.fromGain * (1 - fraction);
+  }
+
+  private holdEnvelope(gain: AudioParam, now: number, value: number) {
+    if (typeof gain.cancelAndHoldAtTime === 'function') gain.cancelAndHoldAtTime(now);
+    else { gain.cancelScheduledValues(now); gain.setValueAtTime(value, now); }
   }
 
   private clearFadePlan() {
@@ -150,20 +164,19 @@ class SoundSynthesizer {
       this.stopAmbient();
       return;
     }
-    const duration = Math.max(0.05, seconds);
-    const delay = Math.max(0, delaySeconds);
+    const duration = Number.isFinite(seconds) ? Math.max(0.05, seconds) : 1;
+    const delay = Number.isFinite(delaySeconds) ? Math.max(0, delaySeconds) : 0;
     const now = this.ctx.currentTime;
-    if (this.fadePlan && now >= this.fadePlan.startAt) {
+    const fromGain = this.envelopeValue(now);
+    const alreadyFading = this.fadePlan !== null && now >= this.fadePlan.startAt;
+    if (alreadyFading) {
       // Already fading: only ever shorten the fade, never extend it.
       const currentEnd = this.fadePlan.startAt + this.fadePlan.duration;
       if (now + delay + duration >= currentEnd) return;
-      const gain = this.gainNode.gain;
-      gain.cancelScheduledValues(now);
-      gain.setValueAtTime(Math.max(SILENT_GAIN, gain.value), now);
     }
     this.clearFadePlan();
-    this.fadePlan = { startAt: now + delay, duration };
-    this.applyGainPlanForFade();
+    this.fadePlan = { startAt: now + delay, duration, fromGain: delay > 0 && !alreadyFading ? 1 : fromGain };
+    this.applyGainPlanForFade(fromGain);
     const track = this.currentTrack;
     this.fadeStopTimer = window.setTimeout(() => {
       this.fadeStopTimer = null;
@@ -171,26 +184,30 @@ class SoundSynthesizer {
     }, (delay + duration) * 1000 + 60);
   }
 
-  /** Like applyGainPlan, but also (re)starts a fade that begins now. */
-  private applyGainPlanForFade() {
+  /** Timer envelope only. Scheduling this cannot cancel the independent attack. */
+  private applyGainPlanForFade(currentValue: number) {
     if (!this.gainNode || !this.ctx || !this.fadePlan) return;
     const gain = this.gainNode.gain;
     const now = this.ctx.currentTime;
-    const { startAt, duration } = this.fadePlan;
-    gain.cancelScheduledValues(now);
-    gain.setValueAtTime(Math.max(SILENT_GAIN, gain.value), now);
+    const { startAt, duration, fromGain } = this.fadePlan;
+    this.holdEnvelope(gain, now, currentValue);
     if (startAt > now) {
-      gain.setTargetAtTime(Math.max(SILENT_GAIN, this.volume * 0.4), now, 0.05);
-      gain.setValueAtTime(Math.max(SILENT_GAIN, this.volume * 0.4), startAt);
+      gain.setTargetAtTime(fromGain, now, 0.05);
+      gain.setValueAtTime(fromGain, startAt);
+    } else {
+      gain.setValueAtTime(fromGain, now);
     }
-    gain.linearRampToValueAtTime(SILENT_GAIN, startAt + duration);
+    gain.linearRampToValueAtTime(0, startAt + duration);
   }
 
   /** Cancels a scheduled or running fade-out and brings the volume back (e.g. the timer was changed). */
   public cancelFadeOut() {
     if (!this.fadePlan) return;
+    if (this.gainNode && this.ctx) {
+      this.holdEnvelope(this.gainNode.gain, this.ctx.currentTime, this.envelopeValue(this.ctx.currentTime));
+      this.gainNode.gain.setTargetAtTime(1, this.ctx.currentTime, 0.05);
+    }
     this.clearFadePlan();
-    this.applyGainPlan();
   }
 
   public stopAmbient() {
@@ -201,42 +218,61 @@ class SoundSynthesizer {
   private stopAmbientSilently() {
     this.clearFadePlan();
     this.trackStartedAt = null;
-    if (this.activeNodes.length > 0) {
-      this.activeNodes.forEach((node) => {
-        if (typeof node === 'number') {
-          clearInterval(node);
-        } else {
-          try {
-            if ('stop' in node && typeof (node as AudioScheduledSourceNode).stop === 'function') {
-              (node as AudioScheduledSourceNode).stop();
-            }
-            node.disconnect();
-          } catch {
-            // Ignored
-          }
-        }
-      });
-      this.activeNodes = [];
-    }
+    this.disposeNodes(this.activeNodes);
+    this.activeNodes = [];
+    this.preparedTexture = null;
+    for (const retiring of this.retiringTracks) this.disposeRetiring(retiring);
     if (this.gainNode) {
-      try {
-        this.gainNode.disconnect();
-      } catch {
-        // Ignored
-      }
+      try { this.gainNode.disconnect(); } catch { /* Already disconnected. */ }
       this.gainNode = null;
     }
     this.currentTrack = 'silence';
   }
 
+  private disposeNodes(nodes: (AudioNode | number)[]) {
+    nodes.forEach((node) => {
+      if (typeof node === 'number') clearInterval(node);
+      else {
+        try {
+          if ('stop' in node && typeof (node as AudioScheduledSourceNode).stop === 'function') (node as AudioScheduledSourceNode).stop();
+        } catch { /* An ended source still needs to be disconnected. */ }
+        try { node.disconnect(); } catch { /* Already disconnected. */ }
+      }
+    });
+  }
+
+  private disposeRetiring(track: RetiringTrack) {
+    clearTimeout(track.timer);
+    this.disposeNodes(track.nodes);
+    try { track.envelope.disconnect(); } catch { /* Already disconnected. */ }
+    this.retiringTracks.delete(track);
+  }
+
+  /** Let the old texture release on the audio clock; stop recurring callbacks immediately. */
+  private retireCurrentTrack() {
+    if (!this.ctx || !this.gainNode || this.currentTrack === 'silence') return;
+    const now = this.ctx.currentTime;
+    this.holdEnvelope(this.gainNode.gain, now, this.envelopeValue(now));
+    this.gainNode.gain.linearRampToValueAtTime(0, now + AMBIENT_SWITCH_SECONDS);
+    this.clearFadePlan();
+    for (const node of this.activeNodes) if (typeof node === 'number') clearInterval(node);
+    const retiring: RetiringTrack = { nodes: this.activeNodes, envelope: this.gainNode, timer: 0 };
+    this.activeNodes = [];
+    this.gainNode = null;
+    retiring.timer = window.setTimeout(() => this.disposeRetiring(retiring), AMBIENT_SWITCH_SECONDS * 1000 + 40);
+    this.retiringTracks.add(retiring);
+    // Bound resources even if the user switches repeatedly before releases finish.
+    if (this.retiringTracks.size > 2) this.disposeRetiring(this.retiringTracks.values().next().value!);
+  }
+
   /**
    * Starts an ambient track. Call only from a user gesture (browsers block
    * audio that starts on its own). `fadeInSeconds` eases the sound in; the
-   * default 0 keeps the original instant start used by the Focus page.
+   * default is a short safe attack; Sound Room retains its three-second attack.
    */
   public playAmbient(track: FocusSoundTrack, options: { fadeInSeconds?: number } = {}) {
-    this.stopAmbientSilently();
     if (track === 'silence') {
+      this.stopAmbientSilently();
       this.emit();
       return;
     }
@@ -248,59 +284,58 @@ class SoundSynthesizer {
     }
 
     const ctx = this.ctx;
+    const textureTrack: AmbientTexture | null = ['brown_noise', 'rain', 'waves', 'fireplace', 'pink_noise'].includes(track)
+      ? track as AmbientTexture : track === 'delta_sleep' ? 'brown_noise' : track === 'breath_pacer' ? 'pink_noise' : null;
+    // Keep existing audio running while a new long buffer is generated.
+    if (textureTrack) this.preparedTexture = { track: textureTrack, buffer: this.createTextureBuffer(ctx, textureTrack) };
+    this.retireCurrentTrack();
     this.currentTrack = track;
     this.trackStartedAt = Date.now();
 
-    // Master track gain
+    // Independent attack → timer/release envelope → user volume/mute.
     const masterGain = ctx.createGain();
-    const fadeIn = Math.max(0, options.fadeInSeconds ?? 0);
-    if (fadeIn > 0) {
-      masterGain.gain.setValueAtTime(SILENT_GAIN, ctx.currentTime);
-      masterGain.gain.linearRampToValueAtTime(Math.max(SILENT_GAIN, this.volume * 0.4), ctx.currentTime + fadeIn);
-    } else {
-      masterGain.gain.setValueAtTime(this.volume * 0.4, ctx.currentTime);
-    }
-    masterGain.connect(ctx.destination);
-    this.gainNode = masterGain;
+    const requestedAttack = options.fadeInSeconds ?? AMBIENT_SWITCH_SECONDS;
+    const fadeIn = Number.isFinite(requestedAttack) ? Math.max(0.04, requestedAttack) : AMBIENT_SWITCH_SECONDS;
+    masterGain.gain.setValueAtTime(SILENT_GAIN, ctx.currentTime);
+    const envelope = ctx.createGain();
+    envelope.gain.setValueAtTime(1, ctx.currentTime);
+    masterGain.connect(envelope);
+    envelope.connect(this.userGainNode!);
+    this.gainNode = envelope;
+    this.activeNodes.push(masterGain);
     this.buildTrack(track, ctx, masterGain);
+    // Generating a long texture can consume time; begin its attack when ready.
+    masterGain.gain.setValueAtTime(SILENT_GAIN, ctx.currentTime);
+    masterGain.gain.linearRampToValueAtTime(1, ctx.currentTime + fadeIn);
+    if (track !== 'breath_pacer') this.trackStartedAt = Date.now();
     this.emit();
   }
 
-  /** Brown-noise buffer (mono), the same recipe the original tracks use. */
+  private createTextureBuffer(ctx: AudioContext, track: AmbientTexture, seconds?: number): AudioBuffer {
+    if (this.preparedTexture?.track === track) {
+      const buffer = this.preparedTexture.buffer;
+      this.preparedTexture = null;
+      return buffer;
+    }
+    const channels = renderAmbientTexture(track, ctx.sampleRate, { seconds });
+    const buffer = ctx.createBuffer(2, channels[0].length, ctx.sampleRate);
+    for (let channel = 0; channel < 2; channel++) buffer.getChannelData(channel).set(channels[channel]);
+    return buffer;
+  }
+
+  /** Long seam-crossfaded stereo bed, including the existing quiet delta layer. */
   private createBrownNoiseBuffer(ctx: AudioContext, seconds: number, gainCompensation: number): AudioBuffer {
-    const bufferSize = Math.floor(seconds * ctx.sampleRate);
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const output = buffer.getChannelData(0);
-    let lastOut = 0.0;
-    for (let i = 0; i < bufferSize; i++) {
-      const white = Math.random() * 2 - 1;
-      output[i] = (lastOut + 0.02 * white) / 1.02;
-      lastOut = output[i];
-      output[i] *= gainCompensation;
+    const buffer = this.createTextureBuffer(ctx, 'brown_noise', seconds);
+    for (let channel = 0; channel < 2; channel++) {
+      const output = buffer.getChannelData(channel);
+      for (let i = 0; i < output.length; i++) output[i] *= gainCompensation / 3.5;
     }
     return buffer;
   }
 
-  /** Stereo pink noise (Paul Kellet's filter), each channel independent for a wide, soft image. */
+  /** Stereo pink bed with the same seam treatment as the natural scenes. */
   private createPinkNoiseBuffer(ctx: AudioContext, seconds: number): AudioBuffer {
-    const bufferSize = Math.floor(seconds * ctx.sampleRate);
-    const buffer = ctx.createBuffer(2, bufferSize, ctx.sampleRate);
-    for (let channel = 0; channel < 2; channel++) {
-      const output = buffer.getChannelData(channel);
-      let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
-      for (let i = 0; i < bufferSize; i++) {
-        const white = Math.random() * 2 - 1;
-        b0 = 0.99886 * b0 + white * 0.0555179;
-        b1 = 0.99332 * b1 + white * 0.0750759;
-        b2 = 0.969 * b2 + white * 0.153852;
-        b3 = 0.8665 * b3 + white * 0.3104856;
-        b4 = 0.55 * b4 + white * 0.5329522;
-        b5 = -0.7616 * b5 - white * 0.016898;
-        output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.11;
-        b6 = white * 0.115926;
-      }
-    }
-    return buffer;
+    return this.createTextureBuffer(ctx, 'pink_noise', seconds);
   }
 
   private buildTrack(track: FocusSoundTrack, ctx: AudioContext, masterGain: GainNode) {
@@ -341,102 +376,12 @@ class SoundSynthesizer {
 
       this.activeNodes.push(oscLeft, oscRight, filter, gainLeft, gainRight, merger);
     } else if (track === 'brown_noise' || track === 'rain' || track === 'waves' || track === 'fireplace') {
-      // Generate noise buffer
-      const bufferSize = 2 * ctx.sampleRate;
-      const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const output = noiseBuffer.getChannelData(0);
-
-      let lastOut = 0.0;
-      for (let i = 0; i < bufferSize; i++) {
-        const white = Math.random() * 2 - 1;
-        // Brown noise integration
-        output[i] = (lastOut + 0.02 * white) / 1.02;
-        lastOut = output[i];
-        output[i] *= 3.5; // Gain compensation
-      }
-
-      const whiteNoise = ctx.createBufferSource();
-      whiteNoise.buffer = noiseBuffer;
-      whiteNoise.loop = true;
-
-      if (track === 'brown_noise') {
-        const filter = ctx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(220, ctx.currentTime);
-        filter.Q.setValueAtTime(1, ctx.currentTime);
-
-        whiteNoise.connect(filter);
-        filter.connect(masterGain);
-        whiteNoise.start();
-        this.activeNodes.push(whiteNoise, filter);
-      } else if (track === 'rain') {
-        const filter = ctx.createBiquadFilter();
-        filter.type = 'bandpass';
-        filter.frequency.setValueAtTime(800, ctx.currentTime);
-        filter.Q.setValueAtTime(0.7, ctx.currentTime);
-
-        const highFilter = ctx.createBiquadFilter();
-        highFilter.type = 'highpass';
-        highFilter.frequency.setValueAtTime(400, ctx.currentTime);
-
-        whiteNoise.connect(highFilter);
-        highFilter.connect(filter);
-        filter.connect(masterGain);
-        whiteNoise.start();
-        this.activeNodes.push(whiteNoise, filter, highFilter);
-      } else if (track === 'waves') {
-        const filter = ctx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(300, ctx.currentTime);
-
-        // LFO for wave swells
-        const lfo = ctx.createOscillator();
-        lfo.type = 'sine';
-        lfo.frequency.setValueAtTime(0.1, ctx.currentTime); // 10 second swell cycle
-
-        const lfoGain = ctx.createGain();
-        lfoGain.gain.setValueAtTime(180, ctx.currentTime);
-
-        lfo.connect(lfoGain);
-        lfoGain.connect(filter.frequency);
-
-        whiteNoise.connect(filter);
-        filter.connect(masterGain);
-
-        whiteNoise.start();
-        lfo.start();
-        this.activeNodes.push(whiteNoise, filter, lfo, lfoGain);
-      } else if (track === 'fireplace') {
-        const filter = ctx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(320, ctx.currentTime);
-
-        whiteNoise.connect(filter);
-        filter.connect(masterGain);
-        whiteNoise.start();
-        this.activeNodes.push(whiteNoise, filter);
-
-        // Random crackle pops
-        const crackleInterval = window.setInterval(() => {
-          if (!this.ctx || this.currentTrack !== 'fireplace') return;
-          try {
-            const popOsc = this.ctx.createOscillator();
-            const popGain = this.ctx.createGain();
-            popOsc.type = 'triangle';
-            popOsc.frequency.setValueAtTime(150 + Math.random() * 800, this.ctx.currentTime);
-            popGain.gain.setValueAtTime(0.08 * Math.random(), this.ctx.currentTime);
-            popGain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.04);
-            popOsc.connect(popGain);
-            popGain.connect(masterGain);
-            popOsc.start();
-            popOsc.stop(this.ctx.currentTime + 0.05);
-          } catch {
-            // Ignored
-          }
-        }, 180);
-
-        this.activeNodes.push(crackleInterval);
-      }
+      const texture = ctx.createBufferSource();
+      texture.buffer = this.createTextureBuffer(ctx, track);
+      texture.loop = true;
+      texture.connect(masterGain);
+      texture.start();
+      this.activeNodes.push(texture);
     } else if (track === 'meditation_432hz') {
       /**
        * 432 Hz Universal Healing Harmony
@@ -539,13 +484,13 @@ class SoundSynthesizer {
       }, 24000);
 
       // Trigger initial soft bowl
-      setTimeout(() => {
+      const bowlStartTimeout = window.setTimeout(() => {
         if (this.ctx && this.currentTrack === 'meditation_432hz') {
           this.triggerSingingBowlTone(432, 7.0, masterGain);
         }
       }, 250);
 
-      this.activeNodes.push(bowlInterval);
+      this.activeNodes.push(bowlInterval, bowlStartTimeout);
     } else if (track === 'solfeggio_528hz') {
       /**
        * 528 Hz Solfeggio — Transformation & Love
@@ -656,13 +601,13 @@ class SoundSynthesizer {
         }
       }, 26000);
 
-      setTimeout(() => {
+      const bowlStartTimeout = window.setTimeout(() => {
         if (this.ctx && this.currentTrack === 'solfeggio_528hz') {
           this.triggerSingingBowlTone(528, 7.0, masterGain);
         }
       }, 250);
 
-      this.activeNodes.push(bowlInterval);
+      this.activeNodes.push(bowlInterval, bowlStartTimeout);
     } else if (track === 'theta_meditation') {
       /**
        * Theta 6 Hz — Deep Transcendence & Subconscious Flow
@@ -798,13 +743,13 @@ class SoundSynthesizer {
       }, 18000);
 
       // Strike immediate starting bowl
-      setTimeout(() => {
+      const bowlStartTimeout = window.setTimeout(() => {
         if (this.ctx && this.currentTrack === 'tibetan_bowls') {
           this.triggerSingingBowlTone(216, 9.0, masterGain);
         }
       }, 300);
 
-      this.activeNodes.push(bowlInterval);
+      this.activeNodes.push(bowlInterval, bowlStartTimeout);
     } else if (track === 'solfeggio_396hz') {
       /**
        * 396 Hz Solfeggio — Liberation from Fear & Grounding
@@ -895,13 +840,13 @@ class SoundSynthesizer {
         }
       }, 25000);
 
-      setTimeout(() => {
+      const bowlStartTimeout = window.setTimeout(() => {
         if (this.ctx && this.currentTrack === 'solfeggio_396hz') {
           this.triggerSingingBowlTone(396, 7.0, masterGain);
         }
       }, 300);
 
-      this.activeNodes.push(bowlInterval);
+      this.activeNodes.push(bowlInterval, bowlStartTimeout);
     } else if (track === 'solfeggio_639hz') {
       /**
        * 639 Hz Solfeggio — Heart Coherence & Relationship Harmony
@@ -992,13 +937,13 @@ class SoundSynthesizer {
         }
       }, 24000);
 
-      setTimeout(() => {
+      const bowlStartTimeout = window.setTimeout(() => {
         if (this.ctx && this.currentTrack === 'solfeggio_639hz') {
           this.triggerSingingBowlTone(639, 6.5, masterGain);
         }
       }, 300);
 
-      this.activeNodes.push(bowlInterval);
+      this.activeNodes.push(bowlInterval, bowlStartTimeout);
     } else if (track === 'pink_noise') {
       /**
        * Pink noise — equal energy per octave, softer and less hissy than white noise.
@@ -1181,6 +1126,14 @@ class SoundSynthesizer {
 
       osc.connect(gain);
       gain.connect(dest);
+
+      if (targetNode) {
+        this.activeNodes.push(osc, gain);
+        osc.onended = () => {
+          try { osc.disconnect(); gain.disconnect(); } catch { /* Already stopped. */ }
+          this.activeNodes = this.activeNodes.filter(node => node !== osc && node !== gain);
+        };
+      }
 
       osc.start();
       osc.stop(ctx.currentTime + duration);

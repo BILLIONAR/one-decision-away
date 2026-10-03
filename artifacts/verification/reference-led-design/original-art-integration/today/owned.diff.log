@@ -1,0 +1,38 @@
+diff --git a/src/pages/Today.tsx b/src/pages/Today.tsx
+index da25536..8da98ca 100644
+--- a/src/pages/Today.tsx
++++ b/src/pages/Today.tsx
+@@ -1,7 +1,7 @@
+ import React, { useEffect, useRef, useState } from 'react';
+ import { ArrowRight, AudioLines, Check, ChevronDown, ChevronRight, Leaf, Plus, MessageCircle, GraduationCap, Route, Share2, Waves } from 'lucide-react';
+ import { GrowthTreePanel, GrowthWeek } from '../components/momentum/GrowthDashboard';
+-import { CourseCover } from '../components/CourseCover';
++import { OriginalSceneImage } from '../components/OriginalSceneImage';
+ import { growthCopy } from '../i18n/growth';
+ import { courseCatalogFor } from '../data/courseCatalog';
+ import { courseForIntent } from '../data/starterDecisions';
+@@ -209,7 +209,7 @@ export const Today: React.FC = () => {
+       <div className="oda-fidelity-command">
+       {/* The quote has its own scene; the saved growth stage appears once in its evidence panel. */}
+       <figure className="oda-quote oda-fidelity-hero">
+-        <div className="oda-fidelity-scene" aria-hidden="true"><CourseCover courseId="meaning" eager /></div>
++        <div className="oda-fidelity-scene oda-fidelity-scene--original" aria-hidden="true"><OriginalSceneImage asset="today-scene" sizes="(max-width: 479px) calc(100vw - 40px), (max-width: 1179px) calc(100vw - 80px), 1024px" eager fallback="assets/oda/course-covers/oda-growth-values.png" /></div>
+         <span aria-hidden="true" className="oda-quote-mark text-5xl">“</span>
+         <div className="oda-fidelity-hero-copy min-w-0">
+           <p className="oda-kicker text-[var(--fg-muted)] mb-2">{d.quote}</p>
+diff --git a/src/styles/workingSurfaces.css b/src/styles/workingSurfaces.css
+index c95ac93..28bebf0 100644
+--- a/src/styles/workingSurfaces.css
++++ b/src/styles/workingSurfaces.css
+@@ -127,6 +127,11 @@
+ .oda-fidelity-today .oda-evidence-tree.w-20 + .min-w-0 { flex: 1 1 0%; overflow-wrap: anywhere; }
+ :root[data-theme="dark"] .oda-fidelity-scene img, html.dark .oda-fidelity-scene img { opacity: .3; }
+ 
++/* The approved original Today scene retains its material and central landmark. */
++.oda-fidelity-today .oda-fidelity-scene.oda-fidelity-scene--original img { object-position: 56% 44%; filter: none; opacity: 1; }
++.oda-fidelity-today .oda-fidelity-scene.oda-fidelity-scene--original::after { background: linear-gradient(180deg, transparent 0%, transparent 30%, color-mix(in srgb, var(--surface) 25%, transparent) 60%, var(--surface) 95%); }
++.oda-fidelity-today .oda-fidelity-scene--original ~ .oda-fidelity-hero-copy > .oda-kicker { width: fit-content; max-width: 100%; background: var(--surface); box-shadow: 0 0 0 3px var(--surface); border-radius: 2px; }
++
+ /* Keep protected FirstSteps controls usable when their mobile flex column shrinks. */
+ .oda-fidelity-today #tomorrow-draft { min-height: 44px; flex: 1 0 auto; }
+ .oda-fidelity-today .oda-fidelity-support > section > button.w-10.h-10 { min-width: 44px; min-height: 44px; flex-shrink: 0; }

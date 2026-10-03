@@ -1,0 +1,435 @@
+{
+  "kind": "independent built-app browser and visual QA",
+  "sourceCommit": "84ecbf8776146b766a30964bf8e6487234dd1dd4",
+  "branch": "design/reference-led-oda",
+  "sealedAtUtc": "2026-10-03T19:18:55.575775+00:00",
+  "artifactRoot": "/workspace/scratch/oda-reference-redesign/domino-logo/browser-qa",
+  "synthetic": true,
+  "physicalDevice": false,
+  "publicationPerformedByThisAgent": false,
+  "artworkProvenance": "Accepted reference-guided reconstruction; no claim of identity with unavailable original 1254 master.",
+  "finalSourceAndCompiledIdentity": {
+    "sourceFiles": 900,
+    "compiledFiles": 445,
+    "allMatchedBeforeAndAfterRelevantRuns": true,
+    "finalReverification": true,
+    "cleanCheckout": true,
+    "buildReceipt": {
+      "path": "/workspace/scratch/oda-reference-redesign/domino-logo/final-build/build-receipt.json",
+      "bytes": 244395,
+      "sha256": "2936d984840ee67a2a9696f24111a32b4a14b411a798b56c518ec9b949894c6e"
+    },
+    "aggregateLog": {
+      "bytes": 79264,
+      "sha256": "17e93008892990c226a74dc59af7d68d515fdb5ff1c177d348b6c16fa7bddb0f",
+      "passed": 621,
+      "failed": 0
+    }
+  },
+  "counts": {
+    "captureCases": 18,
+    "actualFinalPngs": 43,
+    "functionalChecks": 46,
+    "continuityChecks": 17,
+    "settledServiceWorkerChecks": 6,
+    "totalChecks": 69,
+    "failedFinalChecks": 0,
+    "actualCaptureServedBodyMatches": 312,
+    "axeContrastAudits": 8,
+    "axeContrastViolations": 0
+  },
+  "baselineComparisons": {
+    "measuredRectanglesAndStylesAllIdentical": true,
+    "measuredDifferencesTextOnly": "42 selector observations differ only because new lockup emits ODA as SVG text.",
+    "phoneTodayNotebookCoachPixelsIdenticalAt390And320": true,
+    "desktopTodayOutsideLogo": "15 edge antialias pixels differ by maximum 2/255 channels at x299..301,y752..801. Source/layout/token matches; no visual regression."
+  },
+  "logoAccessibility": {
+    "instancesObserved": 36,
+    "allUseNewVersionedArtwork": true,
+    "meaningfulLockupsHaveImgRoleAndODAName": true,
+    "decorativeMarksAriaHidden": true,
+    "existingPrimaryMobileRoutesOmitHeaderByDesign": true
+  },
+  "narrationEvidence": {
+    "noMp3BeforeExplicitPlay": true,
+    "previewCurrentClipBytes": 105260,
+    "guidedUniqueCurrentUpcomingClips": 3,
+    "guidedDownloadedBytes": 354564,
+    "locale": "en-US",
+    "recordedModeObserved": true,
+    "pauseResume": true,
+    "offlinePersistentCacheReplayAfterAdapterReload": true,
+    "noBulkRuntimeOrAssetDownload": true,
+    "humanListeningOrTranscriptionQAClaimed": false
+  },
+  "serviceWorkerUpgrade": {
+    "baselineReport": "../baseline-sw/report.json",
+    "firstAttemptReport": "../attempts/sw-1/report.json",
+    "samePersistentProfile": "../sw-profile",
+    "firstAttemptStartedWith": [
+      "oda:%2Fone-decision-away%2F:v5"
+    ],
+    "firstAttemptResult": "Actual v6 activation reached; immediate reload failed stricter absence-of-any-v5-prefix assertion. Initial failure preserved.",
+    "settledResult": "Subsequent reopening of the same profile observed only v6 both before update and after reload; exact new icon downloads and offline routes passed.",
+    "limitation": "The second run did not begin on v5 and must not be described as a fresh v5-to-v6 upgrade."
+  },
+  "externalTraffic": {
+    "captureFunctionalSWAttempts": 0,
+    "continuityMediaAttemptsBlocked": 14,
+    "continuityMediaOrigins": [
+      "https://images.unsplash.com"
+    ],
+    "successfulExternalCalls": 0,
+    "accountProviderWrites": 0,
+    "note": "Existing onboarding dream thumbnails and course overview images attempted Unsplash reads; all aborted by local-only harness."
+  },
+  "manualActualPixelInspection": {
+    "result": "Readable new domino artwork; no observed clipping or Today palette/layout regression; light/dark logo text inherits existing shell colors.",
+    "files": [
+      "final/today-1440.png",
+      "final/today-320.png",
+      "final/focus-390.png",
+      "final/focus-320.png",
+      "final/landing-1440.png",
+      "final/landing-390.png",
+      "final/landing-320.png",
+      "final/landing-1440-full.png",
+      "final/onboarding-390.png",
+      "final/coach-1440.png",
+      "final/functional/actions-390.png",
+      "final/functional/plan-error-390.png",
+      "final/functional/completed-decision-390.png",
+      "final/continuity/recorded-english-preview-390.png",
+      "final-sw/offline-v6-focus-header-390.png"
+    ],
+    "additionalPlatformPreviewInspected": "../independent-assets/favicon-small-size-preview.png"
+  },
+  "limits": [
+    "Chromium desktop and phone viewport emulation, not physical iOS/Android installation.",
+    "Axe leaves image/gradient/pseudo-element contrast cases incomplete; computed CTA contrast and manual visual checks supplement it.",
+    "Initial search test incorrectly expected one confidence result; actual existing catalogue correctly matched two. First failure preserved; corrected harness validates actual catalogue results.",
+    "Initial v5 profile reached v6 but strict immediate post-reload no-v5-prefix assertion failed. Same profile later settled with only v6; first failure preserved. No fresh-old-profile rerun is claimed.",
+    "A wrong-working-directory launcher attempt could not resolve already installed tsx; corrected cwd used without installation."
+  ],
+  "reviewStatus": "No blocking app regression found in scoped checks; transient initial cache observation preserved for parent review.",
+  "pngs": [
+    {
+      "file": "final/landing-1440.png",
+      "bytes": 158036,
+      "sha256": "2c5c48ba7fe9d117954f874fba292ee98e7fdde5da16665737d8f35b15fe402d"
+    },
+    {
+      "file": "final/landing-1440-full.png",
+      "bytes": 525104,
+      "sha256": "447142baf233eb4ec8f624f05e609248be9d71e27ebd14bb993569c19ba42dd2"
+    },
+    {
+      "file": "final/onboarding-1440.png",
+      "bytes": 70441,
+      "sha256": "d855b97dfa8e1a2c6b4702ab08e18693709186297535f4f30acdc6a6741e2efb"
+    },
+    {
+      "file": "final/today-1440.png",
+      "bytes": 434529,
+      "sha256": "e389fd4615338746aa4b50adcf9362bd8247fe8cb16a6e4aa648a16fcaf83b14"
+    },
+    {
+      "file": "final/notebook-1440.png",
+      "bytes": 143367,
+      "sha256": "9173d1bcafd641d4284cacced789fc05d35e5d9fafb8e70e5b2bdf90419a65a9"
+    },
+    {
+      "file": "final/coach-1440.png",
+      "bytes": 425775,
+      "sha256": "f8e2d063503a36afe647e59a3b01fef2595dbbc9cd4595503544e17834ef64b6"
+    },
+    {
+      "file": "final/focus-1440.png",
+      "bytes": 173578,
+      "sha256": "29f60cb32e924e9540cc6a9997b40afc0a8f707f27d507c8ebda15d961ea3bda"
+    },
+    {
+      "file": "final/landing-390.png",
+      "bytes": 68795,
+      "sha256": "e8efe608799177a1834d11d86e35a6c35030be99bb7809ccfc81de32d744e7e8"
+    },
+    {
+      "file": "final/landing-390-full.png",
+      "bytes": 446537,
+      "sha256": "bfd6db85b6c490c6c62ca9e1ce18b84a70cdb578e3baf9cd5249a5aebe11921a"
+    },
+    {
+      "file": "final/onboarding-390.png",
+      "bytes": 53285,
+      "sha256": "c98c5c89c8f8871dde49fc1290cd66d005c441f81f47eb24b0d474aa61d55d55"
+    },
+    {
+      "file": "final/today-390.png",
+      "bytes": 159198,
+      "sha256": "6f93805cbeec517bea363a6e848e30e956ba54241638286dce1f7dba0e3de533"
+    },
+    {
+      "file": "final/notebook-390.png",
+      "bytes": 59172,
+      "sha256": "28adce25ef17a9332fc07dfdeed1dd1b114485020e1d8b9ee9bbbe32bd7b5a8e"
+    },
+    {
+      "file": "final/coach-390.png",
+      "bytes": 165393,
+      "sha256": "0ef4d698462aa92f480595305cded1a9f3affae687556aef03f5988bb4e44b2c"
+    },
+    {
+      "file": "final/focus-390.png",
+      "bytes": 50391,
+      "sha256": "ad6a5a9f5b983d7d02e705d9b547e73f138637cc8f9573820ffd9c379970bc73"
+    },
+    {
+      "file": "final/landing-320.png",
+      "bytes": 63250,
+      "sha256": "5bf1624c5d4a2cb1f00ea91a6e9b39a87166d83abaf573dd24e47b89a3a0febe"
+    },
+    {
+      "file": "final/landing-320-full.png",
+      "bytes": 442188,
+      "sha256": "8c3ad9ed3aaa9783db43d7616c275129d3dab6e64d238d16ea1944023d6e8aca"
+    },
+    {
+      "file": "final/onboarding-320.png",
+      "bytes": 52534,
+      "sha256": "b7b4eb0a8f8be6b18cf7f3bb5decc4bc7bfb2975d21d8dc7bb7d6435bb582ad6"
+    },
+    {
+      "file": "final/today-320.png",
+      "bytes": 127227,
+      "sha256": "e2a87313711419499dd7b4ea330f43880c9e022e15563e374102bf1180c3099a"
+    },
+    {
+      "file": "final/notebook-320.png",
+      "bytes": 56815,
+      "sha256": "3ddaa545773fb9f8bbd596c1523d385b5706f98cc24f2032174572558d795b34"
+    },
+    {
+      "file": "final/coach-320.png",
+      "bytes": 147865,
+      "sha256": "97777b1e77be4732c03f12b6aef810d229c5cbd47f5c10de3c82ad21629fb9ff"
+    },
+    {
+      "file": "final/focus-320.png",
+      "bytes": 50620,
+      "sha256": "b020d6182c905a1d457fcae5789f07f021d194fb0b23779432f420b75167244e"
+    },
+    {
+      "file": "final/functional/dark-focus-1440.png",
+      "bytes": 434104,
+      "sha256": "a6e15a92059cd00d2cde7e70da9d6d67278495d68267f15d35a5fa9efe4542dc"
+    },
+    {
+      "file": "final/functional/dark-focus-390.png",
+      "bytes": 158669,
+      "sha256": "cc6a9a7a1a160ffe3b2ece5e0865e950367247802c7c8d06e8d75bc4d4d8f3a3"
+    },
+    {
+      "file": "final/functional/actions-390.png",
+      "bytes": 42833,
+      "sha256": "95844ceb387e60820e8d4f47b897d782fee72ca0fbbfacefb7d5d6ebf253a6c4"
+    },
+    {
+      "file": "final/functional/dark-focus-320.png",
+      "bytes": 126814,
+      "sha256": "57450191ca246096ec0a48ce1cea294e02f3e65bbcbf8146566e18bafceb489f"
+    },
+    {
+      "file": "final/functional/actions-320.png",
+      "bytes": 42115,
+      "sha256": "d9df044d99b7d878b2701058077ed9775c70076bb19e66839f6c2cfefd6b0e6f"
+    },
+    {
+      "file": "final/functional/empty-disabled-320.png",
+      "bytes": 132598,
+      "sha256": "69b57e6a8335707fe2bbf9d2c52d319012f71c8d436eb2b53d3f756cf1c45098"
+    },
+    {
+      "file": "final/functional/plan-focus-390.png",
+      "bytes": 55857,
+      "sha256": "306b7019ffda18fb8aca76e2469b87cd9e1ff46d605561511e1240d54266662f"
+    },
+    {
+      "file": "final/functional/plan-error-390.png",
+      "bytes": 61083,
+      "sha256": "0adaa1232636b9a85a4586e1dd4666d177d8bd041f94953864125c60c8e9aefc"
+    },
+    {
+      "file": "final/functional/plan-success-390.png",
+      "bytes": 145757,
+      "sha256": "f92a89beb35439860aeb7768d7f0cfc0800e9f247596c516ab66ed83a402ea14"
+    },
+    {
+      "file": "final/functional/two-minute-complete-390.png",
+      "bytes": 95741,
+      "sha256": "87277752db70ce80fda8309a6dcc380ae89c94f6d1deb15f534edaf4105ab8a4"
+    },
+    {
+      "file": "final/functional/completion-ready-390.png",
+      "bytes": 95697,
+      "sha256": "2704ac3fab4ff999f76808dc8db97df8b1f1c7149ed40e24bc072acc7e0864bd"
+    },
+    {
+      "file": "final/functional/completed-decision-390.png",
+      "bytes": 158758,
+      "sha256": "e08e9ddb5db1f501efeeffe03936c6dcc2d68f0d0504f897a7a8ead60994878e"
+    },
+    {
+      "file": "final/continuity/onboarding-preview-carried-320.png",
+      "bytes": 44860,
+      "sha256": "640a01d639fd17252b5b40b2bdcbb0a21cd7dab7f3977e21662cd7d6dc0e1fc1"
+    },
+    {
+      "file": "final/continuity/onboarding-protected-draft-320.png",
+      "bytes": 53229,
+      "sha256": "aa1469dd23bb9551703f11ec168670326765164a421c794be277f71284d2936b"
+    },
+    {
+      "file": "final/continuity/untouched-course-overview-1440.png",
+      "bytes": 163266,
+      "sha256": "ea969776c869efbc7f2f38ca4f5d0486f08c588c1e2f1832551e0a7281f884b4"
+    },
+    {
+      "file": "final/continuity/course-resumed-lesson2-1440.png",
+      "bytes": 166006,
+      "sha256": "3db4a4f9a9e7c54fa70919ec78fc31983ae9f0c345d4225d9e3412b1934be065"
+    },
+    {
+      "file": "final/continuity/notebook-saved-continuity-1440.png",
+      "bytes": 159924,
+      "sha256": "dc4277364210503ac1e0e0e5d6728766bedb50cbcc776603e1be99857004df63"
+    },
+    {
+      "file": "final/continuity/recorded-english-preview-390.png",
+      "bytes": 62150,
+      "sha256": "49974f3813c403fdcaa396bf0d2f4d6c6937f8c2cdfefde518d239a221e9e0f8"
+    },
+    {
+      "file": "final/continuity/offline-recorded-english-preview-390.png",
+      "bytes": 62150,
+      "sha256": "49974f3813c403fdcaa396bf0d2f4d6c6937f8c2cdfefde518d239a221e9e0f8"
+    },
+    {
+      "file": "final-sw/upgraded-v6-today-390.png",
+      "bytes": 159030,
+      "sha256": "3f2011ae6f1c190ee055aa2304b945bd9b1392033a701f19c55207b03e39c516"
+    },
+    {
+      "file": "final-sw/offline-v6-focus-header-390.png",
+      "bytes": 50391,
+      "sha256": "ad6a5a9f5b983d7d02e705d9b547e73f138637cc8f9573820ffd9c379970bc73"
+    },
+    {
+      "file": "final-sw/offline-v6-notebook-390.png",
+      "bytes": 59172,
+      "sha256": "28adce25ef17a9332fc07dfdeed1dd1b114485020e1d8b9ee9bbbe32bd7b5a8e"
+    }
+  ],
+  "supportingEvidence": [
+    {
+      "file": "baseline/report.json",
+      "bytes": 238577,
+      "sha256": "322b32fdc90f03439912381232f9337304a35594c099c2a551dc08fb893122c8"
+    },
+    {
+      "file": "baseline-secondary/report.json",
+      "bytes": 42278,
+      "sha256": "ca483c4ba94a6c141e77d87f286d80f2810921257d1100c38f51374f8e9566a4"
+    },
+    {
+      "file": "baseline-sw/report.json",
+      "bytes": 11399,
+      "sha256": "3c3332d839c5614d8f5436522df8f9495da1ed7f50c6bda30bdc41fd977d32ad"
+    },
+    {
+      "file": "final/report.json",
+      "bytes": 283062,
+      "sha256": "fc982c4574b4bf26684c9f5206b8d3c81223d146d1fac1a73d23691c414c84f0"
+    },
+    {
+      "file": "final/functional/report.json",
+      "bytes": 89085,
+      "sha256": "675ef34711184c3de7aa9d6414eaf52f13c36c98785bc0ccf7501f7c6bb7b55f"
+    },
+    {
+      "file": "final/continuity/report.json",
+      "bytes": 21333,
+      "sha256": "f929430f0f0510803cf5b4a48179d06dbde3f4b2c5c913d4f89dd60c01b815a1"
+    },
+    {
+      "file": "final-sw/report.json",
+      "bytes": 60916,
+      "sha256": "136d40c2aacd0ba80fd68725a9e717b5b90584ab0015405b569d3ee7c9d6cd18"
+    },
+    {
+      "file": "final/baseline-comparison.json",
+      "bytes": 79632,
+      "sha256": "f36aa9e279912d930159a13e0d5e500131baed33af799122ea1e3852859045ba"
+    },
+    {
+      "file": "attempts/continuity-1/report.json",
+      "bytes": 12512,
+      "sha256": "6026274b36b38339d4850e3a6add2c968427e3cbb66845d58449243432f7ac27"
+    },
+    {
+      "file": "attempts/sw-1/report.json",
+      "bytes": 25494,
+      "sha256": "07e4d1be320a0ac06a9bdc5bc177bf1099be5339dc72d203f902f4092d912d0e"
+    },
+    {
+      "file": "attempts/continuity-1/final-continuity.log",
+      "bytes": 1539,
+      "sha256": "0817d49741a36c95b603b90f429c31d9b95c551853162a31a4c55f86ee18114f"
+    },
+    {
+      "file": "attempts/sw-1/final-sw.log",
+      "bytes": 681,
+      "sha256": "ba128e7efd71a7887e99b89d55912476140f09c35251d0e06c3c400fe6b4ad5f"
+    },
+    {
+      "file": "final-capture.log",
+      "bytes": 206,
+      "sha256": "0b2caa0e32b325b5a8632e80e640976580b8772d98d0b2bf5a102f33821aed05"
+    },
+    {
+      "file": "final-functional.log",
+      "bytes": 100,
+      "sha256": "12d1160bf4687c9c15fb05a47b87cb99ed40a1c7dd2225ee61e612a91d97a044"
+    },
+    {
+      "file": "final-continuity-3.log",
+      "bytes": 976,
+      "sha256": "640f3234994fc1aa03902876d0d1834676fb6295e1f4151357531a764228856c"
+    },
+    {
+      "file": "final-sw-3.log",
+      "bytes": 95,
+      "sha256": "8ce7e187665adf59cb88f9579ff1144cce75d95726d25d008120ef1d399c4271"
+    },
+    {
+      "file": "capture.mjs",
+      "bytes": 7539,
+      "sha256": "dac7e0d9cee79670471c63b0a82060595b43d36f0d7a62549920362a8ebb8cb9"
+    },
+    {
+      "file": "functional.mjs",
+      "bytes": 15212,
+      "sha256": "1e91f6215299b6f8ad1a41e77e967aee1b60019ac643d2dda7b576716c3f5424"
+    },
+    {
+      "file": "continuity.mjs",
+      "bytes": 12337,
+      "sha256": "4d5e9f4e1c3ab2fd6d9f8f03789758668d35a88e4b0dd15282b09bb45a3f81c2"
+    },
+    {
+      "file": "service-worker.mjs",
+      "bytes": 7958,
+      "sha256": "8b5b15b4f097c13ff7819b4206727fddc52eae546285fbad715f7a37bddcffe2"
+    }
+  ]
+}

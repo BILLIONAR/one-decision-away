@@ -1,0 +1,43 @@
+{
+  "at": "2026-10-02T13:38:30.867Z",
+  "base": "http://127.0.0.1:4313/one-decision-away",
+  "browser": "151.0.7922.173",
+  "checks": [],
+  "errors": [],
+  "externalBlocked": [],
+  "contexts": [
+    {
+      "name": "focus-normal",
+      "options": {
+        "missingInert": false,
+        "width": 390
+      }
+    }
+  ],
+  "screenshots": [
+    "failure.png"
+  ],
+  "sourceHashes": {
+    "src/components/FocusLockView.tsx": "d1bf8e2c0df5349bad8c7580e6c76a9b01b84353ddb896b1c5a64f93b41acfc1",
+    "src/components/notebook/JournalWorkspace.tsx": "20219d8ca48e826efdf754666cc8d9f57b0a48cb065be9e39719d1f49552c602",
+    "src/utils/useDialogAccessibility.ts": "5b068c627b873c7da369502937470a45704cd748d1d4e22a70015ef9e66cf027",
+    "src/components/ui.tsx": "26fcc938ee5d5a32106033b1e58055f70b12f053210388218d2931e666858b46",
+    "src/components/AppErrorBoundary.tsx": "c49623c7531d5e172372c0338b35e5b80433aa096500633e7a269f62ff99ed2b",
+    "scripts/qa-mobile-core-quality.mjs": "2079bcefe04dee7a0d3d147ea644a80af663adfa6c5b5321feb72b973ef0145c"
+  },
+  "syntheticPhotoFixture": {
+    "path": "public/assets/oda/trees/tree-00-seedling-0.png",
+    "bytes": 134287,
+    "sha256": "9be7d6a7175f1e2aebdcead274b506ee65d8ce669f523d9a6f9c75b20fe1e512"
+  },
+  "limits": [
+    "Actual app, AppProvider, repository and UI handlers in cloud Chromium; synthetic local records and capability failures only.",
+    "Native dialog and fullscreen success exercise actual Chromium APIs. Method absence, missing inert, and denial are explicit simulations.",
+    "All requests outside the preview origin are blocked. No provider, payment, cloud account, physical native device, or audio-quality claim."
+  ],
+  "failure": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('heading', { name: 'Focus', exact: true, level: 1 }) to be visible\u001b[22m\n\n    at startFocus (/workspace/oda-mobile-core-quality/scripts/qa-mobile-core-quality.mjs:111:77)\n    at async file:///workspace/oda-mobile-core-quality/scripts/qa-mobile-core-quality.mjs:123:5",
+  "sourceUnchanged": true,
+  "artifactHashes": {
+    "failure.png": "9146fbde212f5c9cf4a6e6289ac9b8d18a360287b179cca346472fd11e99e3cb"
+  }
+}

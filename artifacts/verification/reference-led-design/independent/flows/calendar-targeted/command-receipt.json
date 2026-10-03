@@ -1,0 +1,25 @@
+{
+  "kind": "calendar-targeted",
+  "command": [
+    "node",
+    "--import",
+    "tsx",
+    "/workspace/scratch/oda-reference-redesign/independent/flows/harness/calendar.mjs"
+  ],
+  "cwd": "/workspace/oda-reference-redesign",
+  "environmentOverrides": {
+    "ODA_QA_URL": "http://127.0.0.1:4183/one-decision-away/#",
+    "ODA_QA_OUT": "/workspace/scratch/oda-reference-redesign/independent/flows/calendar-targeted",
+    "ODA_QA_REPO": "/workspace/oda-reference-redesign"
+  },
+  "startedAt": 1790964748.0085409,
+  "elapsedSeconds": 4.126418590545654,
+  "exitCode": 1,
+  "log": {
+    "file": "/workspace/scratch/oda-reference-redesign/independent/flows/calendar-targeted/browser.log",
+    "bytes": 843,
+    "sha256": "13297c329788a6bf6ccac8b89c4accad5e66e40b9e1a1ec7b71923d92947be3b"
+  },
+  "syntheticOnly": true,
+  "noInstallNoDeploy": true
+}

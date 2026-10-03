@@ -1,0 +1,306 @@
+import assert from 'node:assert/strict';
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { createRequire } from 'node:module';
+import { pathToFileURL } from 'node:url';
+
+if (process.env.ODA_BACKUP_SCOPE_GO !== '1' || process.env.ODA_PRIMARY_CASES_PASSED !== '1') {
+  throw new Error('Frozen GO and parent primary-case PASS are required before any runtime execution.');
+}
+const repo = '/workspace/oda-reference-redesign';
+const source = 'd33c0077c549bdf8e61fbf9b8bb20422a768f8e9';
+const base = 'http://127.0.0.1:4183/one-decision-away/';
+const out = process.env.ODA_BACKUP_SCOPE_OUT;
+assert.ok(out?.startsWith('/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-repair-qa/backup-prep-d33/attempt-'));
+const receiptPath = '/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/projection-fix/final/build-receipt.json';
+const receiptBytes = readFileSync(receiptPath);
+const receipt = JSON.parse(receiptBytes);
+const key = 'one_decision_away_app_data_v1';
+const epochKey = '_odaReplacementEpoch';
+const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+const git = (...args) => execFileSync('git', args, {cwd: repo, encoding: 'utf8'}).trim();
+function admission() {
+  assert.equal(git('rev-parse', 'HEAD'), source);
+  assert.equal(git('branch', '--show-current'), 'design/reference-led-oda');
+  assert.equal(git('status', '--porcelain'), '');
+  assert.equal(receipt.sourceCommit, source);
+  assert.equal(receipt.exitCode, 0);
+  assert.equal(receipt.passed, 614);
+  assert.equal(receipt.failed, 0);
+  assert.equal(receipt.source.length, 876);
+  assert.equal(receipt.build.length, 437);
+  assert.ok(receipt.allSourcesMatchCommittedSource && receipt.unchangedDuringRun);
+  for (const row of [...receipt.source, ...receipt.build]) {
+    const data = readFileSync(`${repo}/${row.file}`);
+    assert.equal(data.length, row.bytes, row.file);
+    assert.equal(sha(data), row.sha256, row.file);
+  }
+  return {sourceCommit: source, branch: 'design/reference-led-oda', clean: true, sourceFiles: 876, buildFiles: 437, parentReceiptSHA256: sha(receiptBytes), atUtc: new Date().toISOString()};
+}
+mkdirSync(out, {recursive: true});
+const report = {
+  task: 'Bounded supported backup review/Cancel/Replace two-tab saved-course scope QA',
+  sourceCommit: source, synthetic: true, checks: [], contexts: [], screenshots: [], errors: [],
+  limits: [
+    'Only the actual frozen compiled local app runs in Chromium pages. Seed/canonical catalogue come from the current admitted owned factory in Node.',
+    'Fresh signed-out synthetic profile data, service workers blocked; no cloud control, account, model, provider or real user operation.',
+    'All nonlocal or non-GET/HEAD browser requests are recorded with URL/method/type and aborted. No successful outbound request is claimed.',
+    'Today reader stays mounted throughout Cancel, same-record replacement B and distinct-profile replacement C; no reader navigation or reload.',
+    'Local backup has schema validation but no checksum envelope; fixture hashes are QA provenance only.',
+    'Native browser file chooser and IndexedDB authority reads are real. 390×844 is Chromium viewport emulation, not physical device QA.',
+  ],
+};
+const save = (name, data) => writeFileSync(`${out}/${name}`, typeof data === 'string' ? data : JSON.stringify(data, null, 2) + '\n', {flag: 'wx'});
+const pass = (name, evidence) => {report.checks.push({name, evidence}); console.log(`PASS ${name}`);};
+let browser, context, reader, writer;
+async function bindServed() {
+  const files = receipt.build.filter(row => row.file === 'dist/index.html' || row.file.endsWith('.js') || row.file.endsWith('.css'));
+  const served = [];
+  // Bounded batches of harmless same-origin GETs, without browser or execution.
+  for (let start = 0; start < files.length; start += 8) {
+    const batch = await Promise.all(files.slice(start, start + 8).map(async row => {
+      const path = row.file.slice('dist/'.length);
+      const response = await fetch(base + (path === 'index.html' ? '' : path));
+      assert.equal(response.status, 200, path);
+      const data = Buffer.from(await response.arrayBuffer());
+      const type = response.headers.get('content-type');
+      if (path.endsWith('.js')) assert.match(type || '', /(?:javascript|ecmascript)/i, path);
+      if (path.endsWith('.css')) assert.match(type || '', /text\/css/i, path);
+      assert.equal(data.length, row.bytes, path);
+      assert.equal(sha(data), row.sha256, path);
+      return {file: row.file, url: response.url, status: response.status, contentType: type, bytes: data.length, sha256: sha(data)};
+    }));
+    served.push(...batch);
+  }
+  return {atUtc: new Date().toISOString(), servedFiles: served.length, javascriptFiles: served.filter(row => row.file.endsWith('.js')).length, cssFiles: served.filter(row => row.file.endsWith('.css')).length, files: served};
+}
+async function authority(page) {
+  const result = await page.evaluate(({key, epochKey}) => new Promise((resolve, reject) => {
+    const open = indexedDB.open('oda_personal_record_v1', 1);
+    open.onerror = () => reject(String(open.error));
+    open.onsuccess = () => {
+      const db = open.result;
+      const tx = db.transaction('record', 'readonly');
+      const get = tx.objectStore('record').get('current');
+      tx.onabort = () => {db.close(); reject(String(tx.error));};
+      tx.oncomplete = () => {
+        const raw = get.result?.appData;
+        const projectionRaw = localStorage.getItem(key);
+        const record = raw ? JSON.parse(raw) : null;
+        db.close();
+        resolve({raw, projectionRaw, profileId: record?.profile?.id, epoch: record?.[epochKey], courseProgress: record?.courseProgress, record});
+      };
+    };
+  }), {key, epochKey});
+  assert.equal(typeof result.raw, 'string');
+  assert.equal(result.raw, result.projectionRaw, 'Native IDB appData and local projection are byte-identical after commit');
+  return {...result, rawSha256: sha(result.raw), rawBytes: Buffer.byteLength(result.raw)};
+}
+async function observeReader() {
+  return reader.evaluate(({key, epochKey}) => {
+    const data = JSON.parse(localStorage.getItem(key));
+    return {
+      profileId: data.profile.id, epoch: data[epochKey], documentToken: window.__backupScope.documentToken,
+      timeOrigin: performance.timeOrigin, route: document.querySelector('[data-app-route]')?.getAttribute('data-app-route'),
+      library: Number(document.querySelector('.oda-hybrid-progress [role="progressbar"]')?.getAttribute('aria-valuenow')),
+      libraryMaximum: Number(document.querySelector('.oda-hybrid-progress [role="progressbar"]')?.getAttribute('aria-valuemax')),
+      course: Number(document.querySelector('.oda-hybrid-mission [role="progressbar"]')?.getAttribute('aria-valuenow')),
+      courseMaximum: Number(document.querySelector('.oda-hybrid-mission [role="progressbar"]')?.getAttribute('aria-valuemax')),
+      nextTitle: document.querySelector('[data-next-lesson-title]')?.textContent,
+      nextGoal: document.querySelector('[data-next-lesson-goal]')?.textContent,
+      sameMissionNode: window.__backupScope.missionNode === document.querySelector('.oda-hybrid-mission'),
+      sameLibraryNode: window.__backupScope.libraryNode === document.querySelector('.oda-hybrid-progress'),
+      storageEvents: window.__backupScope.storageEvents,
+      width: document.documentElement.clientWidth, scrollWidth: document.documentElement.scrollWidth,
+    };
+  }, {key, epochKey});
+}
+async function waitReader(count, lesson) {
+  await reader.waitForFunction(({count, title}) =>
+    Number(document.querySelector('.oda-hybrid-progress [role="progressbar"]')?.getAttribute('aria-valuenow')) === count &&
+    Number(document.querySelector('.oda-hybrid-mission [role="progressbar"]')?.getAttribute('aria-valuenow')) === count &&
+    document.querySelector('[data-next-lesson-title]')?.textContent === title,
+  {count, title: lesson.title});
+  const view = await observeReader();
+  assert.equal(view.nextGoal, lesson.goal);
+  assert.equal(view.libraryMaximum, report.fixture.catalogueLessonCount);
+  assert.equal(view.courseMaximum, report.fixture.course.lessonCount);
+  assert.equal(view.route, '/app');
+  assert.equal(view.documentToken, report.readerBaseline.documentToken);
+  assert.equal(view.timeOrigin, report.readerBaseline.timeOrigin);
+  assert.equal(view.sameMissionNode, true);
+  assert.equal(view.sameLibraryNode, true);
+  assert.equal(report.readerMainFrameNavigations.length, 1);
+  assert.ok(view.scrollWidth <= view.width);
+  return view;
+}
+async function capture(page, name, locator) {
+  const path = `${out}/${name}.png`;
+  if (locator) await page.locator(locator).screenshot({path, animations: 'disabled'});
+  else await page.screenshot({path, fullPage: false, animations: 'disabled'});
+  report.screenshots.push(`${name}.png`);
+}
+async function review(payload, name, expectedCompleted) {
+  const file = {name: `${name}.json`, mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(payload, null, 2))};
+  const chooserPromise = writer.waitForEvent('filechooser');
+  await writer.locator('#backup').getByRole('button', {name: 'Restore', exact: true}).click();
+  const chooser = await chooserPromise;
+  assert.equal(chooser.isMultiple(), false);
+  await chooser.setFiles(file);
+  const dialog = writer.getByRole('dialog', {name: 'Review the record to restore', exact: true});
+  await dialog.waitFor({state: 'visible'});
+  const summary = dialog.locator('dl > div').filter({has: writer.getByText('Completed lessons', {exact: true})});
+  assert.equal(await summary.locator('dd').textContent(), String(expectedCompleted));
+  assert.equal(await dialog.getByRole('button', {name: 'Replace saved record', exact: true}).isEnabled(), true);
+  return dialog;
+}
+try {
+  report.preflight = admission();
+  report.servedPreflight = await bindServed();
+  save('preflight-receipt.json', {source: report.preflight, served: report.servedPreflight});
+  const {getInitialDemoState} = await import(pathToFileURL(`${repo}/src/services/repository.ts`));
+  const {courseCatalogFor} = await import(pathToFileURL(`${repo}/src/data/courseCatalog.ts`));
+  const catalog = courseCatalogFor('en');
+  const course = catalog.find(course => course.id === 'turning-day');
+  assert.ok(course && course.lessons.length > 1);
+  const first = course.lessons[0], second = course.lessons[1];
+  const seed = getInitialDemoState(), now = new Date().toISOString();
+  seed.profile = {...seed.profile, id: 'synthetic-backup-scope-A', displayName: 'Synthetic backup scope A', locale: 'en', theme: 'light', onboardingStep: 'completed', intent: 'finish', simpleModeOff: true, soundMuted: true, nudgesEnabled: false, dailyWisdomEnabled: false, reminderAskedAt: now, firstOpenedAt: '2026-01-01T00:00:00Z', lastOpenedAt: now};
+  seed.subscription.userId = seed.profile.id;
+  seed.transactions = seed.transactions.filter(row => row.kind === 'welcome_grant').map(row => ({...row, userId: seed.profile.id}));
+  seed.missions = seed.missions.filter(mission => !mission.isOneDecision).map(row => ({...row, userId: seed.profile.id}));
+  seed.completions = [];
+  seed.dreamJournal = [];
+  seed.notebook.entries = [];
+  seed.courseProgress = {version: 1, lessons: {[first.id]: {checked: Array(first.practiceCount).fill(true), answer: first.correct, reflection: 'Synthetic A saved real prerequisites, incomplete', completed: false}}};
+  const B = structuredClone(seed);
+  B.profile.displayName = 'Synthetic restored B same profile scope';
+  B.courseProgress.lessons[first.id] = {...B.courseProgress.lessons[first.id], completed: true, reflection: 'Synthetic B first real lesson completed'};
+  const C = structuredClone(seed);
+  C.profile.id = 'synthetic-backup-scope-C';
+  C.profile.displayName = 'Synthetic restored C distinct profile scope';
+  C.subscription.userId = C.profile.id;
+  C.transactions = C.transactions.map(row => ({...row, userId: C.profile.id}));
+  C.missions = C.missions.map(row => ({...row, userId: C.profile.id}));
+  C.courseProgress.lessons[first.id].reflection = 'Synthetic C incomplete first real lesson';
+  report.fixture = {factory: 'getInitialDemoState', course, first, second, catalogueLessonCount: new Set(catalog.flatMap(c => c.lessonIds)).size, phases: [{name: 'A', profileId: seed.profile.id, completed: 0, title: first.title}, {name: 'B', profileId: B.profile.id, completed: 1, title: second.title}, {name: 'C', profileId: C.profile.id, completed: 0, title: first.title}]};
+  assert.equal(report.fixture.catalogueLessonCount, 103);
+  save('synthetic-record-A.json', seed); save('synthetic-record-B.json', B); save('synthetic-record-C.json', C);
+  const require = createRequire(`${repo}/package.json`);
+  const {chromium} = require('playwright');
+  browser = await chromium.launch({executablePath: '/usr/bin/chromium'});
+  report.browser = await browser.version();
+  context = await browser.newContext({viewport: {width: 390, height: 844}, timezoneId: 'UTC', reducedMotion: 'reduce', serviceWorkers: 'block'});
+  const traffic = {viewport: {width: 390, height: 844}, requests: [], blockedExternal: [], pageErrors: []};
+  report.contexts.push(traffic);
+  await context.route('**/*', route => {
+    const request = route.request();
+    const row = {url: request.url(), method: request.method(), resourceType: request.resourceType()};
+    if (new URL(row.url).origin !== new URL(base).origin || !['GET', 'HEAD'].includes(row.method)) {
+      traffic.blockedExternal.push(row); return route.abort();
+    }
+    traffic.requests.push(row); return route.continue();
+  });
+  await context.addInitScript(({seed, key, courseId, epochKey}) => {
+    if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify(seed));
+    localStorage.setItem('oda_locale', 'en'); localStorage.setItem('oda_theme', 'light'); localStorage.setItem('oda_course_selection_v1', courseId);
+    window.__backupScope = {documentToken: `${performance.timeOrigin}-${Math.random()}`, storageEvents: []};
+    addEventListener('storage', event => {
+      if (event.key !== key) return;
+      const data = event.newValue ? JSON.parse(event.newValue) : null;
+      window.__backupScope.storageEvents.push({at: performance.now(), trusted: event.isTrusted, profileId: data?.profile?.id, epoch: data?.[epochKey], lessonCompleted: data?.courseProgress?.lessons?.['turning-day-1']?.completed});
+    });
+  }, {seed, key, courseId: course.id, epochKey});
+  reader = await context.newPage(); writer = await context.newPage();
+  reader.setDefaultTimeout(10000); writer.setDefaultTimeout(10000);
+  for (const page of [reader, writer]) page.on('pageerror', error => {traffic.pageErrors.push(error.message); report.errors.push(error.message);});
+  report.readerMainFrameNavigations = [];
+  reader.on('framenavigated', frame => {if (frame === reader.mainFrame()) report.readerMainFrameNavigations.push({url: frame.url(), atUtc: new Date().toISOString()});});
+  await reader.goto(`${base}#/app`);
+  await reader.locator('[data-app-route="/app"]').waitFor();
+  await reader.locator('.oda-hybrid-mission').waitFor();
+  await reader.evaluate(() => {window.__backupScope.missionNode = document.querySelector('.oda-hybrid-mission'); window.__backupScope.libraryNode = document.querySelector('.oda-hybrid-progress');});
+  report.readerBaseline = await observeReader();
+  await writer.goto(`${base}#/app/settings`);
+  await writer.locator('#backup').waitFor();
+  await Promise.all([reader.evaluate(() => document.fonts.ready), writer.evaluate(() => document.fonts.ready)]);
+  const baseline = await authority(reader);
+  report.baselineAuthority = {profileId: baseline.profileId, epoch: baseline.epoch, rawSha256: baseline.rawSha256, rawBytes: baseline.rawBytes};
+  const initial = await waitReader(0, first);
+  assert.equal(baseline.profileId, seed.profile.id);
+  assert.equal(baseline.courseProgress.lessons[first.id].completed, false);
+  await expectLocalOnly(writer);
+  pass('Two real tabs hydrate factory-backed A with native IDB authority and both Today projections0/title1', {view: initial, authority: report.baselineAuthority});
+  let dialog = await review(B, 'synthetic-record-B', 1);
+  const previewAuthority = await authority(reader);
+  assert.equal(previewAuthority.raw, baseline.raw, 'Preview does not commit');
+  await waitReader(0, first);
+  await capture(writer, 'review-B-before-cancel');
+  await dialog.getByRole('button', {name: 'Cancel', exact: true}).click();
+  await dialog.waitFor({state: 'hidden'});
+  const cancelled = await authority(reader);
+  assert.equal(cancelled.raw, baseline.raw, 'Cancel preserves exact canonical IDB bytes');
+  const cancelledView = await waitReader(0, first);
+  await capture(reader, 'today-after-cancel', '.oda-hybrid-mission');
+  pass('Supported picker/review/Cancel keeps exact A bytes, progress0 and first title while Today stays mounted', {rawSha256: cancelled.rawSha256, view: cancelledView});
+  dialog = await review(B, 'synthetic-record-B', 1);
+  await dialog.getByRole('button', {name: 'Replace saved record', exact: true}).click();
+  await dialog.waitFor({state: 'hidden'});
+  await writer.getByText('Backup restored. Welcome back.', {exact: true}).waitFor();
+  const Bview = await waitReader(1, second), Bauthority = await authority(reader);
+  assert.equal(Bauthority.profileId, B.profile.id);
+  assert.equal(Bauthority.record.profile.displayName, B.profile.displayName);
+  assert.equal(Bauthority.courseProgress.lessons[first.id].completed, true);
+  assert.equal(Bauthority.courseProgress.lessons[first.id].reflection, B.courseProgress.lessons[first.id].reflection);
+  assert.equal(typeof Bauthority.epoch, 'string'); assert.ok(Bauthority.epoch.length > 0);
+  assert.notEqual(Bauthority.epoch, baseline.epoch);
+  await capture(reader, 'today-after-replace-B', '.oda-hybrid-mission');
+  report.Bauthority = {profileId: Bauthority.profileId, epoch: Bauthority.epoch, rawSha256: Bauthority.rawSha256, rawBytes: Bauthority.rawBytes};
+  pass('Actual Replace B commits IDB+new epoch and updates both mounted Today projections1/real title2', {view: Bview, authority: report.Bauthority});
+  dialog = await review(C, 'synthetic-record-C', 0);
+  const CpreviewAuthority = await authority(reader);
+  assert.equal(CpreviewAuthority.raw, Bauthority.raw);
+  await waitReader(1, second);
+  await capture(writer, 'review-C-before-replace');
+  await dialog.getByRole('button', {name: 'Replace saved record', exact: true}).click();
+  await dialog.waitFor({state: 'hidden'});
+  const Cview = await waitReader(0, first), Cauthority = await authority(reader);
+  assert.equal(Cauthority.profileId, C.profile.id);
+  assert.equal(Cauthority.record.profile.displayName, C.profile.displayName);
+  assert.equal(Cauthority.courseProgress.lessons[first.id].completed, false);
+  assert.equal(Cauthority.courseProgress.lessons[first.id].reflection, C.courseProgress.lessons[first.id].reflection);
+  assert.equal(typeof Cauthority.epoch, 'string'); assert.ok(Cauthority.epoch.length > 0);
+  assert.notEqual(Cauthority.epoch, Bauthority.epoch);
+  assert.notEqual(Cauthority.profileId, Bauthority.profileId);
+  await capture(reader, 'today-after-replace-C', '.oda-hybrid-mission');
+  report.Cauthority = {profileId: Cauthority.profileId, epoch: Cauthority.epoch, rawSha256: Cauthority.rawSha256, rawBytes: Cauthority.rawBytes};
+  pass('Actual Replace C changes profile+epoch and resets mounted saved counts0/title1 without previous-scope leakage', {view: Cview, authority: report.Cauthority});
+  assert.ok(Cview.storageEvents.some(event => event.profileId === B.profile.id && event.epoch === Bauthority.epoch && event.trusted));
+  assert.ok(Cview.storageEvents.some(event => event.profileId === C.profile.id && event.epoch === Cauthority.epoch && event.trusted));
+  await expectLocalOnly(writer);
+  assert.deepEqual(report.errors, []);
+  const audioRequests = traffic.requests.filter(row => /\.mp3(?:\?|$)/.test(row.url));
+  assert.deepEqual(audioRequests, []);
+  const masters = traffic.requests.filter(row => /original-art.*(?:received|master)/i.test(row.url));
+  assert.deepEqual(masters, []);
+  pass('Trusted cross-tab storage updates settle with original Today DOM/document, no navigation/reload/page error/bulk audio', {readerMainFrameNavigations: report.readerMainFrameNavigations, storageEvents: Cview.storageEvents, blockedAttempts: traffic.blockedExternal, mp3Requests: audioRequests.length});
+  report.status = 'passed';
+} catch (error) {
+  report.status = 'failed'; report.failure = {name: error.name, message: error.message, stack: error.stack};
+  console.error(error); process.exitCode = 1;
+  try {if (reader && !reader.isClosed()) await capture(reader, 'failure-reader');} catch (failure) {report.failureScreenshotError = String(failure);}
+  try {if (writer && !writer.isClosed()) await capture(writer, 'failure-writer');} catch (failure) {report.failureScreenshotErrorWriter = String(failure);}
+} finally {
+  try {if (context) await context.close();} finally {if (browser) await browser.close();}
+  try {report.postflight = admission(); report.servedPostflight = await bindServed();}
+  catch (error) {report.postflightFailure = String(error); report.status = 'failed'; process.exitCode = 1; console.error(error);}
+  report.readersClosed = true; report.finishedAtUtc = new Date().toISOString();
+  save('backup-scope-report.json', report);
+  console.log(JSON.stringify({status: report.status, passedCheckRecords: report.checks.length, screenshots: report.screenshots.length, blockedAttempts: report.contexts.flatMap(row => row.blockedExternal).length, readersClosed: true}));
+}
+
+async function expectLocalOnly(page) {
+  await page.locator('#backup').getByText('Local only', {exact: true}).waitFor();
+  assert.equal(await page.locator('#backup').getByText('Signed in as', {exact: true}).count(), 0);
+}

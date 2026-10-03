@@ -1,0 +1,269 @@
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
+import vm from 'node:vm';
+
+const root = '/workspace/oda-cloud-upload-guard';
+const out = '/workspace/scratch/oda-cloud-upload-review/caller';
+const require = createRequire(`${root}/package.json`);
+const ts = require('typescript');
+const sourceFiles = [
+  'src/store/useApp.tsx', 'src/services/cloudSync.ts',
+  'src/services/cloudUploadReadiness.ts', 'src/data/backupCopy.ts',
+  'src/pages/Account.tsx', 'src/components/BackupAndCloudSettings.tsx',
+  'src/components/BackupRestoreReview.tsx',
+];
+const hashes = () => Object.fromEntries(sourceFiles.map(file => [file,
+  createHash('sha256').update(readFileSync(`${root}/${file}`)).digest('hex')]));
+const before = hashes();
+const source = readFileSync(`${root}/src/store/useApp.tsx`, 'utf8');
+const ast = ts.createSourceFile('useApp.tsx', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+let callback;
+const handlers = {};
+function visit(node) {
+  if (ts.isVariableDeclaration(node) && node.name.getText(ast) === 'syncFromCloud') {
+    assert.ok(ts.isCallExpression(node.initializer));
+    callback = node.initializer.arguments[0].getText(ast);
+  }
+  if (ts.isJsxSelfClosingElement(node) && node.tagName.getText(ast) === 'BackupRestoreReview') {
+    for (const attribute of node.attributes.properties) {
+      if (ts.isJsxAttribute(attribute) && ['onCancel', 'onConfirm'].includes(attribute.name.getText(ast))) {
+        handlers[attribute.name.getText(ast)] = attribute.initializer.expression.getText(ast);
+      }
+    }
+  }
+  ts.forEachChild(node, visit);
+}
+visit(ast);
+assert.ok(callback && handlers.onCancel && handlers.onConfirm);
+const extracted = `globalThis.run = ${callback};\nglobalThis.cancel = ${handlers.onCancel};\nglobalThis.confirm = ${handlers.onConfirm};\n`;
+const executable = ts.transpileModule(extracted, {
+  compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.None },
+}).outputText;
+writeFileSync(`${out}/extracted-caller.ts.txt`, extracted);
+const { backupCopy } = await import(`${root}/src/data/backupCopy.ts`);
+const failed = 'Cloud backup failed — check your connection.';
+let fetchCalls = 0;
+const denyFetch = () => { fetchCalls += 1; throw new Error('Network prohibited in caller probe'); };
+globalThis.fetch = denyFetch;
+const deferred = () => {
+  let resolve;
+  let reject;
+  const promise = new Promise((res, rej) => { resolve = res; reject = rej; });
+  return { promise, resolve, reject };
+};
+
+function fixture(options = {}) {
+  const events = [];
+  const remote = { synthetic: 'reviewed cloud record' };
+  const local = { synthetic: 'current device record' };
+  const state = {
+    accountCurrent: true, operationCurrent: true, durable: false,
+    fallbackCalls: 0, pullCalls: 0, reviewCalls: 0, replaceCalls: 0,
+    ackCalls: 0, refreshCalls: 0, toasts: [], events,
+  };
+  const heldRead = deferred();
+  const context = {
+    cloudReviewActive: { current: false }, cloudRestoreReview: null,
+    data: local, Promise, fetch: denyFetch,
+    getLocale: () => options.locale || 'en', backupCopy,
+    t: value => value,
+    setCloudRestoreReview(value) {
+      context.cloudRestoreReview = value;
+      if (value) { state.reviewCalls += 1; events.push('review opened'); }
+      else events.push('review closed');
+    },
+    showToast(message, type) { state.toasts.push({ message, type }); events.push(`toast:${type}`); },
+    async refreshData(value) {
+      state.refreshCalls += 1;
+      assert.equal(value.skipCloudPull, true);
+      assert.deepEqual(Object.keys(value), ['skipCloudPull']);
+      assert.equal(state.durable, true);
+      events.push('refresh device without cloud pull');
+      if (options.staleAfterRefresh) state.accountCurrent = false;
+    },
+    cloudSync: {
+      currentAccountGuard: () => () => state.accountCurrent,
+      currentOperationGuard() {
+        events.push('capture operation');
+        if (options.captureThrows) throw new Error('Synthetic storage read failure');
+        return () => state.accountCurrent && state.operationCurrent;
+      },
+      async pullIfNewer(record, value) {
+        state.pullCalls += 1;
+        assert.equal(record, local);
+        assert.equal(value.forReview, true);
+        assert.deepEqual(Object.keys(value), ['forReview']);
+        events.push('manual cloud read');
+        if (options.readThrows) {
+          throw new Error('Synthetic read failure');
+        }
+        if (options.holdRead) return heldRead.promise;
+        if (options.staleRead) state.operationCurrent = false;
+        return options.noRemote ? null : remote;
+      },
+      canApplyRemote(record, original) {
+        assert.equal(record, remote);
+        assert.equal(original, 'synthetic-original-bytes');
+        events.push('replacement guard checked');
+        return state.accountCurrent && state.operationCurrent && !options.replaceRejected;
+      },
+      async markRemoteApplied(record) {
+        assert.equal(record, remote);
+        assert.equal(state.durable, true);
+        state.ackCalls += 1;
+        events.push('ack after durable replacement');
+        if (options.staleAfterAck) state.accountCurrent = false;
+        return options.acknowledged !== false;
+      },
+      getState: () => ({ error: options.cloudError || null }),
+    },
+    repository: {
+      async replaceAll(record, guard) {
+        state.replaceCalls += 1;
+        assert.equal(record, remote);
+        assert.equal(typeof guard, 'function');
+        events.push('replacement requested');
+        if (options.replaceThrows) throw new Error('Synthetic durable commit failure');
+        if (!guard('synthetic-original-bytes')) return false;
+        state.durable = true;
+        events.push('durable replacement');
+        return true;
+      },
+    },
+  };
+  vm.createContext(context);
+  vm.runInContext(executable, context);
+  const runWithFallback = async () => {
+    const handled = await context.run();
+    if (!handled) state.fallbackCalls += 1;
+    return handled;
+  };
+  return { state, context, remote, heldRead, runWithFallback };
+}
+
+async function waitForReview(f) {
+  for (let count = 0; count < 25; count += 1) {
+    if (f.context.cloudRestoreReview) return;
+    await Promise.resolve();
+  }
+  throw new Error('Expected review did not open');
+}
+const report = {
+  evidence: 'Actual extracted syncFromCloud and actual cloud modal confirm/cancel handlers executed in a VM with injected synthetic stubs. Actual locale copy imported. No mounted React, SDK, provider, database or native device.',
+  beforeSourceSha256: before, cases: [], failures: [], fetchCalls: 0,
+};
+async function check(name, options, action) {
+  const f = fixture(options);
+  try {
+    await action(f);
+    assert.equal(f.context.cloudReviewActive.current, false, 'review single-flight ref must clear');
+    report.cases.push({ name, passed: true, ...f.state });
+  } catch (error) {
+    report.failures.push({ name, error: String(error.stack || error) });
+    report.cases.push({ name, passed: false, ...f.state });
+  }
+}
+const expectHandled = f => { assert.equal(f.state.fallbackCalls, 0); };
+const noApply = f => {
+  assert.equal(f.state.replaceCalls, 0); assert.equal(f.state.ackCalls, 0);
+  assert.equal(f.state.refreshCalls, 0); assert.equal(f.state.durable, false);
+};
+
+await check('current empty cloud permits exactly the normal upload fallback', { noRemote: true }, async f => {
+  assert.equal(await f.runWithFallback(), false);
+  assert.equal(f.state.pullCalls, 1); assert.equal(f.state.fallbackCalls, 1);
+  noApply(f); assert.deepEqual(f.state.toasts, []);
+});
+await check('repeat during pending read is handled without another read or fallback', { holdRead: true }, async f => {
+  const first = f.runWithFallback();
+  assert.equal(await f.runWithFallback(), true);
+  assert.equal(f.state.pullCalls, 1);
+  f.heldRead.resolve(f.remote); await waitForReview(f);
+  f.context.cancel(); assert.equal(await first, true);
+  expectHandled(f); noApply(f);
+});
+await check('actual cancel handler closes review with no replacement or fallback', {}, async f => {
+  const pending = f.runWithFallback(); await waitForReview(f);
+  assert.equal(await f.runWithFallback(), true);
+  f.context.cancel(); assert.equal(f.context.cloudRestoreReview, null);
+  assert.equal(await pending, true); assert.equal(f.state.reviewCalls, 1);
+  expectHandled(f); noApply(f); assert.deepEqual(f.state.toasts, []);
+});
+await check('operation capture exception is handled and next attempt can run', { captureThrows: true }, async f => {
+  assert.equal(await f.runWithFallback(), true);
+  assert.equal(await f.runWithFallback(), true);
+  assert.equal(f.state.pullCalls, 0); expectHandled(f); noApply(f);
+  assert.equal(f.state.toasts.length, 2);
+  assert.ok(f.state.toasts.every(item => item.message === failed && item.type === 'error'));
+});
+await check('read exception is handled and repeat can perform a fresh read', { readThrows: true }, async f => {
+  assert.equal(await f.runWithFallback(), true);
+  assert.equal(await f.runWithFallback(), true);
+  assert.equal(f.state.pullCalls, 2); expectHandled(f); noApply(f);
+  assert.ok(f.state.toasts.every(item => item.message === failed && item.type === 'error'));
+});
+await check('stale null read is handled instead of granting upload permission', { staleRead: true, noRemote: true }, async f => {
+  assert.equal(await f.runWithFallback(), true);
+  expectHandled(f); noApply(f); assert.deepEqual(f.state.toasts, []);
+});
+await check('returned service pause is displayed exactly and suppresses upload', { noRemote: true, cloudError: 'Synthetic precise paused reason' }, async f => {
+  assert.equal(await f.runWithFallback(), true); expectHandled(f); noApply(f);
+  assert.deepEqual(f.state.toasts, [{ message: 'Synthetic precise paused reason', type: 'error' }]);
+});
+await check('accepted confirmed restore acknowledges after durable commit and refreshes without cloud pull', {}, async f => {
+  const pending = f.runWithFallback(); await waitForReview(f);
+  f.context.confirm(); assert.equal(f.context.cloudRestoreReview, null);
+  assert.equal(await pending, true); expectHandled(f);
+  assert.equal(f.state.ackCalls, 1); assert.equal(f.state.refreshCalls, 1);
+  assert.deepEqual(f.state.toasts, [{ message: 'Synced from cloud.', type: 'success' }]);
+});
+for (const locale of ['en', 'tr', 'es']) {
+  await check(`accepted unconfirmed restore renders durable record with truthful ${locale} paused copy`, { acknowledged: false, locale }, async f => {
+    const pending = f.runWithFallback(); await waitForReview(f); f.context.confirm();
+    assert.equal(await pending, true); expectHandled(f);
+    assert.equal(f.state.durable, true); assert.equal(f.state.refreshCalls, 1);
+    assert.deepEqual(f.state.toasts, [{ message: backupCopy(locale).cloudAppliedPaused, type: 'info' }]);
+  });
+}
+await check('account switch after acknowledgement suppresses refresh and success toast', { staleAfterAck: true }, async f => {
+  const pending = f.runWithFallback(); await waitForReview(f); f.context.confirm();
+  assert.equal(await pending, true); expectHandled(f);
+  assert.equal(f.state.durable, true); assert.equal(f.state.ackCalls, 1);
+  assert.equal(f.state.refreshCalls, 0); assert.deepEqual(f.state.toasts, []);
+});
+await check('account switch during refresh suppresses old-scope success toast', { staleAfterRefresh: true }, async f => {
+  const pending = f.runWithFallback(); await waitForReview(f); f.context.confirm();
+  assert.equal(await pending, true); expectHandled(f);
+  assert.equal(f.state.refreshCalls, 1); assert.deepEqual(f.state.toasts, []);
+});
+await check('guarded replacement rejection keeps device record and suppresses fallback', { replaceRejected: true }, async f => {
+  const pending = f.runWithFallback(); await waitForReview(f); f.context.confirm();
+  assert.equal(await pending, true); expectHandled(f);
+  assert.equal(f.state.durable, false); assert.equal(f.state.ackCalls, 0); assert.equal(f.state.refreshCalls, 0);
+  assert.deepEqual(f.state.toasts, [{ message: backupCopy('en').cloudChanged, type: 'info' }]);
+});
+await check('thrown replacement failure is handled with no ack or fallback', { replaceThrows: true }, async f => {
+  const pending = f.runWithFallback(); await waitForReview(f); f.context.confirm();
+  assert.equal(await pending, true); expectHandled(f);
+  assert.equal(f.state.durable, false); assert.equal(f.state.ackCalls, 0);
+  assert.deepEqual(f.state.toasts, [{ message: failed, type: 'error' }]);
+});
+
+report.afterSourceSha256 = hashes();
+report.sourceUnchangedDuringProbe = JSON.stringify(before) === JSON.stringify(report.afterSourceSha256);
+report.fetchCalls = fetchCalls;
+report.total = report.cases.length;
+report.passed = report.cases.filter(item => item.passed).length;
+report.failed = report.failures.length;
+assert.equal(report.sourceUnchangedDuringProbe, true, 'source changed during probe');
+assert.equal(fetchCalls, 0);
+writeFileSync(`${out}/caller-report.json`, `${JSON.stringify(report, null, 2)}\n`);
+const receipt = { sourceFiles: before, evidenceFiles: Object.fromEntries([
+  'caller-probes.mjs', 'extracted-caller.ts.txt', 'caller-report.json',
+].map(file => [file, createHash('sha256').update(readFileSync(`${out}/${file}`)).digest('hex')])) };
+writeFileSync(`${out}/source-and-evidence-sha256.json`, `${JSON.stringify(receipt, null, 2)}\n`);
+console.log(JSON.stringify({ total: report.total, passed: report.passed, failed: report.failed,
+  fetchCalls, sourceUnchangedDuringProbe: report.sourceUnchangedDuringProbe, failures: report.failures }, null, 2));
+if (report.failed) process.exitCode = 1;

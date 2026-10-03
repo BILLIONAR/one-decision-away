@@ -1,0 +1,19 @@
+{"sourceCommit":"84ecbf8776146b766a30964bf8e6487234dd1dd4","checks":5,"pngs":2,"external":["https://images.unsplash.com/photo-1483546416237-76fd26bbcdd1","https://images.unsplash.com/photo-1590333748338-d629e4564ad9","https://images.unsplash.com/photo-1729548981825-2a38de5d16aa","https://images.unsplash.com/photo-1633158829875-e5316a358c6f","https://images.unsplash.com/photo-1432821596592-e2c18b78144f","https://images.unsplash.com/photo-1768245076659-d3dafb1c8466","https://images.unsplash.com/photo-1483546416237-76fd26bbcdd1","https://images.unsplash.com/photo-1590333748338-d629e4564ad9","https://images.unsplash.com/photo-1729548981825-2a38de5d16aa","https://images.unsplash.com/photo-1633158829875-e5316a358c6f","https://images.unsplash.com/photo-1432821596592-e2c18b78144f","https://images.unsplash.com/photo-1768245076659-d3dafb1c8466"],"error":{"name":"AssertionError","message":"Expected values to be strictly equal:\n\n2 !== 1\n","stack":"AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n2 !== 1\n\n    at file:///workspace/scratch/oda-reference-redesign/domino-logo/browser-qa/continuity.mjs:35:227"}}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+2 !== 1
+
+    at file:///workspace/scratch/oda-reference-redesign/domino-logo/browser-qa/continuity.mjs:35:227 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 2,
+  expected: 1,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

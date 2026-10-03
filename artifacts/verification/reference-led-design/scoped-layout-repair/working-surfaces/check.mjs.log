@@ -1,0 +1,94 @@
+import fs from 'node:fs';
+import crypto from 'node:crypto';
+import assert from 'node:assert/strict';
+import { chromium } from '/workspace/oda-reference-redesign/node_modules/playwright/index.mjs';
+import AxeBuilder from '/workspace/oda-reference-redesign/node_modules/@axe-core/playwright/dist/index.mjs';
+import { getInitialDemoState } from '/workspace/oda-reference-redesign/src/services/repository.ts';
+
+const out = '/workspace/scratch/oda-reference-redesign/scoped-layout-repair/working-surfaces';
+const base = 'http://127.0.0.1:4181';
+const report = { at: new Date().toISOString(), base, kind: 'Author normal local dev preview; isolated synthetic records; no production connection', cases: [], errors: [], checks: [] };
+const browser = await chromium.launch({ executablePath: '/usr/bin/chromium' });
+const bounds = locator => locator.evaluate(el => { const r = el.getBoundingClientRect(); const s = getComputedStyle(el); return { width:r.width, height:r.height, x:r.x, y:r.y, bottom:r.bottom, minWidth:s.minWidth, minHeight:s.minHeight, flexShrink:s.flexShrink }; });
+const hash = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
+function fixture(locale, theme, kept = 2) {
+  const seed = structuredClone(getInitialDemoState());
+  const now = new Date();
+  Object.assign(seed.profile, { displayName:'Synthetic layout review', onboardingStep:'completed', locale, theme, firstOpenedAt:'2026-08-01T12:00:00.000Z', soundMuted:true, nudgesEnabled:false, dailyWisdomEnabled:false, reminderAskedAt:now.toISOString(), focusTabBlinkEnabled:false, focusScreenPulseEnabled:false });
+  seed.missions = Array.from({ length:kept }, (_, i) => { const date = new Date(now); date.setDate(date.getDate()-i); const at=date.toISOString(); return {id:`scoped-kept-${i}`, userId:seed.profile.id, title:'Read two pages', type:'daily_quest', area:'Learning', difficulty:'easy', estimatedMinutes:2, isOneDecision:true, status:'completed', scheduledFor:at.slice(0,10), createdAt:at, completedAt:at}; });
+  return seed;
+}
+async function context(item) {
+  const seed = fixture(item.locale, item.theme, item.kept ?? 2);
+  const ctx = await browser.newContext({ viewport:{width:item.width,height:item.width===1440?1000:844}, serviceWorkers:'block', reducedMotion:'reduce' });
+  await ctx.route('**/*', route => new URL(route.request().url()).origin === base ? route.continue() : route.abort());
+  await ctx.addInitScript(({seed,locale,theme}) => { localStorage.setItem('one_decision_away_app_data_v1',JSON.stringify(seed)); localStorage.setItem('oda_locale',locale); localStorage.setItem('oda_theme',theme); }, {seed,locale:item.locale,theme:item.theme});
+  const page = await ctx.newPage();
+  page.on('pageerror', e => report.errors.push({item,error:e.message}));
+  return {ctx,page};
+}
+async function capture(page, label, scope, detail) {
+  await page.evaluate(() => document.fonts.ready);
+  await page.locator(scope).waitFor();
+  const geometry = await page.evaluate(scope => { const root = document.querySelector(scope); const controls=[...root.querySelectorAll('input,button')].filter(el=>el.getBoundingClientRect().right>innerWidth+.5);const internal=controls.filter(el=>{const region=el.closest('.oda-notebook-week-region,.oda-notebook-calendar-scroll');return region&&region.scrollWidth>region.clientWidth&&region.getBoundingClientRect().right<=innerWidth+.5;});return {viewport:innerWidth, pageWidth:document.documentElement.scrollWidth, scopedOverflow:controls.filter(el=>!internal.includes(el)).map(el=>el.outerHTML.slice(0,220)), intentionalInternalDateScroll:internal.length}; },scope);
+  assert.equal(geometry.pageWidth,geometry.viewport);
+  assert.deepEqual(geometry.scopedOverflow,[]);
+  const axe = await new AxeBuilder({page}).include(scope).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa']).analyze();
+  const file=label+'.png';
+  await page.screenshot({path:out+'/'+file,animations:'disabled'});
+  const bytes=fs.readFileSync(out+'/'+file);
+  const item={label,file,bytes:bytes.length,sha256:hash(bytes),geometry,detail,axe:axe.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary}))}))};
+  report.cases.push(item); console.log(JSON.stringify(item));
+}
+try {
+  const cases = ['en','tr','es'].flatMap(locale => ['light','dark'].flatMap(theme => [320,390].map(width=>({locale,theme,width}))));
+  for (const item of cases) {
+    const {ctx,page}=await context(item); const prefix=`${item.locale}-${item.theme}-${item.width}`;
+    await page.goto(base+'/app');
+    await page.locator('#tomorrow-draft').waitFor();
+    const tomorrow=await bounds(page.locator('#tomorrow-draft'));
+    const section=page.locator('.oda-fidelity-support > section').filter({has:page.locator('#tomorrow-draft')});
+    const dismiss=await bounds(section.locator('button.w-10.h-10'));
+    assert.ok(tomorrow.height>=44); assert.equal(tomorrow.flexShrink,'0'); assert.ok(dismiss.width>=44&&dismiss.height>=44);
+    const growth=await page.locator('.oda-growth-panel [data-tree-stage]').evaluate(el=>({count:el.dataset.keptCount,stage:el.dataset.treeStage,leaves:el.dataset.leaves,blossoms:el.dataset.blossoms}));
+    assert.equal(growth.count,'2'); assert.equal(await page.locator('.oda-fidelity-hero [data-tree-stage]').count(),0); assert.equal(await page.locator('.oda-fidelity-command [data-tree-stage]').count(),1); assert.equal(await page.locator('.oda-growth-week').getAttribute('data-kept-days'),'2');
+    await page.evaluate(()=>scrollTo(0,0));
+    await capture(page,prefix+'-today','.oda-fidelity-today',{growth,tomorrow,dismiss});
+    await page.locator('#tomorrow-draft').scrollIntoViewIfNeeded();
+    await page.screenshot({path:out+'/'+prefix+'-tomorrow-controls.png',animations:'disabled'});
+    if(item.locale==='en'&&item.theme==='light'&&item.width===390){await page.locator('#tomorrow-draft').fill('Keep this actual synthetic tomorrow draft');await section.locator('form button[type="submit"]').click();await page.waitForFunction(()=>JSON.parse(localStorage.getItem('one_decision_away_app_data_v1')).profile.nextDecisionDraft?.text==='Keep this actual synthetic tomorrow draft');report.checks.push('Tomorrow input remains editable and existing form saves the actual synthetic next-day draft.');}
+    if(item.locale==='es'&&item.theme==='dark'&&item.width===320){await section.locator('button.w-10.h-10').click();assert.equal(await page.locator('#tomorrow-draft').count(),0);report.checks.push('Protected FirstSteps dismiss handler still closes its card.');}
+    await page.goto(base+'/app/notebook');
+    await page.locator('#notebook-journal-title').fill('Synthetic saved target review');
+    await page.locator('#notebook-journal-content').fill('Saved through the actual Notebook form for scoped Delete target verification.');
+    await page.locator('.oda-notebook-editor-actions button[type="submit"]').click();
+    await page.locator('.oda-notebook-entry-list > button').first().waitFor();
+    await page.locator('.oda-notebook-entry-list > button').first().click();
+    const deleteButton=page.locator('.oda-notebook-editor-actions > button');
+    await deleteButton.waitFor(); const deletion=await bounds(deleteButton);
+    assert.ok(deletion.width>=44&&deletion.height>=44); assert.equal(deletion.flexShrink,'0');
+    await deleteButton.scrollIntoViewIfNeeded();
+    await capture(page,prefix+'-notebook-delete','.oda-notebook-fidelity',{deletion,label:await deleteButton.innerText()});
+    if(item.locale==='tr'&&item.theme==='light'&&item.width===320){page.once('dialog',dialog=>dialog.dismiss());await deleteButton.click();assert.equal(await page.locator('.oda-notebook-entry-list > button').count(),1);assert.equal(await page.locator('#notebook-journal-title').inputValue(),'Synthetic saved target review');report.checks.push('Delete keeps the existing confirmation; cancelling retains the saved entry and editor.');}
+    await page.goto(base+'/app/focus');
+    await page.locator('.oda-focus-duration').waitFor(); assert.equal(await page.locator('.oda-focus-duration').innerText(),'25:00');
+    const art=await page.locator('.oda-focus-illustration').evaluate(el=>{const r=el.getBoundingClientRect();const img=el.querySelector('img');const ir=img.getBoundingClientRect();return {width:r.width,height:r.height,src:img.currentSrc,naturalWidth:img.naturalWidth,naturalHeight:img.naturalHeight,fit:getComputedStyle(img).objectFit,imageWidth:ir.width,imageHeight:ir.height,orphanQuote:el.textContent.includes('“')};});
+    assert.equal(art.fit,'contain');assert.ok(art.src.includes('oda-starting-procrastination'));assert.equal(art.orphanQuote,false);assert.ok(Math.abs(art.width/art.height-1672/941)<.05);
+    await capture(page,prefix+'-focus','.oda-fidelity-focus',{art,timer:await page.locator('.oda-focus-duration').innerText()});
+    await ctx.close();
+  }
+  for(const theme of ['light','dark']) {
+    const item={locale:'en',theme,width:1440};const {ctx,page}=await context(item);
+    await page.goto(base+'/app/focus');await page.locator('.oda-focus-duration').waitFor();
+    const art=await page.locator('.oda-focus-illustration').evaluate(el=>{const r=el.getBoundingClientRect();const img=el.querySelector('img');return {width:r.width,height:r.height,src:img.currentSrc,naturalWidth:img.naturalWidth,naturalHeight:img.naturalHeight,fit:getComputedStyle(img).objectFit,quote:el.textContent};});
+    assert.ok(art.height<280);assert.ok(art.naturalWidth>0);assert.equal(art.fit,'contain');
+    await capture(page,`en-${theme}-1440-focus`,'.oda-fidelity-focus',{art,timer:await page.locator('.oda-focus-duration').innerText()});
+    await page.goto(base+'/app');await page.locator('.oda-growth-panel [data-tree-stage]').waitFor();
+    assert.equal(await page.locator('.oda-fidelity-command [data-tree-stage]').count(),1);
+    await capture(page,`en-${theme}-1440-today`,'.oda-fidelity-today',{principalTrees:await page.locator('.oda-fidelity-command [data-tree-stage]').count()});
+    await page.locator('.oda-growth-count').click(); await page.waitForURL(base+'/app/evidence');report.checks.push(`Today real growth-count evidence route retained (${theme} desktop).`);
+    await ctx.close();
+  }
+  assert.deepEqual(report.errors,[]);report.status='passed';
+} catch(error) { report.status='failed'; report.failure=String(error.stack||error);console.error(report.failure);process.exitCode=1; }
+finally { await browser.close(); fs.writeFileSync(out+'/check-report.json',JSON.stringify(report,null,2)+'\n'); console.log(JSON.stringify({status:report.status,cases:report.cases.length,errors:report.errors,checks:report.checks,failure:report.failure})); }

@@ -1,0 +1,13 @@
+This packet records focused independent QA of app source `166d0427257eabcb159ca8eb7c58fc4228ef3991`. All browser/process/source/dist/hash readers were CLOSED at the parent STOP. Do not label166d visually accepted: independent visual QA found a genuine P2 Sleep small-text contrast issue and the parent is preparing a separate CSS fix/build.
+
+`preflight-receipt.json` verifies clean exact Git, all738source files and434dist files against the frozen parent receipt, plus the actualHTTP200 preview index/JavaScript entry. This is a pre-run binding. No postflight source read was performed afterSTOP, and no compiled-byte equality with a future build is asserted.
+
+The fresh native Sound probe passed5checks in `sound-attempt2`: Breathe initial clearance and Home/End reachability, actual44px/68px controls, expanded/mini no-duplicate native focus handoff, same track/shared volume/paused countdown and no graph restart/canonical change. Native Chromium audio is real; no provider or billing operation occurred.
+
+Focused route loading passed Today320, Coach390, Sound390 and Sounddesktop with exact listed WebP response bodies and actual decoded currentSrc. First-load scene bytes were respectively20,440/33,758/104,692/104,692. No route loaded all six scenes, master images or narration audio. Browsercache reuse of480px dunes for a118px thumbnail added no request; the declared source sizes for that thumbnail is120px.
+
+All four finite fallback modes were observed: same-scene640PNG, supplied legacySVG, final owned640growthWebP, and no image. The terminal case made5requests across4distinct local owned paths (initialWebP twice, each remaining stage once), removed the image and stayed settled for2seconds with canonical records unchanged. This is finite fallback proof, not a one-request-per-stage claim.
+
+Raw admission failures in `art-attempt1`/`sound-attempt1` were before browser startup. `art-attempt2` preserves the incorrect per-image cache assumption, exact executed harness and desktopPNG. `art-attempt3` preserves the strict4-request ceiling failure and executed harness. The corrected terminal case is separately recorded in `art-terminal-only`. Attempt3 repeated the focused routes before the parent skip-passed message arrived; no unrelated functional suite was rerun.
+
+Commands/log hashes are in each successful or failed browser attempt’s `command-receipt.json`;4actual inspectedPNGs are bound in `pixel-inspection.json`. Old4c/d14 and historical failed/passed artifacts remain untouched. Unaffected narration/course/Notebook behavior is carried through exact protected-source audit provenance, not claimed as fresh runtime execution. Specific asset-change/cancellation testing and final CSS-impact binding are pending the parent’s new freeze/build GO.

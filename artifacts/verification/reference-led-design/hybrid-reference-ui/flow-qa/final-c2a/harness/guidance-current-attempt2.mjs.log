@@ -1,0 +1,165 @@
+import assert from 'node:assert/strict';
+import { readFileSync, readdirSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { base, repo, out, save, launch, sourceHashes, initApp, instrument, snapshot, gotoFocus, openGuided, preview, start, routeSafe, seed } from './guidance-common.mjs';
+
+const selectedCases = new Set(['normal-service-worker-first-load-no-mp3','start-pause-resume-replay-mute-stop','preview-stop-during-delayed-load','offline-verified-cache-replay-after-session-switch','notebook-tr-device-locale-preserved','notebook-es-device-locale-preserved']);
+const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+const report = { at: new Date().toISOString(), base, phase: 'reference-led final built preview', sourceHashes: sourceHashes(), buildFiles: {}, assetManifestSHA256: sha(readFileSync(`${repo}/public/assets/oda/narration/en-US/v1/manifest.json`)), checks: [], failures: [], errors: [], blockedRequests: [], cases: [], screenshots: [], limitations: ['Real cloud Chromium WebAudio MP3 playback nodes with normal HTTP and trusted clicks; no autoplay-policy override or permissions.', 'Audible output and speech naturalness were not independently listened to; source count, offset, gain and native decoding are instrumented evidence.', 'Installed device voice fixtures are explicitly mocked, while recorded playback uses the real decoder and AudioContext.', 'Viewport screenshots are emulation, not real iPhone/native iOS testing.'] };
+for (const file of ['index.html', ...readdirSync(`${repo}/dist/assets`).filter(f => f.endsWith('.js')).map(f => `assets/${f}`)]) report.buildFiles[file] = sha(readFileSync(`${repo}/dist/${file}`));
+const receiptPath = process.env.ODA_FLOW_BUILD_RECEIPT;
+const receiptBytes = readFileSync(receiptPath), receipt = JSON.parse(receiptBytes);
+report.sourceCommit = process.env.ODA_QA_SOURCE_COMMIT;
+report.selectedCases = [...selectedCases];
+report.buildReceipt = { path: receiptPath, sha256: sha(receiptBytes), sourceBaseMain: receipt.sourceBaseMain, branch: receipt.branch, checkExit: receipt.checkExit };
+report.buildReceiptReviewedSourcesMatch = Object.entries(report.sourceHashes).every(([file, hash]) => receipt.source.some(entry => entry.file === file && entry.sha256 === hash));
+assert.ok(report.buildReceiptReviewedSourcesMatch, 'Reviewed source hashes must match the parent build receipt');
+const browser = await launch(); report.browserVersion = browser.version();
+let activePage, activeCase;
+const verify = (condition, label, evidence = {}) => { assert.ok(condition, `${label}: ${JSON.stringify(evidence)}`); report.checks.push({ case: activeCase, label, ...evidence }); console.log(`PASS ${label}`); };
+const endSession = async page => { await page.getByRole('button', { name: 'End early', exact: true }).click(); await page.getByRole('button', { name: 'End session', exact: true }).click(); await page.locator('#focus-lock-viewport').waitFor({ state: 'hidden' }); };
+const waitSources = (page, count) => page.waitForFunction(count => window.__guidanceQA.sources.length >= count, count);
+const waitMode = (page, mode) => page.waitForFunction(mode => [...document.querySelectorAll('[data-guidance-mode]')].some(e => e.dataset.guidanceMode === mode), mode);
+const capture = async (page, file, fullPage = false) => { await page.screenshot({ path: `${out}/${file}.png`, fullPage }); report.screenshots.push(`${file}.png`); };
+async function run(name, options, test) {
+  if (!selectedCases.has(name)) return;
+  activeCase = name; const begin = Date.now(); let context;
+  const evidence = { requests: [], responses: [], pageErrors: [] };
+  try {
+    context = await browser.newContext({ viewport: { width: options.width || 390, height: options.width === 1440 ? 1000 : 844 }, serviceWorkers: options.serviceWorkers || 'block', reducedMotion: 'reduce' });
+    await initApp(context, options.locale || 'en', options.seedValue); await instrument(context, options.voices ?? null);
+    await routeSafe(context, report, options.handler);
+    const page = await context.newPage(); activePage = page; page.setDefaultTimeout(8000);
+    context.on('request', r => { if (r.url().endsWith('.mp3')) evidence.requests.push({ url: r.url(), at: Date.now(), serviceWorker: Boolean(r.serviceWorker?.()) }); });
+    page.on('response', async response => {
+      if (/\/assets\/[^/]+\.js$/.test(new URL(response.url()).pathname)) {
+        try { evidence.responses.push({ url: response.url(), status: response.status(), sha256: sha(await response.body()) }); } catch { /* Navigation can cancel responses. */ }
+      }
+    });
+    page.on('pageerror', e => { evidence.pageErrors.push(e.message); report.errors.push({ case: name, message: e.message }); });
+    await test(page, context, evidence);
+    evidence.final = await snapshot(page);
+    report.cases.push({ name, passed: true, elapsedMs: Date.now() - begin, evidence });
+  } catch (error) {
+    const failure = { name, error: String(error.stack || error), elapsedMs: Date.now() - begin, evidence };
+    report.failures.push(failure); console.error(`FAIL ${name}: ${error.message}`);
+    if (activePage && !activePage.isClosed()) {
+      try { failure.browserState = await snapshot(activePage); await capture(activePage, `failure-${name.replace(/[^a-z0-9]/gi, '-')}`); } catch {}
+    }
+  } finally { await context?.close(); activePage = null; save('lifecycle-report', report); }
+}
+try {
+  await run('normal-service-worker-first-load-no-mp3', { serviceWorkers: 'allow' }, async (page, context, evidence) => {
+    await gotoFocus(page); await openGuided(page); await page.waitForTimeout(1500);
+    evidence.serviceWorkers = await page.evaluate(async () => ({ supported: Boolean(navigator.serviceWorker), registrations: (await navigator.serviceWorker.getRegistrations()).map(r => ({ scope: r.scope, active: r.active?.scriptURL, waiting: r.waiting?.scriptURL, installing: r.installing?.scriptURL })), controller: navigator.serviceWorker.controller?.scriptURL || null }));
+    verify(evidence.requests.length === 0, 'Normal service-worker-enabled first use requests zero MP3', { serviceWorkers: evidence.serviceWorkers });
+  });
+  await run('start-pause-resume-replay-mute-stop', {}, async (page, context, evidence) => {
+    await gotoFocus(page); verify(evidence.requests.length === 0, 'Final build first app load requests zero MP3');
+    await openGuided(page); await start(page, 'gm-relax').click(); await waitSources(page, 1);
+    let state = await snapshot(page);
+    const unique = [...new Set(evidence.requests.map(r => new URL(r.url).pathname.split('/').pop()))];
+    verify(unique.length === 3 && unique.every(f => /gm-relax-0[012]\./.test(f)), 'Start fetches only current and next two cues', { unique, requestCount: evidence.requests.length });
+    await capture(page, 'lock-recorded-en-390');
+    await page.waitForTimeout(300); await page.getByRole('button', { name: 'Pause', exact: true }).click();
+    state = await snapshot(page);
+    verify(state.sources[0].stopped && state.sources[0].disconnected && state.sources.length === 1, 'Pause stops and disconnects the recorded source');
+    await page.waitForTimeout(200); await page.getByRole('button', { name: 'Resume', exact: true }).click(); await waitSources(page, 2);
+    state = await snapshot(page);
+    verify(state.sources[1].offset > 0 && state.sources[1].offset < state.sources[1].duration, 'Resume starts from measured playback offset', { offset: state.sources[1].offset, duration: state.sources[1].duration });
+    await page.getByRole('button', { name: 'Repeat', exact: true }).click(); await waitSources(page, 3); state = await snapshot(page);
+    verify(state.sources[1].stopped && state.sources[2].offset === 0, 'Repeat retires the resumed source and restarts the current cue');
+    const slider = page.getByRole('slider', { name: 'Voice volume', exact: true }); await slider.focus(); await page.keyboard.press('Home');
+    verify(await slider.inputValue() === '0', 'Keyboard Home sets visible voice volume to zero');
+    state = await snapshot(page); verify(state.gains[state.sources[2].gainIndex] === 0, 'Volume zero sets the active real GainNode to zero');
+    await page.getByRole('button', { name: 'Repeat', exact: true }).click(); await waitSources(page, 4); state = await snapshot(page);
+    verify(state.sources[3].gainAtStart === 0 && state.speech.length === 0, 'Muted repeat creates only a gain-zero recorded source', { source: state.sources[3] });
+    await slider.focus(); await page.keyboard.press('ArrowRight'); state = await snapshot(page);
+    verify(Math.abs(state.gains[state.sources[3].gainIndex] - .05) < 1e-6, 'Keyboard volume update reaches the active recorded GainNode');
+    await endSession(page); state = await snapshot(page);
+    verify(state.sources.every(s => s.stopped && s.disconnected), 'End session stops and disconnects all started recorded sources');
+    const count = state.sources.length; await page.waitForTimeout(350); state = await snapshot(page); verify(state.sources.length === count && state.speech.length === 0, 'No late source or fallback utterance after end');
+  });
+
+  for (const action of ['stop', 'switch']) {
+    const releases = []; let delayed = true;
+    await run(`preview-${action}-during-delayed-load`, { handler: async (route, url) => {
+      if (delayed && url.pathname.includes('gm-relax-00.') && url.pathname.endsWith('.mp3')) {
+        await new Promise(resolve => releases.push(resolve)); try { await route.continue(); } catch {} return true;
+      }
+    } }, async (page, context, evidence) => {
+      await gotoFocus(page); await openGuided(page); await preview(page, 'gm-relax').click(); await waitMode(page, 'loading');
+      await page.waitForFunction(() => window.__guidanceQA.sources.length === 0); verify(releases.length > 0, 'Current recording request is held before decode/start');
+      if (action === 'stop') await preview(page, 'gm-relax').click(); else { await preview(page, 'gm-dopamine').click(); await waitSources(page, 1); }
+      delayed = false; releases.forEach(release => release()); await page.waitForTimeout(450);
+      const state = await snapshot(page);
+      verify(state.sources.length === (action === 'switch' ? 1 : 0) && state.speech.length === 0, `${action}: delayed old cue never starts or invokes fallback`, { sources: state.sources, modes: state.modes });
+      if (action === 'switch') await preview(page, 'gm-dopamine').click();
+    });
+    releases.forEach(release => release());
+  }
+
+  {
+    const releases = []; let delayed = true;
+    await run('pause-resume-during-delayed-load', { handler: async (route, url) => {
+      if (delayed && url.pathname.includes('gm-relax-00.') && url.pathname.endsWith('.mp3')) {
+        await new Promise(resolve => releases.push(resolve)); try { await route.continue(); } catch {} return true;
+      }
+    } }, async (page, context, evidence) => {
+      await gotoFocus(page); await openGuided(page); await start(page, 'gm-relax').click();
+      await page.waitForFunction(() => document.querySelector('#focus-lock-viewport [data-guidance-mode]')?.dataset.guidanceMode === 'loading');
+      verify(releases.length >= 1, 'Guided current cue load is pending before Pause');
+      await page.getByRole('button', { name: 'Pause', exact: true }).click(); delayed = false; releases.forEach(release => release()); await page.waitForTimeout(250);
+      let state = await snapshot(page); verify(state.sources.length === 0 && state.speech.length === 0, 'Paused pending load cannot start recorded or device output');
+      await page.getByRole('button', { name: 'Resume', exact: true }).click(); await waitSources(page, 1); state = await snapshot(page);
+      verify(state.sources[0].offset === 0 && state.sources[0].contextState === 'running' && state.speech.length === 0, 'Resume retries the pending current cue in the real audio context', { requests: evidence.requests, state });
+      await endSession(page);
+    });
+    releases.forEach(release => release());
+  }
+
+  await run('offline-verified-cache-replay-after-session-switch', {}, async (page, context, evidence) => {
+    await gotoFocus(page); await openGuided(page); await preview(page, 'gm-relax').click(); await waitSources(page, 1);
+    const cacheEntries = await page.evaluate(async () => { const all = []; for (const name of await caches.keys()) if (name.startsWith('oda-narration:')) for (const request of await (await caches.open(name)).keys()) all.push({ name, url: request.url }); return all; });
+    verify(cacheEntries.some(e => e.url.includes('gm-relax-00.')), 'First playback writes verified current-cue bytes to native CacheStorage', { cacheEntries });
+    await preview(page, 'gm-relax').click(); await context.setOffline(true);
+    await preview(page, 'gm-dopamine').click(); await waitMode(page, 'unavailable');
+    const before = evidence.requests.length, decodedBefore = (await snapshot(page)).decodes.length;
+    await preview(page, 'gm-relax').click(); await waitSources(page, 2); const state = await snapshot(page);
+    verify(state.decodes.length === decodedBefore + 1 && evidence.requests.length === before && state.sources[1].contextState === 'running', 'Offline replay re-decodes CacheStorage after another session cleared memory, with zero network requests', { before, after: evidence.requests.length, decodes: state.decodes });
+    await capture(page, 'offline-cache-recorded-en-390', true); await preview(page, 'gm-relax').click();
+  });
+
+  const mockEnglish = { lang: 'en-US', name: 'QA English fixture', voiceURI: 'qa-en' }, mockTurkish = { lang: 'tr-TR', name: 'QA Turkish fixture', voiceURI: 'qa-tr' };
+  for (const englishAvailable of [false, true]) await run(`missing-file-${englishAvailable ? 'english-device-fixture' : 'no-english-fixture'}`, { locale: 'tr', voices: englishAvailable ? [mockTurkish, mockEnglish] : [mockTurkish], handler: async (route, url) => {
+    if (url.pathname.endsWith('.mp3')) { await route.fulfill({ status: 404, contentType: 'text/plain', body: 'QA missing supplied recording' }); return true; }
+  } }, async (page, context, evidence) => {
+    await gotoFocus(page); await openGuided(page); await preview(page, 'gm-relax').click(); await waitMode(page, englishAvailable ? 'device' : 'unavailable'); const state = await snapshot(page);
+    verify(state.sources.length === 0 && state.speech.length === (englishAvailable ? 1 : 0), 'Missing MP3 admits only the requested strict English device fallback', { state });
+    if (englishAvailable) verify(state.speech[0].voiceLang === 'en-US' && state.speech[0].lang === 'en-US' && state.speech[0].text === 'Welcome. Find a comfortable position, and let your eyes gently close.', 'Fallback preserves English source text despite Turkish display locale', { utterance: state.speech[0] });
+    else verify(await page.locator('[data-guidance-mode]').innerText() === 'İngilizce ses kullanılamıyor. Altyazıları takip et.', 'No English fixture leaves explicit localized unavailable caption');
+    await capture(page, `missing-file-${englishAvailable ? 'device' : 'unavailable'}-tr-390`, true);
+  });
+
+  for (const locale of ['en', 'tr', 'es']) {
+    const words = locale === 'tr' ? 'Kendime verdiğim sözü tutuyorum.' : locale === 'es' ? 'Cumplo una promesa pequeña cada día.' : 'I keep one small promise each day.';
+    const seedValue = seed(locale); seedValue.notebook.affirmations.push({ id: 'synthetic-guidance-affirmation', text: words, createdAt: '2026-10-02T12:00:00Z', updatedAt: '2026-10-02T12:00:00Z' });
+    const nativeLang = locale === 'tr' ? 'tr-TR' : locale === 'es' ? 'es-ES' : 'en-US';
+    await run(`notebook-${locale}-device-locale-preserved`, { locale, seedValue, voices: [mockEnglish, mockTurkish, { lang: 'es-ES', name: 'QA Spanish fixture', voiceURI: 'qa-es' }] }, async (page, context, evidence) => {
+      await page.goto(`${base}#/app/notebook`); await page.locator('button[aria-controls="notebook-manifest-section"]').click(); await page.locator('#affirmation-text').waitFor();
+      await capture(page, `notebook-practices-${locale}-390`);
+      const item = page.locator('#notebook-manifest-section li').filter({ hasText: words }); await item.getByRole('button').first().click(); const state = await snapshot(page);
+      verify(state.speech.length === 1 && state.speech[0].lang === nativeLang && state.speech[0].voiceLang === nativeLang && state.speech[0].text === words && evidence.requests.length === 0, 'Notebook words remain verbatim in the display-locale device voice with zero MP3', { utterance: state.speech[0] });
+    });
+  }
+
+  // Pixel artifacts are recaptured against this build, including narrow locales.
+  for (const locale of ['en', 'tr', 'es']) for (const width of [320, 390, ...(locale === 'en' ? [1440] : [])]) await run(`final-layout-${locale}-${width}`, { locale, width }, async (page, context, evidence) => {
+    await gotoFocus(page); await openGuided(page);
+    const layout = await page.evaluate(() => ({ width: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth, lang: document.documentElement.lang, rows: document.querySelectorAll('[data-guided-session]').length }));
+    verify(layout.scroll <= layout.width + 1 && layout.lang === locale && layout.rows === 11 && evidence.requests.length === 0, 'Final guidance list retains localized fit and no MP3 preload', layout);
+    await capture(page, `final-guided-${locale}-${width}`, true);
+  });
+} finally { await browser.close(); report.finishedAt = new Date().toISOString(); save('lifecycle-report', report); }
+assert.equal(report.failures.length, 0); assert.equal(report.errors.length, 0); assert.equal(report.blockedRequests.length, 0);
+console.log(`PASS ${report.cases.length} final browser cases, ${report.checks.length} checks`);

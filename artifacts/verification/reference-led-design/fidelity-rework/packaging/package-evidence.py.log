@@ -1,0 +1,38 @@
+import hashlib,json,shutil,subprocess
+from pathlib import Path
+from PIL import Image
+root=Path('/workspace/oda-reference-redesign');scratch=Path('/workspace/scratch/oda-reference-redesign/fidelity-rework');dest=root/'artifacts/verification/reference-led-design/fidelity-rework'
+dest.mkdir(exist_ok=True);mapping=[]
+def copy_file(src,target):
+ if not src.is_file():raise FileNotFoundError(src)
+ original=target
+ if target.suffix in ('.mjs','.py','.tsx','.ts','.diff'):target=target.with_name(target.name+'.log')
+ target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(src,target)
+ assert src.read_bytes()==target.read_bytes()
+ mapping.append({'scratch':str(src.relative_to(scratch)),'review':str(target.relative_to(dest)),'renamed':original!=target})
+def tree(src,target,png=True):
+ for p in sorted(src.rglob('*')):
+  if p.is_file() and (png or p.suffix!='.png'):copy_file(p,target/p.relative_to(src))
+tree(scratch/'before',dest/'before')
+tree(scratch/'artwork-evidence',dest/'artwork')
+copy_file(scratch/'owned-assets/owned-artwork-contact-sheet.png',dest/'artwork/owned-artwork-contact-sheet.png')
+copy_file(scratch/'public-source-review/meditation-source-receipt.json',dest/'artwork/public-source-download-receipt.json')
+for name in ['frozen-build-receipt.json','frozen-build.log','independent-fidelity-review.md','after-capture.log','detail-cover-capture.log','capture-after.mjs','capture-detail-cover.mjs']:
+ copy_file(scratch/name,dest/'pre-correction-6d4'/name)
+tree(scratch/'after',dest/'pre-correction-6d4/after')
+tree(scratch/'protection',dest/'pre-correction-6d4/protection')
+for name in ['runtime-availability-receipt.json','fidelity-mismatch-matrix.md','before-capture.log','capture-before.mjs','build-frozen.py','run-aggregate.py']:
+ copy_file(scratch/name,dest/name)
+for folder in ['coach','sound','working-surfaces']:
+ tree(scratch/folder,dest/'author'/folder,png=False)
+selected={'coach':['in-progress-en-390.png','in-progress-en-320.png'],'sound':['final-en-light-390-discovery.png','final-en-light-390-detail.png','final-en-light-390-player.png','final-en-light-1440-discovery.png'],'working-surfaces':['correction-6d4/same-fixture-light-390-today.png','correction-6d4/same-fixture-dark-390-today.png','correction-6d4/final-empty-en-light-390-notebook.png']}
+for folder,files in selected.items():
+ for name in files:copy_file(scratch/folder/name,dest/'author'/folder/name)
+tree(scratch/'sound/material-pass/before',dest/'author/sound/material-pass/before')
+tree(scratch/'sound/material-pass/after',dest/'author/sound/material-pass/after')
+tree(scratch/'flows',dest/'flow-preparation',png=False)
+tree(scratch/'final',dest/'final')
+patch=subprocess.check_output(['git','diff','8fc4ef0572a4cfd20964be6e276325161b3a2acf','3ddb98b57669ceed6f220583aa01aa523d6b6a47','--'],cwd=root)
+(dest/'source-change.patch.log').write_bytes(patch)
+(dest/'archive-name-map.json').write_text(json.dumps(mapping,indent=2)+'\n')
+print(json.dumps({'copiedFiles':len(mapping),'dest':str(dest)}))

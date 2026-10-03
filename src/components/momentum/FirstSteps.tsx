@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Bell, Check, X } from 'lucide-react';
 import { useApp } from '../../store/useApp';
 import { useLocale, useT } from '../../i18n';
@@ -57,6 +57,9 @@ export const KeptMomentCard: React.FC = () => {
   const [dismissed, setDismissed] = useState(() => readDismissed() === today);
   const [draft, setDraft] = useState('');
   const [busy, setBusy] = useState(false);
+  const [savingDraft, setSavingDraft] = useState(false);
+  const draftSavingRef = useRef(false);
+  const [draftError, setDraftError] = useState(false);
   if (!data || dismissed) return null;
 
   const kept = keptDecisions(data.missions).length;
@@ -71,9 +74,20 @@ export const KeptMomentCard: React.FC = () => {
   const saveDraft = async (event: React.FormEvent) => {
     event.preventDefault();
     const text = draft.trim();
-    if (!text) return;
-    await updateMomentumProfile({ nextDecisionDraft: { text, forDay: tomorrowKey() } });
-    setDraft('');
+    if (!text || draftSavingRef.current) return;
+    draftSavingRef.current = true;
+    setSavingDraft(true);
+    setDraftError(false);
+    try {
+      await updateMomentumProfile({ nextDecisionDraft: { text, forDay: tomorrowKey() } });
+      setDraft('');
+      showToast(t('Saved.'), 'success');
+    } catch {
+      setDraftError(true);
+    } finally {
+      draftSavingRef.current = false;
+      setSavingDraft(false);
+    }
   };
 
   const acceptReminder = async () => {
@@ -108,12 +122,13 @@ export const KeptMomentCard: React.FC = () => {
       </div>
 
       {!hasDraft ? (
-        <form onSubmit={saveDraft} className="space-y-2">
+        <form onSubmit={saveDraft} className="space-y-2" aria-busy={savingDraft}>
           <label htmlFor="tomorrow-draft" className="block text-[13px] font-semibold text-[var(--fg)]">{t('Want to choose tomorrow’s decision now?')}</label>
           <div className="flex flex-col sm:flex-row gap-2">
-            <input id="tomorrow-draft" value={draft} onChange={e => setDraft(e.target.value)} placeholder={t('Tomorrow I will…')} className="flex-1 min-w-0 h-11 px-3 rounded-[var(--radius-sm)] bg-[var(--bg)] border border-[var(--border)] text-[15px] outline-none focus:border-[var(--accent)]" />
-            <button type="submit" disabled={!draft.trim()} className="h-11 px-4 rounded-[var(--radius-sm)] bg-[var(--fg)] text-[var(--bg)] text-[14px] font-semibold disabled:opacity-40">{t('Save for tomorrow')}</button>
+            <input id="tomorrow-draft" value={draft} onChange={e => setDraft(e.target.value)} disabled={savingDraft} placeholder={t('Tomorrow I will…')} className="flex-1 min-w-0 h-11 px-3 rounded-[var(--radius-sm)] bg-[var(--bg)] border border-[var(--border)] text-[15px] outline-none focus:border-[var(--accent)]" />
+            <button type="submit" disabled={!draft.trim() || savingDraft} className="h-11 px-4 rounded-[var(--radius-sm)] bg-[var(--fg)] text-[var(--bg)] text-[14px] font-semibold disabled:opacity-40">{t('Save for tomorrow')}</button>
           </div>
+          {draftError && <p role="alert" className="text-[14px] leading-relaxed text-[var(--danger)]">{t('Could not save this change. Your writing is still here; please try again.')}</p>}
         </form>
       ) : (
         <p className="flex items-center gap-2 text-[13px] text-[var(--fg-muted)]"><Check size={15} className="text-[var(--accent)]" />{t('Tomorrow’s decision is waiting: “{text}”', { text: data.profile.nextDecisionDraft!.text })}</p>

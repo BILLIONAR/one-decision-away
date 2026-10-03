@@ -1,0 +1,27 @@
+{
+  "kind": "dialogs",
+  "sourceCommit": "d7ed5455fd8a0eaa9372e22bd495f19d7f8cd494",
+  "command": [
+    "node",
+    "--import",
+    "tsx",
+    "scripts/qa-mobile-core-quality.mjs"
+  ],
+  "cwd": "/workspace/oda-reference-redesign",
+  "environmentOverrides": {
+    "ODA_QA_URL": "http://127.0.0.1:4183/one-decision-away/",
+    "ODA_MOBILE_CORE_QA_OUT": "/workspace/scratch/oda-reference-redesign/fidelity-rework/final/ssr-boundary-fix/flows/dialogs",
+    "ODA_QA_REPO": "/workspace/oda-reference-redesign",
+    "ODA_QA_SOURCE_COMMIT": "d7ed5455fd8a0eaa9372e22bd495f19d7f8cd494"
+  },
+  "startedAt": 1790973371.408921,
+  "elapsedSeconds": 24.486331939697266,
+  "exitCode": 0,
+  "log": {
+    "file": "/workspace/scratch/oda-reference-redesign/fidelity-rework/final/ssr-boundary-fix/flows/dialogs/browser.log",
+    "bytes": 4599,
+    "sha256": "74d7af0da5cfaba4bdf19bca61fb75560cf3ebfbb808668a4ceff30b43081fc5"
+  },
+  "syntheticOnly": true,
+  "noInstallNoDeploy": true
+}

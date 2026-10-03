@@ -1,0 +1,10 @@
+# Scoped Sound Room repair before code
+
+Own only SoundRoom.tsx and sound.css on clean evidence base635209e/source3ddb. Keep all sound catalog, entitlement/identity, synthesizer, shared shell/navigation and original artwork bytes exact.
+
+1. Reuse existing volume/timer controls with one volume state for expanded and mini player. Expanded control surface is primary when meaningfully visible within the usable viewport; fixed mini returns offscreen. Keep paused selection. Use IntersectionObserver with usable header/nav margins and read-only scroll/resize fallback. Transfer an actually focused control between surfaces with preventScroll; do not lose keyboard focus on mini removal.
+2. Derive the continuous three scene band heights/overlaps from available viewport instead of 280/310/320px constants. Retain the fourth Breathe tab and all Home/End/arrow/roving-tab behavior. Three scenes fill the initial available area; Breathe follows and remains reachable. On extremely short viewports prioritize readable/reachable content with natural scroll rather than clipping.
+3. Scope dark translucent bottom navigation and a circular active icon to existing .oda-reference-app[data-app-route="/app/sound"]. Keep five actual destination buttons, labels, aria-current and handlers byte-exact.
+4. Compact actual session rows and selected state; move existing why rationale/headphone note into native details with existing translated Why it matters. Keep description and entitlement selection logic. Refine existing cover/thumbnail proportions and organic curves, no art generation or new data claims.
+
+Finite authorized functional/layout repair; art material remains 2/4 HOLD. Meaningful tests will exercise viewport handoff/focus, timer and volume state, pause/resume, four-tab keyboard, rationale disclosure and existing access guards. Actual supported local Chromium previews and hashes will bind the freeze. No build, source outside ownership, install, commit, push, provider, artwork edits or publication.

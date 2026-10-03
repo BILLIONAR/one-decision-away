@@ -1,0 +1,73 @@
+diff --git a/src/components/notebook/NotebookCalendar.tsx b/src/components/notebook/NotebookCalendar.tsx
+index 4b94364..bb42dd9 100644
+--- a/src/components/notebook/NotebookCalendar.tsx
++++ b/src/components/notebook/NotebookCalendar.tsx
+@@ -1,5 +1,5 @@
+ import React, { useState } from 'react';
+-import { ChevronLeft, ChevronRight } from 'lucide-react';
++import { ArrowLeftRight, ChevronLeft, ChevronRight } from 'lucide-react';
+ import { useT, getSpeechLang } from '../../i18n';
+ import { dateLabel, localDate } from './shared';
+ 
+@@ -23,7 +23,7 @@ export const NotebookCalendar: React.FC<{
+       <span className="text-sm font-semibold capitalize" aria-live="polite">{monthLabel}</span>
+       <button type="button" className={navBtn} aria-label={t('Next month')} onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1, 12))}><ChevronRight className="w-5 h-5" strokeWidth={1.8} /></button>
+     </div>
+-    <div className="oda-notebook-calendar-scroll">
++    <div className="oda-notebook-calendar-scroll" role="region" aria-label={t('Writing calendar')} tabIndex={0}>
+     <table className="w-full table-fixed text-center border-separate border-spacing-1">
+       <caption className="sr-only">{t('Writing calendar')} — {monthLabel}</caption>
+       <thead><tr>{Array.from({ length: 7 }, (_, i) => <th key={i} scope="col" className="text-xs font-medium text-[var(--fg-muted)] pb-1">{new Intl.DateTimeFormat(getSpeechLang(), { weekday: 'narrow' }).format(new Date(2024, 0, 1 + i))}</th>)}</tr></thead>
+@@ -37,6 +37,7 @@ export const NotebookCalendar: React.FC<{
+       })}</tr>)}</tbody>
+     </table>
+     </div>
++    <p className="oda-notebook-calendar-scroll-hint"><ArrowLeftRight size={16} strokeWidth={1.8} aria-hidden="true" /><span>{t('Scroll sideways to see all dates')}</span></p>
+     <p className="text-xs text-[var(--fg-muted)] flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" aria-hidden="true" />{t('Days with entries')}</p>
+   </div>;
+ };
+diff --git a/src/i18n/locales/es.ts b/src/i18n/locales/es.ts
+index 9ad773f..261d9e8 100644
+--- a/src/i18n/locales/es.ts
++++ b/src/i18n/locales/es.ts
+@@ -4922,6 +4922,7 @@ const dict: Record<string, string> = {
+   "Dream journal": "Diario de sueños",
+   "Untitled": "Sin título",
+   "Days with entries": "Días con entradas",
++  "Scroll sideways to see all dates": "Desliza hacia los lados para ver todas las fechas",
+   "3-6-9": "3-6-9",
+   "One intention, written three times in the morning, six at midday, nine in the evening. For 33 days.": "Una intención, escrita tres veces por la mañana, seis al mediodía y nueve por la noche. Durante 33 días.",
+   "{n} / 33 days": "{n} / 33 días",
+diff --git a/src/i18n/locales/tr.ts b/src/i18n/locales/tr.ts
+index 8c4c7be..37d7539 100644
+--- a/src/i18n/locales/tr.ts
++++ b/src/i18n/locales/tr.ts
+@@ -4922,6 +4922,7 @@ const dict: Record<string, string> = {
+   "Dream journal": "Hayal günlüğü",
+   "Untitled": "Başlıksız",
+   "Days with entries": "Kayıtlı günler",
++  "Scroll sideways to see all dates": "Tüm tarihleri görmek için yana kaydırın",
+   "3-6-9": "3-6-9",
+   "One intention, written three times in the morning, six at midday, nine in the evening. For 33 days.": "Tek bir niyet; sabah üç, öğlen altı, akşam dokuz kez yazılır. 33 gün boyunca.",
+   "{n} / 33 days": "{n} / 33 gün",
+diff --git a/src/styles/notebook.css b/src/styles/notebook.css
+index 5ddee7f..d0ca43a 100644
+--- a/src/styles/notebook.css
++++ b/src/styles/notebook.css
+@@ -36,9 +36,15 @@
+ .oda-notebook-archive > div:first-child h2 { font-size: 1rem; }
+ .oda-notebook-archive > div:first-child button { border-radius: 999px; }
+ .oda-notebook-archive input[type="search"] { min-height: 48px; }
+-.oda-notebook-calendar { border-radius: 22px; box-shadow: none; }
++.oda-notebook-calendar { border-radius: 22px; box-shadow: none; container-type: inline-size; container-name: oda-notebook-calendar; }
+ .oda-notebook-calendar > div:first-child button { border-radius: 999px; background: var(--bg-muted); }
+ .oda-notebook-calendar-scroll { width: 100%; min-width: 0; overflow-x: auto; padding-block: 2px; scrollbar-width: thin; }
++.oda-notebook-calendar-scroll:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 12px; }
++.oda-notebook-calendar-scroll-hint { display: none; align-items: flex-start; gap: .5rem; color: var(--fg-muted); font-size: .75rem; line-height: 1.5; }
++.oda-notebook-calendar-scroll-hint > svg { flex: none; margin-top: .05rem; }
++@container oda-notebook-calendar (max-width: 351px) {
++  .oda-notebook-calendar-scroll-hint { display: flex; }
++}
+ .oda-notebook-calendar table { min-width: 352px; }
+ .oda-notebook-calendar th { padding-block: .4rem; font-size: .65rem; }
+ .oda-notebook-calendar td button { width: 100%; min-width: 44px; min-height: 44px; aspect-ratio: auto; border-radius: 15px; }

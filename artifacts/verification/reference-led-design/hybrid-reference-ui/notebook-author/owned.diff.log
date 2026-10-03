@@ -1,0 +1,477 @@
+--- a/src/pages/Notebook.tsx
++++ b/src/pages/Notebook.tsx
+@@ -1,15 +1,18 @@
+-import React, { useEffect, useState } from 'react';
++import React, { lazy, Suspense, useEffect, useState } from 'react';
+ import { Check, Feather, Mail } from 'lucide-react';
+ import { useApp } from '../store/useApp';
+-import { N_, useT } from '../i18n';
++import { N_, useLocale, useT } from '../i18n';
++import { notebookHybridCopy } from '../i18n/notebookHybrid';
+ import { getNotebookDateKey, getNotebookStats } from '../services/notebook';
+ import { JournalWorkspace } from '../components/notebook/JournalWorkspace';
+-import { EvidenceTree } from '../components/momentum/EvidenceTree';
+-import { keptDecisions } from '../services/momentum';
++import { OriginalSceneImage } from '../components/OriginalSceneImage';
+ import { WrittenPractice } from '../components/notebook/WrittenPractice';
+ import { Practice369 } from '../components/notebook/Practice369';
+ import { AffirmationPractice, GratitudePractice } from '../components/notebook/DailyPractices';
+ import '../styles/notebook.css';
++import '../styles/notebookHybrid.css';
++
++const QuotesBrowser = lazy(() => import('../components/notebook/QuotesBrowser').then(module => ({ default: module.QuotesBrowser })));
+ 
+ const SCRIPTING_PROMPTS = [
+   { id: 'ordinary-day', label: N_('An ordinary day in my future'), question: N_('It is an ordinary day in the life I am building. Where am I, what do I do, and how do I feel?') },
+@@ -24,8 +27,11 @@
+ 
+ export const Notebook: React.FC = () => {
+   const t = useT();
++  const [locale] = useLocale();
++  const c = notebookHybridCopy(locale);
+   const { data } = useApp();
+-  const [section, setSection] = useState<'journal' | 'manifest'>('journal');
++  const [section, setSection] = useState<'journal' | 'manifest' | 'quotes'>('journal');
++  const [quotesOpened, setQuotesOpened] = useState(false);
+   const [today, setToday] = useState(getNotebookDateKey);
+   useEffect(() => {
+     const refresh = () => setToday(getNotebookDateKey());
+@@ -36,8 +42,8 @@
+   }, []);
+   if (!data) return <p role="status" className="text-sm text-[var(--fg-muted)]">{t('Opening your notebook…')}</p>;
+   const stats = getNotebookStats(data);
+-  const tabs = [{ id: 'journal' as const, label: t('Journal') }, { id: 'manifest' as const, label: t('Practices') }];
+-  return <div className="oda-notebook oda-notebook-fidelity text-[var(--fg)]">
++  const tabs = [{ id: 'journal' as const, label: t('Journal') }, { id: 'manifest' as const, label: t('Practices') }, { id: 'quotes' as const, label: c.quotes }];
++  return <div className="oda-notebook oda-notebook-fidelity oda-notebook-hybrid text-[var(--fg)]">
+     <header className="oda-notebook-heading">
+       <div>
+       <h1 className="oda-display text-[32px] leading-tight text-[var(--fg)]">{t('Notebook')}</h1>
+@@ -61,10 +67,10 @@
+ 
+ 
+     <nav aria-label={t('Notebook sections')} className="oda-notebook-tabs flex p-1 bg-[var(--bg-muted)] rounded-[var(--radius-sm)]">
+-      {tabs.map(({ id, label }) => <button key={id} type="button" aria-pressed={section === id} aria-controls={`notebook-${id}-section`} onClick={() => setSection(id)} className={`flex-1 h-10 rounded-[var(--radius-xs)] text-sm font-medium cursor-pointer transition-colors focus-visible:outline focus-visible:outline-2 ${section === id ? 'bg-[var(--bg)] text-[var(--fg)]' : 'text-[var(--fg-muted)]'}`}>{label}</button>)}
++      {tabs.map(({ id, label }) => <button key={id} type="button" aria-pressed={section === id} aria-controls={`notebook-${id}-section`} onClick={() => { setSection(id); if (id === 'quotes') setQuotesOpened(true); }} className={`flex-1 h-10 rounded-[var(--radius-xs)] text-sm font-medium cursor-pointer transition-colors focus-visible:outline focus-visible:outline-2 ${section === id ? 'bg-[var(--bg)] text-[var(--fg)]' : 'text-[var(--fg-muted)]'}`}>{label}</button>)}
+     </nav>
+ 
+-    <section id="notebook-journal-section" hidden={section !== 'journal'} aria-label={t('Journal')}><JournalWorkspace today={today} reflectionArtwork={<EvidenceTree count={keptDecisions(data.missions).length} label={t('Notebook')} />} /></section>
++    <section id="notebook-journal-section" hidden={section !== 'journal'} aria-label={t('Journal')}><JournalWorkspace today={today} reflectionArtwork={<OriginalSceneImage asset="today-scene" sizes="180px" />} /></section>
+     <section id="notebook-manifest-section" className="oda-notebook-practices" hidden={section !== 'manifest'} aria-label={t('Practices')}>
+       <p className="text-sm text-[var(--fg-muted)] mb-6">{t('Five ways to write. Pick one, use your own words, come back when it helps.')}</p>
+       <div className="space-y-6">
+@@ -75,5 +81,6 @@
+         <AffirmationPractice active={section === 'manifest'} />
+       </div>
+     </section>
++    <section id="notebook-quotes-section" hidden={section !== 'quotes'} aria-label={c.quotes}>{quotesOpened && <Suspense fallback={<p role="status">{c.loadingQuotes}</p>}><QuotesBrowser /></Suspense>}</section>
+   </div>;
+ };
+--- a/src/components/notebook/JournalWorkspace.tsx
++++ b/src/components/notebook/JournalWorkspace.tsx
+@@ -1,7 +1,9 @@
+ import React, { useEffect, useMemo, useState } from 'react';
+-import { CalendarDays, Plus, Search, Trash2, X } from 'lucide-react';
++import { CalendarDays, ChevronLeft, ChevronRight, MoreHorizontal, Plus, Search, Trash2, X } from 'lucide-react';
+ import { useApp } from '../../store/useApp';
+-import { N_, useT } from '../../i18n';
++import { getSpeechLang, N_, useLocale, useT } from '../../i18n';
++import { notebookHybridCopy } from '../../i18n/notebookHybrid';
++import { notebookWeekDates, shiftNotebookWeek } from '../../services/notebookHybrid';
+ import { getNotebookEntries, type NotebookDisplayEntry } from '../../services/notebook';
+ import type { DreamJournalEntry, NotebookMood } from '../../types/models';
+ import { NotebookCalendar } from './NotebookCalendar';
+@@ -15,6 +17,10 @@
+ ] as const;
+ const LEGACY_MOODS = [['triumphant', N_('Triumphant')], ['focused', N_('Focused')], ['grateful', N_('Grateful')], ['visionary', N_('Visionary')], ['breakthrough', N_('Breakthrough')]] as const;
+ const moodLabel = (mood: string) => [...MOODS, ...LEGACY_MOODS].find(([id]) => id === mood)?.[1] || mood;
++const entryTime = (instant: string) => {
++  const date = new Date(instant);
++  return Number.isNaN(date.getTime()) ? undefined : new Intl.DateTimeFormat(getSpeechLang(), { hour: 'numeric', minute: '2-digit' }).format(date);
++};
+ const SEED_TEXT: Record<string, Record<string, string>> = {
+   'journal-seed-1': {
+     title: 'Morning Focus & Sanctuary Awakening',
+@@ -31,6 +37,8 @@
+ 
+ export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: React.ReactNode }> = ({ today, reflectionArtwork }) => {
+   const t = useT();
++  const [locale] = useLocale();
++  const c = notebookHybridCopy(locale);
+   const { data, saveNotebookEntry, updateDreamJournalEntry, deleteNotebookEntry, deleteDreamJournalEntry } = useApp();
+   const { busy, notice, run, setNotice } = useNotebookAction();
+   const [editingRef, setEditingRef] = useSessionDraft<{ id: string; source: 'notebook' | 'dream' } | null>('journal:editing', null);
+@@ -43,6 +51,7 @@
+   const [query, setQuery] = useState('');
+   const [selectedDate, setSelectedDate] = useState('');
+   const [showCalendar, setShowCalendar] = useState(false);
++  const [weekAnchor, setWeekAnchor] = useState<string | null>(null);
+   const [validation, setValidation] = useState(false);
+   const [photoOpen, setPhotoOpen] = useState(false);
+   const nativePhotoDialog = typeof window !== 'undefined' && typeof window.HTMLDialogElement !== 'undefined'
+@@ -100,15 +109,24 @@
+     const result = await run(async () => { if (editing.source === 'dream') await deleteDreamJournalEntry(editing.id); else await deleteNotebookEntry(editing.id); return true; }, 'Entry deleted.');
+     if (result) reset();
+   };
++  const weekDates = notebookWeekDates(weekAnchor || today);
++  const weekMonth = weekDates[0].slice(0, 7) === weekDates[6].slice(0, 7)
++    ? dateLabel(weekDates[0], { month: 'long', year: 'numeric' })
++    : `${dateLabel(weekDates[0], { month: 'short' })} — ${dateLabel(weekDates[6], { month: 'short', year: 'numeric' })}`;
++  const preview = entries[0];
+ 
+   return <div className="oda-notebook-workspace">
+     <section className="oda-notebook-calendar-lead min-w-0 space-y-3" aria-label={t('Journal archive')}>
+-      <div className="flex justify-between items-center"><h2 className="text-[15px] font-semibold">{t('Entries')} <span className="text-[var(--fg-muted)] font-normal">({entries.length})</span></h2><NButton type="button" variant="ghost" icon={CalendarDays} aria-expanded={showCalendar} aria-controls="notebook-calendar" onClick={() => setShowCalendar(!showCalendar)}>{t('Calendar')}</NButton></div>
+-      <div className="oda-notebook-week-region" role="region" aria-label={t('Journal archive')} tabIndex={0}>
++      <div className="oda-hybrid-journal-header flex justify-between items-center"><h2 className="text-[15px] font-semibold">{t('Journal')}</h2><div><NButton type="button" variant="ghost" icon={CalendarDays} aria-expanded={showCalendar} aria-controls="notebook-calendar" onClick={() => setShowCalendar(!showCalendar)}>{t('Calendar')}</NButton><button type="button" className="oda-hybrid-new-entry" disabled={busy} aria-label={c.newEntry} onClick={() => { if (canReplace()) { reset(); setNotice(null); requestAnimationFrame(() => { const field = document.getElementById('notebook-journal-title'); field?.scrollIntoView({ behavior: 'auto', block: 'center' }); field?.focus({ preventScroll: true }); }); } }}><Plus size={19} aria-hidden="true" /></button></div></div>
++      <div className="oda-hybrid-week-nav">
++        <button type="button" aria-label={c.previousWeek} onClick={() => setWeekAnchor(shiftNotebookWeek(weekAnchor || today, -1))}><ChevronLeft size={18} aria-hidden="true" /></button>
++        <button type="button" className="oda-hybrid-week-month" aria-label={`${c.thisWeek} — ${weekMonth}`} title={c.thisWeek} onClick={() => setWeekAnchor(null)}><span aria-live="polite">{weekMonth}</span></button>
++        <button type="button" aria-label={c.nextWeek} onClick={() => setWeekAnchor(shiftNotebookWeek(weekAnchor || today, 1))}><ChevronRight size={18} aria-hidden="true" /></button>
++      </div>
++      <div className="oda-notebook-week-region" role="region" aria-label={t('Journal archive')} aria-describedby="notebook-archive-date-help" tabIndex={0}>
+         <div className="oda-notebook-week-strip">
+-          {Array.from({ length: 7 }, (_, index) => {
+-            const day = new Date(`${today}T12:00:00`); day.setDate(day.getDate() - 6 + index);
+-            const key = `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}`;
++          {weekDates.map(key => {
++            const day = new Date(`${key}T12:00:00`);
+             return <button key={key} type="button" aria-pressed={selectedDate === key} aria-current={key === today ? 'date' : undefined} aria-label={`${dateLabel(key)}${dates.has(key) ? ` — ${t('Has entries')}` : ''}`} onClick={() => setSelectedDate(selectedDate === key ? '' : key)}>
+               <span>{dateLabel(key, { weekday: 'short' })}</span><strong>{day.getDate()}</strong>{dates.has(key) && <i aria-hidden="true" />}
+             </button>;
+@@ -117,14 +135,20 @@
+       </div>
+       <p className="oda-notebook-week-hint text-xs text-[var(--fg-muted)]">{t('Scroll sideways to see all dates')}</p>
+       <div className="relative"><Search className="absolute left-3 top-3.5 w-4 h-4 text-[var(--fg-muted)]" aria-hidden="true" strokeWidth={1.8} /><label htmlFor="notebook-journal-search" className="sr-only">{t('Search entries')}</label><NInput id="notebook-journal-search" type="search" className="pl-9 !bg-[var(--bg-muted)] !border-transparent" value={query} onChange={e => setQuery(e.target.value)} placeholder={t('Search')} /></div>
+-      {showCalendar && <div id="notebook-calendar"><NotebookCalendar today={today} selected={selectedDate} dates={dates} onSelect={setSelectedDate} /></div>}
++      {showCalendar && <div id="notebook-calendar"><NotebookCalendar today={today} selected={selectedDate} dates={dates} onSelect={key => { setSelectedDate(key); if (key) setWeekAnchor(key); }} /></div>}
+       {selectedDate && <div className="flex gap-2 justify-between items-center text-sm"><span>{dateLabel(selectedDate)}</span><button type="button" className={quietButton} onClick={() => setSelectedDate('')}>{t('All dates')}</button></div>}
++      <p id="notebook-archive-date-help" className="oda-hybrid-date-help">{c.archiveDates}</p>
+     </section>
++    {preview && <section className="oda-hybrid-entry-preview" aria-labelledby="notebook-entry-preview-title">
++      <header><h2 id="notebook-entry-preview-title">{preview.dateKey === today ? c.todaysEntry : c.savedEntry}</h2><details className="oda-hybrid-entry-actions" onKeyDown={event => { if (event.key === 'Escape') { event.currentTarget.open = false; event.currentTarget.querySelector('summary')?.focus(); } }}><summary aria-label={c.entryActions}><MoreHorizontal size={19} aria-hidden="true" /></summary><div><button type="button" disabled={busy} onClick={event => { const actions = event.currentTarget.closest('details'); actions?.removeAttribute('open'); actions?.querySelector('summary')?.focus(); openEntry(preview); }}>{t('Edit entry')}</button></div></details></header>
++      <h3>{displayText(preview, 'title') || t('Untitled')}</h3>
++      <p className="oda-hybrid-preview-text">{displayText(preview, 'content')}</p>
++      <footer><span>{dateLabel(preview.dateKey, { day: 'numeric', month: 'short' })}</span>{entryTime(preview.createdAt) && <time dateTime={preview.createdAt}>{entryTime(preview.createdAt)}</time>}{preview.source === 'dream' && <span>{t('Dream journal')}</span>}</footer>
++    </section>}
+     <div className="oda-notebook-writing-column">
+     <div className={`${cardCls} oda-notebook-editor`}>
+       <div className="oda-notebook-editor-heading p-5 flex items-start justify-between gap-3">
+         <div><p className={smallLabel}>{editing ? dateLabel(editing.dateKey) : dateLabel(today)}</p><h2 className="text-lg font-semibold tracking-tight text-[var(--fg)] mt-0.5">{editing ? t('Edit entry') : t('Today')}</h2></div>
+-        <NButton type="button" variant="ghost" icon={Plus} disabled={busy} onClick={() => { if (canReplace()) { reset(); setNotice(null); } }}>{t('New')}</NButton>
+       </div>
+       <form onSubmit={save} className="oda-notebook-editor-form px-5 pb-5 space-y-4">
+         {editing?.source === 'dream' && <p className="text-xs text-[var(--fg-muted)]">{t('From dream journal')}{editing.dreamName ? ` · ${displayText(editing, 'dreamName')}` : ''}</p>}
+@@ -148,8 +172,9 @@
+     </div>
+ 
+     <section className="oda-notebook-archive min-w-0 space-y-3" aria-label={t('Journal archive')}>
++      <h2 className="oda-hybrid-archive-heading">{c.allEntries} <span>({entries.length})</span></h2>
+       {entries.length === 0 ? <div className="oda-card rounded-[var(--radius-lg)] p-5 text-center"><p className="text-[15px] font-semibold">{query || selectedDate ? t('No entries match.') : t('Nothing written yet')}</p><p className="text-sm text-[var(--fg-muted)] mt-1">{query || selectedDate ? t('Try another word or choose all dates.') : t('Your first entry will appear here.')}</p>{(query || selectedDate) && <button type="button" className={`${quietButton} mt-2`} onClick={() => { setQuery(''); setSelectedDate(''); }}>{t('Clear filters')}</button>}</div> : <div className="oda-notebook-entry-list bg-[var(--bg-muted)] rounded-[var(--radius-md)] divide-y divide-[var(--border)] max-h-[650px] overflow-y-auto">{entries.map(entry => <button type="button" key={entry.viewId} disabled={busy} aria-current={editing?.viewId === entry.viewId ? 'true' : undefined} onClick={() => openEntry(entry)} className={`w-full text-left px-4 py-3 min-h-[56px] cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset disabled:opacity-50 ${editing?.viewId === entry.viewId ? 'bg-[var(--bg-inset)]' : ''}`}>
+-        <span className="flex justify-between gap-2 text-xs text-[var(--fg-muted)]"><span>{dateLabel(entry.dateKey, { month: 'short', day: 'numeric', year: 'numeric' })}</span>{entry.source === 'dream' && <span>{t('Dream journal')}</span>}</span>
++        <span className="flex justify-between gap-2 text-xs text-[var(--fg-muted)]"><span>{dateLabel(entry.dateKey, { month: 'short', day: 'numeric', year: 'numeric' })}</span>{entryTime(entry.createdAt) && <time dateTime={entry.createdAt}>{entryTime(entry.createdAt)}</time>}{entry.source === 'dream' && <span>{t('Dream journal')}</span>}</span>
+         <span className="text-[15px] font-medium leading-snug block break-words mt-0.5">{displayText(entry, 'title') || t('Untitled')}</span>
+         <span className="text-sm text-[var(--fg-muted)] line-clamp-2 block mt-0.5 break-words">{displayText(entry, 'content')}</span>
+         {(entry.photoDataUrl || entry.mood) && <span className="flex flex-wrap items-center gap-2 mt-2">{entry.photoDataUrl && <img src={entry.photoDataUrl} alt="" className="w-10 h-10 object-cover rounded-[var(--radius-xs)]" loading="lazy" />}{entry.mood && <span className="text-xs text-[var(--fg-muted)]">{t(moodLabel(entry.mood))}</span>}</span>}
+--- a/src/components/notebook/QuotesBrowser.tsx
++++ b/src/components/notebook/QuotesBrowser.tsx
+@@ -0,0 +1,56 @@
++import React, { useMemo, useState } from 'react';
++import { ArrowDown, ArrowUpRight, Quote, Search } from 'lucide-react';
++import { useLocale } from '../../i18n';
++import { notebookHybridCopy } from '../../i18n/notebookHybrid';
++import { QUOTE_COLLECTION, quoteSource, quoteText } from '../../data/quoteCollection';
++import type { OriginalSceneId } from '../../data/originalSceneAssets';
++import { filterSourcedQuotes, quoteSourceHref, type QuoteFilterCategory } from '../../services/notebookHybrid';
++import { OriginalSceneImage } from '../OriginalSceneImage';
++
++const PAGE_SIZE = 12;
++const CATEGORY_ART: Record<Exclude<QuoteFilterCategory, 'all'>, OriginalSceneId> = {
++  faith: 'dunes', philosophy: 'today-scene', society: 'palms', science: 'foam',
++};
++
++/** The saved catalogue is the sole text/source authority; imagery is decorative. */
++export const QuotesBrowser: React.FC = () => {
++  const [locale] = useLocale();
++  const c = notebookHybridCopy(locale);
++  const [category, setCategory] = useState<QuoteFilterCategory>('all');
++  const [query, setQuery] = useState('');
++  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
++  const matches = useMemo(() => filterSourcedQuotes(QUOTE_COLLECTION, category, query, locale), [category, query, locale]);
++  const visible = matches.slice(0, visibleCount);
++  const categories: QuoteFilterCategory[] = ['all', 'faith', 'philosophy', 'society', 'science'];
++  const passageLanguage = locale === 'tr' ? 'tr' : 'en';
++  return <div className="oda-quotes-browser">
++    <header className="oda-quotes-heading">
++      <div><h2>{c.quotes}</h2><p>{c.collection(QUOTE_COLLECTION.length)}</p></div>
++      <Quote size={23} strokeWidth={1.5} aria-hidden="true" />
++    </header>
++    <div className="oda-quotes-categories" role="group" aria-label={c.categories}>
++      {categories.map(id => <button type="button" key={id} aria-pressed={category === id} onClick={() => { setCategory(id); setVisibleCount(PAGE_SIZE); }}>{c[id]}</button>)}
++    </div>
++    <label className="oda-quotes-search"><Search size={18} aria-hidden="true" /><span className="sr-only">{c.searchQuotes}</span><input type="search" value={query} onChange={event => { setQuery(event.target.value); setVisibleCount(PAGE_SIZE); }} placeholder={c.searchQuotes} /></label>
++    {locale === 'es' && <p className="oda-quotes-language">{c.englishQuotes}</p>}
++    <p className="oda-quotes-count" role="status">{c.shown(visible.length, matches.length)}</p>
++    {matches.length === 0 ? <div className="oda-quotes-empty"><p>{c.noQuotes}</p><button type="button" onClick={() => { setQuery(''); setCategory('all'); setVisibleCount(PAGE_SIZE); }}>{c.clearSearch}</button></div> : <div className="oda-quotes-grid">
++      {visible.map(quote => {
++        const href = quoteSourceHref(quote.sourceUrl);
++        return <article key={quote.id} className="oda-quote-card" data-quote-id={quote.id} data-quote-category={quote.category}>
++          <Quote className="oda-quote-mark" size={20} aria-hidden="true" />
++          <blockquote lang={passageLanguage}>{quoteText(quote, locale)}</blockquote>
++          <div className="oda-quote-citation">
++            <p lang={passageLanguage}>{quoteSource(quote, locale)}</p>
++            {quote.reference && <p lang="en" className="oda-quote-reference">{quote.reference}</p>}
++            <span className="oda-quote-kind">{quote.kind === 'adaptation' ? c.adaptation : c.translation}</span>
++            {href && <a href={href} target="_blank" rel="noopener noreferrer">{c.source}<ArrowUpRight size={14} aria-hidden="true" /></a>}
++          </div>
++          <div className="oda-quote-illustration" aria-hidden="true"><OriginalSceneImage asset={CATEGORY_ART[quote.category]} sizes="120px" /></div>
++        </article>;
++      })}
++    </div>}
++    {visible.length < matches.length && <button type="button" className="oda-quotes-more" onClick={() => setVisibleCount(count => count + PAGE_SIZE)}>{c.moreQuotes}<ArrowDown size={16} aria-hidden="true" /></button>}
++    <p className="oda-quotes-art-note">{c.decorativeArt}</p>
++  </div>;
++};
+--- a/src/i18n/notebookHybrid.ts
++++ b/src/i18n/notebookHybrid.ts
+@@ -0,0 +1,49 @@
++const en = {
++  quotes: 'Quotes', loadingQuotes: 'Opening sourced passages…',
++  categories: 'Passage categories', all: 'All',
++  faith: 'Faith', philosophy: 'Philosophy', society: 'Society', science: 'Science',
++  collection: (n: number) => `${n} passages with their sources.`,
++  searchQuotes: 'Search passages or sources', noQuotes: 'No passages match.',
++  clearSearch: 'Clear search', moreQuotes: 'Show more passages',
++  shown: (shown: number, total: number) => `${shown} of ${total} passages`,
++  source: 'Read source', translation: 'Translation', adaptation: 'Adaptation',
++  englishQuotes: 'These passages are in English; navigation remains in Spanish.',
++  decorativeArt: 'Artwork is decorative; the source is linked on each card.',
++  previousWeek: 'Previous week', nextWeek: 'Next week', thisWeek: 'This week',
++  archiveDates: 'Dates filter saved entries. New writing belongs to today.',
++  newEntry: 'New journal entry', todaysEntry: "Today's entry", savedEntry: 'Saved entry',
++  entryActions: 'Entry actions', allEntries: 'Journal archive',
++};
++const tr: typeof en = {
++  quotes: 'Alıntılar', loadingQuotes: 'Kaynaklı metinler açılıyor…',
++  categories: 'Metin kategorileri', all: 'Tümü',
++  faith: 'İnanç', philosophy: 'Felsefe', society: 'Toplum', science: 'Bilim',
++  collection: n => `Kaynaklarıyla birlikte ${n} metin.`,
++  searchQuotes: 'Metin veya kaynak ara', noQuotes: 'Eşleşen metin yok.',
++  clearSearch: 'Aramayı temizle', moreQuotes: 'Daha fazla metin göster',
++  shown: (shown, total) => `${total} metnin ${shown} tanesi`,
++  source: 'Kaynağı oku', translation: 'Çeviri', adaptation: 'Uyarlama',
++  englishQuotes: 'Bu metinler İngilizcedir; gezinme dili İspanyolca olarak kalır.',
++  decorativeArt: 'Görseller dekoratiftir; her kartta kaynak bağlantısı bulunur.',
++  previousWeek: 'Önceki hafta', nextWeek: 'Sonraki hafta', thisWeek: 'Bu hafta',
++  archiveDates: 'Tarihler kayıtlı yazıları filtreler. Yeni yazı bugüne kaydedilir.',
++  newEntry: 'Yeni günlük yazısı', todaysEntry: 'Bugünün yazısı', savedEntry: 'Kayıtlı yazı',
++  entryActions: 'Yazı işlemleri', allEntries: 'Günlük arşivi',
++};
++const es: typeof en = {
++  quotes: 'Citas', loadingQuotes: 'Abriendo textos con fuentes…',
++  categories: 'Categorías de textos', all: 'Todas',
++  faith: 'Fe', philosophy: 'Filosofía', society: 'Sociedad', science: 'Ciencia',
++  collection: n => `${n} textos con sus fuentes.`,
++  searchQuotes: 'Buscar textos o fuentes', noQuotes: 'No hay textos que coincidan.',
++  clearSearch: 'Borrar búsqueda', moreQuotes: 'Mostrar más textos',
++  shown: (shown, total) => `${shown} de ${total} textos`,
++  source: 'Leer fuente', translation: 'Traducción', adaptation: 'Adaptación',
++  englishQuotes: 'Estos textos están en inglés; la navegación sigue en español.',
++  decorativeArt: 'Las imágenes son decorativas; cada tarjeta enlaza su fuente.',
++  previousWeek: 'Semana anterior', nextWeek: 'Semana siguiente', thisWeek: 'Esta semana',
++  archiveDates: 'Las fechas filtran entradas guardadas. Los textos nuevos se guardan hoy.',
++  newEntry: 'Nueva entrada de diario', todaysEntry: 'Entrada de hoy', savedEntry: 'Entrada guardada',
++  entryActions: 'Acciones de la entrada', allEntries: 'Archivo del diario',
++};
++export const notebookHybridCopy = (locale: string) => locale === 'tr' ? tr : locale === 'es' ? es : en;
+--- a/src/styles/notebookHybrid.css
++++ b/src/styles/notebookHybrid.css
+@@ -0,0 +1,96 @@
++/* Notebook/Quotes hybrid from the approved references; all colors inherit app tokens. */
++.oda-notebook-hybrid .oda-notebook-tabs { width: 100%; max-width: 480px; }
++.oda-notebook-hybrid .oda-notebook-tabs button { min-width: 0; padding-inline: .65rem; }
++.oda-notebook-hybrid .oda-notebook-workspace { gap: 12px; }
++.oda-notebook-hybrid .oda-notebook-writing-column { display: grid; min-width: 0; gap: 12px; }
++.oda-notebook-hybrid .oda-hybrid-journal-header { gap: 8px; }
++.oda-notebook-hybrid .oda-hybrid-journal-header > div { display: flex; gap: 6px; align-items: center; }
++.oda-notebook-hybrid .oda-hybrid-journal-header h2 { font-size: .9rem; letter-spacing: .04em; text-transform: uppercase; }
++.oda-notebook-hybrid .oda-hybrid-journal-header .oda-hybrid-new-entry { display: grid; place-items: center; min-width: 44px; width: 44px; height: 44px; flex: none; border: 0; border-radius: 50%; background: var(--accent); color: var(--on-accent); }
++.oda-notebook-hybrid .oda-hybrid-new-entry:disabled { opacity: .45; }
++.oda-notebook-hybrid .oda-notebook-calendar-lead > * + * { margin-top: 8px; }
++.oda-notebook-hybrid .oda-hybrid-week-nav { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; gap: 4px; align-items: center; }
++.oda-notebook-hybrid .oda-hybrid-week-nav > button { min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 10px; color: var(--fg-muted); background: var(--surface); }
++.oda-notebook-hybrid .oda-hybrid-week-nav > .oda-hybrid-week-month { font-size: .78rem; color: var(--fg); text-align: center; text-transform: capitalize; font-weight: 650; padding-inline: 4px; }
++.oda-notebook-hybrid .oda-notebook-week-strip button { min-height: 56px; border: 0; border-radius: 12px; }
++.oda-notebook-hybrid .oda-notebook-week-strip button > strong { font-size: 1rem; line-height: 1.25; }
++.oda-notebook-hybrid .oda-notebook-week-strip button[aria-current="date"] { box-shadow: inset 0 0 0 1px var(--accent); }
++.oda-notebook-hybrid .oda-notebook-week-strip button[aria-pressed="true"] { border-radius: 999px; }
++.oda-notebook-hybrid .oda-hybrid-date-help { color: var(--fg-muted); font-size: .7rem; line-height: 1.5; }
++.oda-notebook-hybrid .oda-hybrid-entry-preview { min-width: 0; position: relative; padding: 12px 16px 16px; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); box-shadow: var(--surface-shadow); }
++.oda-hybrid-entry-preview > header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
++.oda-hybrid-entry-preview > header h2 { color: var(--fg-muted); font-size: .7rem; font-weight: 650; text-transform: uppercase; letter-spacing: .04em; }
++.oda-hybrid-entry-preview h3 { margin-top: 2px; color: var(--fg); font-size: .93rem; font-weight: 650; line-height: 1.5; overflow-wrap: anywhere; }
++.oda-hybrid-preview-text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; margin-top: 8px; color: var(--fg); font-size: .88rem; line-height: 1.7; white-space: pre-line; overflow-wrap: anywhere; }
++.oda-hybrid-entry-preview > footer { display: flex; flex-wrap: wrap; gap: 5px 12px; margin-top: 12px; color: var(--fg-muted); font-size: .7rem; font-variant-numeric: tabular-nums; }
++.oda-hybrid-entry-actions { position: relative; flex: none; }
++.oda-hybrid-entry-actions > summary { display: grid; place-items: center; list-style: none; width: 44px; height: 44px; border-radius: 10px; color: var(--fg-muted); cursor: pointer; }
++.oda-hybrid-entry-actions > summary::-webkit-details-marker { display: none; }
++.oda-hybrid-entry-actions[open] > summary { background: var(--accent-soft); color: var(--accent); }
++.oda-hybrid-entry-actions > div { position: absolute; inset-inline-end: 0; top: 48px; z-index: 5; min-width: 168px; max-width: 240px; padding: 5px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--surface-shadow); }
++.oda-hybrid-entry-actions button { width: 100%; min-width: 44px; min-height: 44px; padding: 8px 12px; text-align: start; color: var(--fg); font-size: .85rem; border-radius: 8px; }
++.oda-hybrid-entry-actions button:hover { background: var(--bg-muted); }
++.oda-notebook-hybrid .oda-notebook-editor-heading { padding: 12px 16px; margin-bottom: 12px; }
++.oda-notebook-hybrid .oda-notebook-editor-form { padding-inline: 16px; }
++.oda-notebook-hybrid .oda-notebook-reflection-hero { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px; align-items: center; min-height: 0; padding: 14px; background: var(--surface); }
++.oda-notebook-hybrid .oda-notebook-reflection-art { height: 112px; overflow: hidden; border-radius: 12px; }
++.oda-notebook-hybrid .oda-notebook-reflection-art::before, .oda-notebook-hybrid .oda-notebook-reflection-art::after { content: none; }
++.oda-notebook-hybrid .oda-notebook-reflection-art img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 55% 42%; }
++.oda-notebook-hybrid .oda-notebook-reflection-hero > section { padding: 0; }
++.oda-notebook-hybrid .oda-notebook-reflection-hero > section .oda-display { font-family: var(--font-sans); font-size: 1rem; line-height: 1.5; text-transform: none; letter-spacing: 0; }
++.oda-notebook-hybrid .oda-notebook-reflection-hero > section .oda-kicker { font-size: .65rem; }
++.oda-notebook-hybrid .oda-notebook-reflection-hero > section button { font-size: .78rem; border-radius: 10px; }
++.oda-notebook-hybrid .oda-hybrid-archive-heading { margin-bottom: 12px; color: var(--fg); font-size: .85rem; font-weight: 650; }
++.oda-hybrid-archive-heading > span { color: var(--fg-muted); font-weight: 400; }
++.oda-notebook-hybrid .oda-notebook-entry-list > button > span:first-child { flex-wrap: wrap; }
++.oda-notebook-hybrid button:focus-visible, .oda-notebook-hybrid summary:focus-visible, .oda-notebook-hybrid a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
++
++.oda-quotes-browser { display: grid; gap: 14px; min-width: 0; }
++.oda-quotes-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
++.oda-quotes-heading h2 { color: var(--fg); font-size: 1.15rem; font-weight: 650; text-transform: uppercase; letter-spacing: .04em; }
++.oda-quotes-heading p { margin-top: 4px; color: var(--fg-muted); font-size: .8rem; line-height: 1.5; }
++.oda-quotes-heading > svg { color: var(--accent); flex: none; }
++.oda-quotes-categories { display: flex; flex-wrap: wrap; gap: 6px; }
++.oda-quotes-categories button { min-height: 44px; min-width: 44px; padding: 8px 13px; border: 1px solid var(--border); border-radius: 999px; color: var(--fg-muted); background: var(--surface); font-size: .77rem; font-weight: 550; }
++.oda-quotes-categories button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
++.oda-quotes-search { display: flex; min-width: 0; align-items: center; gap: 10px; min-height: 48px; padding: 0 14px; border: 1px solid var(--border); border-radius: 12px; color: var(--fg-muted); background: var(--surface); }
++.oda-quotes-search > svg { flex: none; }
++.oda-notebook-hybrid .oda-quotes-search input { min-width: 0; width: 100%; min-height: 46px; border: 0; border-radius: 0; background: transparent; color: var(--fg); font-size: .9rem; }
++.oda-notebook-hybrid .oda-quotes-search input:focus-visible { outline: none; }
++.oda-quotes-search:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
++.oda-quotes-language, .oda-quotes-count, .oda-quotes-art-note { color: var(--fg-muted); font-size: .75rem; line-height: 1.6; }
++.oda-quotes-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; min-width: 0; }
++.oda-quote-card { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 90px; gap: 12px; align-content: start; min-width: 0; padding: 18px; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); box-shadow: var(--surface-shadow); overflow: hidden; }
++.oda-quote-card > .oda-quote-mark { grid-column: 1 / -1; color: var(--accent); }
++.oda-quote-card blockquote { grid-column: 1 / -1; color: var(--fg); font-size: 1rem; font-weight: 600; line-height: 1.6; overflow-wrap: anywhere; }
++.oda-quote-citation { position: relative; min-width: 0; color: var(--fg-muted); font-size: .74rem; line-height: 1.6; overflow-wrap: anywhere; }
++.oda-quote-reference { margin-top: 3px; font-size: .7rem; }
++.oda-quote-kind { display: block; margin-top: 6px; font-size: .7rem; }
++.oda-quote-citation a { display: inline-flex; align-items: center; gap: 4px; min-width: 44px; min-height: 44px; color: var(--accent); font-size: .76rem; font-weight: 650; text-decoration: underline; text-underline-offset: 3px; }
++.oda-quote-illustration { align-self: end; height: 100px; width: 90px; overflow: hidden; border-radius: 45px 45px 12px 12px; }
++.oda-quote-illustration img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 54% 45%; }
++.oda-quotes-more, .oda-quotes-empty button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; width: fit-content; max-width: 100%; padding: 10px 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--accent); font-size: .87rem; font-weight: 650; }
++.oda-quotes-empty { padding: 20px; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); color: var(--fg); }
++.oda-quotes-empty button { margin-top: 12px; }
++@container oda-notebook (min-width: 620px) {
++  .oda-quotes-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
++}
++@container oda-notebook (min-width: 850px) {
++  .oda-notebook-hybrid .oda-notebook-workspace { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
++  .oda-notebook-hybrid .oda-notebook-calendar-lead { grid-column: 1; grid-row: 1; }
++  .oda-notebook-hybrid .oda-hybrid-entry-preview { grid-column: 1; grid-row: 2; }
++  .oda-notebook-hybrid .oda-notebook-writing-column { grid-column: 2; grid-row: 1 / span 2; align-self: start; }
++  .oda-notebook-hybrid .oda-notebook-editor, .oda-notebook-hybrid .oda-notebook-reflection-hero { grid-column: auto; grid-row: auto; }
++  .oda-notebook-hybrid .oda-notebook-archive { grid-column: 1 / -1; grid-row: 3; }
++  .oda-notebook-hybrid .oda-notebook-reflection-art { height: 112px; }
++}
++@media (max-width: 359px) {
++  .oda-notebook-hybrid .oda-notebook-heading p { max-width: 27ch; }
++  .oda-notebook-hybrid .oda-notebook-stat { padding-inline: 6px; }
++  .oda-notebook-hybrid .oda-notebook-tabs button { padding-inline: 6px; font-size: .77rem; }
++  .oda-notebook-hybrid .oda-notebook-reflection-hero { grid-template-columns: 70px minmax(0, 1fr); gap: 10px; }
++  .oda-quote-card { padding: 15px; }
++}
++@media (prefers-reduced-motion: reduce) {
++  .oda-notebook-hybrid *, .oda-notebook-hybrid *::before, .oda-notebook-hybrid *::after { scroll-behavior: auto; transition: none; }
++}
+--- a/src/services/notebookHybrid.ts
++++ b/src/services/notebookHybrid.ts
+@@ -0,0 +1,42 @@
++import type { SourcedQuote } from '../data/quoteTypes';
++
++export type QuoteFilterCategory = 'all' | SourcedQuote['category'];
++
++function calendarDate(key: string): Date {
++  if (!/^\d{4}-\d{2}-\d{2}$/.test(key)) throw new RangeError('Invalid notebook date');
++  const [year, month, day] = key.split('-').map(Number);
++  const date = new Date(year, month - 1, day, 12);
++  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) throw new RangeError('Invalid notebook date');
++  return date;
++}
++function calendarKey(date: Date): string {
++  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
++}
++
++/** Monday-first archive navigation only; never supplies a date to a writing mutation. */
++export function notebookWeekDates(anchor: string): string[] {
++  const date = calendarDate(anchor);
++  const monday = date.getDate() - (date.getDay() + 6) % 7;
++  return Array.from({ length: 7 }, (_, index) => calendarKey(new Date(date.getFullYear(), date.getMonth(), monday + index, 12)));
++}
++export function shiftNotebookWeek(anchor: string, weeks: number): string {
++  if (!Number.isInteger(weeks)) throw new RangeError('Week offset must be an integer');
++  const date = calendarDate(anchor);
++  return calendarKey(new Date(date.getFullYear(), date.getMonth(), date.getDate() + weeks * 7, 12));
++}
++
++export function filterSourcedQuotes(quotes: readonly SourcedQuote[], category: QuoteFilterCategory, query: string, locale: string): SourcedQuote[] {
++  const language = locale === 'tr' ? 'tr' : locale === 'es' ? 'es' : 'en';
++  const normalize = (value: string) => value.toLocaleLowerCase(language).normalize('NFKD').replace(/\p{M}/gu, '');
++  const needle = normalize(query.trim());
++  return quotes.filter(quote => (category === 'all' || quote.category === category)
++    && (!needle || normalize([quote.text, quote.tr, quote.source, quote.sourceTr, quote.reference || '', ...(quote.tags || [])].join(' ')).includes(needle)));
++}
++
++/** Catalogue links are external sources, never script or app actions. */
++export function quoteSourceHref(value: string): string | undefined {
++  try {
++    const url = new URL(value);
++    return url.protocol === 'https:' || url.protocol === 'http:' ? url.href : undefined;
++  } catch { return undefined; }
++}
+--- a/tests/notebook-hybrid.test.ts
++++ b/tests/notebook-hybrid.test.ts
+@@ -0,0 +1,44 @@
++import assert from 'node:assert/strict';
++import { test } from 'node:test';
++import { QUOTE_COLLECTION } from '../src/data/quoteCollection';
++import { filterSourcedQuotes, notebookWeekDates, quoteSourceHref, shiftNotebookWeek } from '../src/services/notebookHybrid';
++
++test('archive weeks cross month/year and leap-day boundaries without changing stored entries', () => {
++  assert.deepEqual(notebookWeekDates('2026-10-03'), ['2026-09-28', '2026-09-29', '2026-09-30', '2026-10-01', '2026-10-02', '2026-10-03', '2026-10-04']);
++  assert.deepEqual(notebookWeekDates('2028-02-29'), ['2028-02-28', '2028-02-29', '2028-03-01', '2028-03-02', '2028-03-03', '2028-03-04', '2028-03-05']);
++  assert.equal(shiftNotebookWeek('2026-01-01', -1), '2025-12-25');
++  assert.equal(shiftNotebookWeek(shiftNotebookWeek('2026-10-03', -1), 1), '2026-10-03');
++  assert.throws(() => notebookWeekDates('2026-02-30'), RangeError);
++  assert.throws(() => notebookWeekDates('not-a-date'), RangeError);
++  assert.throws(() => shiftNotebookWeek('2026-10-03', .5), RangeError);
++});
++
++test('all sourced passages remain reachable through their actual categories', () => {
++  assert.equal(QUOTE_COLLECTION.length, 600);
++  const actual = new Set<string>();
++  const before = JSON.stringify(QUOTE_COLLECTION);
++  for (const category of ['faith', 'society', 'science', 'philosophy'] as const) {
++    const matches = filterSourcedQuotes(QUOTE_COLLECTION, category, '', 'en');
++    assert.ok(matches.length > 0);
++    assert.ok(matches.every(quote => quote.category === category));
++    for (const quote of matches) actual.add(quote.id);
++  }
++  assert.equal(actual.size, 600);
++  assert.deepEqual(filterSourcedQuotes(QUOTE_COLLECTION, 'all', '', 'es'), QUOTE_COLLECTION);
++  assert.equal(JSON.stringify(QUOTE_COLLECTION), before);
++});
++
++test('search finds real English/Turkish text, sources and references and combines with category', () => {
++  const sample = QUOTE_COLLECTION.find(quote => quote.reference && quote.tags?.length)!;
++  assert.ok(filterSourcedQuotes(QUOTE_COLLECTION, sample.category, sample.text, 'en').includes(sample));
++  assert.ok(filterSourcedQuotes(QUOTE_COLLECTION, sample.category, sample.tr.toLocaleUpperCase('tr'), 'tr').includes(sample));
++  assert.ok(filterSourcedQuotes(QUOTE_COLLECTION, 'all', sample.source, 'es').includes(sample));
++  assert.ok(filterSourcedQuotes(QUOTE_COLLECTION, 'all', sample.reference!, 'en').includes(sample));
++  assert.equal(filterSourcedQuotes(QUOTE_COLLECTION, 'all', 'this-query-does-not-exist-oda-739452', 'en').length, 0);
++});
++
++test('catalogue sources use allowed web protocols and cannot execute app/script URLs', () => {
++  for (const quote of QUOTE_COLLECTION) assert.ok(quoteSourceHref(quote.sourceUrl), quote.id);
++  for (const href of ['javascript:alert(1)', 'data:text/html,hello', 'file:///private', '/app/notebook', 'invalid']) assert.equal(quoteSourceHref(href), undefined);
++  assert.equal(quoteSourceHref('https://example.org/source'), 'https://example.org/source');
++});

@@ -1,0 +1,1760 @@
+{
+  "sourceCommit": "71f1ce41f77bddb519cc9d18933303cc13336073",
+  "reviewBranch": "design/reference-led-oda",
+  "kind": "Exact committed review artifact inventory; self excluded to avoid a hash cycle.",
+  "fileCount": 350,
+  "pngCount": 216,
+  "bytes": 54248022,
+  "files": [
+    {
+      "file": ".gitignore",
+      "bytes": 88,
+      "sha256": "40924ff8865226e36c075666e2252b3b8a8e5afeaeecc0a75b5d0df67324bbd7"
+    },
+    {
+      "file": "README.md",
+      "bytes": 7651,
+      "sha256": "76527526c54e50703f4fdd06eac169a193bd75aaec7b014d4af1418b90419c29"
+    },
+    {
+      "file": "aggregate-check.log",
+      "bytes": 76227,
+      "sha256": "c406039aaff39d515e6156e6f27a592025399488f16318f067d2e3db731c2397"
+    },
+    {
+      "file": "archive-name-map.json",
+      "bytes": 5127,
+      "sha256": "a8b0c771589c683c9ba796afa29e6f454c8ad03d25995ab029b6e4d80888447d"
+    },
+    {
+      "file": "author/coach/coach-focused-qa-reviewed/en-dark-390.png",
+      "bytes": 266245,
+      "sha256": "76cb5a1b488bd3daca078de286bdaba33036221d8e5cb3822d351670f41bce80"
+    },
+    {
+      "file": "author/coach/coach-focused-qa-reviewed/en-light-1440.png",
+      "bytes": 405098,
+      "sha256": "f7d694c133742081baf4049c02c9d6a71d3decdad8e4bca92814a157bcece989"
+    },
+    {
+      "file": "author/coach/coach-focused-qa-reviewed/en-light-320-exercise.png",
+      "bytes": 248677,
+      "sha256": "d65d6b98ec5922d2263acbac1f63d2f5b84567ab8d97bb4fe417b00cabeb9579"
+    },
+    {
+      "file": "author/coach/coach-focused-qa-reviewed/en-light-320.png",
+      "bytes": 253959,
+      "sha256": "f73a1d4ac19fcc0d7c74c918ed29c58cc5fc264b03768c2a6946075092efd096"
+    },
+    {
+      "file": "author/coach/coach-focused-qa-reviewed/en-light-390.png",
+      "bytes": 264957,
+      "sha256": "1c64f234d75d4372f1a08553b7554092f64fe1d461fa931c0f07ac7444214b64"
+    },
+    {
+      "file": "author/coach/coach-focused-qa-reviewed/es-dark-390.png",
+      "bytes": 287804,
+      "sha256": "508f2894c9fc57d211b60d2283017b9b34dca8864e851b07c74e5bc7a63d2dd2"
+    },
+    {
+      "file": "author/coach/coach-focused-qa-reviewed/report.json",
+      "bytes": 3961,
+      "sha256": "4aaf5966758e61a62ae4d7a0411d8e3658ae3102ec723dfcbd0c5f2dd0bc08b0"
+    },
+    {
+      "file": "author/coach/coach-focused-qa-reviewed/tr-dark-390.png",
+      "bytes": 274980,
+      "sha256": "ff3fd42a04e07bce5c8daabe8e38aa0d39db21dd319a2a54bef0bde08c0dfa15"
+    },
+    {
+      "file": "author/coach/coach-focused-qa-reviewed.log",
+      "bytes": 1851,
+      "sha256": "fb1e3388edf8ba38db91a04005e452412faa9fe269e4e1ed57d38eef4cba2fbb"
+    },
+    {
+      "file": "author/coach/coach-focused-qa.mjs.log",
+      "bytes": 5864,
+      "sha256": "26542f90666a4dd47a957b871f574149915cc3154678ae089af4818d01a2d560"
+    },
+    {
+      "file": "author/coach/coach-presentation-receipt.json",
+      "bytes": 1793,
+      "sha256": "e76e37a8f574e0b04eadc4de7121bfc0e21fb50649be02cbebff644cc34732d1"
+    },
+    {
+      "file": "author/coach/coach-presentation-report.md",
+      "bytes": 2929,
+      "sha256": "92581c1abc8bf4a47f0a6fbe29aad92e4ad18cfce6b19b7a8e704089c7977d25"
+    },
+    {
+      "file": "author/sound/behavior-preservation.json",
+      "bytes": 456,
+      "sha256": "b1d40c5d2fc35ed6cb5eb0908c8b028ae4e7d13798e8de78d58a774e095ad3fa"
+    },
+    {
+      "file": "author/sound/desktop-report.json",
+      "bytes": 503,
+      "sha256": "323de83fbf37156e929908d3b844a258b3068009ac5c327b1fbed3fc66f64a58"
+    },
+    {
+      "file": "author/sound/en-dark-1440-discovery.png",
+      "bytes": 421282,
+      "sha256": "d9a4d0f692e8c168d3c52ac7cacf4b4c8ccc58eac2cd21997341b37f40ff7fad"
+    },
+    {
+      "file": "author/sound/en-dark-1440-sessions-player.png",
+      "bytes": 341290,
+      "sha256": "37d9600d184fc17528c12cfbbcaed833127a9dada7ae9fe58693f4485aaa64bf"
+    },
+    {
+      "file": "author/sound/en-light-1440-discovery.png",
+      "bytes": 414588,
+      "sha256": "74c8e04a77d9dffa570c9532c88357b3164c83cfa61c1e1877d8d871d7bf8307"
+    },
+    {
+      "file": "author/sound/en-light-1440-sessions-player.png",
+      "bytes": 329003,
+      "sha256": "5f1a5544b87eb702b8b3cd2742ea97143051eacc9758f591e57d9a7461f8e295"
+    },
+    {
+      "file": "author/sound/final-en-dark-390-discovery.png",
+      "bytes": 167530,
+      "sha256": "388882762600f934099c7bf82fe99401fafa4b3b8392864b3c93dc7469a3de7b"
+    },
+    {
+      "file": "author/sound/final-en-dark-390-sessions-player.png",
+      "bytes": 105833,
+      "sha256": "8b667e3a4f44ac387127477219de68abf061bb6b3605f416f11b5d23b8102ef3"
+    },
+    {
+      "file": "author/sound/final-en-light-390-discovery.png",
+      "bytes": 170443,
+      "sha256": "315fd85bbb6a8dcb2b8703082d909c8b219bdeef0e20b484890249aab79b3023"
+    },
+    {
+      "file": "author/sound/final-en-light-390-sessions-player.png",
+      "bytes": 108665,
+      "sha256": "8e0de160a4c452d5d9df89327d163dd2ba852a0414a5b5c4a54bcc21d7f8ef50"
+    },
+    {
+      "file": "author/sound/final-geometry-report.json",
+      "bytes": 2266,
+      "sha256": "16c8b5e1ee82c902b91621dabc9f06f047a6e20c017cfe97a1dfa15afb12fcfd"
+    },
+    {
+      "file": "author/sound/implementation-summary.json",
+      "bytes": 2877,
+      "sha256": "5e062d6e6f727a288a1031198128a2956e275150d6fc4928aacc1a0c436bc17f"
+    },
+    {
+      "file": "author/sound/initial-contrast-finding.json",
+      "bytes": 2547,
+      "sha256": "749617bc13c2ea7b8af0f6f2c979451b47f2b2813c2d607922b84a9ed0ec4056"
+    },
+    {
+      "file": "author/sound/presentation.diff",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "author/sound/report.json",
+      "bytes": 2711,
+      "sha256": "4fd6dcaabe9ff7112ac30b9ff34e9bdd19abe01f39c533eac848255809691624"
+    },
+    {
+      "file": "author/sound/scoped-browser.mjs.log",
+      "bytes": 5956,
+      "sha256": "65fbfa196191bad1ee90c4838cecd2d2ead42c4a3f52a0cb8b5bbf64fb93c892"
+    },
+    {
+      "file": "author/working-surfaces/accessibility-report.json",
+      "bytes": 19391,
+      "sha256": "7d1eb5891e5ca24027c585865bc118a253860041ca20d8c2f3f41f43c47ea674"
+    },
+    {
+      "file": "author/working-surfaces/design-and-diff-notes.md",
+      "bytes": 2723,
+      "sha256": "40fb80bde53d3b1130104c6273cf449bbf445ba872aff7da330a359aba7a7108"
+    },
+    {
+      "file": "author/working-surfaces/evidence-files.json",
+      "bytes": 4787,
+      "sha256": "0a1825ff591fc7312b717b9fba0abff7393aee347d69debb981dcd9cba3ed648"
+    },
+    {
+      "file": "author/working-surfaces/final-course-overview-mobile.png",
+      "bytes": 238979,
+      "sha256": "b9a9f7f639a6e738c60c2b7159262b422eb24e93a2e166b589eee7f61d9f3ce4"
+    },
+    {
+      "file": "author/working-surfaces/final-course-workbook-mobile.png",
+      "bytes": 666915,
+      "sha256": "8ada0425803c776e4c4a6439560d4e8fc47278dbd9722858df35ff3e4da33d1d"
+    },
+    {
+      "file": "author/working-surfaces/final-courses-en-390-light.png",
+      "bytes": 120191,
+      "sha256": "9b7b6579e2c1336bd682dc9c99ca7bc6a412a812a07b1a58fb86e42574108169"
+    },
+    {
+      "file": "author/working-surfaces/final-courses-es-390-light.png",
+      "bytes": 105368,
+      "sha256": "26977ecbdcecd643f58b5dd5a8dd9f1f39d4e568b3f0688f1471683111d1f17b"
+    },
+    {
+      "file": "author/working-surfaces/final-courses-tr-320-dark.png",
+      "bytes": 99183,
+      "sha256": "032469cee28df268188f4563f3efdd721ec0232b0ad999c702b4d5a96b6196fa"
+    },
+    {
+      "file": "author/working-surfaces/final-focused-report.json",
+      "bytes": 4213,
+      "sha256": "ebd364d918457d01ad1988c04bf36a446f1cb65ea4252d8a3793bd08a0c4e53d"
+    },
+    {
+      "file": "author/working-surfaces/final-notebook-archive-en-390-light.png",
+      "bytes": 49266,
+      "sha256": "1a72d3dd92003f2ebaadd1d44e0e77fab2275f044c84c22a6cc1928254a81049"
+    },
+    {
+      "file": "author/working-surfaces/final-notebook-archive-es-390-light.png",
+      "bytes": 50410,
+      "sha256": "d6f47089277ec5bb4e38b8628064725cd3e79844fb7a47b4d3bc4cb5f31d9004"
+    },
+    {
+      "file": "author/working-surfaces/final-notebook-archive-tr-320-dark.png",
+      "bytes": 53493,
+      "sha256": "ed9f78c1d0e4681de92a9f7045d45e3a1b14c8c354b824a3b24fceb17efcc8f1"
+    },
+    {
+      "file": "author/working-surfaces/final-notebook-desktop.png",
+      "bytes": 193409,
+      "sha256": "ee54d53760b4badeb416ce240c0583cebee579d63bb8a621fe1aa46d083201fb"
+    },
+    {
+      "file": "author/working-surfaces/final-notebook-en-390-light.png",
+      "bytes": 88005,
+      "sha256": "ae50abeb7198827bcffaa0230b223229d7685643a382c041afea4eb5a5826703"
+    },
+    {
+      "file": "author/working-surfaces/final-notebook-es-390-light.png",
+      "bytes": 83193,
+      "sha256": "35c1f63aca9585cd3da1b4ba68a7686340a19ba49ba09a60b5f56f77600441c8"
+    },
+    {
+      "file": "author/working-surfaces/final-notebook-tr-320-dark.png",
+      "bytes": 82287,
+      "sha256": "d9eed6369dc7ad4b86ad891b5df136799c80e914a10ab006270d1542ce8aeaa3"
+    },
+    {
+      "file": "author/working-surfaces/source-report.json",
+      "bytes": 1761,
+      "sha256": "ca8faea3993bc2d01a3c31f92d19cf4771c5470ad806659bcfd071454ff911da"
+    },
+    {
+      "file": "build-receipt.json",
+      "bytes": 197905,
+      "sha256": "01b38e1a88c2bf027a20a670f24e849e5781cccfba36d65871ecf8c7324b66d1"
+    },
+    {
+      "file": "calendar-fix/calendar-scroll-affordance.patch",
+      "bytes": 4337,
+      "sha256": "cbe28edd043f23fd9a865337bd6ebcd5e25beea1e67529d8d40a34703e2471ba"
+    },
+    {
+      "file": "calendar-fix/proposal-receipt.json",
+      "bytes": 2462,
+      "sha256": "d298260c85e4a546df885bc7242a04c91689807ee60d038ae36401b6237f7713"
+    },
+    {
+      "file": "design-brief-before-code.md",
+      "bytes": 4257,
+      "sha256": "6e62e6d77298c4adb5b4f706728e6a038eaeb4cfd4fb8b6509ce22d12c399f40"
+    },
+    {
+      "file": "independent/flows/README.md",
+      "bytes": 4312,
+      "sha256": "0b9e3b9ac3d406a6d9419980742719a9974b2f54cfb48378379acf1cf6fa4108"
+    },
+    {
+      "file": "independent/flows/calendar-final/README.md",
+      "bytes": 2013,
+      "sha256": "84d6dd8a6d766a61e268eb981477cda2e4280f5eaa0d3957cbcc611db9981cc9"
+    },
+    {
+      "file": "independent/flows/calendar-final/exact-delta.diff.log",
+      "bytes": 4909,
+      "sha256": "9c25670dd0a99053df82031578bbc4e367a732cf60240d44357867c0e389d8c5"
+    },
+    {
+      "file": "independent/flows/calendar-final/final-rebind-receipt.json",
+      "bytes": 3084,
+      "sha256": "f0d23df42410147a0213d19bc1c25be1f0f8cbbdbbca3ebcd2b03821a28eea16"
+    },
+    {
+      "file": "independent/flows/calendar-final/preflight-receipt.json",
+      "bytes": 198057,
+      "sha256": "1e4ac608f2bd784efe94c0fc1be2d8805af7b26e29c16551ab687a1498e8d0a0"
+    },
+    {
+      "file": "independent/flows/calendar-scroll-fixture-correction.json",
+      "bytes": 637,
+      "sha256": "47e7a245350c00979343ebfa8fd9f4798baeecaf4fab1edc485ea69bb3c5c206"
+    },
+    {
+      "file": "independent/flows/calendar-settled/browser.log",
+      "bytes": 2117,
+      "sha256": "e450e0fce45653a6f83958ed7d7150f28fd480a1522167de6db8c7ed440b7e89"
+    },
+    {
+      "file": "independent/flows/calendar-settled/calendar-hint-en-320.png",
+      "bytes": 50280,
+      "sha256": "a8d14352751b5265a5fedafe4480d3cfcfc7ad7843e196a7cb3858414f31e54b"
+    },
+    {
+      "file": "independent/flows/calendar-settled/calendar-hint-en-390.png",
+      "bytes": 52356,
+      "sha256": "81b1dda896768cd45d158655ae9b4b81eaa34aa864d7b9a02d98dac1fafa8e48"
+    },
+    {
+      "file": "independent/flows/calendar-settled/calendar-hint-es-320.png",
+      "bytes": 52261,
+      "sha256": "e93c8aa40092a33147d751816b920136e50677ae038236024ea45721b5d67636"
+    },
+    {
+      "file": "independent/flows/calendar-settled/calendar-hint-es-390.png",
+      "bytes": 54223,
+      "sha256": "ba2f48d9501eb1524ccfcd5101e4b93ff7240201c9db5ada77ea9a2dd9e1df62"
+    },
+    {
+      "file": "independent/flows/calendar-settled/calendar-hint-tr-320.png",
+      "bytes": 50106,
+      "sha256": "232965964597723427322d245168386e9ad833695530b32546941245e31f4307"
+    },
+    {
+      "file": "independent/flows/calendar-settled/calendar-hint-tr-390.png",
+      "bytes": 52031,
+      "sha256": "9edd13da042d17e4dde01eab5719c60d3922cf53ec9d66227ba809ff668c9b28"
+    },
+    {
+      "file": "independent/flows/calendar-settled/calendar-report.json",
+      "bytes": 5845,
+      "sha256": "e216e15373f329b15455646c014c7c3b5f52c7cedf62189d94d8c25ebc3aed2d"
+    },
+    {
+      "file": "independent/flows/calendar-settled/calendar-weekend-selected-en-320.png",
+      "bytes": 52680,
+      "sha256": "2ce7a19319f1c9cdbef92c850988d20f4ca30cdc35013df7df844a9ed7be8f35"
+    },
+    {
+      "file": "independent/flows/calendar-settled/calendar-weekend-selected-en-390.png",
+      "bytes": 55157,
+      "sha256": "9b2f50a637c70007029e34f4867dd8caee3f59ef5070fac3aac9a02a891d1aca"
+    },
+    {
+      "file": "independent/flows/calendar-settled/calendar-weekend-selected-es-320.png",
+      "bytes": 53268,
+      "sha256": "3664d78c8c4b2bddb8197f0f87a18e30a639e132c17dc9476036cfccfdd989f9"
+    },
+    {
+      "file": "independent/flows/calendar-settled/calendar-weekend-selected-es-390.png",
+      "bytes": 58424,
+      "sha256": "f50a5666e7263d836e25766f9aaaec572a56355c08c0ddacfa553d7c42333708"
+    },
+    {
+      "file": "independent/flows/calendar-settled/calendar-weekend-selected-tr-320.png",
+      "bytes": 50876,
+      "sha256": "cf25b7edb922e0657410c4d9ca204470696f83e9de912a097e4f69fff2fae647"
+    },
+    {
+      "file": "independent/flows/calendar-settled/calendar-weekend-selected-tr-390.png",
+      "bytes": 54551,
+      "sha256": "07fbd26831f9301b02e04d926c2a64208108306cd3fc0f78bd483b135341035f"
+    },
+    {
+      "file": "independent/flows/calendar-settled/command-receipt.json",
+      "bytes": 839,
+      "sha256": "b4b9715464321b085aa22ffe888ff9d6b0e2679bcc252bd18ef7805a9a287c85"
+    },
+    {
+      "file": "independent/flows/calendar-targeted/browser.log",
+      "bytes": 843,
+      "sha256": "13297c329788a6bf6ccac8b89c4accad5e66e40b9e1a1ec7b71923d92947be3b"
+    },
+    {
+      "file": "independent/flows/calendar-targeted/calendar-hint-en-320.png",
+      "bytes": 50280,
+      "sha256": "a8d14352751b5265a5fedafe4480d3cfcfc7ad7843e196a7cb3858414f31e54b"
+    },
+    {
+      "file": "independent/flows/calendar-targeted/calendar-hint-en-390.png",
+      "bytes": 52354,
+      "sha256": "b62f58d7b33aa135b25deaa51d3419f81dbef67556a8983e2c33d2d6db522b7e"
+    },
+    {
+      "file": "independent/flows/calendar-targeted/calendar-report.json",
+      "bytes": 2108,
+      "sha256": "d94621d78b85213022587b55d09e80cc69b1858b9781f12bc3b2172cae69c8d8"
+    },
+    {
+      "file": "independent/flows/calendar-targeted/calendar-weekend-selected-en-320.png",
+      "bytes": 52682,
+      "sha256": "29551320315315dad34293248df6b8961ba18ca4a3b8e240c11974a670576551"
+    },
+    {
+      "file": "independent/flows/calendar-targeted/command-receipt.json",
+      "bytes": 841,
+      "sha256": "f33333474391a685f876d601a0001bd5a08090683cd3be836f68c7c911c305bc"
+    },
+    {
+      "file": "independent/flows/calendar-targeted/failure.png",
+      "bytes": 55206,
+      "sha256": "2203c6a5c833c72025a8262de78f34c932206a91d3253ba8f4a6ca9a96fb7a74"
+    },
+    {
+      "file": "independent/flows/cf95-evidence-manifest.json",
+      "bytes": 21767,
+      "sha256": "7c29cdc35b911644e66d0b74c24a1b3b1885164316bb3dfd328b6164b63ecf34"
+    },
+    {
+      "file": "independent/flows/cf95-final-browser-receipt.json",
+      "bytes": 4037,
+      "sha256": "c45ddfb93abae01a58d148b78c366bf6b177784b037481e89710af2bd5df04b7"
+    },
+    {
+      "file": "independent/flows/courses/browser.log",
+      "bytes": 2806,
+      "sha256": "5d0b6571300622d45b9cafd3e3b935a3354e55f2a21f5a1b1dc5d7a3c7046ea4"
+    },
+    {
+      "file": "independent/flows/courses/catalog-dark-top.png",
+      "bytes": 213698,
+      "sha256": "3290ed867e53c515da14f402cb927ff4acd23db2a00a51d5142dff60848d3637"
+    },
+    {
+      "file": "independent/flows/courses/catalog-desktop-top.png",
+      "bytes": 404267,
+      "sha256": "8ceaac6943256d118285bc9078d65f1821254b53ba4237f04f1cd22462aebea8"
+    },
+    {
+      "file": "independent/flows/courses/catalog-desktop.png",
+      "bytes": 2845783,
+      "sha256": "070efd29994d4675fff2d6c633ea1e72c0367886dc169d16203ea65bdb9dd5cd"
+    },
+    {
+      "file": "independent/flows/courses/catalog-mobile-top.png",
+      "bytes": 120191,
+      "sha256": "9b7b6579e2c1336bd682dc9c99ca7bc6a412a812a07b1a58fb86e42574108169"
+    },
+    {
+      "file": "independent/flows/courses/catalog-mobile.png",
+      "bytes": 1072833,
+      "sha256": "26c81fb7190d4dfeb7201d48f880ab8b2a48f82769cc21b225eb109871d2d972"
+    },
+    {
+      "file": "independent/flows/courses/command-receipt.json",
+      "bytes": 854,
+      "sha256": "8d60723d9b8c58ab422d9d1569729a051fbaab49fbda08a0f7bcd787ea70c7c0"
+    },
+    {
+      "file": "independent/flows/courses/course-browser-report.json",
+      "bytes": 4524,
+      "sha256": "e6b896a35d158ed8447a6c9cedc3b6164e04299eca23e64feb7e9792eac5bf09"
+    },
+    {
+      "file": "independent/flows/courses/overview-320px.png",
+      "bytes": 144103,
+      "sha256": "c0af6094a95a90507aecb3c65c024d95f4a44f9ea365a72e972d6a3ed1e4378e"
+    },
+    {
+      "file": "independent/flows/courses/overview-mobile.png",
+      "bytes": 186955,
+      "sha256": "a08d8f3f7a6ef5f5a6b1b4cf861b9b0cb6aa4b72d5a20a8c24401658d56d3767"
+    },
+    {
+      "file": "independent/flows/courses/workbook-320px.png",
+      "bytes": 634670,
+      "sha256": "84a8788973c075ad4192cef2d4b2c798c9c9be01858948c252a6888aab56a05a"
+    },
+    {
+      "file": "independent/flows/courses/workbook-dark-plan.png",
+      "bytes": 134487,
+      "sha256": "0dc9335e1d5f7cb4713810cf79c81b5bfc9e2105d7931b25a428026ef9b27a92"
+    },
+    {
+      "file": "independent/flows/courses/workbook-desktop.png",
+      "bytes": 691778,
+      "sha256": "aab02ca6c8e45d6b24ebbe9e1c9fd061be6bbe537c39c49641f66ff8970adc5e"
+    },
+    {
+      "file": "independent/flows/courses/workbook-mobile-plan.png",
+      "bytes": 55249,
+      "sha256": "2a71a83c0d1fc0e19d1982b825b3f603f8847fe32e434808eb00b59e053a4392"
+    },
+    {
+      "file": "independent/flows/courses/workbook-mobile.png",
+      "bytes": 660447,
+      "sha256": "520e55953f9d89f9b5a9fec2dc3f2a43d572e38a6924f88aed840e513002f63b"
+    },
+    {
+      "file": "independent/flows/dialogs/browser.log",
+      "bytes": 4572,
+      "sha256": "1f3c434f35a11de6ddefeb0abd65f3532ba2aa31a67a1385c85f7f66952da05a"
+    },
+    {
+      "file": "independent/flows/dialogs/command-receipt.json",
+      "bytes": 778,
+      "sha256": "0d0f852ace485875a5b9c84c389a0eabaefe0cb8a1223fed11788a591bbf4efc"
+    },
+    {
+      "file": "independent/flows/dialogs/focus-no-inert-confirmation.png",
+      "bytes": 34370,
+      "sha256": "5ee32fa4c2a95f64a77c3f7787ee41dcbdcf1ec34f6c900019b707090b4d5835"
+    },
+    {
+      "file": "independent/flows/dialogs/focus-normal-confirmation.png",
+      "bytes": 34167,
+      "sha256": "8928e1909ad6f4536fa5d2560955e0bf464f052809ce5954390c41919021f2b9"
+    },
+    {
+      "file": "independent/flows/dialogs/fullscreen-actual-success.png",
+      "bytes": 31629,
+      "sha256": "dc7c1b96a8166241b33b127bfc493276749d710749c4b9c7052cc69c6d4fce32"
+    },
+    {
+      "file": "independent/flows/dialogs/fullscreen-denied.png",
+      "bytes": 31590,
+      "sha256": "f6acd721e5a86e27d8aae9fc5ff9d79e648b830b384f2b91719b2730cae72c3c"
+    },
+    {
+      "file": "independent/flows/dialogs/fullscreen-unsupported.png",
+      "bytes": 31605,
+      "sha256": "593f13c4e6e2bc76487d3844ea5f455237337c4b622e5d8e76ff0783df74ccd8"
+    },
+    {
+      "file": "independent/flows/dialogs/photo-native-320.png",
+      "bytes": 23546,
+      "sha256": "5b005b613f37914fbcb198fd6d5ab25ae1a7e2a821c311d73816288d15cbffa5"
+    },
+    {
+      "file": "independent/flows/dialogs/photo-native.png",
+      "bytes": 24508,
+      "sha256": "b91588b3e62253b1fb6872460d1aaa84d03f285cd9f967b72911e37d18c59c7d"
+    },
+    {
+      "file": "independent/flows/dialogs/photo-no-close.png",
+      "bytes": 24520,
+      "sha256": "8fdf3249f001933d2db0a75d2152c109332ac28aaa10c7bc272ba9b6f85748e9"
+    },
+    {
+      "file": "independent/flows/dialogs/photo-no-methods-or-inert.png",
+      "bytes": 34319,
+      "sha256": "0739683af0afde30939c764a2a102faccfd4d0673d4d99094cfdf1ae0499927c"
+    },
+    {
+      "file": "independent/flows/dialogs/photo-no-showModal.png",
+      "bytes": 23551,
+      "sha256": "543f395ae1511aec9a2e5cd74031322dc751f1298f25727860520141cdb3692c"
+    },
+    {
+      "file": "independent/flows/dialogs/report.json",
+      "bytes": 14950,
+      "sha256": "54c399f72d0ecced39b477a3196851b530bea0b61f9e861897b9dd6d4d0e1de9"
+    },
+    {
+      "file": "independent/flows/evidence-manifest.json",
+      "bytes": 30309,
+      "sha256": "eeb2edb4ad0382369d70fc5b963f79eb97a6dbc4d7e33688a72929aabefc848b"
+    },
+    {
+      "file": "independent/flows/first-use/browser.log",
+      "bytes": 3666,
+      "sha256": "4718f76d6dc21cdca44a3f18768531125328c7d388e63fa62ba4241de7a75d76"
+    },
+    {
+      "file": "independent/flows/first-use/command-receipt.json",
+      "bytes": 820,
+      "sha256": "f74ea0738891935d25bc5c3fc8c753ca33c2e831c4b6012ab79806c35305f80b"
+    },
+    {
+      "file": "independent/flows/first-use/en-course-overview-1440.png",
+      "bytes": 677156,
+      "sha256": "5ffd1df7778235c188af23abac0d88c43a8d9473d09f547a6476d946d844c85d"
+    },
+    {
+      "file": "independent/flows/first-use/en-course-overview-320.png",
+      "bytes": 203087,
+      "sha256": "41d91d06936029a2403c77e8eef4bd439ce63f3ae0e6a8895184700a9693b6a9"
+    },
+    {
+      "file": "independent/flows/first-use/en-course-overview-390.png",
+      "bytes": 237234,
+      "sha256": "ff7b6ac0b6568cdfd1aeff90f8203dfdc0efac70c33225b1e527742de91e0e64"
+    },
+    {
+      "file": "independent/flows/first-use/en-onboarding-final-390.png",
+      "bytes": 55930,
+      "sha256": "234644c2b4cd98e15dc74115c8cd31c6bac6f7232406ad96d78221a7c38e4f85"
+    },
+    {
+      "file": "independent/flows/first-use/en-onboarding-preview-1440.png",
+      "bytes": 72683,
+      "sha256": "6f585d4b08e2e0d092ef028e38894ba2b20c46a28b97dfeaae57fafcfb19eb4c"
+    },
+    {
+      "file": "independent/flows/first-use/en-onboarding-preview-320.png",
+      "bytes": 53996,
+      "sha256": "045e8c244cd6b20145ad26ef970bb690700d280d9335b8ec7ebf1bc98b81cc83"
+    },
+    {
+      "file": "independent/flows/first-use/en-onboarding-preview-390.png",
+      "bytes": 54611,
+      "sha256": "03fd8e8e62e66a5351aa706a85fc2d6b74f1dda7ca2581d70c824ad18c8c8858"
+    },
+    {
+      "file": "independent/flows/first-use/en-onboarding-proof-1440.png",
+      "bytes": 72483,
+      "sha256": "cc9438869f1dfdb5742e3a1ea06b4e01dbd4cbcad9a625c0769d2ead3110895b"
+    },
+    {
+      "file": "independent/flows/first-use/en-onboarding-proof-320.png",
+      "bytes": 52432,
+      "sha256": "a239dc058006bbd46af3742791c7345f4178899d21d7f451af56a54c92b4366d"
+    },
+    {
+      "file": "independent/flows/first-use/en-onboarding-proof-390.png",
+      "bytes": 53440,
+      "sha256": "68a83409fc1ada616dcb310a207e873da91703ff4a22278647073b887c04a014"
+    },
+    {
+      "file": "independent/flows/first-use/en-real-kept-one-leaf-390.png",
+      "bytes": 350744,
+      "sha256": "9cf89060babf34d501374045d14ce5cded4a82f928280a8250b7e966256cbbd4"
+    },
+    {
+      "file": "independent/flows/first-use/en-resumed-lesson-two-390.png",
+      "bytes": 568927,
+      "sha256": "5a9049e2556fd7b9e78ab61e75afaf2e5b8dd398059670c5f29b41d14d20173e"
+    },
+    {
+      "file": "independent/flows/first-use/en-today-optional-plan-390.png",
+      "bytes": 323358,
+      "sha256": "60a18bd4c5b412b8022586b42bc5a4f55365e60f585b6b14c8a52267dc4d959f"
+    },
+    {
+      "file": "independent/flows/first-use/en-today-real-next-lesson-390.png",
+      "bytes": 338017,
+      "sha256": "c7423b73577deaeff2faf9bce6d51e782a9ad34586154f0154c2c287db52f2f7"
+    },
+    {
+      "file": "independent/flows/first-use/en-two-minute-expired-390.png",
+      "bytes": 63466,
+      "sha256": "1f4fbcb8368cc0b3206e03d331b81a776e54f138ada5fa26249cde4b675c71f8"
+    },
+    {
+      "file": "independent/flows/first-use/es-course-overview-1440.png",
+      "bytes": 678501,
+      "sha256": "0fda3a314f579e89ca514ddc64078d95c93992113350eac300041fda01396879"
+    },
+    {
+      "file": "independent/flows/first-use/es-course-overview-320.png",
+      "bytes": 205949,
+      "sha256": "63dd1bf0fde5aa9d02d86614d271a4eacae2dc37d1b662e6026dc0bc4c09dca1"
+    },
+    {
+      "file": "independent/flows/first-use/es-course-overview-390.png",
+      "bytes": 242075,
+      "sha256": "ce60ddce5bb626dc621c5a15804bc55ea31edb644d381c02ea3b2ce09ed6f10c"
+    },
+    {
+      "file": "independent/flows/first-use/es-onboarding-final-390.png",
+      "bytes": 52776,
+      "sha256": "df09d58f14c88fb778871e186c6c2bc0d9b966f6c6a0bd4008b42da4c1e0612a"
+    },
+    {
+      "file": "independent/flows/first-use/es-onboarding-preview-1440.png",
+      "bytes": 78782,
+      "sha256": "d8b2250251c025c8a24c53ac83a1f6c43f2d1f0b46a9cd91de247b850ed08526"
+    },
+    {
+      "file": "independent/flows/first-use/es-onboarding-preview-320.png",
+      "bytes": 58009,
+      "sha256": "22ee665c011721e19885231bfdbccf0d8e38ffdc0df506e892f06aa4a68d3890"
+    },
+    {
+      "file": "independent/flows/first-use/es-onboarding-preview-390.png",
+      "bytes": 57198,
+      "sha256": "3549338aaca1f3778ef5fc23cacad9d442ae6bf0c96e3f60537f5a5ec4345cf3"
+    },
+    {
+      "file": "independent/flows/first-use/es-onboarding-proof-1440.png",
+      "bytes": 79151,
+      "sha256": "a079d62c3fdc62af6b422020b1e363922a32bd3f19cb7f5e1d6b2b28429e4013"
+    },
+    {
+      "file": "independent/flows/first-use/es-onboarding-proof-320.png",
+      "bytes": 57332,
+      "sha256": "1dc663200931d032faac93aad4deb3cd0f403747d27455f3ca3c6b538090fac6"
+    },
+    {
+      "file": "independent/flows/first-use/es-onboarding-proof-390.png",
+      "bytes": 57507,
+      "sha256": "f6a5ada829a4f9a6646d21b029651822ece91f158b19a20813db4505a97d0880"
+    },
+    {
+      "file": "independent/flows/first-use/independent-first-use-report.json",
+      "bytes": 20377,
+      "sha256": "3d06e60fff3eafb759882f3973191d5d8f432a149c269863a45677ffbc72a436"
+    },
+    {
+      "file": "independent/flows/first-use/tr-course-overview-1440.png",
+      "bytes": 668795,
+      "sha256": "99fc7834a1ba85b3ce830e40cf49b9e67a8174922dcfb41bbf01029046e89a57"
+    },
+    {
+      "file": "independent/flows/first-use/tr-course-overview-320.png",
+      "bytes": 192418,
+      "sha256": "5bd63b208992070c0ff55f83b0debe0750c42470a722efc36bd028ef35e62b8c"
+    },
+    {
+      "file": "independent/flows/first-use/tr-course-overview-390.png",
+      "bytes": 227312,
+      "sha256": "f385105c6936c1106ba5744e79014bc7cb6ce91a68663e5c3805d867b9310199"
+    },
+    {
+      "file": "independent/flows/first-use/tr-onboarding-final-390.png",
+      "bytes": 50927,
+      "sha256": "fe04f3b150f428c22c02431fb009f5fc150675fdf1efd3f3f6e4a0a45a16b483"
+    },
+    {
+      "file": "independent/flows/first-use/tr-onboarding-preview-1440.png",
+      "bytes": 74820,
+      "sha256": "970c95fa3c48df4e1bc0fe92d449e94c8033f432c25721c059ce3d9601098357"
+    },
+    {
+      "file": "independent/flows/first-use/tr-onboarding-preview-320.png",
+      "bytes": 54821,
+      "sha256": "8e15d603ec583d0947c570ac194b846d5ae0bdbb9a62a60b230d1aaff04ecb71"
+    },
+    {
+      "file": "independent/flows/first-use/tr-onboarding-preview-390.png",
+      "bytes": 55784,
+      "sha256": "ee0d5a5e3168b371a7ab6b1a719fa829fbdaa621fe6b98b7d73a07feb23dc687"
+    },
+    {
+      "file": "independent/flows/first-use/tr-onboarding-proof-1440.png",
+      "bytes": 75106,
+      "sha256": "567f8edc0814ab0abd6762b7d892fe2f145d2fccdcf874d0ff7d20928dff09db"
+    },
+    {
+      "file": "independent/flows/first-use/tr-onboarding-proof-320.png",
+      "bytes": 54234,
+      "sha256": "62935f48b835c0c2000f482208c65000dc6ed4de48a4cd7ac1ca8da5601dc484"
+    },
+    {
+      "file": "independent/flows/first-use/tr-onboarding-proof-390.png",
+      "bytes": 54312,
+      "sha256": "bc12234fa4564d99b1613cb920f4fee546b7107aa96bf0b4a38dfcd2f508f7f3"
+    },
+    {
+      "file": "independent/flows/guidance/browser.log",
+      "bytes": 2347,
+      "sha256": "d666ce31196ac3b18895d359c5ec582ac8fb99044b5aa5de6b41a77283434552"
+    },
+    {
+      "file": "independent/flows/guidance/command-receipt.json",
+      "bytes": 1004,
+      "sha256": "dccad4b60667b164d9efb1ac18afcbd5461b3eead1a3d1281d871da003d7dfe1"
+    },
+    {
+      "file": "independent/flows/guidance/final-guided-en-1440.png",
+      "bytes": 277819,
+      "sha256": "ef33ed0e46b8b9e607f32f873e88c8dbe8f9fc94110047857299b3ad949c8a6b"
+    },
+    {
+      "file": "independent/flows/guidance/final-guided-en-320.png",
+      "bytes": 177495,
+      "sha256": "bea3c453ec73b9a1611872187cd07c1dc9e8af8fb6189964c1533ece3e580907"
+    },
+    {
+      "file": "independent/flows/guidance/final-guided-en-390.png",
+      "bytes": 187193,
+      "sha256": "b7e45741f78c291cbb311ce60d1714c36471ab7d16e20e68b80de29d1fe1ed6d"
+    },
+    {
+      "file": "independent/flows/guidance/final-guided-es-320.png",
+      "bytes": 208095,
+      "sha256": "3a36a7368449d08ab83628e179a8c92d1b42dd31258ddf3c1f559b06157f5d6e"
+    },
+    {
+      "file": "independent/flows/guidance/final-guided-es-390.png",
+      "bytes": 203183,
+      "sha256": "0dbc80930fadbee555f5bcc725a40b04beddca7c0e648cc2cc532d908b3a701e"
+    },
+    {
+      "file": "independent/flows/guidance/final-guided-tr-320.png",
+      "bytes": 182916,
+      "sha256": "4018653924433f96a14d4943c9fd8d075d283f4d135dd57ef058c61624ba297a"
+    },
+    {
+      "file": "independent/flows/guidance/final-guided-tr-390.png",
+      "bytes": 192417,
+      "sha256": "6e79c8996c1efcc9876717c755a3bfbce3f072d1621eac18ea0d61bee1988fe3"
+    },
+    {
+      "file": "independent/flows/guidance/lifecycle-report.json",
+      "bytes": 82327,
+      "sha256": "8267f64cba4ad23b87eca2a5a24487bd8f41e4af736afa6edb2826c2df768d20"
+    },
+    {
+      "file": "independent/flows/guidance/lock-recorded-en-390.png",
+      "bytes": 42788,
+      "sha256": "0fe4f0474783247c90d98689ad7a932b11fcefda77a6da953d7214019eb7ef1d"
+    },
+    {
+      "file": "independent/flows/guidance/missing-file-device-tr-390.png",
+      "bytes": 193107,
+      "sha256": "cd74038b86bbdfa0e32eba9a6310f6c7f60dc8dc5341ab7654eb8424e37acda1"
+    },
+    {
+      "file": "independent/flows/guidance/missing-file-unavailable-tr-390.png",
+      "bytes": 193457,
+      "sha256": "27f34ce526b5d47ad1f3520154df58ae3853af8e20ad3938468ed97ed747831a"
+    },
+    {
+      "file": "independent/flows/guidance/offline-cache-recorded-en-390.png",
+      "bytes": 188286,
+      "sha256": "3e5690eabf2e5acc41487f1f9d48fa9cd0bff42b0051c88bbb3a0d73ee408e2b"
+    },
+    {
+      "file": "independent/flows/harness/calendar-before-scroll-settle.mjs.log",
+      "bytes": 6698,
+      "sha256": "65001d15e042bb2542f54990f5aa4728b4b680970c7f43276322c49dab5195d1"
+    },
+    {
+      "file": "independent/flows/harness/calendar.mjs.log",
+      "bytes": 6977,
+      "sha256": "e6c41c2ca7f516f1ffe6c260ea9e63a23efe533cb24ac6f7643b819634744789"
+    },
+    {
+      "file": "independent/flows/harness/common.mjs.log",
+      "bytes": 7526,
+      "sha256": "3486e9178e219d7ab682c6e72142ce0b5c155f685080f1bb96a006fd1cdd8eb6"
+    },
+    {
+      "file": "independent/flows/harness/common.mjs.original.log",
+      "bytes": 7535,
+      "sha256": "d71bdf0516cf677e19a5402e2945ed4e3a872f9655f855d70be505a284581a29"
+    },
+    {
+      "file": "independent/flows/harness/courses.mjs.log",
+      "bytes": 19664,
+      "sha256": "0ab5924507348f88280b5a06207da50d61cb5a96d589f1a87f3018b48d7b42ce"
+    },
+    {
+      "file": "independent/flows/harness/courses.mjs.original.log",
+      "bytes": 19364,
+      "sha256": "2b6229482e2ce32306fe6b8c068ca6dfc0f49a7033c548717d15a61ac01ba8c3"
+    },
+    {
+      "file": "independent/flows/harness/first-use.mjs.log",
+      "bytes": 20731,
+      "sha256": "d754281e3e80e966602204e2aebe6e56c5ceb4c77763caccfba613e448a0a55a"
+    },
+    {
+      "file": "independent/flows/harness/first-use.mjs.original.log",
+      "bytes": 20745,
+      "sha256": "df3b971bdacca92667e807d5244a6a72c70ad00df3d809baa302eea86d49bf9d"
+    },
+    {
+      "file": "independent/flows/harness/guidance.mjs.log",
+      "bytes": 17268,
+      "sha256": "32c4356b1ca3e2c4f08972a33ab5a7e7533b3358512263f77451288b08ac6f79"
+    },
+    {
+      "file": "independent/flows/harness/guidance.mjs.original.log",
+      "bytes": 17297,
+      "sha256": "de0c2730621d667ae38b8db62c0ce45c6593fbb8f5253776c9a0bbecadc56da3"
+    },
+    {
+      "file": "independent/flows/harness/localized-preview.mjs.log",
+      "bytes": 3579,
+      "sha256": "605a9d877c47f7f24ab2c76284c782b11cc71fb3f73707539a52731f7e426bb5"
+    },
+    {
+      "file": "independent/flows/harness/notebook-before-fixture-correction.mjs.log",
+      "bytes": 5948,
+      "sha256": "7f5bf4edc65d10f1b351d5441a938f86f6b3b1254972727a558fc7ae3861ad07"
+    },
+    {
+      "file": "independent/flows/harness/notebook.mjs.log",
+      "bytes": 5955,
+      "sha256": "74cc23f0086f5b8b7fe805df37f6a26546888a43f56a0e9a312224961fecd6fd"
+    },
+    {
+      "file": "independent/flows/harness-preparation.json",
+      "bytes": 1542,
+      "sha256": "2ed9cd18bca3e1db03d479754e4d9f10dc5f54b8dc70fe15b1598272c153908b"
+    },
+    {
+      "file": "independent/flows/localized-preview/browser.log",
+      "bytes": 545,
+      "sha256": "be912bc824de59e8b8ea80742cf517d01af46f9865ab288b10a59ae4b87854ed"
+    },
+    {
+      "file": "independent/flows/localized-preview/command-receipt.json",
+      "bytes": 922,
+      "sha256": "84b6eee6bbbea6f9cdaa16a86762c6fb861f79d311e65177a0960558d32055db"
+    },
+    {
+      "file": "independent/flows/localized-preview/localized-preview-report.json",
+      "bytes": 5209,
+      "sha256": "a1c1a0e9d5b0cb91ad5a0f4ef6251e3fec701718793e3f015e0fdec926cd344a"
+    },
+    {
+      "file": "independent/flows/localized-preview/trusted-recorded-preview-en-320.png",
+      "bytes": 99099,
+      "sha256": "cae368174edecafacf43591e68f1bd125467921b3e5050b1e87646fcd44aa2ff"
+    },
+    {
+      "file": "independent/flows/localized-preview/trusted-recorded-preview-en-390.png",
+      "bytes": 113154,
+      "sha256": "9ee9c15aad2e7bb29a62be5e5625052a20a6ea36d11e06cfd5dd29c721afc987"
+    },
+    {
+      "file": "independent/flows/localized-preview/trusted-recorded-preview-es-320.png",
+      "bytes": 103374,
+      "sha256": "52617c1ad67b94a1e7be26bb927f5d82ad2e17384f7cb90009a2141e09aa95c3"
+    },
+    {
+      "file": "independent/flows/localized-preview/trusted-recorded-preview-es-390.png",
+      "bytes": 116666,
+      "sha256": "433f314f99eb62b9bfa2259ada0d3cee100d5331eeb600c9f3213e317a9e9557"
+    },
+    {
+      "file": "independent/flows/localized-preview/trusted-recorded-preview-tr-320.png",
+      "bytes": 100209,
+      "sha256": "8d05eb33f799dc770d7edefaa241a8da335cd0c974dbfdc7b7a1de8508a85c7c"
+    },
+    {
+      "file": "independent/flows/localized-preview/trusted-recorded-preview-tr-390.png",
+      "bytes": 113049,
+      "sha256": "aa3b8c7ccab2a21c2758ce55adf9366241be56b3372714682d0f635f4d35df94"
+    },
+    {
+      "file": "independent/flows/notebook/browser.log",
+      "bytes": 428,
+      "sha256": "d9a0d573d096413141dd149030ec2d50aa01d74fc79f42ded2fc01c3dde5f6e9"
+    },
+    {
+      "file": "independent/flows/notebook/command-receipt.json",
+      "bytes": 814,
+      "sha256": "e74dbf892799bfde806089af1ebe8a9f7bc8f51c5b33a3451b458e1661536b48"
+    },
+    {
+      "file": "independent/flows/notebook/failure.png",
+      "bytes": 124694,
+      "sha256": "ad06b44d4894a44f8002fcc38177d0fef51870d35ac45a527b363a3b465ffe63"
+    },
+    {
+      "file": "independent/flows/notebook/notebook-draft-en-320.png",
+      "bytes": 117323,
+      "sha256": "8eb90ed860c43b820092f679d78cacd6de7bb1cecdede8fdf544fff64114a2c0"
+    },
+    {
+      "file": "independent/flows/notebook/notebook-report.json",
+      "bytes": 889,
+      "sha256": "2e71eac0f49b47e3ae2c827a6114fa89e8597f01d69ce8f2f4a6ac1e4a5701f4"
+    },
+    {
+      "file": "independent/flows/notebook-corrected/browser.log",
+      "bytes": 1428,
+      "sha256": "7ba3c28eeedc74c5c173d1ded2f87dc818a3ac402ff6ed88c473f13fb540436d"
+    },
+    {
+      "file": "independent/flows/notebook-corrected/command-receipt.json",
+      "bytes": 846,
+      "sha256": "f616f4a612b69899cd18803b292179cf5e5a22f683370267431941c2a25d5d4c"
+    },
+    {
+      "file": "independent/flows/notebook-corrected/notebook-draft-en-320.png",
+      "bytes": 117323,
+      "sha256": "8eb90ed860c43b820092f679d78cacd6de7bb1cecdede8fdf544fff64114a2c0"
+    },
+    {
+      "file": "independent/flows/notebook-corrected/notebook-draft-en-390.png",
+      "bytes": 128430,
+      "sha256": "913cae79d77ea6c3ea5f40faff098b153c8e545bb7fa46af91b3f0ab42da828a"
+    },
+    {
+      "file": "independent/flows/notebook-corrected/notebook-draft-es-320.png",
+      "bytes": 122566,
+      "sha256": "2d6df40d6e29af122a1a831a21d4840f4d46e822477944dba167b509aa75463f"
+    },
+    {
+      "file": "independent/flows/notebook-corrected/notebook-draft-es-390.png",
+      "bytes": 125848,
+      "sha256": "3afc6d55c5d6b9899d05c7faa53d3e50d3ea57d12f498af517d0b8d6813cfa1b"
+    },
+    {
+      "file": "independent/flows/notebook-corrected/notebook-draft-tr-320.png",
+      "bytes": 111512,
+      "sha256": "52c59fba6ba1aa20c32bbd103a2bc1fe5797b5e7bebff84e5988be4c2806e60f"
+    },
+    {
+      "file": "independent/flows/notebook-corrected/notebook-draft-tr-390.png",
+      "bytes": 124592,
+      "sha256": "c8f51d8a27770b5c38ec3cbf815f64b891dd8c19a8e534400255f2d61f98e0bb"
+    },
+    {
+      "file": "independent/flows/notebook-corrected/notebook-report.json",
+      "bytes": 3698,
+      "sha256": "0481b53c0008616823b479511772459e4b82c99731c3f3dd36a1bc2e47eca8a8"
+    },
+    {
+      "file": "independent/flows/notebook-corrected/notebook-saved-en-320.png",
+      "bytes": 124153,
+      "sha256": "978db662cd6a5de77cc8121059ab5e8b3d1a39f80842069fe3ce648ec9cd92bb"
+    },
+    {
+      "file": "independent/flows/notebook-corrected/notebook-saved-en-390.png",
+      "bytes": 129319,
+      "sha256": "a21ce011643ad45ec5ec808c83000ddfe5737d946e2021a915cc3a32c1566065"
+    },
+    {
+      "file": "independent/flows/notebook-corrected/notebook-saved-es-320.png",
+      "bytes": 125210,
+      "sha256": "ef98a3c01336387a3a6cbe83dfdc31ca42b58552cfb4e3b05ef314afe0178f28"
+    },
+    {
+      "file": "independent/flows/notebook-corrected/notebook-saved-es-390.png",
+      "bytes": 125964,
+      "sha256": "8404641b546bfd74612be7f75e62fd40dffa4e40d40793268a616ac472c76c37"
+    },
+    {
+      "file": "independent/flows/notebook-corrected/notebook-saved-tr-320.png",
+      "bytes": 116581,
+      "sha256": "f7edba124dfad7eccb786b7e3e0832e54da0d3c430a3273ad50f60da383caa8e"
+    },
+    {
+      "file": "independent/flows/notebook-corrected/notebook-saved-tr-390.png",
+      "bytes": 123594,
+      "sha256": "76f49db0e39aefef7071c2e530391e78461362760041e8cd219c073cf6cdfb7f"
+    },
+    {
+      "file": "independent/flows/notebook-final/browser.log",
+      "bytes": 1428,
+      "sha256": "7ba3c28eeedc74c5c173d1ded2f87dc818a3ac402ff6ed88c473f13fb540436d"
+    },
+    {
+      "file": "independent/flows/notebook-final/command-receipt.json",
+      "bytes": 833,
+      "sha256": "edf2e40654a3e305bc069dd975e9ee91daa521928e6a6c00fbf05a4ec7c916a5"
+    },
+    {
+      "file": "independent/flows/notebook-final/notebook-draft-en-320.png",
+      "bytes": 119525,
+      "sha256": "b8495b88de4562be27a28c6936a5bc434c4ed4a18d1466554f7487a40e2f94f1"
+    },
+    {
+      "file": "independent/flows/notebook-final/notebook-draft-en-390.png",
+      "bytes": 130760,
+      "sha256": "1ed80d5438de218a6c80092f8b6b58fa871b18dbe3eadb753c6144c96dd8b887"
+    },
+    {
+      "file": "independent/flows/notebook-final/notebook-draft-es-320.png",
+      "bytes": 125721,
+      "sha256": "4453771d4f06edce28af89839e6b9bc70558fee7993460855b367b45b0974a89"
+    },
+    {
+      "file": "independent/flows/notebook-final/notebook-draft-es-390.png",
+      "bytes": 128831,
+      "sha256": "418292ba0ff63c8db4c42fc089b8b36d810a421976582df4b53e57be455f850c"
+    },
+    {
+      "file": "independent/flows/notebook-final/notebook-draft-tr-320.png",
+      "bytes": 113962,
+      "sha256": "999037d4abd79bdd53decb458eb6f21b328f6248537d17f1442ba0766503c364"
+    },
+    {
+      "file": "independent/flows/notebook-final/notebook-draft-tr-390.png",
+      "bytes": 127125,
+      "sha256": "e60cf99e2c778f270882638c65b8dea91f55fa000e80e12b20b9c44582247a1e"
+    },
+    {
+      "file": "independent/flows/notebook-final/notebook-report.json",
+      "bytes": 3698,
+      "sha256": "e2da093f652ab26bf237f554ec9026a8a32a24f9a995f7205c3cd1659c810d2b"
+    },
+    {
+      "file": "independent/flows/notebook-final/notebook-saved-en-320.png",
+      "bytes": 126337,
+      "sha256": "2846ddcd20dc3f074c5d7addbbc28f5239a1f48b5a64d25b9db636e304227e95"
+    },
+    {
+      "file": "independent/flows/notebook-final/notebook-saved-en-390.png",
+      "bytes": 131660,
+      "sha256": "dc133b2427386e73cf03b41556d269b4e0730f8b1e9a2c3072578536bb662b88"
+    },
+    {
+      "file": "independent/flows/notebook-final/notebook-saved-es-320.png",
+      "bytes": 128369,
+      "sha256": "8f0414c7e5797ba99ca2e4991a5784ab57e448bc609c192f53416d264cc6bed0"
+    },
+    {
+      "file": "independent/flows/notebook-final/notebook-saved-es-390.png",
+      "bytes": 128936,
+      "sha256": "504038eb48e1ed6117b752c1dbaf7394f0c5cc8b738ee219b9e7e3660c45e947"
+    },
+    {
+      "file": "independent/flows/notebook-final/notebook-saved-tr-320.png",
+      "bytes": 119039,
+      "sha256": "ecf7b1f1df86376e4b2aec5c67f3a77ecfcae7d6964e307b73a1a19d4fae059b"
+    },
+    {
+      "file": "independent/flows/notebook-final/notebook-saved-tr-390.png",
+      "bytes": 126126,
+      "sha256": "176d3860fc5c6af4d674ce5922a193f38d1f4882e89e42520b416333996469ad"
+    },
+    {
+      "file": "independent/flows/notebook-fixture-correction.json",
+      "bytes": 519,
+      "sha256": "943debbde1494c61683df9baa9331ce5f0de35a6b190f28a680fbe981bbc8ea6"
+    },
+    {
+      "file": "independent/flows/pixel-inspection.json",
+      "bytes": 1072,
+      "sha256": "af80c488637774ef081f75dd32d03159130d995f4ea212d9f72d7814d8e728fb"
+    },
+    {
+      "file": "independent/flows/preflight-receipt.json",
+      "bytes": 174393,
+      "sha256": "ba41a8fe2576d64e0570d9634022f5d536c3c52163c4de5fc504bc2d9bd0b9ca"
+    },
+    {
+      "file": "independent/flows/run-one.calendar-final.py.log",
+      "bytes": 2705,
+      "sha256": "c432a9c7d2d474cea7146ab6f906529de15443fcacca09ec62fd09929ed88ba0"
+    },
+    {
+      "file": "independent/flows/run-one.py.log",
+      "bytes": 2266,
+      "sha256": "656f69fec80760a6bfff366a689e4b1e8f3929839eeb6d7e2da9c4a66840473a"
+    },
+    {
+      "file": "independent/protection/calendar-controller-attributes.json",
+      "bytes": 1343,
+      "sha256": "1c10bea20f0cc4e60af6fb3c74c4b833d6a7553a367afcfb7ef83c6fb1536868"
+    },
+    {
+      "file": "independent/protection/compare-calendar.mjs.log",
+      "bytes": 5053,
+      "sha256": "11fe69d5db864887bd9a2958e9c617f2dda3f794f61774f4cd7792ed9620832b"
+    },
+    {
+      "file": "independent/protection/final-build-evidence-rebinding.json",
+      "bytes": 989,
+      "sha256": "63d13d6ed92cb885e8498aee66c95c740b7ffe6263ced04b768b7f5f2b2e2d09"
+    },
+    {
+      "file": "independent/protection/final-calendar-delta-review.json",
+      "bytes": 6269,
+      "sha256": "8d270b9945acd6ac23d628ca0a2082f57a996424861cb330e0afbeac95415406"
+    },
+    {
+      "file": "independent/protection/final-calendar-delta-review.sha256",
+      "bytes": 99,
+      "sha256": "c39c1bccfb6c01d731e34f66993720d44b94bafe3a523494bab7b845837104b0"
+    },
+    {
+      "file": "independent/protection/protected-source-rebinding.json",
+      "bytes": 79611,
+      "sha256": "92abd6768a798f4f638ff07fe8c7419bd7a5d3d18019f1ce1d4f1ab7cab6f1c7"
+    },
+    {
+      "file": "independent/protection/reviewed-calendar-delta.diff",
+      "bytes": 4909,
+      "sha256": "9c25670dd0a99053df82031578bbc4e367a732cf60240d44357867c0e389d8c5"
+    },
+    {
+      "file": "independent/visual/calendar-final-71/es-light-390-region-focus.png",
+      "bytes": 54403,
+      "sha256": "3630858d137cddf5a9975cf1394b8b462a81335c799ebc05613fc28af861d8a1"
+    },
+    {
+      "file": "independent/visual/calendar-final-71/report.json",
+      "bytes": 221462,
+      "sha256": "9123dcd89344a44c287f9a70b87c760d5b20f195da8391ba24e88722c31f673b"
+    },
+    {
+      "file": "independent/visual/calendar-final-71/tr-dark-320-region-focus.png",
+      "bytes": 56626,
+      "sha256": "2fa94c641ff04eecb408fe9e6d147360809bf23798eb46aa79a3253bbd40bcd9"
+    },
+    {
+      "file": "independent/visual/calendar-final-71-run.log",
+      "bytes": 56,
+      "sha256": "3e0ca60fe3fa0e97d332e55f479c7a749668a5f7ea0eb407dc1b5693eeaad8ee"
+    },
+    {
+      "file": "independent/visual/end-clearance-71/en-dark-320.png",
+      "bytes": 65307,
+      "sha256": "caea4fdd77e9dcbb33e3f4e9fda8fdc45647ca48990c806977b0db0c9b728088"
+    },
+    {
+      "file": "independent/visual/end-clearance-71/en-dark-390.png",
+      "bytes": 71431,
+      "sha256": "a53dd544c755321101657a9a22139d6311888c287b398d5b9e43c9a2d784d20b"
+    },
+    {
+      "file": "independent/visual/end-clearance-71/en-light-320.png",
+      "bytes": 60154,
+      "sha256": "368446fca8f44785baae76c068cc5e7e9284165bc3278ecd8238935c1494d763"
+    },
+    {
+      "file": "independent/visual/end-clearance-71/en-light-390.png",
+      "bytes": 65838,
+      "sha256": "49053575b0f8467cdcdb36c6170b378153d454ee36280c8edadade8842a7323f"
+    },
+    {
+      "file": "independent/visual/end-clearance-71/es-light-390.png",
+      "bytes": 66905,
+      "sha256": "9ec3aa8029ab9d9b1b1b68c0f49aaf32e7695222ad74ee179aa4756cf7cb4523"
+    },
+    {
+      "file": "independent/visual/end-clearance-71/report.json",
+      "bytes": 6366,
+      "sha256": "b5894af575864c2849e15ea48b78f84ae9943557ace7f251ad3e186f8b42fa88"
+    },
+    {
+      "file": "independent/visual/end-clearance-71/tr-dark-320.png",
+      "bytes": 65428,
+      "sha256": "d7b03a1b16aaa107f6558283a448affc99c6b2dc2c583b3c29645dbb8e339f51"
+    },
+    {
+      "file": "independent/visual/end-clearance-71-run.log",
+      "bytes": 3260,
+      "sha256": "1980ef0550868b6e85fc849d332dbd94e685393883b36ae8d963146eb24d41f1"
+    },
+    {
+      "file": "independent/visual/final-71/en-dark-1440-focus-custom.png",
+      "bytes": 242994,
+      "sha256": "8a3b6781c829a7fec1a6b1c041aa62a705403f64aabf6b61778bca5e8c6eea6a"
+    },
+    {
+      "file": "independent/visual/final-71/en-dark-390-sound-breathe.png",
+      "bytes": 138951,
+      "sha256": "c0558504e336c2985d40fcac5eac644d5e8aa915d9f82698c6ff68581c379e97"
+    },
+    {
+      "file": "independent/visual/final-71/en-light-1440-coach.png",
+      "bytes": 376192,
+      "sha256": "9c6380e1480bb9de1b97a5b3b920fc2b1a1a06d3f37eb1db086a11f57a97365a"
+    },
+    {
+      "file": "independent/visual/final-71/en-light-1440-course-overview.png",
+      "bytes": 680440,
+      "sha256": "9e08a56660596946a2dca46d11fbdd5c6b6eea4cc72d3ee670ed0ea472139cfe"
+    },
+    {
+      "file": "independent/visual/final-71/en-light-1440-notebook.png",
+      "bytes": 195515,
+      "sha256": "8713259e0211e40260d8aa4097dcf28c494139bc428d315f8a94abb7fd73be06"
+    },
+    {
+      "file": "independent/visual/final-71/en-light-1440-sound-discovery.png",
+      "bytes": 417563,
+      "sha256": "771dfadfe16abc7cb9a743388b2932fc7582a2e0d3fc244eb82f84f29b4e8878"
+    },
+    {
+      "file": "independent/visual/final-71/en-light-1440-today.png",
+      "bytes": 384703,
+      "sha256": "b0f971c32220a101f0f662b2a03614b04f261306d56ff3ca73638089dca2b75e"
+    },
+    {
+      "file": "independent/visual/final-71/en-light-320-notebook-calendar.png",
+      "bytes": 51928,
+      "sha256": "c6100549ef7e7abda0d45c3c2e5faff1a7cea27cd9ff6377c7c6ff2c0795d393"
+    },
+    {
+      "file": "independent/visual/final-71/en-light-320-sound-discovery.png",
+      "bytes": 152162,
+      "sha256": "1fdaf383236803495782b9f69280ea6d24022a57e1bcc95341bca62f0965bc03"
+    },
+    {
+      "file": "independent/visual/final-71/en-light-390-notebook-weekend.png",
+      "bytes": 54602,
+      "sha256": "b1cbb1845a97bee68fbb6b6bf1f90067878031b6561053ceb8ebe712bc479b5a"
+    },
+    {
+      "file": "independent/visual/final-71/en-light-390-sound-player.png",
+      "bytes": 108552,
+      "sha256": "39a8e26f0ce3a397989ed343ba270ed7e80a2929c687de041e6832312c40d91f"
+    },
+    {
+      "file": "independent/visual/final-71/en-light-390-today.png",
+      "bytes": 120190,
+      "sha256": "7f5be4c142bd3880e47f1e618a53824b9ba9a849d7a071edddce531ed95bdc67"
+    },
+    {
+      "file": "independent/visual/final-71/es-dark-390-coach.png",
+      "bytes": 148268,
+      "sha256": "bfb0364db38aa15ae46687d3bab06873266a6caee2cabecafc330cefedaf8cac"
+    },
+    {
+      "file": "independent/visual/final-71/es-light-320-course-workbook.png",
+      "bytes": 65191,
+      "sha256": "2d13c3ae07057f1c51dac73c8355782832dc64ec35f40389d03ce4f48a59b3a2"
+    },
+    {
+      "file": "independent/visual/final-71/es-light-390-notebook-calendar.png",
+      "bytes": 57360,
+      "sha256": "711f77ef2e4922ec697eaa1fc3347b7c2efc317437e98587e55e472bf617802f"
+    },
+    {
+      "file": "independent/visual/final-71/report.json",
+      "bytes": 6196094,
+      "sha256": "d14d5622bb54c2977dbce92c93a8a99514b76025ddb50fdc3f465eecbfac8701"
+    },
+    {
+      "file": "independent/visual/final-71/tr-dark-1440-today-growth.png",
+      "bytes": 413812,
+      "sha256": "fc73b07a60fa81d4eab10300490722e3c0e9d108b1333070ab99268302d6ef9e"
+    },
+    {
+      "file": "independent/visual/final-71/tr-dark-320-notebook-calendar.png",
+      "bytes": 55651,
+      "sha256": "af4d371f0134790f196b62ace1f74508e04288729cbb8f2c951e3472c314b120"
+    },
+    {
+      "file": "independent/visual/final-71/tr-dark-390-focus-guided.png",
+      "bytes": 116272,
+      "sha256": "86562b8ef6f458e092ea26380c1e38bddb16031e03ce8bf4d4008a27e2f76820"
+    },
+    {
+      "file": "independent/visual/final-71-run.log",
+      "bytes": 640,
+      "sha256": "b0d7dee19fe461ba6dd1de4ad636dfa7610edd1c1bf2a8d62597e113baf4595b"
+    },
+    {
+      "file": "independent/visual/harness/calendar-final.mjs.log",
+      "bytes": 6693,
+      "sha256": "5fa79043cfd74fe59a46dd0f96abec60fd8a6aa14c78af315ca218ed67184e5d"
+    },
+    {
+      "file": "independent/visual/harness/calendar-probe.mjs.log",
+      "bytes": 3469,
+      "sha256": "ff2239d716d6afb6e1fdfccfa0f99b36149d4488a6416d72da4e61f79136e49d"
+    },
+    {
+      "file": "independent/visual/harness/end-clearance.mjs.log",
+      "bytes": 3307,
+      "sha256": "eb38317a64e7b1070b7858f0b8d0d582f2abb661e411e6f1879f28f1d7c1eb2c"
+    },
+    {
+      "file": "independent/visual/harness/run-visual.mjs.log",
+      "bytes": 22459,
+      "sha256": "c849ec26de30db264af5f11001fa10f9fc3bdc1d792126f591d451791e934b13"
+    },
+    {
+      "file": "independent/visual/personal-review-final.json",
+      "bytes": 8952,
+      "sha256": "d1cc1609013fbffd47b644528d0fb2ec6871d4199c0dfcfc0f2994b203bdc5fb"
+    },
+    {
+      "file": "independent/visual/source-provenance-71.json",
+      "bytes": 821,
+      "sha256": "5efc4c08be5fba0aa3cd558fa452725cce00949c48a937cda0ebd0199568a0bd"
+    },
+    {
+      "file": "packaging/after-artifact-ignore-build.log",
+      "bytes": 12353,
+      "sha256": "1c5f5803e2c12fd6cb3f8d29b6fb80e3c24210a0e3f174c85121ebc84ae979ef"
+    },
+    {
+      "file": "packaging/helper-draft-correction.json",
+      "bytes": 731,
+      "sha256": "1356445106134ad5e98dae155b07d193a371b1c8cfa241e33fa2484a4db86cb8"
+    },
+    {
+      "file": "packaging/packaging-protected-parity.initial-false-positive.json.log",
+      "bytes": 190815,
+      "sha256": "c4ac4c4cc45316011513986ec1260e20ad950bd106b25e4a6a5a66ee739e325f"
+    },
+    {
+      "file": "packaging/packaging-protected-parity.json",
+      "bytes": 190815,
+      "sha256": "c4ac4c4cc45316011513986ec1260e20ad950bd106b25e4a6a5a66ee739e325f"
+    },
+    {
+      "file": "packaging/packaging-review.json",
+      "bytes": 320013,
+      "sha256": "b66d1ab71ff52359f221463e52c206a0da76333eb0f4c57fd434bba3d5989803"
+    },
+    {
+      "file": "packaging/packaging-review.sha256",
+      "bytes": 88,
+      "sha256": "085b000e067b7464a9bd50b29550bd660906030aa7422cba7a88978a281613d3"
+    },
+    {
+      "file": "packaging/packaging-scan-finding.json",
+      "bytes": 79853,
+      "sha256": "918d1c93e42daaee814109988bd2919cf8381defbadb2eb81966252ba3d8f606"
+    },
+    {
+      "file": "packaging/post-evidence-build.log",
+      "bytes": 12353,
+      "sha256": "7fe3e1aed6abc628bcee0830c332be2bb6a34b3de521fe6d21f7de2e50bd9dad"
+    },
+    {
+      "file": "packaging/post-evidence-tsc.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "packaging/resolution-receipt.json",
+      "bytes": 1029,
+      "sha256": "6972fc2089a2c6e89b6ea69a8846634c317a289868398ea1a23c0ecad305dff1"
+    },
+    {
+      "file": "pre-fix-cf95/aggregate-check.log",
+      "bytes": 76209,
+      "sha256": "9803340ff035b7577991d3b69a0ce75ce555ef57eaaea3e991be34f9d973ce8f"
+    },
+    {
+      "file": "pre-fix-cf95/build-receipt.json",
+      "bytes": 197905,
+      "sha256": "a6da5a5a501d7730f153b6c71743fd490b5a3446b88050e04829fa04d4cabc4e"
+    },
+    {
+      "file": "pre-fix-cf95/protection/build-evidence-rebinding.json",
+      "bytes": 1227,
+      "sha256": "082bce5b7268ccf560c1b175934acb95669a655b07968a4253115afe451e8c92"
+    },
+    {
+      "file": "pre-fix-cf95/protection/compare-presentation.mjs.log",
+      "bytes": 5206,
+      "sha256": "f685ef2c7a263d3a7454e5f3e3495198233082fc7c6f3dae0238a22e4ef3e27c"
+    },
+    {
+      "file": "pre-fix-cf95/protection/final-review-receipt.json",
+      "bytes": 3044,
+      "sha256": "af2267d4c9b8670afa743286dd6ab81e4611971b075e02e12e848e0b42e2fdb2"
+    },
+    {
+      "file": "pre-fix-cf95/protection/final-review-receipt.sha256",
+      "bytes": 92,
+      "sha256": "27dcbae58d95944fb129fad5985d16f1ef065147278b62f828b0c0441771465f"
+    },
+    {
+      "file": "pre-fix-cf95/protection/presentation-static-final.json",
+      "bytes": 7609,
+      "sha256": "f65485c9ed5429f6f257f6ef8e169c0ebe4d6e5d0f0e7bf60591a0eeeaf5b59e"
+    },
+    {
+      "file": "pre-fix-cf95/protection/protected-source-parity.json",
+      "bytes": 145512,
+      "sha256": "6df36ee9ccb194f21dc032f46dac528363009b2925896d2d0f45461df8a812f5"
+    },
+    {
+      "file": "pre-fix-cf95/protection/protected-source-parity.sha256",
+      "bytes": 95,
+      "sha256": "c047fa40a58d27927fe41fbbaf459a4ebe23b8725bd090382eb4840cc01f7ccc"
+    },
+    {
+      "file": "pre-fix-cf95/protection/reviewed-fixes-css-final.json",
+      "bytes": 2130,
+      "sha256": "0b94a11274ac61b2e446838eafddb99bad219165ba9ebe6fb01eda2903b95b25"
+    },
+    {
+      "file": "pre-fix-cf95/protection/reviewed-source-manifest.json",
+      "bytes": 4110,
+      "sha256": "e1bb25701cc08da31563051bfc2fb058d6d0c0bea24f600cb1360c8945734d27"
+    },
+    {
+      "file": "pre-fix-cf95/protection/reviewed-source.diff",
+      "bytes": 128438,
+      "sha256": "6b2589fbbd666dfa8ef14cb88493708a0b96109d5bcc2b5570987ce6b9ad01c3"
+    },
+    {
+      "file": "pre-fix-cf95/runtime-receipt.json",
+      "bytes": 1055,
+      "sha256": "5feb650fb24bb62df12f8425543566536f97dcecdde8221be3200f03068a2259"
+    },
+    {
+      "file": "pre-fix-cf95/visual/calendar-probe/calendar-320-initial.png",
+      "bytes": 47026,
+      "sha256": "a9ccde09cf89654c66e2672f773a26436365f501f12eebde8d29ed88c1011f4a"
+    },
+    {
+      "file": "pre-fix-cf95/visual/calendar-probe/calendar-320-keyboard-sunday.png",
+      "bytes": 50249,
+      "sha256": "d60db9783443efd5d42393dd5191d4de61c6699172ab0a5ac20c24fe82798a5a"
+    },
+    {
+      "file": "pre-fix-cf95/visual/calendar-probe/calendar-320-right.png",
+      "bytes": 50249,
+      "sha256": "d60db9783443efd5d42393dd5191d4de61c6699172ab0a5ac20c24fe82798a5a"
+    },
+    {
+      "file": "pre-fix-cf95/visual/calendar-probe/calendar-390-initial.png",
+      "bytes": 49099,
+      "sha256": "3b33c12d78777ba70e1243cc207b29d8dd7c5a3a00d318596b635c6cee46db0e"
+    },
+    {
+      "file": "pre-fix-cf95/visual/calendar-probe/calendar-390-keyboard-sunday.png",
+      "bytes": 51817,
+      "sha256": "91320737ad58781362bc89f4503b8af1bbe82cfef2be8268ac31dedb7c4676c1"
+    },
+    {
+      "file": "pre-fix-cf95/visual/calendar-probe/calendar-390-right.png",
+      "bytes": 52365,
+      "sha256": "8f226e901b2ac8c5e2078c1ffed59a0d591d1d697e453cf7ff7a6d048519e924"
+    },
+    {
+      "file": "pre-fix-cf95/visual/calendar-probe/report.json",
+      "bytes": 28386,
+      "sha256": "a3a4cf97fca065051421cdea686dfa1e718b0322e9c44a38b842c8274be2fcb7"
+    },
+    {
+      "file": "pre-fix-cf95/visual/personal-review-cf95.json",
+      "bytes": 3003,
+      "sha256": "851976ad9082022474d791481a789112f35c0abb5bd0593a48ac0849a2551cf3"
+    },
+    {
+      "file": "pre-fix-cf95/visual/reviewed/report.json",
+      "bytes": 6185376,
+      "sha256": "1113c1d00e98e21a234707a22d23d1e26a1ee7ab1c464fc4eb85f0e0f3f125b3"
+    },
+    {
+      "file": "pre-fix-cf95/visual/reviewed-run.log",
+      "bytes": 640,
+      "sha256": "5d49003de054411543c55f8bf4054866188c8b98d4202a5a5590a140ce811477"
+    },
+    {
+      "file": "root-pixel-inspection.json",
+      "bytes": 2325,
+      "sha256": "4f3eb78ac807608e8dda0ef33f8afff32ceb8a2e3d7fc7317dfdd91a3216592c"
+    },
+    {
+      "file": "runtime-receipt.json",
+      "bytes": 1122,
+      "sha256": "fb2d21e4fdb9f969b5c5dc0aa8f70adc9ee8d11c5a01dae383726ed5d48463d7"
+    },
+    {
+      "file": "screenshots/README.md",
+      "bytes": 1528,
+      "sha256": "43eb17af2a12741fb49a7faa3e54276f642700e11b81369dbcb21675af3239da"
+    },
+    {
+      "file": "screenshots/en-dark-1440-coach.png",
+      "bytes": 382741,
+      "sha256": "8a1b36c6262cf34b82bfc78ae319e391b20792b12846ab9910203aa9d3bb5375"
+    },
+    {
+      "file": "screenshots/en-dark-1440-sound-discovery.png",
+      "bytes": 423230,
+      "sha256": "9cac26f6f9dc0680910a6e3cc6eb758a37bb9e4e77c4fdc3ab0c1f1e5de569bd"
+    },
+    {
+      "file": "screenshots/en-dark-1440-today.png",
+      "bytes": 416960,
+      "sha256": "38c4ccf32b9ab6b9d2e798ba19ffe4a2c0172b9b716131bd5f3e80cff8eeea13"
+    },
+    {
+      "file": "screenshots/en-light-1440-coach.png",
+      "bytes": 376192,
+      "sha256": "9c6380e1480bb9de1b97a5b3b920fc2b1a1a06d3f37eb1db086a11f57a97365a"
+    },
+    {
+      "file": "screenshots/en-light-1440-course-overview.png",
+      "bytes": 680440,
+      "sha256": "9e08a56660596946a2dca46d11fbdd5c6b6eea4cc72d3ee670ed0ea472139cfe"
+    },
+    {
+      "file": "screenshots/en-light-1440-course-workbook.png",
+      "bytes": 136668,
+      "sha256": "8033567adf768278486d8592070b0fa672b5ce22256cb590b26932f37817409e"
+    },
+    {
+      "file": "screenshots/en-light-1440-courses.png",
+      "bytes": 425953,
+      "sha256": "2e44403691ed605c4b3bde451131c86671c9ecca202e81aea22b8624750c0359"
+    },
+    {
+      "file": "screenshots/en-light-1440-focus-custom.png",
+      "bytes": 229573,
+      "sha256": "494a9bd1e441b5fc29878fbb3adde164944c5aa8608feff97a3427d1c7776e6e"
+    },
+    {
+      "file": "screenshots/en-light-1440-focus-guided.png",
+      "bytes": 225076,
+      "sha256": "4afebc83f242422d09044caf8c8970b95be54e9459acafa9281446b526aded4c"
+    },
+    {
+      "file": "screenshots/en-light-1440-notebook-calendar.png",
+      "bytes": 195515,
+      "sha256": "8713259e0211e40260d8aa4097dcf28c494139bc428d315f8a94abb7fd73be06"
+    },
+    {
+      "file": "screenshots/en-light-1440-notebook.png",
+      "bytes": 195515,
+      "sha256": "8713259e0211e40260d8aa4097dcf28c494139bc428d315f8a94abb7fd73be06"
+    },
+    {
+      "file": "screenshots/en-light-1440-sound-discovery.png",
+      "bytes": 417563,
+      "sha256": "771dfadfe16abc7cb9a743388b2932fc7582a2e0d3fc244eb82f84f29b4e8878"
+    },
+    {
+      "file": "screenshots/en-light-1440-sound-player.png",
+      "bytes": 330316,
+      "sha256": "9e412d8d67aa682255be2565f2e94b45ddc94d4bd5030db04a176a0bb3f2271c"
+    },
+    {
+      "file": "screenshots/en-light-1440-today.png",
+      "bytes": 384703,
+      "sha256": "b0f971c32220a101f0f662b2a03614b04f261306d56ff3ca73638089dca2b75e"
+    },
+    {
+      "file": "screenshots/en-light-320-coach.png",
+      "bytes": 122863,
+      "sha256": "d3026e5d659244a5c8dae83040c24c5c3543c1f86b3a301baa088bc2e7138c83"
+    },
+    {
+      "file": "screenshots/en-light-320-course-workbook.png",
+      "bytes": 64278,
+      "sha256": "a62fbde99e3976e03350a6714665b0e97f6bd2bc97f152fe6aeee7bb18e4f3b7"
+    },
+    {
+      "file": "screenshots/en-light-320-focus-guided.png",
+      "bytes": 101260,
+      "sha256": "101e5bf814052937b90b5c9af06dfee0a19128ecf36854d7189e64357d198462"
+    },
+    {
+      "file": "screenshots/en-light-320-notebook-calendar.png",
+      "bytes": 51928,
+      "sha256": "c6100549ef7e7abda0d45c3c2e5faff1a7cea27cd9ff6377c7c6ff2c0795d393"
+    },
+    {
+      "file": "screenshots/en-light-320-sound-player.png",
+      "bytes": 95146,
+      "sha256": "dc777cd9bad658ae1d872ff77cc1ba3ff44298c0f5d42b347bd7321cd5b37210"
+    },
+    {
+      "file": "screenshots/en-light-320-today.png",
+      "bytes": 113230,
+      "sha256": "a826e3cf66aa7a87666ee9c273ff8477909ac060736d5d3cd9974a845172cd65"
+    },
+    {
+      "file": "screenshots/en-light-390-coach.png",
+      "bytes": 147551,
+      "sha256": "0e8b8ead5d11222268164a013ce78c216f0326e1cbe4fc6fb63201589064e13b"
+    },
+    {
+      "file": "screenshots/en-light-390-course-overview.png",
+      "bytes": 186984,
+      "sha256": "ae7f055bb284fd704bad1fb6fb59f0ad849120a7093690dbecd66fa52eedbe06"
+    },
+    {
+      "file": "screenshots/en-light-390-course-workbook.png",
+      "bytes": 72522,
+      "sha256": "1bf42b802cd8e517c8acb25b6bd648cca67db681fba0056b58dd53673782df24"
+    },
+    {
+      "file": "screenshots/en-light-390-courses.png",
+      "bytes": 120191,
+      "sha256": "9b7b6579e2c1336bd682dc9c99ca7bc6a412a812a07b1a58fb86e42574108169"
+    },
+    {
+      "file": "screenshots/en-light-390-focus-custom.png",
+      "bytes": 113728,
+      "sha256": "b4e5a6a08f946e9fcda41409407520b2243a7709af403a9ae61ba91d3453f31a"
+    },
+    {
+      "file": "screenshots/en-light-390-focus-guided.png",
+      "bytes": 114045,
+      "sha256": "f85efebdf1adbff5815d4976208960c556d1181f903f4579f0a37ea427db38f3"
+    },
+    {
+      "file": "screenshots/en-light-390-notebook-calendar.png",
+      "bytes": 53834,
+      "sha256": "9f34dabad0c68b9f61e5cf117ff98793598663c67f61bf9307a2574278a6a78a"
+    },
+    {
+      "file": "screenshots/en-light-390-notebook.png",
+      "bytes": 88151,
+      "sha256": "5528af8908494ec0e3b4bf799b59a5809d0f6c38430df81a7305450fe099c925"
+    },
+    {
+      "file": "screenshots/en-light-390-sound-discovery.png",
+      "bytes": 171667,
+      "sha256": "1176841c0623211bfd9aeb42aaf7fa760438757a5c5af7b77a82f78970f269b0"
+    },
+    {
+      "file": "screenshots/en-light-390-sound-player.png",
+      "bytes": 108552,
+      "sha256": "39a8e26f0ce3a397989ed343ba270ed7e80a2929c687de041e6832312c40d91f"
+    },
+    {
+      "file": "screenshots/en-light-390-today.png",
+      "bytes": 120190,
+      "sha256": "7f5be4c142bd3880e47f1e618a53824b9ba9a849d7a071edddce531ed95bdc67"
+    },
+    {
+      "file": "screenshots/es-light-390-course-overview.png",
+      "bytes": 195692,
+      "sha256": "40d0a2d9749ee1d9e9bb7c62dfa5981b3afb4cfe426b5154c18d1a3477295bbb"
+    },
+    {
+      "file": "screenshots/es-light-390-notebook-calendar.png",
+      "bytes": 57360,
+      "sha256": "711f77ef2e4922ec697eaa1fc3347b7c2efc317437e98587e55e472bf617802f"
+    },
+    {
+      "file": "screenshots/es-light-390-notebook.png",
+      "bytes": 85555,
+      "sha256": "9a24956217188d749263f99d5ffc8e731dd6f7b77e87cfe6ae96b31dd1473a6b"
+    },
+    {
+      "file": "screenshots/es-light-390-sound-discovery.png",
+      "bytes": 183269,
+      "sha256": "71be5849edc1c482ae5a94d5a22abba5eb2ee8ec1ae969c225275b72d3701438"
+    },
+    {
+      "file": "screenshots/tr-dark-320-coach.png",
+      "bytes": 126247,
+      "sha256": "a42c46f86a50064dbb9fff4bebaed82c43d0f54893f2dd79b842e682d6c83aec"
+    },
+    {
+      "file": "screenshots/tr-dark-320-course-overview.png",
+      "bytes": 151635,
+      "sha256": "82d622b833955528482b9098f752ec92ca31146a51a0716c90c726b38d2c6982"
+    },
+    {
+      "file": "screenshots/tr-dark-320-focus-guided.png",
+      "bytes": 103666,
+      "sha256": "4484b6d71739431f515148faf8e57c8b312ce740c78a012c7c3bdc98d5253a34"
+    },
+    {
+      "file": "screenshots/tr-dark-320-notebook-calendar.png",
+      "bytes": 55651,
+      "sha256": "af4d371f0134790f196b62ace1f74508e04288729cbb8f2c951e3472c314b120"
+    },
+    {
+      "file": "screenshots/tr-dark-320-sound-player.png",
+      "bytes": 95102,
+      "sha256": "7dac703a0141451fc504aa42cf7a6b6cd42cc27c8d70094f680d3067693ac362"
+    },
+    {
+      "file": "screenshots/tr-dark-320-today.png",
+      "bytes": 121107,
+      "sha256": "395529accb0fb5898ae778ec541e4696ef84dd54bc2dd3916def416638f75f63"
+    },
+    {
+      "file": "source-change.patch.log",
+      "bytes": 130874,
+      "sha256": "3ac6152aec8ac2657135907945e2ee7fef2bb2b85c8a92e8f9130de077edb077"
+    }
+  ]
+}

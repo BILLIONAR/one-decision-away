@@ -1,0 +1,50 @@
+{
+  "at": "2026-10-02T17:50:05.084Z",
+  "base": "http://127.0.0.1:4181",
+  "contexts": [
+    {
+      "name": "en-light-390",
+      "measures": {
+        "width": 390,
+        "scroll": 390,
+        "theme": "light",
+        "images": [
+          {
+            "url": "http://127.0.0.1:4181/assets/oda/delivery/course-covers/oda-growth-values-640.webp",
+            "complete": true,
+            "width": 640
+          }
+        ]
+      },
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": [
+            {
+              "target": [
+                "button[aria-labelledby=\"_r_p_\"] > .oda-sound-card-body > .oda-sound-card-note"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.18 (foreground color: #7358df, background color: #ede8fa, font size: 8.5pt (11.36px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "target": [
+                "button[aria-labelledby=\"_r_l_\"] > .oda-sound-card-body > .oda-sound-card-note"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.18 (foreground color: #7358df, background color: #ede8fa, font size: 8.5pt (11.36px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "screenshots": [],
+  "errors": [],
+  "externalRequests": [],
+  "limits": [
+    "Actual cloud Chromium UI with synthetic local records; no physical device or perceptual audio-quality claim.",
+    "External requests aborted; references adapted from actual viewed user pixels, never embedded."
+  ],
+  "browser": "151.0.7922.173",
+  "failure": "AssertionError [ERR_ASSERTION]: [{\"id\":\"color-contrast\",\"impact\":\"serious\",\"nodes\":[{\"target\":[\"button[aria-labelledby=\\\"_r_p_\\\"] > .oda-sound-card-body > .oda-sound-card-note\"],\"summary\":\"Fix any of the following:\\n  Element has insufficient color contrast of 4.18 (foreground color: #7358df, background color: #ede8fa, font size: 8.5pt (11.36px), font weight: normal). Expected contrast ratio of 4.5:1\"},{\"target\":[\"button[aria-labelledby=\\\"_r_l_\\\"] > .oda-sound-card-body > .oda-sound-card-note\"],\"summary\":\"Fix any of the following:\\n  Element has insufficient color contrast of 4.18 (foreground color: #7358df, background color: #ede8fa, font size: 8.5pt (11.36px), font weight: normal). Expected contrast ratio of 4.5:1\"}]}]\n\n1 !== 0\n"
+}

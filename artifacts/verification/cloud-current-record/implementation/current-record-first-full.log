@@ -1,0 +1,29 @@
+✔ a matching current durable document uploads and records current plus historical confirmation (26.378328ms)
+✔ a stale rendered profile payload cannot roll acknowledged cloud work backward (5.240575ms)
+✔ a stale rendered notebook payload cannot roll acknowledged cloud work backward (3.92936ms)
+✔ a stale rendered futureSelf payload cannot roll acknowledged cloud work backward (3.424546ms)
+✔ missing authoritative local record rejects a push before any cloud query (5.287126ms)
+✔ invalid-json authoritative local record rejects a push before any cloud query (2.710524ms)
+✔ invalid-document authoritative local record rejects a push before any cloud query (2.818247ms)
+✔ a course-only stale caller uses the existing latest-course normalization and can upload (6.979457ms)
+✔ an ordinary repository save invalidates current confirmation immediately and retains history (8.155538ms)
+✔ a durable Notebook action invalidates confirmation without waiting for its debounce (4.408686ms)
+✔ a durable course save invalidates confirmation without requiring the AppProvider event listener (3.603045ms)
+✔ a save suppressed by its account guard still makes the current durable document dirty (4.986229ms)
+✔ a failed durable repository write preserves previous current confirmation (2.857116ms)
+✔ a failed durable notebook write preserves previous current confirmation (3.152764ms)
+✔ a failed durable course write preserves previous current confirmation (5.312163ms)
+✔ dirty startup does not automatically restore the same acknowledged cloud baseline over newer device work (5.559548ms)
+✔ an old in-flight upload retains its remote baseline while the latest durable document remains dirty (13.794ms)
+✔ the latest queued durable payload updates after an older in-flight upload without reverting cloud or device (8.376648ms)
+✔ confirmation bootstrap after a clean reload is tied to the actual persisted document (5.199762ms)
+✔ confirmation bootstrap after a dirty reload preserves device work and historical cloud time (3.327378ms)
+✔ a coherently hydrated external-tab edit cannot inherit another tab’s current-document confirmation (2.844187ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 364.693471

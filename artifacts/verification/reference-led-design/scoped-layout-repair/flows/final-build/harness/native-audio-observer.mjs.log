@@ -1,0 +1,46 @@
+/** Observe native WebAudio graph starts without replacing synthesis or clocks. */
+export function observeNativeAudio() {
+  const events = [];
+  Object.defineProperty(window, '__odaScopedAudioEvents', { value: events });
+  const constructors = [window.AudioContext, window.webkitAudioContext].filter(Boolean);
+  const seen = new Set();
+  for (const Constructor of constructors) {
+    if (seen.has(Constructor.prototype)) continue;
+    seen.add(Constructor.prototype);
+    for (const method of ['createOscillator', 'createBufferSource']) {
+      const native = Constructor.prototype[method];
+      if (!native) continue;
+      Constructor.prototype[method] = function (...args) {
+        const node = native.apply(this, args);
+        const start = node.start.bind(node);
+        node.start = (...startArgs) => {
+          events.push({ method, audioTime: this.currentTime, wallTime: Date.now(), action: 'start' });
+          return start(...startArgs);
+        };
+        return node;
+      };
+    }
+  }
+}
+
+export const nativeGraphStarts = page => page.evaluate(() => window.__odaScopedAudioEvents.filter(event => event.action === 'start'));
+
+export async function requireNoGraphRestart(page, before, label) {
+  const after = await nativeGraphStarts(page);
+  if (after.length !== before.length) throw new Error(`${label}: visibility/disclosure changed native graph starts from ${before.length} to ${after.length}`);
+  return { graphStartsBefore: before.length, graphStartsAfter: after.length };
+}
+
+export async function visibleInsideViewport(locator) {
+  if (!(await locator.count())) return false;
+  return locator.first().evaluate(element => {
+    const style = getComputedStyle(element), box = element.getBoundingClientRect();
+    return style.display !== 'none' && style.visibility !== 'hidden' && box.width > 0 && box.height > 0 && box.bottom > 0 && box.top < innerHeight && box.right > 0 && box.left < innerWidth;
+  });
+}
+
+export function remainingSeconds(text) {
+  const match = text.match(/(\d+):(\d{2})/);
+  if (!match) throw new Error(`Actual countdown absent from visible player: ${text}`);
+  return Number(match[1]) * 60 + Number(match[2]);
+}

@@ -1,0 +1,1309 @@
+diff --git a/src/components/CourseRoadmap.tsx b/src/components/CourseRoadmap.tsx
+new file mode 100644
+index 0000000..0ed15c1
+--- /dev/null
++++ b/src/components/CourseRoadmap.tsx
+@@ -0,0 +1,43 @@
++import React, { useId } from 'react';
++import { Check, ChevronDown, ChevronRight, LockKeyhole } from 'lucide-react';
++import { useLocale } from '../i18n';
++import '../styles/courses.css';
++
++export interface CourseRoadmapProps {
++  lessons: { id: string; title: string; minutes: number; goal?: string }[];
++  completedLessonIds: string[];
++  currentLessonId?: string;
++  availableLessonIds?: string[];
++  onOpenLesson?: (id: string) => void;
++  compact?: boolean;
++  language?: string;
++}
++
++const labels = {
++  en: { name: 'Course roadmap', completed: 'Completed', current: 'Next lesson', later: 'Not available yet', cue: 'Follow the numbered lessons in order', scroll: 'Scroll to see all lessons', lesson: 'Lesson' },
++  tr: { name: 'Kurs yol haritası', completed: 'Tamamlandı', current: 'Sonraki ders', later: 'Henüz açılmadı', cue: 'Numaralı dersleri sırayla izle', scroll: 'Tüm dersleri görmek için kaydır', lesson: 'Ders' },
++  es: { name: 'Mapa del curso', completed: 'Completada', current: 'Siguiente lección', later: 'Todavía no disponible', cue: 'Sigue las lecciones numeradas en orden', scroll: 'Desplázate para ver todas las lecciones', lesson: 'Lección' },
++};
++
++/** Real lesson sequence. Compact mode stays horizontal; mobile adapts to a vertical path. */
++export function CourseRoadmap({ lessons, completedLessonIds, currentLessonId, availableLessonIds, onOpenLesson, compact = false, language }: CourseRoadmapProps) {
++  const [locale] = useLocale();
++  const copy = labels[locale] ?? labels.en;
++  const cueId = useId();
++  const completed = new Set(completedLessonIds);
++  return <div className={`oda-course-roadmap${compact ? ' oda-course-roadmap--compact' : ''}`}>
++    <p id={cueId} className="oda-course-roadmap-cue">{compact ? <ChevronRight size={14} aria-hidden="true" /> : <ChevronDown size={14} aria-hidden="true" />}{compact ? copy.scroll : copy.cue}</p>
++    <ol aria-label={copy.name} aria-describedby={cueId}>
++      {lessons.map((lesson, index) => {
++        const done = completed.has(lesson.id);
++        const current = lesson.id === currentLessonId;
++        const unlocked = !availableLessonIds || availableLessonIds.includes(lesson.id);
++        const status = done ? copy.completed : current ? copy.current : !unlocked ? copy.later : '';
++        const body = <><span className="oda-course-roadmap-number" aria-hidden="true">{done ? <Check size={17} /> : index + 1}</span><span className="oda-course-roadmap-copy"><span className="oda-course-roadmap-title" lang={language}>{lesson.title}</span><span className="oda-course-roadmap-meta"><span>{lesson.minutes} min</span>{status && <span> · {status}</span>}</span>{!compact && lesson.goal && <span className="oda-course-roadmap-goal" lang={language}>{lesson.goal}</span>}</span>{!unlocked && <LockKeyhole size={14} className="oda-course-roadmap-lock" aria-hidden="true" />}</>;
++        return <li key={lesson.id} data-course-roadmap-lesson={lesson.id} data-course-overview-lesson={!compact ? lesson.id : undefined} data-completed={done} data-current={current}>
++          {onOpenLesson ? <button type="button" disabled={!unlocked} aria-current={current ? 'step' : undefined} aria-label={`${copy.lesson} ${index + 1}: ${lesson.title}, ${lesson.minutes} min${status ? `, ${status}` : ''}`} onClick={() => onOpenLesson(lesson.id)}>{body}</button> : <div aria-current={current ? 'step' : undefined}>{body}</div>}
++        </li>;
++      })}
++    </ol>
++  </div>;
++}
+diff --git a/src/components/notebook/JournalWorkspace.tsx b/src/components/notebook/JournalWorkspace.tsx
+index 468cba4..0e19e84 100644
+--- a/src/components/notebook/JournalWorkspace.tsx
++++ b/src/components/notebook/JournalWorkspace.tsx
+@@ -1,7 +1,9 @@
+ import React, { useEffect, useMemo, useState } from 'react';
+-import { CalendarDays, Plus, Search, Trash2, X } from 'lucide-react';
++import { CalendarDays, ChevronLeft, ChevronRight, MoreHorizontal, Plus, Search, Trash2, X } from 'lucide-react';
+ import { useApp } from '../../store/useApp';
+-import { N_, useT } from '../../i18n';
++import { getSpeechLang, N_, useLocale, useT } from '../../i18n';
++import { notebookHybridCopy } from '../../i18n/notebookHybrid';
++import { notebookWeekDates, shiftNotebookWeek } from '../../services/notebookHybrid';
+ import { getNotebookEntries, type NotebookDisplayEntry } from '../../services/notebook';
+ import type { DreamJournalEntry, NotebookMood } from '../../types/models';
+ import { NotebookCalendar } from './NotebookCalendar';
+@@ -15,6 +17,10 @@ const MOODS = [
+ ] as const;
+ const LEGACY_MOODS = [['triumphant', N_('Triumphant')], ['focused', N_('Focused')], ['grateful', N_('Grateful')], ['visionary', N_('Visionary')], ['breakthrough', N_('Breakthrough')]] as const;
+ const moodLabel = (mood: string) => [...MOODS, ...LEGACY_MOODS].find(([id]) => id === mood)?.[1] || mood;
++const entryTime = (instant: string) => {
++  const date = new Date(instant);
++  return Number.isNaN(date.getTime()) ? undefined : new Intl.DateTimeFormat(getSpeechLang(), { hour: 'numeric', minute: '2-digit' }).format(date);
++};
+ const SEED_TEXT: Record<string, Record<string, string>> = {
+   'journal-seed-1': {
+     title: 'Morning Focus & Sanctuary Awakening',
+@@ -31,6 +37,8 @@ const SEED_TEXT: Record<string, Record<string, string>> = {
+ 
+ export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: React.ReactNode }> = ({ today, reflectionArtwork }) => {
+   const t = useT();
++  const [locale] = useLocale();
++  const c = notebookHybridCopy(locale);
+   const { data, saveNotebookEntry, updateDreamJournalEntry, deleteNotebookEntry, deleteDreamJournalEntry } = useApp();
+   const { busy, notice, run, setNotice } = useNotebookAction();
+   const [editingRef, setEditingRef] = useSessionDraft<{ id: string; source: 'notebook' | 'dream' } | null>('journal:editing', null);
+@@ -43,6 +51,7 @@ export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: Rea
+   const [query, setQuery] = useState('');
+   const [selectedDate, setSelectedDate] = useState('');
+   const [showCalendar, setShowCalendar] = useState(false);
++  const [weekAnchor, setWeekAnchor] = useState<string | null>(null);
+   const [validation, setValidation] = useState(false);
+   const [photoOpen, setPhotoOpen] = useState(false);
+   const nativePhotoDialog = typeof window !== 'undefined' && typeof window.HTMLDialogElement !== 'undefined'
+@@ -100,15 +109,24 @@ export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: Rea
+     const result = await run(async () => { if (editing.source === 'dream') await deleteDreamJournalEntry(editing.id); else await deleteNotebookEntry(editing.id); return true; }, 'Entry deleted.');
+     if (result) reset();
+   };
++  const weekDates = notebookWeekDates(weekAnchor || today);
++  const weekMonth = weekDates[0].slice(0, 7) === weekDates[6].slice(0, 7)
++    ? dateLabel(weekDates[0], { month: 'long', year: 'numeric' })
++    : `${dateLabel(weekDates[0], { month: 'short' })} — ${dateLabel(weekDates[6], { month: 'short', year: 'numeric' })}`;
++  const preview = entries[0];
+ 
+   return <div className="oda-notebook-workspace">
+     <section className="oda-notebook-calendar-lead min-w-0 space-y-3" aria-label={t('Journal archive')}>
+-      <div className="flex justify-between items-center"><h2 className="text-[15px] font-semibold">{t('Entries')} <span className="text-[var(--fg-muted)] font-normal">({entries.length})</span></h2><NButton type="button" variant="ghost" icon={CalendarDays} aria-expanded={showCalendar} aria-controls="notebook-calendar" onClick={() => setShowCalendar(!showCalendar)}>{t('Calendar')}</NButton></div>
+-      <div className="oda-notebook-week-region" role="region" aria-label={t('Journal archive')} tabIndex={0}>
++      <div className="oda-hybrid-journal-header flex justify-between items-center"><h2 className="text-[15px] font-semibold">{t('Journal')}</h2><div><NButton type="button" variant="ghost" icon={CalendarDays} aria-expanded={showCalendar} aria-controls="notebook-calendar" onClick={() => setShowCalendar(!showCalendar)}>{t('Calendar')}</NButton><button type="button" className="oda-hybrid-new-entry" disabled={busy} aria-label={c.newEntry} onClick={() => { if (canReplace()) { reset(); setNotice(null); requestAnimationFrame(() => { const field = document.getElementById('notebook-journal-title'); field?.scrollIntoView({ behavior: 'auto', block: 'center' }); field?.focus({ preventScroll: true }); }); } }}><Plus size={19} aria-hidden="true" /></button></div></div>
++      <div className="oda-hybrid-week-nav">
++        <button type="button" aria-label={c.previousWeek} onClick={() => setWeekAnchor(shiftNotebookWeek(weekAnchor || today, -1))}><ChevronLeft size={18} aria-hidden="true" /></button>
++        <button type="button" className="oda-hybrid-week-month" aria-label={`${c.thisWeek} — ${weekMonth}`} title={c.thisWeek} onClick={() => setWeekAnchor(null)}><span aria-live="polite">{weekMonth}</span></button>
++        <button type="button" aria-label={c.nextWeek} onClick={() => setWeekAnchor(shiftNotebookWeek(weekAnchor || today, 1))}><ChevronRight size={18} aria-hidden="true" /></button>
++      </div>
++      <div className="oda-notebook-week-region" role="region" aria-label={t('Journal archive')} aria-describedby="notebook-archive-date-help" tabIndex={0}>
+         <div className="oda-notebook-week-strip">
+-          {Array.from({ length: 7 }, (_, index) => {
+-            const day = new Date(`${today}T12:00:00`); day.setDate(day.getDate() - 6 + index);
+-            const key = `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}`;
++          {weekDates.map(key => {
++            const day = new Date(`${key}T12:00:00`);
+             return <button key={key} type="button" aria-pressed={selectedDate === key} aria-current={key === today ? 'date' : undefined} aria-label={`${dateLabel(key)}${dates.has(key) ? ` — ${t('Has entries')}` : ''}`} onClick={() => setSelectedDate(selectedDate === key ? '' : key)}>
+               <span>{dateLabel(key, { weekday: 'short' })}</span><strong>{day.getDate()}</strong>{dates.has(key) && <i aria-hidden="true" />}
+             </button>;
+@@ -117,14 +135,20 @@ export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: Rea
+       </div>
+       <p className="oda-notebook-week-hint text-xs text-[var(--fg-muted)]">{t('Scroll sideways to see all dates')}</p>
+       <div className="relative"><Search className="absolute left-3 top-3.5 w-4 h-4 text-[var(--fg-muted)]" aria-hidden="true" strokeWidth={1.8} /><label htmlFor="notebook-journal-search" className="sr-only">{t('Search entries')}</label><NInput id="notebook-journal-search" type="search" className="pl-9 !bg-[var(--bg-muted)] !border-transparent" value={query} onChange={e => setQuery(e.target.value)} placeholder={t('Search')} /></div>
+-      {showCalendar && <div id="notebook-calendar"><NotebookCalendar today={today} selected={selectedDate} dates={dates} onSelect={setSelectedDate} /></div>}
++      {showCalendar && <div id="notebook-calendar"><NotebookCalendar today={today} selected={selectedDate} dates={dates} onSelect={key => { setSelectedDate(key); if (key) setWeekAnchor(key); }} /></div>}
+       {selectedDate && <div className="flex gap-2 justify-between items-center text-sm"><span>{dateLabel(selectedDate)}</span><button type="button" className={quietButton} onClick={() => setSelectedDate('')}>{t('All dates')}</button></div>}
++      <p id="notebook-archive-date-help" className="oda-hybrid-date-help">{c.archiveDates}</p>
+     </section>
++    {preview && <section className="oda-hybrid-entry-preview" aria-labelledby="notebook-entry-preview-title">
++      <header><h2 id="notebook-entry-preview-title">{preview.dateKey === today ? c.todaysEntry : c.savedEntry}</h2><details className="oda-hybrid-entry-actions" onKeyDown={event => { if (event.key === 'Escape') { event.currentTarget.open = false; event.currentTarget.querySelector('summary')?.focus(); } }}><summary aria-label={c.entryActions}><MoreHorizontal size={19} aria-hidden="true" /></summary><div><button type="button" disabled={busy} onClick={event => { const actions = event.currentTarget.closest('details'); actions?.removeAttribute('open'); actions?.querySelector('summary')?.focus(); openEntry(preview); }}>{t('Edit entry')}</button></div></details></header>
++      <h3>{displayText(preview, 'title') || t('Untitled')}</h3>
++      <p className="oda-hybrid-preview-text">{displayText(preview, 'content')}</p>
++      <footer><span>{dateLabel(preview.dateKey, { day: 'numeric', month: 'short' })}</span>{entryTime(preview.createdAt) && <time dateTime={preview.createdAt}>{entryTime(preview.createdAt)}</time>}{preview.source === 'dream' && <span>{t('Dream journal')}</span>}</footer>
++    </section>}
+     <div className="oda-notebook-writing-column">
+     <div className={`${cardCls} oda-notebook-editor`}>
+       <div className="oda-notebook-editor-heading p-5 flex items-start justify-between gap-3">
+         <div><p className={smallLabel}>{editing ? dateLabel(editing.dateKey) : dateLabel(today)}</p><h2 className="text-lg font-semibold tracking-tight text-[var(--fg)] mt-0.5">{editing ? t('Edit entry') : t('Today')}</h2></div>
+-        <NButton type="button" variant="ghost" icon={Plus} disabled={busy} onClick={() => { if (canReplace()) { reset(); setNotice(null); } }}>{t('New')}</NButton>
+       </div>
+       <form onSubmit={save} className="oda-notebook-editor-form px-5 pb-5 space-y-4">
+         {editing?.source === 'dream' && <p className="text-xs text-[var(--fg-muted)]">{t('From dream journal')}{editing.dreamName ? ` · ${displayText(editing, 'dreamName')}` : ''}</p>}
+@@ -148,8 +172,9 @@ export const JournalWorkspace: React.FC<{ today: string; reflectionArtwork?: Rea
+     </div>
+ 
+     <section className="oda-notebook-archive min-w-0 space-y-3" aria-label={t('Journal archive')}>
++      <h2 className="oda-hybrid-archive-heading">{c.allEntries} <span>({entries.length})</span></h2>
+       {entries.length === 0 ? <div className="oda-card rounded-[var(--radius-lg)] p-5 text-center"><p className="text-[15px] font-semibold">{query || selectedDate ? t('No entries match.') : t('Nothing written yet')}</p><p className="text-sm text-[var(--fg-muted)] mt-1">{query || selectedDate ? t('Try another word or choose all dates.') : t('Your first entry will appear here.')}</p>{(query || selectedDate) && <button type="button" className={`${quietButton} mt-2`} onClick={() => { setQuery(''); setSelectedDate(''); }}>{t('Clear filters')}</button>}</div> : <div className="oda-notebook-entry-list bg-[var(--bg-muted)] rounded-[var(--radius-md)] divide-y divide-[var(--border)] max-h-[650px] overflow-y-auto">{entries.map(entry => <button type="button" key={entry.viewId} disabled={busy} aria-current={editing?.viewId === entry.viewId ? 'true' : undefined} onClick={() => openEntry(entry)} className={`w-full text-left px-4 py-3 min-h-[56px] cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset disabled:opacity-50 ${editing?.viewId === entry.viewId ? 'bg-[var(--bg-inset)]' : ''}`}>
+-        <span className="flex justify-between gap-2 text-xs text-[var(--fg-muted)]"><span>{dateLabel(entry.dateKey, { month: 'short', day: 'numeric', year: 'numeric' })}</span>{entry.source === 'dream' && <span>{t('Dream journal')}</span>}</span>
++        <span className="flex justify-between gap-2 text-xs text-[var(--fg-muted)]"><span>{dateLabel(entry.dateKey, { month: 'short', day: 'numeric', year: 'numeric' })}</span>{entryTime(entry.createdAt) && <time dateTime={entry.createdAt}>{entryTime(entry.createdAt)}</time>}{entry.source === 'dream' && <span>{t('Dream journal')}</span>}</span>
+         <span className="text-[15px] font-medium leading-snug block break-words mt-0.5">{displayText(entry, 'title') || t('Untitled')}</span>
+         <span className="text-sm text-[var(--fg-muted)] line-clamp-2 block mt-0.5 break-words">{displayText(entry, 'content')}</span>
+         {(entry.photoDataUrl || entry.mood) && <span className="flex flex-wrap items-center gap-2 mt-2">{entry.photoDataUrl && <img src={entry.photoDataUrl} alt="" className="w-10 h-10 object-cover rounded-[var(--radius-xs)]" loading="lazy" />}{entry.mood && <span className="text-xs text-[var(--fg-muted)]">{t(moodLabel(entry.mood))}</span>}</span>}
+diff --git a/src/components/notebook/QuotesBrowser.tsx b/src/components/notebook/QuotesBrowser.tsx
+new file mode 100644
+index 0000000..696c45f
+--- /dev/null
++++ b/src/components/notebook/QuotesBrowser.tsx
+@@ -0,0 +1,56 @@
++import React, { useMemo, useState } from 'react';
++import { ArrowDown, ArrowUpRight, Quote, Search } from 'lucide-react';
++import { useLocale } from '../../i18n';
++import { notebookHybridCopy } from '../../i18n/notebookHybrid';
++import { QUOTE_COLLECTION, quoteSource, quoteText } from '../../data/quoteCollection';
++import type { OriginalSceneId } from '../../data/originalSceneAssets';
++import { filterSourcedQuotes, quoteSourceHref, type QuoteFilterCategory } from '../../services/notebookHybrid';
++import { OriginalSceneImage } from '../OriginalSceneImage';
++
++const PAGE_SIZE = 12;
++const CATEGORY_ART: Record<Exclude<QuoteFilterCategory, 'all'>, OriginalSceneId> = {
++  faith: 'dunes', philosophy: 'today-scene', society: 'palms', science: 'foam',
++};
++
++/** The saved catalogue is the sole text/source authority; imagery is decorative. */
++export const QuotesBrowser: React.FC = () => {
++  const [locale] = useLocale();
++  const c = notebookHybridCopy(locale);
++  const [category, setCategory] = useState<QuoteFilterCategory>('all');
++  const [query, setQuery] = useState('');
++  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
++  const matches = useMemo(() => filterSourcedQuotes(QUOTE_COLLECTION, category, query, locale), [category, query, locale]);
++  const visible = matches.slice(0, visibleCount);
++  const categories: QuoteFilterCategory[] = ['all', 'faith', 'philosophy', 'society', 'science'];
++  const passageLanguage = locale === 'tr' ? 'tr' : 'en';
++  return <div className="oda-quotes-browser">
++    <header className="oda-quotes-heading">
++      <div><h2>{c.quotes}</h2><p>{c.collection(QUOTE_COLLECTION.length)}</p></div>
++      <Quote size={23} strokeWidth={1.5} aria-hidden="true" />
++    </header>
++    <div className="oda-quotes-categories" role="group" aria-label={c.categories}>
++      {categories.map(id => <button type="button" key={id} aria-pressed={category === id} onClick={() => { setCategory(id); setVisibleCount(PAGE_SIZE); }}>{c[id]}</button>)}
++    </div>
++    <label className="oda-quotes-search"><Search size={18} aria-hidden="true" /><span className="sr-only">{c.searchQuotes}</span><input type="search" value={query} onChange={event => { setQuery(event.target.value); setVisibleCount(PAGE_SIZE); }} placeholder={c.searchQuotes} /></label>
++    {locale === 'es' && <p className="oda-quotes-language">{c.englishQuotes}</p>}
++    <p className="oda-quotes-count" role="status">{c.shown(visible.length, matches.length)}</p>
++    {matches.length === 0 ? <div className="oda-quotes-empty"><p>{c.noQuotes}</p><button type="button" onClick={() => { setQuery(''); setCategory('all'); setVisibleCount(PAGE_SIZE); }}>{c.clearSearch}</button></div> : <div className="oda-quotes-grid">
++      {visible.map(quote => {
++        const href = quoteSourceHref(quote.sourceUrl);
++        return <article key={quote.id} className="oda-quote-card" data-quote-id={quote.id} data-quote-category={quote.category}>
++          <Quote className="oda-quote-mark" size={20} aria-hidden="true" />
++          <blockquote lang={passageLanguage}>{quoteText(quote, locale)}</blockquote>
++          <div className="oda-quote-citation">
++            <p lang={passageLanguage}>{quoteSource(quote, locale)}</p>
++            {quote.reference && <p lang="en" className="oda-quote-reference">{quote.reference}</p>}
++            <span className="oda-quote-kind">{quote.kind === 'adaptation' ? c.adaptation : c.translation}</span>
++            {href && <a href={href} target="_blank" rel="noopener noreferrer">{c.source}<ArrowUpRight size={14} aria-hidden="true" /></a>}
++          </div>
++          <div className="oda-quote-illustration" aria-hidden="true"><OriginalSceneImage asset={CATEGORY_ART[quote.category]} sizes="120px" /></div>
++        </article>;
++      })}
++    </div>}
++    {visible.length < matches.length && <button type="button" className="oda-quotes-more" onClick={() => setVisibleCount(count => count + PAGE_SIZE)}>{c.moreQuotes}<ArrowDown size={16} aria-hidden="true" /></button>}
++    <p className="oda-quotes-art-note">{c.decorativeArt}</p>
++  </div>;
++};
+diff --git a/src/components/today/CourseNextStep.tsx b/src/components/today/CourseNextStep.tsx
+index 8b46478..5ee3215 100644
+--- a/src/components/today/CourseNextStep.tsx
++++ b/src/components/today/CourseNextStep.tsx
+@@ -1,4 +1,4 @@
+-import React, { useEffect, useState } from 'react';
++import React from 'react';
+ import { ArrowRight } from 'lucide-react';
+ import { courseCatalogFor } from '../../data/courseCatalog';
+ import { courseEntryCopy } from '../../data/courseEntryCopy';
+@@ -7,7 +7,10 @@ import { useApp } from '../../store/useApp';
+ import { useLocale } from '../../i18n';
+ import { dailyLoopCopy } from '../../i18n/dailyLoop';
+ import { courseContinuation } from '../../services/dailyLoop';
+-import { readCourseProgress, COURSE_PROGRESS_STORAGE_KEY } from '../../services/courseProgress';
++import { useSavedCourseProgress } from '../../hooks/useSavedCourseProgress';
++import { CourseRoadmap } from '../CourseRoadmap';
++import { requestCourseNavigation } from '../../services/courseNavigationIntent';
++import { dashboardHybridCopy } from '../../i18n/dashboardHybrid';
+ 
+ const COURSE_SELECTION = 'oda_course_selection_v1';
+ const readSelected = () => { try { return localStorage.getItem(COURSE_SELECTION); } catch { return null; } };
+@@ -17,29 +20,28 @@ export const CourseNextStep: React.FC = () => {
+   const [locale] = useLocale();
+   const c = dailyLoopCopy(locale);
+   const entryCopy = courseEntryCopy(locale);
+-  const [progress, setProgress] = useState(readCourseProgress);
+-  useEffect(() => {
+-    const update = () => setProgress(readCourseProgress());
+-    const storage = (event: StorageEvent) => { if (event.key === COURSE_PROGRESS_STORAGE_KEY || event.key === null) update(); };
+-    window.addEventListener('storage', storage); window.addEventListener('focus', update);
+-    return () => { window.removeEventListener('storage', storage); window.removeEventListener('focus', update); };
+-  }, []);
+-  // Data replacement (including restoring a backup) can update the side store in this tab.
+-  useEffect(() => { setProgress(readCourseProgress()); }, [data?.courseProgress]);
+-  const next = courseContinuation(courseCatalogFor(locale), progress, courseForIntent(data?.profile.intent), readSelected());
++  const hybrid = dashboardHybridCopy(locale);
++  const progress = useSavedCourseProgress(data?.courseProgress);
++  const catalog = courseCatalogFor(locale);
++  const selected = readSelected();
++  const suggested = courseForIntent(data?.profile.intent);
++  const continuation = courseContinuation(catalog, progress, suggested, selected);
++  const finishedCourse = !continuation && (catalog.find(course => course.id === selected) ?? catalog.find(course => course.id === suggested) ?? catalog[0]);
++  const next = continuation ?? (finishedCourse ? { course: finishedCourse, index: finishedCourse.lessonCount - 1, completed: finishedCourse.lessonCount, started: true } : null);
+   if (!next) return null;
+   const lesson = next.course.lessons[next.index];
+   if (!lesson) return null;
+   const contentLanguage = next.course.lang !== locale ? next.course.lang : undefined;
+-  const open = () => {
+-    try { localStorage.setItem(COURSE_SELECTION, next.course.id); } catch { /* The course catalog remains available if storage is blocked. */ }
++  const completedIds = next.course.lessonIds.filter(id => progress.lessons[id]?.completed === true);
++  const open = (mode: 'overview' | 'lesson', lessonId?: string) => {
++    requestCourseNavigation({ courseId: next.course.id, mode, ...(lessonId ? { lessonId } : {}) });
+     setActiveRoute('/app/courses');
+   };
+-  return <section className="oda-course-next-step" aria-labelledby="course-next-step-title">
+-    <div className="oda-loop-heading"><div><p className="oda-kicker">{next.started ? c.continueCourse : c.startCourse}</p><h2 id="course-next-step-title" lang={contentLanguage} className="oda-display">{next.course.title}</h2><p>{c.lesson} {next.index + 1} {c.of} {next.course.lessonCount} · {lesson.minutes} min · {next.completed}/{next.course.lessonCount} {c.lessonsComplete}</p></div></div>
+-    <h3 lang={contentLanguage} className="mt-4 text-base leading-snug font-semibold" data-next-lesson-title>{lesson.title}</h3>
+-    <p className="oda-loop-help"><span className="font-semibold">{entryCopy.nextGoal}: </span><span lang={contentLanguage} data-next-lesson-goal>{lesson.goal}</span></p>
++  return <section className="oda-course-next-step oda-hybrid-mission" aria-labelledby="course-next-step-title">
++    <div className="oda-loop-heading"><div><p className="oda-kicker">{next.started ? hybrid.mission : hybrid.suggested}</p><h2 id="course-next-step-title" lang={contentLanguage} className="oda-display">{next.course.title}</h2><p>{next.completed}/{next.course.lessonCount} {c.lessonsComplete}</p></div><strong className="oda-hybrid-mission-percent" aria-hidden="true">{Math.round(next.completed / next.course.lessonCount * 100)}%</strong></div>
+     <div className="oda-growth-course-progress" role="progressbar" aria-label={next.course.title} aria-valuenow={next.completed} aria-valuemin={0} aria-valuemax={next.course.lessonCount}><span style={{ width: `${next.completed / next.course.lessonCount * 100}%` }} /></div>
+-    <button type="button" onClick={open} className="oda-loop-link">{next.started ? c.continue : entryCopy.previewCourse}<ArrowRight size={16} aria-hidden="true" /></button>
++    <CourseRoadmap lessons={next.course.lessons} completedLessonIds={completedIds} currentLessonId={continuation ? lesson.id : undefined} availableLessonIds={[...completedIds, ...(continuation ? [lesson.id] : [])]} onOpenLesson={id => open('lesson', id)} compact language={contentLanguage} />
++    {continuation ? <div className="oda-hybrid-next-lesson"><p className="oda-kicker">{hybrid.next} · {lesson.minutes} min</p><h3 lang={contentLanguage} className="text-base leading-snug font-semibold" data-next-lesson-title>{lesson.title}</h3><p className="oda-loop-help"><span className="font-semibold">{entryCopy.nextGoal}: </span><span lang={contentLanguage} data-next-lesson-goal>{lesson.goal}</span></p></div> : <p className="oda-loop-help">{hybrid.complete}</p>}
++    <div className="oda-hybrid-mission-actions"><button type="button" onClick={() => open('overview')} className="oda-loop-link">{hybrid.roadmap}<ArrowRight size={16} aria-hidden="true" /></button>{continuation && <button type="button" onClick={() => open(next.started ? 'lesson' : 'overview')} className="oda-loop-link">{next.started ? c.continue : entryCopy.previewCourse}<ArrowRight size={16} aria-hidden="true" /></button>}</div>
+   </section>;
+ };
+diff --git a/src/hooks/useSavedCourseProgress.ts b/src/hooks/useSavedCourseProgress.ts
+new file mode 100644
+index 0000000..c11fb31
+--- /dev/null
++++ b/src/hooks/useSavedCourseProgress.ts
+@@ -0,0 +1,16 @@
++import { useEffect, useState } from 'react';
++import { readCourseProgress, subscribeCourseProgress } from '../services/courseProgress';
++
++/** Subscribe to committed course changes, not the editor's unsaved optimistic draft. */
++export function useSavedCourseProgress(replacement: unknown) {
++  const [progress, setProgress] = useState(readCourseProgress);
++  useEffect(() => {
++    const update = (canSync?: () => boolean) => { if (!canSync || canSync()) setProgress(readCourseProgress()); };
++    const unsubscribe = subscribeCourseProgress(update);
++    const onFocus = () => update();
++    window.addEventListener('focus', onFocus);
++    return () => { unsubscribe(); window.removeEventListener('focus', onFocus); };
++  }, []);
++  useEffect(() => { setProgress(readCourseProgress()); }, [replacement]);
++  return progress;
++}
+diff --git a/src/i18n/dashboardHybrid.ts b/src/i18n/dashboardHybrid.ts
+new file mode 100644
+index 0000000..dfdb491
+--- /dev/null
++++ b/src/i18n/dashboardHybrid.ts
+@@ -0,0 +1,31 @@
++const en = {
++  progress: 'Course library progress', progressHint: 'Completed lessons across the whole library.',
++  lessons: (done: number, total: number) => `${done} of ${total} lessons completed`,
++  keptDays: 'Kept days · last 7', habits: 'Habits · today', actions: 'Today’s actions',
++  viewAll: 'All habits', confirm: 'Confirm your decision is complete', choose: 'Choose your one decision',
++  addHabit: 'Add a habit', focus: 'Timer focus streak', days: (n: number) => `${n} ${n === 1 ? 'day' : 'days'}`,
++  utc: 'UTC days · completed timer sessions', focusToday: (n: number) => `${n} recorded minutes today`,
++  focusEmpty: 'Complete a timer session to begin.', openFocus: 'Open focus timer',
++  mission: 'Current course', suggested: 'Suggested course', roadmap: 'View roadmap', next: 'Next lesson', complete: 'Course completed',
++};
++const tr: typeof en = {
++  progress: 'Kurs kütüphanesi ilerlemesi', progressHint: 'Tüm kütüphanede tamamlanan dersler.',
++  lessons: (done, total) => `${total} dersin ${done} tanesi tamamlandı`,
++  keptDays: 'Karar tamamlanan gün · son 7', habits: 'Alışkanlıklar · bugün', actions: 'Bugünkü adımların',
++  viewAll: 'Tüm alışkanlıklar', confirm: 'Kararını tamamladığını onayla', choose: 'Bugünkü tek kararını seç',
++  addHabit: 'Alışkanlık ekle', focus: 'Zamanlayıcılı odak serisi', days: n => `${n} gün`,
++  utc: 'UTC günleri · tamamlanan zamanlayıcı oturumları', focusToday: n => `Bugün kaydedilen ${n} dakika`,
++  focusEmpty: 'Başlamak için bir zamanlayıcı oturumu tamamla.', openFocus: 'Odak zamanlayıcısını aç',
++  mission: 'Mevcut kurs', suggested: 'Önerilen kurs', roadmap: 'Ders yolunu gör', next: 'Sonraki ders', complete: 'Kurs tamamlandı',
++};
++const es: typeof en = {
++  progress: 'Progreso de la biblioteca de cursos', progressHint: 'Lecciones completadas en toda la biblioteca.',
++  lessons: (done, total) => `${done} de ${total} lecciones completadas`,
++  keptDays: 'Días cumplidos · últimos 7', habits: 'Hábitos · hoy', actions: 'Tus acciones de hoy',
++  viewAll: 'Todos los hábitos', confirm: 'Confirma que cumpliste tu decisión', choose: 'Elige tu decisión del día',
++  addHabit: 'Añadir un hábito', focus: 'Racha de enfoque con temporizador', days: n => `${n} ${n === 1 ? 'día' : 'días'}`,
++  utc: 'Días UTC · sesiones de temporizador completadas', focusToday: n => `${n} minutos registrados hoy`,
++  focusEmpty: 'Completa una sesión de temporizador para empezar.', openFocus: 'Abrir temporizador',
++  mission: 'Curso actual', suggested: 'Curso sugerido', roadmap: 'Ver recorrido', next: 'Próxima lección', complete: 'Curso completado',
++};
++export const dashboardHybridCopy = (locale: string) => locale === 'tr' ? tr : locale === 'es' ? es : en;
+diff --git a/src/i18n/notebookHybrid.ts b/src/i18n/notebookHybrid.ts
+new file mode 100644
+index 0000000..7cdf2f6
+--- /dev/null
++++ b/src/i18n/notebookHybrid.ts
+@@ -0,0 +1,49 @@
++const en = {
++  quotes: 'Quotes', loadingQuotes: 'Opening sourced passages…',
++  categories: 'Passage categories', all: 'All',
++  faith: 'Faith', philosophy: 'Philosophy', society: 'Society', science: 'Science',
++  collection: (n: number) => `${n} passages with their sources.`,
++  searchQuotes: 'Search passages or sources', noQuotes: 'No passages match.',
++  clearSearch: 'Clear search', moreQuotes: 'Show more passages',
++  shown: (shown: number, total: number) => `${shown} of ${total} passages`,
++  source: 'Read source', translation: 'Translation', adaptation: 'Adaptation',
++  englishQuotes: 'These passages are in English; navigation remains in Spanish.',
++  decorativeArt: 'Artwork is decorative; the source is linked on each card.',
++  previousWeek: 'Previous week', nextWeek: 'Next week', thisWeek: 'This week',
++  archiveDates: 'Dates filter saved entries. New writing belongs to today.',
++  newEntry: 'New journal entry', todaysEntry: "Today's entry", savedEntry: 'Saved entry',
++  entryActions: 'Entry actions', allEntries: 'Journal archive',
++};
++const tr: typeof en = {
++  quotes: 'Alıntılar', loadingQuotes: 'Kaynaklı metinler açılıyor…',
++  categories: 'Metin kategorileri', all: 'Tümü',
++  faith: 'İnanç', philosophy: 'Felsefe', society: 'Toplum', science: 'Bilim',
++  collection: n => `Kaynaklarıyla birlikte ${n} metin.`,
++  searchQuotes: 'Metin veya kaynak ara', noQuotes: 'Eşleşen metin yok.',
++  clearSearch: 'Aramayı temizle', moreQuotes: 'Daha fazla metin göster',
++  shown: (shown, total) => `${total} metnin ${shown} tanesi`,
++  source: 'Kaynağı oku', translation: 'Çeviri', adaptation: 'Uyarlama',
++  englishQuotes: 'Bu metinler İngilizcedir; gezinme dili İspanyolca olarak kalır.',
++  decorativeArt: 'Görseller dekoratiftir; her kartta kaynak bağlantısı bulunur.',
++  previousWeek: 'Önceki hafta', nextWeek: 'Sonraki hafta', thisWeek: 'Bu hafta',
++  archiveDates: 'Tarihler kayıtlı yazıları filtreler. Yeni yazı bugüne kaydedilir.',
++  newEntry: 'Yeni günlük yazısı', todaysEntry: 'Bugünün yazısı', savedEntry: 'Kayıtlı yazı',
++  entryActions: 'Yazı işlemleri', allEntries: 'Günlük arşivi',
++};
++const es: typeof en = {
++  quotes: 'Citas', loadingQuotes: 'Abriendo textos con fuentes…',
++  categories: 'Categorías de textos', all: 'Todas',
++  faith: 'Fe', philosophy: 'Filosofía', society: 'Sociedad', science: 'Ciencia',
++  collection: n => `${n} textos con sus fuentes.`,
++  searchQuotes: 'Buscar textos o fuentes', noQuotes: 'No hay textos que coincidan.',
++  clearSearch: 'Borrar búsqueda', moreQuotes: 'Mostrar más textos',
++  shown: (shown, total) => `${shown} de ${total} textos`,
++  source: 'Leer fuente', translation: 'Traducción', adaptation: 'Adaptación',
++  englishQuotes: 'Estos textos están en inglés; la navegación sigue en español.',
++  decorativeArt: 'Las imágenes son decorativas; cada tarjeta enlaza su fuente.',
++  previousWeek: 'Semana anterior', nextWeek: 'Semana siguiente', thisWeek: 'Esta semana',
++  archiveDates: 'Las fechas filtran entradas guardadas. Los textos nuevos se guardan hoy.',
++  newEntry: 'Nueva entrada de diario', todaysEntry: 'Entrada de hoy', savedEntry: 'Entrada guardada',
++  entryActions: 'Acciones de la entrada', allEntries: 'Archivo del diario',
++};
++export const notebookHybridCopy = (locale: string) => locale === 'tr' ? tr : locale === 'es' ? es : en;
+diff --git a/src/pages/Courses.tsx b/src/pages/Courses.tsx
+index 35f0e35..9eb419f 100644
+--- a/src/pages/Courses.tsx
++++ b/src/pages/Courses.tsx
+@@ -12,6 +12,9 @@ import { courseCatalogueCopy, courseOutcomeFor } from '../data/coursePresentatio
+ import { courseEntryCopy } from '../data/courseEntryCopy';
+ import { courseEntryFor, hasCourseLearningProgress, sameCourseEntryScope, type CourseEntryScope } from '../services/courseEntry';
+ import { REPLACEMENT_EPOCH_KEY } from '../services/dataSnapshots';
++import { queueDataWrite } from '../services/dataWrites';
++import { consumeCourseNavigation, resolveCourseNavigation } from '../services/courseNavigationIntent';
++import { CourseRoadmap } from '../components/CourseRoadmap';
+ import { getCourseExperiment, isCourseReviewDue } from '../services/courseLearning';
+ import { useLocale, useT } from '../i18n';
+ import { useApp } from '../store/useApp';
+@@ -60,6 +63,12 @@ export const Courses: React.FC = () => {
+   const didMount = useRef(false);
+   const manuallyEnteredLesson = useRef(false);
+   const resolvedEntry = useRef({ courseId: selected, scope: entryScope, started: entry?.started ?? false });
++  const navigationChecked = useRef(false);
++  const navigationCopy = ({
++    en: { prerequisite: 'Complete the previous lessons before opening this one.', entitlement: 'This lesson needs your course’s subscription level. You can still review the roadmap.', invalid: 'That lesson is not part of this course. Choose a lesson from the roadmap.' },
++    tr: { prerequisite: 'Bu dersi açmadan önce önceki dersleri tamamla.', entitlement: 'Bu ders kursunun abonelik düzeyini gerektiriyor. Yol haritasını yine de inceleyebilirsin.', invalid: 'Bu ders bu kursa ait değil. Yol haritasından bir ders seç.' },
++    es: { prerequisite: 'Completa las lecciones anteriores antes de abrir esta.', entitlement: 'Esta lección requiere el nivel de suscripción del curso. Puedes seguir consultando el mapa.', invalid: 'Esa lección no pertenece a este curso. Elige una lección del mapa.' },
++  })[locale];
+   useEffect(() => draft.subscribe((progress, failed) => {
+     setState(progress);
+     setStorageError(failed);
+@@ -82,6 +91,27 @@ export const Courses: React.FC = () => {
+     if (replaced) { setEntryRequest(null); setNotice(''); }
+     resolvedEntry.current = { courseId: course.id, scope: entryScope, started: entry!.started };
+   }, [state, course, index, entryScope.recordId, entryScope.replacementEpoch]);
++  useEffect(() => {
++    if (!appData || !pro.ready || navigationChecked.current) return;
++    let cancelled = false;
++    // The session's authoritative initial read is already queued. Consume the
++    // one-use request only after that read, and after access/profile are ready.
++    void queueDataWrite(() => draft.read()).then(saved => {
++      if (cancelled || navigationChecked.current) return;
++      navigationChecked.current = true;
++      const intent = consumeCourseNavigation();
++      if (!intent) return;
++      const target = courses.find(item => item.id === intent.courseId);
++      if (!target) return;
++      const resolved = resolveCourseNavigation(intent, target, saved, { gating: pro.gating, tier: pro.tier });
++      setState(saved);
++      open(target, resolved.mode);
++      setIndex(resolved.index);
++      resolvedEntry.current = { courseId: target.id, scope: entryScope, started: hasCourseLearningProgress(target.lessons.map(lesson => lesson.id), saved) };
++      setNotice(resolved.reason ? navigationCopy[resolved.reason] : '');
++    }).catch(() => { /* Leave the request available if the personal record cannot yet be read. */ });
++    return () => { cancelled = true; };
++  }, [draft, appData?.profile.id, entryScope.replacementEpoch, pro.ready, pro.gating, pro.tier]);
+ 
+   // Each updater is replayed onto the latest stored copy under the shared data lock.
+   const commit = (update: (current: typeof state) => typeof state) => draft.update(update);
+@@ -96,6 +126,16 @@ export const Courses: React.FC = () => {
+   };
+   const countCompleted = (item: GuidedCourse) => item.lessons.filter(lesson => getLessonProgress(state, lesson).completed).length;
+   const started = (item: GuidedCourse) => hasCourseLearningProgress(item.lessons.map(lesson => lesson.id), state);
++  const openRoadmapLesson = (lessonId?: string) => {
++    if (!course) return;
++    const resolved = resolveCourseNavigation({ courseId: course.id, mode: 'lesson', lessonId }, course, draft.read(), { gating: pro.gating, tier: pro.tier });
++    manuallyEnteredLesson.current = true;
++    setIndex(resolved.index);
++    setEntryRequest({ courseId: course.id, scope: entryScope, mode: resolved.mode, resumeOnHydration: !entry?.started });
++    setNotice(resolved.reason ? navigationCopy[resolved.reason] : '');
++  };
++  const completedLessonIds = course ? course.lessons.filter(lesson => getLessonProgress(state, lesson).completed).map(lesson => lesson.id) : [];
++  const availableLessonIds = course ? course.lessons.filter((lesson, i) => i <= nextLessonIndex(state, course) && !isLessonLocked(course.id, i, { gating: pro.gating, tier: pro.tier })).map(lesson => lesson.id) : [];
+   const inProgress = courses.filter(item => started(item) && countCompleted(item) < item.lessons.length);
+   const resumeCourse = inProgress.find(item => item.id === lastVisited) ?? inProgress[0];
+   const reviewCourse = courses.find(item => isCourseReviewDue(getCourseExperiment(state.experiments, item.id)));
+@@ -168,21 +208,17 @@ export const Courses: React.FC = () => {
+       <h1 id="course-overview-title" lang={content} ref={titleRef} tabIndex={-1} className="oda-display oda-course-title outline-none scroll-mt-16">{course.title}</h1>
+       <p lang={content} className="text-sm leading-relaxed text-[var(--fg-muted)]">{course.subtitle}</p>
+       <p className="flex flex-wrap items-center gap-2 text-xs text-[var(--fg-muted)] mt-3"><Clock3 size={14} aria-hidden="true" />{t('{lessons} lessons · {minutes} min', { lessons: course.lessons.length, minutes: course.lessons.reduce((sum, lesson) => sum + lesson.minutes, 0) })} · {catalogue.pace}</p>
++      <div className="oda-course-overview-progress"><p>{t('{done}/{total} lessons completed', { done: completedLessonIds.length, total: course.lessons.length })}<span>{Math.round(completedLessonIds.length / course.lessons.length * 100)}%</span></p><div role="progressbar" aria-label={t('{title} progress', { title: course.title })} aria-valuemin={0} aria-valuemax={course.lessons.length} aria-valuenow={completedLessonIds.length}><span style={{ width: `${completedLessonIds.length / course.lessons.length * 100}%` }} /></div></div>
+       {languageNote}
+       </div>
+       <CourseCover courseId={course.id} eager layout="overview" className="oda-course-overview-art" />
+     </header>
+-    <button id="course-start-lesson" type="button" className="oda-course-primary w-full" onClick={() => {
+-      manuallyEnteredLesson.current = true;
+-      setIndex(entry!.index);
+-      setEntryRequest({ courseId: course.id, scope: entryScope, mode: 'lesson', resumeOnHydration: !entry!.started });
+-      setNotice('');
+-    }}>{entry!.started ? entryCopy.continueLesson.replace('{number}', String(entry!.index + 1)) : entryCopy.startFirst}<ArrowRight size={16} aria-hidden="true" /></button>
++    <button id="course-start-lesson" type="button" className="oda-course-primary w-full" onClick={() => openRoadmapLesson()}>{entry!.started ? entryCopy.continueLesson.replace('{number}', String(entry!.index + 1)) : entryCopy.startFirst}<ArrowRight size={16} aria-hidden="true" /></button>
++    {notice && <p role="status" className="oda-course-navigation-notice">{notice}</p>}
++    {notice === navigationCopy.entitlement && <button type="button" className="oda-course-primary" onClick={() => setActiveRoute('/app/upgrade')}>{t('See the levels')}<ArrowRight size={16} aria-hidden="true" /></button>}
+     <section className="oda-course-map" aria-labelledby="course-overview-lessons">
+       <h2 id="course-overview-lessons" className="oda-display text-xl pt-4">{entryCopy.lessons}</h2>
+-      <ol>{course.lessons.map((lesson, i) => <li key={lesson.id} data-course-overview-lesson={lesson.id} className="flex items-start gap-3 py-3 text-sm leading-relaxed">
+-        <span className="oda-course-map-number" aria-hidden="true">{i + 1}</span><span lang={content} className="flex-1 min-w-0">{lesson.title}</span><span className="shrink-0 text-xs text-[var(--fg-muted)] whitespace-nowrap">{lesson.minutes} min</span>
+-      </li>)}</ol>
++      <CourseRoadmap lessons={course.lessons} completedLessonIds={completedLessonIds} currentLessonId={course.lessons[entry!.index]?.id} availableLessonIds={availableLessonIds} onOpenLesson={openRoadmapLesson} language={content} />
+     </section>
+     <section aria-labelledby="course-overview-about">
+       <h2 id="course-overview-about" className="oda-display text-xl mb-3">{entryCopy.about}</h2>
+@@ -219,11 +255,7 @@ export const Courses: React.FC = () => {
+       const unlocked = i === 0 || getLessonProgress(state, course.lessons[i - 1]).completed;
+       return <button key={item.id} type="button" disabled={!unlocked} data-completed={done} aria-current={i === index ? 'step' : undefined} aria-label={done ? t('Lesson {number}: {title}, completed', { number: i + 1, title: item.title }) : !unlocked ? t('Lesson {number}: {title}, complete the previous lesson first', { number: i + 1, title: item.title }) : t('Lesson {number}: {title}', { number: i + 1, title: item.title })} onClick={() => { manuallyEnteredLesson.current = true; setIndex(i); setNotice(''); }} className="oda-course-step">{done ? <Check size={15} aria-hidden="true" /> : !unlocked ? <LockKeyhole size={12} aria-hidden="true" /> : null}{i + 1}</button>;
+     })}</nav>
+-    <details className="oda-course-map"><summary>{copy.courseMap}<span>{completed}/{course.lessons.length}</span></summary><p>{copy.lessonMap}</p><ol>{course.lessons.map((item, i) => {
+-      const done = getLessonProgress(state, item).completed;
+-      const unlocked = i === 0 || getLessonProgress(state, course.lessons[i - 1]).completed;
+-      return <li key={item.id}><button type="button" disabled={!unlocked} aria-current={i === index ? 'step' : undefined} onClick={() => { manuallyEnteredLesson.current = true; setIndex(i); setNotice(''); }}><span className="oda-course-map-number" aria-hidden="true">{done ? <Check size={16} /> : i + 1}</span><span lang={content}>{item.title}</span><span>{item.minutes} min</span>{!unlocked && <LockKeyhole size={13} aria-hidden="true" />}</button></li>;
+-    })}</ol></details>
++    <details className="oda-course-map"><summary>{copy.courseMap}<span>{completed}/{course.lessons.length}</span></summary><CourseRoadmap lessons={course.lessons} completedLessonIds={completedLessonIds} currentLessonId={lesson.id} availableLessonIds={availableLessonIds} onOpenLesson={openRoadmapLesson} language={content} /></details>
+     <p lang={content} className="text-xs leading-relaxed text-[var(--fg-muted)]">{course.scope}</p>
+     <section className="oda-course-goal"><p className="text-xs font-semibold text-[var(--accent)]">{t("This lesson's small goal")}</p><p lang={content}>{lesson.goal}</p></section>
+     <CoursePracticeStudio key={course.id} course={course} locale={locale} experiments={state.experiments} completed={completed} onUpdate={update => commit(current => ({ ...current, experiments: update(current.experiments) }))} />
+diff --git a/src/pages/Notebook.tsx b/src/pages/Notebook.tsx
+index 825818e..e7f1e29 100644
+--- a/src/pages/Notebook.tsx
++++ b/src/pages/Notebook.tsx
+@@ -1,15 +1,18 @@
+-import React, { useEffect, useState } from 'react';
++import React, { lazy, Suspense, useEffect, useState } from 'react';
+ import { Check, Feather, Mail } from 'lucide-react';
+ import { useApp } from '../store/useApp';
+-import { N_, useT } from '../i18n';
++import { N_, useLocale, useT } from '../i18n';
++import { notebookHybridCopy } from '../i18n/notebookHybrid';
+ import { getNotebookDateKey, getNotebookStats } from '../services/notebook';
+ import { JournalWorkspace } from '../components/notebook/JournalWorkspace';
+-import { EvidenceTree } from '../components/momentum/EvidenceTree';
+-import { keptDecisions } from '../services/momentum';
++import { OriginalSceneImage } from '../components/OriginalSceneImage';
+ import { WrittenPractice } from '../components/notebook/WrittenPractice';
+ import { Practice369 } from '../components/notebook/Practice369';
+ import { AffirmationPractice, GratitudePractice } from '../components/notebook/DailyPractices';
+ import '../styles/notebook.css';
++import '../styles/notebookHybrid.css';
++
++const QuotesBrowser = lazy(() => import('../components/notebook/QuotesBrowser').then(module => ({ default: module.QuotesBrowser })));
+ 
+ const SCRIPTING_PROMPTS = [
+   { id: 'ordinary-day', label: N_('An ordinary day in my future'), question: N_('It is an ordinary day in the life I am building. Where am I, what do I do, and how do I feel?') },
+@@ -24,8 +27,11 @@ const LETTER_PROMPTS = [
+ 
+ export const Notebook: React.FC = () => {
+   const t = useT();
++  const [locale] = useLocale();
++  const c = notebookHybridCopy(locale);
+   const { data } = useApp();
+-  const [section, setSection] = useState<'journal' | 'manifest'>('journal');
++  const [section, setSection] = useState<'journal' | 'manifest' | 'quotes'>('journal');
++  const [quotesOpened, setQuotesOpened] = useState(false);
+   const [today, setToday] = useState(getNotebookDateKey);
+   useEffect(() => {
+     const refresh = () => setToday(getNotebookDateKey());
+@@ -36,8 +42,8 @@ export const Notebook: React.FC = () => {
+   }, []);
+   if (!data) return <p role="status" className="text-sm text-[var(--fg-muted)]">{t('Opening your notebook…')}</p>;
+   const stats = getNotebookStats(data);
+-  const tabs = [{ id: 'journal' as const, label: t('Journal') }, { id: 'manifest' as const, label: t('Practices') }];
+-  return <div className="oda-notebook oda-notebook-fidelity text-[var(--fg)]">
++  const tabs = [{ id: 'journal' as const, label: t('Journal') }, { id: 'manifest' as const, label: t('Practices') }, { id: 'quotes' as const, label: c.quotes }];
++  return <div className="oda-notebook oda-notebook-fidelity oda-notebook-hybrid text-[var(--fg)]">
+     <header className="oda-notebook-heading">
+       <div>
+       <h1 className="oda-display text-[32px] leading-tight text-[var(--fg)]">{t('Notebook')}</h1>
+@@ -61,10 +67,10 @@ export const Notebook: React.FC = () => {
+ 
+ 
+     <nav aria-label={t('Notebook sections')} className="oda-notebook-tabs flex p-1 bg-[var(--bg-muted)] rounded-[var(--radius-sm)]">
+-      {tabs.map(({ id, label }) => <button key={id} type="button" aria-pressed={section === id} aria-controls={`notebook-${id}-section`} onClick={() => setSection(id)} className={`flex-1 h-10 rounded-[var(--radius-xs)] text-sm font-medium cursor-pointer transition-colors focus-visible:outline focus-visible:outline-2 ${section === id ? 'bg-[var(--bg)] text-[var(--fg)]' : 'text-[var(--fg-muted)]'}`}>{label}</button>)}
++      {tabs.map(({ id, label }) => <button key={id} type="button" aria-pressed={section === id} aria-controls={`notebook-${id}-section`} onClick={() => { setSection(id); if (id === 'quotes') setQuotesOpened(true); }} className={`flex-1 h-10 rounded-[var(--radius-xs)] text-sm font-medium cursor-pointer transition-colors focus-visible:outline focus-visible:outline-2 ${section === id ? 'bg-[var(--bg)] text-[var(--fg)]' : 'text-[var(--fg-muted)]'}`}>{label}</button>)}
+     </nav>
+ 
+-    <section id="notebook-journal-section" hidden={section !== 'journal'} aria-label={t('Journal')}><JournalWorkspace today={today} reflectionArtwork={<EvidenceTree count={keptDecisions(data.missions).length} label={t('Notebook')} />} /></section>
++    <section id="notebook-journal-section" hidden={section !== 'journal'} aria-label={t('Journal')}><JournalWorkspace today={today} reflectionArtwork={<OriginalSceneImage asset="today-scene" sizes="180px" />} /></section>
+     <section id="notebook-manifest-section" className="oda-notebook-practices" hidden={section !== 'manifest'} aria-label={t('Practices')}>
+       <p className="text-sm text-[var(--fg-muted)] mb-6">{t('Five ways to write. Pick one, use your own words, come back when it helps.')}</p>
+       <div className="space-y-6">
+@@ -75,5 +81,6 @@ export const Notebook: React.FC = () => {
+         <AffirmationPractice active={section === 'manifest'} />
+       </div>
+     </section>
++    <section id="notebook-quotes-section" hidden={section !== 'quotes'} aria-label={c.quotes}>{quotesOpened && <Suspense fallback={<p role="status">{c.loadingQuotes}</p>}><QuotesBrowser /></Suspense>}</section>
+   </div>;
+ };
+diff --git a/src/pages/Today.tsx b/src/pages/Today.tsx
+index 8da98ca..f949571 100644
+--- a/src/pages/Today.tsx
++++ b/src/pages/Today.tsx
+@@ -5,6 +5,9 @@ import { OriginalSceneImage } from '../components/OriginalSceneImage';
+ import { growthCopy } from '../i18n/growth';
+ import { courseCatalogFor } from '../data/courseCatalog';
+ import { courseForIntent } from '../data/starterDecisions';
++import { useSavedCourseProgress } from '../hooks/useSavedCourseProgress';
++import { timerFocusEvidence } from '../services/focusEvidence';
++import { dashboardHybridCopy } from '../i18n/dashboardHybrid';
+ import { useApp } from '../store/useApp';
+ import { getDailyQuote } from '../data/dailyQuotes';
+ import { Modal } from '../components/ui';
+@@ -72,6 +75,8 @@ export const Today: React.FC = () => {
+   const d = designCopy(locale);
+   const loop = dailyLoopCopy(locale);
+   const growth = growthCopy(locale);
++  const hybrid = dashboardHybridCopy(locale);
++  const courseProgress = useSavedCourseProgress(data?.courseProgress);
+ 
+   const [completingMission, setCompletingMission] = useState<Mission | null>(null);
+   const [newDecisionTitle, setNewDecisionTitle] = useState('');
+@@ -140,7 +145,7 @@ export const Today: React.FC = () => {
+   // Micro-habits
+   const habits = data.microHabits || [];
+   const visibleHabits = habits.slice(0, 3);
+-  const habitsDone = visibleHabits.filter((h) => h.completedDates.includes(todayStr)).length;
++  const allHabitsDone = habits.filter(habit => habit.completedDates.includes(todayStr)).length;
+ 
+   // Active dream
+   const allItems = [...SEED_MARKET_ITEMS, ...(data.customMarketItems || [])].filter((i) => !i.isArchived);
+@@ -165,6 +170,12 @@ export const Today: React.FC = () => {
+   const keptCount = keptDecisions(data.missions).length;
+   const chain = decisionChain(data.missions);
+   const week = evidenceSummary(data.missions, now);
++  const catalog = courseCatalogFor(locale);
++  const allLessonIds = new Set(catalog.flatMap(course => course.lessonIds));
++  const completedLessons = [...allLessonIds].filter(id => courseProgress.lessons[id]?.completed === true).length;
++  const coursePercent = Math.round(completedLessons / Math.max(1, allLessonIds.size) * 100);
++  const focusEvidence = timerFocusEvidence(data.completions, now);
++  const maximumFocusMinutes = Math.max(1, ...focusEvidence.days.map(day => day.minutes));
+   const suggestedCourse = courseCatalogFor(locale).find(c => c.id === courseForIntent(data.profile.intent));
+   const draftForToday = data.profile.nextDecisionDraft?.forDay === localDayKey() ? data.profile.nextDecisionDraft.text : null;
+   const pickSuggestion = (title: string) => {
+@@ -311,8 +322,38 @@ export const Today: React.FC = () => {
+       </section>
+       {decisionError && <p role="alert" className="oda-loop-error">{loop.saveError}</p>}
+       </div>
+-          <GrowthWeek summary={week} onEvidence={() => setActiveRoute('/app/evidence')} />
++          <section className="oda-hybrid-progress oda-hybrid-card" aria-labelledby="today-library-progress">
++            <h2 id="today-library-progress">{hybrid.progress}</h2>
++            <div className="oda-hybrid-progress-summary">
++              <div className="oda-hybrid-ring" style={{ '--progress': `${coursePercent}%` } as React.CSSProperties} role="progressbar" aria-label={hybrid.progress} aria-valuemin={0} aria-valuemax={allLessonIds.size} aria-valuenow={completedLessons}>
++                <span aria-hidden="true">{coursePercent}%</span>
++              </div>
++              <div><p>{hybrid.lessons(completedLessons, allLessonIds.size)}</p><p className="oda-hybrid-help">{hybrid.progressHint}</p></div>
++            </div>
++            <dl className="oda-hybrid-metrics"><div><dt>{hybrid.keptDays}</dt><dd>{week.last7} / 7</dd></div><div><dt>{hybrid.habits}</dt><dd>{allHabitsDone} / {habits.length}</dd></div></dl>
++          </section>
+           <GrowthTreePanel count={keptCount} onEvidence={() => setActiveRoute('/app/evidence')} />
++          <section className="oda-hybrid-focus oda-hybrid-card" aria-labelledby="today-timer-streak">
++            <h2 id="today-timer-streak">{hybrid.focus}</h2>
++            <p className="oda-hybrid-streak-value">{hybrid.days(focusEvidence.streak)}</p>
++            <p className="oda-hybrid-help">{hybrid.utc}</p>
++            <ol className="oda-hybrid-focus-days">{focusEvidence.days.map(day => <li key={day.dayKey} aria-label={`${day.dayKey} UTC: ${day.minutes} min`} data-focus-day-minutes={day.minutes}>
++              <span className="oda-hybrid-focus-bar" aria-hidden="true"><span style={{ height: `${day.minutes / maximumFocusMinutes * 100}%` }} /></span>
++              <span aria-hidden="true">{formatDate(`${day.dayKey}T12:00:00Z`, { weekday: 'narrow', timeZone: 'UTC' })}</span>
++            </li>)}</ol>
++            <p className="oda-hybrid-help">{focusEvidence.streak > 0 || focusEvidence.todayMinutes > 0 ? hybrid.focusToday(Number(focusEvidence.todayMinutes.toFixed(1))) : hybrid.focusEmpty}</p>
++            <button type="button" onClick={() => setActiveRoute('/app/focus')} className="oda-hybrid-link">{hybrid.openFocus}<ArrowRight size={16} aria-hidden="true" /></button>
++          </section>
++          <section className="oda-hybrid-actions oda-hybrid-card" aria-labelledby="today-real-actions">
++            <div className="oda-hybrid-heading"><h2 id="today-real-actions">{hybrid.actions}</h2><button type="button" onClick={() => setHabitsModalOpen(true)} className="oda-hybrid-link">{hybrid.viewAll}<ChevronRight size={15} aria-hidden="true" /></button></div>
++            <ul>
++              <li>{todayOneDecision ? <button type="button" disabled={decisionDone} onClick={() => setCompletingMission(todayOneDecision)} aria-label={`${decisionDone ? t('Kept today') : hybrid.confirm}: ${t(todayOneDecision.title)}`} className="oda-hybrid-action" data-done={decisionDone}>
++                <span className="oda-hybrid-check" aria-hidden="true">{decisionDone && <Check size={15} />}</span><span>{t(todayOneDecision.title)}</span>
++              </button> : <button type="button" onClick={() => { document.getElementById('today-decision-input')?.focus(); }} className="oda-hybrid-action"><Plus size={18} aria-hidden="true" /><span>{hybrid.choose}</span></button>}</li>
++              {visibleHabits.map(habit => { const done = habit.completedDates.includes(todayStr); return <li key={habit.id}><button type="button" onClick={() => toggleMicroHabit(habit.id)} aria-pressed={done} className="oda-hybrid-action" data-done={done}><span className="oda-hybrid-check" aria-hidden="true">{done && <Check size={15} />}</span><span>{t(habit.title)}</span></button></li>; })}
++              {habits.length === 0 && <li><button type="button" onClick={() => setHabitsModalOpen(true)} className="oda-hybrid-action"><Plus size={18} aria-hidden="true" /><span>{hybrid.addHabit}</span></button></li>}
++            </ul>
++          </section>
+           <CourseNextStep />
+         </div>
+       </div>
+@@ -320,6 +361,7 @@ export const Today: React.FC = () => {
+       <BackupReminder />
+ 
+       <div className="oda-fidelity-support">
++      <GrowthWeek summary={week} onEvidence={() => setActiveRoute('/app/evidence')} />
+       <DailyPractice mission={todayOneDecision} dayKey={todayStr} />
+ 
+       <MomentumCard
+@@ -380,72 +422,6 @@ export const Today: React.FC = () => {
+       <EvidenceStrip />
+       {checkInDue && <TwoWeekCheckIn />}
+ 
+-      {/* 3. Three small habits */}
+-      <section className="oda-fidelity-habits bg-[var(--bg-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] p-5">
+-        <div className="flex items-center justify-between gap-3 mb-2">
+-          <h2 className="text-[15px] font-semibold text-[var(--fg)]">{t('Three small habits')}</h2>
+-          <span className="text-[13px] text-[var(--fg-muted)]">
+-            {habitsDone} / {visibleHabits.length || 3}
+-          </span>
+-        </div>
+-
+-        {visibleHabits.length > 0 ? (
+-          <ul className="divide-y divide-[var(--border)]">
+-            {visibleHabits.map((habit) => {
+-              const done = habit.completedDates.includes(todayStr);
+-              return (
+-                <li key={habit.id}>
+-                  <button
+-                    type="button"
+-                    onClick={() => toggleMicroHabit(habit.id)}
+-                    aria-pressed={done}
+-                    className="w-full h-[52px] flex items-center gap-3.5 text-left"
+-                  >
+-                    <span
+-                      className={`w-6 h-6 shrink-0 rounded-full border flex items-center justify-center transition-colors ${
+-                        done
+-                          ? 'bg-[var(--accent)] border-[var(--accent)] text-[var(--bg)]'
+-                          : 'border-[var(--border-strong)] bg-transparent'
+-                      }`}
+-                    >
+-                      {done && <Check size={14} strokeWidth={2.2} />}
+-                    </span>
+-                    <span
+-                      className={`text-[15px] truncate ${
+-                        done ? 'text-[var(--fg-muted)] line-through' : 'text-[var(--fg)]'
+-                      }`}
+-                    >
+-                      {t(habit.title)}
+-                    </span>
+-                  </button>
+-                </li>
+-              );
+-            })}
+-          </ul>
+-        ) : (
+-          <button
+-            type="button"
+-            onClick={() => setHabitsModalOpen(true)}
+-            className="w-full h-[52px] flex items-center gap-3.5 text-left"
+-          >
+-            <span className="w-6 h-6 shrink-0 rounded-full border border-dashed border-[var(--border-strong)] flex items-center justify-center text-[var(--fg-muted)]">
+-              <Plus size={14} strokeWidth={2} />
+-            </span>
+-            <span className="text-[15px] text-[var(--fg-muted)]">{t('Add a habit')}</span>
+-          </button>
+-        )}
+-
+-        {habits.length > 3 && (
+-          <button
+-            type="button"
+-            onClick={() => setHabitsModalOpen(true)}
+-            className="mt-2 h-11 text-[14px] text-[var(--fg-muted)] hover:text-[var(--fg)]"
+-          >
+-            {t('See all {n}', { n: habits.length })}
+-          </button>
+-        )}
+-      </section>
+-
+       {simple ? <SimpleModeNote /> : <>
+       <section aria-labelledby="today-discover" className="space-y-3">
+         <h2 id="today-discover" className="text-sm font-semibold">{d.discover}</h2>
+diff --git a/src/services/courseNavigationIntent.ts b/src/services/courseNavigationIntent.ts
+new file mode 100644
+index 0000000..69e17bb
+--- /dev/null
++++ b/src/services/courseNavigationIntent.ts
+@@ -0,0 +1,66 @@
++import { courseCatalogFor } from '../data/courseCatalog';
++import type { GuidedCourse } from '../data/courses';
++import { nextLessonIndex, type CourseProgress } from './courseProgress';
++import { isLessonLocked, type Tier } from './entitlements';
++import { APP_DATA_STORAGE_KEY } from './storageKeys';
++import { readCommittedAppData } from './dataWrites';
++import { REPLACEMENT_EPOCH_KEY } from './dataSnapshots';
++
++export interface CourseNavigationIntent { courseId: string; mode: 'overview' | 'lesson'; lessonId?: string }
++export const COURSE_NAVIGATION_INTENT_KEY = 'oda_course_navigation_intent_v1';
++const SELECTION_KEY = 'oda_course_selection_v1';
++const catalog = courseCatalogFor('en');
++const isRecord = (value: unknown): value is Record<string, unknown> => Boolean(value && typeof value === 'object' && !Array.isArray(value));
++
++function validate(value: unknown): CourseNavigationIntent | null {
++  if (!isRecord(value) || typeof value.courseId !== 'string' || (value.mode !== 'overview' && value.mode !== 'lesson')) return null;
++  const course = catalog.find(item => item.id === value.courseId);
++  if (!course || (value.lessonId !== undefined && (typeof value.lessonId !== 'string' || !course.lessonIds.includes(value.lessonId)))) return null;
++  return { courseId: course.id, mode: value.mode as CourseNavigationIntent['mode'], ...(value.mode === 'lesson' && typeof value.lessonId === 'string' ? { lessonId: value.lessonId } : {}) };
++}
++
++function currentScope(): string | null {
++  try {
++    const committed = readCommittedAppData();
++    const raw = committed !== undefined ? committed : globalThis.localStorage.getItem(APP_DATA_STORAGE_KEY);
++    if (!raw) return null;
++    const data: unknown = JSON.parse(raw);
++    if (!isRecord(data) || !isRecord(data.profile) || typeof data.profile.id !== 'string') return null;
++    return JSON.stringify([data.profile.id, data[REPLACEMENT_EPOCH_KEY] ?? null]);
++  } catch { return null; }
++}
++
++/** Returns false when navigation storage is unavailable; no learning progress is written. */
++export function requestCourseNavigation(value: CourseNavigationIntent): boolean {
++  const intent = validate(value);
++  if (!intent) return false;
++  try {
++    globalThis.sessionStorage.removeItem(COURSE_NAVIGATION_INTENT_KEY);
++    globalThis.localStorage.setItem(SELECTION_KEY, intent.courseId);
++    globalThis.sessionStorage.setItem(COURSE_NAVIGATION_INTENT_KEY, JSON.stringify({ version: 1, intent, scope: currentScope() }));
++    return true;
++  } catch { return false; }
++}
++
++/** One-use intent. Invalid, stale-account and replaced-record requests are discarded. */
++export function consumeCourseNavigation(): CourseNavigationIntent | null {
++  try {
++    const raw = globalThis.sessionStorage.getItem(COURSE_NAVIGATION_INTENT_KEY);
++    globalThis.sessionStorage.removeItem(COURSE_NAVIGATION_INTENT_KEY);
++    if (!raw) return null;
++    const value: unknown = JSON.parse(raw);
++    if (!isRecord(value) || value.version !== 1 || (value.scope !== null && value.scope !== currentScope())) return null;
++    return validate(value.intent);
++  } catch { return null; }
++}
++
++/** Navigation cannot unlock a prerequisite or paid lesson, or mark any lesson complete. */
++export function resolveCourseNavigation(intent: CourseNavigationIntent, course: GuidedCourse, progress: CourseProgress, access: { gating: boolean; tier: Tier }) {
++  const available = Math.min(nextLessonIndex(progress, course), course.lessons.length - 1);
++  const index = intent.lessonId ? course.lessons.findIndex(lesson => lesson.id === intent.lessonId) : available;
++  if (!validate(intent) || intent.courseId !== course.id || index < 0) return { mode: 'overview' as const, index: available, reason: 'invalid' as const };
++  if (intent.mode === 'overview') return { mode: 'overview' as const, index: available, reason: null };
++  if (index > available) return { mode: 'overview' as const, index: available, reason: 'prerequisite' as const };
++  if (isLessonLocked(course.id, index, access)) return { mode: 'overview' as const, index: available, reason: 'entitlement' as const };
++  return { mode: 'lesson' as const, index, reason: null };
++}
+diff --git a/src/services/focusEvidence.ts b/src/services/focusEvidence.ts
+new file mode 100644
+index 0000000..44e94fd
+--- /dev/null
++++ b/src/services/focusEvidence.ts
+@@ -0,0 +1,31 @@
++import type { MissionCompletion } from '../types/models';
++
++const DAY_MS = 86_400_000;
++const utcDay = (time: number) => new Date(time).toISOString().slice(0, 10);
++
++/** Timer completions are evidence; self/photo estimates and active timers are not. */
++export function timerFocusEvidence(completions: MissionCompletion[], now = new Date()) {
++  const end = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
++  const unique = new Map<string, MissionCompletion>();
++  for (const record of completions) {
++    const time = Date.parse(record.completedAt);
++    if (record.method !== 'timer' || !Number.isFinite(record.focusMinutes) || record.focusMinutes! <= 0
++      || !Number.isFinite(time) || time > now.getTime()) continue;
++    const previous = unique.get(record.missionId);
++    if (!previous || time < Date.parse(previous.completedAt)) unique.set(record.missionId, record);
++  }
++  const minutesByDay = new Map<string, number>();
++  for (const record of unique.values()) {
++    const day = utcDay(Date.parse(record.completedAt));
++    minutesByDay.set(day, (minutesByDay.get(day) ?? 0) + record.focusMinutes!);
++  }
++  // Yesterday's chain remains current until today has ended, without grace days.
++  let cursor = minutesByDay.has(utcDay(end)) ? end : end - DAY_MS;
++  let streak = 0;
++  while (minutesByDay.has(utcDay(cursor))) { streak++; cursor -= DAY_MS; }
++  const days = Array.from({ length: 7 }, (_, index) => {
++    const dayKey = utcDay(end - (6 - index) * DAY_MS);
++    return { dayKey, minutes: minutesByDay.get(dayKey) ?? 0 };
++  });
++  return { streak, days, todayMinutes: minutesByDay.get(utcDay(end)) ?? 0 };
++}
+diff --git a/src/services/notebookHybrid.ts b/src/services/notebookHybrid.ts
+new file mode 100644
+index 0000000..f039c54
+--- /dev/null
++++ b/src/services/notebookHybrid.ts
+@@ -0,0 +1,42 @@
++import type { SourcedQuote } from '../data/quoteTypes';
++
++export type QuoteFilterCategory = 'all' | SourcedQuote['category'];
++
++function calendarDate(key: string): Date {
++  if (!/^\d{4}-\d{2}-\d{2}$/.test(key)) throw new RangeError('Invalid notebook date');
++  const [year, month, day] = key.split('-').map(Number);
++  const date = new Date(year, month - 1, day, 12);
++  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) throw new RangeError('Invalid notebook date');
++  return date;
++}
++function calendarKey(date: Date): string {
++  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
++}
++
++/** Monday-first archive navigation only; never supplies a date to a writing mutation. */
++export function notebookWeekDates(anchor: string): string[] {
++  const date = calendarDate(anchor);
++  const monday = date.getDate() - (date.getDay() + 6) % 7;
++  return Array.from({ length: 7 }, (_, index) => calendarKey(new Date(date.getFullYear(), date.getMonth(), monday + index, 12)));
++}
++export function shiftNotebookWeek(anchor: string, weeks: number): string {
++  if (!Number.isInteger(weeks)) throw new RangeError('Week offset must be an integer');
++  const date = calendarDate(anchor);
++  return calendarKey(new Date(date.getFullYear(), date.getMonth(), date.getDate() + weeks * 7, 12));
++}
++
++export function filterSourcedQuotes(quotes: readonly SourcedQuote[], category: QuoteFilterCategory, query: string, locale: string): SourcedQuote[] {
++  const language = locale === 'tr' ? 'tr' : locale === 'es' ? 'es' : 'en';
++  const normalize = (value: string) => value.toLocaleLowerCase(language).normalize('NFKD').replace(/\p{M}/gu, '');
++  const needle = normalize(query.trim());
++  return quotes.filter(quote => (category === 'all' || quote.category === category)
++    && (!needle || normalize([quote.text, quote.tr, quote.source, quote.sourceTr, quote.reference || '', ...(quote.tags || [])].join(' ')).includes(needle)));
++}
++
++/** Catalogue links are external sources, never script or app actions. */
++export function quoteSourceHref(value: string): string | undefined {
++  try {
++    const url = new URL(value);
++    return url.protocol === 'https:' || url.protocol === 'http:' ? url.href : undefined;
++  } catch { return undefined; }
++}
+diff --git a/src/styles/courses.css b/src/styles/courses.css
+index 7d7f977..eddba9d 100644
+--- a/src/styles/courses.css
++++ b/src/styles/courses.css
+@@ -375,3 +375,36 @@
+   .oda-courses-fidelity .oda-course-row-content { padding: 16px; }
+   .oda-courses-fidelity .oda-course-steps { gap: 8px; }
+ }
++
++/* The hybrid roadmap follows real lessons; its geometry never implies extra curriculum. */
++.oda-course-roadmap { min-width: 0; }
++.oda-course-roadmap-cue { display: flex; align-items: center; gap: 7px; margin: 12px 0; color: var(--fg-muted); font-size: .73rem; line-height: 1.5; }
++.oda-course-roadmap > ol { display: grid; gap: 0; padding: 0; margin: 0; list-style: none; }
++.oda-course-roadmap > ol > li { position: relative; min-width: 0; border: 0; }
++.oda-course-roadmap > ol > li + li { border: 0; }
++.oda-course-roadmap > ol > li:not(:last-child)::after { content: ''; position: absolute; left: 24px; top: 48px; bottom: -4px; width: 1px; background: var(--border-strong); pointer-events: none; }
++.oda-course-roadmap > ol > li > button, .oda-course-roadmap > ol > li > div { display: flex; align-items: flex-start; gap: 12px; min-height: 64px; width: 100%; padding: 12px 4px; text-align: left; border: 0; border-radius: 10px; color: var(--fg); background: transparent; }
++.oda-course-roadmap > ol > li > button { cursor: pointer; }
++.oda-course-roadmap > ol > li > button:hover:not(:disabled) { background: var(--accent-soft); }
++.oda-course-roadmap > ol > li > button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
++.oda-course-roadmap > ol > li > button:disabled { cursor: not-allowed; color: var(--fg-muted); }
++.oda-course-roadmap-number { position: relative; z-index: 1; display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border-strong); background: var(--surface, var(--bg-elevated)); color: var(--fg); font-size: .9rem; font-weight: 650; }
++.oda-course-roadmap [data-completed="true"] .oda-course-roadmap-number { color: var(--accent); background: var(--accent-soft); border-color: var(--accent); }
++.oda-course-roadmap [data-current="true"] .oda-course-roadmap-number { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
++.oda-course-roadmap-copy { display: grid; gap: 5px; min-width: 0; flex: 1; padding-top: 2px; }
++.oda-course-roadmap-title { color: var(--fg); font-size: .85rem; line-height: 1.45; font-weight: 650; overflow-wrap: anywhere; }
++.oda-course-roadmap-meta { color: var(--fg-muted); font-size: .7rem; line-height: 1.5; }
++.oda-course-roadmap-goal { color: var(--fg-muted); font-size: .75rem; line-height: 1.6; }
++.oda-course-roadmap-lock { flex: none; margin-top: 13px; color: var(--fg-muted); }
++.oda-course-overview-progress { margin-top: 18px; }
++.oda-course-overview-progress > p { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-size: .75rem; color: var(--fg-muted); }
++.oda-course-overview-progress [role="progressbar"] { height: 5px; margin-top: 9px; border-radius: 99px; overflow: hidden; background: var(--border); }
++.oda-course-overview-progress [role="progressbar"] > span { display: block; height: 100%; background: var(--accent); border-radius: inherit; }
++.oda-course-navigation-notice { font-size: .82rem; line-height: 1.6; color: var(--fg); padding: 12px 16px; border-inline-start: 2px solid var(--accent); background: var(--accent-soft); }
++.oda-course-roadmap--compact > ol { display: grid; grid-auto-flow: column; grid-auto-columns: 136px; gap: 16px; overflow-x: auto; padding: 4px 4px 12px; scroll-snap-type: x proximity; scrollbar-width: thin; scrollbar-color: var(--accent) var(--border); }
++.oda-course-roadmap--compact > ol > li { scroll-snap-align: start; }
++.oda-course-roadmap--compact > ol > li > button, .oda-course-roadmap--compact > ol > li > div { flex-direction: column; align-items: center; gap: 9px; min-height: 110px; padding: 4px; text-align: center; }
++.oda-course-roadmap--compact > ol > li:not(:last-child)::after { left: calc(50% + 22px); top: 24px; bottom: auto; width: calc(100% - 28px); height: 1px; }
++.oda-course-roadmap--compact .oda-course-roadmap-copy { padding-top: 0; width: 100%; }
++.oda-course-roadmap--compact .oda-course-roadmap-title { font-size: .73rem; }
++.oda-course-roadmap--compact .oda-course-roadmap-lock { position: absolute; top: 14px; right: 6px; margin: 0; }
+diff --git a/src/styles/notebookHybrid.css b/src/styles/notebookHybrid.css
+new file mode 100644
+index 0000000..817648d
+--- /dev/null
++++ b/src/styles/notebookHybrid.css
+@@ -0,0 +1,96 @@
++/* Notebook/Quotes hybrid from the approved references; all colors inherit app tokens. */
++.oda-notebook-hybrid .oda-notebook-tabs { width: 100%; max-width: 480px; }
++.oda-notebook-hybrid .oda-notebook-tabs button { min-width: 0; padding-inline: .65rem; }
++.oda-notebook-hybrid .oda-notebook-workspace { gap: 12px; }
++.oda-notebook-hybrid .oda-notebook-writing-column { display: grid; min-width: 0; gap: 12px; }
++.oda-notebook-hybrid .oda-hybrid-journal-header { gap: 8px; }
++.oda-notebook-hybrid .oda-hybrid-journal-header > div { display: flex; gap: 6px; align-items: center; }
++.oda-notebook-hybrid .oda-hybrid-journal-header h2 { font-size: .9rem; letter-spacing: .04em; text-transform: uppercase; }
++.oda-notebook-hybrid .oda-hybrid-journal-header .oda-hybrid-new-entry { display: grid; place-items: center; min-width: 44px; width: 44px; height: 44px; flex: none; border: 0; border-radius: 50%; background: var(--accent); color: var(--on-accent); }
++.oda-notebook-hybrid .oda-hybrid-new-entry:disabled { opacity: .45; }
++.oda-notebook-hybrid .oda-notebook-calendar-lead > * + * { margin-top: 8px; }
++.oda-notebook-hybrid .oda-hybrid-week-nav { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; gap: 4px; align-items: center; }
++.oda-notebook-hybrid .oda-hybrid-week-nav > button { min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 10px; color: var(--fg-muted); background: var(--surface); }
++.oda-notebook-hybrid .oda-hybrid-week-nav > .oda-hybrid-week-month { font-size: .78rem; color: var(--fg); text-align: center; text-transform: capitalize; font-weight: 650; padding-inline: 4px; }
++.oda-notebook-hybrid .oda-notebook-week-strip button { min-height: 56px; border: 0; border-radius: 12px; }
++.oda-notebook-hybrid .oda-notebook-week-strip button > strong { font-size: 1rem; line-height: 1.25; }
++.oda-notebook-hybrid .oda-notebook-week-strip button[aria-current="date"] { box-shadow: inset 0 0 0 1px var(--accent); }
++.oda-notebook-hybrid .oda-notebook-week-strip button[aria-pressed="true"] { border-radius: 999px; }
++.oda-notebook-hybrid .oda-hybrid-date-help { color: var(--fg-muted); font-size: .7rem; line-height: 1.5; }
++.oda-notebook-hybrid .oda-hybrid-entry-preview { min-width: 0; position: relative; padding: 12px 16px 16px; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); box-shadow: var(--surface-shadow); }
++.oda-hybrid-entry-preview > header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
++.oda-hybrid-entry-preview > header h2 { color: var(--fg-muted); font-size: .7rem; font-weight: 650; text-transform: uppercase; letter-spacing: .04em; }
++.oda-hybrid-entry-preview h3 { margin-top: 2px; color: var(--fg); font-size: .93rem; font-weight: 650; line-height: 1.5; overflow-wrap: anywhere; }
++.oda-hybrid-preview-text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; margin-top: 8px; color: var(--fg); font-size: .88rem; line-height: 1.7; white-space: pre-line; overflow-wrap: anywhere; }
++.oda-hybrid-entry-preview > footer { display: flex; flex-wrap: wrap; gap: 5px 12px; margin-top: 12px; color: var(--fg-muted); font-size: .7rem; font-variant-numeric: tabular-nums; }
++.oda-hybrid-entry-actions { position: relative; flex: none; }
++.oda-hybrid-entry-actions > summary { display: grid; place-items: center; list-style: none; width: 44px; height: 44px; border-radius: 10px; color: var(--fg-muted); cursor: pointer; }
++.oda-hybrid-entry-actions > summary::-webkit-details-marker { display: none; }
++.oda-hybrid-entry-actions[open] > summary { background: var(--accent-soft); color: var(--accent); }
++.oda-hybrid-entry-actions > div { position: absolute; inset-inline-end: 0; top: 48px; z-index: 5; min-width: 168px; max-width: 240px; padding: 5px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--surface-shadow); }
++.oda-hybrid-entry-actions button { width: 100%; min-width: 44px; min-height: 44px; padding: 8px 12px; text-align: start; color: var(--fg); font-size: .85rem; border-radius: 8px; }
++.oda-hybrid-entry-actions button:hover { background: var(--bg-muted); }
++.oda-notebook-hybrid .oda-notebook-editor-heading { padding: 12px 16px; margin-bottom: 12px; }
++.oda-notebook-hybrid .oda-notebook-editor-form { padding-inline: 16px; }
++.oda-notebook-hybrid .oda-notebook-reflection-hero { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px; align-items: center; min-height: 0; padding: 14px; background: var(--surface); }
++.oda-notebook-hybrid .oda-notebook-reflection-art { height: 112px; overflow: hidden; border-radius: 12px; }
++.oda-notebook-hybrid .oda-notebook-reflection-art::before, .oda-notebook-hybrid .oda-notebook-reflection-art::after { content: none; }
++.oda-notebook-hybrid .oda-notebook-reflection-art img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 55% 42%; }
++.oda-notebook-hybrid .oda-notebook-reflection-hero > section { padding: 0; }
++.oda-notebook-hybrid .oda-notebook-reflection-hero > section .oda-display { font-family: var(--font-sans); font-size: 1rem; line-height: 1.5; text-transform: none; letter-spacing: 0; }
++.oda-notebook-hybrid .oda-notebook-reflection-hero > section .oda-kicker { font-size: .65rem; }
++.oda-notebook-hybrid .oda-notebook-reflection-hero > section button { font-size: .78rem; border-radius: 10px; }
++.oda-notebook-hybrid .oda-hybrid-archive-heading { margin-bottom: 12px; color: var(--fg); font-size: .85rem; font-weight: 650; }
++.oda-hybrid-archive-heading > span { color: var(--fg-muted); font-weight: 400; }
++.oda-notebook-hybrid .oda-notebook-entry-list > button > span:first-child { flex-wrap: wrap; }
++.oda-notebook-hybrid button:focus-visible, .oda-notebook-hybrid summary:focus-visible, .oda-notebook-hybrid a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
++
++.oda-quotes-browser { display: grid; gap: 14px; min-width: 0; }
++.oda-quotes-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
++.oda-quotes-heading h2 { color: var(--fg); font-size: 1.15rem; font-weight: 650; text-transform: uppercase; letter-spacing: .04em; }
++.oda-quotes-heading p { margin-top: 4px; color: var(--fg-muted); font-size: .8rem; line-height: 1.5; }
++.oda-quotes-heading > svg { color: var(--accent); flex: none; }
++.oda-quotes-categories { display: flex; flex-wrap: wrap; gap: 6px; }
++.oda-quotes-categories button { min-height: 44px; min-width: 44px; padding: 8px 13px; border: 1px solid var(--border); border-radius: 999px; color: var(--fg-muted); background: var(--surface); font-size: .77rem; font-weight: 550; }
++.oda-quotes-categories button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
++.oda-quotes-search { display: flex; min-width: 0; align-items: center; gap: 10px; min-height: 48px; padding: 0 14px; border: 1px solid var(--border); border-radius: 12px; color: var(--fg-muted); background: var(--surface); }
++.oda-quotes-search > svg { flex: none; }
++.oda-notebook-hybrid .oda-quotes-search input { min-width: 0; width: 100%; min-height: 46px; border: 0; border-radius: 0; background: transparent; color: var(--fg); font-size: .9rem; }
++.oda-notebook-hybrid .oda-quotes-search input:focus-visible { outline: none; }
++.oda-quotes-search:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
++.oda-quotes-language, .oda-quotes-count, .oda-quotes-art-note { color: var(--fg-muted); font-size: .75rem; line-height: 1.6; }
++.oda-quotes-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; min-width: 0; }
++.oda-quote-card { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 90px; gap: 12px; align-content: start; min-width: 0; padding: 18px; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); box-shadow: var(--surface-shadow); overflow: hidden; }
++.oda-quote-card > .oda-quote-mark { grid-column: 1 / -1; color: var(--accent); }
++.oda-quote-card blockquote { grid-column: 1 / -1; color: var(--fg); font-size: 1rem; font-weight: 600; line-height: 1.6; overflow-wrap: anywhere; }
++.oda-quote-citation { position: relative; min-width: 0; color: var(--fg-muted); font-size: .74rem; line-height: 1.6; overflow-wrap: anywhere; }
++.oda-quote-reference { margin-top: 3px; font-size: .7rem; }
++.oda-quote-kind { display: block; margin-top: 6px; font-size: .7rem; }
++.oda-quote-citation a { display: inline-flex; align-items: center; gap: 4px; min-width: 44px; min-height: 44px; color: var(--accent); font-size: .76rem; font-weight: 650; text-decoration: underline; text-underline-offset: 3px; }
++.oda-quote-illustration { align-self: end; height: 100px; width: 90px; overflow: hidden; border-radius: 45px 45px 12px 12px; }
++.oda-quote-illustration img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 54% 45%; }
++.oda-quotes-more, .oda-quotes-empty button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; width: fit-content; max-width: 100%; padding: 10px 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--accent); font-size: .87rem; font-weight: 650; }
++.oda-quotes-empty { padding: 20px; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); color: var(--fg); }
++.oda-quotes-empty button { margin-top: 12px; }
++@container oda-notebook (min-width: 620px) {
++  .oda-quotes-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
++}
++@container oda-notebook (min-width: 850px) {
++  .oda-notebook-hybrid .oda-notebook-workspace { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
++  .oda-notebook-hybrid .oda-notebook-calendar-lead { grid-column: 1; grid-row: 1; }
++  .oda-notebook-hybrid .oda-hybrid-entry-preview { grid-column: 1; grid-row: 2; }
++  .oda-notebook-hybrid .oda-notebook-writing-column { grid-column: 2; grid-row: 1 / span 2; align-self: start; }
++  .oda-notebook-hybrid .oda-notebook-editor, .oda-notebook-hybrid .oda-notebook-reflection-hero { grid-column: auto; grid-row: auto; }
++  .oda-notebook-hybrid .oda-notebook-archive { grid-column: 1 / -1; grid-row: 3; }
++  .oda-notebook-hybrid .oda-notebook-reflection-art { height: 112px; }
++}
++@media (max-width: 359px) {
++  .oda-notebook-hybrid .oda-notebook-heading p { max-width: 27ch; }
++  .oda-notebook-hybrid .oda-notebook-stat { padding-inline: 6px; }
++  .oda-notebook-hybrid .oda-notebook-tabs button { padding-inline: 6px; font-size: .77rem; }
++  .oda-notebook-hybrid .oda-notebook-reflection-hero { grid-template-columns: 70px minmax(0, 1fr); gap: 10px; }
++  .oda-quote-card { padding: 15px; }
++}
++@media (prefers-reduced-motion: reduce) {
++  .oda-notebook-hybrid *, .oda-notebook-hybrid *::before, .oda-notebook-hybrid *::after { scroll-behavior: auto; transition: none; }
++}
+diff --git a/src/styles/sound.css b/src/styles/sound.css
+index 3c2a34f..95b7d91 100644
+--- a/src/styles/sound.css
++++ b/src/styles/sound.css
+@@ -32,6 +32,7 @@
+ .oda-sound-tab-name { font-size: clamp(2rem, 9.6vw, 2.65rem); font-weight: 700; line-height: 1.06; letter-spacing: -.045em; text-shadow: 0 2px 16px rgb(0 0 0 / .4); }
+ .oda-sound-tab-detail { display: block; max-width: 35ch; margin-top: .5rem; font-size: .76rem; line-height: 1.5; color: #FFFFFF; text-shadow: 0 1px 8px #10232C; }
+ .oda-sound-tab[data-section="sleep"] .oda-sound-tab-detail { background: rgb(8 19 28 / .35); box-shadow: 0 0 0 3px rgb(8 19 28 / .35); }
++.oda-sound-tab[data-section="focus"] :is(.oda-sound-tab-name, .oda-sound-tab-detail) { background: rgb(8 19 28 / .25); box-shadow: 0 0 0 3px rgb(8 19 28 / .25); }
+ .oda-sound-tab[aria-selected="true"] .oda-sound-tab-name::after { content: ''; display: block; width: 26px; height: 3px; margin: .45rem auto 0; border-radius: 99px; background: #FFFFFF; }
+ .oda-sound .oda-sound-tab:focus-visible { outline: none; }
+ .oda-sound-tab:focus-visible .oda-sound-tab-name { outline: 2px solid #FFFFFF; outline-offset: 8px; border-radius: 4px; }
+diff --git a/src/styles/workingSurfaces.css b/src/styles/workingSurfaces.css
+index 28bebf0..1150f65 100644
+--- a/src/styles/workingSurfaces.css
++++ b/src/styles/workingSurfaces.css
+@@ -135,3 +135,54 @@
+ /* Keep protected FirstSteps controls usable when their mobile flex column shrinks. */
+ .oda-fidelity-today #tomorrow-draft { min-height: 44px; flex: 1 0 auto; }
+ .oda-fidelity-today .oda-fidelity-support > section > button.w-10.h-10 { min-width: 44px; min-height: 44px; flex-shrink: 0; }
++
++/* The inspected hybrid uses real course, decision, habit and timer evidence. */
++.oda-hybrid-card { min-width: 0; padding: 18px; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); color: var(--fg); box-shadow: var(--surface-shadow); }
++.oda-hybrid-card h2 { font-size: .95rem; line-height: 1.4; font-weight: 650; }
++.oda-hybrid-help { color: var(--fg-muted); font-size: .75rem; line-height: 1.55; }
++.oda-hybrid-progress-summary { display: flex; align-items: center; gap: 16px; margin-block: 16px; }
++.oda-hybrid-progress-summary > div:last-child { min-width: 0; font-size: .85rem; line-height: 1.5; }
++.oda-hybrid-ring { position: relative; flex: 0 0 96px; width: 96px; height: 96px; display: grid; place-items: center; border-radius: 50%; background: conic-gradient(var(--accent) var(--progress), var(--border) 0); }
++.oda-hybrid-ring::before { content: ''; position: absolute; inset: 7px; background: var(--surface); border-radius: 50%; }
++.oda-hybrid-ring > span { position: relative; font-size: 1.5rem; font-weight: 650; font-variant-numeric: tabular-nums; }
++.oda-hybrid-metrics { display: grid; gap: 8px; border-top: 1px solid var(--border); padding-top: 12px; font-size: .75rem; }
++.oda-hybrid-metrics > div { display: flex; justify-content: space-between; gap: 12px; }
++.oda-hybrid-metrics dt { color: var(--fg-muted); }
++.oda-hybrid-metrics dd { white-space: nowrap; font-variant-numeric: tabular-nums; font-weight: 650; }
++.oda-hybrid-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
++.oda-hybrid-link { display: inline-flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; color: var(--accent); font-size: .75rem; line-height: 1.45; text-align: left; }
++.oda-hybrid-actions ul { margin-top: 8px; }
++.oda-hybrid-actions li + li { border-top: 1px solid var(--border); }
++.oda-hybrid-action { display: flex; gap: 12px; align-items: center; width: 100%; min-height: 52px; padding-block: 10px; text-align: left; font-size: .86rem; line-height: 1.4; }
++.oda-hybrid-action > span:last-child { min-width: 0; overflow-wrap: anywhere; }
++.oda-hybrid-check { display: grid; flex: 0 0 23px; width: 23px; height: 23px; place-items: center; border: 1px solid var(--border-strong); border-radius: 6px; }
++.oda-hybrid-action[data-done="true"] .oda-hybrid-check { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
++.oda-hybrid-action[data-done="true"] > span:last-child { color: var(--fg-muted); }
++.oda-hybrid-action:disabled { opacity: 1; }
++.oda-hybrid-streak-value { margin-top: 8px; font-size: 1.9rem; font-variant-numeric: tabular-nums; line-height: 1.2; }
++.oda-hybrid-focus-days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; margin-block: 14px 10px; }
++.oda-hybrid-focus-days li { display: grid; gap: 6px; text-align: center; font-size: .65rem; color: var(--fg-muted); }
++.oda-hybrid-focus-bar { display: flex; height: 52px; align-items: flex-end; justify-content: center; border-bottom: 1px solid var(--border); }
++.oda-hybrid-focus-bar > span { width: 12px; border-radius: 6px 6px 0 0; background: var(--accent); }
++.oda-fidelity-today .oda-hybrid-mission { min-width: 0; padding: 20px; border: 1px solid var(--border); }
++.oda-hybrid-mission .oda-loop-heading { display: flex; justify-content: space-between; gap: 14px; align-items: start; }
++.oda-hybrid-mission-percent { color: var(--accent); font-variant-numeric: tabular-nums; font-size: 1.25rem; }
++.oda-hybrid-next-lesson { padding-top: 14px; border-top: 1px solid var(--border); }
++.oda-hybrid-mission-actions { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
++.oda-hybrid-mission .oda-loop-link { min-height: 44px; }
++@container oda-working-today (min-width: 900px) {
++  .oda-fidelity-command { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, .95fr); grid-template-rows: auto auto auto; }
++  .oda-fidelity-command .oda-fidelity-hero { grid-column: 1; grid-row: 1 / span 2; }
++  .oda-fidelity-command .oda-fidelity-decision-module { grid-column: 2; grid-row: 1; }
++  .oda-fidelity-command .oda-hybrid-progress { grid-column: 3; grid-row: 1; }
++  .oda-fidelity-command .oda-growth-panel { grid-column: 1; grid-row: 3; }
++  .oda-fidelity-command .oda-hybrid-actions { grid-column: 2; grid-row: 2; }
++  .oda-fidelity-command .oda-hybrid-focus { grid-column: 3; grid-row: 2; }
++  .oda-fidelity-command .oda-hybrid-mission { grid-column: 2 / span 2; grid-row: 3; }
++}
++@media (max-width: 479px) {
++  .oda-hybrid-card { padding: 16px; }
++  .oda-hybrid-progress-summary { gap: 14px; }
++  .oda-hybrid-ring { flex-basis: 84px; width: 84px; height: 84px; }
++  .oda-fidelity-today .oda-hybrid-mission { padding: 16px; }
++}
+diff --git a/tests/course-navigation-intent.test.ts b/tests/course-navigation-intent.test.ts
+new file mode 100644
+index 0000000..0ea1930
+--- /dev/null
++++ b/tests/course-navigation-intent.test.ts
+@@ -0,0 +1,89 @@
++import assert from 'node:assert/strict';
++import test from 'node:test';
++import { coursesFor } from '../src/data/courses';
++import { completeLesson, EMPTY_PROGRESS, updateLessonProgress } from '../src/services/courseProgress';
++import { consumeCourseNavigation, requestCourseNavigation, resolveCourseNavigation, COURSE_NAVIGATION_INTENT_KEY } from '../src/services/courseNavigationIntent';
++
++const course = coursesFor('en').find(item => item.id === 'focus')!;
++const access = { gating: false, tier: 'free' as const };
++const storage = () => {
++  const values = new Map<string, string>();
++  return { values, getItem: (key: string) => values.get(key) ?? null, setItem: (key: string, value: string) => { values.set(key, value); }, removeItem: (key: string) => { values.delete(key); } };
++};
++function withStores(run: (session: ReturnType<typeof storage>, local: ReturnType<typeof storage>) => void) {
++  const session = storage(), local = storage();
++  const previous = ['sessionStorage', 'localStorage'].map(key => [key, Object.getOwnPropertyDescriptor(globalThis, key)] as const);
++  Object.defineProperty(globalThis, 'sessionStorage', { value: session, configurable: true });
++  Object.defineProperty(globalThis, 'localStorage', { value: local, configurable: true });
++  try { run(session, local); } finally {
++    for (const [key, descriptor] of previous) if (descriptor) Object.defineProperty(globalThis, key, descriptor); else Reflect.deleteProperty(globalThis, key);
++  }
++}
++function prefix(count: number) {
++  let progress = EMPTY_PROGRESS;
++  for (let i = 0; i < count; i++) {
++    const lesson = course.lessons[i];
++    progress = updateLessonProgress(progress, lesson, { checked: lesson.practice.map(() => true), answer: lesson.correct });
++    progress = completeLesson(progress, course, i);
++  }
++  return progress;
++}
++
++test('overview and lesson requests are distinct, single-use and never write learning progress', () => withStores((session, local) => {
++  for (const mode of ['overview', 'lesson'] as const) {
++    const intent = { courseId: course.id, mode };
++    assert.equal(requestCourseNavigation(intent), true);
++    assert.equal(local.getItem('oda_course_selection_v1'), course.id);
++    assert.deepEqual(consumeCourseNavigation(), intent);
++    assert.equal(consumeCourseNavigation(), null);
++    assert.equal(session.getItem(COURSE_NAVIGATION_INTENT_KEY), null);
++    assert.deepEqual([...local.values.keys()], ['oda_course_selection_v1']);
++  }
++}));
++
++test('malformed, unknown-course, cross-course lesson and unsupported version requests are discarded', () => withStores((session, local) => {
++  assert.equal(requestCourseNavigation({ courseId: 'constructor', mode: 'overview' }), false);
++  assert.equal(requestCourseNavigation({ courseId: course.id, mode: 'lesson', lessonId: 'sleep-1' }), false);
++  assert.equal(local.values.size, 0);
++  for (const raw of ['{', '{}', 'null', JSON.stringify({ version: 2, scope: null, intent: { courseId: course.id, mode: 'lesson' } }), JSON.stringify({ version: 1, scope: null, intent: { courseId: course.id, mode: 'unknown' } }), JSON.stringify({ version: 1, scope: null, intent: { courseId: course.id, mode: ['lesson'] } })]) {
++    session.setItem(COURSE_NAVIGATION_INTENT_KEY, raw);
++    assert.equal(consumeCourseNavigation(), null);
++    assert.equal(session.getItem(COURSE_NAVIGATION_INTENT_KEY), null);
++  }
++}));
++
++test('requests belonging to a different account or restored record cannot be consumed', () => withStores((session, local) => {
++  local.setItem('one_decision_away_app_data_v1', JSON.stringify({ profile: { id: 'reader' }, _odaReplacementEpoch: 'original' }));
++  assert.equal(requestCourseNavigation({ courseId: course.id, mode: 'overview' }), true);
++  local.setItem('one_decision_away_app_data_v1', JSON.stringify({ profile: { id: 'reader' }, _odaReplacementEpoch: 'restore' }));
++  assert.equal(consumeCourseNavigation(), null);
++  assert.equal(requestCourseNavigation({ courseId: course.id, mode: 'lesson' }), true);
++  local.setItem('one_decision_away_app_data_v1', JSON.stringify({ profile: { id: 'another' }, _odaReplacementEpoch: 'restore' }));
++  assert.equal(consumeCourseNavigation(), null);
++}));
++
++test('an explicit overview stays overview after saved progress arrives; Continue resumes actual incomplete lesson', () => {
++  const saved = prefix(2);
++  assert.deepEqual(resolveCourseNavigation({ courseId: course.id, mode: 'overview' }, course, saved, access), { mode: 'overview', index: 2, reason: null });
++  assert.deepEqual(resolveCourseNavigation({ courseId: course.id, mode: 'lesson' }, course, saved, access), { mode: 'lesson', index: 2, reason: null });
++  assert.deepEqual(resolveCourseNavigation({ courseId: course.id, mode: 'lesson', lessonId: course.lessons[0].id }, course, saved, access), { mode: 'lesson', index: 0, reason: null });
++});
++
++test('roadmap requests cannot skip prerequisites, open unknown lessons or bypass existing subscription gates', () => {
++  const original = JSON.stringify(EMPTY_PROGRESS);
++  assert.equal(resolveCourseNavigation({ courseId: course.id, mode: 'lesson', lessonId: course.lessons[1].id }, course, EMPTY_PROGRESS, access).reason, 'prerequisite');
++  assert.equal(resolveCourseNavigation({ courseId: course.id, mode: 'lesson', lessonId: 'unknown' }, course, EMPTY_PROGRESS, access).reason, 'invalid');
++  const saved = prefix(2);
++  assert.equal(resolveCourseNavigation({ courseId: course.id, mode: 'lesson' }, course, saved, { gating: true, tier: 'free' }).reason, 'entitlement');
++  assert.equal(resolveCourseNavigation({ courseId: course.id, mode: 'lesson' }, course, saved, { gating: true, tier: 'essentials' }).mode, 'lesson');
++  assert.equal(JSON.stringify(EMPTY_PROGRESS), original);
++});
++
++test('completed courses remain rereadable and blocked navigation storage is reported without throwing', () => {
++  assert.equal(resolveCourseNavigation({ courseId: course.id, mode: 'lesson' }, course, prefix(course.lessons.length), access).index, course.lessons.length - 1);
++  withStores((session) => {
++    session.setItem = () => { throw new Error('Storage blocked'); };
++    assert.equal(requestCourseNavigation({ courseId: course.id, mode: 'overview' }), false);
++    assert.equal(consumeCourseNavigation(), null);
++  });
++});
+diff --git a/tests/focus-evidence.test.ts b/tests/focus-evidence.test.ts
+new file mode 100644
+index 0000000..23516cc
+--- /dev/null
++++ b/tests/focus-evidence.test.ts
+@@ -0,0 +1,37 @@
++import assert from 'node:assert/strict';
++import test from 'node:test';
++import { timerFocusEvidence } from '../src/services/focusEvidence';
++import type { MissionCompletion } from '../src/types/models';
++
++const record = (day: string, patch: Partial<MissionCompletion> = {}): MissionCompletion => ({
++  id: day, missionId: day, userId: 'u', completedAt: `${day}T12:00:00Z`, method: 'timer',
++  focusMinutes: 12, rewardAmount: 0, streakBonus: 0, ...patch,
++});
++const now = new Date('2026-10-03T14:00:00Z');
++test('focus streak counts distinct real timer days, not estimates, duplicates or future records', () => {
++  const records = [record('2026-10-01'), record('2026-10-02'), record('2026-10-03'),
++    record('2026-10-03', { id: 'other', missionId: 'other', focusMinutes: 5 }),
++    record('2026-10-03', { id: 'duplicate' }), record('2026-10-04'),
++    record('2026-09-30', { method: 'photo' }), record('2026-09-29', { method: 'self' }),
++    record('2026-09-28', { focusMinutes: 0 }), record('2026-09-27', { focusMinutes: NaN }),
++    record('2026-09-26', { completedAt: 'invalid' })];
++  const before = JSON.stringify(records);
++  const evidence = timerFocusEvidence(records, now);
++  assert.equal(evidence.streak, 3);
++  assert.equal(evidence.todayMinutes, 17);
++  assert.equal(evidence.days.length, 7);
++  assert.equal(evidence.days[0].dayKey, '2026-09-27');
++  assert.equal(JSON.stringify(records), before);
++});
++test('yesterday continues a streak until today ends; missing yesterday ends it', () => {
++  assert.equal(timerFocusEvidence([record('2026-10-01'), record('2026-10-02')], now).streak, 2);
++  assert.equal(timerFocusEvidence([record('2026-10-01')], now).streak, 0);
++  assert.equal(timerFocusEvidence([], now).streak, 0);
++});
++test('UTC boundary is explicit and duplicate mission records cannot fabricate another day', () => {
++  const evidence = timerFocusEvidence([record('2026-10-01', { completedAt: '2026-10-02T01:00:00+03:00' }),
++    record('2026-10-03', { missionId: '2026-10-01' })], now);
++  assert.equal(evidence.streak, 0);
++  assert.equal(evidence.days.find(day => day.dayKey === '2026-10-01')?.minutes, 12);
++  assert.equal(evidence.todayMinutes, 0);
++});
+diff --git a/tests/notebook-hybrid.test.ts b/tests/notebook-hybrid.test.ts
+new file mode 100644
+index 0000000..348aaba
+--- /dev/null
++++ b/tests/notebook-hybrid.test.ts
+@@ -0,0 +1,44 @@
++import assert from 'node:assert/strict';
++import { test } from 'node:test';
++import { QUOTE_COLLECTION } from '../src/data/quoteCollection';
++import { filterSourcedQuotes, notebookWeekDates, quoteSourceHref, shiftNotebookWeek } from '../src/services/notebookHybrid';
++
++test('archive weeks cross month/year and leap-day boundaries without changing stored entries', () => {
++  assert.deepEqual(notebookWeekDates('2026-10-03'), ['2026-09-28', '2026-09-29', '2026-09-30', '2026-10-01', '2026-10-02', '2026-10-03', '2026-10-04']);
++  assert.deepEqual(notebookWeekDates('2028-02-29'), ['2028-02-28', '2028-02-29', '2028-03-01', '2028-03-02', '2028-03-03', '2028-03-04', '2028-03-05']);
++  assert.equal(shiftNotebookWeek('2026-01-01', -1), '2025-12-25');
++  assert.equal(shiftNotebookWeek(shiftNotebookWeek('2026-10-03', -1), 1), '2026-10-03');
++  assert.throws(() => notebookWeekDates('2026-02-30'), RangeError);
++  assert.throws(() => notebookWeekDates('not-a-date'), RangeError);
++  assert.throws(() => shiftNotebookWeek('2026-10-03', .5), RangeError);
++});
++
++test('all sourced passages remain reachable through their actual categories', () => {
++  assert.equal(QUOTE_COLLECTION.length, 600);
++  const actual = new Set<string>();
++  const before = JSON.stringify(QUOTE_COLLECTION);
++  for (const category of ['faith', 'society', 'science', 'philosophy'] as const) {
++    const matches = filterSourcedQuotes(QUOTE_COLLECTION, category, '', 'en');
++    assert.ok(matches.length > 0);
++    assert.ok(matches.every(quote => quote.category === category));
++    for (const quote of matches) actual.add(quote.id);
++  }
++  assert.equal(actual.size, 600);
++  assert.deepEqual(filterSourcedQuotes(QUOTE_COLLECTION, 'all', '', 'es'), QUOTE_COLLECTION);
++  assert.equal(JSON.stringify(QUOTE_COLLECTION), before);
++});
++
++test('search finds real English/Turkish text, sources and references and combines with category', () => {
++  const sample = QUOTE_COLLECTION.find(quote => quote.reference && quote.tags?.length)!;
++  assert.ok(filterSourcedQuotes(QUOTE_COLLECTION, sample.category, sample.text, 'en').includes(sample));
++  assert.ok(filterSourcedQuotes(QUOTE_COLLECTION, sample.category, sample.tr.toLocaleUpperCase('tr'), 'tr').includes(sample));
++  assert.ok(filterSourcedQuotes(QUOTE_COLLECTION, 'all', sample.source, 'es').includes(sample));
++  assert.ok(filterSourcedQuotes(QUOTE_COLLECTION, 'all', sample.reference!, 'en').includes(sample));
++  assert.equal(filterSourcedQuotes(QUOTE_COLLECTION, 'all', 'this-query-does-not-exist-oda-739452', 'en').length, 0);
++});
++
++test('catalogue sources use allowed web protocols and cannot execute app/script URLs', () => {
++  for (const quote of QUOTE_COLLECTION) assert.ok(quoteSourceHref(quote.sourceUrl), quote.id);
++  for (const href of ['javascript:alert(1)', 'data:text/html,hello', 'file:///private', '/app/notebook', 'invalid']) assert.equal(quoteSourceHref(href), undefined);
++  assert.equal(quoteSourceHref('https://example.org/source'), 'https://example.org/source');
++});

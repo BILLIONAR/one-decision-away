@@ -1,0 +1,38 @@
+{
+  "syntheticFixtures": true,
+  "noProductionOrExternalWrites": true,
+  "base": "http://127.0.0.1:4183/one-decision-away/#",
+  "repo": "/workspace/oda-reference-redesign",
+  "at": "2026-10-02T21:48:37.964Z",
+  "buildIndex": "assets/index-Cvg2WzED.js",
+  "checks": [
+    "setting, reloading and returning to Today never automatically open obstacle planning after 700 ms",
+    "optional obstacle planning opens by explicit action and persists without reopening itself",
+    "Today optional planning 390: controls fit and no serious/critical axe findings",
+    "real two-minute timer is unfinished at 119 seconds and finished at 120 seconds without automatic completion or reward"
+  ],
+  "screenshots": [
+    "en-today-optional-plan-390.png",
+    "en-two-minute-expired-390.png",
+    "failure.png"
+  ],
+  "accessibility": [
+    {
+      "name": "Today optional planning 390",
+      "violations": []
+    }
+  ],
+  "layouts": [
+    {
+      "name": "Today optional planning 390",
+      "width": 390,
+      "scrollWidth": 390,
+      "outside": []
+    }
+  ],
+  "pageErrors": [],
+  "blockedExternalRequests": [],
+  "status": "failed",
+  "failure": "locator.innerText: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.oda-fidelity-live-evidence')\u001b[22m\n\n    at <anonymous> (/workspace/scratch/oda-reference-redesign/scoped-layout-repair/flows/final-build/harness/today-controls.mjs:178:70)",
+  "finishedAt": "2026-10-02T21:48:59.367Z"
+}

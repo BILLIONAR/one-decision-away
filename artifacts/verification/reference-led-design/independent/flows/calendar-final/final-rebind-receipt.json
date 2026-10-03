@@ -1,0 +1,71 @@
+{
+  "atUtc": "2026-10-02T18:15:00.095696+00:00",
+  "sourceCommit": "71f1ce41f77bddb519cc9d18933303cc13336073",
+  "originalRegressionSource": "cf95c6eda4264385a4f70b41f7df0dee7832ebe7",
+  "sourceDelta": [
+    "src/components/notebook/NotebookCalendar.tsx",
+    "src/i18n/locales/es.ts",
+    "src/i18n/locales/tr.ts",
+    "src/styles/notebook.css"
+  ],
+  "687UnaffectedSourcesMatchOriginalRegression": true,
+  "calendarStateHandlersExactlyPreserved": true,
+  "all691FinalSourcesUnchanged": true,
+  "all388FinalBuildFilesUnchanged": true,
+  "gitStatus": "",
+  "currentServedEntry": {
+    "url": "http://127.0.0.1:4183/one-decision-away/",
+    "status": 200,
+    "sha256": "823f1fe5ddc70b79b500893e3fbb5c1a784146d547037ac5fc3620642901ba64"
+  },
+  "currentServedJS": {
+    "url": "http://127.0.0.1:4183/one-decision-away/assets/index-CY4kxE0P.js",
+    "status": 200,
+    "sha256": "a65fe6a9f151fe43e7b07409f064edbcacaf5757406a28fc1b17c0ab4f53d06f",
+    "contentType": "text/javascript"
+  },
+  "targetedRuns": [
+    {
+      "case": "notebook-final",
+      "checks": 18,
+      "profiles": 6,
+      "screenshots": 12,
+      "report": "/workspace/scratch/oda-reference-redesign/independent/flows/notebook-final/notebook-report.json",
+      "log": {
+        "file": "/workspace/scratch/oda-reference-redesign/independent/flows/notebook-final/browser.log",
+        "bytes": 1428,
+        "sha256": "7ba3c28eeedc74c5c173d1ded2f87dc818a3ac402ff6ed88c473f13fb540436d"
+      }
+    },
+    {
+      "case": "calendar-settled",
+      "checks": 24,
+      "profiles": 6,
+      "screenshots": 12,
+      "report": "/workspace/scratch/oda-reference-redesign/independent/flows/calendar-settled/calendar-report.json",
+      "log": {
+        "file": "/workspace/scratch/oda-reference-redesign/independent/flows/calendar-settled/browser.log",
+        "bytes": 2117,
+        "sha256": "e450e0fce45653a6f83958ed7d7150f28fd480a1522167de6db8c7ed440b7e89"
+      }
+    }
+  ],
+  "actualPixelsInspected": [
+    "calendar-settled/calendar-hint-tr-390.png",
+    "calendar-settled/calendar-weekend-selected-es-320.png",
+    "notebook-final/notebook-saved-es-390.png"
+  ],
+  "calendarFinding": "Prior visual P2 weekend overflow cue resolved by localized hint + named keyboard region; all tested keyboard date and month behavior remains intact.",
+  "harnessTimingFailure": "Initial calendar-targeted immediate geometry check occurred during native scroll motion. Its exact report/log/failure PNG preserved. The corrected calendar-settled run waits up to2seconds for the same strict bounds without relaxing thresholds; all six profiles pass. No app change involved.",
+  "findings": {
+    "P0": [],
+    "P1": [],
+    "P2": [],
+    "P3": []
+  },
+  "limitations": [
+    "Original broad regression evidence remains truthfully tied to cf95; no unrelated broad rerun after the four-file calendar delta.",
+    "Targeted checks use synthetic cloud Chromium profiles, not physical iPhone/touch/voice listening or real account/provider operations.",
+    "This flow review does not replace independent whole-layout visual review."
+  ]
+}

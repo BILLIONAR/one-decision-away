@@ -1,0 +1,177 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import http from 'node:http';
+import { createRequire } from 'node:module';
+import { createHash } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
+
+const out = path.dirname(fileURLToPath(import.meta.url));
+const repo = '/workspace/oda-cloud-upload-guard';
+const require = createRequire(path.join(repo, 'package.json'));
+const { build } = require('esbuild');
+const { chromium } = require('playwright');
+const baseURL = 'http://127.0.0.1:4191';
+const sha = file => createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+const builtHTML = fs.readFileSync(path.join(repo, 'dist/index.html'), 'utf8');
+const css = builtHTML.match(/href="[^\"]*\/(assets\/index-[^\"]+\.css)"/)?.[1];
+assert.ok(css, 'Parent must confirm final source and fresh built CSS before this runs.');
+const boundaries = path.join(out, 'boundaries.ts');
+const bundle = await build({ entryPoints: [path.join(out, 'fixture.tsx')], absWorkingDir: repo,
+  nodePaths: [path.join(repo, 'node_modules')], bundle: true, write: false, outfile: path.join(out, 'fixture.js'),
+  format: 'iife', platform: 'browser', jsx: 'automatic', define: { 'import.meta.env': '{"BASE_URL":"/one-decision-away/"}' },
+  plugins: [{ name: 'synthetic-native-provider-boundaries', setup(build) {
+    build.onResolve({ filter: /(?:^|\/)(?:native|pushNotifications|notificationScheduler|soundSynthesizer|voiceGuide|confetti)$|^@supabase\/supabase-js$/ }, () => ({ path: boundaries }));
+  } }] });
+for (const file of bundle.outputFiles) fs.writeFileSync(file.path, file.contents);
+fs.writeFileSync(path.join(out, 'index.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ODA upload-guard synthetic acceptance fixture</title><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self'; object-src 'none'">
+  <link rel="stylesheet" href="/one-decision-away/${css}">
+  <style>body{margin:0;background:var(--bg);color:var(--fg)}#fixture-controls{margin:12px 16px;font:12px system-ui;max-width:560px}#fixture-controls button,#fixture-controls select{margin:4px;padding:6px;border:1px solid #777;border-radius:4px}#root{max-width:592px;margin:0 auto;padding:16px}</style>
+  </head><body><details id="fixture-controls"></details><main id="root"></main><script src="/fixture.js"></script></body></html>`);
+const server = http.createServer((request, response) => {
+  const pathname = new URL(request.url, baseURL).pathname;
+  const built = pathname.startsWith('/one-decision-away/');
+  const relative = built ? pathname.slice('/one-decision-away/'.length) : pathname.slice(1) || 'index.html';
+  const root = built ? path.join(repo, 'dist') : out;
+  const file = path.resolve(root, relative);
+  if (!file.startsWith(root + path.sep) || !fs.existsSync(file) || !fs.statSync(file).isFile()) { response.writeHead(404); response.end('Not found'); return; }
+  const mime = { '.css': 'text/css', '.woff2': 'font/woff2', '.js': 'text/javascript', '.html': 'text/html', '.png': 'image/png', '.webp': 'image/webp' };
+  response.writeHead(200, { 'Content-Type': mime[path.extname(file)] ?? 'application/octet-stream', 'Cache-Control': 'no-store' }); fs.createReadStream(file).pipe(response);
+});
+await new Promise((resolve, reject) => { server.once('error', reject); server.listen(4191, '127.0.0.1', resolve); });
+if (process.argv.includes('--serve')) { console.log(`Interactive synthetic upload fixture at ${baseURL}/#/app/settings`); await new Promise(() => {}); }
+const sourcePaths = ['src/store/useApp.tsx', 'src/services/repository.ts', 'src/services/cloudSync.ts', 'src/services/cloudUploadReadiness.ts',
+  'src/components/BackupAndCloudSettings.tsx', 'src/pages/Account.tsx', 'src/services/useCloudState.ts', 'src/components/BackupRestoreReview.tsx', 'src/data/backupCopy.ts', 'tests/helpers/cloudCrudFixture.ts'];
+const report = { at: new Date().toISOString(), baseURL, browser: '', sourceHashes: Object.fromEntries(sourcePaths.map(file => [file, sha(path.join(repo, file))])),
+  css: { path: css, sha256: sha(path.join(repo, 'dist', css)) }, checks: [], screenshots: [], layouts: [], errors: [], externalAttempts: [], failedRequests: [],
+  boundaryObservations: [], limits: ['Real AppProvider/useApp, repository, CloudSync public methods, review callbacks, components, translations and built CSS/fonts.',
+    'One local synthetic SDK uses the actual test conditional-CRUD adapter; native/audio/notification/confetti boundaries are no-ops.',
+    'Startup is signed out; a synthetic auth callback emits account A only after the actual local AppProvider load finishes.',
+    'Chromium in the saved Linux cloud executor; no real SDK/provider/database/auth/native-device/network/email/publication claims.'] };
+let browser, page;
+const check = (name, evidence = {}) => report.checks.push({ name, passed: true, ...evidence });
+const snapshot = () => page.evaluate(() => window.ODA_UPLOAD_FIXTURE.snapshot());
+const copy = () => page.evaluate(() => window.ODA_UPLOAD_FIXTURE.copy());
+const translated = source => page.evaluate(source => window.ODA_UPLOAD_FIXTURE.translate(source), source);
+const save = title => page.evaluate(title => window.ODA_UPLOAD_FIXTURE.saveDecision(title), title);
+const navigate = route => page.evaluate(route => window.ODA_UPLOAD_FIXTURE.navigate(route), route);
+const waitPaused = text => page.waitForFunction(text => {
+  const state = window.ODA_UPLOAD_FIXTURE.snapshot().cloud; return state.error === text && !state.syncing;
+}, text, { timeout: 12000 });
+const assertDecision = (state, title) => assert.ok(state.local.missions.some(item => item.isOneDecision && item.title === title), 'Saved device decision must remain usable');
+const screenshot = async file => { await page.evaluate(() => document.fonts.ready); await page.screenshot({ path: path.join(out, file), fullPage: true }); report.screenshots.push(file); };
+try {
+  browser = await chromium.launch({ executablePath: '/usr/bin/chromium' }); report.browser = await browser.version();
+  const open = async (locale = 'en', width = 390) => {
+    const context = await browser.newContext({ viewport: { width, height: 844 }, deviceScaleFactor: 1, serviceWorkers: 'block' });
+    await context.route('**/*', route => {
+      if (new URL(route.request().url()).origin === baseURL) return route.continue();
+      report.externalAttempts.push(route.request().url()); return route.abort();
+    });
+    page = await context.newPage(); page.on('pageerror', error => report.errors.push(error.message));
+    page.on('response', response => { if (response.status() >= 400) report.failedRequests.push({ url: response.url(), status: response.status() }); });
+    await page.goto(`${baseURL}/#/app/settings`);
+    await page.waitForFunction(() => window.ODA_UPLOAD_FIXTURE?.snapshot().ready, null, { timeout: 12000 });
+    await page.evaluate(locale => window.ODA_UPLOAD_FIXTURE.setLocale(locale), locale);
+    assert.equal((await snapshot()).cloud.session, null, 'Bootstrap must not auto-restore the existing cloud work');
+    await page.evaluate(() => window.ODA_UPLOAD_FIXTURE.signIn());
+    await page.waitForFunction(() => Boolean(window.ODA_UPLOAD_FIXTURE.snapshot().cloud.session));
+    return context;
+  };
+  let context = await open();
+  let currentCopy = await copy(); const initial = await snapshot();
+  await save('Synthetic ordinary decision'); await waitPaused(currentCopy.cloudUploadUnreviewed);
+  let state = await snapshot(); assertDecision(state, 'Synthetic ordinary decision');
+  assert.deepEqual(state.remote, initial.remote); assert.deepEqual(state.attempts, []); assert.deepEqual(state.writes, []);
+  assert.equal(state.cloud.lastSyncAt, null); assert.equal(state.syncOwner, null);
+  check('Ordinary real AppProvider save preserves local decision and pauses unreviewed existing cloud work without any SDK mutation');
+  await page.getByText(currentCopy.cloudUploadUnreviewed, { exact: true }).waitFor();
+  check('Native signed-in Settings shows actual paused cloud error and preserves its existing account routing');
+  await navigate('/app/account'); await page.getByRole('alert').filter({ hasText: currentCopy.cloudUploadUnreviewed }).waitFor();
+  assert.equal(await page.getByText(await translated('Syncs automatically after every change.'), { exact: true }).count(), 0);
+  assert.equal(await page.getByRole('heading', { name: await translated('Your proof is safe'), exact: true }).count(), 0);
+  check('Paused Account renders device-saved/error copy without optimistic confirmed-backup or automatic-sync claims');
+  const back = await page.evaluate(() => window.ODA_UPLOAD_FIXTURE.accountCopy().back);
+  await page.getByRole('button', { name: back, exact: true }).click();
+  await page.getByRole('button', { name: await translated('Sync now'), exact: true }).waitFor();
+  assert.equal((await snapshot()).route, '/app/settings');
+  check('Native Account Back returns to the existing signed-in Settings screen');
+
+  const rawBeforeCancel = (await snapshot()).localRaw;
+  await page.getByRole('button', { name: await translated('Sync now'), exact: true }).click();
+  await page.getByRole('dialog').waitFor(); await screenshot('review-cancel-en-390.png');
+  await page.getByRole('dialog').getByRole('button', { name: await translated('Cancel'), exact: true }).click();
+  await page.getByRole('dialog').waitFor({ state: 'hidden' });
+  state = await snapshot(); assert.equal(state.localRaw, rawBeforeCancel); assert.deepEqual(state.attempts, []); assert.deepEqual(state.writes, []); assert.equal(state.syncOwner, null);
+  await save('Synthetic after canceled review'); await waitPaused(currentCopy.cloudUploadUnreviewed);
+  state = await snapshot(); assertDecision(state, 'Synthetic after canceled review'); assert.deepEqual(state.remote, initial.remote); assert.deepEqual(state.attempts, []);
+  check('Actual manual cloud review Cancel keeps exact local bytes and never enables fallback or subsequent unreviewed upload');
+
+  await page.getByRole('button', { name: await translated('Sync now'), exact: true }).click();
+  await page.getByRole('dialog').waitFor(); await screenshot('review-accept-en-390.png');
+  await page.getByRole('dialog').getByRole('button', { name: currentCopy.confirm, exact: true }).click();
+  await page.getByRole('dialog').waitFor({ state: 'hidden' });
+  await page.waitForFunction(() => window.ODA_UPLOAD_FIXTURE.snapshot().local.profile.displayName === 'Synthetic existing cloud record'
+    && window.ODA_UPLOAD_FIXTURE.snapshot().renderedData?.profile.displayName === 'Synthetic existing cloud record'
+    && window.ODA_UPLOAD_FIXTURE.snapshot().ready && Boolean(window.ODA_UPLOAD_FIXTURE.snapshot().cloud.lastSyncAt));
+  state = await snapshot(); assert.deepEqual(state.attempts, []); assert.deepEqual(state.writes, []);
+  assert.equal(state.renderedData.profile.displayName, 'Synthetic existing cloud record'); assert.equal(state.cloud.error, null); assert.ok(state.syncOwner);
+  check('Actual manual review Accept replaces only the device record, renders reviewed data and acknowledges the row without uploading');
+
+  await save('Synthetic after approved review');
+  await page.waitForFunction(() => window.ODA_UPLOAD_FIXTURE.snapshot().writes.length === 1 && !window.ODA_UPLOAD_FIXTURE.snapshot().cloud.syncing, null, { timeout: 12000 });
+  state = await snapshot(); assertDecision(state, 'Synthetic after approved review');
+  assert.equal(state.attempts[0].kind, 'update'); assert.equal(state.remote.data.profile.displayName, 'Synthetic existing cloud record');
+  assert.ok(state.remote.data.missions.some(item => item.title === 'Synthetic after approved review')); assert.equal(state.cloud.error, null);
+  check('Ordinary save after reviewed acknowledgement performs the actual conditional SDK update');
+  const remoteBeforeReadFailure = state.remote;
+  await page.evaluate(() => window.ODA_UPLOAD_FIXTURE.setReadFailure(true));
+  await save('Synthetic while read fails'); await waitPaused(currentCopy.cloudUploadReadFailed);
+  state = await snapshot(); assertDecision(state, 'Synthetic while read fails'); assert.deepEqual(state.remote, remoteBeforeReadFailure); assert.equal(state.writes.length, 1);
+  check('SDK read failure pauses cloud work truthfully while the ordinary local save remains usable');
+  await page.evaluate(() => window.ODA_UPLOAD_FIXTURE.setReadFailure(false));
+  await page.getByRole('button', { name: await translated('Sync now'), exact: true }).click();
+  await page.waitForFunction(() => window.ODA_UPLOAD_FIXTURE.snapshot().writes.length === 2 && !window.ODA_UPLOAD_FIXTURE.snapshot().cloud.syncing, null, { timeout: 12000 });
+  state = await snapshot(); assertDecision(state, 'Synthetic while read fails'); assert.equal(state.cloud.error, null); assert.ok(state.cloud.lastSyncAt);
+  check('Manual retry after SDK recovery uses the acknowledged conditional upload and clears the paused status');
+  report.boundaryObservations.push({ case: 'real-callback-flows', ...(await snapshot()).boundaryAttempts });
+  await context.close();
+
+  for (const locale of ['en', 'tr', 'es']) for (const width of [320, 390]) {
+    context = await open(locale, width); currentCopy = await copy();
+    await save(`Synthetic ${locale} ${width} local decision`); await waitPaused(currentCopy.cloudUploadUnreviewed);
+    for (const screen of ['settings', 'account']) {
+      await navigate(`/app/${screen}`); await page.getByText(currentCopy.cloudUploadUnreviewed, { exact: true }).waitFor();
+      await page.evaluate(() => document.fonts.ready);
+      const layout = await page.evaluate(() => {
+        const main = document.querySelector('main');
+        return { viewport: innerWidth, documentScroll: document.documentElement.scrollWidth, mainScroll: main.scrollWidth, mainWidth: main.clientWidth,
+          controls: [...main.querySelectorAll('button,input')].filter(element => element.getClientRects().length).map(element => {
+            const rect = element.getBoundingClientRect(); return { text: element.textContent || element.id, x: rect.x, right: rect.right, width: rect.width, height: rect.height };
+          }), fontStatus: document.fonts.status };
+      });
+      const file = `paused-${screen}-${locale}-${width}.png`; await screenshot(file); report.layouts.push({ locale, width, screen, screenshot: file, ...layout });
+      const problems = [];
+      if (layout.documentScroll > width + 1) problems.push('document overflow');
+      if (layout.mainScroll > layout.mainWidth + 1) problems.push('component overflow');
+      if (!layout.controls.every(control => control.x >= 0 && control.right <= width + 1)) problems.push('clipped cloud-status control');
+      report.checks.push({ name: `${locale} ${width}px ${screen}: truthful paused status and controls fit`, passed: problems.length === 0, problems, ...layout });
+    }
+    report.boundaryObservations.push({ case: `${locale}-${width}`, ...(await snapshot()).boundaryAttempts });
+    await context.close();
+  }
+  assert.deepEqual(report.errors, []); assert.deepEqual(report.externalAttempts, []); assert.deepEqual(report.failedRequests, []);
+  assert.ok(report.boundaryObservations.every(item => item.providerConstruction === 0 && item.authDelivery === 0 && item.authVerification === 0));
+  check('Zero page errors, external requests, failed local assets, real emails or provider calls');
+  assert.equal(report.checks.filter(item => !item.passed).length, 0, 'Responsive checks failed; requested screenshots retained');
+} catch (error) {
+  report.failure = String(error.stack || error);
+  if (page && !page.isClosed()) report.failureState = await snapshot().catch(() => null);
+  if (page && !page.isClosed()) { await page.screenshot({ path: path.join(out, 'failure.png'), fullPage: true }).catch(() => {}); report.failureScreenshot = 'failure.png'; }
+  throw error;
+} finally {
+  fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify(report, null, 2) + '\n');
+  if (browser) await browser.close(); await new Promise(resolve => server.close(resolve));
+  console.log(JSON.stringify({ out, passed: report.checks.filter(item => item.passed).length, checks: report.checks.length, screenshots: report.screenshots.length, errors: report.errors, failure: report.failure ?? null }));
+}

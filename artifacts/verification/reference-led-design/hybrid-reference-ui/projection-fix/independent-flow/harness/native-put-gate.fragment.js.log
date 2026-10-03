@@ -1,0 +1,23 @@
+    const nativePut=IDBObjectStore.prototype.put,nativeGet=IDBObjectStore.prototype.get;
+    const completed=s=>{try{return !!JSON.parse(s.appData)?.courseProgress?.lessons?.[lessonId]?.completed;}catch{return null;}};
+    window.__projectionGate={armed:false,phase:'idle',release:null,events:[],nativeMutationPuts:0,reads:0};
+    IDBObjectStore.prototype.put=function(value,recordKey){
+      const gate=window.__projectionGate;
+      if(!gate.armed||gate.phase!=='idle'||this.name!=='record'||recordKey!=='current'||completed(value)!==true)return nativePut.apply(this,arguments);
+      gate.phase='held-before-native-put';gate.armed=false;gate.heldAt=performance.now();gate.candidateCompleted=completed(value);
+      const store=this,tx=this.transaction,started=performance.now();
+      gate.transactionMode=tx.mode;gate.database=tx.db.name;gate.events.push({phase:gate.phase,at:started});
+      tx.addEventListener('complete',()=>{gate.phase='native-transaction-complete';gate.events.push({phase:gate.phase,at:performance.now()});});
+      tx.addEventListener('abort',()=>{gate.phase='native-transaction-aborted';gate.events.push({phase:gate.phase,at:performance.now()});});
+      const pump=()=>{
+        const request=nativeGet.call(store,'current');
+        request.onsuccess=()=>{
+          gate.reads++;gate.authorityCompleted=completed(request.result);gate.lastAuthorityReadAt=performance.now();
+          if(gate.release==='abort'||performance.now()-started>20000){gate.abortReason=gate.release==='abort'?'controlled abort':'bounded watchdog';tx.abort();return;}
+          if(gate.release==='commit'){gate.nativeMutationPuts++;gate.nativePutAt=performance.now();nativePut.call(store,value,recordKey);return;}
+          pump();
+        };
+        return request;
+      };
+      return pump();
+    };

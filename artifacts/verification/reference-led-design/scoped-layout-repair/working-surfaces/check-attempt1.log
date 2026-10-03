@@ -1,0 +1,12 @@
+{"label":"en-light-320-today","file":"en-light-320-today.png","bytes":101960,"sha256":"6189647db48901be47b7102fb68fa06c0bea84f01c45e2b2a307669acbc6b66b","geometry":{"viewport":320,"pageWidth":320,"scopedOverflow":[]},"detail":{"growth":{"count":"2","stage":"sapling","leaves":"2","blossoms":"0"},"tomorrow":{"width":210,"height":44,"x":41,"y":2301.359375,"bottom":2345.359375,"minWidth":"0px","minHeight":"44px","flexShrink":"0"},"dismiss":{"width":44,"height":44,"x":247,"y":2152.859375,"bottom":2196.859375,"minWidth":"44px","minHeight":"44px","flexShrink":"0"}},"axe":[]}
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   '<button type="button" aria-pressed="false" aria-current="date" aria-label="October 2, 2026 — Has entries"><span>Fri</span><strong>2</strong><i aria-hidden="true"></i></button>'
++ ]
+- []
+
+    at capture (file:///workspace/scratch/oda-reference-redesign/scoped-layout-repair/working-surfaces/check.mjs:35:10)
+    at async file:///workspace/scratch/oda-reference-redesign/scoped-layout-repair/working-surfaces/check.mjs:71:5
+{"status":"failed","cases":1,"errors":[],"checks":[],"failure":"AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   '<button type=\"button\" aria-pressed=\"false\" aria-current=\"date\" aria-label=\"October 2, 2026 — Has entries\"><span>Fri</span><strong>2</strong><i aria-hidden=\"true\"></i></button>'\n+ ]\n- []\n\n    at capture (file:///workspace/scratch/oda-reference-redesign/scoped-layout-repair/working-surfaces/check.mjs:35:10)\n    at async file:///workspace/scratch/oda-reference-redesign/scoped-layout-repair/working-surfaces/check.mjs:71:5"}

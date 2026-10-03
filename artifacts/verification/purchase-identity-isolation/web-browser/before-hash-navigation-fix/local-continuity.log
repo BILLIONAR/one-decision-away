@@ -1,0 +1,28 @@
+PASS en web welcome 320: controls fit and no serious/critical axe findings
+PASS en web welcome 390: controls fit and no serious/critical axe findings
+PASS en: a fresh web record boots to the real onboarding preview
+PASS en: signed-out Today boots with real lightweight lesson metadata
+PASS en untouched overview 320: controls fit and no serious/critical axe findings
+PASS en untouched overview 390: controls fit and no serious/critical axe findings
+PASS en: explicit Start and saved partial lesson/reflection survive web startup
+PASS en returning lesson 320: controls fit and no serious/critical axe findings
+PASS en returning lesson 390: controls fit and no serious/critical axe findings
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Local preview entry must return 200
+
+undefined !== 200
+
+    at goto (/workspace/scratch/oda-purchase-identity-browser/qa-local-continuity.mjs:75:10)
+    at async <anonymous> (/workspace/scratch/oda-purchase-identity-browser/qa-local-continuity.mjs:189:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: undefined,
+  expected: 200,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

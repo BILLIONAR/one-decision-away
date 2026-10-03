@@ -1,0 +1,384 @@
+diff --git a/src/components/OriginalSceneImage.tsx b/src/components/OriginalSceneImage.tsx
+new file mode 100644
+index 0000000..c69fec4
+--- /dev/null
++++ b/src/components/OriginalSceneImage.tsx
+@@ -0,0 +1,38 @@
++import React, { useEffect, useState } from 'react';
++import { ORIGINAL_SCENE_ASSETS, type OriginalSceneId } from '../data/originalSceneAssets';
++
++const OWNED_FALLBACK = 'assets/oda/delivery/course-covers/oda-growth-values-640.webp';
++
++/** Decorative original artwork with responsive delivery and bounded local fallbacks. */
++export function OriginalSceneImage({ asset, sizes, eager = false, fallback, className }: {
++  asset: OriginalSceneId;
++  sizes: string;
++  eager?: boolean;
++  fallback?: string;
++  className?: string;
++}) {
++  const image = ORIGINAL_SCENE_ASSETS[asset];
++  const [modernFailed, setModernFailed] = useState(false);
++  const [failedPaths, setFailedPaths] = useState<readonly string[]>([]);
++  useEffect(() => { setModernFailed(false); setFailedPaths([]); }, [asset]);
++  const candidates = [...new Set([image.src, fallback, OWNED_FALLBACK].filter((path): path is string => Boolean(path)))];
++  const source = candidates.find(path => !failedPaths.includes(path));
++  if (!source) return null;
++  const original = source === image.src;
++  return <picture style={{ display: 'contents' }} data-original-scene={asset} data-image-mode={original ? modernFailed ? 'png' : 'webp' : 'fallback'}>
++    {original && !modernFailed && <source type="image/webp" srcSet={image.sources.map(item => `${import.meta.env.BASE_URL}${item.src} ${item.width}w`).join(', ')} sizes={sizes} />}
++    <img
++      src={`${import.meta.env.BASE_URL}${source}`}
++      alt=""
++      width={image.width}
++      height={image.height}
++      className={className}
++      loading={eager ? 'eager' : 'lazy'}
++      decoding="async"
++      onError={event => {
++        if (original && !modernFailed && event.currentTarget.currentSrc.endsWith('.webp')) setModernFailed(true);
++        else setFailedPaths(paths => paths.includes(source) ? paths : [...paths, source]);
++      }}
++    />
++  </picture>;
++}
+diff --git a/src/data/originalSceneAssets.ts b/src/data/originalSceneAssets.ts
+new file mode 100644
+index 0000000..a19bb79
+--- /dev/null
++++ b/src/data/originalSceneAssets.ts
+@@ -0,0 +1,183 @@
++/** Responsive delivery variants of user-approved original ODA artwork. Paths are relative to BASE_URL. */
++export const ORIGINAL_SCENE_ASSETS = {
++  "dunes": {
++    "src": "assets/oda/original-scenes/dunes-640.png",
++    "width": 640,
++    "height": 427,
++    "sources": [
++      {
++        "src": "assets/oda/original-scenes/dunes-160.webp",
++        "width": 160
++      },
++      {
++        "src": "assets/oda/original-scenes/dunes-320.webp",
++        "width": 320
++      },
++      {
++        "src": "assets/oda/original-scenes/dunes-480.webp",
++        "width": 480
++      },
++      {
++        "src": "assets/oda/original-scenes/dunes-640.webp",
++        "width": 640
++      },
++      {
++        "src": "assets/oda/original-scenes/dunes-960.webp",
++        "width": 960
++      },
++      {
++        "src": "assets/oda/original-scenes/dunes-1280.webp",
++        "width": 1280
++      }
++    ]
++  },
++  "palms": {
++    "src": "assets/oda/original-scenes/palms-640.png",
++    "width": 640,
++    "height": 427,
++    "sources": [
++      {
++        "src": "assets/oda/original-scenes/palms-160.webp",
++        "width": 160
++      },
++      {
++        "src": "assets/oda/original-scenes/palms-320.webp",
++        "width": 320
++      },
++      {
++        "src": "assets/oda/original-scenes/palms-480.webp",
++        "width": 480
++      },
++      {
++        "src": "assets/oda/original-scenes/palms-640.webp",
++        "width": 640
++      },
++      {
++        "src": "assets/oda/original-scenes/palms-960.webp",
++        "width": 960
++      },
++      {
++        "src": "assets/oda/original-scenes/palms-1280.webp",
++        "width": 1280
++      }
++    ]
++  },
++  "foam": {
++    "src": "assets/oda/original-scenes/foam-640.png",
++    "width": 640,
++    "height": 427,
++    "sources": [
++      {
++        "src": "assets/oda/original-scenes/foam-160.webp",
++        "width": 160
++      },
++      {
++        "src": "assets/oda/original-scenes/foam-320.webp",
++        "width": 320
++      },
++      {
++        "src": "assets/oda/original-scenes/foam-480.webp",
++        "width": 480
++      },
++      {
++        "src": "assets/oda/original-scenes/foam-640.webp",
++        "width": 640
++      },
++      {
++        "src": "assets/oda/original-scenes/foam-960.webp",
++        "width": 960
++      },
++      {
++        "src": "assets/oda/original-scenes/foam-1280.webp",
++        "width": 1280
++      }
++    ]
++  },
++  "sound-sculpture": {
++    "src": "assets/oda/original-scenes/sound-sculpture-640.png",
++    "width": 640,
++    "height": 960,
++    "sources": [
++      {
++        "src": "assets/oda/original-scenes/sound-sculpture-160.webp",
++        "width": 160
++      },
++      {
++        "src": "assets/oda/original-scenes/sound-sculpture-320.webp",
++        "width": 320
++      },
++      {
++        "src": "assets/oda/original-scenes/sound-sculpture-480.webp",
++        "width": 480
++      },
++      {
++        "src": "assets/oda/original-scenes/sound-sculpture-640.webp",
++        "width": 640
++      },
++      {
++        "src": "assets/oda/original-scenes/sound-sculpture-960.webp",
++        "width": 960
++      },
++      {
++        "src": "assets/oda/original-scenes/sound-sculpture-1024.webp",
++        "width": 1024
++      }
++    ]
++  },
++  "coach-orb": {
++    "src": "assets/oda/original-scenes/coach-orb-640.png",
++    "width": 640,
++    "height": 640,
++    "sources": [
++      {
++        "src": "assets/oda/original-scenes/coach-orb-160.webp",
++        "width": 160
++      },
++      {
++        "src": "assets/oda/original-scenes/coach-orb-320.webp",
++        "width": 320
++      },
++      {
++        "src": "assets/oda/original-scenes/coach-orb-480.webp",
++        "width": 480
++      },
++      {
++        "src": "assets/oda/original-scenes/coach-orb-640.webp",
++        "width": 640
++      }
++    ]
++  },
++  "today-scene": {
++    "src": "assets/oda/original-scenes/today-scene-640.png",
++    "width": 640,
++    "height": 427,
++    "sources": [
++      {
++        "src": "assets/oda/original-scenes/today-scene-160.webp",
++        "width": 160
++      },
++      {
++        "src": "assets/oda/original-scenes/today-scene-320.webp",
++        "width": 320
++      },
++      {
++        "src": "assets/oda/original-scenes/today-scene-480.webp",
++        "width": 480
++      },
++      {
++        "src": "assets/oda/original-scenes/today-scene-640.webp",
++        "width": 640
++      },
++      {
++        "src": "assets/oda/original-scenes/today-scene-960.webp",
++        "width": 960
++      },
++      {
++        "src": "assets/oda/original-scenes/today-scene-1280.webp",
++        "width": 1280
++      }
++    ]
++  }
++} as const;
++
++export type OriginalSceneId = keyof typeof ORIGINAL_SCENE_ASSETS;
+diff --git a/src/pages/Coach.tsx b/src/pages/Coach.tsx
+index d9b0a82..9a82fb6 100644
+--- a/src/pages/Coach.tsx
++++ b/src/pages/Coach.tsx
+@@ -5,6 +5,7 @@ import { CoachTools } from '../components/coach/CoachTools';
+ import { companionCopy } from '../i18n/companion';
+ import { createAICoach, getCoachAvailability, setCoachFocus, MAX_COACH_MESSAGE_LENGTH, type CoachMessage } from '../services/aiCoach';
+ import { INTENTS } from '../data/starterDecisions';
++import { OriginalSceneImage } from '../components/OriginalSceneImage';
+ import { useApp } from '../store/useApp';
+ import { useCloudState } from '../services/useCloudState';
+ import { cloudSync } from '../services/cloudSync';
+@@ -239,7 +240,7 @@ export const Coach: React.FC = () => {
+           <p className="text-[15px] text-[var(--fg-muted)] leading-relaxed max-w-xl">{c.coachIntro}</p>
+         </div>
+         <div className="coach-orbit" aria-hidden="true" data-state={replying ? 'replying' : listening ? 'listening' : phase === 'loading' ? 'loading' : 'idle'}>
+-          <div className="coach-orb"><img src={`${import.meta.env.BASE_URL}assets/oda/reference-fidelity/coach-liquid-form.svg`} alt="" width={420} height={420} decoding="async" /></div>
++          <div className="coach-orb"><OriginalSceneImage asset="coach-orb" sizes="(min-width: 768px) 194px, 159px" eager fallback="assets/oda/reference-fidelity/coach-liquid-form.svg" /></div>
+           <div className="coach-orbit-ring" />
+         </div>
+       </header>
+diff --git a/src/pages/SoundRoom.tsx b/src/pages/SoundRoom.tsx
+index bbaa53b..ad72b9b 100644
+--- a/src/pages/SoundRoom.tsx
++++ b/src/pages/SoundRoom.tsx
+@@ -11,6 +11,7 @@ import {
+ import { soundRoomPlayer } from '../services/soundRoomPlayer';
+ import { BREATH_CYCLE_MS, breathPhase, formatRemaining, TIMER_CHOICES } from '../services/soundRoom';
+ import { soundSynthesizer } from '../utils/soundSynthesizer';
++import { OriginalSceneImage } from '../components/OriginalSceneImage';
+ import '../styles/sound.css';
+ 
+ const TAB_KEY = 'oda_sound_tab_v1';
+@@ -63,14 +64,14 @@ const SECTION_ICONS = { relax: Waves, sleep: Moon, focus: Headphones, breathe: W
+ const SCENE_ASSETS: Record<Scene, string> = {
+   dunes: 'sound-dunes.svg', leaves: 'sound-palms.svg', coast: 'sound-ocean.svg', night: 'sound-palms.svg',
+ };
++const SCENE_ORIGINALS = { dunes: 'dunes', leaves: 'palms', coast: 'foam', night: 'palms' } as const;
+ 
+-/** Original local landscape illustrations; unavailable art falls back to existing owned ODA art. */
+-const SoundScene: React.FC<{ scene: Scene; className?: string; eager?: boolean }> = ({ scene, className = '', eager = false }) => {
+-  const [failed, setFailed] = useState(false);
+-  useEffect(() => setFailed(false), [scene]);
++/** Approved original local art, with responsive delivery and the prior owned scene fallback. */
++const SoundScene: React.FC<{ scene: Scene; className?: string; eager?: boolean; sculpture?: boolean; sizes?: string }> = ({ scene, className = '', eager = false, sculpture = false, sizes = '(min-width: 1000px) 450px, (min-width: 640px) calc(100vw - 64px), 100vw' }) => {
++  const asset = sculpture ? 'sound-sculpture' : SCENE_ORIGINALS[scene];
+   return (
+-    <span className={`oda-sound-scene ${className}`} data-scene={scene} data-artwork={failed ? 'owned-fallback' : scene} aria-hidden="true">
+-      <img src={`${import.meta.env.BASE_URL}${failed ? 'assets/oda/delivery/course-covers/oda-growth-values-640.webp' : `assets/oda/reference-fidelity/${SCENE_ASSETS[scene]}`}`} alt="" loading={eager ? 'eager' : 'lazy'} decoding="async" onError={() => setFailed(true)} />
++    <span className={`oda-sound-scene ${className}`} data-scene={sculpture ? 'sculpture' : scene} data-artwork={asset} aria-hidden="true">
++      <OriginalSceneImage asset={asset} sizes={sizes} eager={eager} fallback={`assets/oda/reference-fidelity/${SCENE_ASSETS[scene]}`} />
+     </span>
+   );
+ };
+@@ -243,7 +244,7 @@ const PlayerBar: React.FC<PlayerControlProps & { visible: boolean }> = ({ volume
+     <div className="oda-sound-player" data-sound-surface="mini" role="region" aria-label={t('Sound player')}>
+       <div className="oda-sound-player-inner">
+         <div className="oda-sound-player-now">
+-          <SoundScene scene={scene} className="oda-sound-player-thumb" />
++          <SoundScene scene={scene} className="oda-sound-player-thumb" sizes="44px" />
+           <div className="oda-sound-player-text">
+             <p className="oda-sound-player-name">{sound ? t(sound.name) : t('Sound Room')}</p>
+             <p className="oda-sound-player-status" aria-live="off">{playerStatus(player, t)}</p>
+@@ -315,7 +316,7 @@ const NowPlayingPanel: React.FC<PlayerControlProps & { primary: boolean; onPrima
+         <h2 className="oda-display">{sound ? t(sound.name) : t('Choose a sound to begin')}</h2>
+         {sound && <p>{t(sound.description)}</p>}
+       </div>
+-      <SoundScene scene={scene} className="oda-sound-now-art" eager />
++      <SoundScene scene={scene} className="oda-sound-now-art" sculpture eager sizes="(min-width: 1000px) 440px, (min-width: 640px) calc(100vw - 96px), calc(100vw - 44px)" />
+       <div className="oda-sound-now-control-surface" ref={controlsRef}>
+       <div className="oda-sound-now-controls">
+         <Headphones size={20} aria-hidden="true" />
+@@ -458,7 +459,7 @@ export const SoundRoom: React.FC = () => {
+         </div>
+ 
+         <div className="oda-sound-panel-body">
+-        <SoundScene key={section.id} scene={SECTION_SCENES[section.id]} className="oda-sound-detail-thumb" />
++        <SoundScene key={section.id} scene={SECTION_SCENES[section.id]} className="oda-sound-detail-thumb" sizes="120px" />
+         <p className="oda-sound-detail-credit">ODA · {t('Sound Room')}</p>
+         {section.id === 'breathe' ? (
+           <BreathePanel sound={section.sounds[0]} soundPlaying={isPlaying('breath_pacer')} />
+diff --git a/src/pages/Today.tsx b/src/pages/Today.tsx
+index da25536..8da98ca 100644
+--- a/src/pages/Today.tsx
++++ b/src/pages/Today.tsx
+@@ -1,7 +1,7 @@
+ import React, { useEffect, useRef, useState } from 'react';
+ import { ArrowRight, AudioLines, Check, ChevronDown, ChevronRight, Leaf, Plus, MessageCircle, GraduationCap, Route, Share2, Waves } from 'lucide-react';
+ import { GrowthTreePanel, GrowthWeek } from '../components/momentum/GrowthDashboard';
+-import { CourseCover } from '../components/CourseCover';
++import { OriginalSceneImage } from '../components/OriginalSceneImage';
+ import { growthCopy } from '../i18n/growth';
+ import { courseCatalogFor } from '../data/courseCatalog';
+ import { courseForIntent } from '../data/starterDecisions';
+@@ -209,7 +209,7 @@ export const Today: React.FC = () => {
+       <div className="oda-fidelity-command">
+       {/* The quote has its own scene; the saved growth stage appears once in its evidence panel. */}
+       <figure className="oda-quote oda-fidelity-hero">
+-        <div className="oda-fidelity-scene" aria-hidden="true"><CourseCover courseId="meaning" eager /></div>
++        <div className="oda-fidelity-scene oda-fidelity-scene--original" aria-hidden="true"><OriginalSceneImage asset="today-scene" sizes="(max-width: 479px) calc(100vw - 40px), (max-width: 1179px) calc(100vw - 80px), 1024px" eager fallback="assets/oda/course-covers/oda-growth-values.png" /></div>
+         <span aria-hidden="true" className="oda-quote-mark text-5xl">“</span>
+         <div className="oda-fidelity-hero-copy min-w-0">
+           <p className="oda-kicker text-[var(--fg-muted)] mb-2">{d.quote}</p>
+diff --git a/src/styles/sound.css b/src/styles/sound.css
+index d070da1..496dc78 100644
+--- a/src/styles/sound.css
++++ b/src/styles/sound.css
+@@ -1,8 +1,9 @@
+-/* SoundRoom reference composition. Original vector scenes are illustrations, not source photographs. */
++/* SoundRoom reference composition with approved original local art and owned scene fallbacks. */
+ .oda-sound { --sound-cyan: #58DFDB; --sound-on-cyan: #113B40; position: relative; color: var(--fg); padding-bottom: 9rem; }
+ .oda-sound button, .oda-sound select, .oda-sound input { -webkit-tap-highlight-color: transparent; }
+ .oda-sound button:focus-visible, .oda-sound select:focus-visible, .oda-sound input:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+ .oda-sound-scene { display: block; position: relative; overflow: hidden; background: #19313C; }
++.oda-sound-scene picture { display: contents; }
+ .oda-sound-scene img { display: block; width: 100%; height: 100%; object-fit: cover; }
+ .oda-sound-scene[data-scene="night"] img { filter: brightness(.68) saturate(.7); }
+ .oda-sound-intro { position: absolute; top: 1.5rem; left: 0; right: 0; z-index: 6; text-align: center; pointer-events: none; }
+@@ -23,6 +24,7 @@
+ .oda-sound-tab:nth-child(3) { z-index: 2; margin-top: calc(-1 * var(--sound-wave-overlap)); height: var(--sound-scene-span); border-radius: 0 0 28% 62% / 0 0 16% 24%; }
+ .oda-sound-tab > .oda-sound-scene { position: absolute; inset: 0; }
+ .oda-sound-tab::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(8 19 28 / .08), rgb(8 19 28 / .18) 45%, rgb(8 19 28 / .5)); }
++.oda-sound-tab:nth-child(1)::after { background: linear-gradient(180deg, rgb(8 19 28 / .5), rgb(8 19 28 / .24) 45%, rgb(8 19 28 / .5)); }
+ .oda-sound-tab-copy { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 0; padding: 1.4rem 1.45rem 2rem; color: #FFFFFF; }
+ .oda-sound-tab:nth-child(2) .oda-sound-tab-copy { padding-top: calc(var(--sound-wave-overlap) + .75rem); }
+ .oda-sound-tab:nth-child(3) .oda-sound-tab-copy { padding: calc(var(--sound-wave-overlap) + .25rem) 1.45rem .8rem; }
+@@ -85,7 +87,7 @@
+ .oda-sound-now-heading h2 { margin-top: .5rem; font-size: 1.5rem; letter-spacing: -.03em; line-height: 1.15; }
+ .oda-sound-now-heading > p:last-child { margin-top: .7rem; max-width: 36ch; font-size: .8rem; line-height: 1.6; color: #E4F4F0; }
+ .oda-sound-now-art { width: calc(100% + 2.2rem); height: clamp(180px, 30svh, 300px); margin: 1.4rem -1.1rem 0; border-radius: 0 0 45% 15% / 0 0 18% 6%; }
+-.oda-sound-now-art img { object-position: center 65%; opacity: .92; }
++.oda-sound-now-art img { object-position: center 45%; opacity: .92; }
+ .oda-sound-now-control-surface { position: relative; margin: -22px auto 0; padding: .75rem; border: 1px solid rgb(194 245 239 / .22); border-radius: 26px; background: rgb(50 99 106 / .8); backdrop-filter: blur(14px); color: #D9EEEA; }
+ .oda-sound-now-controls { display: flex; justify-content: space-around; align-items: center; width: min(100%, 270px); margin-inline: auto; }
+ .oda-sound-now-status { margin-block: .4rem .25rem; font-size: .74rem; line-height: 1.4; text-align: center; font-variant-numeric: tabular-nums; color: #DEEFED; }
+diff --git a/src/styles/workingSurfaces.css b/src/styles/workingSurfaces.css
+index c95ac93..28bebf0 100644
+--- a/src/styles/workingSurfaces.css
++++ b/src/styles/workingSurfaces.css
+@@ -127,6 +127,11 @@
+ .oda-fidelity-today .oda-evidence-tree.w-20 + .min-w-0 { flex: 1 1 0%; overflow-wrap: anywhere; }
+ :root[data-theme="dark"] .oda-fidelity-scene img, html.dark .oda-fidelity-scene img { opacity: .3; }
+ 
++/* The approved original Today scene retains its material and central landmark. */
++.oda-fidelity-today .oda-fidelity-scene.oda-fidelity-scene--original img { object-position: 56% 44%; filter: none; opacity: 1; }
++.oda-fidelity-today .oda-fidelity-scene.oda-fidelity-scene--original::after { background: linear-gradient(180deg, transparent 0%, transparent 30%, color-mix(in srgb, var(--surface) 25%, transparent) 60%, var(--surface) 95%); }
++.oda-fidelity-today .oda-fidelity-scene--original ~ .oda-fidelity-hero-copy > .oda-kicker { width: fit-content; max-width: 100%; background: var(--surface); box-shadow: 0 0 0 3px var(--surface); border-radius: 2px; }
++
+ /* Keep protected FirstSteps controls usable when their mobile flex column shrinks. */
+ .oda-fidelity-today #tomorrow-draft { min-height: 44px; flex: 1 0 auto; }
+ .oda-fidelity-today .oda-fidelity-support > section > button.w-10.h-10 { min-width: 44px; min-height: 44px; flex-shrink: 0; }

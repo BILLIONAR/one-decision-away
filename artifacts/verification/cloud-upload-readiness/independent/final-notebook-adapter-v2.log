@@ -1,0 +1,27 @@
+✔ old backups normalize without copying or losing any legacy Dream Journal field (3.274247ms)
+✔ new writing of every kind including affirmation earns 25 once; intention alone does not (3.078371ms)
+✔ edit, no-op, delete and recreate preserve immutable once-per-day reward claims (0.711647ms)
+✔ local writing day and existing UTC reward ceiling are separate and cap-safe (0.573278ms)
+✔ 369 only counts matching written intentions, allows partial saves and retains archived histories (3.915828ms)
+✔ 369 derives a real 33-day streak and preserves the achieved target after a gap (1.372698ms)
+✔ 369 matches Turkish dotted/dotless uppercase pairs without stripping meaningful accents (0.432075ms)
+✔ calendar streaks use local days across DST, not elapsed 24-hour periods (0.604235ms)
+✔ validation rejects blank entries, future dates, past creation and excess slots without altering input (0.497824ms)
+✔ legacy edits preserve photos, links and original date; unified JSON roundtrip is lossless (6.516566ms)
+✔ real repository serializes concurrent writes, protects from stale saves, and honors explicit restore (10.306744ms)
+✔ stale whole-document saves do not resurrect deleted legacy entries or lose new ones (1.326418ms)
+✔ Notebook rebases after a delayed load against a concurrent profile and ledger save (0.928686ms)
+✔ concurrent mission and Notebook reward evaluation share the same 2500 ceiling (8.283772ms)
+✔ failed storage saves reject, do not push cloud or claim rewards, and queue recovers (1.344115ms)
+✔ unreadable saved JSON is preserved, never silently replaced with seed data (0.203188ms)
+✔ explicit local restore blocks older cloud data across failed uploads and is account/project scoped (11.26829ms)
+✔ an old in-flight cloud upload cannot overwrite a newer restored snapshot or clear its marker (6.182391ms)
+✔ a signed-out import binds to the first later connection and stays isolated from other accounts (2.986602ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 70.409992

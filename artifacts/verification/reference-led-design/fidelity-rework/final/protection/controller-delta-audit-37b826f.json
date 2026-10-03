@@ -1,0 +1,624 @@
+{
+  "kind": "independent final corrective controller and control/ARIA audit",
+  "sourceCommit": "37b826fb0eea083095d2fe0fed0fb9bae55ed6f4",
+  "immutableBaselineCommit": "8fc4ef0572a4cfd20964be6e276325161b3a2acf",
+  "previousFrozenSourceCommit": "6d4c0bb7f2f9b6c9629b66ce4458f6615ee03f7b",
+  "reviewedAtUtc": "2026-10-02T20:28:48.475419+00:00",
+  "allTsxFilesReviewed": 105,
+  "existingControllers": 191,
+  "currentControllers": 192,
+  "conservativeExistingControllersTokenIdentical": 187,
+  "normalizedExistingControllersTokenIdentical": 188,
+  "all3233ExistingControlAndAriaAttributesRetained": true,
+  "all3254PreviousFrozenControlAndAriaAttributesRetained": true,
+  "currentControlAndAriaAttributes": 3270,
+  "totalAddedAttributes": [
+    {
+      "file": "src/components/FocusTimerHub.tsx",
+      "attribute": {
+        "name": "aria-label",
+        "tag": "p",
+        "valueTokens": "[[19,\"{\"],[80,\"t\"],[21,\"(\"],[11,\"'{n} min'\"],[28,\",\"],[19,\"{\"],[80,\"n\"],[59,\":\"],[80,\"durationMinutes\"],[20,\"}\"],[22,\")\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "aria-label",
+        "tag": "section",
+        "valueTokens": "[[19,\"{\"],[80,\"t\"],[21,\"(\"],[11,\"'Journal archive'\"],[22,\")\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "role",
+        "tag": "div",
+        "valueTokens": "[[11,\"\\\"region\\\"\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "aria-label",
+        "tag": "div",
+        "valueTokens": "[[19,\"{\"],[80,\"t\"],[21,\"(\"],[11,\"'Journal archive'\"],[22,\")\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "tabIndex",
+        "tag": "div",
+        "valueTokens": "[[19,\"{\"],[9,\"0\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "key",
+        "tag": "button",
+        "valueTokens": "[[19,\"{\"],[80,\"key\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "type",
+        "tag": "button",
+        "valueTokens": "[[11,\"\\\"button\\\"\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "aria-pressed",
+        "tag": "button",
+        "valueTokens": "[[19,\"{\"],[80,\"selectedDate\"],[37,\"===\"],[80,\"key\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "aria-current",
+        "tag": "button",
+        "valueTokens": "[[19,\"{\"],[80,\"key\"],[37,\"===\"],[80,\"today\"],[58,\"?\"],[11,\"'date'\"],[59,\":\"],[157,\"undefined\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "aria-label",
+        "tag": "button",
+        "valueTokens": "[[19,\"{\"],[16,\"`${\"],[80,\"dateLabel\"],[21,\"(\"],[80,\"key\"],[22,\")\"],[20,\"}\"],[80,\"$\"],[19,\"{\"],[80,\"dates\"],[25,\".\"],[80,\"has\"],[21,\"(\"],[80,\"key\"],[22,\")\"],[58,\"?\"],[16,\"` \u2014 ${\"],[80,\"t\"],[21,\"(\"],[11,\"'Has entries'\"],[22,\")\"],[20,\"}\"],[15,\"` : ''}`\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "onClick",
+        "tag": "button",
+        "valueTokens": "[[19,\"{\"],[21,\"(\"],[22,\")\"],[39,\"=>\"],[80,\"setSelectedDate\"],[21,\"(\"],[80,\"selectedDate\"],[37,\"===\"],[80,\"key\"],[58,\"?\"],[11,\"''\"],[59,\":\"],[80,\"key\"],[22,\")\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "aria-hidden",
+        "tag": "i",
+        "valueTokens": "[[11,\"\\\"true\\\"\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "aria-hidden",
+        "tag": "div",
+        "valueTokens": "[[11,\"\\\"true\\\"\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "count",
+        "tag": "EvidenceTree",
+        "valueTokens": "[[19,\"{\"],[80,\"keptDecisions\"],[21,\"(\"],[80,\"data\"],[25,\".\"],[80,\"missions\"],[22,\")\"],[25,\".\"],[80,\"length\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "label",
+        "tag": "EvidenceTree",
+        "valueTokens": "[[19,\"{\"],[80,\"t\"],[21,\"(\"],[11,\"'Notebook'\"],[22,\")\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/pages/Focus.tsx",
+      "attribute": {
+        "name": "aria-hidden",
+        "tag": "figure",
+        "valueTokens": "[[11,\"\\\"true\\\"\"]]"
+      }
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "attribute": {
+        "name": "onError",
+        "tag": "img",
+        "valueTokens": "[[19,\"{\"],[21,\"(\"],[22,\")\"],[39,\"=>\"],[80,\"setFailed\"],[21,\"(\"],[112,\"true\"],[22,\")\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "attribute": {
+        "name": "aria-hidden",
+        "tag": "svg",
+        "valueTokens": "[[11,\"\\\"true\\\"\"]]"
+      }
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "attribute": {
+        "name": "type",
+        "tag": "button",
+        "valueTokens": "[[11,\"\\\"button\\\"\"]]"
+      }
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "attribute": {
+        "name": "aria-hidden",
+        "tag": "Headphones",
+        "valueTokens": "[[11,\"\\\"true\\\"\"]]"
+      }
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "attribute": {
+        "name": "disabled",
+        "tag": "button",
+        "valueTokens": "[[19,\"{\"],[54,\"!\"],[80,\"sound\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "attribute": {
+        "name": "aria-label",
+        "tag": "button",
+        "valueTokens": "[[19,\"{\"],[80,\"player\"],[25,\".\"],[80,\"playing\"],[58,\"?\"],[80,\"t\"],[21,\"(\"],[11,\"'Pause'\"],[22,\")\"],[59,\":\"],[80,\"t\"],[21,\"(\"],[11,\"'Play'\"],[22,\")\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "attribute": {
+        "name": "onClick",
+        "tag": "button",
+        "valueTokens": "[[19,\"{\"],[21,\"(\"],[22,\")\"],[39,\"=>\"],[21,\"(\"],[80,\"player\"],[25,\".\"],[80,\"playing\"],[58,\"?\"],[80,\"soundRoomPlayer\"],[25,\".\"],[80,\"pause\"],[21,\"(\"],[22,\")\"],[59,\":\"],[80,\"soundRoomPlayer\"],[25,\".\"],[80,\"resume\"],[21,\"(\"],[22,\")\"],[22,\")\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "attribute": {
+        "name": "aria-hidden",
+        "tag": "Timer",
+        "valueTokens": "[[11,\"\\\"true\\\"\"]]"
+      }
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "attribute": {
+        "name": "aria-label",
+        "tag": "section",
+        "valueTokens": "[[19,\"{\"],[80,\"t\"],[21,\"(\"],[11,\"'Sound player'\"],[22,\")\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "attribute": {
+        "name": "key",
+        "tag": "SoundScene",
+        "valueTokens": "[[19,\"{\"],[80,\"section\"],[25,\".\"],[80,\"id\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "attribute": {
+        "name": "key",
+        "tag": "SoundScene",
+        "valueTokens": "[[19,\"{\"],[80,\"section\"],[25,\".\"],[80,\"id\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "attribute": {
+        "name": "aria-hidden",
+        "tag": "Info",
+        "valueTokens": "[[11,\"\\\"true\\\"\"]]"
+      }
+    },
+    {
+      "file": "src/pages/Today.tsx",
+      "attribute": {
+        "name": "aria-hidden",
+        "tag": "div",
+        "valueTokens": "[[11,\"\\\"true\\\"\"]]"
+      }
+    },
+    {
+      "file": "src/pages/Today.tsx",
+      "attribute": {
+        "name": "aria-hidden",
+        "tag": "div",
+        "valueTokens": "[[11,\"\\\"true\\\"\"]]"
+      }
+    },
+    {
+      "file": "src/pages/Today.tsx",
+      "attribute": {
+        "name": "count",
+        "tag": "EvidenceTree",
+        "valueTokens": "[[19,\"{\"],[80,\"keptCount\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/pages/Today.tsx",
+      "attribute": {
+        "name": "label",
+        "tag": "EvidenceTree",
+        "valueTokens": "[[19,\"{\"],[80,\"growth\"],[25,\".\"],[80,\"growth\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/pages/Today.tsx",
+      "attribute": {
+        "name": "role",
+        "tag": "span",
+        "valueTokens": "[[11,\"\\\"progressbar\\\"\"]]"
+      }
+    },
+    {
+      "file": "src/pages/Today.tsx",
+      "attribute": {
+        "name": "aria-label",
+        "tag": "span",
+        "valueTokens": "[[19,\"{\"],[80,\"growth\"],[25,\".\"],[80,\"week\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/pages/Today.tsx",
+      "attribute": {
+        "name": "aria-valuenow",
+        "tag": "span",
+        "valueTokens": "[[19,\"{\"],[80,\"week\"],[25,\".\"],[80,\"last7\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/pages/Today.tsx",
+      "attribute": {
+        "name": "aria-valuemin",
+        "tag": "span",
+        "valueTokens": "[[19,\"{\"],[9,\"0\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/pages/Today.tsx",
+      "attribute": {
+        "name": "aria-valuemax",
+        "tag": "span",
+        "valueTokens": "[[19,\"{\"],[9,\"7\"],[20,\"}\"]]"
+      }
+    }
+  ],
+  "correctiveAddedAttributes": [
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "role",
+        "tag": "div",
+        "valueTokens": "[[11,\"\\\"region\\\"\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "aria-label",
+        "tag": "div",
+        "valueTokens": "[[19,\"{\"],[80,\"t\"],[21,\"(\"],[11,\"'Journal archive'\"],[22,\")\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "tabIndex",
+        "tag": "div",
+        "valueTokens": "[[19,\"{\"],[9,\"0\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "key",
+        "tag": "button",
+        "valueTokens": "[[19,\"{\"],[80,\"key\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "type",
+        "tag": "button",
+        "valueTokens": "[[11,\"\\\"button\\\"\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "aria-pressed",
+        "tag": "button",
+        "valueTokens": "[[19,\"{\"],[80,\"selectedDate\"],[37,\"===\"],[80,\"key\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "aria-current",
+        "tag": "button",
+        "valueTokens": "[[19,\"{\"],[80,\"key\"],[37,\"===\"],[80,\"today\"],[58,\"?\"],[11,\"'date'\"],[59,\":\"],[157,\"undefined\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "aria-label",
+        "tag": "button",
+        "valueTokens": "[[19,\"{\"],[16,\"`${\"],[80,\"dateLabel\"],[21,\"(\"],[80,\"key\"],[22,\")\"],[20,\"}\"],[80,\"$\"],[19,\"{\"],[80,\"dates\"],[25,\".\"],[80,\"has\"],[21,\"(\"],[80,\"key\"],[22,\")\"],[58,\"?\"],[16,\"` \u2014 ${\"],[80,\"t\"],[21,\"(\"],[11,\"'Has entries'\"],[22,\")\"],[20,\"}\"],[15,\"` : ''}`\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "onClick",
+        "tag": "button",
+        "valueTokens": "[[19,\"{\"],[21,\"(\"],[22,\")\"],[39,\"=>\"],[80,\"setSelectedDate\"],[21,\"(\"],[80,\"selectedDate\"],[37,\"===\"],[80,\"key\"],[58,\"?\"],[11,\"''\"],[59,\":\"],[80,\"key\"],[22,\")\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "attribute": {
+        "name": "aria-hidden",
+        "tag": "i",
+        "valueTokens": "[[11,\"\\\"true\\\"\"]]"
+      }
+    },
+    {
+      "file": "src/pages/Today.tsx",
+      "attribute": {
+        "name": "aria-hidden",
+        "tag": "div",
+        "valueTokens": "[[11,\"\\\"true\\\"\"]]"
+      }
+    },
+    {
+      "file": "src/pages/Today.tsx",
+      "attribute": {
+        "name": "role",
+        "tag": "span",
+        "valueTokens": "[[11,\"\\\"progressbar\\\"\"]]"
+      }
+    },
+    {
+      "file": "src/pages/Today.tsx",
+      "attribute": {
+        "name": "aria-label",
+        "tag": "span",
+        "valueTokens": "[[19,\"{\"],[80,\"growth\"],[25,\".\"],[80,\"week\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/pages/Today.tsx",
+      "attribute": {
+        "name": "aria-valuenow",
+        "tag": "span",
+        "valueTokens": "[[19,\"{\"],[80,\"week\"],[25,\".\"],[80,\"last7\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/pages/Today.tsx",
+      "attribute": {
+        "name": "aria-valuemin",
+        "tag": "span",
+        "valueTokens": "[[19,\"{\"],[9,\"0\"],[20,\"}\"]]"
+      }
+    },
+    {
+      "file": "src/pages/Today.tsx",
+      "attribute": {
+        "name": "aria-valuemax",
+        "tag": "span",
+        "valueTokens": "[[19,\"{\"],[9,\"7\"],[20,\"}\"]]"
+      }
+    }
+  ],
+  "removedExistingAttributes": [],
+  "correctiveRemovedAttributes": [],
+  "changedTsxFiles": [
+    {
+      "file": "src/components/FocusTimerHub.tsx",
+      "baselineSha256": "32a10d4ef52d659bcc5580eae42bc8311982ddf9598c6c1fe989b2bd17d7325a",
+      "reviewedSha256": "eca351bf48077bac9e89e0e03182beccb5d3a0a09290747ec703ee3284299d1c",
+      "existingAttributesRetained": true
+    },
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "baselineSha256": "a0008e1343fafca6665edd6d247831a2bb26f8f5fbf39abe356e8ee142c7bdd7",
+      "reviewedSha256": "8e6887288ee5c0bf16b7e0e6deb3d4d5041fcd8ceeb477be3cfb664d805b044c",
+      "existingAttributesRetained": true
+    },
+    {
+      "file": "src/pages/Coach.tsx",
+      "baselineSha256": "e8075ab437c354bdc2af21e8fe67139bc9101ed87306ddeaba6ab5a5ac20f467",
+      "reviewedSha256": "8813ba7630205c142aeb273ca606ee07ee50e7e19662131d2c41c7ed4d810e89",
+      "existingAttributesRetained": true
+    },
+    {
+      "file": "src/pages/Courses.tsx",
+      "baselineSha256": "a42d95ca0c02e51ffcb12ac9cd1bd6c971c37765214c94092e724550629a462a",
+      "reviewedSha256": "7535a230c309bffbd1476170ee9f25acbd2bfc0ec52635de77383ce55cfd4385",
+      "existingAttributesRetained": true
+    },
+    {
+      "file": "src/pages/Focus.tsx",
+      "baselineSha256": "526ba92a276accf0e85f7808fdb9ac6c1eeea64980616fbd85cf080ae5489db4",
+      "reviewedSha256": "7ac69a26d553032d1ff897c2bec63113e607da04d0791a3493b1080da3f7fe3b",
+      "existingAttributesRetained": true
+    },
+    {
+      "file": "src/pages/Notebook.tsx",
+      "baselineSha256": "ab74050eadfcaaef79a0a0fbd6f9ca34874deac06cf3707fda0219c0605d1889",
+      "reviewedSha256": "060a5fa4868232133bf6510c48a2662fad728b186c11d24f9b61dc7f0f5b73a2",
+      "existingAttributesRetained": true
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "baselineSha256": "e7ac3e6eaa6dc75bd83255a6bd760613064702ddd2a60fdc9266b508ecb8b7df",
+      "reviewedSha256": "b5be386314572f55030b5b95a2caac336b6582c4fca72f886b1ecad089caaf58",
+      "existingAttributesRetained": true
+    },
+    {
+      "file": "src/pages/Today.tsx",
+      "baselineSha256": "f48b20a7e01b57c017b65800c3547f546a7181a59b9e9bf9fbcc12f065c718ee",
+      "reviewedSha256": "c6a0a76eef52ec53812d3bfcdb7ec8d5e51b13575258b8478e7c932fcda7be7c",
+      "existingAttributesRetained": true
+    }
+  ],
+  "explicitControllerExceptions": [
+    {
+      "file": "src/components/notebook/JournalWorkspace.tsx",
+      "controller": "JournalWorkspace",
+      "baseline": {
+        "name": "JournalWorkspace",
+        "parameters": [
+          "[[19,\"{\"],[80,\"today\"],[20,\"}\"]]"
+        ],
+        "statementTokens": "[[87,\"const\"],[80,\"t\"],[64,\"=\"],[80,\"useT\"],[21,\"(\"],[22,\")\"],[27,\";\"],[87,\"const\"],[19,\"{\"],[80,\"data\"],[28,\",\"],[80,\"saveNotebookEntry\"],[28,\",\"],[80,\"updateDreamJournalEntry\"],[28,\",\"],[80,\"deleteNotebookEntry\"],[28,\",\"],[80,\"deleteDreamJournalEntry\"],[20,\"}\"],[64,\"=\"],[80,\"useApp\"],[21,\"(\"],[22,\")\"],[27,\";\"],[87,\"const\"],[19,\"{\"],[80,\"busy\"],[28,\",\"],[80,\"notice\"],[28,\",\"],[80,\"run\"],[28,\",\"],[80,\"setNotice\"],[20,\"}\"],[64,\"=\"],[80,\"useNotebookAction\"],[21,\"(\"],[22,\")\"],[27,\";\"],[87,\"const\"],[23,\"[\"],[80,\"editingRef\"],[28,\",\"],[80,\"setEditingRef\"],[24,\"]\"],[64,\"=\"],[80,\"useSessionDraft\"],[30,\"<\"],[19,\"{\"],[80,\"id\"],[59,\":\"],[154,\"string\"],[27,\";\"],[80,\"source\"],[59,\":\"],[11,\"'notebook'\"],[52,\"|\"],[11,\"'dream'\"],[20,\"}\"],[52,\"|\"],[106,\"null\"],[32,\">\"],[21,\"(\"],[11,\"'journal:editing'\"],[28,\",\"],[106,\"null\"],[22,\")\"],[27,\";\"],[87,\"const\"],[80,\"editing\"],[64,\"=\"],[80,\"data\"],[56,\"&&\"],[80,\"editingRef\"],[58,\"?\"],[80,\"getNotebookEntries\"],[21,\"(\"],[80,\"data\"],[28,\",\"],[19,\"{\"],[80,\"kinds\"],[59,\":\"],[23,\"[\"],[11,\"'journal'\"],[24,\"]\"],[20,\"}\"],[22,\")\"],[25,\".\"],[80,\"find\"],[21,\"(\"],[80,\"entry\"],[39,\"=>\"],[80,\"entry\"],[25,\".\"],[80,\"id\"],[37,\"===\"],[80,\"editingRef\"],[25,\".\"],[80,\"id\"],[56,\"&&\"],[80,\"entry\"],[25,\".\"],[80,\"source\"],[37,\"===\"],[80,\"editingRef\"],[25,\".\"],[80,\"source\"],[22,\")\"],[57,\"||\"],[106,\"null\"],[59,\":\"],[106,\"null\"],[27,\";\"],[87,\"const\"],[80,\"setEditing\"],[64,\"=\"],[21,\"(\"],[80,\"entry\"],[59,\":\"],[80,\"NotebookDisplayEntry\"],[52,\"|\"],[106,\"null\"],[22,\")\"],[39,\"=>\"],[80,\"setEditingRef\"],[21,\"(\"],[80,\"entry\"],[58,\"?\"],[19,\"{\"],[80,\"id\"],[59,\":\"],[80,\"entry\"],[25,\".\"],[80,\"id\"],[28,\",\"],[80,\"source\"],[59,\":\"],[80,\"entry\"],[25,\".\"],[80,\"source\"],[20,\"}\"],[59,\":\"],[106,\"null\"],[22,\")\"],[27,\";\"],[87,\"const\"],[23,\"[\"],[80,\"title\"],[28,\",\"],[80,\"setTitle\"],[24,\"]\"],[64,\"=\"],[80,\"useSessionDraft\"],[21,\"(\"],[11,\"'journal:title'\"],[28,\",\"],[11,\"''\"],[22,\")\"],[27,\";\"],[87,\"const\"],[23,\"[\"],[80,\"content\"],[28,\",\"],[80,\"setContent\"],[24,\"]\"],[64,\"=\"],[80,\"useSessionDraft\"],[21,\"(\"],[11,\"'journal:content'\"],[28,\",\"],[11,\"''\"],[22,\")\"],[27,\";\"],[87,\"const\"],[23,\"[\"],[80,\"mood\"],[28,\",\"],[80,\"setMood\"],[24,\"]\"],[64,\"=\"],[80,\"useSessionDraft\"],[21,\"(\"],[11,\"'journal:mood'\"],[28,\",\"],[11,\"''\"],[22,\")\"],[27,\";\"],[87,\"const\"],[23,\"[\"],[80,\"baseline\"],[28,\",\"],[80,\"setBaseline\"],[24,\"]\"],[64,\"=\"],[80,\"useSessionDraft\"],[21,\"(\"],[11,\"'journal:baseline'\"],[28,\",\"],[11,\"'\\\\u0000\\\\u0000'\"],[22,\")\"],[27,\";\"],[87,\"const\"],[23,\"[\"],[80,\"query\"],[28,\",\"],[80,\"setQuery\"],[24,\"]\"],[64,\"=\"],[80,\"useState\"],[21,\"(\"],[11,\"''\"],[22,\")\"],[27,\";\"],[87,\"const\"],[23,\"[\"],[80,\"selectedDate\"],[28,\",\"],[80,\"setSelectedDate\"],[24,\"]\"],[64,\"=\"],[80,\"useState\"],[21,\"(\"],[11,\"''\"],[22,\")\"],[27,\";\"],[87,\"const\"],[23,\"[\"],[80,\"showCalendar\"],[28,\",\"],[80,\"setShowCalendar\"],[24,\"]\"],[64,\"=\"],[80,\"useState\"],[21,\"(\"],[112,\"true\"],[22,\")\"],[27,\";\"],[87,\"const\"],[23,\"[\"],[80,\"validation\"],[28,\",\"],[80,\"setValidation\"],[24,\"]\"],[64,\"=\"],[80,\"useState\"],[21,\"(\"],[97,\"false\"],[22,\")\"],[27,\";\"],[87,\"const\"],[23,\"[\"],[80,\"photoOpen\"],[28,\",\"],[80,\"setPhotoOpen\"],[24,\"]\"],[64,\"=\"],[80,\"useState\"],[21,\"(\"],[97,\"false\"],[22,\")\"],[27,\";\"],[87,\"const\"],[80,\"nativePhotoDialog\"],[64,\"=\"],[114,\"typeof\"],[80,\"window\"],[38,\"!==\"],[11,\"'undefined'\"],[56,\"&&\"],[114,\"typeof\"],[80,\"window\"],[25,\".\"],[80,\"HTMLDialogElement\"],[38,\"!==\"],[11,\"'undefined'\"],[56,\"&&\"],[114,\"typeof\"],[80,\"window\"],[25,\".\"],[80,\"HTMLDialogElement\"],[25,\".\"],[80,\"prototype\"],[25,\".\"],[80,\"showModal\"],[37,\"===\"],[11,\"'function'\"],[56,\"&&\"],[114,\"typeof\"],[80,\"window\"],[25,\".\"],[80,\"HTMLDialogElement\"],[25,\".\"],[80,\"prototype\"],[25,\".\"],[80,\"close\"],[37,\"===\"],[11,\"'function'\"],[27,\";\"],[87,\"const\"],[80,\"photoDialog\"],[64,\"=\"],[80,\"useDialogAccessibility\"],[21,\"(\"],[80,\"photoOpen\"],[28,\",\"],[21,\"(\"],[22,\")\"],[39,\"=>\"],[80,\"setPhotoOpen\"],[21,\"(\"],[97,\"false\"],[22,\")\"],[28,\",\"],[80,\"nativePhotoDialog\"],[22,\")\"],[27,\";\"],[87,\"const\"],[80,\"PhotoDialogRoot\"],[64,\"=\"],[80,\"nativePhotoDialog\"],[58,\"?\"],[11,\"'dialog'\"],[59,\":\"],[11,\"'div'\"],[27,\";\"],[87,\"const\"],[80,\"displayText\"],[64,\"=\"],[21,\"(\"],[80,\"entry\"],[59,\":\"],[80,\"NotebookDisplayEntry\"],[28,\",\"],[80,\"field\"],[59,\":\"],[11,\"'title'\"],[52,\"|\"],[11,\"'content'\"],[52,\"|\"],[11,\"'dreamName'\"],[22,\")\"],[39,\"=>\"],[19,\"{\"],[87,\"const\"],[80,\"value\"],[64,\"=\"],[80,\"entry\"],[23,\"[\"],[80,\"field\"],[24,\"]\"],[57,\"||\"],[11,\"''\"],[27,\";\"],[107,\"return\"],[80,\"entry\"],[25,\".\"],[80,\"source\"],[37,\"===\"],[11,\"'dream'\"],[56,\"&&\"],[80,\"SEED_TEXT\"],[23,\"[\"],[80,\"entry\"],[25,\".\"],[80,\"id\"],[24,\"]\"],[29,\"?.\"],[23,\"[\"],[80,\"field\"],[24,\"]\"],[37,\"===\"],[80,\"value\"],[58,\"?\"],[80,\"t\"],[21,\"(\"],[80,\"value\"],[22,\")\"],[59,\":\"],[80,\"value\"],[27,\";\"],[20,\"}\"],[27,\";\"],[87,\"const\"],[80,\"dirty\"],[64,\"=\"],[16,\"`${\"],[80,\"title\"],[20,\"}\"],[0,\"\\\\\"],[80,\"u0000$\"],[19,\"{\"],[80,\"content\"],[20,\"}\"],[0,\"\\\\\"],[80,\"u0000$\"],[19,\"{\"],[80,\"mood\"],[20,\"}\"],[15,\"` !== baseline;\\nconst entries = useMemo(() => data ? getNotebookEntries(data, { kinds: ['journal'], dateKey: selectedDate || undefined }).filter(entry => !query.trim() || [entry.title, entry.content, entry.dreamName || '', displayText(entry, 'title'), displayText(entry, 'content'), displayText(entry, 'dreamName')].join(' ').toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())) : [], [data, query, selectedDate, t]);\\nconst dates = useMemo(() => new Set(data ? getNotebookEntries(data, { kinds: ['journal'] }).map(entry => entry.dateKey) : []), [data]);\\nuseEffect(() => {\\n    if (!dirty) return;\\n    const warn = (event: BeforeUnloadEvent) => { event.preventDefault(); event.returnValue = ''; };\\n    window.addEventListener('beforeunload', warn);\\n    return () => window.removeEventListener('beforeunload', warn);\\n  }, [dirty]);\\nif (!data) return null;\\nconst reset = () => { setEditing(null); setTitle(''); setContent(''); setMood(''); setBaseline('\\\\u0000\\\\u0000'); setValidation(false); };\\nconst canReplace = () => !busy && (!dirty || window.confirm(t('Discard your unsaved changes?')));\\nconst openEntry = (entry: NotebookDisplayEntry) => {\\n    if (editing?.viewId === entry.viewId || !canReplace()) return;\\n    const shownTitle = displayText(entry, 'title');\\n    const shownContent = displayText(entry, 'content');\\n    setEditing(entry); setTitle(shownTitle); setContent(shownContent); setMood(entry.mood || '');\\n    setBaseline(`\"],[80,\"$\"],[19,\"{\"],[80,\"shownTitle\"],[20,\"}\"],[0,\"\\\\\"],[80,\"u0000$\"],[19,\"{\"],[80,\"shownContent\"],[20,\"}\"],[0,\"\\\\\"],[80,\"u0000$\"],[19,\"{\"],[80,\"entry\"],[25,\".\"],[80,\"mood\"],[57,\"||\"],[11,\"''\"],[20,\"}\"],[15,\"`); setValidation(false); setNotice(null);\\n    document.getElementById('notebook-journal-title')?.scrollIntoView({ behavior: 'auto', block: 'center' });\\n  };\\nconst usePrompt = (prompt: string) => {\\n    // A prompt starts a new entry; never overwrite the title of one being edited.\\n    if (editing) { if (!canReplace()) return; reset(); setNotice(null); }\\n    setTitle(prompt);\\n    document.getElementById('notebook-journal-content')?.focus();\\n  };\\nconst save = async (event: React.FormEvent) => {\\n    event.preventDefault();\\n    if (editingRef && !editing) { setNotice({ error: true, message: t('This notebook record no longer exists.') }); return; }\\n    if (!content.trim()) { setValidation(true); document.getElementById('notebook-journal-content')?.focus(); return; }\\n    const result = await run(async () => {\\n      if (editing?.source === 'dream') {\\n        await updateDreamJournalEntry(editing.id, { title: title === baseline.split('\\\\u0000')[0] ? editing.title : title, content: content === baseline.split('\\\\u0000')[1] ? editing.content : content, mood: (mood || undefined) as DreamJournalEntry['mood'] });\\n        return true;\\n      }\\n      return saveNotebookEntry({ id: editing?.id, kind: 'journal', title, content, mood: (mood || undefined) as NotebookMood | undefined });\\n    });\\n    if (result !== undefined) reset();\\n  };\\nconst remove = async () => {\\n    if (!editing || busy || !window.confirm(t('Delete this entry? This cannot be undone.'))) return;\\n    const result = await run(async () => { if (editing.source === 'dream') await deleteDreamJournalEntry(editing.id); else await deleteNotebookEntry(editing.id); return true; }, 'Entry deleted.');\\n    if (result) reset();\\n  };\"]]",
+        "statementTokensSha256": "4b3888e4923a81b289105b542682c8e761fa224102a28b80fb14800310284a19",
+        "statementCount": 30
+      },
+      "reviewed": {
+        "name": "JournalWorkspace",
+        "parameters": [
+          "[[19,\"{\"],[80,\"today\"],[20,\"}\"]]"
+        ],
+        "statementTokens": "[[87,\"const\"],[80,\"t\"],[64,\"=\"],[80,\"useT\"],[21,\"(\"],[22,\")\"],[27,\";\"],[87,\"const\"],[19,\"{\"],[80,\"data\"],[28,\",\"],[80,\"saveNotebookEntry\"],[28,\",\"],[80,\"updateDreamJournalEntry\"],[28,\",\"],[80,\"deleteNotebookEntry\"],[28,\",\"],[80,\"deleteDreamJournalEntry\"],[20,\"}\"],[64,\"=\"],[80,\"useApp\"],[21,\"(\"],[22,\")\"],[27,\";\"],[87,\"const\"],[19,\"{\"],[80,\"busy\"],[28,\",\"],[80,\"notice\"],[28,\",\"],[80,\"run\"],[28,\",\"],[80,\"setNotice\"],[20,\"}\"],[64,\"=\"],[80,\"useNotebookAction\"],[21,\"(\"],[22,\")\"],[27,\";\"],[87,\"const\"],[23,\"[\"],[80,\"editingRef\"],[28,\",\"],[80,\"setEditingRef\"],[24,\"]\"],[64,\"=\"],[80,\"useSessionDraft\"],[30,\"<\"],[19,\"{\"],[80,\"id\"],[59,\":\"],[154,\"string\"],[27,\";\"],[80,\"source\"],[59,\":\"],[11,\"'notebook'\"],[52,\"|\"],[11,\"'dream'\"],[20,\"}\"],[52,\"|\"],[106,\"null\"],[32,\">\"],[21,\"(\"],[11,\"'journal:editing'\"],[28,\",\"],[106,\"null\"],[22,\")\"],[27,\";\"],[87,\"const\"],[80,\"editing\"],[64,\"=\"],[80,\"data\"],[56,\"&&\"],[80,\"editingRef\"],[58,\"?\"],[80,\"getNotebookEntries\"],[21,\"(\"],[80,\"data\"],[28,\",\"],[19,\"{\"],[80,\"kinds\"],[59,\":\"],[23,\"[\"],[11,\"'journal'\"],[24,\"]\"],[20,\"}\"],[22,\")\"],[25,\".\"],[80,\"find\"],[21,\"(\"],[80,\"entry\"],[39,\"=>\"],[80,\"entry\"],[25,\".\"],[80,\"id\"],[37,\"===\"],[80,\"editingRef\"],[25,\".\"],[80,\"id\"],[56,\"&&\"],[80,\"entry\"],[25,\".\"],[80,\"source\"],[37,\"===\"],[80,\"editingRef\"],[25,\".\"],[80,\"source\"],[22,\")\"],[57,\"||\"],[106,\"null\"],[59,\":\"],[106,\"null\"],[27,\";\"],[87,\"const\"],[80,\"setEditing\"],[64,\"=\"],[21,\"(\"],[80,\"entry\"],[59,\":\"],[80,\"NotebookDisplayEntry\"],[52,\"|\"],[106,\"null\"],[22,\")\"],[39,\"=>\"],[80,\"setEditingRef\"],[21,\"(\"],[80,\"entry\"],[58,\"?\"],[19,\"{\"],[80,\"id\"],[59,\":\"],[80,\"entry\"],[25,\".\"],[80,\"id\"],[28,\",\"],[80,\"source\"],[59,\":\"],[80,\"entry\"],[25,\".\"],[80,\"source\"],[20,\"}\"],[59,\":\"],[106,\"null\"],[22,\")\"],[27,\";\"],[87,\"const\"],[23,\"[\"],[80,\"title\"],[28,\",\"],[80,\"setTitle\"],[24,\"]\"],[64,\"=\"],[80,\"useSessionDraft\"],[21,\"(\"],[11,\"'journal:title'\"],[28,\",\"],[11,\"''\"],[22,\")\"],[27,\";\"],[87,\"const\"],[23,\"[\"],[80,\"content\"],[28,\",\"],[80,\"setContent\"],[24,\"]\"],[64,\"=\"],[80,\"useSessionDraft\"],[21,\"(\"],[11,\"'journal:content'\"],[28,\",\"],[11,\"''\"],[22,\")\"],[27,\";\"],[87,\"const\"],[23,\"[\"],[80,\"mood\"],[28,\",\"],[80,\"setMood\"],[24,\"]\"],[64,\"=\"],[80,\"useSessionDraft\"],[21,\"(\"],[11,\"'journal:mood'\"],[28,\",\"],[11,\"''\"],[22,\")\"],[27,\";\"],[87,\"const\"],[23,\"[\"],[80,\"baseline\"],[28,\",\"],[80,\"setBaseline\"],[24,\"]\"],[64,\"=\"],[80,\"useSessionDraft\"],[21,\"(\"],[11,\"'journal:baseline'\"],[28,\",\"],[11,\"'\\\\u0000\\\\u0000'\"],[22,\")\"],[27,\";\"],[87,\"const\"],[23,\"[\"],[80,\"query\"],[28,\",\"],[80,\"setQuery\"],[24,\"]\"],[64,\"=\"],[80,\"useState\"],[21,\"(\"],[11,\"''\"],[22,\")\"],[27,\";\"],[87,\"const\"],[23,\"[\"],[80,\"selectedDate\"],[28,\",\"],[80,\"setSelectedDate\"],[24,\"]\"],[64,\"=\"],[80,\"useState\"],[21,\"(\"],[11,\"''\"],[22,\")\"],[27,\";\"],[87,\"const\"],[23,\"[\"],[80,\"showCalendar\"],[28,\",\"],[80,\"setShowCalendar\"],[24,\"]\"],[64,\"=\"],[80,\"useState\"],[21,\"(\"],[97,\"false\"],[22,\")\"],[27,\";\"],[87,\"const\"],[23,\"[\"],[80,\"validation\"],[28,\",\"],[80,\"setValidation\"],[24,\"]\"],[64,\"=\"],[80,\"useState\"],[21,\"(\"],[97,\"false\"],[22,\")\"],[27,\";\"],[87,\"const\"],[23,\"[\"],[80,\"photoOpen\"],[28,\",\"],[80,\"setPhotoOpen\"],[24,\"]\"],[64,\"=\"],[80,\"useState\"],[21,\"(\"],[97,\"false\"],[22,\")\"],[27,\";\"],[87,\"const\"],[80,\"nativePhotoDialog\"],[64,\"=\"],[114,\"typeof\"],[80,\"window\"],[38,\"!==\"],[11,\"'undefined'\"],[56,\"&&\"],[114,\"typeof\"],[80,\"window\"],[25,\".\"],[80,\"HTMLDialogElement\"],[38,\"!==\"],[11,\"'undefined'\"],[56,\"&&\"],[114,\"typeof\"],[80,\"window\"],[25,\".\"],[80,\"HTMLDialogElement\"],[25,\".\"],[80,\"prototype\"],[25,\".\"],[80,\"showModal\"],[37,\"===\"],[11,\"'function'\"],[56,\"&&\"],[114,\"typeof\"],[80,\"window\"],[25,\".\"],[80,\"HTMLDialogElement\"],[25,\".\"],[80,\"prototype\"],[25,\".\"],[80,\"close\"],[37,\"===\"],[11,\"'function'\"],[27,\";\"],[87,\"const\"],[80,\"photoDialog\"],[64,\"=\"],[80,\"useDialogAccessibility\"],[21,\"(\"],[80,\"photoOpen\"],[28,\",\"],[21,\"(\"],[22,\")\"],[39,\"=>\"],[80,\"setPhotoOpen\"],[21,\"(\"],[97,\"false\"],[22,\")\"],[28,\",\"],[80,\"nativePhotoDialog\"],[22,\")\"],[27,\";\"],[87,\"const\"],[80,\"PhotoDialogRoot\"],[64,\"=\"],[80,\"nativePhotoDialog\"],[58,\"?\"],[11,\"'dialog'\"],[59,\":\"],[11,\"'div'\"],[27,\";\"],[87,\"const\"],[80,\"displayText\"],[64,\"=\"],[21,\"(\"],[80,\"entry\"],[59,\":\"],[80,\"NotebookDisplayEntry\"],[28,\",\"],[80,\"field\"],[59,\":\"],[11,\"'title'\"],[52,\"|\"],[11,\"'content'\"],[52,\"|\"],[11,\"'dreamName'\"],[22,\")\"],[39,\"=>\"],[19,\"{\"],[87,\"const\"],[80,\"value\"],[64,\"=\"],[80,\"entry\"],[23,\"[\"],[80,\"field\"],[24,\"]\"],[57,\"||\"],[11,\"''\"],[27,\";\"],[107,\"return\"],[80,\"entry\"],[25,\".\"],[80,\"source\"],[37,\"===\"],[11,\"'dream'\"],[56,\"&&\"],[80,\"SEED_TEXT\"],[23,\"[\"],[80,\"entry\"],[25,\".\"],[80,\"id\"],[24,\"]\"],[29,\"?.\"],[23,\"[\"],[80,\"field\"],[24,\"]\"],[37,\"===\"],[80,\"value\"],[58,\"?\"],[80,\"t\"],[21,\"(\"],[80,\"value\"],[22,\")\"],[59,\":\"],[80,\"value\"],[27,\";\"],[20,\"}\"],[27,\";\"],[87,\"const\"],[80,\"dirty\"],[64,\"=\"],[16,\"`${\"],[80,\"title\"],[20,\"}\"],[0,\"\\\\\"],[80,\"u0000$\"],[19,\"{\"],[80,\"content\"],[20,\"}\"],[0,\"\\\\\"],[80,\"u0000$\"],[19,\"{\"],[80,\"mood\"],[20,\"}\"],[15,\"` !== baseline;\\nconst entries = useMemo(() => data ? getNotebookEntries(data, { kinds: ['journal'], dateKey: selectedDate || undefined }).filter(entry => !query.trim() || [entry.title, entry.content, entry.dreamName || '', displayText(entry, 'title'), displayText(entry, 'content'), displayText(entry, 'dreamName')].join(' ').toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())) : [], [data, query, selectedDate, t]);\\nconst dates = useMemo(() => new Set(data ? getNotebookEntries(data, { kinds: ['journal'] }).map(entry => entry.dateKey) : []), [data]);\\nuseEffect(() => {\\n    if (!dirty) return;\\n    const warn = (event: BeforeUnloadEvent) => { event.preventDefault(); event.returnValue = ''; };\\n    window.addEventListener('beforeunload', warn);\\n    return () => window.removeEventListener('beforeunload', warn);\\n  }, [dirty]);\\nif (!data) return null;\\nconst reset = () => { setEditing(null); setTitle(''); setContent(''); setMood(''); setBaseline('\\\\u0000\\\\u0000'); setValidation(false); };\\nconst canReplace = () => !busy && (!dirty || window.confirm(t('Discard your unsaved changes?')));\\nconst openEntry = (entry: NotebookDisplayEntry) => {\\n    if (editing?.viewId === entry.viewId || !canReplace()) return;\\n    const shownTitle = displayText(entry, 'title');\\n    const shownContent = displayText(entry, 'content');\\n    setEditing(entry); setTitle(shownTitle); setContent(shownContent); setMood(entry.mood || '');\\n    setBaseline(`\"],[80,\"$\"],[19,\"{\"],[80,\"shownTitle\"],[20,\"}\"],[0,\"\\\\\"],[80,\"u0000$\"],[19,\"{\"],[80,\"shownContent\"],[20,\"}\"],[0,\"\\\\\"],[80,\"u0000$\"],[19,\"{\"],[80,\"entry\"],[25,\".\"],[80,\"mood\"],[57,\"||\"],[11,\"''\"],[20,\"}\"],[15,\"`); setValidation(false); setNotice(null);\\n    document.getElementById('notebook-journal-title')?.scrollIntoView({ behavior: 'auto', block: 'center' });\\n  };\\nconst usePrompt = (prompt: string) => {\\n    // A prompt starts a new entry; never overwrite the title of one being edited.\\n    if (editing) { if (!canReplace()) return; reset(); setNotice(null); }\\n    setTitle(prompt);\\n    document.getElementById('notebook-journal-content')?.focus();\\n  };\\nconst save = async (event: React.FormEvent) => {\\n    event.preventDefault();\\n    if (editingRef && !editing) { setNotice({ error: true, message: t('This notebook record no longer exists.') }); return; }\\n    if (!content.trim()) { setValidation(true); document.getElementById('notebook-journal-content')?.focus(); return; }\\n    const result = await run(async () => {\\n      if (editing?.source === 'dream') {\\n        await updateDreamJournalEntry(editing.id, { title: title === baseline.split('\\\\u0000')[0] ? editing.title : title, content: content === baseline.split('\\\\u0000')[1] ? editing.content : content, mood: (mood || undefined) as DreamJournalEntry['mood'] });\\n        return true;\\n      }\\n      return saveNotebookEntry({ id: editing?.id, kind: 'journal', title, content, mood: (mood || undefined) as NotebookMood | undefined });\\n    });\\n    if (result !== undefined) reset();\\n  };\\nconst remove = async () => {\\n    if (!editing || busy || !window.confirm(t('Delete this entry? This cannot be undone.'))) return;\\n    const result = await run(async () => { if (editing.source === 'dream') await deleteDreamJournalEntry(editing.id); else await deleteNotebookEntry(editing.id); return true; }, 'Entry deleted.');\\n    if (result) reset();\\n  };\"]]",
+        "statementTokensSha256": "ab4a04f515b1b9e5f76961f80610a204e71c00c57f79b59dc88800670404f79a",
+        "statementCount": 30
+      },
+      "exactTokenDelta": [
+        {
+          "opcode": "replace",
+          "baselineTokens": [
+            [
+              112,
+              "true"
+            ]
+          ],
+          "reviewedTokens": [
+            [
+              97,
+              "false"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "controller": "SoundScene",
+      "baseline": {
+        "name": "SoundScene",
+        "parameters": [
+          "[[19,\"{\"],[80,\"scene\"],[28,\",\"],[80,\"className\"],[64,\"=\"],[11,\"''\"],[20,\"}\"]]"
+        ],
+        "statementTokens": "[]",
+        "statementTokensSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "statementCount": 0
+      },
+      "reviewed": {
+        "name": "SoundScene",
+        "parameters": [
+          "[[19,\"{\"],[80,\"scene\"],[28,\",\"],[80,\"className\"],[64,\"=\"],[11,\"''\"],[28,\",\"],[80,\"eager\"],[64,\"=\"],[97,\"false\"],[20,\"}\"]]"
+        ],
+        "statementTokens": "[[87,\"const\"],[23,\"[\"],[80,\"failed\"],[28,\",\"],[80,\"setFailed\"],[24,\"]\"],[64,\"=\"],[80,\"useState\"],[21,\"(\"],[97,\"false\"],[22,\")\"],[27,\";\"],[80,\"useEffect\"],[21,\"(\"],[21,\"(\"],[22,\")\"],[39,\"=>\"],[80,\"setFailed\"],[21,\"(\"],[97,\"false\"],[22,\")\"],[28,\",\"],[23,\"[\"],[80,\"scene\"],[24,\"]\"],[22,\")\"],[27,\";\"]]",
+        "statementTokensSha256": "a4300f9e732fbbdd34efa3a32b1db2a86a192ac73254e7bc7a86a0102cff6f33",
+        "statementCount": 2
+      }
+    },
+    {
+      "file": "src/pages/SoundRoom.tsx",
+      "controller": "PlayerBar",
+      "baseline": {
+        "name": "PlayerBar",
+        "parameters": [],
+        "statementTokens": "[[87,\"const\"],[80,\"t\"],[64,\"=\"],[80,\"useT\"],[21,\"(\"],[22,\")\"],[27,\";\"],[87,\"const\"],[80,\"player\"],[64,\"=\"],[80,\"usePlayer\"],[21,\"(\"],[22,\")\"],[27,\";\"],[87,\"const\"],[23,\"[\"],[80,\"volume\"],[28,\",\"],[80,\"setVolume\"],[24,\"]\"],[64,\"=\"],[80,\"useState\"],[21,\"(\"],[21,\"(\"],[22,\")\"],[39,\"=>\"],[80,\"soundRoomPlayer\"],[25,\".\"],[80,\"getVolume\"],[21,\"(\"],[22,\")\"],[22,\")\"],[27,\";\"],[80,\"useTick\"],[21,\"(\"],[80,\"player\"],[25,\".\"],[80,\"playing\"],[56,\"&&\"],[80,\"player\"],[25,\".\"],[80,\"endsAt\"],[38,\"!==\"],[106,\"null\"],[28,\",\"],[9,\"1000\"],[22,\")\"],[27,\";\"],[87,\"const\"],[80,\"sound\"],[64,\"=\"],[80,\"soundForTrack\"],[21,\"(\"],[80,\"player\"],[25,\".\"],[80,\"track\"],[22,\")\"],[27,\";\"],[87,\"const\"],[80,\"scene\"],[64,\"=\"],[80,\"SECTION_SCENES\"],[23,\"[\"],[80,\"SOUND_ROOM_SECTIONS\"],[25,\".\"],[80,\"find\"],[21,\"(\"],[21,\"(\"],[80,\"item\"],[22,\")\"],[39,\"=>\"],[80,\"item\"],[25,\".\"],[80,\"sounds\"],[25,\".\"],[80,\"some\"],[21,\"(\"],[21,\"(\"],[80,\"entry\"],[22,\")\"],[39,\"=>\"],[80,\"entry\"],[25,\".\"],[80,\"track\"],[37,\"===\"],[80,\"player\"],[25,\".\"],[80,\"track\"],[22,\")\"],[22,\")\"],[29,\"?.\"],[80,\"id\"],[61,\"??\"],[11,\"'relax'\"],[24,\"]\"],[27,\";\"],[87,\"const\"],[80,\"volumeId\"],[64,\"=\"],[80,\"useId\"],[21,\"(\"],[22,\")\"],[27,\";\"],[87,\"const\"],[80,\"timerId\"],[64,\"=\"],[80,\"useId\"],[21,\"(\"],[22,\")\"],[27,\";\"],[87,\"const\"],[80,\"remaining\"],[64,\"=\"],[80,\"player\"],[25,\".\"],[80,\"playing\"],[56,\"&&\"],[80,\"player\"],[25,\".\"],[80,\"endsAt\"],[38,\"!==\"],[106,\"null\"],[58,\"?\"],[80,\"player\"],[25,\".\"],[80,\"endsAt\"],[41,\"-\"],[80,\"Date\"],[25,\".\"],[80,\"now\"],[21,\"(\"],[22,\")\"],[59,\":\"],[80,\"player\"],[25,\".\"],[80,\"pausedRemainingMs\"],[27,\";\"],[121,\"let\"],[80,\"status\"],[59,\":\"],[154,\"string\"],[27,\";\"],[101,\"if\"],[21,\"(\"],[54,\"!\"],[80,\"sound\"],[22,\")\"],[80,\"status\"],[64,\"=\"],[80,\"t\"],[21,\"(\"],[11,\"'Choose a sound to begin'\"],[22,\")\"],[27,\";\"],[93,\"else\"],[101,\"if\"],[21,\"(\"],[80,\"remaining\"],[38,\"!==\"],[106,\"null\"],[56,\"&&\"],[80,\"remaining\"],[32,\">\"],[9,\"0\"],[22,\")\"],[80,\"status\"],[64,\"=\"],[80,\"t\"],[21,\"(\"],[11,\"'{time} left'\"],[28,\",\"],[19,\"{\"],[80,\"time\"],[59,\":\"],[80,\"formatRemaining\"],[21,\"(\"],[80,\"remaining\"],[22,\")\"],[20,\"}\"],[22,\")\"],[27,\";\"],[93,\"else\"],[101,\"if\"],[21,\"(\"],[80,\"player\"],[25,\".\"],[80,\"playing\"],[22,\")\"],[80,\"status\"],[64,\"=\"],[80,\"t\"],[21,\"(\"],[11,\"'Playing \u00b7 no timer'\"],[22,\")\"],[27,\";\"],[93,\"else\"],[80,\"status\"],[64,\"=\"],[80,\"t\"],[21,\"(\"],[11,\"'Paused'\"],[22,\")\"],[27,\";\"]]",
+        "statementTokensSha256": "f4133795cf87f5c34ab9c5b48659df4f6cdcf959387db26407347616463dfdc2",
+        "statementCount": 11
+      },
+      "reviewed": {
+        "name": "PlayerBar",
+        "parameters": [],
+        "statementTokens": "[[87,\"const\"],[80,\"t\"],[64,\"=\"],[80,\"useT\"],[21,\"(\"],[22,\")\"],[27,\";\"],[87,\"const\"],[80,\"player\"],[64,\"=\"],[80,\"usePlayer\"],[21,\"(\"],[22,\")\"],[27,\";\"],[87,\"const\"],[23,\"[\"],[80,\"volume\"],[28,\",\"],[80,\"setVolume\"],[24,\"]\"],[64,\"=\"],[80,\"useState\"],[21,\"(\"],[21,\"(\"],[22,\")\"],[39,\"=>\"],[80,\"soundRoomPlayer\"],[25,\".\"],[80,\"getVolume\"],[21,\"(\"],[22,\")\"],[22,\")\"],[27,\";\"],[80,\"useTick\"],[21,\"(\"],[80,\"player\"],[25,\".\"],[80,\"playing\"],[56,\"&&\"],[80,\"player\"],[25,\".\"],[80,\"endsAt\"],[38,\"!==\"],[106,\"null\"],[28,\",\"],[9,\"1000\"],[22,\")\"],[27,\";\"],[87,\"const\"],[80,\"sound\"],[64,\"=\"],[80,\"soundForTrack\"],[21,\"(\"],[80,\"player\"],[25,\".\"],[80,\"track\"],[22,\")\"],[27,\";\"],[87,\"const\"],[80,\"scene\"],[64,\"=\"],[80,\"SECTION_SCENES\"],[23,\"[\"],[80,\"SOUND_ROOM_SECTIONS\"],[25,\".\"],[80,\"find\"],[21,\"(\"],[21,\"(\"],[80,\"item\"],[22,\")\"],[39,\"=>\"],[80,\"item\"],[25,\".\"],[80,\"sounds\"],[25,\".\"],[80,\"some\"],[21,\"(\"],[21,\"(\"],[80,\"entry\"],[22,\")\"],[39,\"=>\"],[80,\"entry\"],[25,\".\"],[80,\"track\"],[37,\"===\"],[80,\"player\"],[25,\".\"],[80,\"track\"],[22,\")\"],[22,\")\"],[29,\"?.\"],[80,\"id\"],[61,\"??\"],[11,\"'relax'\"],[24,\"]\"],[27,\";\"],[87,\"const\"],[80,\"volumeId\"],[64,\"=\"],[80,\"useId\"],[21,\"(\"],[22,\")\"],[27,\";\"],[87,\"const\"],[80,\"timerId\"],[64,\"=\"],[80,\"useId\"],[21,\"(\"],[22,\")\"],[27,\";\"],[87,\"const\"],[80,\"remaining\"],[64,\"=\"],[80,\"player\"],[25,\".\"],[80,\"playing\"],[56,\"&&\"],[80,\"player\"],[25,\".\"],[80,\"endsAt\"],[38,\"!==\"],[106,\"null\"],[58,\"?\"],[80,\"player\"],[25,\".\"],[80,\"endsAt\"],[41,\"-\"],[80,\"Date\"],[25,\".\"],[80,\"now\"],[21,\"(\"],[22,\")\"],[59,\":\"],[80,\"player\"],[25,\".\"],[80,\"pausedRemainingMs\"],[27,\";\"],[121,\"let\"],[80,\"status\"],[59,\":\"],[154,\"string\"],[27,\";\"],[101,\"if\"],[21,\"(\"],[54,\"!\"],[80,\"sound\"],[22,\")\"],[80,\"status\"],[64,\"=\"],[80,\"t\"],[21,\"(\"],[11,\"'Choose a sound to begin'\"],[22,\")\"],[27,\";\"],[93,\"else\"],[101,\"if\"],[21,\"(\"],[80,\"remaining\"],[38,\"!==\"],[106,\"null\"],[56,\"&&\"],[80,\"remaining\"],[32,\">\"],[9,\"0\"],[22,\")\"],[80,\"status\"],[64,\"=\"],[80,\"t\"],[21,\"(\"],[11,\"'{time} left'\"],[28,\",\"],[19,\"{\"],[80,\"time\"],[59,\":\"],[80,\"formatRemaining\"],[21,\"(\"],[80,\"remaining\"],[22,\")\"],[20,\"}\"],[22,\")\"],[27,\";\"],[93,\"else\"],[101,\"if\"],[21,\"(\"],[80,\"player\"],[25,\".\"],[80,\"playing\"],[22,\")\"],[80,\"status\"],[64,\"=\"],[80,\"t\"],[21,\"(\"],[11,\"'Playing \u00b7 no timer'\"],[22,\")\"],[27,\";\"],[93,\"else\"],[80,\"status\"],[64,\"=\"],[80,\"t\"],[21,\"(\"],[11,\"'Paused'\"],[22,\")\"],[27,\";\"],[101,\"if\"],[21,\"(\"],[54,\"!\"],[80,\"player\"],[25,\".\"],[80,\"track\"],[22,\")\"],[107,\"return\"],[106,\"null\"],[27,\";\"]]",
+        "statementTokensSha256": "1a56c4c56eedaa14e41acd5706a75056d7a82eb008aca6a987bb0fdfd7736433",
+        "statementCount": 12
+      }
+    }
+  ],
+  "explicitSourceProofs": [
+    {
+      "scope": "Corrective Journal controller",
+      "assessment": "Only existing controller token change is showCalendar useState true \u2192 false, explicitly authorized. No other non-JSX statement, parameter, hook, photo effect, draft/edit/save/remove callback change."
+    },
+    {
+      "scope": "Seven date archive controls",
+      "assessment": "Seven real local dates are constructed at noon from Notebook today and decremented with setDate. dateLabel already uses local noon and current app locale. Keys/aria-label/current-date/pressed state and has-entries markers use actual dates/entries. Button only toggles selectedDate; existing memoized archive query consumes it. Unsaved title/content/mood/editingRef/baseline remain unchanged."
+    },
+    {
+      "scope": "Writing date and protection",
+      "assessment": "Archive selection is not passed to saveNotebookEntry or updateDreamJournalEntry; existing service determines new-entry writing date and retains original edited-entry date. These service bytes are identical. Calendar clear action, search filter and confirmation-before-replace/delete remain."
+    },
+    {
+      "scope": "Calendar accessibility",
+      "assessment": "Existing calendar71 keyboard overflow region/focus/hint and labels unchanged; optional full month still uses same NotebookCalendar. New week region is named, keyboard-focusable and horizontally scrollable; 44px minimum day controls, selection state and narrow-width hint are present."
+    },
+    {
+      "scope": "Corrective Today",
+      "assessment": "Component controller statements and parameters are token-identical. Existing decision/reward/planning/start and GrowthWeek/Tree evidence callbacks retained; JSX ordering now follows displayed decision/week/tree/course order. Additional keptCount/last7 are actual unchanged momentum data. last7 is counted over exactly seven actual date buckets, bounded 0\u20137; ring ARIA values match."
+    },
+    {
+      "scope": "Earlier first-use/course/voice fixes",
+      "assessment": "Existing services/store/data/audio runtime/native/workflow/CSP protected files and 160 MP3s are unchanged; FocusTimerHub real timer/reward/start controllers are unchanged; course start/resume/workbook/quiz callbacks survive; Journal native/fallback photo logic survives with only calendar default explicitly changed."
+    },
+    {
+      "scope": "Sound player safety",
+      "assessment": "The corrective eight-file delta changes no Sound JSX/controller. Prior after-all-hooks empty-bar return and equivalent pause/resume service controls remain. Timer4a8 width:auto/min-width118 remains. SVGs are static local decorative assets without scripts, event attrs, external refs or animation."
+    },
+    {
+      "scope": "Source versus visual approval",
+      "assessment": "The audit finds no P0\u2013P3 functional/protection source issue. Strict visual gate is held for Sound artwork dependency; original static art is not asserted to be the supplied source photographs. No visual approval or deployment follows."
+    }
+  ],
+  "method": [
+    "Same TypeScript/scanner parameter/body and separate exact callback/control/ARIA multiset inventory as immutable baseline.",
+    "Outer JSX expressions are normalized for presentation-only early-return comparisons; JSX handler/control attrs are not normalized away.",
+    "Journal controller token comparison independently confirms exactly one Boolean initializer change; new date filter actions remain explicit JSX callbacks."
+  ],
+  "findings": [],
+  "appSourceEdited": false,
+  "newTestsOrBuildsRun": false,
+  "visualApproval": false,
+  "productionDeployment": false,
+  "limits": [
+    "Physical compiled output parity rebind is pending parent aggregate completion; frozen source/log/manifest is already verified separately.",
+    "Browser interaction, clipping and reference fidelity are separate evidence; Sound visual dependency remains held."
+  ]
+}

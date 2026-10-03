@@ -1,0 +1,25 @@
+{
+  "sourceFiles": {
+    "src/main.tsx": "0814637533b0ea42e813e4275a3602a7ea0ff2367ad3bf75a27201a4ce2c2cbc",
+    "src/services/purchaseIdentityBinding.ts": "9635abcc38a61f1893e2222e82ceea5038cca03cbecb15df1f76b98421d19d39",
+    "src/services/cloudSync.ts": "50a24f6690106cebbc1b38dfabb0edb84d4ca34f28b26dde4b919537b62a4bde",
+    "src/services/purchases.ts": "20166152294fdaba6c351e282c1b738a47b775256677030af518a417e1da257d",
+    "src/pages/Upgrade.tsx": "5347a3452b252fce1050b0ffaa080e1429984b62e2b3365592309a44ceb78998",
+    "src/services/entitlements.ts": "ee4a9c923f94154d4a3e4809980929474ab3289929d56ee067790010fa691219"
+  },
+  "evidenceFiles": {
+    "oda-main-identity-preflight.mjs": "4b1ff872a0ecdcfa171e03267d9d77164ac2360062957449ef1e65748d745fbe",
+    "oda-main-identity-after-fix.json": "a0a07187d034b38af7017fd9965083ed0ce146353b8f6802c5c8f405b0a452e3",
+    "oda-binder-independent.mjs": "d6da11ce701957362b0372d965b2f79ecfdc5af38cd0a272cdaea1b7562913e6",
+    "oda-binder-after-fix.json": "a1e1140240c598428cb466bc566f7be76b08dd8b2f5263306fe550a1d003f6b6",
+    "oda-binder-returned-error-before-fix-observation.json": "cca49267e0da87657af1212de093a3dfce430db6b53b8b76d073e7ba8ee48a80",
+    "oda-purchase-consumer-gates.mjs": "25f4f0c63d74d0f5eccffafff8ffd0528c23d39da554fcd46b006f173cc4cb79",
+    "oda-purchase-consumer-gates-after-fix.json": "409b6d09bcf625bd23353eddc4537a6ec6db4066019929fca2db243cbd07ac62"
+  },
+  "limits": [
+    "Synthetic Node/VM integration only; no physical iPhone or RevenueCat/Supabase provider validation.",
+    "The before-fix file is an excerpt recorded from the actual earlier failed probe output; it is not a new execution.",
+    "Main startup source block uses synthetic imported targets; binder probe runs actual CloudSync initialization with in-memory fake auth adapters.",
+    "Upgrade feedback and button guards were reviewed statically; no live App Store transaction was performed."
+  ]
+}

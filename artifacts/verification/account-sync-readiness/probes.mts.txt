@@ -1,0 +1,210 @@
+import assert from 'node:assert/strict';
+import { readFile, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+
+const root = '/workspace/oda-native-settings-otp';
+const output = '/workspace/scratch/oda-account-sync-readiness';
+class MemoryStorage {
+  values = new Map<string, string>();
+  getItem(key: string) { return this.values.get(key) ?? null; }
+  setItem(key: string, value: string) { this.values.set(key, String(value)); }
+  removeItem(key: string) { this.values.delete(key); }
+}
+const storage = new MemoryStorage();
+Object.defineProperty(globalThis, 'localStorage', { configurable: true, value: storage });
+let networkCalls = 0;
+Object.defineProperty(globalThis, 'fetch', { configurable: true, value: async () => { networkCalls++; throw new Error('Live network forbidden in readiness probe'); } });
+const timers = new Map<number, () => void>();
+let timerId = 0;
+Object.defineProperty(globalThis, 'window', { configurable: true, value: {
+  setTimeout(callback: () => void) { const id = ++timerId; timers.set(id, callback); return id; },
+  clearTimeout(id: number) { timers.delete(id); },
+  location: { origin: 'https://fixture.example' },
+}});
+const { cloudSync } = await import(`${root}/src/services/cloudSync.ts`);
+const { LocalDemoRepository, getInitialDemoState } = await import(`${root}/src/services/repository.ts`);
+const { APP_DATA_STORAGE_KEY } = await import(`${root}/src/services/storageKeys.ts`);
+const internal = cloudSync as unknown as Record<string, any>;
+const repository = new LocalDemoRepository();
+const session = (id: string) => ({ access_token: `mock-token-${id}`, user: { id, email: `${id.toLowerCase()}@fixture.invalid` } });
+const clone = <T>(data: T): T => structuredClone(data);
+const entry = (id: string) => ({ id, kind: 'journal', title: id, content: `Synthetic ${id} writing`, dateKey: '2026-10-02', createdAt: '2026-10-02T00:00:00.000Z', updatedAt: '2026-10-02T00:00:00.000Z' });
+const deferred = <T>() => { let resolve!: (value: T) => void; const promise = new Promise<T>(done => { resolve = done; }); return { promise, resolve }; };
+type Row = { user_id: string; data: any; updated_at: string };
+type Fixture = ReturnType<typeof fixture>;
+function fixture(initialUser: string | null = null, remoteUsers: string[] = ['A']) {
+  storage.values.clear(); timers.clear();
+  const local = clone(getInitialDemoState());
+  local.profile.displayName = 'Intentional shared device record';
+  local.profile.onboardingStep = 'completed';
+  local.notebook.entries.push(entry('device-writing'));
+  storage.setItem(APP_DATA_STORAGE_KEY, JSON.stringify(local));
+  const remote = new Map<string, Row>();
+  for (const user of remoteUsers) {
+    const data = clone(getInitialDemoState());
+    data.profile.displayName = `Remote ${user}`;
+    data.profile.onboardingStep = 'completed';
+    data.notebook.entries.push(entry(`remote-only-${user}`));
+    remote.set(user, { user_id: user, data, updated_at: '2030-01-01T00:00:00.000Z' });
+  }
+  const calls: Array<{ kind: string; userId?: string; entries?: string[] }> = [];
+  let callback: ((event: string, session: unknown) => void) | undefined;
+  let otpUser = 'A';
+  let offline = false;
+  let heldRead: ReturnType<typeof deferred<any>> | null = null;
+  const client = {
+    auth: {
+      async getSession() { calls.push({ kind: 'getSession' }); return { data: { session: initialUser ? session(initialUser) : null }, error: null }; },
+      onAuthStateChange(fn: typeof callback) { callback = fn; calls.push({ kind: 'authSubscribe' }); return { data: { subscription: { unsubscribe() {} } } }; },
+      async verifyOtp(_request: unknown) { calls.push({ kind: 'verifyOtp', userId: otpUser }); callback?.('SIGNED_IN', session(otpUser)); return { error: null }; },
+      async signOut() { callback?.('SIGNED_OUT', null); return { error: null }; },
+    },
+    from(table: string) {
+      assert.equal(table, 'oda_user_data');
+      return {
+        select(columns: string) { assert.equal(columns, 'data, updated_at'); return { eq(key: string, userId: string) { assert.equal(key, 'user_id'); return { async maybeSingle() {
+          calls.push({ kind: 'SELECT', userId });
+          if (offline) return { data: null, error: new Error('Synthetic offline SELECT') };
+          if (heldRead) return heldRead.promise;
+          const row = remote.get(userId);
+          return { data: row ? clone(row) : null, error: null };
+        } }; } }; },
+        async upsert(row: Row, options: unknown) {
+          assert.deepEqual(options, { onConflict: 'user_id' });
+          calls.push({ kind: offline ? 'UPSERT_OFFLINE' : 'UPSERT', userId: row.user_id, entries: row.data.notebook.entries.map((e: any) => e.id) });
+          if (offline) return { error: new Error('Synthetic offline UPSERT') };
+          remote.set(row.user_id, clone(row)); return { error: null };
+        },
+      };
+    },
+  };
+  Object.assign(internal, { config: { url: 'https://synthetic-project.invalid', anonKey: 'public-mock-key' }, client, session: null, scopeRevision: 0, syncing: false, error: null, initialized: false, initializing: null, sessionHydrated: false, authSubscription: null, pushTimer: null, pushQueue: Promise.resolve(false), pendingPulls: new WeakMap() });
+  return { local, remote, calls,
+    async login(user: string) { otpUser = user; const result = await cloudSync.verifyEmailCode(`${user.toLowerCase()}@fixture.invalid`, '123456'); assert.equal(result.ok, true); },
+    setOffline(value: boolean) { offline = value; },
+    holdRead() { heldRead = deferred(); return heldRead; },
+    authChange(user: string | null) { callback?.(user ? 'SIGNED_IN' : 'SIGNED_OUT', user ? session(user) : null); },
+  };
+}
+async function flushAutomaticPush() {
+  const callbacks = [...timers.values()]; timers.clear(); callbacks.forEach(fn => fn());
+  await internal.pushQueue;
+}
+async function localEdit(name: string) { const data = await repository.load(); data.profile.displayName = name; await repository.save(data); return data; }
+const ids = (row: Row | undefined) => row?.data.notebook.entries.map((e: any) => e.id) ?? [];
+const count = (f: Fixture, kind: string) => f.calls.filter(call => call.kind === kind).length;
+const results: any[] = [];
+async function probe(name: string, classification: string, run: () => Promise<Record<string, unknown>>) {
+  try { const evidence = await run(); results.push({ name, classification, passed: true, evidence }); }
+  catch (error) { results.push({ name, classification, passed: false, error: error instanceof Error ? error.stack : String(error) }); }
+}
+
+await probe('Fresh OTP to existing remote: first ordinary edit overwrites unseen cloud work', 'P1 reproduced risk', async () => {
+  const f = fixture(); await cloudSync.init(); const before = storage.getItem(APP_DATA_STORAGE_KEY);
+  await f.login('A');
+  assert.equal(storage.getItem(APP_DATA_STORAGE_KEY), before); assert.equal(count(f, 'SELECT'), 0);
+  assert.ok(ids(f.remote.get('A')).includes('remote-only-A'));
+  await localEdit('First post-OTP edit'); await flushAutomaticPush();
+  assert.equal(count(f, 'SELECT'), 0); assert.equal(count(f, 'UPSERT'), 1);
+  assert.deepEqual(ids(f.remote.get('A')), ['device-writing']);
+  return { readsAfterOTP: 0, fullDocumentUploads: 1, remoteOnlyBefore: ['remote-only-A'], remoteAfter: ids(f.remote.get('A')), calls: f.calls };
+});
+await probe('Fresh OTP to empty account: current full-document backup creates cloud row', 'expected current behavior', async () => {
+  const f = fixture(null, []); await cloudSync.init(); await f.login('A'); await localEdit('New account edit'); await flushAutomaticPush();
+  assert.equal(count(f, 'SELECT'), 0); assert.deepEqual(ids(f.remote.get('A')), ['device-writing']);
+  return { remoteCreated: true, deviceRecordPreserved: true, calls: f.calls };
+});
+await probe('Successful initial pull applies existing cloud record with account guard', 'existing protection passes', async () => {
+  const f = fixture('A'); const local = await repository.load(); await cloudSync.init();
+  const remote = await cloudSync.pullIfNewer(local); assert.ok(remote);
+  assert.equal(await repository.replaceAll(remote, original => cloudSync.canApplyRemote(remote, original)), true);
+  cloudSync.markRemoteApplied(remote); const latest = await repository.load();
+  assert.deepEqual(latest.notebook.entries.map((e: any) => e.id), ['remote-only-A']); assert.equal(count(f, 'UPSERT'), 0);
+  return { cloudRecordApplied: true, noUpload: true, lastSyncAt: cloudSync.getState().lastSyncAt, calls: f.calls };
+});
+await probe('Edit while initial SELECT is pending: stale pull blocked, but automatic push loses remote work', 'P1 reproduced risk', async () => {
+  const f = fixture('A'); await cloudSync.init(); const read = f.holdRead(); const pending = cloudSync.pullIfNewer(await repository.load());
+  await Promise.resolve(); await Promise.resolve(); assert.equal(count(f, 'SELECT'), 1);
+  await localEdit('Local edit during initial pull');
+  read.resolve({ data: clone(f.remote.get('A')), error: null }); assert.equal(await pending, null);
+  await flushAutomaticPush(); assert.deepEqual(ids(f.remote.get('A')), ['device-writing']);
+  return { latePullPreventedLocalOverwrite: true, unreviewedAutomaticUploadStillReplacedRemote: true, calls: f.calls };
+});
+await probe('Failed offline pull then reconnect and ordinary save overwrites unseen cloud work', 'P1 reproduced risk', async () => {
+  const f = fixture('A'); await cloudSync.init(); f.setOffline(true);
+  assert.equal(await cloudSync.pullIfNewer(await repository.load()), null);
+  assert.match(cloudSync.getState().error ?? '', /offline SELECT/);
+  await localEdit('Offline edit'); await flushAutomaticPush(); assert.equal(count(f, 'UPSERT_OFFLINE'), 1);
+  assert.deepEqual(ids(f.remote.get('A')), ['remote-only-A']);
+  f.setOffline(false); await localEdit('Reconnected edit'); await flushAutomaticPush();
+  assert.equal(count(f, 'SELECT'), 1); assert.deepEqual(ids(f.remote.get('A')), ['device-writing']);
+  return { onlyReadWasOfflineFailure: true, remotePreservedWhileOffline: true, remoteLostOnNextOnlineSave: true, calls: f.calls };
+});
+await probe('Synced account edits offline; remote advances elsewhere; next connected edit loses remote change', 'P1 reproduced risk', async () => {
+  const f = fixture('A', []); await cloudSync.init(); assert.equal(await cloudSync.push(f.local), true);
+  const remote = clone(f.remote.get('A')!); remote.data.notebook.entries.push(entry('another-device-new-writing')); remote.updated_at = '2030-01-01T00:00:00.000Z'; f.remote.set('A', remote);
+  f.setOffline(true); await localEdit('Offline local change'); await flushAutomaticPush();
+  assert.ok(ids(f.remote.get('A')).includes('another-device-new-writing'));
+  const callsBeforeReconnect = f.calls.length; f.setOffline(false); await Promise.resolve(); await Promise.resolve();
+  assert.equal(f.calls.length, callsBeforeReconnect);
+  await localEdit('Connected local change'); await flushAutomaticPush();
+  assert.equal(count(f, 'SELECT'), 0); assert.deepEqual(ids(f.remote.get('A')), ['device-writing']);
+  return { noReconnectRetryUntilAnotherSave: true, noCloudReadBeforeLaterUpload: true, remoteNewWritingLost: true, calls: f.calls };
+});
+await probe('Account switch preserves intentional shared-device data but first B edit replaces unseen B remote', 'P1 reproduced risk', async () => {
+  const f = fixture('A', ['A', 'B']); await cloudSync.init(); const before = storage.getItem(APP_DATA_STORAGE_KEY);
+  await f.login('B'); assert.equal(storage.getItem(APP_DATA_STORAGE_KEY), before); assert.equal(cloudSync.getState().lastSyncAt, null);
+  await localEdit('Shared-device edit while B connected'); await flushAutomaticPush();
+  assert.equal(count(f, 'SELECT'), 0); assert.deepEqual(ids(f.remote.get('A')), ['remote-only-A']); assert.deepEqual(ids(f.remote.get('B')), ['device-writing']);
+  return { sharedDeviceDatasetKeptOnSwitch: true, accountANotUploaded: true, remoteBReplaced: true, calls: f.calls };
+});
+await probe('A delayed automatic save cannot upload into B after account switch', 'existing protection passes', async () => {
+  const f = fixture('A', ['A', 'B']); await cloudSync.init(); await localEdit('A delayed change');
+  await f.login('B'); await flushAutomaticPush(); assert.equal(count(f, 'UPSERT'), 0);
+  assert.deepEqual(ids(f.remote.get('A')), ['remote-only-A']); assert.deepEqual(ids(f.remote.get('B')), ['remote-only-B']);
+  return { delayedWrongAccountUploadPrevented: true, calls: f.calls };
+});
+await probe('Declining manual restore avoids immediate fallback but later ordinary save still replaces cloud', 'P1 reproduced risk', async () => {
+  const f = fixture('A'); await cloudSync.init(); const reviewed = await cloudSync.pullIfNewer(await repository.load()); assert.ok(reviewed);
+  // The real syncFromCloud cancellation returns true: intentionally no replaceAll/push here.
+  assert.equal(count(f, 'UPSERT'), 0); assert.deepEqual(ids(f.remote.get('A')), ['remote-only-A']);
+  await localEdit('Ordinary edit after declining cloud restore'); await flushAutomaticPush();
+  assert.deepEqual(ids(f.remote.get('A')), ['device-writing']);
+  return { declinedRestoreDidNotUploadImmediately: true, laterAutoSaveReplacedRemote: true, calls: f.calls };
+});
+await probe('Explicit local restore retains local-wins barrier and intentional cloud replacement', 'expected current behavior', async () => {
+  const f = fixture('A'); await cloudSync.init(); cloudSync.markLocalRestore();
+  const imported = clone(f.local); imported.notebook.entries = [entry('explicit-import-writing')];
+  assert.equal(await repository.replaceAll(imported), true);
+  assert.equal(await cloudSync.pullIfNewer(await repository.load()), null); assert.equal(count(f, 'SELECT'), 0);
+  assert.equal(await cloudSync.push(await repository.load()), true); assert.deepEqual(ids(f.remote.get('A')), ['explicit-import-writing']);
+  return { explicitRestoreIntentPreserved: true, noAccidentalPullOverImport: true, calls: f.calls };
+});
+await probe('Remote write within freshness tolerance is missed; manual fallback can overwrite it', 'P1 reproduced risk', async () => {
+  const f = fixture('A', []); await cloudSync.init(); assert.equal(await cloudSync.push(f.local), true);
+  const lastSync = cloudSync.getState().lastSyncAt!;
+  const remote = clone(f.remote.get('A')!); remote.data.notebook.entries.push(entry('remote-within-two-seconds'));
+  remote.updated_at = new Date(Date.parse(lastSync) + 1000).toISOString(); f.remote.set('A', remote);
+  const current = cloudSync.currentOperationGuard(); const pulled = await cloudSync.pullIfNewer(await repository.load());
+  assert.equal(pulled, null); assert.equal(cloudSync.getState().error, null); assert.equal(current(), true);
+  // Mirrors Account/Settings manual fallback when syncFromCloud finds no newer row.
+  assert.equal(await cloudSync.push(await repository.load()), true); assert.deepEqual(ids(f.remote.get('A')), ['device-writing']);
+  return { remoteNewerByMilliseconds: 1000, ignoredByCurrentTolerance: true, manualFallbackReplacedRemote: true, calls: f.calls };
+});
+await probe('Late A SELECT after switch to B cannot replace shared-device data', 'existing protection passes', async () => {
+  const f = fixture('A', ['A', 'B']); await cloudSync.init(); const before = storage.getItem(APP_DATA_STORAGE_KEY);
+  const read = f.holdRead(); const pending = cloudSync.pullIfNewer(await repository.load());
+  await Promise.resolve(); await Promise.resolve(); await f.login('B');
+  read.resolve({ data: clone(f.remote.get('A')), error: null }); assert.equal(await pending, null);
+  assert.equal(storage.getItem(APP_DATA_STORAGE_KEY), before); assert.equal(count(f, 'UPSERT'), 0);
+  return { staleAccountReadDiscarded: true, sharedDeviceBytesUnchanged: true, calls: f.calls };
+});
+
+const sourceFiles = ['src/services/cloudSync.ts', 'src/services/repository.ts', 'src/store/useApp.tsx', 'supabase/schema.sql'];
+const source = {} as Record<string, string>;
+for (const file of sourceFiles) source[file] = createHash('sha256').update(await readFile(`${root}/${file}`)).digest('hex');
+const report = { label: 'Synthetic local account-sync readiness diagnostic; current code, not a fix', createdAt: new Date().toISOString(), root, head: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(), source, total: results.length, passed: results.filter(r => r.passed).length, failed: results.filter(r => !r.passed).length, reproducedRisks: results.filter(r => r.passed && r.classification === 'P1 reproduced risk').length, liveNetworkCalls: networkCalls, realNativeOrProviderTested: false, results };
+await writeFile(`${output}/report.json`, JSON.stringify(report, null, 2) + '\n');
+console.log(JSON.stringify(report, null, 2));
+if (report.failed || networkCalls) process.exitCode = 1;

@@ -1,0 +1,213 @@
+{
+  "evidence": "Actual binding helper plus actual CloudSync initialization in Node, synthetic in-memory auth adapters only. No provider/native SDK/account data.",
+  "sourceSha256": {
+    "src/main.tsx": "0814637533b0ea42e813e4275a3602a7ea0ff2367ad3bf75a27201a4ce2c2cbc",
+    "src/services/purchaseIdentityBinding.ts": "9635abcc38a61f1893e2222e82ceea5038cca03cbecb15df1f76b98421d19d39",
+    "src/services/cloudSync.ts": "50a24f6690106cebbc1b38dfabb0edb84d4ca34f28b26dde4b919537b62a4bde"
+  },
+  "fetchCalls": 0,
+  "cases": [
+    {
+      "case": "hydrate-null",
+      "untouchedWhileHydrationPending": true,
+      "transientIgnored": true,
+      "currentIdentityAfterHydration": true,
+      "sameIdRetryNotDropped": true,
+      "disposedIgnored": true,
+      "calls": [
+        {
+          "action": "defer"
+        },
+        {
+          "action": "defer"
+        },
+        {
+          "action": "identify",
+          "id": null
+        },
+        {
+          "action": "identify",
+          "id": null
+        },
+        {
+          "action": "purchase-init",
+          "cachedIdentity": null
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-B"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-B"
+        },
+        {
+          "action": "identify",
+          "id": null
+        }
+      ]
+    },
+    {
+      "case": "hydrate-A",
+      "untouchedWhileHydrationPending": true,
+      "transientIgnored": true,
+      "currentIdentityAfterHydration": true,
+      "sameIdRetryNotDropped": true,
+      "disposedIgnored": true,
+      "calls": [
+        {
+          "action": "defer"
+        },
+        {
+          "action": "defer"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-A"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-A"
+        },
+        {
+          "action": "purchase-init",
+          "cachedIdentity": "synthetic-A"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-B"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-B"
+        },
+        {
+          "action": "identify",
+          "id": null
+        }
+      ]
+    },
+    {
+      "case": "actual-cloud-init-catches-hydration-failure",
+      "cloudError": "Synthetic hydration failure",
+      "readyRejected": false,
+      "noSDKIdentityMutationAfterHydrationFailure": true,
+      "calls": [
+        {
+          "action": "defer"
+        },
+        {
+          "action": "defer"
+        },
+        {
+          "action": "defer"
+        },
+        {
+          "action": "defer"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-retry-A"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-retry-A"
+        },
+        {
+          "action": "purchase-init",
+          "cachedIdentity": "synthetic-retry-A"
+        }
+      ]
+    },
+    {
+      "case": "retry-after-thrown-hydration-error",
+      "retryRestoresCorrectIdentity": true,
+      "calls": [
+        {
+          "action": "defer"
+        },
+        {
+          "action": "defer"
+        },
+        {
+          "action": "defer"
+        },
+        {
+          "action": "defer"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-retry-A"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-retry-A"
+        },
+        {
+          "action": "purchase-init",
+          "cachedIdentity": "synthetic-retry-A"
+        }
+      ]
+    },
+    {
+      "case": "getSession-returns-error-result",
+      "returnedErrorCannotAssertAnonymous": true,
+      "isSessionReady": false,
+      "cloudError": "Synthetic returned auth error",
+      "calls": [
+        {
+          "action": "defer"
+        },
+        {
+          "action": "defer"
+        },
+        {
+          "action": "defer"
+        }
+      ]
+    },
+    {
+      "case": "obsolete-hydration-resolves-before-new-scope",
+      "obsoleteScopeCannotBind": true,
+      "callsBeforeCurrentScopeHydrated": [
+        {
+          "action": "defer"
+        },
+        {
+          "action": "defer"
+        }
+      ],
+      "neverBoundOldA": true,
+      "finalCalls": [
+        {
+          "action": "defer"
+        },
+        {
+          "action": "defer"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-B"
+        },
+        {
+          "action": "identify",
+          "id": "synthetic-B"
+        },
+        {
+          "action": "purchase-init",
+          "cachedIdentity": "synthetic-B"
+        }
+      ]
+    },
+    {
+      "case": "dispose-before-hydration",
+      "noMutationAfterDispose": true,
+      "calls": [
+        {
+          "action": "defer"
+        }
+      ]
+    }
+  ],
+  "failures": []
+}

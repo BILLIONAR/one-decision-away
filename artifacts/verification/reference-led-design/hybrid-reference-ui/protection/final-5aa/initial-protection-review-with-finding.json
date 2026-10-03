@@ -1,0 +1,99 @@
+{
+  "kind": "independent hybrid candidate protection/build review with concrete correctness blocker",
+  "sealedAtUtc": "2026-10-03T01:16:52.487218+00:00",
+  "sourceCommit": "5aa69ae3f2d722558fb69319babda0c1810b69d2",
+  "reviewBase": "4bf566f17980fe2eaf26e3f20b277e97cad981b9",
+  "protectedBase": "4c873b0df32c4489a8b95260122ae3ae9efd936d",
+  "status": "BLOCKED by new timer-evidence P2; passed aggregate and integrity proof do not establish correctness readiness.",
+  "findings": [
+    {
+      "priority": "P2",
+      "file": "src/services/focusEvidence.ts",
+      "line": 14,
+      "title": "Lifetime mission-ID dedup drops legitimate repeatable-quest timer sessions",
+      "actualEvidence": "unique Map keyed by missionId retains earliest completion. repository.ts completeMission keeps ordinary repeatable quests and appends uniquecompletionIDs; spaced completions for samequest onlaterUTCday disappear from Today todayMinutes/streak.",
+      "supportingFiles": [
+        {
+          "file": "src/services/repository.ts",
+          "line": 337
+        },
+        {
+          "file": "src/services/repository.ts",
+          "line": 372
+        },
+        {
+          "file": "src/services/economy.ts",
+          "line": 106
+        },
+        {
+          "file": "tests/focus-evidence.test.ts",
+          "line": 31
+        },
+        {
+          "file": "src/pages/Today.tsx",
+          "line": 177
+        }
+      ],
+      "reviewMethod": "Independent helper static review and parent auditor independently inspected actual unchanged repository/ledger contract and new Today/helper/test wiring. No test/app execution.",
+      "recommendedScope": "Deduplicate exact completion identity/timestamp duplicate records while retaining legitimate distinct later sessions. Keep canonical one-decision repeat-tap/reward guards unchanged; adjust regression that currently enshrines omission."
+    }
+  ],
+  "changedPaths": [
+    "src/components/CourseRoadmap.tsx",
+    "src/components/notebook/JournalWorkspace.tsx",
+    "src/components/notebook/QuotesBrowser.tsx",
+    "src/components/today/CourseNextStep.tsx",
+    "src/hooks/useSavedCourseProgress.ts",
+    "src/i18n/dashboardHybrid.ts",
+    "src/i18n/notebookHybrid.ts",
+    "src/pages/Courses.tsx",
+    "src/pages/Notebook.tsx",
+    "src/pages/Today.tsx",
+    "src/services/courseNavigationIntent.ts",
+    "src/services/focusEvidence.ts",
+    "src/services/notebookHybrid.ts",
+    "src/styles/courses.css",
+    "src/styles/notebookHybrid.css",
+    "src/styles/sound.css",
+    "src/styles/workingSurfaces.css",
+    "tests/course-navigation-intent.test.ts",
+    "tests/focus-evidence.test.ts",
+    "tests/notebook-hybrid.test.ts"
+  ],
+  "changedPathCount": 20,
+  "sourceCount": 874,
+  "newTrackedFiles": 12,
+  "existingChangedSourceCount": 8,
+  "inventoryClarification": "Parent now inventories all tracked nonartifact files,874; prior738 selectedsource inventory is a different denominator. Actual Git diff20paths determines source scope.",
+  "protectedInventory": {
+    "count": 348,
+    "changedFiles": [],
+    "byteComparisonPerformed": true,
+    "scopeClarification": "Course/Notebook fullfiles are separately changed presentation/nav/date controller exceptions even if outside original348 inventory; no blanket whole-component identity claim."
+  },
+  "englishMp3CountUnchanged": 160,
+  "oldPublicCountUnchanged": 285,
+  "originalDeliveryCountUnchanged": 40,
+  "prior597RawAndSourceAuditExact": true,
+  "aggregate": {
+    "passed": 610,
+    "failed": 0,
+    "exitCode": 0,
+    "rawLogBytes": 78088,
+    "rawLogSha256": "b022e2928da37ce2c1cf844a5776e05c31185f53817744aea4ee60e1eb18d454",
+    "actualSummaryAndBuildCompleteVerified": true
+  },
+  "compiled": {
+    "files": 437,
+    "css": 7,
+    "allActualNamesBytesHashesMatchFreshReceipt": true
+  },
+  "reviewsInProgress": [
+    "Finish component semantic receipts/accountscope/dirty-save/course gates and independent helper subscription review; do not claim overallsourcePASS."
+  ],
+  "limits": [
+    "No app/source edits/build/browser/tests/network/commit/push.",
+    "Report snapshot bound to immutable5aa; future correction requiresnewsource/aggregatebinding.",
+    "No visual/publication approval or fresh parentremote verification claim."
+  ]
+}

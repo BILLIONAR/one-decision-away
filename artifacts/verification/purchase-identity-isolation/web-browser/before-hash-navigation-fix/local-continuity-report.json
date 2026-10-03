@@ -1,0 +1,134 @@
+{
+  "syntheticFixtures": true,
+  "scope": "Bounded local web boot/course continuity after purchase identity fix; no native SDK/payment tests",
+  "sourceAtStart": [
+    {
+      "file": "src/main.tsx",
+      "sha256": "0814637533b0ea42e813e4275a3602a7ea0ff2367ad3bf75a27201a4ce2c2cbc"
+    },
+    {
+      "file": "src/services/cloudSync.ts",
+      "sha256": "50a24f6690106cebbc1b38dfabb0edb84d4ca34f28b26dde4b919537b62a4bde"
+    },
+    {
+      "file": "src/services/purchases.ts",
+      "sha256": "20166152294fdaba6c351e282c1b738a47b775256677030af518a417e1da257d"
+    },
+    {
+      "file": "src/services/purchaseIdentityBinding.ts",
+      "sha256": "9635abcc38a61f1893e2222e82ceea5038cca03cbecb15df1f76b98421d19d39"
+    },
+    {
+      "file": "src/pages/Upgrade.tsx",
+      "sha256": "5347a3452b252fce1050b0ffaa080e1429984b62e2b3365592309a44ceb78998"
+    },
+    {
+      "file": "src/i18n/purchases.ts",
+      "sha256": "6a2ee05bc421d8c169fa1ef0e732b1e1485f9e6d1e31d1fa1b0316ba234c0521"
+    },
+    {
+      "file": "src/services/native.ts",
+      "sha256": "55462f6c779126002857402f9172cb7dbc025d1ae72351ca4c295d9b50cecfbd"
+    }
+  ],
+  "noProductionOrExternalWrites": true,
+  "base": "http://127.0.0.1:4188/one-decision-away/#",
+  "repo": "/workspace/oda-purchase-identity-fix",
+  "at": "2026-10-02T09:34:03.920Z",
+  "buildIndex": "assets/index-CCDlpWJE.js",
+  "checks": [
+    "en web welcome 320: controls fit and no serious/critical axe findings",
+    "en web welcome 390: controls fit and no serious/critical axe findings",
+    "en: a fresh web record boots to the real onboarding preview",
+    "en: signed-out Today boots with real lightweight lesson metadata",
+    "en untouched overview 320: controls fit and no serious/critical axe findings",
+    "en untouched overview 390: controls fit and no serious/critical axe findings",
+    "en: explicit Start and saved partial lesson/reflection survive web startup",
+    "en returning lesson 320: controls fit and no serious/critical axe findings",
+    "en returning lesson 390: controls fit and no serious/critical axe findings"
+  ],
+  "screenshots": [
+    "en-web-welcome-320.png",
+    "en-web-welcome-390.png",
+    "en-untouched-course-320.png",
+    "en-untouched-course-390.png",
+    "en-returning-lesson-two-320.png",
+    "en-returning-lesson-two-390.png",
+    "failure.png"
+  ],
+  "accessibility": [
+    {
+      "name": "en web welcome 320",
+      "violations": []
+    },
+    {
+      "name": "en web welcome 390",
+      "violations": []
+    },
+    {
+      "name": "en untouched overview 320",
+      "violations": []
+    },
+    {
+      "name": "en untouched overview 390",
+      "violations": []
+    },
+    {
+      "name": "en returning lesson 320",
+      "violations": []
+    },
+    {
+      "name": "en returning lesson 390",
+      "violations": []
+    }
+  ],
+  "layouts": [
+    {
+      "name": "en web welcome 320",
+      "width": 320,
+      "scrollWidth": 320,
+      "outside": []
+    },
+    {
+      "name": "en web welcome 390",
+      "width": 390,
+      "scrollWidth": 390,
+      "outside": []
+    },
+    {
+      "name": "en untouched overview 320",
+      "width": 320,
+      "scrollWidth": 320,
+      "outside": []
+    },
+    {
+      "name": "en untouched overview 390",
+      "width": 390,
+      "scrollWidth": 390,
+      "outside": []
+    },
+    {
+      "name": "en returning lesson 320",
+      "width": 320,
+      "scrollWidth": 320,
+      "outside": []
+    },
+    {
+      "name": "en returning lesson 390",
+      "width": 390,
+      "scrollWidth": 390,
+      "outside": []
+    }
+  ],
+  "pageErrors": [],
+  "blockedExternalRequests": [
+    "https://images.unsplash.com/photo-1552360708-ebcdf76845ac?auto=format&fit=crop&w=600&h=338&q=70",
+    "https://images.unsplash.com/photo-1552360708-ebcdf76845ac?auto=format&fit=crop&w=600&h=338&q=70",
+    "https://images.unsplash.com/photo-1552360708-ebcdf76845ac?auto=format&fit=crop&w=600&h=338&q=70",
+    "https://images.unsplash.com/photo-1448387473223-5c37445527e7?auto=format&fit=crop&w=600&h=338&q=70",
+    "https://images.unsplash.com/photo-1448387473223-5c37445527e7?auto=format&fit=crop&w=600&h=338&q=70"
+  ],
+  "status": "failed",
+  "failure": "AssertionError [ERR_ASSERTION]: Local preview entry must return 200\n\nundefined !== 200\n\n    at goto (/workspace/scratch/oda-purchase-identity-browser/qa-local-continuity.mjs:75:10)\n    at async <anonymous> (/workspace/scratch/oda-purchase-identity-browser/qa-local-continuity.mjs:189:5)",
+  "finishedAt": "2026-10-02T09:34:12.727Z"
+}

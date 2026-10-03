@@ -20,7 +20,7 @@ The core application works without an account or API key. New visitors start in 
 - Course progress, reflections, workbook plans and attempts are included in JSON and optional cloud backup snapshots. Existing separate course storage migrates without changing lesson IDs. Older backups without a course section preserve current course work. A restore is validated and reviewed before replacing the saved record.
 - Today connects choosing, taking a step and reflecting, with an editable saved notebook reflection, real course continuation and a weekly review based on actual recorded activity. Setup drafts survive an interrupted first run.
 - The designer signature is **Designed by Yahya** in English, Turkish and Spanish. Keep that exact wording untranslated. See [brand decisions](docs/BRAND.md) for the persistent visual identity.
-- The selected C4 symbol with ODA beneath it is supplied as a transparent PNG in `public/brand/oda-c4.png`, used for the app, landing page and install metadata.
+- The selected icon8 gold/ruby domino now supplies the application logo and web/native icon assets. Its accepted high-resolution reconstruction and provenance are retained in `brand-assets/domino8/`; it is not the missing original source. Earlier C4/v2/v3/v4 assets remain preserved. See [brand decisions](docs/BRAND.md).
 
 See [inspiration and coach notes](docs/INSPIRATION_AND_COACH.md) and [push setup](docs/PUSH_NOTIFICATIONS.md) for details.
 

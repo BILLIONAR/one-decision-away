@@ -1,0 +1,22 @@
+# ODA Sound Room timer label repair
+
+Review branch: `design/reference-led-oda`. Exact application source: **`4a8b5753dc7c1c676e5a2146ae1d4e63a4772b75`**, following the parent-approved review candidate `9adcd46084763c64579203b97902029e8bad0ef7` (application source `71f1ce41f77bddb519cc9d18933303cc13336073`). The existing reference-led scope and appearance are preserved. No deployment or main merge.
+
+At 320px, the fixed 109px native timer control truncated Turkish “Zamanlayıcı yok”. This [one-file source delta](source-delta.patch.log) uses the select's native intrinsic width with a 118px minimum and removes the 109px override. No handler, option, palette, theme, logo, asset or other source file changed. Controls stay in the same row and the player keeps its 124.375px height.
+
+| Actual synthetic Chromium PNG | Before | After |
+| --- | --- | --- |
+| Turkish, light, 320×844 | [Clipped](independent/baseline/tr-light-320-no-timer.png) | [Full label](independent/final-4a8/tr-light-320-no-timer.png) |
+| Turkish, dark, 320×844 | [Clipped](independent/baseline/tr-dark-320-no-timer.png) | [Full label](independent/final-4a8/tr-dark-320-no-timer.png) |
+| Spanish, light, 320×844 | — | [Full label](independent/final-4a8/es-light-320-no-timer.png) |
+| English, light, 390×844 | — | [Active player](independent/final-4a8/en-light-390-active.png) |
+
+[Exact new aggregate log](aggregate-check.log): **76,225 bytes**, SHA256 **`511bbcfabdff03aa8af00150a13a113aeaa5b830e939dcc444bc07591e07e644`**. `VITE_BASE_PATH=/one-decision-away/ npm run check` passed **597 tests, zero failures**, exit 0; typecheck, locale validation and production build passed. Sound timer arming, pause/resume, expiry and reentrant playback regression checks are included in that aggregate, not claimed as a separate run. This fresh check is justified by the CSS repair. Older aggregate logs and receipts are retained unchanged. [Build receipt](build-receipt.json) binds all **691 source files** and **388 compiled files**, including six CSS files. Its baseCommit field is the original functional base `68ae8179c875b54ce8f200e34a6148259ae6cad1`; the immediate approved predecessor is 9adcd46 above.
+
+[Independent targeted browser report](independent/final-4a8/report.json), [raw log](independent/final-4a8.log) and [evidence receipt](independent/evidence-receipt.json) cover **EN/TR/ES × light/dark × 320/390: 12 contexts, 60 selected-option fit checks and 24 final PNGs**. Native keyboard timer selection, volume, pause/resume and navigation pass; all player controls are at least 44px; page overflow, page errors and 12 scoped axe scans have zero findings. At 320px, volume remains 97.4375px wide in TR and 91.4375px in ES, and player-to-navigation clearance stays 8px.
+
+[Independent protection and binding receipt](protection/sealed-final-evidence-receipt.json) verifies all 691 source hashes against actual Git blobs, all 388 compiled filenames/bytes/hashes, **348 protected files and all 160 MP3s unchanged**. Only sound.css differs among the source hashes. No broad flow rerun is claimed for this tiny CSS delta; previous independently reviewed flow evidence remains pinned to its original source in the [parent packet](../README.md).
+
+[Root personal inspection](root-personal-review.json) records six actual viewed PNGs, including the clipped baseline and repaired TR/ES labels. [Independent personal inspection](independent/personal-review.json) covers 16 actual PNGs. This is synthetic Chromium 151 QA in the selected saved Linux cloud, with no physical-device or audio-listening QA claim. The baseline's original empty font shorthand made its canvas text estimate invalid; its report marks that measurement invalid. Actual baseline pixels establish clipping. Final measurements use valid computed font longhands; the 20px native-arrow reserve remains an explicit estimate, supported by actual PNG inspection.
+
+The [packet inventory](evidence-manifest.json) lists exact bytes and hashes, excluding only itself. The [parent-accepted inventory](parent-accepted-evidence-manifest.json) is preserved byte-for-byte from 9adcd46 and describes that historical packet relative to its original root. Archived QA programs use .log suffixes and the existing tracked evidence-local .gitignore to avoid affecting automatic CSS discovery. No packages, credentials, provider/account/billing settings, permissions or native signing changed. Parent review remains the checkpoint before any production publication.

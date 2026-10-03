@@ -1,0 +1,75 @@
+import { cloudSync } from '/workspace/oda-cloud-upload-guard/src/services/cloudSync';
+import { getInitialDemoState } from '/workspace/oda-cloud-upload-guard/src/services/repository';
+import { cloudCrudFixture } from '/workspace/oda-cloud-upload-guard/tests/helpers/cloudCrudFixture';
+import { APP_DATA_STORAGE_KEY } from '/workspace/oda-cloud-upload-guard/src/services/storageKeys';
+import { REPLACEMENT_EPOCH_KEY } from '/workspace/oda-cloud-upload-guard/src/services/dataSnapshots';
+import { backupCopy } from '/workspace/oda-cloud-upload-guard/src/data/backupCopy';
+import { accountCopy } from '/workspace/oda-cloud-upload-guard/src/i18n/account';
+import { getLocale, t } from '/workspace/oda-cloud-upload-guard/src/i18n';
+import { boundaryAttempts } from './boundaries';
+
+const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
+const reads: string[] = [];
+const writes: any[] = [];
+const attempts: { kind: string }[] = [];
+let readFailed = false;
+let authCallback: ((event: string, session: any) => void) | undefined;
+let app: any;
+const crud = cloudCrudFixture({
+  read: async id => {
+    reads.push(id);
+    return readFailed ? { data: null, error: { message: backupCopy(getLocale()).cloudUploadReadFailed } }
+      : { data: clone(crud.rows.get(id) ?? null), error: null };
+  },
+  write: async row => { writes.push(clone(row)); return { error: null }; },
+});
+const from = crud.client.from;
+const client = {
+  ...crud.client,
+  from: (...args: any[]) => {
+    const query = (from as any)(...args);
+    return { ...query,
+      insert: (row: any) => { attempts.push({ kind: 'insert' }); return query.insert(row); },
+      update: (row: any) => { attempts.push({ kind: 'update' }); return query.update(row); },
+    };
+  },
+  auth: {
+    getSession: async () => ({ data: { session: null }, error: null }),
+    onAuthStateChange: (callback: typeof authCallback) => { authCallback = callback; return { data: { subscription: { unsubscribe() {} } } }; },
+    signOut: async () => { authCallback?.('SIGNED_OUT', null); return { error: null }; },
+    signInWithOtp: async () => { boundaryAttempts.authDelivery++; throw new Error('Auth delivery is outside this fixture.'); },
+    verifyOtp: async () => { boundaryAttempts.authVerification++; throw new Error('Auth verification is outside this fixture.'); },
+  },
+};
+function data(name: string) {
+  const result = clone(getInitialDemoState());
+  Object.assign(result.profile, { displayName: name, onboardingStep: 'completed', theme: 'light', soundMuted: true, nudgesEnabled: false, dailyWisdomEnabled: false });
+  Object.assign(result, { [REPLACEMENT_EPOCH_KEY]: `synthetic-${name.replace(/\s+/g, '-').toLowerCase()}` });
+  return result;
+}
+const local = data('Synthetic device record');
+const remote = data('Synthetic existing cloud record');
+localStorage.clear(); // Dedicated loopback fixture origin contains only synthetic data.
+localStorage.setItem(APP_DATA_STORAGE_KEY, JSON.stringify(local));
+crud.rows.set('synthetic-account-A', { user_id: 'synthetic-account-A', data: remote, updated_at: '2030-01-01T00:00:00.000Z' });
+cloudSync.setConfig('https://fixture.invalid', 'synthetic-placeholder-not-a-key');
+Object.assign(cloudSync as any, { client }); // Test-only SDK injection; public CloudSync methods remain real.
+export const bindApp = (value: any) => { app = value; };
+export const fixture = {
+  snapshot: () => ({ ready: Boolean(app?.data && !app.isLoading), route: app?.activeRoute, cloud: cloudSync.getState(),
+    localRaw: localStorage.getItem(APP_DATA_STORAGE_KEY), local: JSON.parse(localStorage.getItem(APP_DATA_STORAGE_KEY) || 'null'),
+    renderedData: app?.data ?? null, remote: clone(crud.rows.get('synthetic-account-A') ?? null), reads: [...reads], writes: [...writes], attempts: [...attempts],
+    toast: app?.toast ?? null, syncOwner: JSON.parse(localStorage.getItem('oda_cloud_last_sync:local_scope') || 'null'),
+    boundaryAttempts: { ...boundaryAttempts } }),
+  signIn: () => {
+    if (!app?.data || app.isLoading || !authCallback) throw new Error('Wait for local startup before emitting the synthetic session.');
+    authCallback('SIGNED_IN', { access_token: 'synthetic-token', user: { id: 'synthetic-account-A', email: 'synthetic.account.a@example.test' } });
+  },
+  saveDecision: async (title: string) => { if (!app?.data) throw new Error('AppProvider is not ready.'); await app.setOneDecision(title, undefined, 15); },
+  navigate: (route: string) => app.setActiveRoute(route),
+  setReadFailure: (failed: boolean) => { readFailed = failed; },
+  changeRemote: (name: string, version = '2030-01-02T00:00:00.000Z') => crud.rows.set('synthetic-account-A', { user_id: 'synthetic-account-A', data: data(name), updated_at: version }),
+  copy: () => backupCopy(getLocale()),
+  accountCopy: () => accountCopy(getLocale()),
+  translate: (source: string) => t(source),
+};

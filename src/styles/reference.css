@@ -1,0 +1,80 @@
+/* One shared working shell; category atmospheres stay local to their screens. */
+.oda-reference-app .oda-display {
+  font-family: var(--font-sans);
+  font-weight: 650;
+  letter-spacing: -.025em;
+}
+.oda-reference-app .oda-kicker {
+  font-family: var(--font-sans);
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: .035em;
+}
+.oda-reference-app .oda-sidebar {
+  margin: 14px 0 14px 14px;
+  height: calc(100vh - 28px);
+  top: 14px;
+  gap: 20px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  box-shadow: var(--surface-shadow);
+}
+.oda-sidebar-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 10px;
+  border-block: 1px solid var(--border);
+  text-align: left;
+  min-height: 70px;
+}
+.oda-sidebar-avatar {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+.oda-reference-app .oda-nav-active {
+  box-shadow: inset 0 0 0 1px var(--border), 0 4px 12px -8px var(--accent);
+}
+.oda-reference-app .oda-tabbar {
+  box-shadow: var(--glass-shadow);
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+.oda-reference-app .oda-tab[aria-current="page"] {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.oda-reference-app input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
+.oda-reference-app textarea {
+  font-family: var(--font-sans);
+}
+.oda-reference-app [role="status"] button { min-height: 44px; min-width: 44px; }
+@media (prefers-reduced-transparency: reduce) {
+  .oda-reference-app .oda-tabbar { backdrop-filter: none; -webkit-backdrop-filter: none; }
+}
+
+/* The source working screens use neutral pearl modules, compact borders and a
+   rectangular navigation shelf. Each category keeps its own local material. */
+.oda-reference-app .oda-sidebar { border-radius: 16px; box-shadow: 0 8px 28px -18px #4C4C7025; }
+.oda-reference-app .oda-sidebar-profile { flex-direction: column; text-align: center; padding: 18px 8px; gap: 9px; }
+.oda-reference-app .oda-sidebar-avatar { width: 62px; height: 62px; border: 1px solid #DCD8ED; background: radial-gradient(circle at 30% 20%, #FFF, var(--accent-soft)); }
+.oda-reference-app .oda-nav-active { background: linear-gradient(90deg, var(--accent-soft), var(--surface)); border-radius: 9px; }
+.oda-reference-app .oda-tabbar { border-radius: 16px; box-shadow: 0 7px 24px -12px #39325430; }
+.oda-reference-app .oda-tab { border-radius: 12px; }
+.oda-reference-app .oda-tab[aria-current="page"] { box-shadow: inset 0 0 0 1px var(--border); }
+.oda-reference-app[data-app-route="/app/coach"] { background: #040B1C; }
+.oda-reference-app[data-app-route="/app/coach"] .oda-tabbar { background: #09152B; border-color: #2D3B60; color: #B8C6E2; box-shadow: 0 0 18px -8px #396DC0; }
+.oda-reference-app[data-app-route="/app/coach"] .oda-tab { color: #B8C6E2; }
+.oda-reference-app[data-app-route="/app/coach"] .oda-tab[aria-current="page"] { color: #B5C4FF; background: #1C254E; box-shadow: inset 0 0 0 1px #3D5290; }
+@media (max-width: 767px) {
+  .oda-reference-app[data-app-route="/app/coach"] .oda-page-enter { padding: 10px 10px 0; }
+  .oda-reference-app[data-app-route="/app/coach"] .coach-page { min-height: calc(100vh - 10px); border: 0; border-radius: 0; }
+}

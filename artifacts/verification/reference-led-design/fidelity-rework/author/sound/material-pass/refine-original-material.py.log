@@ -1,0 +1,122 @@
+from pathlib import Path
+import math, random
+root=Path('/workspace/oda-reference-redesign/public/assets/oda/reference-fidelity')
+
+def wrap(name,defs,body):
+    text='<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1280" viewBox="0 0 960 1280">\n'
+    text+='<!-- Original static procedural ODA illustration; not the unavailable source photograph. No external resources, scripts or animation. -->\n'
+    text+='<defs>'+defs+'</defs>\n'+body+'\n</svg>\n'
+    (root/name).write_text(text)
+
+# Curved fine leaflets replace broad graphic fans. Each frond has a bowed rib and tapered asymmetric leaves.
+rng=random.Random(8617)
+def bezier(points,t):
+    s=1-t
+    x=s*s*s*points[0][0]+3*s*s*t*points[1][0]+3*s*t*t*points[2][0]+t*t*t*points[3][0]
+    y=s*s*s*points[0][1]+3*s*s*t*points[1][1]+3*s*t*t*points[2][1]+t*t*t*points[3][1]
+    dx=3*s*s*(points[1][0]-points[0][0])+6*s*t*(points[2][0]-points[1][0])+3*t*t*(points[3][0]-points[2][0])
+    dy=3*s*s*(points[1][1]-points[0][1])+6*s*t*(points[2][1]-points[1][1])+3*t*t*(points[3][1]-points[2][1])
+    length=math.hypot(dx,dy)
+    return x,y,dx/length,dy/length
+
+def frond(points,length,opacity=1):
+    items=[f'<g opacity="{opacity}">']
+    for n in range(1,24):
+        t=n/25
+        x,y,tx,ty=bezier(points,t);nx,ny=-ty,tx
+        leaf_len=length*(math.sin(math.pi*t)**.65)*(1-.45*t)*rng.uniform(.86,1.13)
+        for side in [-1,1]:
+            ln=leaf_len*rng.uniform(.9,1.1);wide=(5.3-3.4*t)*rng.uniform(.8,1.1)
+            ex=x+tx*ln*.48+nx*ln*.79*side;ey=y+ty*ln*.48+ny*ln*.79*side+ln*.11
+            c1x=x+tx*ln*.12+nx*ln*.58*side;c1y=y+ty*ln*.12+ny*ln*.58*side
+            c2x=x+tx*ln*.22+nx*ln*.25*side;c2y=y+ty*ln*.22+ny*ln*.25*side
+            bx=x+tx*wide;by=y+ty*wide
+            items.append(f'<path fill="url(#leaf)" d="M{x:.1f} {y:.1f}Q{c1x:.1f} {c1y:.1f} {ex:.1f} {ey:.1f}Q{c2x:.1f} {c2y:.1f} {bx:.1f} {by:.1f}Z"/>')
+            if n%3==0:
+                items.append(f'<path fill="none" stroke="#64827B" stroke-opacity=".2" stroke-width=".8" d="M{x:.1f} {y:.1f}Q{c1x:.1f} {c1y:.1f} {ex:.1f} {ey:.1f}"/>')
+    p=points
+    items.append(f'<path fill="none" stroke="#29473F" stroke-width="2.8" d="M{p[0][0]} {p[0][1]}C{p[1][0]} {p[1][1]} {p[2][0]} {p[2][1]} {p[3][0]} {p[3][1]}"/>')
+    items.append('</g>');return ''.join(items)
+
+palm_defs='''
+<linearGradient id="sky" x1=".1" x2=".85" y2="1"><stop stop-color="#708895"/><stop offset=".46" stop-color="#9BB7C1"/><stop offset="1" stop-color="#315C6C"/></linearGradient>
+<radialGradient id="light" cx=".56" cy=".2" r=".65"><stop stop-color="#E0E4CE" stop-opacity=".28"/><stop offset="1" stop-color="#E0E4CE" stop-opacity="0"/></radialGradient>
+<linearGradient id="sea" x2="0" y2="1"><stop stop-color="#678D95"/><stop offset="1" stop-color="#1C4657"/></linearGradient>
+<linearGradient id="leaf" x1=".1" x2=".9" y2="1"><stop stop-color="#24443F"/><stop offset=".48" stop-color="#173A36"/><stop offset="1" stop-color="#0E282C"/></linearGradient>
+<linearGradient id="trunk" x2="1" y2=".2"><stop stop-color="#0C2328"/><stop offset=".55" stop-color="#29443D"/><stop offset=".82" stop-color="#43534A"/><stop offset="1" stop-color="#152E2C"/></linearGradient>
+<filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".18 .34" numOctaves="2" seed="6" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+'''
+palms='<path fill="url(#sky)" d="M0 0H960V1280H0Z"/><path fill="url(#light)" d="M0 0H960V1280H0Z"/>'
+palms+='<path fill="url(#sea)" d="M0 885Q480 865 960 877V1280H0Z"/>'
+for n in range(24):
+    y=886+n*n*.44;x=330+rng.uniform(-120,90);span=140+n*6
+    palms+=f'<path fill="none" stroke="#BCDFD6" stroke-opacity="{.08+(24-n)*.002:.3f}" stroke-width="{1+n*.10:.1f}" d="M{x:.1f} {y:.1f}q{span/2:.1f} -3 {span:.1f} 0"/>'
+palms+='<path fill="url(#trunk)" d="M-51 1280C20 1035 139 774 149 575L165 575C170 793 79 1055 1 1280Z"/><path fill="url(#trunk)" d="M949 1280C852 1050 806 816 816 618L832 618C825 812 891 1035 1000 1280Z"/>'
+for n in range(18):
+    t=n/17;y=615+650*t;cx=154-186*t*t
+    palms+=f'<path fill="none" stroke="#718277" stroke-opacity=".2" stroke-width="1.4" d="M{cx-6-13*t:.1f} {y:.1f}q{15+16*t:.1f} 10 {17+21*t:.1f} 1"/>'
+    yr=657+610*t;cxr=823+141*t*t
+    palms+=f'<path fill="none" stroke="#738378" stroke-opacity=".16" stroke-width="1.2" d="M{cxr-7-13*t:.1f} {yr:.1f}q{17+14*t:.1f} 8 {18+22*t:.1f} 0"/>'
+left=[((155,580),(85,440),(-90,360),(-230,504)),((155,580),(70,325),(112,262),(171,253)),((155,580),(180,327),(266,268),(330,330)),((155,580),(334,355),(455,420),(466,552)),((155,580),(323,507),(460,611),(473,744)),((155,580),(263,584),(323,730),(319,846)),((155,580),(63,564),(-30,645),(-123,831))]
+right=[((825,620),(673,435),(558,439),(532,535)),((825,620),(751,343),(812,318),(870,349)),((825,620),(862,385),(966,374),(1052,452)),((825,620),(1000,479),(1132,540),(1146,672)),((825,620),(971,600),(1038,760),(1029,870)),((825,620),(724,625),(647,744),(663,897))]
+for p in left+right:palms+=frond(p,108)
+palms+='<path fill="#102C36" fill-opacity=".18" d="M0 0H960V1280H0Z"/><path filter="url(#grain)" opacity=".038" d="M0 0H960V1280H0Z"/>'
+wrap('sound-palms.svg',palm_defs,palms)
+
+# Dune faces have coherent warm ridge light and cool lee shadows, with wind-ripple paths on a near face.
+dune_defs='''
+<linearGradient id="sky" x2=".12" y2="1"><stop stop-color="#BAA78D"/><stop offset=".32" stop-color="#8B7D7B"/><stop offset="1" stop-color="#343E54"/></linearGradient>
+<radialGradient id="haze" cx=".2" cy=".2" r=".8"><stop stop-color="#E4C6A0" stop-opacity=".3"/><stop offset="1" stop-color="#D4B49A" stop-opacity="0"/></radialGradient>
+<linearGradient id="far" x1=".1" x2=".8" y2="1"><stop stop-color="#988A81"/><stop offset=".34" stop-color="#6B6370"/><stop offset="1" stop-color="#2D354C"/></linearGradient>
+<linearGradient id="lit" x1=".08" y1=".05" x2=".94" y2="1"><stop stop-color="#BCAB92"/><stop offset=".34" stop-color="#7F7580"/><stop offset=".71" stop-color="#4C5067"/><stop offset="1" stop-color="#243449"/></linearGradient>
+<linearGradient id="shade" x2="1" y2="1"><stop stop-color="#43506B"/><stop offset=".4" stop-color="#29384F"/><stop offset="1" stop-color="#122236"/></linearGradient>
+<linearGradient id="near" x1="0" x2=".95" y2="1"><stop stop-color="#7E7D88"/><stop offset=".32" stop-color="#4A5770"/><stop offset="1" stop-color="#182A41"/></linearGradient>
+<filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".10 .35" numOctaves="2" seed="13" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+<clipPath id="nearFace"><path d="M-20 990C232 803 421 685 648 688S842 805 1000 756V1280H-20Z"/></clipPath>
+'''
+dunes='<path fill="url(#sky)" d="M0 0H960V1280H0Z"/><path fill="url(#haze)" d="M0 0H960V1280H0Z"/>'
+dunes+='<path fill="#656375" d="M-20 534C137 487 263 516 426 444S740 360 980 466V1280H-20Z"/>'
+dunes+='<path fill="url(#far)" d="M-20 632C179 595 345 484 575 405S787 398 980 479V1280H-20Z"/>'
+dunes+='<path fill="url(#lit)" d="M-20 793C156 725 336 594 601 491S829 508 980 579V1280H-20Z"/>'
+dunes+='<path fill="url(#shade)" d="M601 491C716 607 796 891 980 933V579C829 508 734 438 601 491Z"/>'
+dunes+='<path fill="none" stroke="#C8BCA8" stroke-opacity=".43" stroke-width="2.3" d="M-20 793C156 725 336 594 601 491S829 508 980 579"/>'
+dunes+='<path fill="url(#near)" d="M-20 990C232 803 421 685 648 688S842 805 1000 756V1280H-20Z"/>'
+dunes+='<path fill="url(#shade)" opacity=".64" d="M648 688C493 913 531 1090 752 1280H1000V756C842 805 754 684 648 688Z"/>'
+dunes+='<g clip-path="url(#nearFace)" fill="none" stroke="#B7BAC3" stroke-opacity=".12">'
+for n in range(26):
+    y=731+n*n*.56
+    dunes+=f'<path stroke-width="{.65+n*.035:.2f}" d="M-35 {y+177:.1f}C184 {y+83:.1f} 386 {y-35:.1f} 656 {y-26:.1f}S869 {y+38:.1f} 1000 {y+23:.1f}"/>'
+dunes+='</g><path fill="#111F33" fill-opacity=".16" d="M0 0H960V1280H0Z"/><path filter="url(#grain)" opacity=".057" d="M0 0H960V1280H0Z"/>'
+wrap('sound-dunes.svg',dune_defs,dunes)
+
+# Fine foam follows an irregular crest; deeper turquoise layers, scattered flecks and soft reflection add water depth.
+rng=random.Random(8663)
+ocean_defs='''
+<linearGradient id="water" x1=".05" x2=".95" y2="1"><stop stop-color="#245663"/><stop offset=".31" stop-color="#317980"/><stop offset=".62" stop-color="#205962"/><stop offset="1" stop-color="#102E43"/></linearGradient>
+<radialGradient id="depth" cx=".3" cy=".35" r=".72"><stop stop-color="#7FBEB9" stop-opacity=".37"/><stop offset=".46" stop-color="#469993" stop-opacity=".18"/><stop offset="1" stop-color="#052333" stop-opacity=".44"/></radialGradient>
+<linearGradient id="wave" x1=".1" x2=".8" y2="1"><stop stop-color="#78AEA6" stop-opacity=".55"/><stop offset=".4" stop-color="#2F8D86" stop-opacity=".36"/><stop offset="1" stop-color="#063241" stop-opacity=".4"/></linearGradient>
+<filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".16 .28" numOctaves="2" seed="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+<filter id="foam" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".045 .10" numOctaves="2" seed="9" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .66 0 0 0 0 .86 0 0 0 0 .81 0 0 0 .4 0"/></filter>
+<clipPath id="foamBand"><path d="M-20 630C211 551 308 827 538 735S763 562 980 771L980 891C777 671 713 887 527 888S226 684-20 795Z"/></clipPath>
+'''
+ocean='<path fill="url(#water)" d="M0 0H960V1280H0Z"/><path fill="url(#depth)" d="M0 0H960V1280H0Z"/>'
+ocean+='<path fill="url(#wave)" d="M-20 401C194 320 269 543 474 509S781 338 980 559V694C728 481 676 723 445 648S154 411-20 572Z"/>'
+ocean+='<path fill="url(#wave)" d="M-20 637C213 542 310 828 538 735S765 562 980 771V995C726 766 652 1029 404 849S168 685-20 918Z"/>'
+ocean+='<path filter="url(#foam)" opacity=".30" clip-path="url(#foamBand)" d="M0 500H960V990H0Z"/>'
+for n in range(18):
+    parts=[]
+    offset=n*4.4
+    for k in range(49):
+        x=-10+k*21;y=654+102*math.sin(x/132)+42*math.cos(x/77)+offset+rng.uniform(-7,7)
+        parts.append(('M' if k==0 else 'L')+f'{x:.1f} {y:.1f}')
+    ocean+=f'<path fill="none" stroke="#D5EEE3" stroke-opacity="{.16-(n%4)*.016:.3f}" stroke-width="{.7+(n%3)*.25:.2f}" d="'+''.join(parts)+'"/>'
+for n in range(250):
+    x=rng.uniform(-5,970);crest=654+102*math.sin(x/132)+42*math.cos(x/77);y=crest+rng.uniform(0,85);r=rng.uniform(.6,2.0)
+    ocean+=f'<ellipse fill="#D8F0E5" opacity="{rng.uniform(.10,.27):.2f}" cx="{x:.1f}" cy="{y:.1f}" rx="{r*1.9:.2f}" ry="{r*.55:.2f}" transform="rotate({rng.uniform(-35,35):.1f} {x:.1f} {y:.1f})"/>'
+for n in range(32):
+    x=rng.uniform(145,765);y=rng.uniform(220,560);span=rng.uniform(10,66)
+    ocean+=f'<path fill="none" stroke="#AADBD3" stroke-opacity=".12" stroke-width=".9" d="M{x:.1f} {y:.1f}q{span/2:.1f} -2 {span:.1f} 0"/>'
+ocean+='<path fill="#112C3E" fill-opacity=".14" d="M0 0H960V1280H0Z"/><path filter="url(#grain)" opacity=".041" d="M0 0H960V1280H0Z"/>'
+wrap('sound-ocean.svg',ocean_defs,ocean)
+for name in ['sound-dunes.svg','sound-palms.svg','sound-ocean.svg']:
+    print(name,(root/name).stat().st_size)

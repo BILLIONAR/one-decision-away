@@ -1,0 +1,441 @@
+diff --git a/src/pages/SoundRoom.tsx b/src/pages/SoundRoom.tsx
+index 745d42a..bbaa53b 100644
+--- a/src/pages/SoundRoom.tsx
++++ b/src/pages/SoundRoom.tsx
+@@ -1,4 +1,4 @@
+-import React, { useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from 'react';
++import React, { useCallback, useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+ import { Headphones, Info, LockKeyhole, Moon, Pause, Play, Timer, Volume1, Volume2, Waves, Wind } from 'lucide-react';
+ import { useApp } from '../store/useApp';
+ import { purchases, usePro } from '../services/purchases';
+@@ -81,13 +81,13 @@ const CoverWave: React.FC = () => (
+   </svg>
+ );
+ 
+-const SoundCard: React.FC<{ sound: SoundRoomSound; sectionId: SoundRoomSectionId; indexInCategory: number; playing: boolean; locked?: boolean }> = ({ sound, sectionId, indexInCategory, playing, locked }) => {
++const SoundCard: React.FC<{ sound: SoundRoomSound; sectionId: SoundRoomSectionId; indexInCategory: number; playing: boolean; selected: boolean; locked?: boolean }> = ({ sound, sectionId, indexInCategory, playing, selected, locked }) => {
+   const t = useT();
+   const { setActiveRoute } = useApp();
+   const nameId = useId();
+   const descriptionId = useId();
+   return (
+-    <li className="oda-sound-card" data-playing={playing || undefined}>
++    <li className="oda-sound-card" data-playing={playing || undefined} data-selected={selected || undefined}>
+       <button
+         type="button"
+         className="oda-sound-card-button"
+@@ -111,18 +111,16 @@ const SoundCard: React.FC<{ sound: SoundRoomSound; sectionId: SoundRoomSectionId
+         <span className="oda-sound-card-body">
+           <span id={nameId} className="oda-sound-card-name">{t(sound.name)}</span>
+           <span id={descriptionId} className="oda-sound-card-description">{t(sound.description)}</span>
+-          <span className="oda-sound-card-why">{t(sound.why)}</span>
+-          {sound.binaural && (
+-            <span className="oda-sound-card-note">
+-              <Headphones size={14} aria-hidden="true" />
+-              {t('Use headphones for binaural sounds')}
+-            </span>
+-          )}
+         </span>
+         <span className="oda-sound-card-play" aria-hidden="true">
+           {locked ? <LockKeyhole size={17} strokeWidth={2} /> : playing ? <Pause size={19} strokeWidth={2.2} /> : <Play size={19} strokeWidth={2.2} />}
+         </span>
+       </button>
++      <details className="oda-sound-card-rationale">
++        <summary aria-label={`${t('Why it matters')}: ${t(sound.name)}`} title={t('Why it matters')}><Info size={16} aria-hidden="true" /><span className="sr-only">{t('Why it matters')}</span></summary>
++        <p className="oda-sound-card-why">{t(sound.why)}</p>
++        {sound.binaural && <p className="oda-sound-card-note"><Headphones size={14} aria-hidden="true" />{t('Use headphones for binaural sounds')}</p>}
++      </details>
+     </li>
+   );
+ };
+@@ -197,40 +195,63 @@ const BreathePanel: React.FC<{ sound: SoundRoomSound; soundPlaying: boolean }> =
+   );
+ };
+ 
+-const PlayerBar: React.FC = () => {
++type PlayerControlProps = { volume: number; onVolumeChange: (volume: number) => void };
++
++/** Both presentations use the same volume value and the existing guarded player methods. */
++const PlayerControls: React.FC<PlayerControlProps> = ({ volume, onVolumeChange }) => {
+   const t = useT();
+   const player = usePlayer();
+-  const [volume, setVolume] = useState(() => soundRoomPlayer.getVolume());
+-  useTick(player.playing && player.endsAt !== null, 1000);
+-  const sound = soundForTrack(player.track);
+-  const scene = SECTION_SCENES[SOUND_ROOM_SECTIONS.find((item) => item.sounds.some((entry) => entry.track === player.track))?.id ?? 'relax'];
+   const volumeId = useId();
+   const timerId = useId();
++  return (
++    <div className="oda-sound-player-controls">
++      <label htmlFor={volumeId} className="oda-sound-player-volume">
++        <span className="sr-only">{t('Volume')}</span>
++        {volume < 0.5 ? <Volume1 size={16} aria-hidden="true" /> : <Volume2 size={16} aria-hidden="true" />}
++        <input id={volumeId} data-sound-control="volume" type="range" min={0} max={1} step={0.01} value={volume} onChange={(event) => onVolumeChange(Number(event.target.value))} />
++      </label>
++      <label htmlFor={timerId} className="oda-sound-player-timer">
++        <Timer size={16} aria-hidden="true" />
++        <span className="sr-only">{t('Timer')}</span>
++        <select id={timerId} data-sound-control="timer" value={player.timerMinutes ?? ''} onChange={(event) => soundRoomPlayer.setTimer(event.target.value ? Number(event.target.value) : null)}>
++          <option value="">{t('No timer')}</option>
++          {TIMER_CHOICES.map((minutes) => <option key={minutes} value={minutes}>{t('{n} min', { n: minutes })}</option>)}
++        </select>
++      </label>
++    </div>
++  );
++};
+ 
++function playerStatus(player: ReturnType<typeof usePlayer>, t: ReturnType<typeof useT>): string {
+   const remaining = player.playing && player.endsAt !== null
+     ? player.endsAt - Date.now()
+     : player.pausedRemainingMs;
++  if (!player.track) return t('Choose a sound to begin');
++  if (remaining !== null && remaining > 0) return t('{time} left', { time: formatRemaining(remaining) });
++  return player.playing ? t('Playing · no timer') : t('Paused');
++}
+ 
+-  let status: string;
+-  if (!sound) status = t('Choose a sound to begin');
+-  else if (remaining !== null && remaining > 0) status = t('{time} left', { time: formatRemaining(remaining) });
+-  else if (player.playing) status = t('Playing · no timer');
+-  else status = t('Paused');
+-
+-  if (!player.track) return null;
++const PlayerBar: React.FC<PlayerControlProps & { visible: boolean }> = ({ volume, onVolumeChange, visible }) => {
++  const t = useT();
++  const player = usePlayer();
++  useTick(visible && player.playing && player.endsAt !== null, 1000);
++  const sound = soundForTrack(player.track);
++  const scene = SECTION_SCENES[SOUND_ROOM_SECTIONS.find((item) => item.sounds.some((entry) => entry.track === player.track))?.id ?? 'relax'];
++  if (!player.track || !visible) return null;
+ 
+   return (
+-    <div className="oda-sound-player" role="region" aria-label={t('Sound player')}>
++    <div className="oda-sound-player" data-sound-surface="mini" role="region" aria-label={t('Sound player')}>
+       <div className="oda-sound-player-inner">
+         <div className="oda-sound-player-now">
+           <SoundScene scene={scene} className="oda-sound-player-thumb" />
+           <div className="oda-sound-player-text">
+             <p className="oda-sound-player-name">{sound ? t(sound.name) : t('Sound Room')}</p>
+-            <p className="oda-sound-player-status" aria-live="off">{status}</p>
++            <p className="oda-sound-player-status" aria-live="off">{playerStatus(player, t)}</p>
+           </div>
+           <button
+             type="button"
+             className="oda-sound-player-toggle"
++            data-sound-control="toggle"
+             disabled={!sound}
+             aria-label={player.playing ? t('Pause') : t('Play')}
+             onClick={() => (player.playing ? soundRoomPlayer.pause() : soundRoomPlayer.resume())}
+@@ -238,66 +259,74 @@ const PlayerBar: React.FC = () => {
+             {player.playing ? <Pause size={20} strokeWidth={2.2} /> : <Play size={20} strokeWidth={2.2} />}
+           </button>
+         </div>
+-        <div className="oda-sound-player-controls">
+-          <label htmlFor={volumeId} className="oda-sound-player-volume">
+-            <span className="sr-only">{t('Volume')}</span>
+-            {volume < 0.5 ? <Volume1 size={16} aria-hidden="true" /> : <Volume2 size={16} aria-hidden="true" />}
+-            <input
+-              id={volumeId}
+-              type="range"
+-              min={0}
+-              max={1}
+-              step={0.01}
+-              value={volume}
+-              onChange={(event) => {
+-                const next = Number(event.target.value);
+-                setVolume(next);
+-                soundRoomPlayer.setVolume(next);
+-              }}
+-            />
+-          </label>
+-          <label htmlFor={timerId} className="oda-sound-player-timer">
+-            <Timer size={16} aria-hidden="true" />
+-            <span className="sr-only">{t('Timer')}</span>
+-            <select
+-              id={timerId}
+-              value={player.timerMinutes ?? ''}
+-              onChange={(event) => soundRoomPlayer.setTimer(event.target.value ? Number(event.target.value) : null)}
+-            >
+-              <option value="">{t('No timer')}</option>
+-              {TIMER_CHOICES.map((minutes) => (
+-                <option key={minutes} value={minutes}>{t('{n} min', { n: minutes })}</option>
+-              ))}
+-            </select>
+-          </label>
+-        </div>
++        <PlayerControls volume={volume} onVolumeChange={onVolumeChange} />
+       </div>
+     </div>
+   );
+ };
+ 
+ /** The same real player state, given the reference's larger teal-glass presentation. */
+-const NowPlayingPanel: React.FC = () => {
++const NowPlayingPanel: React.FC<PlayerControlProps & { primary: boolean; onPrimaryVisible: (visible: boolean) => void }> = ({ volume, onVolumeChange, primary, onPrimaryVisible }) => {
+   const t = useT();
+   const player = usePlayer();
+   const sound = soundForTrack(player.track);
+   const scene = SECTION_SCENES[SOUND_ROOM_SECTIONS.find((item) => item.sounds.some((entry) => entry.track === player.track))?.id ?? 'relax'];
++  const controlsRef = useRef<HTMLDivElement>(null);
++  useTick(primary && player.playing && player.endsAt !== null, 1000);
++  const hasSound = !!sound;
++  useEffect(() => {
++    const controls = controlsRef.current;
++    if (!hasSound || !controls) { onPrimaryVisible(false); return; }
++    let observer: IntersectionObserver | undefined;
++    let frame = 0;
++    const margins = () => window.matchMedia('(min-width: 768px)').matches ? [24, 24] : [64, 96];
++    const check = () => {
++      const rect = controls.getBoundingClientRect();
++      const [top, bottom] = margins();
++      onPrimaryVisible(rect.height > 0 && rect.top >= top && rect.bottom <= window.innerHeight - bottom);
++    };
++    const schedule = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(check); };
++    const observe = () => {
++      observer?.disconnect();
++      if (typeof IntersectionObserver !== 'undefined') {
++        const [top, bottom] = margins();
++        observer = new IntersectionObserver(check, { rootMargin: `-${top}px 0px -${bottom}px 0px`, threshold: [0, .99, 1] });
++        observer.observe(controls);
++      }
++      schedule();
++    };
++    observe();
++    window.addEventListener('resize', observe);
++    // Capture nested scrolling too; this also supports browsers without IntersectionObserver.
++    window.addEventListener('scroll', schedule, true);
++    return () => {
++      observer?.disconnect();
++      cancelAnimationFrame(frame);
++      window.removeEventListener('resize', observe);
++      window.removeEventListener('scroll', schedule, true);
++      onPrimaryVisible(false);
++    };
++  }, [hasSound, onPrimaryVisible]);
+   if (!sound) return null;
+   return (
+-    <section className="oda-sound-now-panel" aria-label={t('Sound player')}>
++    <section className="oda-sound-now-panel" data-sound-surface="expanded" data-primary={primary || undefined} aria-label={t('Sound player')}>
+       <div className="oda-sound-now-heading">
+         <p className="oda-kicker">{t('Sound Room')}</p>
+         <h2 className="oda-display">{sound ? t(sound.name) : t('Choose a sound to begin')}</h2>
+         {sound && <p>{t(sound.description)}</p>}
+       </div>
+       <SoundScene scene={scene} className="oda-sound-now-art" eager />
++      <div className="oda-sound-now-control-surface" ref={controlsRef}>
+       <div className="oda-sound-now-controls">
+         <Headphones size={20} aria-hidden="true" />
+-        <button type="button" className="oda-sound-now-toggle" disabled={!sound} aria-label={player.playing ? t('Pause') : t('Play')} onClick={() => (player.playing ? soundRoomPlayer.pause() : soundRoomPlayer.resume())}>
++        <button type="button" className="oda-sound-now-toggle" data-sound-control="toggle" disabled={!sound} aria-label={player.playing ? t('Pause') : t('Play')} onClick={() => (player.playing ? soundRoomPlayer.pause() : soundRoomPlayer.resume())}>
+           {player.playing ? <Pause size={27} strokeWidth={2.2} /> : <Play size={27} strokeWidth={2.2} />}
+         </button>
+         <Timer size={20} aria-hidden="true" />
+       </div>
++      <p className="oda-sound-now-status" aria-live="off">{playerStatus(player, t)}</p>
++      <PlayerControls volume={volume} onVolumeChange={onVolumeChange} />
++      </div>
+       <p className="oda-sound-now-note">{sound ? t(sound.why) : t('Sound for calm, sleep and focus')}</p>
+     </section>
+   );
+@@ -314,6 +343,30 @@ export const SoundRoom: React.FC = () => {
+   const pro = usePro();
+   const tier = pro.identityConfirmed ? pro.tier : 'free';
+   const [tab, setTab] = useState<SoundRoomSectionId>(readTab);
++  const [volume, setVolume] = useState(() => soundRoomPlayer.getVolume());
++  const [expandedPrimary, setExpandedPrimary] = useState(false);
++  const expandedPrimaryRef = useRef(false);
++  const pendingFocus = useRef<string | null>(null);
++  const soundRootRef = useRef<HTMLDivElement>(null);
++  const onPrimaryVisible = useCallback((visible: boolean) => {
++    if (expandedPrimaryRef.current === visible) return;
++    const focused = document.activeElement as HTMLElement | null;
++    const previousSurface = visible ? 'mini' : 'expanded';
++    if (focused?.closest(`[data-sound-surface="${previousSurface}"]`)) {
++      pendingFocus.current = focused.dataset.soundControl ?? null;
++    }
++    expandedPrimaryRef.current = visible;
++    setExpandedPrimary(visible);
++  }, []);
++  useEffect(() => {
++    const control = pendingFocus.current;
++    pendingFocus.current = null;
++    if (control) soundRootRef.current?.querySelector<HTMLElement>(`[data-sound-surface="${expandedPrimary ? 'expanded' : 'mini'}"] [data-sound-control="${control}"]`)?.focus({ preventScroll: true });
++  }, [expandedPrimary]);
++  const onVolumeChange = useCallback((next: number) => {
++    setVolume(next);
++    soundRoomPlayer.setVolume(next);
++  }, []);
+   const tabRefs = useRef<Partial<Record<SoundRoomSectionId, HTMLButtonElement | null>>>({});
+   const baseId = useId();
+   const section = TAB_SECTIONS.find((item) => item.id === tab) ?? TAB_SECTIONS[0];
+@@ -346,7 +399,7 @@ export const SoundRoom: React.FC = () => {
+   const isPlaying = (track: SoundRoomSound['track']) => player.playing && player.track === track;
+ 
+   return (
+-    <div className="oda-sound">
++    <div className="oda-sound" ref={soundRootRef}>
+       <header className="oda-sound-intro">
+         <div className="oda-sound-intro-copy">
+           <h1 className="oda-display oda-sound-title">{t('Sound Room')}</h1>
+@@ -412,7 +465,7 @@ export const SoundRoom: React.FC = () => {
+         ) : (
+           <ul className="oda-sound-grid">
+             {section.sounds.map((sound, i) => (
+-              <SoundCard key={`${section.id}-${sound.track}`} sound={sound} sectionId={section.id} indexInCategory={i} playing={isPlaying(sound.track)} locked={isSoundLocked(i, { gating: pro.gating, tier })} />
++              <SoundCard key={`${section.id}-${sound.track}`} sound={sound} sectionId={section.id} indexInCategory={i} playing={isPlaying(sound.track)} selected={player.track === sound.track} locked={isSoundLocked(i, { gating: pro.gating, tier })} />
+             ))}
+           </ul>
+         )}
+@@ -425,7 +478,7 @@ export const SoundRoom: React.FC = () => {
+         )}
+         </div>
+       </section>
+-      <NowPlayingPanel />
++      <NowPlayingPanel volume={volume} onVolumeChange={onVolumeChange} primary={expandedPrimary} onPrimaryVisible={onPrimaryVisible} />
+       </div>
+       </div>
+ 
+@@ -447,7 +500,7 @@ export const SoundRoom: React.FC = () => {
+         </aside>
+         <ul className="oda-sound-grid">
+           {FREQUENCIES.sounds.map((sound, i) => (
+-            <SoundCard key={`frequencies-${sound.track}`} sound={sound} sectionId="frequencies" indexInCategory={i} playing={isPlaying(sound.track)} locked={isSoundLocked(i, { gating: pro.gating, tier })} />
++            <SoundCard key={`frequencies-${sound.track}`} sound={sound} sectionId="frequencies" indexInCategory={i} playing={isPlaying(sound.track)} selected={player.track === sound.track} locked={isSoundLocked(i, { gating: pro.gating, tier })} />
+           ))}
+         </ul>
+       </section>
+@@ -466,7 +519,7 @@ export const SoundRoom: React.FC = () => {
+         {t('Keep the volume low. Do not use binaural or sleep sounds while driving or doing anything that needs your full attention. Stop if you feel any discomfort.')}
+       </p>
+ 
+-      <PlayerBar />
++      <PlayerBar volume={volume} onVolumeChange={onVolumeChange} visible={!expandedPrimary} />
+     </div>
+   );
+ };
+diff --git a/src/styles/sound.css b/src/styles/sound.css
+index e4fa9e8..6ef03b9 100644
+--- a/src/styles/sound.css
++++ b/src/styles/sound.css
+@@ -15,25 +15,26 @@
+ .oda-sound-about summary::marker { content: ''; }
+ 
+ /* One continuous canvas: three full-width scenic bands flow into the dark local breathing action. */
+-.oda-sound-tabs { display: flex; flex-direction: column; position: relative; isolation: isolate; width: calc(100% + 40px); margin-inline: -20px; border-radius: 30px; overflow: hidden; background: #10232C; }
+-.oda-sound-tab { position: relative; flex: none; width: 100%; min-width: 0; min-height: 280px; border: 0; border-radius: 0; overflow: hidden; text-align: center; cursor: pointer; }
++.oda-sound-tabs { --sound-scene-span: max(100px, calc((100vh - 172px) / 3)); --sound-wave-overlap: clamp(32px, 8vh, 76px); display: flex; flex-direction: column; position: relative; isolation: isolate; width: calc(100% + 40px); margin-inline: -20px; border-radius: 30px; overflow: hidden; background: #10232C; }
++@supports (height: 100svh) { .oda-sound-tabs { --sound-scene-span: max(100px, calc((100svh - 172px) / 3)); --sound-wave-overlap: clamp(32px, 8svh, 76px); } }
++.oda-sound-tab { position: relative; flex: none; width: 100%; min-width: 0; min-height: 0; height: calc(var(--sound-scene-span) + var(--sound-wave-overlap)); border: 0; border-radius: 0; overflow: hidden; scroll-margin-block: 80px 100px; text-align: center; cursor: pointer; }
+ .oda-sound-tab:nth-child(1) { z-index: 4; border-radius: 0 0 18% 64% / 0 0 20% 40%; }
+-.oda-sound-tab:nth-child(2) { z-index: 3; margin-top: -104px; min-height: 310px; border-radius: 0 0 65% 16% / 0 0 34% 18%; }
+-.oda-sound-tab:nth-child(3) { z-index: 2; margin-top: -108px; min-height: 320px; border-radius: 0 0 28% 62% / 0 0 16% 24%; }
++.oda-sound-tab:nth-child(2) { z-index: 3; margin-top: calc(-1 * var(--sound-wave-overlap)); border-radius: 0 0 65% 16% / 0 0 34% 18%; }
++.oda-sound-tab:nth-child(3) { z-index: 2; margin-top: calc(-1 * var(--sound-wave-overlap)); height: var(--sound-scene-span); border-radius: 0 0 28% 62% / 0 0 16% 24%; }
+ .oda-sound-tab > .oda-sound-scene { position: absolute; inset: 0; }
+ .oda-sound-tab::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(8 19 28 / .08), rgb(8 19 28 / .18) 45%, rgb(8 19 28 / .5)); }
+-.oda-sound-tab-copy { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 250px; padding: 2rem 1.45rem 3.5rem; color: #FFFFFF; }
+-.oda-sound-tab:nth-child(2) .oda-sound-tab-copy { padding-top: 6rem; }
+-.oda-sound-tab:nth-child(3) .oda-sound-tab-copy { padding-top: 7rem; }
++.oda-sound-tab-copy { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 0; padding: 1.4rem 1.45rem 2rem; color: #FFFFFF; }
++.oda-sound-tab:nth-child(2) .oda-sound-tab-copy { padding-top: calc(var(--sound-wave-overlap) + .75rem); }
++.oda-sound-tab:nth-child(3) .oda-sound-tab-copy { padding: calc(var(--sound-wave-overlap) + .25rem) 1.45rem .8rem; }
+ .oda-sound-tab-icon { display: none; }
+ .oda-sound-tab-name { font-size: clamp(2rem, 9.6vw, 2.65rem); font-weight: 700; line-height: 1.06; letter-spacing: -.045em; text-shadow: 0 2px 16px rgb(0 0 0 / .4); }
+ .oda-sound-tab-detail { display: block; max-width: 35ch; margin-top: .5rem; font-size: .76rem; line-height: 1.5; color: #FFFFFF; text-shadow: 0 1px 8px #10232C; }
+ .oda-sound-tab[aria-selected="true"] .oda-sound-tab-name::after { content: ''; display: block; width: 26px; height: 3px; margin: .45rem auto 0; border-radius: 99px; background: #FFFFFF; }
+ .oda-sound .oda-sound-tab:focus-visible { outline: none; }
+ .oda-sound-tab:focus-visible .oda-sound-tab-name { outline: 2px solid #FFFFFF; outline-offset: 8px; border-radius: 4px; }
+-.oda-sound-tab[data-section="breathe"] { z-index: 1; min-height: 122px; margin-top: -24px; padding-top: 12px; background: #10232C; }
++.oda-sound-tab[data-section="breathe"] { z-index: 1; height: 112px; margin-top: 0; background: #10232C; }
+ .oda-sound-tab[data-section="breathe"] > .oda-sound-scene, .oda-sound-tab[data-section="breathe"]::after { display: none; }
+-.oda-sound-tab[data-section="breathe"] .oda-sound-tab-copy { min-height: 112px; padding: .8rem 1rem 1.25rem; }
++.oda-sound-tab[data-section="breathe"] .oda-sound-tab-copy { padding: .8rem 1rem 1.25rem; }
+ .oda-sound-tab[data-section="breathe"] .oda-sound-tab-icon { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; margin-bottom: .35rem; border: 1px solid #53747D; border-radius: 50%; background: #1A3540; }
+ .oda-sound-tab[data-section="breathe"][aria-selected="true"] .oda-sound-tab-icon { background: #ECF8F5; color: #1B3840; border-color: #ECF8F5; }
+ .oda-sound-tab[data-section="breathe"] .oda-sound-tab-name { font-size: .83rem; font-weight: 600; letter-spacing: 0; }
+@@ -41,21 +42,22 @@
+ 
+ /* A large dark cover meets a light lesson-style list through one continuous organic edge. */
+ .oda-sound-panel { min-width: 0; margin-top: 1.5rem; overflow: hidden; border: 1px solid var(--border); border-radius: 30px; background: var(--bg-elevated); box-shadow: var(--surface-shadow); }
+-.oda-sound-panel-cover { position: relative; isolation: isolate; min-height: 340px; padding: 3rem 1.4rem 6.5rem; background: #182D36; text-align: center; color: #FFFFFF; }
++.oda-sound-panel-cover { position: relative; isolation: isolate; min-height: 280px; padding: 2.25rem 1.4rem 5.5rem; background: #182D36; text-align: center; color: #FFFFFF; }
+ .oda-sound-panel-cover > .oda-sound-scene { position: absolute; z-index: -2; inset: 0; }
+ .oda-sound-panel-cover::after { content: ''; position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, rgb(8 20 30 / .55), rgb(8 20 30 / .18) 60%, rgb(8 20 30 / .45)); }
+ .oda-sound-section-title { margin-block: .4rem .6rem; font-size: clamp(1.7rem, 6.5vw, 2.25rem); line-height: 1.1; letter-spacing: -.035em; }
+ .oda-sound-section-intro { max-width: 58ch; margin-inline: auto; font-size: .87rem; line-height: 1.65; color: var(--fg-muted); }
+ .oda-sound-panel-cover .oda-sound-section-intro { max-width: 34ch; color: #FFFFFF; font-size: .81rem; }
+-.oda-sound-cover-wave { position: absolute; left: 0; bottom: -1px; display: block; width: 100%; height: 90px; fill: var(--bg-elevated); }
++.oda-sound-cover-wave { position: absolute; left: 0; bottom: -1px; display: block; width: 100%; height: 78px; fill: var(--bg-elevated); }
+ .oda-sound-panel-body { position: relative; padding: 0 1.1rem 1.4rem; }
+-.oda-sound-detail-thumb { position: relative; z-index: 1; width: 136px; height: 156px; margin: -122px auto 0; border: 1px solid rgb(241 252 251 / .42); border-radius: 32px; box-shadow: 0 12px 32px -18px #14202A; }
++.oda-sound-detail-thumb { position: relative; z-index: 1; width: 120px; height: 140px; margin: -104px auto 0; border: 1px solid rgb(241 252 251 / .42); border-radius: 28px 28px 38px 26px; box-shadow: 0 12px 32px -18px #14202A; }
+ .oda-sound-detail-credit { margin-top: .95rem; text-align: center; font-size: .74rem; color: var(--fg-muted); }
+ .oda-sound-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; margin-top: 1.1rem; }
+-.oda-sound-card { min-width: 0; }
++.oda-sound-card { position: relative; min-width: 0; }
+ .oda-sound-card + .oda-sound-card { border-top: 1px solid var(--border); }
+-.oda-sound-card-button { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr); align-items: start; gap: .7rem; width: 100%; min-height: 76px; padding: 1rem .15rem; border: 0; border-radius: 0; background: transparent; text-align: left; cursor: pointer; transition: background-color 160ms ease; }
++.oda-sound-card-button { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr); align-items: start; gap: .6rem; width: 100%; min-height: 64px; padding: .7rem 2.9rem .7rem .15rem; border: 0; border-radius: 0; background: transparent; text-align: left; cursor: pointer; transition: background-color 160ms ease; }
+ .oda-sound-card-button:hover { background: var(--bg-muted); }
++.oda-sound-card[data-selected] { background: var(--accent-soft); }
+ .oda-sound-card-button[aria-pressed="true"] { background: var(--accent-soft); }
+ .oda-sound-card-media { display: none; }
+ .oda-sound-card-play { grid-column: 1; grid-row: 1; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 0; border-radius: 50%; color: var(--fg-muted); background: transparent; }
+@@ -64,6 +66,11 @@
+ .oda-sound-card-name { font-size: .93rem; font-weight: 650; line-height: 1.3; letter-spacing: -.015em; color: var(--fg); overflow-wrap: anywhere; }
+ .oda-sound-card-description { font-size: .77rem; line-height: 1.5; color: var(--fg); }
+ .oda-sound-card-why { font-size: .74rem; line-height: 1.5; color: var(--fg-muted); }
++.oda-sound-card-rationale summary { position: absolute; top: .6rem; right: 0; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; color: var(--fg-muted); cursor: pointer; list-style: none; }
++.oda-sound-card-rationale summary::-webkit-details-marker { display: none; }
++.oda-sound-card-rationale summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
++.oda-sound-card-rationale[open] { padding: 0 .8rem .8rem 3.6rem; }
++.oda-sound-card-rationale[open] summary { color: var(--accent); background: var(--bg-muted); }
+ .oda-sound-card-note { display: inline-flex; align-items: center; gap: .35rem; align-self: flex-start; margin-top: .15rem; padding: .3rem .5rem; border-radius: 12px; font-size: .71rem; font-weight: 600; line-height: 1.45; color: var(--fg); background: var(--accent-soft); }
+ .oda-sound-card-note svg { flex: none; }
+ .oda-sound-card-pro { display: none; }
+@@ -77,9 +84,13 @@
+ .oda-sound-now-heading .oda-kicker { color: #D5EEEB; }
+ .oda-sound-now-heading h2 { margin-top: .5rem; font-size: 1.5rem; letter-spacing: -.03em; line-height: 1.15; }
+ .oda-sound-now-heading > p:last-child { margin-top: .7rem; max-width: 36ch; font-size: .8rem; line-height: 1.6; color: #E4F4F0; }
+-.oda-sound-now-art { width: calc(100% + 2.2rem); height: 300px; margin: 1.4rem -1.1rem 0; border-radius: 0 0 45% 15% / 0 0 18% 6%; }
++.oda-sound-now-art { width: calc(100% + 2.2rem); height: clamp(180px, 30svh, 300px); margin: 1.4rem -1.1rem 0; border-radius: 0 0 45% 15% / 0 0 18% 6%; }
+ .oda-sound-now-art img { object-position: center 65%; opacity: .92; }
+-.oda-sound-now-controls { display: flex; justify-content: space-around; align-items: center; width: min(100%, 270px); margin: -18px auto 0; padding: .7rem; position: relative; border: 1px solid rgb(194 245 239 / .22); border-radius: 26px; background: rgb(50 99 106 / .8); backdrop-filter: blur(14px); color: #D9EEEA; }
++.oda-sound-now-control-surface { position: relative; margin: -22px auto 0; padding: .75rem; border: 1px solid rgb(194 245 239 / .22); border-radius: 26px; background: rgb(50 99 106 / .8); backdrop-filter: blur(14px); color: #D9EEEA; }
++.oda-sound-now-controls { display: flex; justify-content: space-around; align-items: center; width: min(100%, 270px); margin-inline: auto; }
++.oda-sound-now-status { margin-block: .4rem .25rem; font-size: .74rem; line-height: 1.4; text-align: center; font-variant-numeric: tabular-nums; color: #DEEFED; }
++.oda-sound-now-control-surface .oda-sound-player-controls { gap: .6rem; }
++.oda-sound-now-control-surface input:focus-visible, .oda-sound-now-control-surface select:focus-visible { outline-color: #D3F7F4; }
+ .oda-sound-now-toggle { display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 50%; color: var(--sound-on-cyan); background: var(--sound-cyan); cursor: pointer; box-shadow: 0 0 22px rgb(71 218 217 / .2); }
+ .oda-sound-now-toggle:disabled { background: #587C80; color: #E3F0ED; cursor: not-allowed; box-shadow: none; }
+ .oda-sound-now-toggle:focus-visible { outline-color: #F1FCFB; }
+@@ -91,7 +102,8 @@
+   .oda-sound-intro { right: auto; width: calc((100% - 1.5rem) * .468); }
+   .oda-sound-tabs { position: sticky; top: 24px; }
+   .oda-sound-panel { margin-top: 0; }
+-  .oda-sound-panel-cover { min-height: 380px; }
++  .oda-sound-tabs { --sound-scene-span: max(100px, calc((100svh - 96px) / 3)); }
++  .oda-sound-panel-cover { min-height: 320px; }
+ }
+ /* Breath timing remains synchronized to the existing audio clock. */
+ .oda-sound-breathe { display: flex; flex-direction: column; align-items: center; margin-top: 1.25rem; padding: 1.5rem 1rem 1.4rem; border: 1px solid #477B7D; border-radius: 23px; background: radial-gradient(ellipse at 50% 0, #285A62, #15383F 70%); color: #F1FCFB; text-align: center; }
+@@ -159,6 +171,19 @@
+   .oda-sound-panel-body { padding-inline: .8rem; }
+   .oda-sound-player-controls { gap: .5rem; }
+ }
++@media (max-height: 650px) {
++  .oda-sound-tab-detail { display: none; }
++  .oda-sound-tab-name { font-size: 1.8rem; }
++  .oda-sound-tab:nth-child(3) .oda-sound-tab-copy { padding-top: var(--sound-wave-overlap); }
++}
++/* Sound-only scenic navigation retains all five actual destinations and their labels. */
++.oda-reference-app[data-app-route="/app/sound"] .oda-tabbar { border-radius: 33px; border-color: #49666B; background: rgb(15 38 45 / .91); color: #DEEEEA; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); box-shadow: 0 8px 28px -14px #071E29; }
++.oda-reference-app[data-app-route="/app/sound"] .oda-tab { min-height: 44px; min-width: 0; border-radius: 50%; background: transparent; color: #DEEEEA; }
++.oda-reference-app[data-app-route="/app/sound"] .oda-tab svg { width: 42px; height: 42px; padding: 10.5px; border-radius: 50%; }
++.oda-reference-app[data-app-route="/app/sound"] .oda-tab[aria-current="page"] { color: #FFFFFF; background: transparent; box-shadow: none; }
++.oda-reference-app[data-app-route="/app/sound"] .oda-tab[aria-current="page"] svg { color: #153B42; background: #ECF8F5; box-shadow: 0 0 0 3px rgb(170 224 215 / .12); }
++.oda-reference-app[data-app-route="/app/sound"] .oda-tab:focus-visible { outline: 2px solid #C8F0E8; outline-offset: -2px; }
++@media (prefers-reduced-transparency: reduce) { .oda-reference-app[data-app-route="/app/sound"] .oda-tabbar { background: #142E37; backdrop-filter: none; -webkit-backdrop-filter: none; } }
+ @media (prefers-reduced-motion: reduce) {
+   .oda-sound-tab, .oda-sound-card-button { transition: none; }
+   .oda-sound-breathe-circle[data-active] { animation: none; }

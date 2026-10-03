@@ -1,0 +1,30 @@
+{
+  "label": "Independent actual-service synthetic conditional-query review",
+  "mode": "baseline",
+  "root": "/workspace/oda-native-settings-otp",
+  "head": "c30da64a5991758e952983377cbd6c4740e09d20",
+  "source": {
+    "src/services/cloudSync.ts": "50a24f6690106cebbc1b38dfabb0edb84d4ca34f28b26dde4b919537b62a4bde",
+    "src/services/repository.ts": "a65560692f655d05b37a367e5acbeff1b6dd2974f2f951ff70e419c1c9dcfc8a",
+    "src/store/useApp.tsx": "f9830c38ec908641d33ea8f26c92ae4d5d2a21068d2b3d19a99fd70c4708fb0c"
+  },
+  "total": 3,
+  "passed": 3,
+  "failed": 0,
+  "liveNetworkCalls": 0,
+  "providerOrNativeTested": false,
+  "results": [
+    {
+      "name": "Known defect reproduced (before fix): Fresh existing cloud: ordinary first save preserves unseen remote and local",
+      "passed": true
+    },
+    {
+      "name": "Known defect reproduced (before fix): Declined cloud preview then ordinary edit never authorizes remote replacement",
+      "passed": true
+    },
+    {
+      "name": "Known defect reproduced (before fix): One-second remote advance after own upload is preserved on next push",
+      "passed": true
+    }
+  ]
+}

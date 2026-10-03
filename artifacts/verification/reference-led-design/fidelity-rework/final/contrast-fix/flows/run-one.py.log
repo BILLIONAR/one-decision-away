@@ -1,0 +1,38 @@
+from pathlib import Path
+import subprocess, os, json, time, hashlib, sys
+
+root=Path('/workspace/oda-reference-redesign')
+out=Path('/workspace/scratch/oda-reference-redesign/fidelity-rework/final/contrast-fix/flows')
+if os.environ.get('ODA_FIDELITY_FLOW_GO') != '1':
+    raise SystemExit('Not executed: parent source/build GO is required.')
+expected=os.environ['ODA_QA_SOURCE_COMMIT']
+actual=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
+if actual != expected:
+    raise SystemExit('Not executed: actual Git source differs from approved source.')
+url=os.environ['ODA_FIDELITY_PREVIEW_URL'].rstrip('/')
+kind=sys.argv[1]
+jobs={
+ 'first-use-remaining':('harness/first-use-remaining.mjs', {'ODA_QA_URL':url+'/#','ODA_QA_OUT':str(out/'first-use-remaining')}),
+ 'first-use':('harness/first-use.mjs', {'ODA_QA_URL':url+'/#','ODA_QA_OUT':str(out/'first-use')}),
+ 'courses':('harness/courses.mjs', {'ODA_QA_URL':url+'/#','ODA_COURSE_QA_OUT':str(out/'courses'),'ODA_QA_ISOLATE_EXTERNAL':'1'}),
+ 'guidance':('harness/guidance.mjs', {'ODA_GUIDANCE_URL':url+'/','ODA_GUIDANCE_OUT':str(out/'guidance'),'ODA_GUIDANCE_REPO':str(root),'ODA_FLOW_BUILD_RECEIPT':str(out/'preflight-receipt.json')}),
+ 'notebook':('harness/notebook.mjs', {'ODA_QA_URL':url+'/#','ODA_QA_OUT':str(out/'notebook')}),
+ 'calendar':('harness/calendar.mjs', {'ODA_QA_URL':url+'/#','ODA_QA_OUT':str(out/'calendar')}),
+ 'localized-preview':('harness/localized-preview.mjs', {'ODA_GUIDANCE_URL':url+'/','ODA_GUIDANCE_OUT':str(out/'localized-preview'),'ODA_GUIDANCE_REPO':str(root)}),
+ 'dialogs':('scripts/qa-mobile-core-quality.mjs', {'ODA_QA_URL':url+'/','ODA_MOBILE_CORE_QA_OUT':str(out/'dialogs')}),
+ 'sound':('harness/sound-functional.mjs', {'ODA_QA_URL':url+'/#','ODA_QA_OUT':str(out/'sound')}),
+}
+script,extra=jobs[kind]
+script=str(out/script) if script.startswith('harness/') else script
+command=['node','--import','tsx',script]
+env={**os.environ,**extra,'ODA_QA_REPO':str(root)}
+folder=out/kind
+folder.mkdir(parents=True,exist_ok=True)
+log=folder/'browser.log'
+begin=time.time()
+with log.open('xb') as stream:
+    result=subprocess.run(command,cwd=root,env=env,stdout=stream,stderr=subprocess.STDOUT)
+receipt={'kind':kind,'sourceCommit':expected,'command':command,'cwd':str(root),'environmentOverrides':{**extra,'ODA_QA_REPO':str(root),'ODA_QA_SOURCE_COMMIT':expected},'startedAt':begin,'elapsedSeconds':time.time()-begin,'exitCode':result.returncode,'log':{'file':str(log),'bytes':log.stat().st_size,'sha256':hashlib.sha256(log.read_bytes()).hexdigest()},'syntheticOnly':True,'noInstallNoDeploy':True}
+(folder/'command-receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
+print(json.dumps(receipt))
+sys.exit(result.returncode)

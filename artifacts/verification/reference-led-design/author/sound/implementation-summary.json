@@ -1,0 +1,63 @@
+{
+  "base": "68ae8179c875b54ce8f200e34a6148259ae6cad1",
+  "branch": "design/reference-led-oda",
+  "ownedFiles": [
+    "src/pages/SoundRoom.tsx",
+    "src/styles/sound.css"
+  ],
+  "pixelInspection": [
+    "IMG_8669.jpeg: sweeping scenic category discovery and dark-cover/light-content session rows",
+    "IMG_8668.jpeg: closer curved scenic bands with readable white titles and dark controls",
+    "IMG_8667.jpeg: teal glass meditation/player surfaces and cyan playback; no health metrics copied"
+  ],
+  "implementation": [
+    "Four persisted category tabs become curved original decorative scenes, using no reference pixels or new remote assets.",
+    "Existing sound titles, descriptions, science/safety notes and entitlement gates remain.",
+    "Real session rows and real persistent player are restyled; no waveform or health score is fabricated.",
+    "Owned ODA leaf-cover art is reused only as decorative local scenery; no new asset bytes.",
+    "Light/dark inherit root shell tokens; teal/cyan is localized to player/breath surfaces."
+  ],
+  "validation": {
+    "focusedAudioTests": {
+      "tests": 67,
+      "pass": 67,
+      "fail": 0,
+      "command": "node --import tsx --test tests/sound-room.test.ts tests/sound-room-player-access.test.ts tests/sound-synthesizer.test.ts tests/ambient-textures.test.ts"
+    },
+    "typeCheck": "npx tsc --noEmit: exit 0",
+    "mobileContexts": 12,
+    "desktopContexts": 2,
+    "postAdjustmentGeometryContexts": 6,
+    "mobileSeriousCriticalAxe": 0,
+    "desktopAxeViolations": 0,
+    "pageErrors": [],
+    "externalRequests": [],
+    "finalMobileNavPlayerGapPixels": [
+      8
+    ]
+  },
+  "sourceHashes": {
+    "src/pages/SoundRoom.tsx": "e7ac3e6eaa6dc75bd83255a6bd760613064702ddd2a60fdc9266b508ecb8b7df",
+    "src/styles/sound.css": "1a5c1d586dabb86f9faeac737af61e9347baa0336827795b571bc1e91f07268a"
+  },
+  "screenshots": [
+    "final-en-light-390-discovery.png",
+    "final-en-light-390-sessions-player.png",
+    "final-en-dark-390-discovery.png",
+    "final-en-dark-390-sessions-player.png",
+    "en-light-1440-discovery.png",
+    "en-light-1440-sessions-player.png",
+    "en-dark-1440-discovery.png",
+    "en-dark-1440-sessions-player.png"
+  ],
+  "findingsResolved": [
+    "Initial headphone note contrast 4.18:1 corrected to inherited foreground ink; initial finding retained separately.",
+    "Inherited player/tabbar 8px overlap corrected to actual 8px clearance; tested at 320/390 and desktop breakpoint768."
+  ],
+  "limits": [
+    "Development preview, synthetic local records, actual cloud Chromium; no physical iOS/audio listening claim.",
+    "Root owns final exact source/build receipt, aggregate and independent visual/functional QA.",
+    "No fresh official model-setting getter available in this executor; no new model preflight claimed.",
+    "No commit, deployment or production release by this agent."
+  ]
+}

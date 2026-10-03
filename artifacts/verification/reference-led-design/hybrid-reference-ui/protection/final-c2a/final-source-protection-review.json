@@ -1,0 +1,113 @@
+{
+  "kind": "sealed independent corrected hybrid protection/source/compiled audit",
+  "sealedAtUtc": "2026-10-03T01:26:16.146635+00:00",
+  "sourceCommit": "c2a5e6497f1bed4cf95951375c9aa86872b169a9",
+  "previousBlockedSourceCommit": "5aa69ae3f2d722558fb69319babda0c1810b69d2",
+  "hybridReviewBase": "4bf566f17980fe2eaf26e3f20b277e97cad981b9",
+  "protectedBase": "4c873b0df32c4489a8b95260122ae3ae9efd936d",
+  "status": "PASS bounded corrected source/protection and fresh aggregate/build binding; runtime/visual approval remains separate.",
+  "findings": [],
+  "resolvedP2": "Lifetime mission-ID dedup replaced with canonical completionID and exact(userId,missionId,normalizedtimestamp) event suppression. Legitimate distinctsame-day/spacedrepeatable sessions count; repeatedIDs/events cannot inflate dayminutes/streak.",
+  "exactDeltaFrom5aa": [
+    "src/services/focusEvidence.ts",
+    "tests/focus-evidence.test.ts"
+  ],
+  "sourceCount": 874,
+  "unchangedSourceCountFrom5aa": 872,
+  "allActualSourceEqualFrozenGitAndFreshReceipt": true,
+  "compiledCount": 437,
+  "cssCount": 7,
+  "allActualCompiledNamesBytesHashesEqualReceipt": true,
+  "protectedInventoryCount": 348,
+  "changedProtectedInventoryFiles": [],
+  "all348HashesComparedExactToBase": true,
+  "legitimateComponentExceptions": "Course/Notebook/Journal/Today/CourseNextStep authorized presentation/nav/date behavior already analyzed in sealed5aa review; thosefullfiles unchanged in correctedcommit. No blanketwholecomponent/controlleridentity claim against4bf.",
+  "englishNarrationMp3CountUnchanged": 160,
+  "englishSessions": 11,
+  "oldPublicCountUnchanged": 285,
+  "originalDeliveryCountUnchanged": 40,
+  "allGlobalIdentityThemeC4LogoSwCspNativeMainWorkflowAudioCoreStoreDataPersistenceBytesUnchanged": true,
+  "repositoryRewardLeafDedupAndActual120SecondTimerContractsUnchanged": true,
+  "carriedContractAnalysis": {
+    "sourceCommit": "5aa69ae3f2d722558fb69319babda0c1810b69d2",
+    "receiptPath": "/workspace/scratch/oda-reference-redesign/expanded-hybrid/protection/final-5aa/final-source-protection-review.json",
+    "receiptSha256": "ec1e3080dc4ab1f9873013951d48a086412b12dcc6bf82b349e47e520a47d1e4",
+    "reason": "872othertrackedsourcefilesbyte-identical; savedcourse/navigation/dirty-save/date/voice/lightweightimports reviewed there. This isexplicitstaticcontinuity, not freshallruntime re-execution."
+  },
+  "inheritedDurabilityConcern": {
+    "file": "src/hooks/useSavedCourseProgress.ts",
+    "lines": [
+      6,
+      10,
+      14
+    ],
+    "title": "Direct initial/focus/replacement reads can show provisional localStorage course projection before queued commit",
+    "reportedBy": "safety_inventory independent helper",
+    "codeBasis": "courseProgress.ts110\u2013125reads projection;181\u2013186queued subscriptions deliberately avoid provisional values.",
+    "classification": "Inherited transient durability concern pending reproduction; directread patterns already existed in baselineCourseNextStep. Not a second newly confirmed blocker or claimed persistence write.",
+    "action": "Parent informed before its focused repair; no further app reads/tests or mutation by auditor."
+  },
+  "aggregate": {
+    "passed": 611,
+    "failed": 0,
+    "exitCode": 0,
+    "rawLog": "/workspace/scratch/oda-reference-redesign/hybrid-reference-ui/final/timer-evidence-fix/aggregate-check.log",
+    "rawLogBytes": 78158,
+    "rawLogSha256": "5c1f5db98ade7925403e2885c235a27369572c481ee669053ce486909842ab66",
+    "actualSummaryAndBuildCompleteVerified": true
+  },
+  "focusedTestEvidence": {
+    "fourFocusRegressionNamesPresentInPassedActualAggregate": [
+      "focus streak counts distinct real timer days",
+      "yesterday continues a streak until today ends",
+      "UTC boundary is explicit and later repeatable-quest sessions remain evidence",
+      "canonical IDs and exact events dedup without losing spaced completions of the same quest"
+    ],
+    "auditorReranTests": false
+  },
+  "historical5aaEvidence": {
+    "blockedReceiptSha256": "ec1e3080dc4ab1f9873013951d48a086412b12dcc6bf82b349e47e520a47d1e4",
+    "raw610LogBytes": 78088,
+    "raw610LogSha256": "b022e2928da37ce2c1cf844a5776e05c31185f53817744aea4ee60e1eb18d454",
+    "actualBytesUnchanged": true
+  },
+  "sealedEvidence": [
+    {
+      "file": "correction-source-review.json",
+      "bytes": 4254,
+      "sha256": "c6912238ec7ce1105e4cdef3e239eb822e4454067f1203cc713143f3b889c27a"
+    },
+    {
+      "file": "source-manifest.json",
+      "bytes": 183058,
+      "sha256": "b0f68ca9a901d72e352f76fca087b7325cc2692a5067de46f81cc607214220ba"
+    },
+    {
+      "file": "compiled-binding.json",
+      "bytes": 83388,
+      "sha256": "f2b2ac0349a7b3d776f4b8ba5800478484617b61951f6ad77ff3dc9c31145490"
+    },
+    {
+      "file": "exact-timer-evidence.delta.diff.log",
+      "bytes": 3527,
+      "sha256": "d988142c1ecf8133d81025d695bb73d7e1b878ad1ab62c6c8f1a091f7a41c56e"
+    }
+  ],
+  "independentHelper": {
+    "name": "safety_inventory",
+    "inspectedOnly": [
+      "src/services/focusEvidence.ts",
+      "tests/focus-evidence.test.ts"
+    ],
+    "originalP2Resolved": true,
+    "newP0P3Issues": [],
+    "noTestsExecuted": true,
+    "allReadersClosed": true
+  },
+  "allAuditorAndHelperSourceBuildArtifactReadersClosed": true,
+  "limits": [
+    "No app edits/browser/build/tests/network/install/commit/push/publication by auditors.",
+    "Actual611/0aggregate verified; inheriteddirectprojectionreadconcern remains disclosed/pendingreproduction; no newhook mutation.",
+    "Independent currentbrowser/courseNotebook/firstuse/visual checkpoint remains required; no exact-reference/publication/globalWCAG/physicaliOS/model/provider/wholeaudiohumanQA claim."
+  ]
+}

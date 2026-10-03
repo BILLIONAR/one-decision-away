@@ -1,9 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight, AudioLines, Check, ChevronDown, ChevronRight, Leaf, Plus, MessageCircle, GraduationCap, Route, Share2, Waves } from 'lucide-react';
 import { GrowthTreePanel, GrowthWeek } from '../components/momentum/GrowthDashboard';
+import { OriginalSceneImage } from '../components/OriginalSceneImage';
 import { growthCopy } from '../i18n/growth';
 import { courseCatalogFor } from '../data/courseCatalog';
 import { courseForIntent } from '../data/starterDecisions';
+import { useSavedCourseProgress } from '../hooks/useSavedCourseProgress';
+import { timerFocusEvidence } from '../services/focusEvidence';
+import { dashboardHybridCopy } from '../i18n/dashboardHybrid';
 import { useApp } from '../store/useApp';
 import { getDailyQuote } from '../data/dailyQuotes';
 import { Modal } from '../components/ui';
@@ -42,6 +46,10 @@ import { shareDecision } from '../components/momentum/shareDecision';
 import { decisionChain, evidenceSummary, isSimpleMode, keptDecisions, localDayKey, twoWeekCheckInDue } from '../services/momentum';
 import { EasyDecisionChips, KeptMomentCard } from '../components/momentum/FirstSteps';
 import { easyDecisions } from '../data/starterDecisions';
+import { firstRunCopy } from '../i18n/firstRun';
+import { sentenceCaseLabel } from '../utils/sentenceCaseLabel';
+import '../styles/workingSurfaces.css';
+import '../styles/todayPalette.css';
 
 const RITUALS_KEY = 'oda_rituals_open';
 
@@ -69,6 +77,8 @@ export const Today: React.FC = () => {
   const d = designCopy(locale);
   const loop = dailyLoopCopy(locale);
   const growth = growthCopy(locale);
+  const hybrid = dashboardHybridCopy(locale);
+  const courseProgress = useSavedCourseProgress(data);
 
   const [completingMission, setCompletingMission] = useState<Mission | null>(null);
   const [newDecisionTitle, setNewDecisionTitle] = useState('');
@@ -86,22 +96,6 @@ export const Today: React.FC = () => {
   const [habitsModalOpen, setHabitsModalOpen] = useState(false);
   const [plan, setPlan] = useState<{ open: boolean; justSet?: boolean; smaller?: boolean }>({ open: false });
   const [startOpen, setStartOpen] = useState(false);
-
-  // The offer is consumed only when it opens, so interrupted navigation can retry.
-  const selectedDecision = data ? todayDecision(data.missions, now) : undefined;
-  const firstPlanCandidate = selectedDecision?.status === 'active' && !selectedDecision.plan ? selectedDecision : undefined;
-  const firstWeek = data ? isSimpleMode(data) : false;
-  useEffect(() => {
-    if (!firstPlanCandidate || !firstWeek) return;
-    const markOpened = () => { try { localStorage.setItem('oda_plan_prompted', firstPlanCandidate.id); } catch { /* The offer can still open without storage. */ } };
-    if (plan.open) { markOpened(); return; }
-    // Defer the automatic sheet while another task is open. Closing that task
-    // rechecks the offer, so it is never consumed by an overlapping dialog.
-    if (completingMission || startOpen || habitsModalOpen) return;
-    try { if (localStorage.getItem('oda_plan_prompted') === firstPlanCandidate.id) return; } catch { /* Optional reminder memory. */ }
-    const timer = window.setTimeout(() => { markOpened(); setPlan({ open: true, justSet: true }); }, 700);
-    return () => window.clearTimeout(timer);
-  }, [firstPlanCandidate?.id, firstWeek, plan.open, completingMission?.id, startOpen, habitsModalOpen]);
 
   if (!data) return null;
 
@@ -143,8 +137,6 @@ export const Today: React.FC = () => {
     try {
       await setOneDecision(title);
       setNewDecisionTitle('');
-      // Right after choosing is the best moment to plan for the obstacle.
-      setPlan({ open: true, justSet: true });
     } catch {
       setDecisionError(true);
     } finally {
@@ -155,7 +147,7 @@ export const Today: React.FC = () => {
   // Micro-habits
   const habits = data.microHabits || [];
   const visibleHabits = habits.slice(0, 3);
-  const habitsDone = visibleHabits.filter((h) => h.completedDates.includes(todayStr)).length;
+  const allHabitsDone = habits.filter(habit => habit.completedDates.includes(todayStr)).length;
 
   // Active dream
   const allItems = [...SEED_MARKET_ITEMS, ...(data.customMarketItems || [])].filter((i) => !i.isArchived);
@@ -180,6 +172,12 @@ export const Today: React.FC = () => {
   const keptCount = keptDecisions(data.missions).length;
   const chain = decisionChain(data.missions);
   const week = evidenceSummary(data.missions, now);
+  const catalog = courseCatalogFor(locale);
+  const allLessonIds = new Set(catalog.flatMap(course => course.lessonIds));
+  const completedLessons = [...allLessonIds].filter(id => courseProgress.lessons[id]?.completed === true).length;
+  const coursePercent = Math.round(completedLessons / Math.max(1, allLessonIds.size) * 100);
+  const focusEvidence = timerFocusEvidence(data.completions, now);
+  const maximumFocusMinutes = Math.max(1, ...focusEvidence.days.map(day => day.minutes));
   const suggestedCourse = courseCatalogFor(locale).find(c => c.id === courseForIntent(data.profile.intent));
   const draftForToday = data.profile.nextDecisionDraft?.forDay === localDayKey() ? data.profile.nextDecisionDraft.text : null;
   const pickSuggestion = (title: string) => {
@@ -202,7 +200,7 @@ export const Today: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="oda-reference-today oda-fidelity-today space-y-6">
       {/* 1. Header */}
       <header className="flex items-start justify-between gap-4">
         <div className="min-w-0">
@@ -221,10 +219,29 @@ export const Today: React.FC = () => {
         </button>
       </header>
 
+      <div className="oda-fidelity-command">
+      {/* The quote has its own scene; the saved growth stage appears once in its evidence panel. */}
+      <figure className="oda-quote oda-fidelity-hero">
+        <div className="oda-fidelity-scene oda-fidelity-scene--original" aria-hidden="true"><OriginalSceneImage asset="today-scene" sizes="(max-width: 479px) calc(100vw - 40px), (max-width: 1179px) calc(100vw - 80px), 1024px" eager fallback="assets/oda/course-covers/oda-growth-values.png" /></div>
+        <span aria-hidden="true" className="oda-quote-mark text-5xl">“</span>
+        <div className="oda-fidelity-hero-copy min-w-0">
+          <p className="oda-kicker text-[var(--fg-muted)] mb-2">{d.quote}</p>
+          <blockquote className="oda-display text-[22px] leading-snug text-[var(--fg)] max-w-[46ch]">
+            {locale === 'tr' && quote.tr ? quote.tr : t(quote.text)}
+          </blockquote>
+          {quote.source && (
+            <figcaption className="mt-1 text-[12px] font-medium text-[var(--fg-muted)]">
+              — {quote.sourceUrl ? <a href={quote.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">{locale === 'tr' && quote.sourceTr ? quote.sourceTr : t(quote.source)}</a> : t(quote.source)}
+              {quote.kind && <span className="block mt-1 font-normal">{quote.kind === 'adaptation' ? c.adaptation : c.translation}</span>}
+            </figcaption>
+          )}
+        </div>
+      </figure>
+
       <div className="oda-growth-dashboard">
-        <GrowthTreePanel count={keptCount} onEvidence={() => setActiveRoute('/app/evidence')} />
         <div className="oda-growth-actions">
       {/* 2. One decision: a soft card with this week's ring, one clear action and a check. */}
+      <div className="oda-fidelity-decision-module">
       <section id="set-one-decision" className="oda-decision" aria-labelledby="today-decision-label">
         <div className="flex items-center gap-4">
           <div className="min-w-0 flex-1 space-y-1">
@@ -249,7 +266,7 @@ export const Today: React.FC = () => {
                 <span className="block text-[13px] text-[var(--fg-muted)]">
                   {decisionPlan.obstacle ? t('If {obstacle}', { obstacle: decisionPlan.obstacle }) : t('If it gets hard')}
                 </span>
-                <span className="block text-[15px] leading-snug text-[var(--fg)]">{t('then I will {plan}', { plan: decisionPlan.ifThen })}</span>
+                <span className="block text-[15px] leading-snug text-[var(--fg)]">{sentenceCaseLabel(t('then I will {plan}', { plan: decisionPlan.ifThen }), locale)}</span>
               </button>
             )}
             {decisionDone ? (
@@ -277,6 +294,7 @@ export const Today: React.FC = () => {
                   </button>
                 </div>
                 <p className="text-[12.5px] text-[var(--fg-muted)] px-1">{t('Did it? Tap the check · +D$ {amount}', { amount: ECONOMY_CONSTANTS.ONE_DECISION_REWARD.toLocaleString() })}</p>
+                {!decisionPlan?.ifThen && <button type="button" onClick={() => setPlan({ open: true })} className="min-h-11 inline-flex items-center gap-2 text-[13px] text-[var(--fg-muted)] underline underline-offset-4"><Route size={16} aria-hidden="true" />{firstRunCopy(locale).optionalPlan}</button>}
               </div>
             )}
           </>
@@ -305,11 +323,47 @@ export const Today: React.FC = () => {
         )}
       </section>
       {decisionError && <p role="alert" className="oda-loop-error">{loop.saveError}</p>}
+      </div>
+          <section className="oda-hybrid-progress oda-hybrid-card" aria-labelledby="today-library-progress">
+            <h2 id="today-library-progress">{hybrid.progress}</h2>
+            <div className="oda-hybrid-progress-summary">
+              <div className="oda-hybrid-ring" style={{ '--progress': `${coursePercent}%` } as React.CSSProperties} role="progressbar" aria-label={hybrid.progress} aria-valuemin={0} aria-valuemax={allLessonIds.size} aria-valuenow={completedLessons}>
+                <span aria-hidden="true">{coursePercent}%</span>
+              </div>
+              <div><p>{hybrid.lessons(completedLessons, allLessonIds.size)}</p><p className="oda-hybrid-help">{hybrid.progressHint}</p></div>
+            </div>
+            <dl className="oda-hybrid-metrics"><div><dt>{hybrid.keptDays}</dt><dd>{week.last7} / 7</dd></div><div><dt>{hybrid.habits}</dt><dd>{allHabitsDone} / {habits.length}</dd></div></dl>
+          </section>
+          <GrowthTreePanel count={keptCount} onEvidence={() => setActiveRoute('/app/evidence')} />
+          <section className="oda-hybrid-focus oda-hybrid-card" aria-labelledby="today-timer-streak">
+            <h2 id="today-timer-streak">{hybrid.focus}</h2>
+            <p className="oda-hybrid-streak-value">{hybrid.days(focusEvidence.streak)}</p>
+            <p className="oda-hybrid-help">{hybrid.utc}</p>
+            <ol className="oda-hybrid-focus-days">{focusEvidence.days.map(day => <li key={day.dayKey} aria-label={`${day.dayKey} UTC: ${day.minutes} min`} data-focus-day-minutes={day.minutes}>
+              <span className="oda-hybrid-focus-bar" aria-hidden="true"><span style={{ height: `${day.minutes / maximumFocusMinutes * 100}%` }} /></span>
+              <span aria-hidden="true">{formatDate(`${day.dayKey}T12:00:00Z`, { weekday: 'narrow', timeZone: 'UTC' })}</span>
+            </li>)}</ol>
+            <p className="oda-hybrid-help">{focusEvidence.streak > 0 || focusEvidence.todayMinutes > 0 ? hybrid.focusToday(Number(focusEvidence.todayMinutes.toFixed(1))) : hybrid.focusEmpty}</p>
+            <button type="button" onClick={() => setActiveRoute('/app/focus')} className="oda-hybrid-link">{hybrid.openFocus}<ArrowRight size={16} aria-hidden="true" /></button>
+          </section>
+          <section className="oda-hybrid-actions oda-hybrid-card" aria-labelledby="today-real-actions">
+            <div className="oda-hybrid-heading"><h2 id="today-real-actions">{hybrid.actions}</h2><button type="button" onClick={() => setHabitsModalOpen(true)} className="oda-hybrid-link">{hybrid.viewAll}<ChevronRight size={15} aria-hidden="true" /></button></div>
+            <ul>
+              <li>{todayOneDecision ? <button type="button" disabled={decisionDone} onClick={() => setCompletingMission(todayOneDecision)} aria-label={`${decisionDone ? t('Kept today') : hybrid.confirm}: ${t(todayOneDecision.title)}`} className="oda-hybrid-action" data-done={decisionDone}>
+                <span className="oda-hybrid-check" aria-hidden="true">{decisionDone && <Check size={15} />}</span><span>{t(todayOneDecision.title)}</span>
+              </button> : <button type="button" onClick={() => { document.getElementById('today-decision-input')?.focus(); }} className="oda-hybrid-action"><Plus size={18} aria-hidden="true" /><span>{hybrid.choose}</span></button>}</li>
+              {visibleHabits.map(habit => { const done = habit.completedDates.includes(todayStr); return <li key={habit.id}><button type="button" onClick={() => toggleMicroHabit(habit.id)} aria-pressed={done} className="oda-hybrid-action" data-done={done}><span className="oda-hybrid-check" aria-hidden="true">{done && <Check size={15} />}</span><span>{t(habit.title)}</span></button></li>; })}
+              {habits.length === 0 && <li><button type="button" onClick={() => setHabitsModalOpen(true)} className="oda-hybrid-action"><Plus size={18} aria-hidden="true" /><span>{hybrid.addHabit}</span></button></li>}
+            </ul>
+          </section>
           <CourseNextStep />
         </div>
       </div>
-      <GrowthWeek summary={week} onEvidence={() => setActiveRoute('/app/evidence')} />
+      </div>
+      <BackupReminder />
 
+      <div className="oda-fidelity-support">
+      <GrowthWeek summary={week} onEvidence={() => setActiveRoute('/app/evidence')} />
       <DailyPractice mission={todayOneDecision} dayKey={todayStr} />
 
       <MomentumCard
@@ -331,7 +385,7 @@ export const Today: React.FC = () => {
       />
 
       {/* Quick actions: four tinted tiles */}
-      <nav aria-label={t('Quick actions')} className="grid grid-cols-2 gap-2.5">
+      <nav aria-label={t('Quick actions')} className="oda-fidelity-shortcuts grid grid-cols-2 gap-2.5">
         {todayOneDecision && !decisionDone && !decisionPlan?.ifThen ? (
           <button type="button" onClick={() => setPlan({ open: true })} className="oda-tile">
             <span className="oda-tile-icon oda-tint-sage"><Route size={18} strokeWidth={1.9} aria-hidden="true" /></span>
@@ -340,7 +394,7 @@ export const Today: React.FC = () => {
         ) : (
           <button type="button" onClick={() => setActiveRoute('/app/evidence')} className="oda-tile">
             <span className="oda-tile-icon oda-tint-sage"><Leaf size={18} strokeWidth={1.9} aria-hidden="true" /></span>
-            <span><span className="block text-[14px] font-semibold">{t('Your evidence')}</span><span className="block text-[12px] text-[var(--fg-muted)]">{t('{n} kept promises', { n: keptCount })}</span></span>
+            <span><span className="block text-[14px] font-semibold">{t('Your evidence')}</span><span className="block text-[12px] text-[var(--fg-muted)]">{keptCount === 1 ? t('1 kept promise') : t('{n} kept promises', { n: keptCount })}</span></span>
           </button>
         )}
         {todayOneDecision ? (
@@ -369,89 +423,6 @@ export const Today: React.FC = () => {
       <WeeklyOutcomeReview key={reviewWeek} weekKey={reviewWeek} />
       <EvidenceStrip />
       {checkInDue && <TwoWeekCheckIn />}
-
-      {/* 3. Three small habits */}
-      <section className="bg-[var(--bg-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] p-5">
-        <div className="flex items-center justify-between gap-3 mb-2">
-          <h2 className="text-[15px] font-semibold text-[var(--fg)]">{t('Three small habits')}</h2>
-          <span className="text-[13px] text-[var(--fg-muted)]">
-            {habitsDone} / {visibleHabits.length || 3}
-          </span>
-        </div>
-
-        {visibleHabits.length > 0 ? (
-          <ul className="divide-y divide-[var(--border)]">
-            {visibleHabits.map((habit) => {
-              const done = habit.completedDates.includes(todayStr);
-              return (
-                <li key={habit.id}>
-                  <button
-                    type="button"
-                    onClick={() => toggleMicroHabit(habit.id)}
-                    aria-pressed={done}
-                    className="w-full h-[52px] flex items-center gap-3.5 text-left"
-                  >
-                    <span
-                      className={`w-6 h-6 shrink-0 rounded-full border flex items-center justify-center transition-colors ${
-                        done
-                          ? 'bg-[var(--accent)] border-[var(--accent)] text-[var(--bg)]'
-                          : 'border-[var(--border-strong)] bg-transparent'
-                      }`}
-                    >
-                      {done && <Check size={14} strokeWidth={2.2} />}
-                    </span>
-                    <span
-                      className={`text-[15px] truncate ${
-                        done ? 'text-[var(--fg-muted)] line-through' : 'text-[var(--fg)]'
-                      }`}
-                    >
-                      {t(habit.title)}
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        ) : (
-          <button
-            type="button"
-            onClick={() => setHabitsModalOpen(true)}
-            className="w-full h-[52px] flex items-center gap-3.5 text-left"
-          >
-            <span className="w-6 h-6 shrink-0 rounded-full border border-dashed border-[var(--border-strong)] flex items-center justify-center text-[var(--fg-muted)]">
-              <Plus size={14} strokeWidth={2} />
-            </span>
-            <span className="text-[15px] text-[var(--fg-muted)]">{t('Add a habit')}</span>
-          </button>
-        )}
-
-        {habits.length > 3 && (
-          <button
-            type="button"
-            onClick={() => setHabitsModalOpen(true)}
-            className="mt-2 h-11 text-[14px] text-[var(--fg-muted)] hover:text-[var(--fg)]"
-          >
-            {t('See all {n}', { n: habits.length })}
-          </button>
-        )}
-      </section>
-
-      {/* Quote of the day */}
-      <figure className="oda-quote flex gap-3 py-6">
-        <span aria-hidden="true" className="oda-quote-mark text-5xl">“</span>
-        <div className="min-w-0">
-          <p className="oda-kicker text-[var(--fg-muted)] mb-2">{d.quote}</p>
-          <blockquote className="oda-display text-[22px] leading-snug text-[var(--fg)] max-w-[46ch]">
-            {locale === 'tr' && quote.tr ? quote.tr : t(quote.text)}
-          </blockquote>
-          {quote.source && (
-            <figcaption className="mt-1 text-[12px] font-medium text-[var(--fg-muted)]">
-              — {quote.sourceUrl ? <a href={quote.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">{locale === 'tr' && quote.sourceTr ? quote.sourceTr : t(quote.source)}</a> : t(quote.source)}
-              {quote.kind && <span className="block mt-1 font-normal">{quote.kind === 'adaptation' ? c.adaptation : c.translation}</span>}
-            </figcaption>
-          )}
-        </div>
-      </figure>
 
       {simple ? <SimpleModeNote /> : <>
       <section aria-labelledby="today-discover" className="space-y-3">
@@ -547,12 +518,12 @@ export const Today: React.FC = () => {
             <DailyDeepQuestion />
             <EveningDriftCheck />
             <MorningVision />
-            <BackupReminder />
           </div>
         )}
       </section>
 
       </>}
+      </div>
 
       {/* Modals */}
       <DecisionPlanModal

@@ -1,0 +1,36 @@
+from pathlib import Path
+import hashlib,json,os,re,subprocess,time
+root=Path('/workspace/oda-mobile-core-quality')
+out=Path('/workspace/scratch/oda-mobile-core-quality')
+out.mkdir(parents=True,exist_ok=True)
+log=out/'aggregate-v2-check.log'
+receipt=out/'build-receipt-v2.json'
+assert not log.exists() and not receipt.exists()
+source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
+assert source=='ca4c949b0773272ce8ba4c8f3d2fec7d6a51e4ec'
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=root,text=True).strip()
+old=json.loads((root/'artifacts/verification/cloud-current-record/implementation/build-receipt.json').read_text())
+paths={row['file'] for row in old['source']}
+for name in ['src','tests','scripts','public']:
+    paths.update(str(p.relative_to(root)) for p in (root/name).rglob('*') if p.is_file())
+paths=sorted(paths)
+def snapshot():
+    return [{'file':p,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()} for p in paths for b in [(root/p).read_bytes()]]
+before=snapshot()
+committed=all(subprocess.check_output(['git','show',source+':'+row['file']],cwd=root)==(root/row['file']).read_bytes() for row in before)
+assert committed
+start=time.time()
+env=dict(os.environ,VITE_BASE_PATH='/one-decision-away/')
+with log.open('xb') as stream:
+    process=subprocess.run(['npm','run','check'],cwd=root,env=env,stdout=stream,stderr=subprocess.STDOUT)
+after=snapshot()
+built=[{'file':str(p.relative_to(root)),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()} for p in sorted((root/'dist').rglob('*')) if p.is_file() for b in [p.read_bytes()]]
+raw=log.read_bytes()
+text=raw.decode(errors='replace')
+passed=re.findall(r'^(?:# |ℹ )pass (\d+)\s*$',text,re.M)
+failed=re.findall(r'^(?:# |ℹ )fail (\d+)\s*$',text,re.M)
+result={'base':'999586179446182ad156c6d249def00459700ea6','sourceCommit':source,'command':'VITE_BASE_PATH=/one-decision-away/ npm run check','exitCode':process.returncode,'passed':int(passed[-1]) if passed else None,'failed':int(failed[-1]) if failed else None,'log':log.name,'logBytes':len(raw),'logSha256':hashlib.sha256(raw).hexdigest(),'elapsedSeconds':round(time.time()-start,3),'unchangedDuringRun':before==after,'allSourcesMatchCommittedSource':committed,'sourceFileCount':len(before),'source':before,'build':built}
+receipt.write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps({k:v for k,v in result.items() if k not in ['source','build']},indent=2))
+assert before==after,'Source changed during aggregate run'
+assert process.returncode==0,'Aggregate failed; original raw log preserved'
