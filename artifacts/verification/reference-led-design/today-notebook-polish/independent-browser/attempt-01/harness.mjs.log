@@ -1,0 +1,151 @@
+import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+
+// Prep does not open a browser. Run only after root supplies the frozen build GO.
+assert.equal(process.env.ODA_POLISH_BROWSER_GO, '1', 'Frozen source/build parent GO required');
+const repo = '/workspace/oda-reference-redesign';
+const out = process.env.ODA_POLISH_QA_OUT;
+const receiptPath = process.env.ODA_POLISH_BUILD_RECEIPT;
+const expectedCommit = process.env.ODA_POLISH_SOURCE_COMMIT;
+const base = process.env.ODA_POLISH_QA_URL || 'http://127.0.0.1:4193/one-decision-away/';
+assert.ok(out && receiptPath && expectedCommit);
+assert.equal(new URL(base).hostname, '127.0.0.1');
+mkdirSync(out, { recursive: true });
+const sha = b => createHash('sha256').update(b).digest('hex');
+const receipt = JSON.parse(readFileSync(receiptPath, 'utf8'));
+assert.equal(receipt.sourceCommit, expectedCommit);
+const source = receipt.source;
+const build = receipt.build;
+assert.ok(Array.isArray(source) && Array.isArray(build) && source.length > 800 && build.length > 400);
+const verify = () => {
+  assert.equal(execFileSync('git', ['rev-parse','HEAD'], {cwd:repo,encoding:'utf8'}).trim(), expectedCommit);
+  for (const row of [...source,...build]) {
+    const bytes=readFileSync(`${repo}/${row.file}`);
+    assert.equal(bytes.length,row.bytes,`${row.file} bytes`);
+    assert.equal(sha(bytes),row.sha256,`${row.file} hash`);
+  }
+  return {sourceFiles:source.length,buildFiles:build.length,allExact:true};
+};
+const report={ sourceCommit:expectedCommit, buildReceipt:{path:receiptPath,bytes:readFileSync(receiptPath).length,sha256:sha(readFileSync(receiptPath))}, base, startedAtUtc:new Date().toISOString(), syntheticData:true, checks:[], screenshots:[], contexts:[], served:[], limits:[
+  'Desktop and 390/320 Chromium viewport emulation; not a physical iPhone or native app run.',
+  'Fixed synthetic date Saturday 2026-10-03. Native save fault injected at real IDBObjectStore.put; normal compiled app/store/write queue unchanged.',
+  'Local GET/HEAD only; external requests aborted and recorded. No accounts, providers, paid services, signing or production operations.',
+  'No narration listening/transcription or broader app QA claim.'
+]};
+report.preflight=verify();
+const require=createRequire(`${repo}/package.json`);
+const {chromium}=require('playwright');
+const browser=await chromium.launch({executablePath:'/usr/bin/chromium'});
+report.browser=await browser.version();
+const {getInitialDemoState}=await import(`${repo}/src/services/repository.ts`);
+const NOW='2026-10-03T12:00:00.000Z', TODAY='2026-10-03';
+const rawTitle='read two pages — NASA on iPhone; istanbul ıhlamur.';
+const rawPlan='  “start two pages with NASA on iPhone; istanbul ıhlamur.”';
+const words={en:{prefix:'Then I will ',noMatch:'No entries match.',clear:'Clear filters',calendar:'Calendar',savePlan:'Save plan',tomorrow:'Save for tomorrow',kept:'1 kept promise',prev:'Previous week',next:'Next week',thisWeek:'This week'},tr:{prefix:'O zaman: ',noMatch:'Eşleşen kayıt yok.',clear:'Filtreleri temizle',calendar:'Takvim',savePlan:'Planı kaydet',tomorrow:'Yarın için kaydet',kept:'1 tutulan söz',prev:'Önceki hafta',next:'Sonraki hafta',thisWeek:'Bu hafta'},es:{prefix:'Entonces: ',noMatch:'Ninguna entrada coincide.',clear:'Borrar filtros',calendar:'Calendario',savePlan:'Guardar plan',tomorrow:'Guardar para mañana',kept:'1 promesa cumplida',prev:'Semana anterior',next:'Semana siguiente',thisWeek:'Esta semana'}};
+const pass=(name,evidence)=>{report.checks.push({name,evidence});console.log(`PASS ${name}`);};
+function seed(locale='en',theme='light',n=1,completed=false,withPlan=true) {
+  const d=getInitialDemoState();
+  d.profile={...d.profile,displayName:'Synthetic polish QA',locale,theme,onboardingStep:'completed',simpleModeOff:true,soundMuted:true,nudgesEnabled:false,dailyWisdomEnabled:false,reminderAskedAt:NOW,firstOpenedAt:'2026-01-01T00:00:00Z',lastOpenedAt:NOW};
+  d.lastActiveDateKey=TODAY;d.lastDailyResetTimestamp=NOW;d.dreamJournal=[];d.completions=[];
+  d.missions=d.missions.filter(m=>!m.isOneDecision);
+  d.missions.push({id:'synthetic-polish-decision',userId:d.profile.id,title:rawTitle,type:'daily_quest',area:'Mindset',difficulty:'easy',isOneDecision:true,status:completed?'completed':'active',createdAt:NOW,scheduledFor:TODAY,...completed?{completedAt:NOW}:{},...withPlan?{plan:{obstacle:'the iPhone calls; NASA waits',ifThen:rawPlan,plannedAt:NOW}}:{}});
+  if(completed)d.completions.push({id:'synthetic-polish-completion',userId:d.profile.id,missionId:'synthetic-polish-decision',completedAt:NOW,method:'self',rewardAmount:0,streakBonus:0});
+  d.notebook.entries=Array.from({length:n},(_,i)=>({id:`synthetic-polish-entry-${i}`,kind:'journal',title:i?'istanbul ıhlamur — NASA on iPhone':'read two pages — NASA on iPhone',content:`original saved lowercase content ${i}; NASA on iPhone.`,dateKey:i?'2026-10-02':TODAY,createdAt:i?'2026-10-02T10:00:00Z':NOW,updatedAt:NOW,mood:'focused'}));
+  d.notebook.activityDays=Array.from({length:n},(_,i)=>({dateKey:i?'2026-10-02':TODAY,rewardAmount:0}));
+  return d;
+}
+const seenServed=new Map();let active;
+async function contextFor({locale='en',theme='light',width=390,n=1,completed=false,withPlan=true,browserLocale,trSearch=false}={}) {
+  const context=await browser.newContext({viewport:{width,height:width===1440?1000:844},timezoneId:'UTC',locale:browserLocale||(locale==='tr'?'tr-TR':locale==='es'?'es-ES':'en-US'),reducedMotion:'reduce',serviceWorkers:'block'});
+  const record={locale,theme,width,requests:[],blockedExternal:[],pageErrors:[],dialogs:[]};report.contexts.push(record);
+  await context.route('**/*',route=>{const req=route.request();if(new URL(req.url()).origin!==new URL(base).origin||!['GET','HEAD'].includes(req.method())){record.blockedExternal.push({url:req.url(),method:req.method(),resourceType:req.resourceType()});return route.abort();}record.requests.push({url:req.url(),resourceType:req.resourceType()});return route.continue();});
+  const d=seed(locale,theme,n,completed,withPlan);if(trSearch)d.notebook.entries[0].title='İki sayfa IŞIK';
+  await context.addInitScript(({d,locale,theme})=>{if(!localStorage.getItem('one_decision_away_app_data_v1'))localStorage.setItem('one_decision_away_app_data_v1',JSON.stringify(d));localStorage.setItem('oda_locale',locale);localStorage.setItem('oda_theme',theme);},{d,locale,theme});
+  const page=await context.newPage();active=page;page.setDefaultTimeout(7000);
+  page.on('pageerror',e=>record.pageErrors.push(e.message));
+  page.on('dialog',async dialog=>{record.dialogs.push({type:dialog.type(),message:dialog.message()});await dialog.dismiss();});
+  const responseTasks=[];
+  page.on('response',response=>{const path=new URL(response.url()).pathname;const rel=path.slice(new URL(base).pathname.length);const file=rel?`dist/${decodeURIComponent(rel)}`:'dist/index.html';const expected=build.find(r=>r.file===file);if(expected&&(/\.(js|css)$/.test(file)||file==='dist/index.html'))responseTasks.push((async()=>{const bytes=await response.body();assert.equal(response.status(),200,file);assert.equal(bytes.length,expected.bytes,file);assert.equal(sha(bytes),expected.sha256,file);seenServed.set(file,{file,bytes:bytes.length,sha256:sha(bytes),actualObservedResponse:true});})());});
+  await page.clock.install({time:new Date(NOW)});
+  return {context,page,record,settleResponses:async()=>{await Promise.all(responseTasks);}};
+}
+async function goto(page,path){await page.goto(`${base}#${path}`);await page.locator('[data-app-route]').waitFor();await page.evaluate(()=>document.fonts.ready);}
+async function capture(page,name,fullPage=false){const path=`${out}/${name}.png`;await page.screenshot({path,animations:'disabled',fullPage});report.screenshots.push({file:`${name}.png`,bytes:readFileSync(path).length,sha256:sha(readFileSync(path)),pixelInspection:'pending'});}
+const read=page=>page.evaluate(()=>JSON.parse(localStorage.getItem('one_decision_away_app_data_v1')));
+const readAuthority=page=>page.evaluate(async()=>navigator.locks.request('oda-data-writes',async()=>{const db=await new Promise((resolve,reject)=>{const req=indexedDB.open('oda_personal_record_v1',1);req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);});try{return await new Promise((resolve,reject)=>{const tx=db.transaction('record','readonly'),req=tx.objectStore('record').get('current');tx.oncomplete=()=>resolve(JSON.parse((req.result?.pendingPrevious||req.result).appData));tx.onabort=()=>reject(tx.error);});}finally{db.close();}}));
+async function waitRecord(page,predicate){for(let i=0;i<120;i++){const r=await read(page);if(predicate(r))return r;await page.waitForTimeout(50);}throw new Error('Canonical record condition timed out');}
+async function fit(page,selector){const e=await page.locator(selector).evaluate(root=>{const w=document.documentElement.clientWidth;return{width:w,scrollWidth:document.documentElement.scrollWidth,clipped:[...root.querySelectorAll('button,input,textarea,select,summary')].filter(el=>!el.closest('[hidden]')).flatMap(el=>{const r=el.getBoundingClientRect();if(!r.width||!r.height)return[];const scroll=el.closest('.oda-notebook-week-region,.oda-notebook-calendar-scroll');return!scroll&&(r.left<-.5||r.right>w+.5)?[{text:el.getAttribute('aria-label')||el.textContent,left:r.left,right:r.right}]:[];})};});assert.ok(e.scrollWidth<=e.width+1,JSON.stringify(e));assert.deepEqual(e.clipped,[]);return e;}
+async function dateVisibility(page,selector){return page.locator(selector).evaluate(el=>{const region=el.closest('.oda-notebook-week-region'),a=el.getBoundingClientRect(),r=region.getBoundingClientRect();return{button:{left:a.left,right:a.right,width:a.width,height:a.height},region:{left:r.left,right:r.right,scrollLeft:region.scrollLeft},fullyVisible:a.left>=r.left-.5&&a.right<=r.right+.5,y:window.scrollY};});}
+async function matrix(locale,width){
+  const c=await contextFor({locale,width}),p=c.page,w=words[locale],tag=`${locale}-${width}`;
+  try{
+    await goto(p,'/app');await p.locator('.oda-decision-plan').waitFor();
+    assert.equal(await p.locator('.oda-decision-text').innerText(),rawTitle);
+    const displayed=await p.locator('.oda-decision-plan span').last().textContent();assert.equal(displayed,w.prefix+rawPlan);
+    const before=await read(p);assert.equal(before.missions.find(m=>m.id==='synthetic-polish-decision').title,rawTitle);assert.equal(before.missions.find(m=>m.id==='synthetic-polish-decision').plan.ifThen,rawPlan);
+    pass(`${tag}: only interface plan prefix is sentence-case; raw lowercase title, NASA/iPhone and plan unchanged`,{displayed,rawTitle,rawPlan});
+    pass(`${tag}: Today controls fit`,await fit(p,'[data-app-route="/app"]'));
+    await capture(p,`today-${tag}`);
+    await goto(p,'/app/notebook');await p.locator('#notebook-journal-search').waitFor();
+    const stats=await p.locator('.oda-notebook-stat-values').innerText();
+    assert.ok(stats.includes(locale==='en'?'1 day written':locale==='es'?'1 día escrito':'1 gün yazıldı'),stats);
+    assert.ok(stats.includes(locale==='en'?'1 day streak':locale==='es'?'Racha de 1 día':'1 günlük seri'),stats);
+    assert.equal(await p.locator('.oda-hybrid-entry-preview h3').innerText(),'read two pages — NASA on iPhone');
+    const vis=await dateVisibility(p,'.oda-notebook-week-strip [aria-current="date"]');assert.ok(vis.fullyVisible,JSON.stringify(vis));assert.ok(vis.button.width>=44&&vis.button.height>=44);
+    const gap=await p.evaluate(()=>{const a=document.querySelector('.oda-notebook-calendar-lead').getBoundingClientRect(),b=document.querySelector('.oda-hybrid-entry-preview').getBoundingClientRect();return{gap:b.top-a.bottom,calendarBottom:a.bottom,previewTop:b.top};});if(width===1440)assert.ok(gap.gap>=11&&gap.gap<=13,JSON.stringify(gap));
+    pass(`${tag}: localized singular counts, original journal text and selected/today date visible`,{stats,visibility:vis,gap});
+    pass(`${tag}: Notebook controls fit`,await fit(p,'.oda-notebook'));
+    await capture(p,`notebook-${tag}`);
+    const titleDraft='  unsaved istanbul ıhlamur — NASA on iPhone  ',contentDraft='original unsaved lowercase words; keep NASA and iPhone intact.';
+    await p.locator('#notebook-journal-title').fill(titleDraft);await p.locator('#notebook-journal-content').fill(contentDraft);
+    await p.locator('#notebook-journal-search').fill('synthetic-no-match-zz');
+    assert.equal(await p.locator('#notebook-filter-result').innerText(),w.noMatch);assert.equal(await p.locator('.oda-hybrid-entry-preview').count(),0);
+    const near=await p.evaluate(()=>{const s=document.querySelector('#notebook-journal-search').getBoundingClientRect(),r=document.querySelector('#notebook-filter-result').getBoundingClientRect(),b=document.querySelector('#notebook-clear-filters').getBoundingClientRect();return{resultGap:r.top-s.bottom,clearGap:b.top-s.bottom,buttonHeight:b.height};});assert.ok(near.resultGap<70&&near.clearGap<70);assert.ok(near.buttonHeight>=44);
+    await p.locator('#notebook-journal-search').scrollIntoViewIfNeeded();await capture(p,`notebook-no-match-${tag}`);
+    await p.locator('#notebook-clear-filters').click();assert.equal(await p.locator('#notebook-journal-search').inputValue(),'');assert.equal(await p.locator('.oda-hybrid-entry-preview').count(),1);
+    await p.locator('.oda-notebook-week-strip button').first().click();assert.equal(await p.locator('#notebook-filter-result').innerText(),w.noMatch);await p.locator('#notebook-clear-filters').click();
+    // Scroll only the week region to Sunday, then select it through a real DOM click.
+    await p.locator('.oda-notebook-week-region').evaluate(el=>{el.scrollLeft=el.scrollWidth;});await p.locator('.oda-notebook-week-strip button').last().click();
+    const selected=await dateVisibility(p,'.oda-notebook-week-strip [aria-pressed="true"]');assert.ok(selected.fullyVisible,JSON.stringify(selected));
+    await p.getByRole('button',{name:w.next,exact:true}).click();await p.getByRole('button',{name:w.prev,exact:true}).click();
+    const returned=await dateVisibility(p,'.oda-notebook-week-strip [aria-pressed="true"]');assert.ok(returned.fullyVisible,JSON.stringify(returned));
+    await p.locator('#notebook-clear-filters').click();
+    await p.getByRole('button',{name:w.calendar,exact:true}).click();await p.locator('#notebook-calendar').waitFor();
+    const date=p.locator('#notebook-calendar [aria-current="date"]');await date.click();await p.locator('#notebook-clear-filters').click();
+    assert.equal(await p.locator('#notebook-journal-title').inputValue(),titleDraft);assert.equal(await p.locator('#notebook-journal-content').inputValue(),contentDraft);assert.deepEqual((await read(p)).notebook.entries,before.notebook.entries);assert.equal(c.record.dialogs.length,0);
+    pass(`${tag}: nearby no-match/reset, search/date/week/calendar preserve original unsaved editor`,{near,selected,returned,titleDraft,contentDraft});
+    if(width===320){await p.locator('#notebook-journal-search').scrollIntoViewIfNeeded();const y=await p.evaluate(()=>window.scrollY);await p.getByRole('button',{name:new RegExp(`^${w.thisWeek}`)}).click();const y2=await p.evaluate(()=>window.scrollY);assert.equal(y2,y);const v=await dateVisibility(p,'.oda-notebook-week-strip [aria-current="date"]');assert.ok(v.fullyVisible);pass(`${tag}: week reveal scrolls horizontal region without page-Y jump`,{beforeY:y,afterY:y2,visibility:v});await capture(p,`notebook-expanded-calendar-${tag}`);}
+    await c.settleResponses();assert.deepEqual(c.record.pageErrors,[]);
+  }finally{await c.context.close();}
+}
+async function countAndEmpty(locale,n){const c=await contextFor({locale,width:390,n}),p=c.page;try{await goto(p,'/app/notebook');await p.locator('#notebook-journal-search').waitFor();const stats=await p.locator('.oda-notebook-stat-values').innerText();const expected=locale==='en'?`${n} days written`:locale==='es'?`${n} días escritos`:`${n} gün yazıldı`;assert.ok(stats.includes(expected),stats);if(!n){assert.equal(await p.locator('.oda-hybrid-entry-preview').count(),0);assert.equal(await p.locator('.oda-notebook-entry-list').count(),0);await p.locator('#notebook-journal-search').fill('no-entry');assert.equal(await p.locator('#notebook-filter-result').innerText(),words[locale].noMatch);await p.locator('#notebook-clear-filters').click();assert.equal(await p.locator('#notebook-journal-search').inputValue(),'');await capture(p,`notebook-empty-${locale}-390`);}pass(`${locale}: ${n} writing-day count${!n?' and empty/reset':''}`,{stats});await c.settleResponses();assert.deepEqual(c.record.pageErrors,[]);}finally{await c.context.close();}}
+async function injectFault(page){await page.evaluate(()=>{const original=IDBObjectStore.prototype.put;window.__polishNativePut={armed:true,thrown:0,successfulCalls:0};IDBObjectStore.prototype.put=function(value,key){if(this.name==='record'&&key==='current'){if(window.__polishNativePut.armed){window.__polishNativePut.armed=false;window.__polishNativePut.thrown++;throw new DOMException('Synthetic independent QA native put failure','QuotaExceededError');}window.__polishNativePut.successfulCalls++;}return original.call(this,value,key);};});}
+async function failureRetry(locale,width,kind){const c=await contextFor({locale,width,completed:kind==='tomorrow'}),p=c.page,w=words[locale];try{await goto(p,'/app');const before=await read(p);let button;
+  if(kind==='plan'){await p.locator('.oda-decision-plan').click();await p.locator('#plan-obstacle').fill('  original NASA obstacle on iPhone  ');await p.locator('#plan-then').fill('  start istanbul ıhlamur with NASA on iPhone  ');button=p.getByRole('button',{name:w.savePlan,exact:true});}
+  else{await p.locator('#tomorrow-draft').waitFor();assert.ok((await p.locator('[data-app-route="/app"]').innerText()).includes(w.kept));await p.locator('#tomorrow-draft').fill('  read NASA on iPhone tomorrow; istanbul ıhlamur  ');button=p.getByRole('button',{name:w.tomorrow,exact:true});}
+  await injectFault(p);await button.evaluate(el=>{el.click();el.click();});await p.getByRole('alert').filter({hasText:/writing|Yazdıkların|texto/}).waitFor();
+  const mid=await read(p),authority=await readAuthority(p),native=await p.evaluate(()=>window.__polishNativePut);assert.equal(native.thrown,1);assert.deepEqual(mid.missions,before.missions);assert.deepEqual(mid.profile.nextDecisionDraft,before.profile.nextDecisionDraft);assert.deepEqual(authority.missions,before.missions);assert.deepEqual(authority.profile.nextDecisionDraft,before.profile.nextDecisionDraft);assert.equal(await button.isDisabled(),false);
+  if(kind==='plan'){assert.equal(await p.locator('#plan-obstacle').inputValue(),'  original NASA obstacle on iPhone  ');assert.equal(await p.locator('#plan-then').inputValue(),'  start istanbul ıhlamur with NASA on iPhone  ');}else assert.equal(await p.locator('#tomorrow-draft').inputValue(),'  read NASA on iPhone tomorrow; istanbul ıhlamur  ');
+  pass(`${locale}-${width}: ${kind} native failure visible, original record/draft retained, duplicate click guarded`,{native});await capture(p,`${kind}-save-failure-${locale}-${width}`);
+  await button.evaluate(el=>{el.click();el.click();});
+  const done=await waitRecord(p,d=>kind==='plan'?d.missions.find(m=>m.id==='synthetic-polish-decision').plan.ifThen==='start istanbul ıhlamur with NASA on iPhone':d.profile.nextDecisionDraft?.text==='read NASA on iPhone tomorrow; istanbul ıhlamur');
+  assert.equal(done.missions.length,before.missions.length);assert.equal(done.completions.length,before.completions.length);assert.equal(done.transactions.length,before.transactions.length);const committed=await readAuthority(p);assert.deepEqual(committed.missions,done.missions);assert.deepEqual(committed.profile.nextDecisionDraft,done.profile.nextDecisionDraft);const after=await p.evaluate(()=>window.__polishNativePut);assert.equal(after.thrown,1);assert.equal(after.successfulCalls,1);
+  if(kind==='plan')assert.equal(await p.locator('#plan-then').count(),0);else assert.equal(await p.locator('#tomorrow-draft').count(),0);
+  pass(`${locale}-${width}: ${kind} retry commits once without duplicate mission/reward`,{native:after});await capture(p,`${kind}-save-retry-${locale}-${width}`);await c.settleResponses();assert.deepEqual(c.record.pageErrors,[]);
+}finally{await c.context.close();}}
+async function turkishSearch(){const c=await contextFor({locale:'tr',browserLocale:'en-US',width:320,trSearch:true}),p=c.page;try{await goto(p,'/app/notebook');await p.locator('#notebook-journal-search').waitFor();const before=await readAuthority(p);for(const query of ['iki','ışık']){await p.locator('#notebook-journal-search').fill(query);assert.equal(await p.locator('.oda-hybrid-entry-preview h3').innerText(),'İki sayfa IŞIK');assert.equal(await p.locator('.oda-notebook-entry-list button').count(),1);}assert.deepEqual((await readAuthority(p)).notebook.entries,before.notebook.entries);pass('TR search on English-browser locale matches dotted İ and dotless I without rewriting saved title',{browserLocale:'en-US',queries:['iki','ışık'],savedTitle:'İki sayfa IŞIK'});await capture(p,'notebook-turkish-search-english-browser-320');await c.settleResponses();assert.deepEqual(c.record.pageErrors,[]);}finally{await c.context.close();}}
+async function heldPlan(){const c=await contextFor({locale:'en',width:390}),p=c.page;try{await goto(p,'/app');await p.locator('.oda-decision-plan').click();await p.locator('#plan-then').fill('held original NASA on iPhone');const before=await readAuthority(p);await p.evaluate(()=>{const put=IDBObjectStore.prototype.put,get=IDBObjectStore.prototype.get;window.__polishHeld={armed:true,phase:'idle',release:null,reads:0,puts:0};IDBObjectStore.prototype.put=function(value,key){const g=window.__polishHeld;if(!g.armed||this.name!=='record'||key!=='current')return put.call(this,value,key);g.armed=false;g.phase='held-before-native-put';const store=this,tx=this.transaction,start=performance.now();tx.addEventListener('abort',()=>g.phase='native-transaction-aborted');tx.addEventListener('complete',()=>g.phase='native-transaction-complete');const pump=()=>{const req=get.call(store,'current');req.onsuccess=()=>{g.reads++;if(g.release==='abort'||performance.now()-start>20000){tx.abort();return;}if(g.release==='commit'){g.puts++;put.call(store,value,key);return;}pump();};return req;};return pump();};});await p.getByRole('button',{name:'Save plan',exact:true}).click();await p.waitForFunction(()=>window.__polishHeld.phase==='held-before-native-put');assert.equal(await p.getByRole('button',{name:'Cancel',exact:true}).isDisabled(),true);await p.getByRole('button',{name:'Cancel',exact:true}).evaluate(el=>el.click());await p.keyboard.press('Escape');assert.equal(await p.locator('#plan-then').count(),1);const dialog=p.getByRole('dialog');await dialog.click({position:{x:2,y:2}});assert.equal(await p.locator('#plan-then').count(),1);assert.equal(await p.locator('#plan-then').inputValue(),'held original NASA on iPhone');const held=await p.evaluate(()=>window.__polishHeld);assert.equal(held.puts,0);pass('390: held native plan save blocks Cancel/Escape/backdrop and retains sheet draft',{held});await capture(p,'plan-held-save-en-390');await p.evaluate(()=>window.__polishHeld.release='abort');await p.getByRole('alert').filter({hasText:/writing/}).waitFor();assert.equal(await p.locator('#plan-then').inputValue(),'held original NASA on iPhone');assert.deepEqual((await readAuthority(p)).missions,before.missions);assert.equal(await p.getByRole('button',{name:'Save plan',exact:true}).isDisabled(),false);pass('390: genuine held transaction abort retains draft, shows failure and enables retry');await capture(p,'plan-held-abort-en-390');await p.getByRole('button',{name:'Save plan',exact:true}).click();await waitRecord(p,d=>d.missions.find(m=>m.id==='synthetic-polish-decision').plan.ifThen==='held original NASA on iPhone');assert.equal(await p.locator('#plan-then').count(),0);pass('390: retry after held genuine abort commits through native queue');await c.settleResponses();assert.deepEqual(c.record.pageErrors,[]);}finally{await c.context.close();}}
+try{
+  for(const locale of ['en','tr','es'])for(const width of [1440,390,320])await matrix(locale,width);
+  for(const locale of ['en','tr','es'])for(const n of [0,2])await countAndEmpty(locale,n);
+  for(const locale of ['en','tr','es']){await failureRetry(locale,locale==='en'?1440:locale==='tr'?390:320,'plan');await failureRetry(locale,locale==='en'?1440:locale==='tr'?390:320,'tomorrow');}
+  await turkishSearch();await heldPlan();
+  const dark=await contextFor({locale:'en',theme:'dark',width:320});try{await goto(dark.page,'/app/notebook');await dark.page.locator('#notebook-journal-search').waitFor();await dark.page.locator('#notebook-journal-search').fill('dark-no-match');assert.equal(await dark.page.locator('#notebook-filter-result').innerText(),words.en.noMatch);pass('dark-320: no-match action fits',await fit(dark.page,'.oda-notebook'));await capture(dark.page,'notebook-dark-no-match-en-320');await dark.settleResponses();assert.deepEqual(dark.record.pageErrors,[]);}finally{await dark.context.close();}
+  // Independent HTTP GET binding of every compiled index/JS/CSS file; no app mutation.
+  for(const row of build.filter(r=>r.file==='dist/index.html'||/\.(js|css)$/.test(r.file))){const url=new URL(row.file.slice(5),base).href;const res=await fetch(url);assert.equal(res.status,200,url);const bytes=Buffer.from(await res.arrayBuffer());assert.equal(bytes.length,row.bytes,row.file);assert.equal(sha(bytes),row.sha256,row.file);report.served.push({file:row.file,bytes:bytes.length,sha256:sha(bytes),http200:true,observedInBrowser:seenServed.has(row.file)});}
+  report.actualBrowserResponses=[...seenServed.values()];report.postflight=verify();report.status='passed-awaiting-pixel-review';
+}catch(error){report.status='failed';report.failure=String(error.stack||error);console.error(report.failure);process.exitCode=1;if(active&&!active.isClosed())await capture(active,'failure',true).catch(()=>{});}
+finally{await browser.close();report.finishedAtUtc=new Date().toISOString();report.passCount=report.checks.length;writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2),{flag:'wx'});}

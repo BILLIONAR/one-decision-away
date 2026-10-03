@@ -1,0 +1,87 @@
+{
+  "kind": "Independent frozen-source static and protection audit; build/browser seal pending",
+  "status": "Static pass within authorized bounded polish; no source blocker found",
+  "sourceCommit": "34ed44ff5189310e301ad81d1d66f6897a44cb73",
+  "baselineEvidenceCommit": "287c289ae5b253d29e5d1af55f1ef241709eaade",
+  "baselineFunctionalSourceCommit": "d33c0077c549bdf8e61fbf9b8bb20422a768f8e9",
+  "branch": "design/reference-led-oda",
+  "reviewedAtUtc": "2026-10-03T11:08:27.429607+00:00",
+  "readOnly": true,
+  "noTestsBuildBrowserInstallOrAppWritesByAuditor": true,
+  "gitCleanAtStartAndClosure": true,
+  "exactDiff": {
+    "pathCount": 9,
+    "changedExisting": [
+      "src/components/momentum/DecisionPlanModal.tsx",
+      "src/components/momentum/FirstSteps.tsx",
+      "src/components/notebook/JournalWorkspace.tsx",
+      "src/i18n/notebookHybrid.ts",
+      "src/pages/Notebook.tsx",
+      "src/pages/Today.tsx",
+      "src/styles/notebookHybrid.css"
+    ],
+    "new": [
+      "src/utils/sentenceCaseLabel.ts",
+      "tests/polish-copy.test.ts"
+    ],
+    "delta": {
+      "file": "/workspace/scratch/oda-reference-redesign/polish/independent-source/exact-source.delta.diff.log",
+      "bytes": 28759,
+      "sha256": "dcb7cf54367c0ed7b632843a9dffa16fe6493b6d3a5a8a0649554cc09e3df9d1"
+    },
+    "sourceWhitespaceCheckPassed": true
+  },
+  "sourceBinding": {
+    "fileCount": 878,
+    "allPhysicalMatchFrozenGitBlobs": true,
+    "unchangedPriorSourceFiles": 869,
+    "manifest": {
+      "file": "/workspace/scratch/oda-reference-redesign/polish/independent-source/frozen-source-manifest.json",
+      "bytes": 198637,
+      "sha256": "8be4caef2c76fbbf5fa8c4ec0bbb07bef12e6ad0302c70098a7fdeb591ec0bdd"
+    }
+  },
+  "protection": {
+    "protectedCount": 348,
+    "allOriginalProtectedByteIdentical": true,
+    "protectedBaseline": {
+      "file": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/protected-baseline.json",
+      "bytes": 81576,
+      "sha256": "e43b76249a116b99631ef2cc439874b70308d67a53423b772dee49f1528647ee"
+    },
+    "all325PublicAssetsByteIdentical": true,
+    "englishMp3": 160,
+    "artVariants": 40,
+    "allServicesStorePersistenceDependenciesLockWorkflowsIdentityAndOtherStylesUnchanged": true,
+    "savedCourseProgressHookAndCourseNextStepCallerByteIdentical": true,
+    "TodayConfirmedDataHookCallerPreserved": true
+  },
+  "staticReview": {
+    "presentationOnly": "Only generated Today localized plan-prefix line invokes sentenceCaseLabel; no mission title, plan payload, draft, or write path passes through helper. English/Turkish/Spanish prefixes precede payload, so only their first letter changes. Existing capitalize declarations unchanged.",
+    "sentenceCase": "Locale-aware first lowercase letter after punctuation/whitespace; preserves rest, uppercase acronyms, mixed-case first tokens and numeric starts. Dotted/dotless Turkish I uses selected locale.",
+    "counts": "EN one day; ES one día escrito / Racha de1 día; zero/multiple plural; TR count forms retained. One kept promise uses existing localized string.",
+    "notebookSearch": "Both haystack and needle lowercase using selected locale; memo also observes locale. Search/date/clear handlers change only filter state, never editor session draft.",
+    "notebookLayout": "One desktop grid-template-rows declaration moves extra editor span height into second row; no token/theme/branding/artwork edits. Exact visual gap requires independent browser geometry.",
+    "weekVisibility": "Memoized dates and observer reveal selected/today only when in displayed week; only region.scrollLeft changes, no scrollIntoView/page-Y movement. Existing44px width56px height, keyboard focus, horizontal region preserved. Observer disconnected on cleanup; reruns on data availability/week/selection/calendar.",
+    "planSave": "Synchronous ref prevents duplicate request; inputs disabled while pending; catch keeps input and exposes localized alert; all ordinary dismissal routes use savingRef close guard; cancel disabled; original success toast+close after awaited save.",
+    "tomorrowSave": "Synchronous ref and disabled submit/input prevent duplicates; catch preserves draft and visible error; clear draft only after awaited success; existing action and merge services untouched.",
+    "persistence": "Existing snapshot merge, replacement epoch conflict, queue/native storage commit/rollback, timer/reward and narration controllers untouched."
+  },
+  "findings": [
+    {
+      "severity": "P2",
+      "finding": "Earlier pending plan-save completion could close/error a sheet reopened before completion.",
+      "resolution": "Fixed before freeze: savingRef guarded Modal close callback and disabled Cancel/Skip. Static check passed; runtime QA pending."
+    },
+    {
+      "severity": "P3",
+      "finding": "Existing Notebook search used ambient browser locale rather than selected TR locale.",
+      "resolution": "Fixed before freeze: locale passed to both lowercase calls and memo dependency. Runtime locale QA pending."
+    }
+  ],
+  "remainingLimits": [
+    "No runtime tests/build/browser performed by this source auditor. Frozen aggregate/browser evidence will be independently read after completion.",
+    "No physical iPhone/iOS, real account/provider/network, broad accessibility or human narration-listening verification.",
+    "External account/document replacement while a planning sheet is open is an existing broader lifecycle boundary; no new account scope UI redesign or runtime claim here."
+  ]
+}

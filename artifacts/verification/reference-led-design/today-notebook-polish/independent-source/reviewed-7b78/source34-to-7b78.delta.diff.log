@@ -1,0 +1,12 @@
+diff --git a/src/components/momentum/FirstSteps.tsx b/src/components/momentum/FirstSteps.tsx
+index c234b48..e50fc02 100644
+--- a/src/components/momentum/FirstSteps.tsx
++++ b/src/components/momentum/FirstSteps.tsx
+@@ -81,6 +81,7 @@ export const KeptMomentCard: React.FC = () => {
+     try {
+       await updateMomentumProfile({ nextDecisionDraft: { text, forDay: tomorrowKey() } });
+       setDraft('');
++      showToast(t('Saved.'), 'success');
+     } catch {
+       setDraftError(true);
+     } finally {

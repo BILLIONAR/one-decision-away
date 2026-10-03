@@ -1,0 +1,316 @@
+{
+  "kind": "Final independent frozen-source/protection/build/native/compiled-browser evidence audit",
+  "status": "Pass within stated authorized polish scope; no remaining source or tested-scope blocker",
+  "sourceCommit": "7b78cf89adf3c1bd89e9e5c1540cffdb3953a566",
+  "baselineEvidenceCommit": "287c289ae5b253d29e5d1af55f1ef241709eaade",
+  "baselineFunctionalSourceCommit": "d33c0077c549bdf8e61fbf9b8bb20422a768f8e9",
+  "branch": "design/reference-led-oda",
+  "reviewedAtUtc": "2026-10-03T11:27:37.641143+00:00",
+  "readOnly": true,
+  "noTestsBuildBrowserInstallOrAppWritesByAuditor": true,
+  "gitCleanAtStartAndClosure": true,
+  "exactDiff": {
+    "pathCount": 9,
+    "changedExisting": [
+      "src/components/momentum/DecisionPlanModal.tsx",
+      "src/components/momentum/FirstSteps.tsx",
+      "src/components/notebook/JournalWorkspace.tsx",
+      "src/i18n/notebookHybrid.ts",
+      "src/pages/Notebook.tsx",
+      "src/pages/Today.tsx",
+      "src/styles/notebookHybrid.css"
+    ],
+    "new": [
+      "src/utils/sentenceCaseLabel.ts",
+      "tests/polish-copy.test.ts"
+    ],
+    "delta": {
+      "file": "/workspace/scratch/oda-reference-redesign/polish/independent-source/reviewed-7b78/exact-source.delta.diff.log",
+      "bytes": 28801,
+      "sha256": "408e8395410ebabf7c7afac2ff8d05abba0cec0009c1013a3d98e493a877aea8"
+    },
+    "sourceWhitespaceCheckPassed": true
+  },
+  "sourceBinding": {
+    "fileCount": 878,
+    "allPhysicalMatchFrozenGitBlobs": true,
+    "unchangedPriorSourceFiles": 869,
+    "manifest": {
+      "file": "/workspace/scratch/oda-reference-redesign/polish/independent-source/reviewed-7b78/frozen-source-manifest.json",
+      "bytes": 198637,
+      "sha256": "cf877a9f4394bc7ed642f802b2bf3a8b63402f24d4c7895a5654a32f231f48bd"
+    }
+  },
+  "protection": {
+    "protectedCount": 348,
+    "allOriginalProtectedByteIdentical": true,
+    "protectedBaseline": {
+      "file": "/workspace/scratch/oda-reference-redesign/scoped-layout-repair/protection/protected-baseline.json",
+      "bytes": 81576,
+      "sha256": "e43b76249a116b99631ef2cc439874b70308d67a53423b772dee49f1528647ee"
+    },
+    "all325PublicAssetsByteIdentical": true,
+    "englishMp3": 160,
+    "artVariants": 40,
+    "allServicesStorePersistenceDependenciesLockWorkflowsIdentityAndOtherStylesUnchanged": true,
+    "savedCourseProgressHookAndCourseNextStepCallerByteIdentical": true,
+    "TodayConfirmedDataHookCallerPreserved": true
+  },
+  "staticReview": {
+    "presentationOnly": "Only generated Today localized plan-prefix line invokes sentenceCaseLabel; no mission title, plan payload, draft, or write path passes through helper. English/Turkish/Spanish prefixes precede payload, so only their first letter changes. Existing capitalize declarations unchanged.",
+    "sentenceCase": "Locale-aware first lowercase letter after punctuation/whitespace; preserves rest, uppercase acronyms, mixed-case first tokens and numeric starts. Dotted/dotless Turkish I uses selected locale.",
+    "counts": "EN one day; ES one día escrito / Racha de1 día; zero/multiple plural; TR count forms retained. One kept promise uses existing localized string.",
+    "notebookSearch": "Both haystack and needle lowercase using selected locale; memo also observes locale. Search/date/clear handlers change only filter state, never editor session draft.",
+    "notebookLayout": "One desktop grid-template-rows declaration moves extra editor span height into second row; no token/theme/branding/artwork edits. Exact visual gap requires independent browser geometry.",
+    "weekVisibility": "Memoized dates and observer reveal selected/today only when in displayed week; only region.scrollLeft changes, no scrollIntoView/page-Y movement. Existing44px width56px height, keyboard focus, horizontal region preserved. Observer disconnected on cleanup; reruns on data availability/week/selection/calendar.",
+    "planSave": "Synchronous ref prevents duplicate request; inputs disabled while pending; catch keeps input and exposes localized alert; all ordinary dismissal routes use savingRef close guard; cancel disabled; original success toast+close after awaited save.",
+    "tomorrowSave": "Synchronous ref and disabled submit/input prevent duplicates; catch preserves draft and visible error; clear draft only after awaited success; existing action and merge services untouched. Revised7b adds only existing translated Saved. success toast AFTER awaited commit and draft clear; global showToast replaces prior failure message/type. Catch never shows success.",
+    "persistence": "Existing snapshot merge, replacement epoch conflict, queue/native storage commit/rollback, timer/reward and narration controllers untouched."
+  },
+  "findings": [
+    {
+      "severity": "P2",
+      "finding": "Earlier pending plan-save completion could close/error a sheet reopened before completion.",
+      "resolution": "Fixed before freeze: savingRef guarded Modal close callback and disabled Cancel/Skip. Static check passed; runtime QA pending. Final7b compiled browser/native evidence independently read: tested behavior passes, with synthetic-data/fault/viewport scope explicitly retained."
+    },
+    {
+      "severity": "P3",
+      "finding": "Existing Notebook search used ambient browser locale rather than selected TR locale.",
+      "resolution": "Fixed before freeze: locale passed to both lowercase calls and memo dependency. Runtime locale QA pending. Final7b compiled browser/native evidence independently read: tested behavior passes, with synthetic-data/fault/viewport scope explicitly retained."
+    },
+    {
+      "severity": "P3",
+      "finding": "Independent earlier browser QA observed stale global failure toast after actual successful tomorrow-draft retry.",
+      "resolution": "One-line post-commit success toast added in7b78; verified source path/ordering/global state replacement and existingEN/TR/ESkeys. Revised browser rerun pending; earlier34ed screenshots are historical. Final7b compiled browser/native evidence independently read: tested behavior passes, with synthetic-data/fault/viewport scope explicitly retained."
+    }
+  ],
+  "remainingLimits": [
+    "Chromium1511440x1000/390x844/320x844 viewport emulation and synthetic data, not physical iPhone/iOS/native execution.",
+    "Fault-injected native transactions establish tested failure/retry behavior, not production latency or incidence; startup loading/read-error boundary not injected.",
+    "No real account/provider/cloud/billing/signing QA, broad accessibility matrix or human all-clip narration listening/transcription. Existing external account/document replacement while planning sheet open was not broadened into new UI lifecycle work.",
+    "Review evidence/source audit authorizes no production publication; parent/user approval remains required.",
+    "Auditor ran no builds/tests/browser sessions and made no app/Git writes. Historical34ed source/build/QA bytes retained; final7b receipts use separate namespace."
+  ],
+  "previousPolishSourceCommit": "34ed44ff5189310e301ad81d1d66f6897a44cb73",
+  "previousRevisionDelta": {
+    "pathCount": 1,
+    "file": "src/components/momentum/FirstSteps.tsx",
+    "insertions": 1,
+    "deletions": 0,
+    "delta": {
+      "file": "/workspace/scratch/oda-reference-redesign/polish/independent-source/reviewed-7b78/source34-to-7b78.delta.diff.log",
+      "bytes": 505,
+      "sha256": "3132b69f3d4bef1aef7cd72f93e2d7f4d8185ef4df60a1c99ba0a489e2d7d070"
+    },
+    "other877SourcesByteIdentical": true
+  },
+  "historicalReceiptPreservation": {
+    "priorSourceBuildReview": {
+      "file": "/workspace/scratch/oda-reference-redesign/polish/independent-source/frozen-source-build-review.json",
+      "bytes": 7844,
+      "sha256": "0b7b7cd9ae721b1020eb6f348d7b5194117029bf854c2159fb44ba7ccc10d125"
+    },
+    "priorStaticReview": {
+      "file": "/workspace/scratch/oda-reference-redesign/polish/independent-source/frozen-static-source-review.json",
+      "bytes": 5534,
+      "sha256": "358a5d4ce80406b5e8877e18ccd9ab0b0e0ccadf91c6fa04c3fd22a91aef87cd"
+    },
+    "noEarlierAuditorReceiptsOverwritten": true,
+    "priorAggregateLog": {
+      "file": "/workspace/scratch/oda-reference-redesign/polish/final/aggregate-check.log",
+      "bytes": 79260,
+      "sha256": "0e6285b0e456ab637ca54bd5ecac74a08ee584485d837fcbeab14cc3e6b75855"
+    }
+  },
+  "aggregate": {
+    "receipt": {
+      "file": "/workspace/scratch/oda-reference-redesign/polish/final-reviewed/build-receipt.json",
+      "bytes": 239146,
+      "sha256": "dfa48fa7c1a9cd3a489414533149d2cec1a207e7a59670b4abf40c6a14049757"
+    },
+    "log": {
+      "file": "/workspace/scratch/oda-reference-redesign/polish/final-reviewed/aggregate-check.log",
+      "bytes": 79249,
+      "sha256": "d2fcc165c72c43bb128c3506be4bdfd09d99ac92c15fb01f4a4cec8bf44dea7e"
+    },
+    "recordedCommand": "VITE_BASE_PATH=/one-decision-away/ npm run check",
+    "exitCode": 0,
+    "passed": 621,
+    "failed": 0,
+    "actualRawSummaryAndSevenFocusedPassLinesRead": true,
+    "focusedPassLines": [
+      "✔ interface sentence case changes only the first letter after whitespace and punctuation (4.92787ms)",
+      "✔ Turkish sentence case handles dotted and dotless I without changing the remaining text (1.276632ms)",
+      "✔ sentence labels preserve acronyms, mixed-case names, numeric starts and empty input (0.217809ms)",
+      "✔ interface plan formatting leaves its user-authored payload and source unchanged (0.127634ms)",
+      "✔ Notebook English writing counts use singular only for one (1.491037ms)",
+      "✔ Notebook Spanish writing counts and streaks agree with singular and plural days (0.152401ms)",
+      "✔ Notebook Turkish count forms remain unchanged for zero, one and multiple days (0.143497ms)"
+    ],
+    "noAggregateRerunByAuditor": true,
+    "all878SourcesMatchFrozenGitAndAggregateReceipt": true,
+    "all437DistFilesMatchReceipt": true,
+    "sourceUnchangedDuringRun": true,
+    "limits": [
+      "Aggregate includes prior regressions and seven focused copy/locale regressions; independent compiled browser QA and native course progress checks are reported separately.",
+      "This receipt is created after the source commit and will be committed with review evidence; no claim it existed in the source commit."
+    ]
+  },
+  "compiledCss": {
+    "count": 7,
+    "allSevenByteIdenticalToPrevious34edBuild": true,
+    "previous34edBuildReceipt": {
+      "file": "/workspace/scratch/oda-reference-redesign/polish/final/build-receipt.json",
+      "bytes": 239146,
+      "sha256": "9d3000aa1d7f8940345e433889d9e307ff2e28959d258d24981cdb55fd91fb60"
+    },
+    "onlyNotebookCssVsD33Changes": "50-byte desktop grid-row declaration; all6 otherCSS unchanged vsd33 as verified in original audit."
+  },
+  "nativeHookRegressions": {
+    "receipt": {
+      "file": "/workspace/scratch/oda-reference-redesign/polish/native-reviewed-course-progress/receipt.json",
+      "bytes": 886,
+      "sha256": "dfb08e92d7e359d87ecabba0608062845dd9f773a1345cfae57ee5a042a43f7b"
+    },
+    "actualLog": {
+      "file": "/workspace/scratch/oda-reference-redesign/polish/native-reviewed-course-progress/native-regressions.log",
+      "bytes": 1305,
+      "sha256": "450e5cbc7c7a2a9ea44c13d950a9e8e727818c0a71441493d09f27aec33d309d"
+    },
+    "passed": 11,
+    "failed": 0,
+    "recordedExitCode": 0,
+    "harness": {
+      "file": "/workspace/oda-reference-redesign/scripts/qa-saved-course-progress.ts",
+      "bytes": 15376,
+      "sha256": "67f6f60bffb67ad0ee9f9302eacf368ab6da11f3b1f3f37a0fbf27816e14db68"
+    },
+    "allRawPassNamesAndSummaryRead": true,
+    "sourceAndBuildUnchangedPerReceipt": true,
+    "limits": [
+      "Native hook regression uses fresh in-memory React/services bundle, separate from compiled whole-app independent QA.",
+      "Synthetic focus/account inputs; no real account or physical iPhone QA."
+    ],
+    "noNativeRerunByAuditor": true
+  },
+  "independentCompiledBrowserEvidence": {
+    "finalReportAnd54PngPixelReceipt": {
+      "file": "/workspace/scratch/oda-reference-redesign/polish/independent-browser/final-report-7b78.json",
+      "bytes": 17905,
+      "sha256": "0ab4852005ba98734916d252bab2dfe6e80e71819030b3d99a38fa290743b88b"
+    },
+    "sourceCommit": "7b78cf89adf3c1bd89e9e5c1540cffdb3953a566",
+    "passed": 79,
+    "failed": 0,
+    "primaryPassed": 71,
+    "supplementPassed": 8,
+    "rawReportsCommandLogsHarnessesAllBytesVerified": [
+      {
+        "file": "/workspace/scratch/oda-reference-redesign/polish/independent-browser/final-7b78-primary/report.json",
+        "bytes": 223108,
+        "sha256": "9fe8859d0c64eed75c940080a6c0502ec4831700bf0856e7b382d4d3dcf8a9c6"
+      },
+      {
+        "file": "/workspace/scratch/oda-reference-redesign/polish/independent-browser/final-7b78-primary/command-receipt.json",
+        "bytes": 1044,
+        "sha256": "0424f1eb3e44c216b43c9007869a5c789ef6c6fdfc95b35bdc21ef40f2cf46c0"
+      },
+      {
+        "file": "/workspace/scratch/oda-reference-redesign/polish/independent-browser/final-7b78-primary/browser.log",
+        "bytes": 5313,
+        "sha256": "96b4935b8f6efd55568a81f29edfb8ebbcbd29f5bc336d215a062f153482f99f"
+      },
+      {
+        "file": "/workspace/scratch/oda-reference-redesign/polish/independent-browser/final-7b78-primary/harness.mjs",
+        "bytes": 27236,
+        "sha256": "530f9338baa5e4e2c68b632a7b66595c5c004dbecce22e1d34418552937483ba"
+      },
+      {
+        "file": "/workspace/scratch/oda-reference-redesign/polish/independent-browser/final-7b78-supplement/report.json",
+        "bytes": 44392,
+        "sha256": "0fc58ac5e2c5a6c5d45c5db7eceec310e36cbbe3a38a7f5e746fb7ea1279bf4b"
+      },
+      {
+        "file": "/workspace/scratch/oda-reference-redesign/polish/independent-browser/final-7b78-supplement/command-receipt.json",
+        "bytes": 1048,
+        "sha256": "54de2ad94e18d8f9f494189ce37e12c6d68b6f68ac9020ef7f17eacbc8946205"
+      },
+      {
+        "file": "/workspace/scratch/oda-reference-redesign/polish/independent-browser/final-7b78-supplement/browser.log",
+        "bytes": 855,
+        "sha256": "8f4a1396a3b967f8620c4a22e5a2e11705fce1e4aa267dc992f8d9995e143daa"
+      },
+      {
+        "file": "/workspace/scratch/oda-reference-redesign/polish/independent-browser/final-7b78-supplement/harness.mjs",
+        "bytes": 29683,
+        "sha256": "0f25cd7dd508c877b60c2da8fa817c2933b2119dd63fca5b12611f0c3ede5ec7"
+      }
+    ],
+    "all105ServedIndexJsCssHashesMatchTestedReceipt": true,
+    "distinctObservedResponseBodies": 46,
+    "all46BrowserObservedBodyHashesMatchTestedReceipt": true,
+    "all878SourcesAnd437DistMatchAfterFinalPixelReviewAndAuditorClosure": true,
+    "actualPNGCount": 54,
+    "all54PNGBytesHashesAndDimensionsVerified": true,
+    "all54PixelsPersonallyInspectedByPeer": true,
+    "pixelReceiptScope": "Sealed final browser report embeds per-PNG pixel inspection receipt for all54. Raw runtime reports remain unchanged with passed-awaiting-pixel-review; final sealed wrapper closes pixel verdict. This auditor does not claim to have personally viewed all54.",
+    "observations": [
+      "Generated plan prefix sentence-case only EN/TR/ES; stored and rendered synthetic lowercase titles and raw plan bytes retained, including whitespace/punctuation/NASA/iPhone/istanbul/ıhlamur.",
+      "EN/TR/ES Notebook0/1/2 writing-day/streak forms correct; Today1keptpromise singular confirmed during completed fixtures.",
+      "Desktop calendar-to-preview gap12px all three languages; no page-wide overflow or non-scroll-region action clipping.",
+      "No-match/result/reset adjacent to search/date controls; search/date/week/month filtering and reset preserve original unsaved editor values and saved record bytes.",
+      "Saturday/today initially fully visible320; selected Sunday remains visible on week return; resize and native keyboard Tab/Space select date with44px targets; region reveal causes no page-Y shift.",
+      "Today no-decision input/disabled empty submit/suggestions and keyboard creation confirmed EN/TR/ES320, with one stored decision and no false completion/reward.",
+      "TR titleİki sayfa IŞIK matchesiki andışık under English-browser locale; saved title bytes unchanged.",
+      "Both save actions: injected real IDBObjectStore.put failure visibly retains draft and canonical/projection records; immediate repeat-click guard; retry one native write, no extra mission/completion/reward.",
+      "Planning held real transaction pre-native-put: Cancel/Escape/backdrop cannot close; genuine tx.abort preserves draft and enables successful retry through existing queue.",
+      "Final successful tomorrow retry replaces earlier failure toast with Saved./Kaydedildi./Guardado. after confirmed native durable commit; no stale failure text.",
+      "Intentional compact course roadmap and calendar/week horizontal overflow remains labelled and accessible; compact roadmap136px-wide targets and native keyboard/wheel scrolling observed."
+    ],
+    "limits": [
+      "Viewport emulation1440x1000,390x844,320x844 in Chromium151; not a physical iPhone or native app execution.",
+      "Runtime modified error paths are fault-injected synthetic transactions, not production latency/failure incidence.",
+      "Startup loading/read-error boundary was not fault-injected; unrelated provider/account/cloud/billing/native signing/narration/physical-device matrix not run.",
+      "This review does not authorize production publication or claim all narration clips received listening/transcription QA."
+    ],
+    "noExternalAttemptsOrPageErrorsInRecordedContexts": true,
+    "allPeerBrowsersProcessesAndReadersClosed": true,
+    "noBrowserRunBySourceAuditor": true
+  },
+  "ownRepresentativePixelInspection": {
+    "actualImagesViewedAtOriginalResolution": [
+      {
+        "file": "/workspace/scratch/oda-reference-redesign/polish/independent-browser/final-7b78-primary/notebook-en-1440.png",
+        "bytes": 143235,
+        "sha256": "543235ae1153d53d60c1eed998c6d86bb649ccef6478fe3e7fab3b33dc012475"
+      },
+      {
+        "file": "/workspace/scratch/oda-reference-redesign/polish/independent-browser/final-7b78-primary/notebook-es-320.png",
+        "bytes": 57131,
+        "sha256": "7eda9d656108c83e0bfea5b38a24d4852c3501d365c7304b5348012b11772bf1"
+      },
+      {
+        "file": "/workspace/scratch/oda-reference-redesign/polish/independent-browser/final-7b78-primary/tomorrow-save-retry-es-320.png",
+        "bytes": 64128,
+        "sha256": "e230a156ef42d6f5f6433ad94308158d9d7d0feda3546f2e0a8a51ebff743abd"
+      }
+    ],
+    "observations": [
+      "English desktop actualPNG visibly shows1daywritten and saved-entry preview directly below calendar with small12px gap; raw lowercase saved title/NASA/iPhone retained.",
+      "Spanish320 actualPNG visibly showsRachade1día/1díaescrito; Saturday fully visible and partialMonday intentional horizontal region, no page-wide overflow.",
+      "Spanish320 actual successfulretryPNG showsGuardado. and committed tomorrow text, preserving NASA/iPhone/istanbul/ıhlamur; no stale failuretoast visible."
+    ],
+    "noPhysicalPhoneClaim": true
+  },
+  "allPNGArtifactManifest": {
+    "file": "/workspace/scratch/oda-reference-redesign/polish/independent-source/reviewed-7b78/final-PNG-byte-manifest.json",
+    "bytes": 17323,
+    "sha256": "74a2bddd8a2b643a47e694fa2b673463de0610b784e0b45f75a9c7724a4247b9"
+  },
+  "readerClosure": {
+    "allOwnSynchronousReadersClosed": true,
+    "noOpenBrowserHttpBuildTestProcessesCreatedByAuditor": true,
+    "allPeerReadersClosedPerSealedReceipt": true,
+    "gitCleanAtClosure": true
+  }
+}

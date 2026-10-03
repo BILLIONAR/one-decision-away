@@ -1,0 +1,32 @@
+import pathlib, json, hashlib, shutil, subprocess, re
+
+repo = pathlib.Path('/workspace/oda-reference-redesign')
+scratch = pathlib.Path('/workspace/scratch/oda-reference-redesign/polish')
+dest = repo / 'artifacts/verification/reference-led-design/today-notebook-polish'
+expected = '7b78cf89adf3c1bd89e9e5c1540cffdb3953a566'
+receipt = json.loads((scratch / 'final-reviewed/build-receipt.json').read_text())
+assert receipt['sourceCommit'] == expected and receipt['exitCode'] == 0 and receipt['passed'] == 621 and receipt['failed'] == 0
+assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=repo).decode().strip() == expected
+def row(path):
+    data = path.read_bytes()
+    return {'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()}
+def stable():
+    for item in receipt['source'] + receipt['build']:
+        assert row(repo/item['file']) == {'bytes':item['bytes'],'sha256':item['sha256']}, item['file']
+stable()
+assert not dest.exists(), 'Use a new packet namespace; never overwrite evidence.'
+dest.mkdir(parents=True)
+name_map=[]
+for old in sorted(scratch.rglob('*')):
+    if not old.is_file(): continue
+    rel=old.relative_to(scratch)
+    if old.name.startswith('remote-proof'): continue
+    archived=pathlib.Path(str(rel)+'.log') if old.suffix in {'.mjs','.js','.ts','.py','.diff'} else rel
+    new=dest/archived
+    new.parent.mkdir(parents=True,exist_ok=True)
+    shutil.copyfile(old,new)
+    assert old.read_bytes()==new.read_bytes()
+    name_map.append({'original':str(rel),'archived':str(archived),**row(old)})
+(dest/'archive-name-map.json').write_text(json.dumps(name_map,indent=2)+'\n')
+stable()
+print(json.dumps({'sourceCommit':expected,'archivedRawFiles':len(name_map),'rawBytes':sum(x['bytes'] for x in name_map),'packet':str(dest)}))

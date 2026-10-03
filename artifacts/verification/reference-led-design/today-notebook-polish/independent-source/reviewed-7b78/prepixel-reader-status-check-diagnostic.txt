@@ -1,0 +1,7 @@
+Tool-captured reader diagnostic; not an app/browser/test failure or complete process log.
+First reader incorrectly expected final report status pass/complete before pixel review was done.
+Actual status correctly is passed-awaiting-pixel-review.
+Traceback (most recent call last):
+  File "<stdin>", line 8, in <module>
+AssertionError: passed-awaiting-pixel-review
+Follow-up reader accepts this only as runtime pass with pixel verdict pending. No app/build/test rerun and no report bytes changed.

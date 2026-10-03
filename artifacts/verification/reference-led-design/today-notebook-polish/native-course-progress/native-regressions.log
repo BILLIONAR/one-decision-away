@@ -1,0 +1,19 @@
+✔ initial mount during a genuinely pending save uses confirmed provider progress, then observes commit (1147.145946ms)
+✔ navigation remount during a pending save cannot manufacture completion and abort retains the confirmed zero (564.272038ms)
+✔ synthetic window focus events wait for the durable commit and coalesce repeated refreshes (581.216179ms)
+✔ synthetic window focus events wait for the durable abort and coalesce repeated refreshes (557.249ms)
+✔ pending read cannot publish old progress after same-profile epoch replacement (546.659959ms)
+✔ pending read cannot publish old progress after profile replacement (585.24239ms)
+✔ synthetic cloud account scope change fences pending old reads without requiring an online account for local progress (593.909101ms)
+✔ expired guarded course notifications cannot bypass the pending-save boundary (616.107307ms)
+✔ failed authoritative focus read retains confirmed progress and a later focus can recover (622.692844ms)
+✔ unmount cancels publication from a pending authoritative refresh (541.806855ms)
+✔ a newer confirmed provider seed is visible even when its same-scope authoritative refresh fails (569.005887ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7449.297174

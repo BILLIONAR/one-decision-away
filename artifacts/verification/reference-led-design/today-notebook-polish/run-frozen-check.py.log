@@ -1,0 +1,38 @@
+import pathlib,subprocess,json,hashlib,datetime,time,re,os,sys
+
+repo=pathlib.Path('/workspace/oda-reference-redesign')
+out=pathlib.Path(sys.argv[1]);out.mkdir(parents=True,exist_ok=True)
+expected=sys.argv[2]
+def git(*args):return subprocess.check_output(['git',*args],cwd=repo).decode().strip()
+assert git('rev-parse','HEAD')==expected
+assert git('branch','--show-current')=='design/reference-led-oda'
+assert git('status','--porcelain')==''
+def row(path):
+ b=(repo/path).read_bytes();return {'file':path,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+paths=[p for p in git('ls-files').splitlines() if not p.startswith('artifacts/')]
+source=[row(p) for p in paths]
+for item in source:
+ b=subprocess.check_output(['git','show',f'{expected}:{item["file"]}'],cwd=repo)
+ assert len(b)==item['bytes'] and hashlib.sha256(b).hexdigest()==item['sha256'],item['file']
+started=datetime.datetime.now(datetime.timezone.utc).isoformat();clock=time.monotonic()
+env=os.environ.copy();env['VITE_BASE_PATH']='/one-decision-away/'
+log=out/'aggregate-check.log'
+with log.open('xb') as sink:
+ result=subprocess.run(['npm','run','check'],cwd=repo,env=env,stdout=sink,stderr=subprocess.STDOUT)
+b=log.read_bytes();text=b.decode(errors='replace')
+passed=re.findall(r'(?:#|ℹ) pass (\d+)',text);failed=re.findall(r'(?:#|ℹ) fail (\d+)',text)
+build=[row(str(p.relative_to(repo))) for p in sorted((repo/'dist').rglob('*')) if p.is_file()]
+r={'sourceCommit':expected,'startedAtUtc':started,'finishedAtUtc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+ 'command':'VITE_BASE_PATH=/one-decision-away/ npm run check','argv':['npm','run','check'],'exitCode':result.returncode,
+ 'elapsedSeconds':round(time.monotonic()-clock,3),'passed':int(passed[-1]) if passed else None,'failed':int(failed[-1]) if failed else None,
+ 'log':log.name,'logBytes':len(b),'logSha256':hashlib.sha256(b).hexdigest(),'sourceFileCount':len(source),'source':source,
+ 'allSourcesMatchCommittedSource':True,'unchangedDuringRun':all(row(p)==item for p,item in zip(paths,source)),
+ 'buildFileCount':len(build),'build':build,'cssFileCount':len([p for p in build if p['file'].endswith('.css')]),
+ 'branch':git('branch','--show-current'),'cleanAfterRun':git('status','--porcelain')=='',
+ 'baselineSourceCommit':'d33c0077c549bdf8e61fbf9b8bb20422a768f8e9',
+ 'reasonForNewRun':'Authorized bounded Today and Notebook polish; exact frozen source and new aggregate output, preserving all historical logs.',
+ 'limits':['Aggregate includes prior regressions and seven focused copy/locale regressions; independent compiled browser QA and native course progress checks are reported separately.','This receipt is created after the source commit and will be committed with review evidence; no claim it existed in the source commit.']}
+(out/'build-receipt.json').write_text(json.dumps(r,indent=2)+'\n')
+assert r['unchangedDuringRun'] and r['cleanAfterRun']
+print(json.dumps({k:r[k] for k in ['sourceCommit','exitCode','passed','failed','sourceFileCount','buildFileCount','logBytes','logSha256']}))
+sys.exit(result.returncode)

@@ -1,0 +1,1291 @@
+{
+  "sourceCommit": "7b78cf89adf3c1bd89e9e5c1540cffdb3953a566",
+  "buildReceipt": {
+    "path": "/workspace/scratch/oda-reference-redesign/polish/final-reviewed/build-receipt.json",
+    "bytes": 239146,
+    "sha256": "dfa48fa7c1a9cd3a489414533149d2cec1a207e7a59670b4abf40c6a14049757"
+  },
+  "base": "http://127.0.0.1:4193/one-decision-away/",
+  "startedAtUtc": "2026-10-03T11:18:50.268Z",
+  "syntheticData": true,
+  "checks": [
+    {
+      "name": "en-320: Today no-decision state exposes input, disabled empty submit and optional suggestions",
+      "evidence": {
+        "width": 320,
+        "scrollWidth": 320,
+        "intentionalScrollRegions": [
+          ".oda-notebook-week-region",
+          ".oda-notebook-calendar-scroll",
+          ".oda-course-roadmap--compact"
+        ],
+        "clipped": []
+      }
+    },
+    {
+      "name": "en-320: keyboard Set decision creates one actual lowercase title without false completion/reward"
+    },
+    {
+      "name": "tr-320: Today no-decision state exposes input, disabled empty submit and optional suggestions",
+      "evidence": {
+        "width": 320,
+        "scrollWidth": 320,
+        "intentionalScrollRegions": [
+          ".oda-notebook-week-region",
+          ".oda-notebook-calendar-scroll",
+          ".oda-course-roadmap--compact"
+        ],
+        "clipped": []
+      }
+    },
+    {
+      "name": "tr-320: keyboard Set decision creates one actual lowercase title without false completion/reward"
+    },
+    {
+      "name": "es-320: Today no-decision state exposes input, disabled empty submit and optional suggestions",
+      "evidence": {
+        "width": 320,
+        "scrollWidth": 320,
+        "intentionalScrollRegions": [
+          ".oda-notebook-week-region",
+          ".oda-notebook-calendar-scroll",
+          ".oda-course-roadmap--compact"
+        ],
+        "clipped": []
+      }
+    },
+    {
+      "name": "es-320: keyboard Set decision creates one actual lowercase title without false completion/reward"
+    },
+    {
+      "name": "320: keyboard region→date Tab/Space and resize keep selected/today visible, 44px target and exact unsaved editor",
+      "evidence": {
+        "selected": {
+          "button": {
+            "left": 33,
+            "right": 77,
+            "width": 44,
+            "height": 56
+          },
+          "region": {
+            "left": 33,
+            "right": 287,
+            "scrollLeft": 0
+          },
+          "fullyVisible": true,
+          "y": 14
+        }
+      }
+    },
+    {
+      "name": "320: compact roadmap is labelled intentional keyboard/wheel-accessible horizontal scroll with44px targets and no page overflow",
+      "evidence": {
+        "before": {
+          "left": 4,
+          "scrollWidth": 904,
+          "clientWidth": 238,
+          "tabIndex": -1,
+          "hint": "Scroll to see all lessons",
+          "targets": [
+            {
+              "width": 136,
+              "height": 129.609375
+            },
+            {
+              "width": 136,
+              "height": 129.609375
+            },
+            {
+              "width": 136,
+              "height": 129.609375
+            },
+            {
+              "width": 136,
+              "height": 129.609375
+            },
+            {
+              "width": 136,
+              "height": 129.609375
+            },
+            {
+              "width": 136,
+              "height": 129.609375
+            }
+          ]
+        },
+        "after": {
+          "left": 612,
+          "pageWidth": 320,
+          "viewport": 320
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "today-empty-en-320.png",
+      "bytes": 113234,
+      "sha256": "e0894b231d1fc135c6537886800f0cf9674dd89ba5d5f71e3524c2e07f9a90f0",
+      "pixelInspection": "pending"
+    },
+    {
+      "file": "today-empty-tr-320.png",
+      "bytes": 112488,
+      "sha256": "10a59c9fd9baa487a3f024a57f784fb36ebbf668baa3ea7410750a941a30a82d",
+      "pixelInspection": "pending"
+    },
+    {
+      "file": "today-empty-es-320.png",
+      "bytes": 115004,
+      "sha256": "b3d7ce78c194fbe0f05b723fbb11a5042f320097540fe9ed337cd5ecebc16145",
+      "pixelInspection": "pending"
+    },
+    {
+      "file": "notebook-keyboard-selected-en-320.png",
+      "bytes": 57790,
+      "sha256": "8d99a9ec2b6ec80a428eb51ea5b07625c808f0b9109dfe8aeba54430edfc0daf",
+      "pixelInspection": "pending"
+    },
+    {
+      "file": "today-roadmap-scroll-en-320.png",
+      "bytes": 58326,
+      "sha256": "54dc5321b8f97c8eb2ffd478fe599272ac99e2774772f5c9f1747ee1f528f124",
+      "pixelInspection": "pending"
+    }
+  ],
+  "contexts": [
+    {
+      "locale": "en",
+      "theme": "light",
+      "width": 320,
+      "requests": [
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/",
+          "resourceType": "document"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/theme-init.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/index-BkRR4AIO.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/react-5GCfeWye.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/media-2mgEiOLR.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/index-BH5El-p7.css",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/hanken-grotesk-latin-wght-normal-CaVRRdDk.woff2",
+          "resourceType": "font"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/brand/oda-favicon-c4-v1-32.png",
+          "resourceType": "other"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/Today-DatEkWOc.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/growth-CtfcX3mW.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/OriginalSceneImage-zmk9pRa_.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/courseNavigationIntent-D57bl2_P.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/chevron-right-Dd9vvKE-.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/lock-keyhole-DoeKd_Jl.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/entitlements-u2O6Yfci.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/courseNavigationIntent-C0ky-Yq1.css",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/MissionFlows-B2ygq3Wr.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/square-DGI_J3rT.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/DreamArt-CYf69uum.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/DailyMicroHabits-my--YggO.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/motion-HNvQpnN_.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/music-CGrAXEnd.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/trending-up-DciuxmaK.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/moon-BQ8pwLl2.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/sparkles-CNogJchf.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/trash-2-1F4ByhE5.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/pen-line-DzItPkBT.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/rotate-ccw-Cvl0sSTn.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/circle-check-B98ao5oy.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/charts-Bzd-XkHo.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/pencil-Cc7IpPE9.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/shuffle-crRgRYlT.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/wind-CYwTUAIp.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/route-BEXS5_35.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/share-2-D99Icjed.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/waves-Cl6QJKjv.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/Today-D76Bu5Fr.css",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/workingSurfaces-Ug3LNMJ2.css",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/brand/oda-c4.png",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/oda/original-scenes/today-scene-320.webp",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/oda/delivery/trees/tree-00-seedling-0-320.webp",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2",
+          "resourceType": "font"
+        }
+      ],
+      "blockedExternal": [],
+      "pageErrors": [],
+      "dialogs": []
+    },
+    {
+      "locale": "tr",
+      "theme": "light",
+      "width": 320,
+      "requests": [
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/",
+          "resourceType": "document"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/theme-init.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/index-BkRR4AIO.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/react-5GCfeWye.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/media-2mgEiOLR.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/index-BH5El-p7.css",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/hanken-grotesk-latin-wght-normal-CaVRRdDk.woff2",
+          "resourceType": "font"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/tr-COHWLD3Y.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/brand/oda-favicon-c4-v1-32.png",
+          "resourceType": "other"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/Today-DatEkWOc.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/growth-CtfcX3mW.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/OriginalSceneImage-zmk9pRa_.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/courseNavigationIntent-D57bl2_P.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/chevron-right-Dd9vvKE-.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/lock-keyhole-DoeKd_Jl.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/entitlements-u2O6Yfci.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/courseNavigationIntent-C0ky-Yq1.css",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/MissionFlows-B2ygq3Wr.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/square-DGI_J3rT.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/DreamArt-CYf69uum.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/DailyMicroHabits-my--YggO.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/motion-HNvQpnN_.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/music-CGrAXEnd.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/trending-up-DciuxmaK.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/moon-BQ8pwLl2.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/sparkles-CNogJchf.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/trash-2-1F4ByhE5.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/pen-line-DzItPkBT.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/rotate-ccw-Cvl0sSTn.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/circle-check-B98ao5oy.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/charts-Bzd-XkHo.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/pencil-Cc7IpPE9.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/shuffle-crRgRYlT.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/wind-CYwTUAIp.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/route-BEXS5_35.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/share-2-D99Icjed.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/waves-Cl6QJKjv.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/Today-D76Bu5Fr.css",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/workingSurfaces-Ug3LNMJ2.css",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/brand/oda-c4.png",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/hanken-grotesk-latin-ext-wght-normal-Dg-wlmqe.woff2",
+          "resourceType": "font"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/oda/original-scenes/today-scene-320.webp",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/oda/delivery/trees/tree-00-seedling-0-320.webp",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2",
+          "resourceType": "font"
+        }
+      ],
+      "blockedExternal": [],
+      "pageErrors": [],
+      "dialogs": []
+    },
+    {
+      "locale": "es",
+      "theme": "light",
+      "width": 320,
+      "requests": [
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/",
+          "resourceType": "document"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/theme-init.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/index-BkRR4AIO.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/react-5GCfeWye.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/media-2mgEiOLR.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/index-BH5El-p7.css",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/hanken-grotesk-latin-wght-normal-CaVRRdDk.woff2",
+          "resourceType": "font"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/es-qQNFzrdv.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/brand/oda-favicon-c4-v1-32.png",
+          "resourceType": "other"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/Today-DatEkWOc.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/growth-CtfcX3mW.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/OriginalSceneImage-zmk9pRa_.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/courseNavigationIntent-D57bl2_P.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/chevron-right-Dd9vvKE-.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/lock-keyhole-DoeKd_Jl.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/entitlements-u2O6Yfci.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/courseNavigationIntent-C0ky-Yq1.css",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/MissionFlows-B2ygq3Wr.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/square-DGI_J3rT.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/DreamArt-CYf69uum.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/DailyMicroHabits-my--YggO.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/motion-HNvQpnN_.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/music-CGrAXEnd.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/trending-up-DciuxmaK.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/moon-BQ8pwLl2.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/sparkles-CNogJchf.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/trash-2-1F4ByhE5.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/pen-line-DzItPkBT.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/rotate-ccw-Cvl0sSTn.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/circle-check-B98ao5oy.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/charts-Bzd-XkHo.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/pencil-Cc7IpPE9.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/shuffle-crRgRYlT.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/wind-CYwTUAIp.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/route-BEXS5_35.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/share-2-D99Icjed.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/waves-Cl6QJKjv.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/Today-D76Bu5Fr.css",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/workingSurfaces-Ug3LNMJ2.css",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/brand/oda-c4.png",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/oda/original-scenes/today-scene-320.webp",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/oda/delivery/trees/tree-00-seedling-0-320.webp",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2",
+          "resourceType": "font"
+        }
+      ],
+      "blockedExternal": [],
+      "pageErrors": [],
+      "dialogs": []
+    },
+    {
+      "locale": "en",
+      "theme": "light",
+      "width": 390,
+      "requests": [
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/",
+          "resourceType": "document"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/theme-init.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/index-BkRR4AIO.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/react-5GCfeWye.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/media-2mgEiOLR.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/index-BH5El-p7.css",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/hanken-grotesk-latin-wght-normal-CaVRRdDk.woff2",
+          "resourceType": "font"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/brand/oda-favicon-c4-v1-32.png",
+          "resourceType": "other"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/Notebook-DF7PkQnH.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/chevron-right-Dd9vvKE-.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/pen-line-DzItPkBT.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/calendar-days-D9MgOuKk.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/search-CEEG2NWO.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/trash-2-1F4ByhE5.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/OriginalSceneImage-zmk9pRa_.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/arrow-up-right-QTsXlSIX.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/moon-BQ8pwLl2.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/archive-CyStU3rF.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/square-DGI_J3rT.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/headphones-FaRzOcFV.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/pencil-Cc7IpPE9.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/mail-BAh53OuY.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/Notebook-B2CgyXXC.css",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/brand/oda-c4.png",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/oda/original-scenes/today-scene-320.webp",
+          "resourceType": "image"
+        }
+      ],
+      "blockedExternal": [],
+      "pageErrors": [],
+      "dialogs": []
+    },
+    {
+      "locale": "en",
+      "theme": "light",
+      "width": 320,
+      "requests": [
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/",
+          "resourceType": "document"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/theme-init.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/index-BkRR4AIO.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/react-5GCfeWye.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/media-2mgEiOLR.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/index-BH5El-p7.css",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/hanken-grotesk-latin-wght-normal-CaVRRdDk.woff2",
+          "resourceType": "font"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/brand/oda-favicon-c4-v1-32.png",
+          "resourceType": "other"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/Today-DatEkWOc.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/growth-CtfcX3mW.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/OriginalSceneImage-zmk9pRa_.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/courseNavigationIntent-D57bl2_P.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/chevron-right-Dd9vvKE-.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/lock-keyhole-DoeKd_Jl.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/entitlements-u2O6Yfci.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/courseNavigationIntent-C0ky-Yq1.css",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/MissionFlows-B2ygq3Wr.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/square-DGI_J3rT.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/DreamArt-CYf69uum.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/DailyMicroHabits-my--YggO.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/motion-HNvQpnN_.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/music-CGrAXEnd.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/trending-up-DciuxmaK.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/moon-BQ8pwLl2.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/sparkles-CNogJchf.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/trash-2-1F4ByhE5.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/pen-line-DzItPkBT.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/rotate-ccw-Cvl0sSTn.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/circle-check-B98ao5oy.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/charts-Bzd-XkHo.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/pencil-Cc7IpPE9.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/shuffle-crRgRYlT.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/wind-CYwTUAIp.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/route-BEXS5_35.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/share-2-D99Icjed.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/waves-Cl6QJKjv.js",
+          "resourceType": "script"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/Today-D76Bu5Fr.css",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/workingSurfaces-Ug3LNMJ2.css",
+          "resourceType": "stylesheet"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/brand/oda-c4.png",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/oda/original-scenes/today-scene-320.webp",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/oda/delivery/trees/tree-00-seedling-0-320.webp",
+          "resourceType": "image"
+        },
+        {
+          "url": "http://127.0.0.1:4193/one-decision-away/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2",
+          "resourceType": "font"
+        }
+      ],
+      "blockedExternal": [],
+      "pageErrors": [],
+      "dialogs": []
+    }
+  ],
+  "served": [],
+  "limits": [
+    "Desktop and 390/320 Chromium viewport emulation; not a physical iPhone or native app run.",
+    "Fixed synthetic date Saturday 2026-10-03. Native save fault injected at real IDBObjectStore.put; normal compiled app/store/write queue unchanged.",
+    "Local GET/HEAD only; external requests aborted and recorded. No accounts, providers, paid services, signing or production operations.",
+    "No narration listening/transcription or broader app QA claim."
+  ],
+  "preflight": {
+    "sourceFiles": 878,
+    "buildFiles": 437,
+    "allExact": true
+  },
+  "browser": "151.0.7922.173",
+  "actualBrowserResponses": [
+    {
+      "file": "dist/index.html",
+      "bytes": 3429,
+      "sha256": "363c93846bf02d62192b98e6a42cd8de740aec3967b8a04e4f817129bf10f4f6",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/theme-init.js",
+      "bytes": 740,
+      "sha256": "bcfb6eb36d90eb505920c80e174d179045456b548e1accff53bf56b19a44caa5",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/media-2mgEiOLR.js",
+      "bytes": 23753,
+      "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/index-BH5El-p7.css",
+      "bytes": 110545,
+      "sha256": "36c163113d0186bf11de8498a554f339400a55a8bdb9dcf521bb39be13e38966",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/react-5GCfeWye.js",
+      "bytes": 229422,
+      "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/index-BkRR4AIO.js",
+      "bytes": 952261,
+      "sha256": "a8b76d34f84261fda8d61cc3486d053a039f647481eb4d5afe0c2f6e7f08cc8a",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/courseNavigationIntent-C0ky-Yq1.css",
+      "bytes": 37678,
+      "sha256": "2baece986565d1ab2dc8bb415e37ffcf5a7fa33cf48a5de99af1753a6b1e0557",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/growth-CtfcX3mW.js",
+      "bytes": 2073,
+      "sha256": "18302f2287d962e3923bb4a8924f7e79d99b1a95f0bae11a29dc54e4174ecf63",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/chevron-right-Dd9vvKE-.js",
+      "bytes": 304,
+      "sha256": "0435174bfb3de2513a17db9095ae94b73e726e5134134ea7c30f89d86d9c5af5",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/courseNavigationIntent-D57bl2_P.js",
+      "bytes": 5487,
+      "sha256": "d2bfb60bb6ecc5de67a4125af4b23c857e35e74f13360ae464dff4619267fd07",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/OriginalSceneImage-zmk9pRa_.js",
+      "bytes": 3619,
+      "sha256": "d403e3d1d177ab9350f961fa1e71d142aa5b7aecea9fdf4aabbbd245a66e364d",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/lock-keyhole-DoeKd_Jl.js",
+      "bytes": 429,
+      "sha256": "709cfc462ed858221f1dff563d8198a7d8d55c8333e890a97be27084ca8703e1",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/entitlements-u2O6Yfci.js",
+      "bytes": 525,
+      "sha256": "bc672087c8c4d541ce854d9099bbbd9981949e6816aba639c3a117e864cd87c0",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/Today-D76Bu5Fr.css",
+      "bytes": 4803,
+      "sha256": "5efc5db34efe27058e8c3c8be002710c4819470eabc278f5e2d62de5d5878b55",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/workingSurfaces-Ug3LNMJ2.css",
+      "bytes": 16628,
+      "sha256": "6affdaa841b72355b976af20fa8c7d65caad28ce1ec50a1479c3b41f8a3939d2",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/square-DGI_J3rT.js",
+      "bytes": 321,
+      "sha256": "265ca6bda4a8ba50239ff0157b04ad21d761047bd3a85aee4e3688b511044089",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/DreamArt-CYf69uum.js",
+      "bytes": 12840,
+      "sha256": "27460d90a1ff8a5c5fe6ca3c62773ce92aa5c99c97b3972fba600c59b3cfc6c7",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/MissionFlows-B2ygq3Wr.js",
+      "bytes": 8100,
+      "sha256": "9267e3e2ec51da18a1c85fcde4c111de60b7a5516ecd8af88261316b8c83f1d9",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/Today-DatEkWOc.js",
+      "bytes": 148529,
+      "sha256": "c323490b13fd4fca5e4ff820138d9d10b422671843b1ca217b92567b2ee2b68c",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/DailyMicroHabits-my--YggO.js",
+      "bytes": 56818,
+      "sha256": "fd6d4335b87b41ad01c4e67f187c395fa63d1421cd906b45af35251e10403a9b",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/music-CGrAXEnd.js",
+      "bytes": 751,
+      "sha256": "56700f077f194622e380a45c1e2f6b120c74c18e21b00985183f28d6dc7fd81a",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/moon-BQ8pwLl2.js",
+      "bytes": 391,
+      "sha256": "991b58b1b3a5e4de5cafbfde7d8e07d476e6e257a4e67f35b5b6629e540af52f",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/trending-up-DciuxmaK.js",
+      "bytes": 694,
+      "sha256": "6a72799c23fe4c1b5bd68800fd5d3ffd568dfd1367176e1c12d35bf7308ffa46",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/sparkles-CNogJchf.js",
+      "bytes": 668,
+      "sha256": "f72b3323e1ac5af01daa17d356339bbc770f77b307f5a0cca7b0ff0c5642c2e6",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/trash-2-1F4ByhE5.js",
+      "bytes": 502,
+      "sha256": "50b72de898cb05b2814021557994908ff67616570f88d281f25d51a2b6a62da0",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/pencil-Cc7IpPE9.js",
+      "bytes": 450,
+      "sha256": "b631a125f748c8a335218ca1bc735e2c792c190448d3ad3e47e2e958c351fda8",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/circle-check-B98ao5oy.js",
+      "bytes": 352,
+      "sha256": "f8e33817262a21b4bb6603b4977922ed7de4a5a0ffb488fc6f74850780472923",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/rotate-ccw-Cvl0sSTn.js",
+      "bytes": 374,
+      "sha256": "794ea8eb3145ed7444f90270410f8adfa33c3f914b9ddfa27ec43bf53bdd5376",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/pen-line-DzItPkBT.js",
+      "bytes": 451,
+      "sha256": "143d0665ed13b5657ba08475832a09fcc5296ae50708536cf4b29c63f2e8b367",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/motion-HNvQpnN_.js",
+      "bytes": 128884,
+      "sha256": "3b8beefe6f5abed46ca686013afdcd2ea9c013557b337d8e606719a91894be70",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/wind-CYwTUAIp.js",
+      "bytes": 420,
+      "sha256": "1c8d94a2cd4b3697fca0c93aceb04bcb87cf3be9065a7ae0559c7eaf7f71f1b2",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/route-BEXS5_35.js",
+      "bytes": 428,
+      "sha256": "7f240df2479129549e614e3c091f9b65801aab6a54513e721ac0793ac49a2c5b",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/shuffle-crRgRYlT.js",
+      "bytes": 557,
+      "sha256": "46d134d6ea18c845c3a235b6540e0bdf89e8b7dd67a9a68fdf4c71039ae4eebe",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/share-2-D99Icjed.js",
+      "bytes": 531,
+      "sha256": "e1170025a8b5d292db96e11aaa68dd4085936ea72e1b662e67b7c24f8cfcad58",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/waves-Cl6QJKjv.js",
+      "bytes": 602,
+      "sha256": "df7ac4e93a66875cbdd9084d5cb4c6b7f4b0969655fa2b05ad9ecd3d6159fcf4",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/charts-Bzd-XkHo.js",
+      "bytes": 431582,
+      "sha256": "2d7b9b31411e27fb1b9b31b24e3ed0884969780d21dbe5da936cf583f3e7f820",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/tr-COHWLD3Y.js",
+      "bytes": 561390,
+      "sha256": "2732c892675ea69e982a265497e037025ce1e8cc81a99d1cf3d4c07333bee939",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/es-qQNFzrdv.js",
+      "bytes": 573845,
+      "sha256": "92990cb37ff89f11df72023a4ab7d593b65d633604a335732deda681614f54d2",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/Notebook-DF7PkQnH.js",
+      "bytes": 61093,
+      "sha256": "ea606c2ad92e98df42fb5efe0c709f5aa488273b73100586d50c0abd2dc1f8b4",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/calendar-days-D9MgOuKk.js",
+      "bytes": 668,
+      "sha256": "a079ca7bb9e07161d09c4ecc36850d082b01bbbabec9b90dbd040b64bc854bf5",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/search-CEEG2NWO.js",
+      "bytes": 348,
+      "sha256": "65e39825a18c5ed73066697a82f49204f2023594c5d6c11228457ceff5262703",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/arrow-up-right-QTsXlSIX.js",
+      "bytes": 341,
+      "sha256": "5484cb8cecbc76358d3a2569752193db768cec975d9151c9f53adde47ac20dbe",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/archive-CyStU3rF.js",
+      "bytes": 427,
+      "sha256": "51fd4221da49f43886070f89d34e491e816cf007a9a1695e8ffc101de4aab346",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/Notebook-B2CgyXXC.css",
+      "bytes": 24016,
+      "sha256": "fc33ff6300e770134aeae8e16961d1066700a13999299e905145851574ab3abb",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/headphones-FaRzOcFV.js",
+      "bytes": 411,
+      "sha256": "a5530bf531985a22da7deddfa5340776d33457ca581ca614a75f2a5cf535ab5a",
+      "actualObservedResponse": true
+    },
+    {
+      "file": "dist/assets/mail-BAh53OuY.js",
+      "bytes": 387,
+      "sha256": "cc754e0dc27012d4b45e1fc3dd4c743e8730c779ceb3db15b2aaadeb899f9349",
+      "actualObservedResponse": true
+    }
+  ],
+  "postflight": {
+    "sourceFiles": 878,
+    "buildFiles": 437,
+    "allExact": true
+  },
+  "status": "passed-awaiting-pixel-review",
+  "finishedAtUtc": "2026-10-03T11:18:57.472Z",
+  "passCount": 8
+}
