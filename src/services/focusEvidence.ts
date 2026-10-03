@@ -11,12 +11,19 @@ export function timerFocusEvidence(completions: MissionCompletion[], now = new D
     const time = Date.parse(record.completedAt);
     if (record.method !== 'timer' || !Number.isFinite(record.focusMinutes) || record.focusMinutes! <= 0
       || !Number.isFinite(time) || time > now.getTime()) continue;
-    const previous = unique.get(record.missionId);
-    if (!previous || time < Date.parse(previous.completedAt)) unique.set(record.missionId, record);
+    const previous = unique.get(record.id);
+    if (!previous || time < Date.parse(previous.completedAt)) unique.set(record.id, record);
   }
   const minutesByDay = new Map<string, number>();
+  const events = new Set<string>();
   for (const record of unique.values()) {
-    const day = utcDay(Date.parse(record.completedAt));
+    const time = Date.parse(record.completedAt);
+    // A repeatable quest can have many genuine completions. Only a repeated
+    // completion ID or the exact same recorded event is a duplicate.
+    const event = JSON.stringify([record.userId, record.missionId, time]);
+    if (events.has(event)) continue;
+    events.add(event);
+    const day = utcDay(time);
     minutesByDay.set(day, (minutesByDay.get(day) ?? 0) + record.focusMinutes!);
   }
   // Yesterday's chain remains current until today has ended, without grace days.
