@@ -1,0 +1,68 @@
+{
+  "kind": "Independent read-only pixel review of exactly three synthetic presentation PNGs; supplements prior QA",
+  "status": "pass; no actual presentation blocker found",
+  "reviewedAtUtc": "2026-10-03T11:47:06.155909+00:00",
+  "sourceCommit": "7b78cf89adf3c1bd89e9e5c1540cffdb3953a566",
+  "evidenceCommit": "d4fc80080002deccb78c24164c4a10c50c838d1f",
+  "branch": "design/reference-led-oda",
+  "captureReceipt": {
+    "file": "capture-receipt.json",
+    "bytes": 12988,
+    "sha256": "7ba8dd28f2ee9823696f62d5e8f9127960cc5aa7015b01779b99a0e856eb7ae8"
+  },
+  "captureScript": {
+    "file": "capture.mjs",
+    "bytes": 8944,
+    "sha256": "eb6442f7e578b4fea37f4881e506203cd883dcf1e8f4601055e97284bed9bcab"
+  },
+  "binding": {
+    "sourceToEvidenceChangesAreArtifactsOnly": true,
+    "committedBuildReceiptMatchesCaptureHash": true,
+    "allObservedCompiledResponsesMatchReceiptAndExistingDist": true,
+    "observedResponseCount": 44,
+    "capturePrePost878Source437BuildChecksRecordedExact": true,
+    "allThreePNGBytesHashesDimensionsVerified": true
+  },
+  "PNG": [
+    {
+      "file": "today-desktop.png",
+      "bytes": 398488,
+      "sha256": "9001d763387d5db754cf31bbc22cf4524b80ecd724721828c3f2f9887f601792",
+      "width": 1440,
+      "height": 1000,
+      "actualPixelsPersonallyInspectedAtOriginalResolution": true
+    },
+    {
+      "file": "notebook-desktop.png",
+      "bytes": 140997,
+      "sha256": "a930ae575456548480bda1895a255c1d21a349e48ab394dade0422b16460ff03",
+      "width": 1440,
+      "height": 1000,
+      "actualPixelsPersonallyInspectedAtOriginalResolution": true
+    },
+    {
+      "file": "notebook-320.png",
+      "bytes": 56435,
+      "sha256": "71fbf314361baa7d38c2157cd50cc36e284d268563959797f8325243055b3206",
+      "width": 320,
+      "height": 844,
+      "actualPixelsPersonallyInspectedAtOriginalResolution": true
+    }
+  ],
+  "pixelOutcomes": [
+    "Today desktop: natural Read two pages, Then I will read one paragraph first., and Start · just 2 minutes are visibly initial-capital. Existing hero typography and artwork preserved.",
+    "Notebook desktop: 1 day written and one natural saved entry A small step forward are visible; saved preview sits directly below calendar with a small gap.",
+    "Notebook320: selected Sat3 is fully visible with44px by56px target; partial Monday stays inside the intentional horizontally scrolling week strip. No page-wide horizontal clipping. One saved-entry preview exists; its body continues below the viewport and fixed navigation fold, so the entire entry is not visible in this PNG."
+  ],
+  "privacyAndMethod": "Capture script constructs fresh synthetic Alex/decision/journal fixtures in isolated browser contexts and uses unmodified viewport PNG capture. No real user record access, rebuild, source edit, DOM text/style replacement or image processing found. This reviewer started no browser or capture.",
+  "remainingLimits": [
+    "Three supplementary presentation views only; prior stress-test/native/aggregate QA remains separate.",
+    "Chromium viewport emulation, not a physical iPhone or native app run.",
+    "No new tests, screenshots, source changes, deployment or publication approval."
+  ],
+  "readerClosure": {
+    "allOwnSynchronousReadersClosed": true,
+    "noBrowserBuildTestCaptureProcessesCreated": true,
+    "onlyWriteIsThisSeparateScratchReview": true
+  }
+}
