@@ -1,0 +1,142 @@
+{
+  "kind": "independent-read-only-production-delta-audit-before-selected-logo",
+  "auditor": "/root/production_delta_audit",
+  "auditedAtUtc": "2026-10-03T18:53:38.388336+00:00",
+  "status": "bounded-source-and-evidence-review-passed-before-logo; final candidate QA remains required",
+  "repository": "BILLIONAR/one-decision-away",
+  "branch": "design/reference-led-oda",
+  "productionBaseline": "350aa158f30c773a373f2895e267119f9f2eb17a",
+  "reviewedEvidenceHead": "dc7208922ecbe026a2523ee4c571735e3f375bae",
+  "exactLatestTestedSource": "712d411df93c79ce2f423cfb0be1acc2d3b227f1",
+  "workingTreeStatusAtEvidenceCheck": "",
+  "mainIsAncestor": true,
+  "rejectedB6BaseIsAncestor": false,
+  "changedScope": {
+    "allPaths": 5580,
+    "artifacts": 5182,
+    "nonArtifacts": 398,
+    "src": 85,
+    "public": 271,
+    "scripts": 10,
+    "tests": 31,
+    "workflowDependencyNativeBackendChanges": []
+  },
+  "currentPacket": {
+    "fileCount": 65,
+    "bytes": 19532383,
+    "manifestSha256": "045ad2c65e4aca9ddac3b02e8bb271c5a80245b3f8a37ca85a80e5f9e9ece4f5",
+    "mismatches": []
+  },
+  "exactBuildReceipt": {
+    "file": "artifacts/verification/reference-led-design/domino-today-palette/final-build/build-receipt.json",
+    "sha256": "b0e446cfddff14d79503f1220315054da5e65cebe83bce7a0bad7fd6f4ca97eb",
+    "sourceCount": 879,
+    "currentSourceMismatches": [],
+    "committedSourceBlobMismatches": [],
+    "compiledCount": 437,
+    "currentCompiledMismatches": [],
+    "aggregateExit": 0,
+    "aggregatePassed": 621,
+    "aggregateFailed": 0,
+    "noAuditorTestsOrBuild": true
+  },
+  "actualHistoricalLogs": [
+    {
+      "file": "artifacts/verification/functional-candidate/aggregate-check.log",
+      "recordedPasses": 419,
+      "actualBytes": 57403,
+      "actualSha256": "502216301ee25cde499cf8e6507455725f813a15840d8e9046e85d84a8ec7d9c",
+      "matchesRecordedBytesHash": true,
+      "existsInAuditedGitTree": true,
+      "rerunByAuditor": false
+    },
+    {
+      "file": "artifacts/verification/reference-led-design/aggregate-check.log",
+      "recordedPasses": 597,
+      "actualBytes": 76227,
+      "actualSha256": "c406039aaff39d515e6156e6f27a592025399488f16318f067d2e3db731c2397",
+      "matchesRecordedBytesHash": true,
+      "existsInAuditedGitTree": true,
+      "rerunByAuditor": false
+    },
+    {
+      "file": "artifacts/verification/reference-led-design/hybrid-reference-ui/final/timer-evidence-fix/aggregate-check.log",
+      "recordedPasses": 611,
+      "actualBytes": 78158,
+      "actualSha256": "5c1f5db98ade7925403e2885c235a27369572c481ee669053ce486909842ab66",
+      "matchesRecordedBytesHash": true,
+      "existsInAuditedGitTree": true,
+      "rerunByAuditor": false
+    },
+    {
+      "file": "artifacts/verification/reference-led-design/domino-today-palette/final-build/aggregate-check.log",
+      "recordedPasses": 621,
+      "actualBytes": 79256,
+      "actualSha256": "fe0c0e94658eda2e8b39e8dbcc2d8e66907356866e1c065e58c219a81c7c7e4c",
+      "matchesRecordedBytesHash": true,
+      "existsInAuditedGitTree": true,
+      "rerunByAuditor": false
+    }
+  ],
+  "sourceReview": [
+    "Read current cloud upload/read/restore guards, saved-record capture, canonical SHA256 checks, conditional insert/update, response identity/version/content validation and account/document generation guards.",
+    "Read current Account, Settings and AppProvider manual-sync callers: stale captured payload rejected; rejected/expired review does not authorize an upload; accepted replacement uses guarded durable commit and skipCloudPull refresh.",
+    "Read purchase identity binder and PurchasesService: desired identity synchronously invalidates tier; SDK identity/customer operations serialized; verified canonical identity brackets customer/purchase/restore operations; unknown authentication closes native gates; web purchasing remains unavailable.",
+    "Read backup reminder, truthful reward/practice evidence and accessibility-dialog hook. No app/backend/schema/dependency/workflow/native change or mutation was performed by this auditor.",
+    "Historical 83-file appearance parity applies to initial main-based functional candidate, not later explicitly authorized reference-led visuals. Current source uses preserved C4 branding until pending selected-domino integration; no rejected v5 asset paths found in current public/src/native file inventory. Service-worker v5 is a cache-generation counter."
+  ],
+  "findings": [],
+  "knownLimits": [
+    {
+      "severity": "inherited, explicitly reproduced limitation",
+      "topic": "legacy same-timestamp remote writer",
+      "detail": "Timestamp conditional update cannot atomically detect a legacy client changing content without advancing updated_at after SELECT; current regression explicitly demonstrates this. Server atomic comparison is separate scope; no schema change here."
+    },
+    {
+      "severity": "verification limit",
+      "topic": "provider/native/runtime boundaries",
+      "detail": "Historical tests use synthetic auth/store/cloud boundaries and real Chromium local storage/locks/audio; live Supabase/RLS, real OTP, RevenueCat/App Store, physical iPhone and WebKit are not certified."
+    },
+    {
+      "severity": "candidate pending",
+      "topic": "selected domino logo",
+      "detail": "This audit freezes dc720892 before logo source arrives; no new logo asset or final candidate approval is claimed. Parent must bind final logo/source/build/browser evidence and actual live content to deployed commit."
+    }
+  ],
+  "focusedFinalQA": [
+    "Fresh final aggregate on exact final logo candidate; preserve exact log and source/build receipt.",
+    "Independent desktop 1440 and mobile 390/320 visual/interaction checks for logo/wordmark, Today palette and representative routes, EN/TR/ES where text fit can change.",
+    "Check manifest/favicon/apple touch/native asset configuration consistency, readable icon sizes, no missing local assets; bump SW generation and replace its old C4 shell/notification references.",
+    "Verify first-load requests exclude narration MP3 bulk; check existing approved guidance load/cancel/English mode, saved decision/reward and course continuation smoke against final built candidate.",
+    "Use repository normal main-triggered Pages workflow without force/protection bypass; preserve previous live commit, wait for actual successful deployment, then verify served HTML/code/icons/manifest/SW and key hash routes."
+  ],
+  "approvalInterpretation": "Latest explicit delegated user instruction authorizes web production once checks pass; historical receipts describe their earlier held publication state and do not cancel latest approval. No App Store release or provider/schema/paid/credential operation authorized.",
+  "narrationCourseSubset": {
+    "independentReviewer": "/root/production_delta_audit/narration_course_delta",
+    "status": "No P0/P1, demonstrated data-loss or performance blocker found in bounded source/evidence review.",
+    "currentManifestMappingsChecked": 160,
+    "sessions": 11,
+    "mp3Bytes": 19843328,
+    "manifestActualHash": "2ba3d11b087b8678c5c574c0a5437de4cc6a222a6733cc9155061dde2e54523e",
+    "manifestMappingChecksumTextErrors": [],
+    "laterGuidanceReport": "artifacts/verification/reference-led-design/hybrid-reference-ui/flow-qa/final-c2a/guidance-current-attempt2/lifecycle-report.json",
+    "laterGuidanceReportSha256": "b5aa0b9ad5fb4f4e8c54ef64d6f2d6277d95ff5809a694e8c3348bc9618d00d3",
+    "currentSourceHashesMatchLaterGuidanceReport": {
+      "src/utils/recordedNarration.ts": true,
+      "src/utils/voiceGuide.ts": true,
+      "src/data/englishNarrationAssets.ts": true,
+      "src/components/FocusTimerHub.tsx": true,
+      "src/components/FocusLockView.tsx": true
+    },
+    "laterGuidanceCases": 6,
+    "laterGuidanceChecks": 18,
+    "laterGuidanceFailures": 0,
+    "sameManifestAsLaterGuidanceReport": true,
+    "courseDurabilityP2": "Repaired current hook seeds confirmed provider progress; refresh uses committed authority inside queue with profile/replacement/account/generation fences. Current hook and course persistence primitive hashes unchanged from native11-pass repair receipt source7b78cf8.",
+    "courseNativeReceipt": "artifacts/verification/reference-led-design/today-notebook-polish/native-reviewed-course-progress/receipt.json",
+    "noFreshRuntimeTestByAuditors": true,
+    "firstUsePreserved": "Current course navigation waits for authoritative queued hydration and preserves prerequisite/subscription gates. Narration keeps3decoded/32persisted clips, cancellation fences, strict installed-English fallback/unavailable; no bulk initial MP3 request. The zero initial request claim is historical runtime evidence with matching source hashes, not a new browser run."
+  },
+  "sealedAtUtc": "2026-10-03T18:54:52.861136+00:00",
+  "allAuditorReadersClosed": true
+}

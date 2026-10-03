@@ -1,0 +1,691 @@
+diff --git a/README.md b/README.md
+index 025914b..9908a9a 100644
+--- a/README.md
++++ b/README.md
+@@ -20,7 +20,7 @@ The core application works without an account or API key. New visitors start in
+ - Course progress, reflections, workbook plans and attempts are included in JSON and optional cloud backup snapshots. Existing separate course storage migrates without changing lesson IDs. Older backups without a course section preserve current course work. A restore is validated and reviewed before replacing the saved record.
+ - Today connects choosing, taking a step and reflecting, with an editable saved notebook reflection, real course continuation and a weekly review based on actual recorded activity. Setup drafts survive an interrupted first run.
+ - The designer signature is **Designed by Yahya** in English, Turkish and Spanish. Keep that exact wording untranslated. See [brand decisions](docs/BRAND.md) for the persistent visual identity.
+-- The selected C4 symbol with ODA beneath it is supplied as a transparent PNG in `public/brand/oda-c4.png`, used for the app, landing page and install metadata.
++- The selected icon8 gold/ruby domino now supplies the application logo and web/native icon assets. Its accepted high-resolution reconstruction and provenance are retained in `brand-assets/domino8/`; it is not the missing original source. Earlier C4/v2/v3/v4 assets remain preserved. See [brand decisions](docs/BRAND.md).
+ 
+ See [inspiration and coach notes](docs/INSPIRATION_AND_COACH.md) and [push setup](docs/PUSH_NOTIFICATIONS.md) for details.
+ 
+diff --git a/brand-assets/domino8/GENERATION-PROMPT.txt b/brand-assets/domino8/GENERATION-PROMPT.txt
+new file mode 100644
+index 0000000..4c8605a
+--- /dev/null
++++ b/brand-assets/domino8/GENERATION-PROMPT.txt
+@@ -0,0 +1,3 @@
++Use case: precise-object-edit. Asset type: production master app icon. Reconstruct ONLY the large burgundy icon artwork on the LEFT of the attached reference preview as a high-resolution 2048 by 2048 pixel square. This is a faithful reference-guided high-resolution reconstruction of selected ODA icon 8, NOT a new logo concept. Remove all the surrounding white page, phone, text, labels and mockup. Treat the large left icon as the edit target. Copy its composition, perspective, positions, relative scale, orientation, materials and lighting as closely as possible.
++The artwork contains EXACTLY THREE thick polished rectangular domino-shaped pieces with rounded edges, all blank with NO dots, markings or lettering: the front piece is reflective warm yellow-gold metal, leaning diagonally to the LEFT, its top reaching near the upper center and its bottom toward the lower-left. Its broad front face is bright buttery gold with controlled specular highlights, the thick narrow RIGHT side is darker metallic gold. Behind it are two UPRIGHT glossy deep ruby/burgundy red pieces stepping back toward the right: the nearer center red piece partially occluded by the gold, the farthest red piece on the right slightly higher. Preserve their narrow bright red reflective right edges and very dark wine-red broad faces. Three pieces total, no duplicate extra gold tile. Broad faces have the same softly beveled border edges as the reference. Objects rest on the burgundy floor with soft grounded dark shadows, not floating. Maintain the original amount of spacing and the large foreground gold tile relative to the two red tiles. The object group's silhouette and framing must be closely matched to the large left reference.
++Critical output requirement: the entire output is ONE edge-to-edge opaque deep burgundy square scene, matching the icon's burgundy background, including all four corners. Do NOT reproduce the original icon's rounded outer mask or the white page beyond it: continue the burgundy background naturally into square corners so iOS/PWA can apply its own corner mask later. No frame, no outline around the image, no phone, no mockup, no typography, no watermark, no pips. Crisp premium 3D product render, faithful to the source with clean highlights and no additional decoration. Output 2048x2048 if possible, at least 1024x1024.
+diff --git a/brand-assets/domino8/ODA-Icon8-Comparison.png b/brand-assets/domino8/ODA-Icon8-Comparison.png
+new file mode 100644
+index 0000000..ca40542
+Binary files /dev/null and b/brand-assets/domino8/ODA-Icon8-Comparison.png differ
+diff --git a/brand-assets/domino8/ODA-Icon8-Reconstruction-Master-1254.png b/brand-assets/domino8/ODA-Icon8-Reconstruction-Master-1254.png
+new file mode 100644
+index 0000000..8d4d649
+Binary files /dev/null and b/brand-assets/domino8/ODA-Icon8-Reconstruction-Master-1254.png differ
+diff --git a/brand-assets/domino8/ODA-Icon8-Small-Size-QA.png b/brand-assets/domino8/ODA-Icon8-Small-Size-QA.png
+new file mode 100644
+index 0000000..b1044c6
+Binary files /dev/null and b/brand-assets/domino8/ODA-Icon8-Small-Size-QA.png differ
+diff --git a/brand-assets/domino8/README.txt b/brand-assets/domino8/README.txt
+new file mode 100644
+index 0000000..9dd9966
+--- /dev/null
++++ b/brand-assets/domino8/README.txt
+@@ -0,0 +1,44 @@
++ODA ICON 8 — REFERENCE-GUIDED RECONSTRUCTION
++Created: 3 October 2026
++
++PROVENANCE
++This package contains a newly generated, reference-guided reconstruction of the
++selected ODA domino icon 8. It is not the recovered original image and does not
++contain the original image's bytes. The available reference was the large icon
++within ODA-8-Telefon-Onizleme.png (980 × 820 pixels). The original standalone
++high-resolution source was unavailable.
++
++PRODUCTION SOURCE
++ODA-Icon8-Reconstruction-Master-1254.png
++Actual size: 1254 × 1254 pixels; 8-bit RGB PNG; sRGB; fully opaque.
++Generated with the built-in image-generation tool. The image is not an enlarged
++copy of the small reference crop. This is the highest-resolution output returned
++by that generation. A larger size was requested, but 1254 × 1254 was returned.
++The source is retained byte-for-byte as returned; no resampling or image edits
++were applied to this master after generation.
++
++DESIGN AND PLATFORM USE
++Three unmarked polished domino shapes: one gold foreground piece leaning left
++and two upright ruby/burgundy pieces behind. Deep burgundy, edge-to-edge square
++background. No phone, page, type, marks, transparent corners, or baked-in outer
++rounding. Platforms may apply their own icon masks. Small icon derivatives may
++be generated from this master as needed.
++
++VISUAL VERIFICATION
++The master was opened and compared with the reference's 332 × 332 pixel icon
++crop, side by side at equal displayed size and at 60 and 32 pixel icon sizes.
++The composition, orientation, three-piece count, materials, and overall colors
++remain close to the reference. It is not pixel-identical: reflections and bevel
++details differ slightly, and the reconstructed group is slightly smaller within
++the square. Those are reconstruction differences, not recovery of lost detail.
++The icon remains readable at 60 and 32 pixels. No deployment is asserted here.
++
++FILES
++- ODA-Icon8-Reconstruction-Master-1254.png: actual generated production source
++- ODA-Icon8-Comparison.png: left = selected reference crop; right = reconstruction
++- ODA-Icon8-Small-Size-QA.png: reference/reconstruction pairs at 60 and 32 pixels
++- GENERATION-PROMPT.txt: image-generation prompt
++- SHA256SUMS.txt: SHA-256 checksums of the preceding files and this README
++
++The comparison and small-size sheets are inspection aids only. Do not use them
++as the production icon source. Their reference crop is intentionally low-res.
+diff --git a/brand-assets/domino8/SHA256SUMS.txt b/brand-assets/domino8/SHA256SUMS.txt
+new file mode 100644
+index 0000000..613e916
+--- /dev/null
++++ b/brand-assets/domino8/SHA256SUMS.txt
+@@ -0,0 +1,5 @@
++49ebd132ec6f67282a95a9e941631fccfd3e1d72bd5049a45179c277dcf78a96  ODA-Icon8-Reconstruction-Master-1254.png
++1917e8f28150979549f8b67b159431afd56a074d60c33cdf8e82af3658383692  ODA-Icon8-Comparison.png
++4037cccab163739989cd2ce4ae30993302046a5214dced044d468ed55483d260  ODA-Icon8-Small-Size-QA.png
++e2726994e119e57176473c13b061943bc639c4a5aa666c270b8d43b63007b73f  GENERATION-PROMPT.txt
++1b40be7fcd02d54174aa9a2651c62be0882b878e29564d94dfe488c5ccac4ad0  README.txt
+diff --git a/brand-assets/domino8/derivatives.json b/brand-assets/domino8/derivatives.json
+new file mode 100644
+index 0000000..d0e28c6
+--- /dev/null
++++ b/brand-assets/domino8/derivatives.json
+@@ -0,0 +1,112 @@
++{
++  "sourceFile": "brand-assets/domino8/ODA-Icon8-Reconstruction-Master-1254.png",
++  "sourceSha256": "49ebd132ec6f67282a95a9e941631fccfd3e1d72bd5049a45179c277dcf78a96",
++  "provenance": "Reference-guided reconstruction accepted by parent visual review; not the missing original.",
++  "resizing": "Browser canvas contain, uniform scale, high-quality smoothing; no cropped source artwork.",
++  "maskable": {
++    "scale": 0.7,
++    "background": "#54010C",
++    "essentialSourceBounds": [
++      80,
++      190,
++      1170,
++      1045
++    ],
++    "maxNormalizedRadius": 0.39082,
++    "safeRadius": 0.4
++  },
++  "platformMasking": "Opaque square web/native assets without baked outer rounding; platforms apply their own masks.",
++  "splash": "Full520px master centered on existing2732px warm ivory launch background.",
++  "files": [
++    {
++      "file": "public/brand/domino8/oda-mark-domino8-v1-256.png",
++      "width": 256,
++      "height": 256,
++      "mode": "icon",
++      "sourceScale": 1,
++      "bytes": 59244,
++      "sha256": "9c707664f9e972aed37b55f2fc912c455aa2aaff852af2c6d2acee5b1d66015c"
++    },
++    {
++      "file": "public/brand/domino8/oda-app-domino8-v1-192.png",
++      "width": 192,
++      "height": 192,
++      "mode": "icon",
++      "sourceScale": 1,
++      "bytes": 37639,
++      "sha256": "0bd5a82bbe820b9de40c43fc140877d9850b0d9fe0749849315ef8a6d3a86e5d"
++    },
++    {
++      "file": "public/brand/domino8/oda-app-domino8-v1-maskable-192.png",
++      "width": 192,
++      "height": 192,
++      "mode": "icon",
++      "sourceScale": 0.7,
++      "bytes": 19253,
++      "sha256": "43d028cc43b857b405b838a4fd439dcde46da198bdb1923f8924fef65f21d14f"
++    },
++    {
++      "file": "public/brand/domino8/oda-app-domino8-v1-512.png",
++      "width": 512,
++      "height": 512,
++      "mode": "icon",
++      "sourceScale": 1,
++      "bytes": 200016,
++      "sha256": "6b83ea675f14e0b5a009a604796fac5d9a9ed517524fc6b8828a6a477ba4053c"
++    },
++    {
++      "file": "public/brand/domino8/oda-app-domino8-v1-maskable-512.png",
++      "width": 512,
++      "height": 512,
++      "mode": "icon",
++      "sourceScale": 0.7,
++      "bytes": 119088,
++      "sha256": "5a82bd405721a61eb5974804419c5bebc57d302073fb7697d1aa55bc29669a14"
++    },
++    {
++      "file": "public/brand/domino8/oda-apple-domino8-v1-180.png",
++      "width": 180,
++      "height": 180,
++      "mode": "icon",
++      "sourceScale": 1,
++      "bytes": 33955,
++      "sha256": "1818fb86ca1c9f90ae5f9881f0841ee333c69d24cfd0b43d6c9126c06b121f61"
++    },
++    {
++      "file": "public/brand/domino8/oda-favicon-domino8-v1-32.png",
++      "width": 32,
++      "height": 32,
++      "mode": "icon",
++      "sourceScale": 1,
++      "bytes": 1778,
++      "sha256": "42f087aea5bf1e46d85892f1293aed1fe9a07bbb7269db7c5c18cfe20425e916"
++    },
++    {
++      "file": "brand-assets/ios/domino8/AppIcon-512@2x.png",
++      "width": 1024,
++      "height": 1024,
++      "mode": "icon",
++      "sourceScale": 1,
++      "bytes": 724220,
++      "sha256": "3609142cb87ecdcc06b6f440db4ce33ec6f8ddfe228c64bcc9d04c99cbcd747c"
++    },
++    {
++      "file": "brand-assets/ios/domino8/splash-2732x2732.png",
++      "width": 2732,
++      "height": 2732,
++      "mode": "splash",
++      "sourceScale": 1,
++      "bytes": 255378,
++      "sha256": "74a729ebebd4df9b67bb875525f2d00b16578005639aac5f9852f0adb35eab34"
++    },
++    {
++      "file": "public/brand/domino8/og-image-domino8-v1.png",
++      "width": 1200,
++      "height": 630,
++      "mode": "social",
++      "sourceScale": 1,
++      "bytes": 66435,
++      "sha256": "1d18da7ce1a2a5b53a18a032c473763c343d0df2a2bb23d42e4558d7d31c1c39"
++    }
++  ]
++}
+diff --git a/brand-assets/ios/c4/AppIcon-512@2x.png b/brand-assets/ios/c4/AppIcon-512@2x.png
+new file mode 100644
+index 0000000..f27abac
+Binary files /dev/null and b/brand-assets/ios/c4/AppIcon-512@2x.png differ
+diff --git a/brand-assets/ios/c4/splash-2732x2732.png b/brand-assets/ios/c4/splash-2732x2732.png
+new file mode 100644
+index 0000000..183971c
+Binary files /dev/null and b/brand-assets/ios/c4/splash-2732x2732.png differ
+diff --git a/brand-assets/ios/domino8/AppIcon-512@2x.png b/brand-assets/ios/domino8/AppIcon-512@2x.png
+new file mode 100644
+index 0000000..4928d1f
+Binary files /dev/null and b/brand-assets/ios/domino8/AppIcon-512@2x.png differ
+diff --git a/brand-assets/ios/domino8/splash-2732x2732.png b/brand-assets/ios/domino8/splash-2732x2732.png
+new file mode 100644
+index 0000000..6f37b00
+Binary files /dev/null and b/brand-assets/ios/domino8/splash-2732x2732.png differ
+diff --git a/docs/BRAND.md b/docs/BRAND.md
+index c0e3af8..7e150fe 100644
+--- a/docs/BRAND.md
++++ b/docs/BRAND.md
+@@ -1,12 +1,13 @@
+ # ODA brand decisions
+ 
+-Confirmed by the owner on 23 September 2026. Preserve these decisions in future changes.
++Owner decisions, updated on 3 October 2026 for the explicitly selected icon8 domino. Preserve these decisions in future changes.
+ 
+ - **Designer signature:** `Designed by Yahya`. Use this exact wording in English, Turkish and Spanish; do not translate it or replace it with `by AurelyStudio`.
+ - **App name:** `ODA`, without dots. The expanded name is `One Decision Away`.
+ - **Installed app name:** the phone home screen and desktop applications list must both display exactly `ODA`. Keep the web manifest's `name` and `short_name`, and the Apple mobile web app title, set to `ODA`. The expanded name may remain inside the website.
+-- **Selected logo:** C4 (the owner's original). On 25 September 2026 the owner reviewed v3 (open door) and asked to go back to the old logo; v2 and v3 remain in the repo (`LogoV2.tsx`, `LogoV3.tsx`, `public/brand/v2|v3/`) but are not in use. Page titles use Fraunces and UI text uses Geist (self-hosted); that typography change was kept.
+-- **Every earlier brand is preserved:** C4 (`public/brand/oda-c4.png`, `oda-*-c4-v1-*`, `LogoC4.tsx`) and v2. Switch with `node scripts/brand.mjs c4`, `v2` or `v3`; it swaps every reference (manifest, index.html, service worker, notifications, test) and `src/brand/current.ts`, then commit and push. Do not generate a new logo as part of ordinary interface changes.
++- **Selected logo:** icon8, the gold foreground domino with two ruby/burgundy dominos on a burgundy background. On 3 October the owner explicitly requested replacing the application logo with this selection. The original standalone source was unavailable; parent visual review accepted a high-resolution reference-guided reconstruction. `brand-assets/domino8/ODA-Icon8-Reconstruction-Master-1254.png` retains the exact reconstructed source bytes, SHA256 `49ebd132ec6f67282a95a9e941631fccfd3e1d72bd5049a45179c277dcf78a96`. Its supplied provenance/comparison make the distinction from the lost original explicit. No new font or global theme accompanies this logo change.
++- **Every earlier brand is preserved:** C4 (`public/brand/oda-c4.png`, `oda-*-c4-v1-*`, `LogoC4.tsx`) and v2/v3/v4. Switch with `node scripts/brand.mjs domino8|c4|v2|v3|v4`; it swaps references (manifest, index.html, service worker, notifications, test), `src/brand/current.ts` and root icon aliases. C4/domino8/v4 also have archived native assets for the switch. Previous C4 selection remains in history; the current explicit domino choice supersedes it. Do not generate a new logo as part of ordinary interface changes.
++- **Platform derivatives:** `node scripts/brand-domino8-assets.mjs` uses the existing installed Chromium/canvas workflow to resize the accepted master without cropping, redrawing or distorting the dominos. Ordinary/native icons are opaque square images without baked outer rounding; platforms supply masks. Maskable PWA icons contain the full master at 70% uniform scale so essential artwork fits the 40% safe circle. In-app marks use display-only rounded clipping, and lockups retain the ODA label. The existing iOS catalog references an opaque 1024 icon and three identical 2732 launch images; the full 520 artwork fits their centered portrait-visible area. Asset configuration is not proof of physical installation or App Store acceptance.
+ - **Visual direction:** an elegant, warm editorial workbook, with forest green and burgundy accents. Use the shared tokens in `src/styles/tokens.css` and reserve explanatory illustrations for learning and action.
+ - **Credit placement:** visible landing-page and settings signatures, with matching website metadata and install branding. The compact standalone signature is always `Designed by Yahya`.
+ 
+diff --git a/index.html b/index.html
+index 244979a..ce289bd 100644
+--- a/index.html
++++ b/index.html
+@@ -10,9 +10,9 @@
+     <meta name="referrer" content="strict-origin-when-cross-origin" />
+     <script src="%BASE_URL%theme-init.js"></script>
+     <link rel="manifest" href="%BASE_URL%manifest.webmanifest" />
+-    <link rel="apple-touch-icon" sizes="180x180" href="%BASE_URL%brand/oda-apple-c4-v1-180.png" />
+-    <link rel="icon" type="image/png" sizes="32x32" href="%BASE_URL%brand/oda-favicon-c4-v1-32.png" />
+-    <link rel="icon" type="image/png" sizes="192x192" href="%BASE_URL%brand/oda-app-c4-v1-192.png" />
++    <link rel="apple-touch-icon" sizes="180x180" href="%BASE_URL%brand/domino8/oda-apple-domino8-v1-180.png" />
++    <link rel="icon" type="image/png" sizes="32x32" href="%BASE_URL%brand/domino8/oda-favicon-domino8-v1-32.png" />
++    <link rel="icon" type="image/png" sizes="192x192" href="%BASE_URL%brand/domino8/oda-app-domino8-v1-192.png" />
+     <meta name="application-name" content="ODA" />
+     <meta name="mobile-web-app-capable" content="yes" />
+     <meta name="apple-mobile-web-app-capable" content="yes" />
+@@ -21,10 +21,10 @@
+     <meta property="og:title" content="One Decision Away — Build the life before you live it" />
+     <meta property="og:description" content="Choose one small decision, apply a guided lesson, and reflect on what helps. A private daily practice with ODA — One Decision Away." />
+     <meta property="og:type" content="website" />
+-    <meta property="og:image" content="https://billionar.github.io/one-decision-away/og-image.png" />
++    <meta property="og:image" content="https://billionar.github.io/one-decision-away/brand/domino8/og-image-domino8-v1.png" />
+     <meta property="og:image:width" content="1200" />
+     <meta property="og:image:height" content="630" />
+-    <meta name="twitter:image" content="https://billionar.github.io/one-decision-away/og-image.png" />
++    <meta name="twitter:image" content="https://billionar.github.io/one-decision-away/brand/domino8/og-image-domino8-v1.png" />
+     <meta name="twitter:card" content="summary_large_image" />
+     <meta name="twitter:title" content="ODA — Designed by Yahya" />
+     <meta name="twitter:description" content="Choose one small decision, apply a guided lesson, and reflect on what helps. A private daily practice with ODA — One Decision Away." />
+diff --git a/ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png b/ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png
+index f27abac..4928d1f 100644
+Binary files a/ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png and b/ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png differ
+diff --git a/ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732-1.png b/ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732-1.png
+index 183971c..6f37b00 100644
+Binary files a/ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732-1.png and b/ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732-1.png differ
+diff --git a/ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732-2.png b/ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732-2.png
+index 183971c..6f37b00 100644
+Binary files a/ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732-2.png and b/ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732-2.png differ
+diff --git a/ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732.png b/ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732.png
+index 183971c..6f37b00 100644
+Binary files a/ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732.png and b/ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732.png differ
+diff --git a/public/apple-touch-icon.png b/public/apple-touch-icon.png
+index a7c358d..6eb1dd5 100644
+Binary files a/public/apple-touch-icon.png and b/public/apple-touch-icon.png differ
+diff --git a/public/brand/domino8/oda-app-domino8-v1-192.png b/public/brand/domino8/oda-app-domino8-v1-192.png
+new file mode 100644
+index 0000000..e3eabaf
+Binary files /dev/null and b/public/brand/domino8/oda-app-domino8-v1-192.png differ
+diff --git a/public/brand/domino8/oda-app-domino8-v1-512.png b/public/brand/domino8/oda-app-domino8-v1-512.png
+new file mode 100644
+index 0000000..f05b4f7
+Binary files /dev/null and b/public/brand/domino8/oda-app-domino8-v1-512.png differ
+diff --git a/public/brand/domino8/oda-app-domino8-v1-maskable-192.png b/public/brand/domino8/oda-app-domino8-v1-maskable-192.png
+new file mode 100644
+index 0000000..f264cef
+Binary files /dev/null and b/public/brand/domino8/oda-app-domino8-v1-maskable-192.png differ
+diff --git a/public/brand/domino8/oda-app-domino8-v1-maskable-512.png b/public/brand/domino8/oda-app-domino8-v1-maskable-512.png
+new file mode 100644
+index 0000000..8ad88ec
+Binary files /dev/null and b/public/brand/domino8/oda-app-domino8-v1-maskable-512.png differ
+diff --git a/public/brand/domino8/oda-apple-domino8-v1-180.png b/public/brand/domino8/oda-apple-domino8-v1-180.png
+new file mode 100644
+index 0000000..6eb1dd5
+Binary files /dev/null and b/public/brand/domino8/oda-apple-domino8-v1-180.png differ
+diff --git a/public/brand/domino8/oda-favicon-domino8-v1-32.png b/public/brand/domino8/oda-favicon-domino8-v1-32.png
+new file mode 100644
+index 0000000..367e2d3
+Binary files /dev/null and b/public/brand/domino8/oda-favicon-domino8-v1-32.png differ
+diff --git a/public/brand/domino8/oda-mark-domino8-v1-256.png b/public/brand/domino8/oda-mark-domino8-v1-256.png
+new file mode 100644
+index 0000000..1493b00
+Binary files /dev/null and b/public/brand/domino8/oda-mark-domino8-v1-256.png differ
+diff --git a/public/brand/domino8/og-image-domino8-v1.png b/public/brand/domino8/og-image-domino8-v1.png
+new file mode 100644
+index 0000000..93f8bae
+Binary files /dev/null and b/public/brand/domino8/og-image-domino8-v1.png differ
+diff --git a/public/icon-192-maskable.png b/public/icon-192-maskable.png
+index bfcbdc0..f264cef 100644
+Binary files a/public/icon-192-maskable.png and b/public/icon-192-maskable.png differ
+diff --git a/public/icon-192.png b/public/icon-192.png
+index 0b3550b..e3eabaf 100644
+Binary files a/public/icon-192.png and b/public/icon-192.png differ
+diff --git a/public/icon-512-maskable.png b/public/icon-512-maskable.png
+index 6eae99d..8ad88ec 100644
+Binary files a/public/icon-512-maskable.png and b/public/icon-512-maskable.png differ
+diff --git a/public/icon-512.png b/public/icon-512.png
+index 2e4d402..f05b4f7 100644
+Binary files a/public/icon-512.png and b/public/icon-512.png differ
+diff --git a/public/manifest.webmanifest b/public/manifest.webmanifest
+index 8ec449e..78025fd 100644
+--- a/public/manifest.webmanifest
++++ b/public/manifest.webmanifest
+@@ -10,25 +10,25 @@
+   "theme_color": "#F5F4FA",
+   "icons": [
+     {
+-      "src": "./brand/oda-app-c4-v1-192.png",
++      "src": "./brand/domino8/oda-app-domino8-v1-192.png",
+       "sizes": "192x192",
+       "type": "image/png",
+       "purpose": "any"
+     },
+     {
+-      "src": "./brand/oda-app-c4-v1-512.png",
++      "src": "./brand/domino8/oda-app-domino8-v1-512.png",
+       "sizes": "512x512",
+       "type": "image/png",
+       "purpose": "any"
+     },
+     {
+-      "src": "./brand/oda-app-c4-v1-maskable-192.png",
++      "src": "./brand/domino8/oda-app-domino8-v1-maskable-192.png",
+       "sizes": "192x192",
+       "type": "image/png",
+       "purpose": "maskable"
+     },
+     {
+-      "src": "./brand/oda-app-c4-v1-maskable-512.png",
++      "src": "./brand/domino8/oda-app-domino8-v1-maskable-512.png",
+       "sizes": "512x512",
+       "type": "image/png",
+       "purpose": "maskable"
+diff --git a/public/sw.js b/public/sw.js
+index 401b6c3..327e221 100644
+--- a/public/sw.js
++++ b/public/sw.js
+@@ -1,11 +1,11 @@
+ /* One Decision Away — each deployment owns its own offline shell and caches. */
+ const BASE = new URL(self.registration.scope);
+ const CACHE_PREFIX = `oda:${encodeURIComponent(BASE.pathname)}:`;
+-const SHELL_CACHE = `${CACHE_PREFIX}v5`;
++const SHELL_CACHE = `${CACHE_PREFIX}v6`;
+ const MEDIA_CACHE = `${SHELL_CACHE}:media`;
+ const INDEX_URL = new URL('index.html', BASE).href;
+ const MANIFEST_URL = new URL('manifest.webmanifest', BASE).href;
+-const SHELL = ['', 'index.html', 'support.html', 'theme-init.js', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-192-maskable.png', 'icon-512-maskable.png', 'apple-touch-icon.png', 'brand/oda-c4.png', 'brand/oda-app-c4-v1-192.png', 'brand/oda-app-c4-v1-512.png', 'brand/oda-app-c4-v1-maskable-192.png', 'brand/oda-app-c4-v1-maskable-512.png', 'brand/oda-apple-c4-v1-180.png', 'brand/oda-favicon-c4-v1-32.png'].map(path => new URL(path, BASE).href);
++const SHELL = ['', 'index.html', 'support.html', 'theme-init.js', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-192-maskable.png', 'icon-512-maskable.png', 'apple-touch-icon.png', 'brand/domino8/oda-mark-domino8-v1-256.png', 'brand/domino8/oda-app-domino8-v1-192.png', 'brand/domino8/oda-app-domino8-v1-512.png', 'brand/domino8/oda-app-domino8-v1-maskable-192.png', 'brand/domino8/oda-app-domino8-v1-maskable-512.png', 'brand/domino8/oda-apple-domino8-v1-180.png', 'brand/domino8/oda-favicon-domino8-v1-32.png'].map(path => new URL(path, BASE).href);
+ const inScope = url => url.origin === BASE.origin && url.pathname.startsWith(BASE.pathname);
+ 
+ self.addEventListener('install', event => {
+@@ -98,8 +98,8 @@ self.addEventListener('push', event => {
+   const body = typeof payload.body === 'string' ? payload.body.slice(0, 2000) : 'Yeni sözün hazır. Bugün kendine küçük bir alan aç.';
+   event.waitUntil(self.registration.showNotification(title, {
+     body,
+-    icon: new URL('brand/oda-app-c4-v1-192.png', BASE).href,
+-    badge: new URL('brand/oda-app-c4-v1-192.png', BASE).href,
++    icon: new URL('brand/domino8/oda-app-domino8-v1-192.png', BASE).href,
++    badge: new URL('brand/domino8/oda-app-domino8-v1-192.png', BASE).href,
+     tag: typeof payload.tag === 'string' ? payload.tag.slice(0, 120) : 'oda-daily-inspiration',
+     data: { url: typeof payload.url === 'string' ? payload.url : '/app' },
+   }));
+diff --git a/scripts/brand-domino8-assets.mjs b/scripts/brand-domino8-assets.mjs
+new file mode 100644
+index 0000000..6d4fff2
+--- /dev/null
++++ b/scripts/brand-domino8-assets.mjs
+@@ -0,0 +1,66 @@
++// Resize the accepted icon8 reconstruction; never redraw or crop its domino artwork.
++// Run from the checkout: node scripts/brand-domino8-assets.mjs
++import { chromium } from 'playwright';
++import fs from 'node:fs';
++import { createHash } from 'node:crypto';
++import { fileURLToPath } from 'node:url';
++
++const root = fileURLToPath(new URL('../', import.meta.url));
++const master = fs.readFileSync(root + 'brand-assets/domino8/ODA-Icon8-Reconstruction-Master-1254.png');
++const expected = '49ebd132ec6f67282a95a9e941631fccfd3e1d72bd5049a45179c277dcf78a96';
++if (createHash('sha256').update(master).digest('hex') !== expected) throw new Error('Unexpected selected icon8 source');
++const image = `data:image/png;base64,${master.toString('base64')}`;
++const oldSocial = `data:image/png;base64,${fs.readFileSync(root + 'public/og-image.png').toString('base64')}`;
++const records = [];
++const browser = await chromium.launch({ executablePath: process.env.ODA_CHROMIUM || '/usr/bin/chromium' });
++const page = await browser.newPage({ deviceScaleFactor: 1 });
++try {
++  async function render(file, width, height, mode = 'icon', scale = 1) {
++    await page.setViewportSize({ width, height });
++    await page.setContent('<html><body style="margin:0"><canvas style="display:block"></canvas></body></html>');
++    await page.evaluate(async ({ image, oldSocial, width, height, mode, scale }) => {
++      const canvas = document.querySelector('canvas'); canvas.width = width; canvas.height = height;
++      const ctx = canvas.getContext('2d');
++      ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
++      const load = async (src) => { const img = new Image(); img.src = src; await img.decode(); return img; };
++      const img = await load(image);
++      if (img.naturalWidth !== 1254 || img.naturalHeight !== 1254) throw new Error('Source must be 1254 square');
++      if (mode === 'social') {
++        ctx.drawImage(await load(oldSocial), 0, 0, width, height);
++        // Replace only the existing mark; all original social text and layout remain.
++        ctx.fillStyle = '#FFFFFF'; ctx.fillRect(90, 75, 50, 62);
++        ctx.save(); ctx.beginPath(); ctx.roundRect(90, 80, 48, 48, 9); ctx.clip();
++        ctx.drawImage(img, 90, 80, 48, 48); ctx.restore();
++      } else {
++        ctx.fillStyle = mode === 'splash' ? '#F7F3EA' : '#54010C';
++        ctx.fillRect(0, 0, width, height);
++        const size = mode === 'splash' ? 520 : width * scale;
++        ctx.drawImage(img, (width - size) / 2, (height - size) / 2, size, size);
++      }
++    }, { image, oldSocial, width, height, mode, scale });
++    fs.mkdirSync(root + file.slice(0, file.lastIndexOf('/')), { recursive: true });
++    const data = await page.screenshot({ path: root + file, omitBackground: false });
++    records.push({ file, width, height, mode, sourceScale: scale, bytes: data.length, sha256: createHash('sha256').update(data).digest('hex') });
++  }
++  await render('public/brand/domino8/oda-mark-domino8-v1-256.png', 256, 256);
++  for (const size of [192, 512]) {
++    await render(`public/brand/domino8/oda-app-domino8-v1-${size}.png`, size, size);
++    // Entire source is contained; essential domino bounds fit the central 40% safe circle.
++    await render(`public/brand/domino8/oda-app-domino8-v1-maskable-${size}.png`, size, size, 'icon', 0.70);
++  }
++  await render('public/brand/domino8/oda-apple-domino8-v1-180.png', 180, 180);
++  await render('public/brand/domino8/oda-favicon-domino8-v1-32.png', 32, 32);
++  await render('brand-assets/ios/domino8/AppIcon-512@2x.png', 1024, 1024);
++  await render('brand-assets/ios/domino8/splash-2732x2732.png', 2732, 2732, 'splash');
++  await render('public/brand/domino8/og-image-domino8-v1.png', 1200, 630, 'social');
++  fs.writeFileSync(root + 'brand-assets/domino8/derivatives.json', JSON.stringify({
++    sourceFile: 'brand-assets/domino8/ODA-Icon8-Reconstruction-Master-1254.png', sourceSha256: expected,
++    provenance: 'Reference-guided reconstruction accepted by parent visual review; not the missing original.',
++    resizing: 'Browser canvas contain, uniform scale, high-quality smoothing; no cropped source artwork.',
++    maskable: { scale: 0.70, background: '#54010C', essentialSourceBounds: [80, 190, 1170, 1045], maxNormalizedRadius: 0.39082, safeRadius: 0.4 },
++    platformMasking: 'Opaque square web/native assets without baked outer rounding; platforms apply their own masks.',
++    splash: 'Full 520px master centered on existing 2732px warm ivory launch background.',
++    files: records,
++  }, null, 2) + '\n');
++} finally { await browser.close(); }
++console.log(JSON.stringify({ sourceSha256: expected, outputs: records.length }));
+diff --git a/scripts/brand.mjs b/scripts/brand.mjs
+index 5600502..8d96b33 100644
+--- a/scripts/brand.mjs
++++ b/scripts/brand.mjs
+@@ -1,31 +1,41 @@
+-// Switch the whole app between brand versions: `node scripts/brand.mjs v4`, `v3`, `v2` or `c4`.
++// Switch the whole app between preserved brand versions: `node scripts/brand.mjs domino8|v4|v3|v2|c4`.
+ // Old assets are never deleted, so switching back is always one command.
+ import fs from 'node:fs';
+ 
+ const target = process.argv[2];
+ const SETS = {
++  domino8: {
++    app192: 'brand/domino8/oda-app-domino8-v1-192.png', app512: 'brand/domino8/oda-app-domino8-v1-512.png',
++    mask192: 'brand/domino8/oda-app-domino8-v1-maskable-192.png', mask512: 'brand/domino8/oda-app-domino8-v1-maskable-512.png',
++    apple: 'brand/domino8/oda-apple-domino8-v1-180.png', favicon: 'brand/domino8/oda-favicon-domino8-v1-32.png', og: 'brand/domino8/og-image-domino8-v1.png',
++    mark: 'brand/domino8/oda-mark-domino8-v1-256.png', native: 'domino8',
++  },
+   v4: {
+     app192: 'brand/v4/oda-app-v4-192.png', app512: 'brand/v4/oda-app-v4-512.png',
+     mask192: 'brand/v4/oda-app-v4-maskable-192.png', mask512: 'brand/v4/oda-app-v4-maskable-512.png',
+     apple: 'brand/v4/oda-apple-v4-180.png', favicon: 'brand/v4/oda-favicon-v4-32.png', og: 'brand/v4/og-image-v4.png',
++    mark: 'brand/v4/oda-mark-v4.svg', native: 'v4',
+   },
+   c4: {
+     app192: 'brand/oda-app-c4-v1-192.png', app512: 'brand/oda-app-c4-v1-512.png',
+     mask192: 'brand/oda-app-c4-v1-maskable-192.png', mask512: 'brand/oda-app-c4-v1-maskable-512.png',
+     apple: 'brand/oda-apple-c4-v1-180.png', favicon: 'brand/oda-favicon-c4-v1-32.png', og: 'og-image.png',
++    mark: 'brand/oda-c4.png', native: 'c4',
+   },
+   v3: {
+     app192: 'brand/v3/oda-app-v3-192.png', app512: 'brand/v3/oda-app-v3-512.png',
+     mask192: 'brand/v3/oda-app-v3-maskable-192.png', mask512: 'brand/v3/oda-app-v3-maskable-512.png',
+     apple: 'brand/v3/oda-apple-v3-180.png', favicon: 'brand/v3/oda-favicon-v3-32.png', og: 'brand/v3/og-image-v3.png',
++    mark: 'brand/v3/oda-mark-v3.svg',
+   },
+   v2: {
+     app192: 'brand/v2/oda-app-v2-192.png', app512: 'brand/v2/oda-app-v2-512.png',
+     mask192: 'brand/v2/oda-app-v2-maskable-192.png', mask512: 'brand/v2/oda-app-v2-maskable-512.png',
+     apple: 'brand/v2/oda-apple-v2-180.png', favicon: 'brand/v2/oda-favicon-v2-32.png', og: 'brand/v2/og-image-v2.png',
++    mark: 'brand/v2/oda-mark-v2.svg',
+   },
+ };
+-if (!SETS[target]) { console.error('Usage: node scripts/brand.mjs v4|v3|v2|c4'); process.exit(1); }
++if (!SETS[target]) { console.error('Usage: node scripts/brand.mjs domino8|v4|v3|v2|c4'); process.exit(1); }
+ const FILES = ['index.html', 'public/manifest.webmanifest', 'public/sw.js', 'src/services/notificationScheduler.ts', 'src/pages/Settings.tsx', 'supabase/functions/send-nudges/push-worker.test.ts'];
+ const root = new URL('../', import.meta.url);
+ for (const file of FILES) {
+@@ -34,6 +44,7 @@ for (const file of FILES) {
+   for (const [from, set] of Object.entries(SETS)) {
+     if (from === target) continue;
+     for (const [key, path] of Object.entries(set)) {
++      if (key === 'native') continue;
+       // og-image.png only appears as an absolute URL; avoid touching other names.
+       const pattern = key === 'og' ? new RegExp(`(?<=/)${path.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&')}(?=["'])`, 'g') : new RegExp(path.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&'), 'g');
+       text = text.replace(pattern, SETS[target][key]);
+@@ -42,5 +53,15 @@ for (const file of FILES) {
+   fs.writeFileSync(url, text);
+ }
+ const current = new URL('src/brand/current.ts', root);
+-fs.writeFileSync(current, fs.readFileSync(current, 'utf8').replace(/export const BRAND: [^=]+= '(v4|v3|v2|c4)';/, `export const BRAND: 'v4' | 'v3' | 'v2' | 'c4' = '${target}';`));
++fs.writeFileSync(current, fs.readFileSync(current, 'utf8').replace(/export const BRAND: [^=]+= '(domino8|v4|v3|v2|c4)';/, `export const BRAND: 'domino8' | 'v4' | 'v3' | 'v2' | 'c4' = '${target}';`));
++for (const [key, file] of Object.entries({ app192: 'icon-192.png', app512: 'icon-512.png', mask192: 'icon-192-maskable.png', mask512: 'icon-512-maskable.png', apple: 'apple-touch-icon.png' })) {
++  fs.copyFileSync(new URL(`public/${SETS[target][key]}`, root), new URL(`public/${file}`, root));
++}
++if (SETS[target].native) {
++  const native = `brand-assets/ios/${SETS[target].native}/`;
++  fs.copyFileSync(new URL(`${native}AppIcon-512@2x.png`, root), new URL('ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png', root));
++  for (const file of ['splash-2732x2732.png', 'splash-2732x2732-1.png', 'splash-2732x2732-2.png']) {
++    fs.copyFileSync(new URL(`${native}splash-2732x2732.png`, root), new URL(`ios/App/App/Assets.xcassets/Splash.imageset/${file}`, root));
++  }
++}
+ console.log(`Brand switched to ${target}.`);
+diff --git a/src/brand/current.ts b/src/brand/current.ts
+index 3097f3c..487eeb9 100644
+--- a/src/brand/current.ts
++++ b/src/brand/current.ts
+@@ -1,5 +1,5 @@
+ /**
+- * Active brand. Switch with `node scripts/brand.mjs v4|v3|v2|c4`, which also swaps
++ * Active brand. Switch with `node scripts/brand.mjs domino8|v4|v3|v2|c4`, which also swaps
+  * every icon reference (manifest, index.html, service worker, notifications).
+  */
+-export const BRAND: 'v4' | 'v3' | 'v2' | 'c4' = 'c4';
++export const BRAND: 'domino8' | 'v4' | 'v3' | 'v2' | 'c4' = 'domino8';
+diff --git a/src/components/Logo.tsx b/src/components/Logo.tsx
+index 54813d7..cbd6baa 100644
+--- a/src/components/Logo.tsx
++++ b/src/components/Logo.tsx
+@@ -4,11 +4,12 @@ import { LogoC4, LogoC4Lockup } from './brand/LogoC4';
+ import { LogoV2, LogoV2Lockup } from './brand/LogoV2';
+ import { LogoV3, LogoV3Lockup } from './brand/LogoV3';
+ import { LogoV4, LogoV4Lockup } from './brand/LogoV4';
++import { LogoDomino8, LogoDomino8Lockup } from './brand/LogoDomino8';
+ 
+ type LogoProps = { className?: string; title?: string };
+ 
+-/** Brand switch (`node scripts/brand.mjs v4|v3|v2|c4`); every earlier brand stays available. */
++/** Brand switch (`node scripts/brand.mjs domino8|v4|v3|v2|c4`); every earlier brand stays available. */
+ export const Logo: React.FC<LogoProps> = (props) =>
+-  BRAND === 'v4' ? <LogoV4 {...props} /> : BRAND === 'c4' ? <LogoC4 {...props} /> : BRAND === 'v2' ? <LogoV2 {...props} /> : <LogoV3 {...props} />;
++  BRAND === 'domino8' ? <LogoDomino8 {...props} /> : BRAND === 'v4' ? <LogoV4 {...props} /> : BRAND === 'c4' ? <LogoC4 {...props} /> : BRAND === 'v2' ? <LogoV2 {...props} /> : <LogoV3 {...props} />;
+ export const LogoLockup: React.FC<LogoProps> = (props) =>
+-  BRAND === 'v4' ? <LogoV4Lockup {...props} /> : BRAND === 'c4' ? <LogoC4Lockup {...props} /> : BRAND === 'v2' ? <LogoV2Lockup {...props} /> : <LogoV3Lockup {...props} />;
++  BRAND === 'domino8' ? <LogoDomino8Lockup {...props} /> : BRAND === 'v4' ? <LogoV4Lockup {...props} /> : BRAND === 'c4' ? <LogoC4Lockup {...props} /> : BRAND === 'v2' ? <LogoV2Lockup {...props} /> : <LogoV3Lockup {...props} />;
+diff --git a/src/components/brand/LogoDomino8.tsx b/src/components/brand/LogoDomino8.tsx
+new file mode 100644
+index 0000000..82925aa
+--- /dev/null
++++ b/src/components/brand/LogoDomino8.tsx
+@@ -0,0 +1,27 @@
++import React, { useId } from 'react';
++
++const brandImage = `${import.meta.env.BASE_URL}brand/domino8/oda-mark-domino8-v1-256.png`;
++type LogoProps = { className?: string; title?: string };
++
++/** The accepted icon8 reconstruction, contained in full; rounding is for in-app display only. */
++const DominoImage: React.FC = () => {
++  const clipId = `oda-domino8-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
++  return <>
++    <defs><clipPath id={clipId}><rect width="100" height="100" rx="20" /></clipPath></defs>
++    <image href={brandImage} width="100" height="100" preserveAspectRatio="xMidYMid meet" clipPath={`url(#${clipId})`} />
++  </>;
++};
++
++export const LogoDomino8: React.FC<LogoProps> = ({ className = 'w-6 h-6', title }) => (
++  <svg viewBox="0 0 100 100" className={`oda-brand-mark oda-domino8-mark ${className}`} aria-hidden={title ? undefined : true} role={title ? 'img' : undefined}>
++    {title && <title>{title}</title>}
++    <DominoImage />
++  </svg>
++);
++
++export const LogoDomino8Lockup: React.FC<LogoProps> = ({ className = 'w-12 h-18', title = 'ODA' }) => (
++  <svg viewBox="0 0 100 150" className={`oda-brand-mark oda-domino8-mark ${className}`} role="img" aria-label={title}>
++    <DominoImage />
++    <text x="50" y="137" textAnchor="middle" fontSize="32" letterSpacing="1.5" fill="currentColor" style={{ fontFamily: 'var(--font-editorial)' }}>ODA</text>
++  </svg>
++);
+diff --git a/src/pages/Settings.tsx b/src/pages/Settings.tsx
+index 277af04..2a4a628 100644
+--- a/src/pages/Settings.tsx
++++ b/src/pages/Settings.tsx
+@@ -254,7 +254,7 @@ export const Settings: React.FC = () => {
+     const fire = () => {
+       new Notification(t('Daily wisdom: {theme}', { theme: t(currentWisdom.theme) }), {
+         body: t('"{quote}" — {author}', { quote: t(currentWisdom.quote), author: t(currentWisdom.author) }),
+-        icon: publicAssetPath('brand/oda-app-c4-v1-192.png'),
++        icon: publicAssetPath('brand/domino8/oda-app-domino8-v1-192.png'),
+       });
+     };
+ 
+diff --git a/src/services/notificationScheduler.ts b/src/services/notificationScheduler.ts
+index 193b375..f2be0a7 100644
+--- a/src/services/notificationScheduler.ts
++++ b/src/services/notificationScheduler.ts
+@@ -214,8 +214,8 @@ class NotificationScheduler {
+     const title = t(NUDGE_TITLES[slot]);
+     const opts: NotificationOptions = {
+       body,
+-      icon: publicAssetPath('brand/oda-app-c4-v1-192.png'),
+-      badge: publicAssetPath('brand/oda-app-c4-v1-192.png'),
++      icon: publicAssetPath('brand/domino8/oda-app-domino8-v1-192.png'),
++      badge: publicAssetPath('brand/domino8/oda-app-domino8-v1-192.png'),
+       tag: `oda-nudge-${slot}`,
+       data: { url: appRouteHref('/app') },
+     };
+diff --git a/src/styles/coach.css b/src/styles/coach.css
+index c6659a6..a43b90c 100644
+--- a/src/styles/coach.css
++++ b/src/styles/coach.css
+@@ -19,7 +19,7 @@
+   background: #142242; color: #B7C4DC; border-color: #3A5275;
+ }
+ /* Keep the user's original transparent logo readable without recoloring it. */
+-.oda-reference-app[data-app-route="/app/coach"] .oda-sidebar > button:first-child .oda-brand-mark {
++.oda-reference-app[data-app-route="/app/coach"] .oda-sidebar > button:first-child .oda-brand-mark:not(.oda-domino8-mark) {
+   background: #F4F6FB; border-radius: 8px;
+ }
+ .coach-page {
+diff --git a/supabase/functions/send-nudges/push-worker.test.ts b/supabase/functions/send-nudges/push-worker.test.ts
+index c4b7b53..c94e0c2 100644
+--- a/supabase/functions/send-nudges/push-worker.test.ts
++++ b/supabase/functions/send-nudges/push-worker.test.ts
+@@ -25,7 +25,7 @@ test('push event displays the real server payload without an open client', async
+   await push({ title: 'ODA · Sabahın sözü', body: 'Şimdi küçük bir adım at.\n— Kaynak · yorumlama', tag: 'oda-nudge-morning', url: '/app' });
+   assert.equal(shown[0].title, 'ODA · Sabahın sözü');
+   assert.equal(shown[0].options.body, 'Şimdi küçük bir adım at.\n— Kaynak · yorumlama');
+-  assert.equal(shown[0].options.icon, 'https://example.github.io/one-decision-away/brand/oda-app-c4-v1-192.png');
++  assert.equal(shown[0].options.icon, 'https://example.github.io/one-decision-away/brand/domino8/oda-app-domino8-v1-192.png');
+   assert.equal(shown[0].options.tag, 'oda-nudge-morning');
+ });
+ 
+@@ -33,7 +33,7 @@ test('unexpected push fields cannot become arbitrary notification options', asyn
+   const { shown, push } = setup();
+   await push({ title: {}, body: null, icon: 'https://outside.example/tracker.png', vibrate: [999], actions: [{ action: 'evil' }] });
+   assert.equal(shown[0].title, 'ODA');
+-  assert.equal(shown[0].options.icon, 'https://example.github.io/one-decision-away/brand/oda-app-c4-v1-192.png');
++  assert.equal(shown[0].options.icon, 'https://example.github.io/one-decision-away/brand/domino8/oda-app-domino8-v1-192.png');
+   assert.equal(shown[0].options.actions, undefined);
+   assert.equal(shown[0].options.vibrate, undefined);
+ });
+diff --git a/tests/service-worker.test.ts b/tests/service-worker.test.ts
+index 0ecc03b..1182aad 100644
+--- a/tests/service-worker.test.ts
++++ b/tests/service-worker.test.ts
+@@ -62,9 +62,9 @@ test('standalone support remains available offline without replacing the applica
+ });
+ 
+ test('activation preserves sibling apps and this version media cache', async () => {
+-  const app = worker('https://example.github.io/repo/', ['oda:%2Frepo%2F:v1', 'oda:%2Frepo%2F:v2', 'oda:%2Frepo%2F:v2:media', 'oda:%2Frepo%2F:v3', 'oda:%2Frepo%2F:v3:media', 'oda:%2Frepo%2F:v4', 'oda:%2Frepo%2F:v4:media', 'oda:%2Frepo%2F:v5', 'oda:%2Frepo%2F:v5:media', 'oda:%2Fother%2F:v1', 'another-app-cache']);
++  const app = worker('https://example.github.io/repo/', ['oda:%2Frepo%2F:v1', 'oda:%2Frepo%2F:v2', 'oda:%2Frepo%2F:v2:media', 'oda:%2Frepo%2F:v3', 'oda:%2Frepo%2F:v3:media', 'oda:%2Frepo%2F:v4', 'oda:%2Frepo%2F:v4:media', 'oda:%2Frepo%2F:v5', 'oda:%2Frepo%2F:v5:media', 'oda:%2Frepo%2F:v6', 'oda:%2Frepo%2F:v6:media', 'oda:%2Fother%2F:v1', 'another-app-cache']);
+   await app.dispatch('activate');
+-  assert.deepEqual(app.deleted, ['oda:%2Frepo%2F:v1', 'oda:%2Frepo%2F:v2', 'oda:%2Frepo%2F:v2:media', 'oda:%2Frepo%2F:v3', 'oda:%2Frepo%2F:v3:media', 'oda:%2Frepo%2F:v4', 'oda:%2Frepo%2F:v4:media']);
++  assert.deepEqual(app.deleted, ['oda:%2Frepo%2F:v1', 'oda:%2Frepo%2F:v2', 'oda:%2Frepo%2F:v2:media', 'oda:%2Frepo%2F:v3', 'oda:%2Frepo%2F:v3:media', 'oda:%2Frepo%2F:v4', 'oda:%2Frepo%2F:v4:media', 'oda:%2Frepo%2F:v5', 'oda:%2Frepo%2F:v5:media']);
+ });
+ 
+ test('notification defaults and legacy targets open the project hash route', async () => {

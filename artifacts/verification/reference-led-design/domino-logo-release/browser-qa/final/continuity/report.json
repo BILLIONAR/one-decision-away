@@ -1,0 +1,673 @@
+{
+  "sourceCommit": "84ecbf8776146b766a30964bf8e6487234dd1dd4",
+  "hashesBefore": {
+    "source": 900,
+    "compiled": 445
+  },
+  "synthetic": true,
+  "physicalDevice": false,
+  "checks": [
+    {
+      "name": "Onboarding preview is labelled and credits no kept decision/reward false",
+      "pass": true
+    },
+    {
+      "name": "Chosen demo decision continues only without an existing saved draft false",
+      "pass": true
+    },
+    {
+      "name": "Onboarding preview is labelled and credits no kept decision/reward true",
+      "pass": true
+    },
+    {
+      "name": "Chosen demo decision continues only without an existing saved draft true",
+      "pass": true
+    },
+    {
+      "name": "Today continuation exposes actual next lesson title/minutes",
+      "pass": true
+    },
+    {
+      "name": "Course catalogue search remains functional",
+      "pass": true
+    },
+    {
+      "name": "Untouched course opens real description/outcome/lesson overview",
+      "pass": true
+    },
+    {
+      "name": "Start lesson1 retains actual lesson practice and quiz",
+      "pass": true
+    },
+    {
+      "name": "Returning TurningPointDay learner resumes saved lesson2",
+      "pass": true
+    },
+    {
+      "name": "Notebook unsaved draft survives route leave/return",
+      "pass": true
+    },
+    {
+      "name": "Notebook save adds one entry and preserves earlier saved entry",
+      "pass": true
+    },
+    {
+      "name": "Guidance page fetches no MP3 before explicit playback and exposes speaker Preview voice",
+      "pass": true
+    },
+    {
+      "name": "Preview actually plays one exact approved English current clip",
+      "pass": true,
+      "mp3": [
+        {
+          "file": "dist/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+          "bytes": 105260,
+          "sha256": "ef95e5eef613307f261021ca45ce6d2823602c44d33bed35570931f3a8ae4851",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "name": "Guided start loads only bounded current/upcoming English clips",
+      "pass": true,
+      "unique": [
+        "dist/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+        "dist/assets/oda/narration/en-US/v1/clips/gm-relax-01.en-US.v1.mp3",
+        "dist/assets/oda/narration/en-US/v1/clips/gm-relax-02.en-US.v1.mp3"
+      ],
+      "bytes": 354564
+    },
+    {
+      "name": "Actual guided narration pause/resume remains functional",
+      "pass": true
+    },
+    {
+      "name": "Approved English clip replays offline from verified persistent cache after adapter reload",
+      "pass": true
+    },
+    {
+      "name": "No browser page errors",
+      "pass": true
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "onboarding-preview-carried-320.png",
+      "bytes": 44860,
+      "sha256": "640a01d639fd17252b5b40b2bdcbb0a21cd7dab7f3977e21662cd7d6dc0e1fc1"
+    },
+    {
+      "file": "onboarding-protected-draft-320.png",
+      "bytes": 53229,
+      "sha256": "aa1469dd23bb9551703f11ec168670326765164a421c794be277f71284d2936b"
+    },
+    {
+      "file": "untouched-course-overview-1440.png",
+      "bytes": 163266,
+      "sha256": "ea969776c869efbc7f2f38ca4f5d0486f08c588c1e2f1832551e0a7281f884b4"
+    },
+    {
+      "file": "course-resumed-lesson2-1440.png",
+      "bytes": 166006,
+      "sha256": "3db4a4f9a9e7c54fa70919ec78fc31983ae9f0c345d4225d9e3412b1934be065"
+    },
+    {
+      "file": "notebook-saved-continuity-1440.png",
+      "bytes": 159924,
+      "sha256": "dc4277364210503ac1e0e0e5d6728766bedb50cbcc776603e1be99857004df63"
+    },
+    {
+      "file": "recorded-english-preview-390.png",
+      "bytes": 62150,
+      "sha256": "49974f3813c403fdcaa396bf0d2f4d6c6937f8c2cdfefde518d239a221e9e0f8"
+    },
+    {
+      "file": "offline-recorded-english-preview-390.png",
+      "bytes": 62150,
+      "sha256": "49974f3813c403fdcaa396bf0d2f4d6c6937f8c2cdfefde518d239a221e9e0f8"
+    }
+  ],
+  "mp3": [
+    {
+      "file": "dist/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+      "bytes": 105260,
+      "sha256": "ef95e5eef613307f261021ca45ce6d2823602c44d33bed35570931f3a8ae4851",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/oda/narration/en-US/v1/clips/gm-relax-01.en-US.v1.mp3",
+      "bytes": 120620,
+      "sha256": "583d89be9836473b4fea4eb4dbad00c6be21d1933de07ab55ea857680153c1fd",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/oda/narration/en-US/v1/clips/gm-relax-02.en-US.v1.mp3",
+      "bytes": 128684,
+      "sha256": "301c02e9c4b73d37f8bfc7fa05b2633f5b1365a1d2f15eb03faf893ad22cc4e1",
+      "status": 200
+    }
+  ],
+  "servedResponses": [
+    {
+      "file": "dist/index.html",
+      "bytes": 3518,
+      "sha256": "8078024c0a8d35f8c680b6eaac41ab448f45ef0e7b1b3b26abe275d93059636e",
+      "status": 200
+    },
+    {
+      "file": "dist/theme-init.js",
+      "bytes": 740,
+      "sha256": "bcfb6eb36d90eb505920c80e174d179045456b548e1accff53bf56b19a44caa5",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/react-5GCfeWye.js",
+      "bytes": 229422,
+      "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/index-BH5El-p7.css",
+      "bytes": 110545,
+      "sha256": "36c163113d0186bf11de8498a554f339400a55a8bdb9dcf521bb39be13e38966",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/media-2mgEiOLR.js",
+      "bytes": 23753,
+      "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/index-2RvfW88y.js",
+      "bytes": 952754,
+      "sha256": "44d91a482816c27ae9150c3c44699ca6a8c2458f9a99db857bf640e5e6d0f8cf",
+      "status": 200
+    },
+    {
+      "file": "dist/index.html",
+      "bytes": 3518,
+      "sha256": "8078024c0a8d35f8c680b6eaac41ab448f45ef0e7b1b3b26abe275d93059636e",
+      "status": 200
+    },
+    {
+      "file": "dist/theme-init.js",
+      "bytes": 740,
+      "sha256": "bcfb6eb36d90eb505920c80e174d179045456b548e1accff53bf56b19a44caa5",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/index-BH5El-p7.css",
+      "bytes": 110545,
+      "sha256": "36c163113d0186bf11de8498a554f339400a55a8bdb9dcf521bb39be13e38966",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/media-2mgEiOLR.js",
+      "bytes": 23753,
+      "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/react-5GCfeWye.js",
+      "bytes": 229422,
+      "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/index-2RvfW88y.js",
+      "bytes": 952754,
+      "sha256": "44d91a482816c27ae9150c3c44699ca6a8c2458f9a99db857bf640e5e6d0f8cf",
+      "status": 200
+    },
+    {
+      "file": "dist/index.html",
+      "bytes": 3518,
+      "sha256": "8078024c0a8d35f8c680b6eaac41ab448f45ef0e7b1b3b26abe275d93059636e",
+      "status": 200
+    },
+    {
+      "file": "dist/theme-init.js",
+      "bytes": 740,
+      "sha256": "bcfb6eb36d90eb505920c80e174d179045456b548e1accff53bf56b19a44caa5",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/index-BH5El-p7.css",
+      "bytes": 110545,
+      "sha256": "36c163113d0186bf11de8498a554f339400a55a8bdb9dcf521bb39be13e38966",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/media-2mgEiOLR.js",
+      "bytes": 23753,
+      "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/react-5GCfeWye.js",
+      "bytes": 229422,
+      "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/index-2RvfW88y.js",
+      "bytes": 952754,
+      "sha256": "44d91a482816c27ae9150c3c44699ca6a8c2458f9a99db857bf640e5e6d0f8cf",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/courseNavigationIntent-C0ky-Yq1.css",
+      "bytes": 37678,
+      "sha256": "2baece986565d1ab2dc8bb415e37ffcf5a7fa33cf48a5de99af1753a6b1e0557",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/Today-BLKGw7K2.css",
+      "bytes": 9665,
+      "sha256": "44d71f0fb8ab60ded9fecc04fb113def8b6b2f540e563278b706049d44e8bdb2",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/workingSurfaces-Ug3LNMJ2.css",
+      "bytes": 16628,
+      "sha256": "6affdaa841b72355b976af20fa8c7d65caad28ce1ec50a1479c3b41f8a3939d2",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/growth-CtfcX3mW.js",
+      "bytes": 2073,
+      "sha256": "18302f2287d962e3923bb4a8924f7e79d99b1a95f0bae11a29dc54e4174ecf63",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/courseNavigationIntent-CVzJRIDW.js",
+      "bytes": 5487,
+      "sha256": "9f28a0032417032c45304c32472e6f94fcdcc2a42b4fb24dcb01a04ced37b810",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/OriginalSceneImage-zmk9pRa_.js",
+      "bytes": 3619,
+      "sha256": "d403e3d1d177ab9350f961fa1e71d142aa5b7aecea9fdf4aabbbd245a66e364d",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/chevron-right-CvStUJC4.js",
+      "bytes": 304,
+      "sha256": "52a5d7f884069483a82c09efca8eaa472a77dae775d10cdf2cff08e4b47eeea0",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/square-Djxltt51.js",
+      "bytes": 321,
+      "sha256": "f80e12dc7bb8cd93cc1ca860aab8767a32655853a8d4c05be9a3670499a53898",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/lock-keyhole-n9M14rAO.js",
+      "bytes": 429,
+      "sha256": "b8410a679db741b7a9a7fb58e9cfae5d02e9eaab411d7d73e279f40de576fa38",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/entitlements-u2O6Yfci.js",
+      "bytes": 525,
+      "sha256": "bc672087c8c4d541ce854d9099bbbd9981949e6816aba639c3a117e864cd87c0",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/Today-CrB9_9Fu.js",
+      "bytes": 148529,
+      "sha256": "ba355500d1a476a541223251a26fa49a4aaa5bc3d57eff4e34112969a1542ea4",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/MissionFlows-D4I-4Ojv.js",
+      "bytes": 8100,
+      "sha256": "a1b57fc7ff65944f3304344c16fa624d7f1cbe65686c832f4bf1798e2cf8bd47",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/DreamArt-BtzSfSVO.js",
+      "bytes": 12840,
+      "sha256": "cc484fb4b0fbcce013d5105d1a37b7149cd50a9bd7aa5e983f2c7b8ccc665c08",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/music-Da6qWoMx.js",
+      "bytes": 751,
+      "sha256": "866efe05f6642620be33a2de394afec3df604565b076b1346d8cd655302a2a66",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/moon-CNiY8MHW.js",
+      "bytes": 391,
+      "sha256": "684faccb42a73f48b8b68e5f26752eadf9c8ea3e244033094a972cfc623dd889",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/trending-up-C79RL-F8.js",
+      "bytes": 694,
+      "sha256": "e229901106085cc97cc04ffc20a6136090a382a96bc90a4b4100e1ac28d650a8",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/DailyMicroHabits-BdTU8MYs.js",
+      "bytes": 56818,
+      "sha256": "61d641f1d8f2e9a6f4b91fb8d679197d5acac6894b3b8f1c130a144796499a3c",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/motion-HNvQpnN_.js",
+      "bytes": 128884,
+      "sha256": "3b8beefe6f5abed46ca686013afdcd2ea9c013557b337d8e606719a91894be70",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/sparkles-BHgsnNrw.js",
+      "bytes": 668,
+      "sha256": "8feccb693e373aca2577900e3ee3085475c96708854617ee426f2abb109ad6d8",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/pen-line-bsPNj-HI.js",
+      "bytes": 451,
+      "sha256": "c5919660ac6cb106a6366624adcea3642f50b217a6e69851e7782be120d7e5f1",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/rotate-ccw-CQm7fL5X.js",
+      "bytes": 374,
+      "sha256": "7be99cb6bcfbd1186594789ec50d1f7a9d99304fc834d5bf2e3103bb59319124",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/trash-2-DHrpPL-3.js",
+      "bytes": 502,
+      "sha256": "dea5868ed1cfaa0ab9662f1efa51416f0b950588db4762bbd6ff683d2236fcd5",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/circle-check-_6ctcrZC.js",
+      "bytes": 352,
+      "sha256": "1779a1bc407d4004cc66f32103e218d527b41d7c25a8a9cc5eef243e4e5a665d",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/wind-i2A9CUqy.js",
+      "bytes": 420,
+      "sha256": "5f5f1575c2e70e2e32a6127db870d8f7efffd4f8b43247dda85b4af784ab08d0",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/route-CNyzjram.js",
+      "bytes": 428,
+      "sha256": "0336215c95071860e495828ebe7b1df97d71b2adcddac7bc6eea47e8a579c54c",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/shuffle-B1Rt3IWf.js",
+      "bytes": 557,
+      "sha256": "edb3124e97bc93a9e5f5cf1e6a3c0a90b40145d93a81ac3d24bc5efff4fd3eb9",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/pencil-CocZr5cV.js",
+      "bytes": 450,
+      "sha256": "0ea5a85059af7c9465b8fb3df57272497ac2505eae6ba02e56519ca471b01f91",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/share-2-CgoqeSY9.js",
+      "bytes": 531,
+      "sha256": "13ce67709edfb7cd86a493c0f2dafb36e25614e0d01fe57bab9eee270b076bd2",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/waves-Cau5Elof.js",
+      "bytes": 602,
+      "sha256": "92c78ca6573e87a7bd35b52c31f1baab49638192ce281319bdf17b7c773995aa",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/charts-Bzd-XkHo.js",
+      "bytes": 431582,
+      "sha256": "2d7b9b31411e27fb1b9b31b24e3ed0884969780d21dbe5da936cf583f3e7f820",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/calendar-days-BaCKu7AX.js",
+      "bytes": 668,
+      "sha256": "152b6bcb96e064b6593f8d668c8403127d6e6c7b4050eacd637380bd1e732f54",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/search-DKkVsP9-.js",
+      "bytes": 348,
+      "sha256": "0ecf9d660c6637a53837186d95721de2ed164c866905078007126268791933b8",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/CourseCover-JJkE5i2v.js",
+      "bytes": 6182,
+      "sha256": "1f280bcd57754ce3c963cd263621435cef1150fc9cf89b32c90612e6dad2a892",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/purchases-CqR8FzP7.js",
+      "bytes": 10034,
+      "sha256": "8e7e8a19dde38441928019a9aac3ebedf1c38c39aa030b9090a80b96f76df509",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/Courses-Dl6ZY9Kv.js",
+      "bytes": 113959,
+      "sha256": "b60d2a69ad1855bcc94c69559b9a48ba37fdb2cf7fdbd93e7a0b71b38743e35d",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/courses-CKtnra3s.js",
+      "bytes": 2510751,
+      "sha256": "065e50aeb656d6a99eba1fb1ea1091bd330fdf9be272670136d23a158ce49d6b",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/Notebook-B2CgyXXC.css",
+      "bytes": 24016,
+      "sha256": "fc33ff6300e770134aeae8e16961d1066700a13999299e905145851574ab3abb",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/arrow-up-right-BbSzw25S.js",
+      "bytes": 341,
+      "sha256": "fb5d73974c798fcaa499682334e4a0ff79d971adf6d783d036109b23c88a08a9",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/archive-BqQ20vJ9.js",
+      "bytes": 427,
+      "sha256": "1cad51caa64581b3f441b6de2e5e2404f4daba7a82675b0f5c348119cd62aa0c",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/headphones-D_RX_Yeh.js",
+      "bytes": 411,
+      "sha256": "1cd3e0f4aba99a687531cde7bbdf3c2a355f80840e06c134fac9d172fe851333",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/Notebook-CF5bAaPn.js",
+      "bytes": 61093,
+      "sha256": "2354fe6f3ef90dcf32f34a11f3a59d484ba16a0305f755c1a36227b3f336b19c",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/mail-8BmMzSVu.js",
+      "bytes": 387,
+      "sha256": "30e21a4e354ea27301f593055e8fe39f2c607f15d54d7f336e84391fd9d8c751",
+      "status": 200
+    },
+    {
+      "file": "dist/index.html",
+      "bytes": 3518,
+      "sha256": "8078024c0a8d35f8c680b6eaac41ab448f45ef0e7b1b3b26abe275d93059636e",
+      "status": 200
+    },
+    {
+      "file": "dist/theme-init.js",
+      "bytes": 740,
+      "sha256": "bcfb6eb36d90eb505920c80e174d179045456b548e1accff53bf56b19a44caa5",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/index-BH5El-p7.css",
+      "bytes": 110545,
+      "sha256": "36c163113d0186bf11de8498a554f339400a55a8bdb9dcf521bb39be13e38966",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/media-2mgEiOLR.js",
+      "bytes": 23753,
+      "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/react-5GCfeWye.js",
+      "bytes": 229422,
+      "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/index-2RvfW88y.js",
+      "bytes": 952754,
+      "sha256": "44d91a482816c27ae9150c3c44699ca6a8c2458f9a99db857bf640e5e6d0f8cf",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/workingSurfaces-Ug3LNMJ2.css",
+      "bytes": 16628,
+      "sha256": "6affdaa841b72355b976af20fa8c7d65caad28ce1ec50a1479c3b41f8a3939d2",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/Focus-C40LG2aj.js",
+      "bytes": 873,
+      "sha256": "7085acc8d53d77918e8ee7a0c906a7fe5980abcdee786a6c855bb9e5f2e1d23e",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/FocusTimerHub-xo-CN_kz.js",
+      "bytes": 15211,
+      "sha256": "a492bf54811c6d955c46dda54dc19b68455ca199ac50d34dc0c4b7fac987a929",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/CourseCover-JJkE5i2v.js",
+      "bytes": 6182,
+      "sha256": "1f280bcd57754ce3c963cd263621435cef1150fc9cf89b32c90612e6dad2a892",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/oda/narration/en-US/v1/clips/gm-relax-00.en-US.v1.mp3",
+      "bytes": 105260,
+      "sha256": "ef95e5eef613307f261021ca45ce6d2823602c44d33bed35570931f3a8ae4851",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/oda/narration/en-US/v1/clips/gm-relax-01.en-US.v1.mp3",
+      "bytes": 120620,
+      "sha256": "583d89be9836473b4fea4eb4dbad00c6be21d1933de07ab55ea857680153c1fd",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/oda/narration/en-US/v1/clips/gm-relax-02.en-US.v1.mp3",
+      "bytes": 128684,
+      "sha256": "301c02e9c4b73d37f8bfc7fa05b2633f5b1365a1d2f15eb03faf893ad22cc4e1",
+      "status": 200
+    },
+    {
+      "file": "dist/index.html",
+      "bytes": 3518,
+      "sha256": "8078024c0a8d35f8c680b6eaac41ab448f45ef0e7b1b3b26abe275d93059636e",
+      "status": 200
+    },
+    {
+      "file": "dist/theme-init.js",
+      "bytes": 740,
+      "sha256": "bcfb6eb36d90eb505920c80e174d179045456b548e1accff53bf56b19a44caa5",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/media-2mgEiOLR.js",
+      "bytes": 23753,
+      "sha256": "d7d349a4012c7b92f0c4a9de337bf7c34b91d2af604bca154db3ada91c5ec13a",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/index-BH5El-p7.css",
+      "bytes": 110545,
+      "sha256": "36c163113d0186bf11de8498a554f339400a55a8bdb9dcf521bb39be13e38966",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/react-5GCfeWye.js",
+      "bytes": 229422,
+      "sha256": "20d857282af38f1ed669b0e04999b1b7aea4408e38f6f8c7de7eb8915715a21f",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/index-2RvfW88y.js",
+      "bytes": 952754,
+      "sha256": "44d91a482816c27ae9150c3c44699ca6a8c2458f9a99db857bf640e5e6d0f8cf",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/workingSurfaces-Ug3LNMJ2.css",
+      "bytes": 16628,
+      "sha256": "6affdaa841b72355b976af20fa8c7d65caad28ce1ec50a1479c3b41f8a3939d2",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/Focus-C40LG2aj.js",
+      "bytes": 873,
+      "sha256": "7085acc8d53d77918e8ee7a0c906a7fe5980abcdee786a6c855bb9e5f2e1d23e",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/FocusTimerHub-xo-CN_kz.js",
+      "bytes": 15211,
+      "sha256": "a492bf54811c6d955c46dda54dc19b68455ca199ac50d34dc0c4b7fac987a929",
+      "status": 200
+    },
+    {
+      "file": "dist/assets/CourseCover-JJkE5i2v.js",
+      "bytes": 6182,
+      "sha256": "1f280bcd57754ce3c963cd263621435cef1150fc9cf89b32c90612e6dad2a892",
+      "status": 200
+    }
+  ],
+  "externalBlocked": [
+    "https://images.unsplash.com/photo-1483546416237-76fd26bbcdd1",
+    "https://images.unsplash.com/photo-1590333748338-d629e4564ad9",
+    "https://images.unsplash.com/photo-1729548981825-2a38de5d16aa",
+    "https://images.unsplash.com/photo-1633158829875-e5316a358c6f",
+    "https://images.unsplash.com/photo-1432821596592-e2c18b78144f",
+    "https://images.unsplash.com/photo-1768245076659-d3dafb1c8466",
+    "https://images.unsplash.com/photo-1483546416237-76fd26bbcdd1",
+    "https://images.unsplash.com/photo-1590333748338-d629e4564ad9",
+    "https://images.unsplash.com/photo-1729548981825-2a38de5d16aa",
+    "https://images.unsplash.com/photo-1633158829875-e5316a358c6f",
+    "https://images.unsplash.com/photo-1432821596592-e2c18b78144f",
+    "https://images.unsplash.com/photo-1768245076659-d3dafb1c8466",
+    "https://images.unsplash.com/photo-1579017308347-e53e0d2fc5e9",
+    "https://images.unsplash.com/photo-1740815897057-a93a8cf98a70"
+  ],
+  "pageErrors": [],
+  "startedAtUtc": "2026-10-03T19:13:53.274Z",
+  "hashesAfter": {
+    "source": 900,
+    "compiled": 445
+  },
+  "finishedAtUtc": "2026-10-03T19:14:01.652Z"
+}

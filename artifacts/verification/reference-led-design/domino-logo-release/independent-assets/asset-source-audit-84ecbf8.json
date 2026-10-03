@@ -1,0 +1,737 @@
+{
+  "reviewedAtUtc": "2026-10-03T19:12:41.530900+00:00",
+  "status": "passed",
+  "sourceCommit": "84ecbf8776146b766a30964bf8e6487234dd1dd4",
+  "baselineCommit": "dc7208922ecbe026a2523ee4c571735e3f375bae",
+  "scope": "Independent read-only source/protection/asset audit; only own scratch receipts and normal-browser synthetic mask previews were written.",
+  "checks": [
+    {
+      "name": "Frozen source commit exact",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "Checkout clean before audit",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "Only the43authorized brand/source paths changed",
+      "passed": true,
+      "evidence": {
+        "changedPaths": [
+          "README.md",
+          "brand-assets/domino8/GENERATION-PROMPT.txt",
+          "brand-assets/domino8/ODA-Icon8-Comparison.png",
+          "brand-assets/domino8/ODA-Icon8-Reconstruction-Master-1254.png",
+          "brand-assets/domino8/ODA-Icon8-Small-Size-QA.png",
+          "brand-assets/domino8/README.txt",
+          "brand-assets/domino8/SHA256SUMS.txt",
+          "brand-assets/domino8/derivatives.json",
+          "brand-assets/ios/c4/AppIcon-512@2x.png",
+          "brand-assets/ios/c4/splash-2732x2732.png",
+          "brand-assets/ios/domino8/AppIcon-512@2x.png",
+          "brand-assets/ios/domino8/splash-2732x2732.png",
+          "docs/BRAND.md",
+          "index.html",
+          "ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png",
+          "ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732-1.png",
+          "ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732-2.png",
+          "ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732.png",
+          "public/apple-touch-icon.png",
+          "public/brand/domino8/oda-app-domino8-v1-192.png",
+          "public/brand/domino8/oda-app-domino8-v1-512.png",
+          "public/brand/domino8/oda-app-domino8-v1-maskable-192.png",
+          "public/brand/domino8/oda-app-domino8-v1-maskable-512.png",
+          "public/brand/domino8/oda-apple-domino8-v1-180.png",
+          "public/brand/domino8/oda-favicon-domino8-v1-32.png",
+          "public/brand/domino8/oda-mark-domino8-v1-256.png",
+          "public/brand/domino8/og-image-domino8-v1.png",
+          "public/icon-192-maskable.png",
+          "public/icon-192.png",
+          "public/icon-512-maskable.png",
+          "public/icon-512.png",
+          "public/manifest.webmanifest",
+          "public/sw.js",
+          "scripts/brand-domino8-assets.mjs",
+          "scripts/brand.mjs",
+          "src/brand/current.ts",
+          "src/components/Logo.tsx",
+          "src/components/brand/LogoDomino8.tsx",
+          "src/pages/Settings.tsx",
+          "src/services/notificationScheduler.ts",
+          "src/styles/coach.css",
+          "supabase/functions/send-nudges/push-worker.test.ts",
+          "tests/service-worker.test.ts"
+        ],
+        "count": 43
+      }
+    },
+    {
+      "name": "Every prior protected tracked file has identical blob and mode",
+      "passed": true,
+      "evidence": {
+        "count": 6451
+      }
+    },
+    {
+      "name": "Protected exact: src/pages/Today.tsx",
+      "passed": true,
+      "evidence": {
+        "blob": "fe3084801e8e1d682723c0196388b9b67a826add"
+      }
+    },
+    {
+      "name": "Protected exact: src/styles/todayPalette.css",
+      "passed": true,
+      "evidence": {
+        "blob": "17b4c5935b4b7da7e682473143dc2fcef8903776"
+      }
+    },
+    {
+      "name": "Protected exact: src/styles/tokens.css",
+      "passed": true,
+      "evidence": {
+        "blob": "20a166779be14270865c66cea53ff10fdfe82393"
+      }
+    },
+    {
+      "name": "Protected exact: capacitor.config.ts",
+      "passed": true,
+      "evidence": {
+        "blob": "1abb1f72d0075f13456dbd2731548dbe99beb87f"
+      }
+    },
+    {
+      "name": "Protected exact: ios/App/App/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "passed": true,
+      "evidence": {
+        "blob": "9b7d382dcecca887eac19d7f1c4c8dc57abe00e4"
+      }
+    },
+    {
+      "name": "Protected exact: ios/App/App/Assets.xcassets/Splash.imageset/Contents.json",
+      "passed": true,
+      "evidence": {
+        "blob": "d7d96a67c0d764a2ddfc9545441c627e6d5fa1fc"
+      }
+    },
+    {
+      "name": "Protected exact: ios/App/App/Base.lproj/LaunchScreen.storyboard",
+      "passed": true,
+      "evidence": {
+        "blob": "05e87bee9231f2c060772cca91780bad12b1826c"
+      }
+    },
+    {
+      "name": "Protected exact: ios/App/App/Info.plist",
+      "passed": true,
+      "evidence": {
+        "blob": "1b6fc4fd69581c040ab6e178045b132f34c3a254"
+      }
+    },
+    {
+      "name": "Protected exact: ios/App/App.xcodeproj/project.pbxproj",
+      "passed": true,
+      "evidence": {
+        "blob": "e0675af0ae1d133921953869052fc51e0a1e6980"
+      }
+    },
+    {
+      "name": "Functional source identical after icon-reference substitution: src/pages/Settings.tsx",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "Functional source identical after icon-reference substitution: src/services/notificationScheduler.ts",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "Coach CSS change only excludes new opaque logo from old C4 backing",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "All legacy C4/v2/v3/v4 brand assets/components remain identical",
+      "passed": true,
+      "evidence": {
+        "count": 38
+      }
+    },
+    {
+      "name": "Original native C4 archived exact: brand-assets/ios/c4/AppIcon-512@2x.png",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "Original native C4 archived exact: brand-assets/ios/c4/splash-2732x2732.png",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "Accepted reconstructed master exact hash",
+      "passed": true,
+      "evidence": {
+        "sha256": "49ebd132ec6f67282a95a9e941631fccfd3e1d72bd5049a45179c277dcf78a96",
+        "bytes": 1226532,
+        "provenance": "Accepted reference-guided reconstruction, not the missing original"
+      }
+    },
+    {
+      "name": "Derivative bytes/dimensions/opaque RGB: public/brand/domino8/oda-mark-domino8-v1-256.png",
+      "passed": true,
+      "evidence": {
+        "file": "public/brand/domino8/oda-mark-domino8-v1-256.png",
+        "bytes": 59244,
+        "sha256": "9c707664f9e972aed37b55f2fc912c455aa2aaff852af2c6d2acee5b1d66015c",
+        "size": [
+          256,
+          256
+        ],
+        "mode": "RGB",
+        "alphaExtrema": null
+      }
+    },
+    {
+      "name": "Derivative bytes/dimensions/opaque RGB: public/brand/domino8/oda-app-domino8-v1-192.png",
+      "passed": true,
+      "evidence": {
+        "file": "public/brand/domino8/oda-app-domino8-v1-192.png",
+        "bytes": 37639,
+        "sha256": "0bd5a82bbe820b9de40c43fc140877d9850b0d9fe0749849315ef8a6d3a86e5d",
+        "size": [
+          192,
+          192
+        ],
+        "mode": "RGB",
+        "alphaExtrema": null
+      }
+    },
+    {
+      "name": "Derivative bytes/dimensions/opaque RGB: public/brand/domino8/oda-app-domino8-v1-maskable-192.png",
+      "passed": true,
+      "evidence": {
+        "file": "public/brand/domino8/oda-app-domino8-v1-maskable-192.png",
+        "bytes": 19253,
+        "sha256": "43d028cc43b857b405b838a4fd439dcde46da198bdb1923f8924fef65f21d14f",
+        "size": [
+          192,
+          192
+        ],
+        "mode": "RGB",
+        "alphaExtrema": null
+      }
+    },
+    {
+      "name": "Derivative bytes/dimensions/opaque RGB: public/brand/domino8/oda-app-domino8-v1-512.png",
+      "passed": true,
+      "evidence": {
+        "file": "public/brand/domino8/oda-app-domino8-v1-512.png",
+        "bytes": 200016,
+        "sha256": "6b83ea675f14e0b5a009a604796fac5d9a9ed517524fc6b8828a6a477ba4053c",
+        "size": [
+          512,
+          512
+        ],
+        "mode": "RGB",
+        "alphaExtrema": null
+      }
+    },
+    {
+      "name": "Derivative bytes/dimensions/opaque RGB: public/brand/domino8/oda-app-domino8-v1-maskable-512.png",
+      "passed": true,
+      "evidence": {
+        "file": "public/brand/domino8/oda-app-domino8-v1-maskable-512.png",
+        "bytes": 119088,
+        "sha256": "5a82bd405721a61eb5974804419c5bebc57d302073fb7697d1aa55bc29669a14",
+        "size": [
+          512,
+          512
+        ],
+        "mode": "RGB",
+        "alphaExtrema": null
+      }
+    },
+    {
+      "name": "Derivative bytes/dimensions/opaque RGB: public/brand/domino8/oda-apple-domino8-v1-180.png",
+      "passed": true,
+      "evidence": {
+        "file": "public/brand/domino8/oda-apple-domino8-v1-180.png",
+        "bytes": 33955,
+        "sha256": "1818fb86ca1c9f90ae5f9881f0841ee333c69d24cfd0b43d6c9126c06b121f61",
+        "size": [
+          180,
+          180
+        ],
+        "mode": "RGB",
+        "alphaExtrema": null
+      }
+    },
+    {
+      "name": "Derivative bytes/dimensions/opaque RGB: public/brand/domino8/oda-favicon-domino8-v1-32.png",
+      "passed": true,
+      "evidence": {
+        "file": "public/brand/domino8/oda-favicon-domino8-v1-32.png",
+        "bytes": 1778,
+        "sha256": "42f087aea5bf1e46d85892f1293aed1fe9a07bbb7269db7c5c18cfe20425e916",
+        "size": [
+          32,
+          32
+        ],
+        "mode": "RGB",
+        "alphaExtrema": null
+      }
+    },
+    {
+      "name": "Derivative bytes/dimensions/opaque RGB: brand-assets/ios/domino8/AppIcon-512@2x.png",
+      "passed": true,
+      "evidence": {
+        "file": "brand-assets/ios/domino8/AppIcon-512@2x.png",
+        "bytes": 724220,
+        "sha256": "3609142cb87ecdcc06b6f440db4ce33ec6f8ddfe228c64bcc9d04c99cbcd747c",
+        "size": [
+          1024,
+          1024
+        ],
+        "mode": "RGB",
+        "alphaExtrema": null
+      }
+    },
+    {
+      "name": "Derivative bytes/dimensions/opaque RGB: brand-assets/ios/domino8/splash-2732x2732.png",
+      "passed": true,
+      "evidence": {
+        "file": "brand-assets/ios/domino8/splash-2732x2732.png",
+        "bytes": 255378,
+        "sha256": "74a729ebebd4df9b67bb875525f2d00b16578005639aac5f9852f0adb35eab34",
+        "size": [
+          2732,
+          2732
+        ],
+        "mode": "RGB",
+        "alphaExtrema": null
+      }
+    },
+    {
+      "name": "Derivative bytes/dimensions/opaque RGB: public/brand/domino8/og-image-domino8-v1.png",
+      "passed": true,
+      "evidence": {
+        "file": "public/brand/domino8/og-image-domino8-v1.png",
+        "bytes": 66435,
+        "sha256": "1d18da7ce1a2a5b53a18a032c473763c343d0df2a2bb23d42e4558d7d31c1c39",
+        "size": [
+          1200,
+          630
+        ],
+        "mode": "RGB",
+        "alphaExtrema": null
+      }
+    },
+    {
+      "name": "Active root alias exact bytes: public/icon-192.png",
+      "passed": true,
+      "evidence": {
+        "target": "public/brand/domino8/oda-app-domino8-v1-192.png",
+        "sha256": "0bd5a82bbe820b9de40c43fc140877d9850b0d9fe0749849315ef8a6d3a86e5d"
+      }
+    },
+    {
+      "name": "Active root alias exact bytes: public/icon-512.png",
+      "passed": true,
+      "evidence": {
+        "target": "public/brand/domino8/oda-app-domino8-v1-512.png",
+        "sha256": "6b83ea675f14e0b5a009a604796fac5d9a9ed517524fc6b8828a6a477ba4053c"
+      }
+    },
+    {
+      "name": "Active root alias exact bytes: public/icon-192-maskable.png",
+      "passed": true,
+      "evidence": {
+        "target": "public/brand/domino8/oda-app-domino8-v1-maskable-192.png",
+        "sha256": "43d028cc43b857b405b838a4fd439dcde46da198bdb1923f8924fef65f21d14f"
+      }
+    },
+    {
+      "name": "Active root alias exact bytes: public/icon-512-maskable.png",
+      "passed": true,
+      "evidence": {
+        "target": "public/brand/domino8/oda-app-domino8-v1-maskable-512.png",
+        "sha256": "5a82bd405721a61eb5974804419c5bebc57d302073fb7697d1aa55bc29669a14"
+      }
+    },
+    {
+      "name": "Active root alias exact bytes: public/apple-touch-icon.png",
+      "passed": true,
+      "evidence": {
+        "target": "public/brand/domino8/oda-apple-domino8-v1-180.png",
+        "sha256": "1818fb86ca1c9f90ae5f9881f0841ee333c69d24cfd0b43d6c9126c06b121f61"
+      }
+    },
+    {
+      "name": "Native catalog mapping exact: ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png",
+      "passed": true,
+      "evidence": {
+        "entry": {
+          "filename": "AppIcon-512@2x.png",
+          "idiom": "universal",
+          "platform": "ios",
+          "size": "1024x1024"
+        },
+        "sha256": "3609142cb87ecdcc06b6f440db4ce33ec6f8ddfe228c64bcc9d04c99cbcd747c"
+      }
+    },
+    {
+      "name": "Native catalog mapping exact: ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732-2.png",
+      "passed": true,
+      "evidence": {
+        "entry": {
+          "idiom": "universal",
+          "filename": "splash-2732x2732-2.png",
+          "scale": "1x"
+        },
+        "sha256": "74a729ebebd4df9b67bb875525f2d00b16578005639aac5f9852f0adb35eab34"
+      }
+    },
+    {
+      "name": "Native catalog mapping exact: ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732-1.png",
+      "passed": true,
+      "evidence": {
+        "entry": {
+          "idiom": "universal",
+          "filename": "splash-2732x2732-1.png",
+          "scale": "2x"
+        },
+        "sha256": "74a729ebebd4df9b67bb875525f2d00b16578005639aac5f9852f0adb35eab34"
+      }
+    },
+    {
+      "name": "Native catalog mapping exact: ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732.png",
+      "passed": true,
+      "evidence": {
+        "entry": {
+          "idiom": "universal",
+          "filename": "splash-2732x2732.png",
+          "scale": "3x"
+        },
+        "sha256": "74a729ebebd4df9b67bb875525f2d00b16578005639aac5f9852f0adb35eab34"
+      }
+    },
+    {
+      "name": "PWA identity/configuration preserved except icon URLs",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "PWA manifest readable declared PNG size/purpose: ./brand/domino8/oda-app-domino8-v1-192.png",
+      "passed": true,
+      "evidence": {
+        "src": "./brand/domino8/oda-app-domino8-v1-192.png",
+        "sizes": "192x192",
+        "type": "image/png",
+        "purpose": "any"
+      }
+    },
+    {
+      "name": "PWA manifest readable declared PNG size/purpose: ./brand/domino8/oda-app-domino8-v1-512.png",
+      "passed": true,
+      "evidence": {
+        "src": "./brand/domino8/oda-app-domino8-v1-512.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "any"
+      }
+    },
+    {
+      "name": "PWA manifest readable declared PNG size/purpose: ./brand/domino8/oda-app-domino8-v1-maskable-192.png",
+      "passed": true,
+      "evidence": {
+        "src": "./brand/domino8/oda-app-domino8-v1-maskable-192.png",
+        "sizes": "192x192",
+        "type": "image/png",
+        "purpose": "maskable"
+      }
+    },
+    {
+      "name": "PWA manifest readable declared PNG size/purpose: ./brand/domino8/oda-app-domino8-v1-maskable-512.png",
+      "passed": true,
+      "evidence": {
+        "src": "./brand/domino8/oda-app-domino8-v1-maskable-512.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "maskable"
+      }
+    },
+    {
+      "name": "Native ODA application label retained",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "Accessible logo API retained",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "SW scoped cache version6 active",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "Conservative essential bounds fully inside40percent safe circle",
+      "passed": true,
+      "evidence": {
+        "sourceBounds": [
+          80,
+          190,
+          1170,
+          1045
+        ],
+        "uniformScale": 0.7,
+        "farthestNormalizedRadius": 0.390820567718353,
+        "safeRadius": 0.4,
+        "sourceSpaceMarginPixels": 11.511008081185372
+      }
+    },
+    {
+      "name": "Social image only changes prior logo area",
+      "passed": true,
+      "evidence": {
+        "pixelDifferenceBounds": [
+          90,
+          80,
+          138,
+          129
+        ]
+      }
+    },
+    {
+      "name": "Build receipt binds exact source/aggregate",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "name": "Every actual source file matches frozen build receipt",
+      "passed": true,
+      "evidence": {
+        "count": 900,
+        "mismatches": []
+      }
+    },
+    {
+      "name": "Every actual build file matches frozen build receipt",
+      "passed": true,
+      "evidence": {
+        "count": 445,
+        "mismatches": []
+      }
+    },
+    {
+      "name": "Exact aggregate log matches recorded bytes/hash",
+      "passed": true,
+      "evidence": {
+        "file": "/workspace/scratch/oda-reference-redesign/domino-logo/final-build/aggregate-check.log",
+        "bytes": 79264,
+        "sha256": "17e93008892990c226a74dc59af7d68d515fdb5ff1c177d348b6c16fa7bddb0f"
+      }
+    },
+    {
+      "name": "Checkout still clean after read-only source/asset audit",
+      "passed": true,
+      "evidence": null
+    }
+  ],
+  "passed": 54,
+  "failed": 0,
+  "changedPaths": [
+    "README.md",
+    "brand-assets/domino8/GENERATION-PROMPT.txt",
+    "brand-assets/domino8/ODA-Icon8-Comparison.png",
+    "brand-assets/domino8/ODA-Icon8-Reconstruction-Master-1254.png",
+    "brand-assets/domino8/ODA-Icon8-Small-Size-QA.png",
+    "brand-assets/domino8/README.txt",
+    "brand-assets/domino8/SHA256SUMS.txt",
+    "brand-assets/domino8/derivatives.json",
+    "brand-assets/ios/c4/AppIcon-512@2x.png",
+    "brand-assets/ios/c4/splash-2732x2732.png",
+    "brand-assets/ios/domino8/AppIcon-512@2x.png",
+    "brand-assets/ios/domino8/splash-2732x2732.png",
+    "docs/BRAND.md",
+    "index.html",
+    "ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png",
+    "ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732-1.png",
+    "ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732-2.png",
+    "ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732.png",
+    "public/apple-touch-icon.png",
+    "public/brand/domino8/oda-app-domino8-v1-192.png",
+    "public/brand/domino8/oda-app-domino8-v1-512.png",
+    "public/brand/domino8/oda-app-domino8-v1-maskable-192.png",
+    "public/brand/domino8/oda-app-domino8-v1-maskable-512.png",
+    "public/brand/domino8/oda-apple-domino8-v1-180.png",
+    "public/brand/domino8/oda-favicon-domino8-v1-32.png",
+    "public/brand/domino8/oda-mark-domino8-v1-256.png",
+    "public/brand/domino8/og-image-domino8-v1.png",
+    "public/icon-192-maskable.png",
+    "public/icon-192.png",
+    "public/icon-512-maskable.png",
+    "public/icon-512.png",
+    "public/manifest.webmanifest",
+    "public/sw.js",
+    "scripts/brand-domino8-assets.mjs",
+    "scripts/brand.mjs",
+    "src/brand/current.ts",
+    "src/components/Logo.tsx",
+    "src/components/brand/LogoDomino8.tsx",
+    "src/pages/Settings.tsx",
+    "src/services/notificationScheduler.ts",
+    "src/styles/coach.css",
+    "supabase/functions/send-nudges/push-worker.test.ts",
+    "tests/service-worker.test.ts"
+  ],
+  "protectedPriorTrackedFiles": 6451,
+  "legacyProtectedBrandFiles": 38,
+  "assets": [
+    {
+      "file": "public/brand/domino8/oda-mark-domino8-v1-256.png",
+      "bytes": 59244,
+      "sha256": "9c707664f9e972aed37b55f2fc912c455aa2aaff852af2c6d2acee5b1d66015c",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGB",
+      "alphaExtrema": null
+    },
+    {
+      "file": "public/brand/domino8/oda-app-domino8-v1-192.png",
+      "bytes": 37639,
+      "sha256": "0bd5a82bbe820b9de40c43fc140877d9850b0d9fe0749849315ef8a6d3a86e5d",
+      "size": [
+        192,
+        192
+      ],
+      "mode": "RGB",
+      "alphaExtrema": null
+    },
+    {
+      "file": "public/brand/domino8/oda-app-domino8-v1-maskable-192.png",
+      "bytes": 19253,
+      "sha256": "43d028cc43b857b405b838a4fd439dcde46da198bdb1923f8924fef65f21d14f",
+      "size": [
+        192,
+        192
+      ],
+      "mode": "RGB",
+      "alphaExtrema": null
+    },
+    {
+      "file": "public/brand/domino8/oda-app-domino8-v1-512.png",
+      "bytes": 200016,
+      "sha256": "6b83ea675f14e0b5a009a604796fac5d9a9ed517524fc6b8828a6a477ba4053c",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGB",
+      "alphaExtrema": null
+    },
+    {
+      "file": "public/brand/domino8/oda-app-domino8-v1-maskable-512.png",
+      "bytes": 119088,
+      "sha256": "5a82bd405721a61eb5974804419c5bebc57d302073fb7697d1aa55bc29669a14",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGB",
+      "alphaExtrema": null
+    },
+    {
+      "file": "public/brand/domino8/oda-apple-domino8-v1-180.png",
+      "bytes": 33955,
+      "sha256": "1818fb86ca1c9f90ae5f9881f0841ee333c69d24cfd0b43d6c9126c06b121f61",
+      "size": [
+        180,
+        180
+      ],
+      "mode": "RGB",
+      "alphaExtrema": null
+    },
+    {
+      "file": "public/brand/domino8/oda-favicon-domino8-v1-32.png",
+      "bytes": 1778,
+      "sha256": "42f087aea5bf1e46d85892f1293aed1fe9a07bbb7269db7c5c18cfe20425e916",
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGB",
+      "alphaExtrema": null
+    },
+    {
+      "file": "brand-assets/ios/domino8/AppIcon-512@2x.png",
+      "bytes": 724220,
+      "sha256": "3609142cb87ecdcc06b6f440db4ce33ec6f8ddfe228c64bcc9d04c99cbcd747c",
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGB",
+      "alphaExtrema": null
+    },
+    {
+      "file": "brand-assets/ios/domino8/splash-2732x2732.png",
+      "bytes": 255378,
+      "sha256": "74a729ebebd4df9b67bb875525f2d00b16578005639aac5f9852f0adb35eab34",
+      "size": [
+        2732,
+        2732
+      ],
+      "mode": "RGB",
+      "alphaExtrema": null
+    },
+    {
+      "file": "public/brand/domino8/og-image-domino8-v1.png",
+      "bytes": 66435,
+      "sha256": "1d18da7ce1a2a5b53a18a032c473763c343d0df2a2bb23d42e4558d7d31c1c39",
+      "size": [
+        1200,
+        630
+      ],
+      "mode": "RGB",
+      "alphaExtrema": null
+    }
+  ],
+  "buildReceipt": {
+    "file": "/workspace/scratch/oda-reference-redesign/domino-logo/final-build/build-receipt.json",
+    "bytes": 244395,
+    "sha256": "2936d984840ee67a2a9696f24111a32b4a14b411a798b56c518ec9b949894c6e",
+    "sourceFiles": 900,
+    "buildFiles": 445
+  },
+  "visualInspection": {
+    "actualMasterAndComparisonInspected": true,
+    "actualCommittedPreviewsInspected": [
+      "web-pwa-mask-preview.png",
+      "favicon-small-size-preview.png",
+      "native-icon-mask-preview.png",
+      "native-splash-390.png",
+      "native-splash-320.png"
+    ],
+    "findings": [
+      "No important domino artwork clipped by40percent PWA safe-circle preview or rounded-square native approximation.",
+      "Opaque square assets contain no baked outer rounded frame.",
+      "Gold foreground and ruby following dominos identifiable at16/32CSSpixels; fine metallic detail reduced naturally.",
+      "Slight squared tonal gradient seam in padded maskable background is visible at larger scales; cosmetic and acceptable, with exact source preserved.",
+      "Full square master retained on warm-ivory native splash and fits390/320portrait previews.",
+      "Native circle comparison is illustrative only; native asset is not declared maskable."
+    ]
+  },
+  "limitations": [
+    "Synthetic Chromium CSS-size and mask previews are not physical iPhone installation, native Xcode asset compilation or App Store acceptance.",
+    "Rounded-square preview approximates system masking; it is not an exact iOS squircle measurement.",
+    "Android/native monochrome notification-badge rendering is untested; selected full-color icon is wired as before.",
+    "No new independent aggregate rerun; exact existing frozen run was inspected and bound.",
+    "Original artwork was unavailable; accepted reconstruction is explicitly labelled."
+  ]
+}
