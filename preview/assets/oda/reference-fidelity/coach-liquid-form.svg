@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 420" fill="none">
+  <title>Original ODA iridescent liquid form</title>
+  <desc>Original vector reconstruction of liquid folds and magenta, cyan and violet lighting. This is not the supplied reference's 3D artwork.</desc>
+  <defs>
+    <linearGradient id="body" x1="86" y1="54" x2="333" y2="366" gradientUnits="userSpaceOnUse"><stop stop-color="#F7BDE9"/><stop offset=".24" stop-color="#F477CA"/><stop offset=".48" stop-color="#88F2FF"/><stop offset=".69" stop-color="#6965FB"/><stop offset="1" stop-color="#DE4ABA"/></linearGradient>
+    <linearGradient id="pink" x1="113" y1="61" x2="321" y2="291" gradientUnits="userSpaceOnUse"><stop stop-color="#FFC3F3"/><stop offset=".35" stop-color="#FD58B3"/><stop offset=".8" stop-color="#D948D5"/><stop offset="1" stop-color="#5A45D5"/></linearGradient>
+    <linearGradient id="blue" x1="110" y1="99" x2="296" y2="334" gradientUnits="userSpaceOnUse"><stop stop-color="#8FEEFF"/><stop offset=".24" stop-color="#51BBEF"/><stop offset=".53" stop-color="#6367ED"/><stop offset=".8" stop-color="#5144CD"/><stop offset="1" stop-color="#3FAFDB"/></linearGradient>
+    <linearGradient id="rim" x1="76" y1="77" x2="354" y2="355" gradientUnits="userSpaceOnUse"><stop stop-color="#F0DAFF"/><stop offset=".35" stop-color="#B2F8FF"/><stop offset=".7" stop-color="#786CFB"/><stop offset="1" stop-color="#F090E6"/></linearGradient>
+    <radialGradient id="shine" cx="0" cy="0" r="1" gradientTransform="translate(125 101) rotate(52) scale(198 148)" gradientUnits="userSpaceOnUse"><stop stop-color="#FFF4FF" stop-opacity=".67"/><stop offset=".58" stop-color="#FFF4FF" stop-opacity=".04"/><stop offset="1" stop-color="#FFF4FF" stop-opacity="0"/></radialGradient>
+    <radialGradient id="shade" cx="0" cy="0" r="1" gradientTransform="translate(203 153) rotate(79) scale(224 200)" gradientUnits="userSpaceOnUse"><stop offset=".47" stop-color="#291697" stop-opacity="0"/><stop offset="1" stop-color="#291697" stop-opacity=".66"/></radialGradient>
+    <filter id="shadow" x="18" y="13" width="391" height="405" filterUnits="userSpaceOnUse"><feDropShadow dx="0" dy="15" stdDeviation="12" flood-color="#5552A3" flood-opacity=".3"/></filter>
+    <filter id="material" x="40" y="30" width="340" height="345" filterUnits="userSpaceOnUse">
+      <feColorMatrix in="SourceGraphic" type="luminanceToAlpha" result="height"/>
+      <feGaussianBlur in="height" stdDeviation="2.2" result="rounded"/>
+      <feSpecularLighting in="rounded" surfaceScale="9" specularConstant=".55" specularExponent="22" lighting-color="#DDF6FF" result="light"><fePointLight x="105" y="35" z="155"/></feSpecularLighting>
+      <feComposite in="light" in2="SourceAlpha" operator="in" result="masked"/>
+      <feBlend in="SourceGraphic" in2="masked" mode="screen"/>
+    </filter>
+    <clipPath id="blob"><path d="M222 43C280 39 298 70 327 93C356 116 366 151 365 191C363 232 349 253 350 282C350 324 306 343 276 357C245 371 216 367 184 361C140 353 104 347 78 316C51 284 56 253 60 218C63 186 48 160 68 125C90 85 111 69 147 61C170 56 192 45 222 43Z"/></clipPath>
+  </defs>
+  <g filter="url(#shadow)">
+    <path d="M222 43C280 39 298 70 327 93C356 116 366 151 365 191C363 232 349 253 350 282C350 324 306 343 276 357C245 371 216 367 184 361C140 353 104 347 78 316C51 284 56 253 60 218C63 186 48 160 68 125C90 85 111 69 147 61C170 56 192 45 222 43Z" fill="url(#body)"/>
+    <g clip-path="url(#blob)" filter="url(#material)">
+      <path d="M65 99C135 39 206 55 219 112C229 156 250 147 256 107C264 55 303 46 341 88L384 128C330 112 286 159 269 185C243 226 206 209 188 164C177 135 163 132 156 153C144 191 130 202 87 173Z" fill="url(#pink)" stroke="url(#rim)" stroke-width="5"/>
+      <path d="M45 141C83 118 128 110 149 137C168 164 143 185 128 190C107 197 105 216 134 220C170 225 183 206 176 190C170 176 179 161 194 172C211 184 234 231 217 258C198 287 156 282 139 263C119 241 85 251 80 279C71 317 126 326 157 308C193 287 206 298 191 326C177 353 141 383 88 350L34 276Z" fill="url(#blue)" stroke="url(#rim)" stroke-width="4"/>
+      <path d="M317 89C359 112 349 157 319 169C294 179 282 168 277 195C272 225 316 207 339 218C367 231 361 267 330 272C302 277 275 259 264 279C252 300 278 313 309 307C344 300 375 318 343 353L287 383C295 350 221 343 235 306C250 265 212 267 229 229C245 191 290 197 302 170C315 140 291 146 295 124Z" fill="url(#blue)" stroke="url(#rim)" stroke-width="5"/>
+      <path d="M77 122C126 73 150 97 162 123C173 149 210 153 203 127C196 102 183 73 207 55M80 291C121 317 130 272 164 288C202 307 207 282 192 266M332 315C288 325 281 291 260 315C239 340 228 313 217 335" stroke="#C2F5FF" stroke-width="9" stroke-linecap="round" opacity=".8"/>
+      <path d="M170 47C147 79 168 111 184 136C205 169 190 193 164 202M62 246C79 218 104 233 115 257C138 305 154 298 169 270M342 107C322 130 335 151 305 167C274 183 264 227 302 238" stroke="#6550D8" stroke-width="14" stroke-linecap="round" opacity=".7"/>
+      <path d="M167 48C147 79 165 110 181 133M62 244C80 220 101 234 113 257M340 108C320 133 332 149 302 164" stroke="#F2C9FF" stroke-width="3" stroke-linecap="round" opacity=".95"/>
+      <path d="M222 43C280 39 298 70 327 93C356 116 366 151 365 191C363 232 349 253 350 282C350 324 306 343 276 357C245 371 216 367 184 361C140 353 104 347 78 316C51 284 56 253 60 218C63 186 48 160 68 125C90 85 111 69 147 61C170 56 192 45 222 43Z" fill="url(#shade)"/>
+      <ellipse cx="176" cy="126" rx="169" ry="157" fill="url(#shine)"/>
+    </g>
+  </g>
+</svg>

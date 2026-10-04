@@ -1,0 +1,96 @@
+/*
+ * Opening scene: one gold decision tips a row of ruby dominoes in 3D, then the
+ * wordmark settles. Pure CSS transforms, no images, so it paints on the first
+ * frame while the app bundle is still loading. Shown only by public/intro.js.
+ */
+#oda-intro { display: none; }
+html.oda-intro-on #oda-intro {
+  --oi-bg: radial-gradient(120% 80% at 50% 38%, #F8E6B8 0%, #EBCB8C 46%, #D9B06A 100%);
+  --oi-ink: #1F1513;
+  --oi-muted: #6A5034;
+  --oi-rule: #8E1B2A;
+  --oi-front: linear-gradient(160deg, #B42A3B 0%, #8E1B2A 52%, #6C1220 100%);
+  --oi-side: #5E0F1B;
+  --oi-top: #C2475A;
+  --oi-pip: #F6DDB0;
+  --oi-glow: rgb(142 27 42 / 22%);
+  position: fixed; inset: 0; z-index: 2147483000;
+  display: grid; place-items: center;
+  background: var(--oi-bg);
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+html[data-theme='dark'].oda-intro-on #oda-intro {
+  --oi-bg: radial-gradient(120% 80% at 50% 38%, #2A1616 0%, #170E0E 52%, #0C0707 100%);
+  --oi-ink: #F6EDE3;
+  --oi-muted: #C9B59C;
+  --oi-rule: #E2B15E;
+  --oi-front: linear-gradient(160deg, #6E1A26 0%, #4E111B 55%, #360A12 100%);
+  --oi-side: #2A070D;
+  --oi-top: #84303D;
+  --oi-pip: #E2B15E;
+  --oi-glow: rgb(226 177 94 / 18%);
+}
+#oda-intro.is-leaving { animation: oi-out .5s cubic-bezier(.4, 0, .2, 1) both; pointer-events: none; }
+
+/* Camera */
+.oi-stage { position: absolute; left: 53%; top: 41%; width: 0; height: 0; perspective: 760px; perspective-origin: 50% 30%; transform: scale(1.12); }
+.oi-scene { position: absolute; transform-style: preserve-3d; transform: rotateX(-20deg) rotateY(-44deg) translateZ(30px); animation: oi-camera 2.6s cubic-bezier(.25, .7, .2, 1) both; }
+
+/* Soft pool of light on the floor */
+.oi-floor { position: absolute; left: -260px; top: -260px; width: 520px; height: 520px; border-radius: 50%; background: radial-gradient(closest-side, var(--oi-glow), transparent 72%); transform: translateY(43px) rotateX(90deg); }
+
+/* One domino: a real box of six faces. --z places it along the row. */
+.oi-d { position: absolute; left: -23px; top: -43px; width: 46px; height: 86px; transform-style: preserve-3d; transform: translateZ(var(--z)); }
+.oi-body { position: absolute; inset: 0; transform-style: preserve-3d; transform-origin: 50% 100% -7px; animation: oi-fall .46s cubic-bezier(.55, 0, .9, .45) both; animation-delay: calc(.42s + var(--i) * .15s); }
+.oi-f { position: absolute; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.oi-front, .oi-back { inset: 0; border-radius: 6px; background: var(--oi-front); }
+.oi-front { transform: translateZ(7px); box-shadow: inset 0 1px 0 rgb(255 255 255 / 28%); }
+.oi-back { transform: rotateY(180deg) translateZ(7px); }
+.oi-right, .oi-left { top: 2px; bottom: 2px; left: 16px; width: 14px; background: var(--oi-side); }
+.oi-right { transform: rotateY(90deg) translateZ(23px); }
+.oi-left { transform: rotateY(-90deg) translateZ(23px); }
+.oi-top, .oi-bottom { left: 2px; right: 2px; top: 36px; height: 14px; background: var(--oi-top); }
+.oi-top { transform: rotateX(90deg) translateZ(43px); }
+.oi-bottom { transform: rotateX(-90deg) translateZ(43px); }
+
+/* Face: a divider and two pips, like the app icon */
+.oi-front::before { content: ''; position: absolute; left: 9px; right: 9px; top: 42px; height: 2px; border-radius: 2px; background: var(--oi-pip); opacity: .55; }
+.oi-front i { position: absolute; left: 18px; width: 10px; height: 10px; border-radius: 50%; background: var(--oi-pip); box-shadow: inset 0 1px 1px rgb(0 0 0 / 25%); }
+.oi-front i:first-child { top: 16px; }
+.oi-front i:last-child { bottom: 16px; }
+
+/* The first decision is gold */
+.oi-d.is-first { --oi-front: linear-gradient(160deg, #FCE7AE 0%, #E3B160 46%, #A8742A 100%); --oi-side: #8A5B1C; --oi-top: #F6D89A; --oi-pip: #7A1322; }
+.oi-d.is-first .oi-front { box-shadow: inset 0 1px 0 rgb(255 255 255 / 70%), 0 0 30px rgb(243 210 142 / 45%); }
+.oi-d.is-last .oi-body { animation-name: oi-fall-last; }
+/* A light catches the gold face as it tips */
+.oi-d.is-first .oi-front { overflow: hidden; }
+.oi-d.is-first .oi-front::after { content: ''; position: absolute; inset: -40% -60%; background: linear-gradient(105deg, transparent 40%, rgb(255 255 255 / 75%) 50%, transparent 60%); transform: translateX(-70%); animation: oi-shine .9s ease-out .25s both; }
+
+/* Wordmark */
+.oi-mark { position: absolute; left: 0; right: 0; top: 60%; display: grid; justify-items: center; gap: 10px; color: var(--oi-ink); text-align: center; }
+.oi-word { font-family: 'Newsreader Variable', Newsreader, 'Iowan Old Style', Georgia, serif; font-size: 56px; font-weight: 500; line-height: 1; letter-spacing: .14em; padding-left: .14em; animation: oi-word .9s cubic-bezier(.2, .8, .2, 1) 1.55s both; }
+.oi-rule { width: 56px; height: 2px; border-radius: 2px; background: var(--oi-rule); transform-origin: 50% 50%; animation: oi-rule .7s cubic-bezier(.2, .8, .2, 1) 1.85s both; }
+.oi-tag { font-family: -apple-system, 'SF Pro Text', 'Hanken Grotesk', system-ui, sans-serif; font-size: 15px; letter-spacing: .02em; color: var(--oi-muted); animation: oi-tag .7s ease-out 2.0s both; }
+
+@keyframes oi-out { to { opacity: 0; transform: scale(1.04); } }
+@keyframes oi-camera {
+  from { transform: rotateX(-10deg) rotateY(-66deg) translateZ(-70px); }
+  to { transform: rotateX(-20deg) rotateY(-44deg) translateZ(30px); }
+}
+@keyframes oi-fall { 0% { transform: rotateX(0); } 100% { transform: rotateX(32deg); } }
+@keyframes oi-fall-last {
+  0% { transform: rotateX(0); }
+  82% { transform: rotateX(90deg); }
+  91% { transform: rotateX(84deg); }
+  100% { transform: rotateX(90deg); }
+}
+@keyframes oi-word { from { opacity: 0; transform: translateY(14px); letter-spacing: .3em; filter: blur(4px); } }
+@keyframes oi-shine { to { transform: translateX(70%); } }
+@keyframes oi-rule { from { transform: scaleX(0); } }
+@keyframes oi-tag { from { opacity: 0; transform: translateY(6px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  html.oda-intro-on #oda-intro, #oda-intro *, #oda-intro.is-leaving { animation-duration: .01s !important; animation-delay: 0s !important; }
+}
