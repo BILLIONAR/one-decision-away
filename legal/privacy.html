@@ -11,7 +11,7 @@
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
 main{max-width:680px;margin:0 auto;padding:32px 20px 80px}
-nav{display:flex;gap:18px;font-size:14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+nav{display:flex;flex-wrap:wrap;gap:18px;font-size:14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
 nav a,.other a{color:var(--muted);text-underline-offset:4px}
 article{padding:40px 0;border-bottom:1px solid var(--line)}
 .kicker{margin:0;font:italic 16px/1.4 "New York",ui-serif,Georgia,serif;color:var(--accent)}
@@ -24,13 +24,13 @@ p{margin:10px 0}
 </head>
 <body>
 <main>
-<nav aria-label="Language"><a href="#tr">Türkçe</a><a href="#en">English</a><a href="#es">Español</a></nav>
+<nav aria-label="Language"><a href="#tr">Türkçe</a><a href="#en">English</a><a href="#es">Español</a><a href="#fr">Français</a><a href="#de">Deutsch</a><a href="#it">Italiano</a></nav>
 
 <article id="tr" lang="tr">
-  <p class="kicker">One Decision Away · YAHYA</p>
+  <p class="kicker">One Decision Away · Yahya Labs</p>
   <h1>Gizlilik Politikası</h1>
   <p class="meta">Son güncelleme: 29 Eylül 2026</p>
-  <p class="intro">One Decision Away (“ODA”) YAHYA tarafından geliştirilir ve sunulur. ODA’yı, verin mümkün olduğunca senin cihazında kalacak şekilde tasarladık. Bu metin neyi, neden ve nerede sakladığımızı sade bir dille anlatır.</p>
+  <p class="intro">One Decision Away (“ODA”) Yahya Labs tarafından geliştirilir ve sunulur. ODA’yı, verin mümkün olduğunca senin cihazında kalacak şekilde tasarladık. Bu metin neyi, neden ve nerede sakladığımızı sade bir dille anlatır.</p>
   <section>
     <h2>Kısaca</h2>
     <p>Reklam yok, izleme yok, üçüncü taraf analiz aracı yok. Verini satmıyoruz ve kimseyle pazarlama için paylaşmıyoruz.</p>
@@ -74,7 +74,7 @@ p{margin:10px 0}
   <section>
     <h2>Saklama süresi ve hakların</h2>
     <p>Bulut verin, hesabın açık olduğu sürece saklanır ve hesabını sildiğinde silinir. Cihazındaki veri, uygulamayı silene veya verileri silene kadar cihazında kalır.</p>
-    <p>KVKK ve GDPR kapsamındaki erişim, düzeltme, silme, taşıma ve itiraz haklarını kullanmak için ufrldk13@gmail.com adresine yazabilirsin. Veri sorumlusu YAHYA’dır.</p>
+    <p>KVKK ve GDPR kapsamındaki erişim, düzeltme, silme, taşıma ve itiraz haklarını kullanmak için ufrldk13@gmail.com adresine yazabilirsin. Veri sorumlusu, Yahya Labs adıyla çalışan Ümit Fırıldak’tır.</p>
   </section>
   <section>
     <h2>Çocuklar</h2>
@@ -88,10 +88,10 @@ p{margin:10px 0}
 </article>
 
 <article id="en" lang="en">
-  <p class="kicker">One Decision Away · YAHYA</p>
+  <p class="kicker">One Decision Away · Yahya Labs</p>
   <h1>Privacy Policy</h1>
   <p class="meta">Last updated: 29 September 2026</p>
-  <p class="intro">One Decision Away (“ODA”) is developed and provided by YAHYA. We designed ODA so that your data stays on your device as much as possible. This page explains, in plain words, what we keep, why and where.</p>
+  <p class="intro">One Decision Away (“ODA”) is developed and provided by Yahya Labs. We designed ODA so that your data stays on your device as much as possible. This page explains, in plain words, what we keep, why and where.</p>
   <section>
     <h2>In short</h2>
     <p>No ads, no tracking, no third-party analytics. We do not sell your data or share it with anyone for marketing.</p>
@@ -135,7 +135,7 @@ p{margin:10px 0}
   <section>
     <h2>Retention and your rights</h2>
     <p>Cloud data is kept while your account exists and is deleted when you delete your account. Data on your device stays there until you delete the app or the data.</p>
-    <p>To exercise your rights to access, correct, delete, port or object under GDPR and Turkey’s KVKK, write to ufrldk13@gmail.com. The data controller is YAHYA.</p>
+    <p>To exercise your rights to access, correct, delete, port or object under GDPR and Turkey’s KVKK, write to ufrldk13@gmail.com. The data controller is Ümit Fırıldak, trading as Yahya Labs.</p>
   </section>
   <section>
     <h2>Children</h2>
@@ -149,10 +149,10 @@ p{margin:10px 0}
 </article>
 
 <article id="es" lang="es">
-  <p class="kicker">One Decision Away · YAHYA</p>
+  <p class="kicker">One Decision Away · Yahya Labs</p>
   <h1>Política de privacidad</h1>
   <p class="meta">Última actualización: 29 de septiembre de 2026</p>
-  <p class="intro">One Decision Away (“ODA”) es desarrollada y ofrecida por YAHYA. Diseñamos ODA para que tus datos se queden en tu dispositivo en la medida de lo posible. Aquí explicamos con claridad qué guardamos, por qué y dónde.</p>
+  <p class="intro">One Decision Away (“ODA”) es desarrollada y ofrecida por Yahya Labs. Diseñamos ODA para que tus datos se queden en tu dispositivo en la medida de lo posible. Aquí explicamos con claridad qué guardamos, por qué y dónde.</p>
   <section>
     <h2>En resumen</h2>
     <p>Sin anuncios, sin rastreo, sin herramientas de analítica de terceros. No vendemos tus datos ni los compartimos con nadie para marketing.</p>
@@ -196,7 +196,7 @@ p{margin:10px 0}
   <section>
     <h2>Conservación y tus derechos</h2>
     <p>Los datos en la nube se conservan mientras exista tu cuenta y se borran cuando la eliminas. Los datos del dispositivo se quedan ahí hasta que borres la app o los datos.</p>
-    <p>Para ejercer tus derechos de acceso, rectificación, supresión, portabilidad u oposición según el RGPD y la KVKK de Turquía, escribe a ufrldk13@gmail.com. El responsable del tratamiento es YAHYA.</p>
+    <p>Para ejercer tus derechos de acceso, rectificación, supresión, portabilidad u oposición según el RGPD y la KVKK de Turquía, escribe a ufrldk13@gmail.com. El responsable del tratamiento es Ümit Fırıldak, que opera como Yahya Labs.</p>
   </section>
   <section>
     <h2>Menores</h2>
@@ -207,6 +207,189 @@ p{margin:10px 0}
     <p>Si cambiamos esta política actualizamos la fecha y anunciamos los cambios importantes en la app. Preguntas: ufrldk13@gmail.com</p>
   </section>
   <p class="other"><a href="terms.html#es">Términos de uso</a></p>
+</article>
+
+<article id="fr" lang="fr">
+  <p class="kicker">One Decision Away · Yahya Labs</p>
+  <h1>Politique de confidentialité</h1>
+  <p class="meta">Dernière mise à jour : 29 septembre 2026</p>
+  <p class="intro">One Decision Away (« ODA ») est développée et proposée par Yahya Labs. Nous avons conçu ODA pour que tes données restent autant que possible sur ton appareil. Cette page explique simplement ce que nous conservons, pourquoi et où.</p>
+  <section>
+    <h2>En bref</h2>
+    <p>Pas de publicité, pas de suivi, pas d’outils d’analyse tiers. Nous ne vendons pas tes données et ne les partageons avec personne à des fins de marketing.</p>
+    <p>Si tu utilises ODA sans compte, tout reste sur ton appareil.</p>
+  </section>
+  <section>
+    <h2>Ce qui reste sur ton appareil</h2>
+    <p>Ton nom, tes décisions, tes notes, tes rêves, tes habitudes, ton arbre de preuves et tes réglages sont conservés dans le stockage de l’app sur ton appareil. Nous ne pouvons pas les voir.</p>
+    <p>Tu peux télécharger une sauvegarde ou tout effacer avec « Réinitialiser toutes les données » dans les réglages, à tout moment.</p>
+  </section>
+  <section>
+    <h2>Compte et sauvegarde facultatifs</h2>
+    <p>Si tu te connectes, ton adresse e-mail et les données de l’app sont conservées dans notre base de données, hébergée sur l’infrastructure Supabase, pour les sauvegarder et synchroniser tes appareils. Nous n’utilisons pas de mot de passe : tu te connectes avec un lien ou un code à usage unique envoyé par e-mail.</p>
+    <p>Ces données servent uniquement à la sauvegarde et à la synchronisation. Elles ne sont accessibles qu’avec ton propre compte.</p>
+    <p>Tu peux supprimer définitivement ton compte dans l’app avec « Supprimer mon compte » sur la page Compte. Ton compte et toutes tes données dans le cloud seront supprimés.</p>
+  </section>
+  <section>
+    <h2>Rappels</h2>
+    <p>Dans l’app iPhone, les rappels sont programmés sur ton appareil. Sur le web, si tu actives les notifications, l’adresse de notification fournie par ton navigateur et les horaires que tu choisis sont conservés pour t’envoyer des rappels ; ils sont supprimés quand tu désactives les notifications.</p>
+  </section>
+  <section>
+    <h2>Coach IA sur l’appareil</h2>
+    <p>Le coach sur l’appareil utilise un modèle de langage qui fonctionne sur ton appareil. Ce que tu lui écris n’est envoyé ni à nous ni à une entreprise d’IA. Les fichiers du modèle sont téléchargés depuis un hébergeur public de modèles (Hugging Face) lors de la première utilisation.</p>
+    <p>Si tu ajoutes ta propre clé Google Gemini dans les réglages, le texte d’accompagnement à lire à voix haute est envoyé à Google avec ta clé pour obtenir des voix naturelles. C’est facultatif.</p>
+  </section>
+  <section>
+    <h2>Coach dans le cloud (compte requis)</h2>
+    <p>Si tu es connecté, tu peux utiliser le coach dans le cloud depuis l’onglet Coach. Les messages que tu lui écris (les derniers messages et ta langue) sont envoyés à notre serveur, puis au service d’IA d’OpenAI pour générer la réponse. Selon la politique de données de l’API d’OpenAI, les contenus envoyés par l’API ne servent pas à entraîner ses modèles.</p>
+    <p>ODA ne conserve ni tes messages ni les réponses du coach et n’en tient aucun journal. Nous gardons seulement un compteur mensuel de messages (le nombre que tu as utilisés) et un cache de courte durée de ton niveau d’abonnement, tous deux liés à ton compte. Pour confirmer ton niveau, l’identifiant de ton compte est envoyé à RevenueCat.</p>
+    <p>Avec l’offre la plus complète, si tu actives « Laisser le coach lire la décision du jour et les dernières lignes du carnet », ta décision du jour, tes décisions récemment tenues et quelques courtes lignes de ton carnet sont aussi envoyées avec ton message. Cette option est désactivée par défaut et tu peux la désactiver à tout moment.</p>
+    <p>Le coach dans le cloud est une IA, pas un thérapeute ni un service d’urgence. Si un message évoque une automutilation, des violences ou un danger immédiat, il arrête le coaching et t’encourage à contacter les services d’urgence locaux (911 aux États-Unis, 112 en Türkiye). Tu n’as jamais besoin d’un compte pour utiliser le coach sur l’appareil et les outils hors ligne.</p>
+  </section>
+  <section>
+    <h2>Images</h2>
+    <p>Les photos des cours sont chargées depuis Unsplash. Comme pour toute requête web, Unsplash voit ton adresse IP pour pouvoir t’envoyer la photo.</p>
+  </section>
+  <section>
+    <h2>Achats</h2>
+    <p>Les abonnements ODA (Essentials, Pro, Pro Coach) sont achetés via Apple ; nous ne voyons jamais tes informations de paiement. Nous utilisons RevenueCat pour confirmer l’état de ton abonnement ; RevenueCat traite un identifiant d’utilisateur anonyme de l’app et les données d’achat.</p>
+  </section>
+  <section>
+    <h2>Durée de conservation et tes droits</h2>
+    <p>Les données dans le cloud sont conservées tant que ton compte existe et sont supprimées quand tu le supprimes. Les données sur ton appareil y restent jusqu’à ce que tu supprimes l’app ou les données.</p>
+    <p>Pour exercer tes droits d’accès, de rectification, de suppression, de portabilité ou d’opposition au titre du RGPD et de la KVKK turque, écris à ufrldk13@gmail.com. Le responsable du traitement est Ümit Fırıldak, exerçant sous le nom Yahya Labs.</p>
+  </section>
+  <section>
+    <h2>Enfants</h2>
+    <p>ODA ne s’adresse pas aux enfants de moins de 13 ans et nous ne recueillons pas sciemment leurs données.</p>
+  </section>
+  <section>
+    <h2>Modifications et contact</h2>
+    <p>Si nous modifions cette politique, nous mettons à jour la date ci-dessus et annonçons les changements importants dans l’app. Pour toute question : ufrldk13@gmail.com</p>
+  </section>
+  <p class="other"><a href="terms.html#fr">Conditions d’utilisation</a></p>
+</article>
+
+<article id="de" lang="de">
+  <p class="kicker">One Decision Away · Yahya Labs</p>
+  <h1>Datenschutzerklärung</h1>
+  <p class="meta">Zuletzt aktualisiert: 29. September 2026</p>
+  <p class="intro">One Decision Away („ODA“) wird von Yahya Labs entwickelt und bereitgestellt. Wir haben ODA so gestaltet, dass deine Daten möglichst auf deinem Gerät bleiben. Diese Seite erklärt in einfachen Worten, was wir aufbewahren, warum und wo.</p>
+  <section>
+    <h2>Kurz erklärt</h2>
+    <p>Keine Werbung, kein Tracking, keine Analysewerkzeuge von Drittanbietern. Wir verkaufen deine Daten nicht und teilen sie mit niemandem für Marketingzwecke.</p>
+    <p>Wenn du ODA ohne Konto nutzt, bleibt alles auf deinem Gerät.</p>
+  </section>
+  <section>
+    <h2>Was auf deinem Gerät bleibt</h2>
+    <p>Dein Name, deine Entscheidungen, Notizen, Träume, Gewohnheiten, dein Beweisbaum und deine Einstellungen werden im Speicher der App auf deinem Gerät aufbewahrt. Wir können sie nicht sehen.</p>
+    <p>Du kannst jederzeit in den Einstellungen ein Backup herunterladen oder mit „Alle Daten zurücksetzen“ alles löschen.</p>
+  </section>
+  <section>
+    <h2>Freiwilliges Konto und Backup</h2>
+    <p>Wenn du dich anmeldest, werden deine E-Mail-Adresse und App-Daten in unserer Datenbank auf Supabase-Infrastruktur gespeichert, um sie zu sichern und deine Geräte zu synchronisieren. Wir verwenden keine Passwörter: Du meldest dich mit einem einmaligen Link oder Code an, den du per E-Mail erhältst.</p>
+    <p>Diese Daten werden nur für Backups und die Synchronisierung verwendet. Auf die Einträge kannst du nur mit deinem eigenen Konto zugreifen.</p>
+    <p>Du kannst dein Konto in der App auf der Seite Konto mit „Mein Konto löschen“ dauerhaft löschen. Dabei werden dein Konto und alle deine Cloud-Daten entfernt.</p>
+  </section>
+  <section>
+    <h2>Erinnerungen</h2>
+    <p>In der iPhone-App werden Erinnerungen auf deinem Gerät geplant. Wenn du im Web Benachrichtigungen einschaltest, speichern wir die von deinem Browser bereitgestellte Benachrichtigungsadresse und deine gewählten Uhrzeiten, damit wir dir Erinnerungen senden können. Wenn du Benachrichtigungen ausschaltest, werden diese Daten gelöscht.</p>
+  </section>
+  <section>
+    <h2>KI-Coach auf deinem Gerät</h2>
+    <p>Der Coach auf deinem Gerät nutzt ein Sprachmodell, das auf deinem Gerät läuft. Was du ihm schreibst, wird weder an uns noch an ein KI-Unternehmen gesendet. Die Modelldateien werden bei der ersten Nutzung von einem öffentlichen Modellanbieter (Hugging Face) heruntergeladen.</p>
+    <p>Wenn du in den Einstellungen deinen eigenen Google-Gemini-Schlüssel hinzufügst, wird der vorzulesende Anleitungstext mit deinem Schlüssel an Google gesendet, um natürliche Stimmen zu nutzen. Das ist freiwillig.</p>
+  </section>
+  <section>
+    <h2>Cloud-Coach (Konto erforderlich)</h2>
+    <p>Wenn du angemeldet bist, kannst du im Coach-Tab den Cloud-Coach nutzen. Deine Nachrichten an ihn (die letzten Nachrichten und deine Sprache) werden an unseren Server und von dort an den KI-Dienst von OpenAI gesendet, um die Antwort zu erstellen. Nach der API-Datenrichtlinie von OpenAI werden Inhalte, die über die API gesendet werden, nicht zum Trainieren der Modelle verwendet.</p>
+    <p>ODA speichert weder deine Nachrichten noch die Antworten des Coachs und führt kein Protokoll darüber. Wir behalten nur einen monatlichen Nachrichtenzähler (wie viele Nachrichten du genutzt hast) und einen kurzzeitig gespeicherten Cache deiner Abostufe, beide mit deinem Konto verknüpft. Um deine Stufe zu bestätigen, wird deine Konto-ID an RevenueCat gesendet.</p>
+    <p>Wenn du in der höchsten Stufe „Dem Coach erlauben, deine heutige Entscheidung und die letzten Zeilen im Notizbuch zu lesen“ einschaltest, werden auch deine heutige Entscheidung, deine zuletzt eingehaltenen Entscheidungen und einige kurze Zeilen aus deinem Notizbuch mit deiner Nachricht gesendet. Diese Option ist standardmäßig ausgeschaltet und du kannst sie jederzeit ausschalten.</p>
+    <p>Der Cloud-Coach ist eine KI, kein Therapeut und kein Notfalldienst. Wenn eine Nachricht Selbstverletzung, Missbrauch oder unmittelbare Gefahr erwähnt, beendet der Coach das Coaching und empfiehlt dir, örtliche Notfalldienste zu kontaktieren (911 in den USA, 112 in Türkiye). Für den Coach auf deinem Gerät und die Offline-Werkzeuge brauchst du nie ein Konto.</p>
+  </section>
+  <section>
+    <h2>Bilder</h2>
+    <p>Die Kursfotos werden von Unsplash geladen. Wie bei jeder Webanfrage sieht Unsplash deine IP-Adresse, um dir das Foto zu senden.</p>
+  </section>
+  <section>
+    <h2>Käufe</h2>
+    <p>ODA-Abos (Essentials, Pro, Pro Coach) werden über Apple gekauft; wir sehen deine Zahlungsdaten nie. Wir nutzen RevenueCat, um deinen Abostatus zu bestätigen. RevenueCat verarbeitet eine anonyme App-Nutzer-ID und Kaufdaten.</p>
+  </section>
+  <section>
+    <h2>Speicherdauer und deine Rechte</h2>
+    <p>Cloud-Daten werden aufbewahrt, solange dein Konto besteht, und gelöscht, wenn du dein Konto löschst. Die Daten auf deinem Gerät bleiben dort, bis du die App oder die Daten löschst.</p>
+    <p>Um deine Rechte auf Auskunft, Berichtigung, Löschung, Datenübertragbarkeit oder Widerspruch nach der DSGVO und dem türkischen KVKK auszuüben, schreibe an ufrldk13@gmail.com. Verantwortlich für die Datenverarbeitung ist Ümit Fırıldak, tätig unter dem Namen Yahya Labs.</p>
+  </section>
+  <section>
+    <h2>Kinder</h2>
+    <p>ODA richtet sich nicht an Kinder unter 13 Jahren und wir erheben wissentlich keine Daten von ihnen.</p>
+  </section>
+  <section>
+    <h2>Änderungen und Kontakt</h2>
+    <p>Wenn wir diese Erklärung ändern, aktualisieren wir das Datum oben und kündigen wichtige Änderungen in der App an. Bei Fragen: ufrldk13@gmail.com</p>
+  </section>
+  <p class="other"><a href="terms.html#de">Nutzungsbedingungen</a></p>
+</article>
+
+<article id="it" lang="it">
+  <p class="kicker">One Decision Away · Yahya Labs</p>
+  <h1>Informativa sulla privacy</h1>
+  <p class="meta">Ultimo aggiornamento: 29 settembre 2026</p>
+  <p class="intro">One Decision Away («ODA») è sviluppata e offerta da Yahya Labs. Abbiamo progettato ODA perché i tuoi dati restino il più possibile sul tuo dispositivo. Questa pagina spiega con parole semplici cosa conserviamo, perché e dove.</p>
+  <section>
+    <h2>In breve</h2>
+    <p>Niente pubblicità, tracciamento o strumenti di analisi di terze parti. Non vendiamo i tuoi dati e non li condividiamo con nessuno per scopi di marketing.</p>
+    <p>Se usi ODA senza un account, tutto resta sul tuo dispositivo.</p>
+  </section>
+  <section>
+    <h2>Cosa resta sul tuo dispositivo</h2>
+    <p>Il tuo nome, le decisioni, le note, i sogni, le abitudini, l’albero delle prove e le impostazioni sono conservati nello spazio dell’app sul tuo dispositivo. Noi non possiamo vederli.</p>
+    <p>Puoi scaricare un backup o cancellare tutto con «Reimposta tutti i dati» nelle impostazioni, in qualsiasi momento.</p>
+  </section>
+  <section>
+    <h2>Account e backup facoltativi</h2>
+    <p>Se accedi, il tuo indirizzo e-mail e i dati dell’app vengono salvati nel nostro database, ospitato sull’infrastruttura Supabase, per eseguire il backup e sincronizzare i tuoi dispositivi. Non usiamo password: accedi con un link o un codice monouso inviato alla tua e-mail.</p>
+    <p>Questi dati vengono usati solo per il backup e la sincronizzazione. Puoi accedere ai dati solo con il tuo account.</p>
+    <p>Puoi eliminare definitivamente il tuo account nell’app con «Elimina il mio account» nella pagina Account. Questo elimina il tuo account e tutti i tuoi dati nel cloud.</p>
+  </section>
+  <section>
+    <h2>Promemoria</h2>
+    <p>Nell’app per iPhone, i promemoria vengono programmati sul tuo dispositivo. Sul web, se attivi le notifiche, conserviamo l’indirizzo di notifica fornito dal browser e gli orari che scegli per poterti inviare i promemoria; vengono eliminati quando disattivi le notifiche.</p>
+  </section>
+  <section>
+    <h2>Coach IA sul dispositivo</h2>
+    <p>Il coach sul dispositivo usa un modello linguistico che funziona sul tuo dispositivo. Quello che gli scrivi non viene inviato né a noi né a un’azienda di IA. I file del modello vengono scaricati da un servizio pubblico che ospita modelli (Hugging Face) al primo utilizzo.</p>
+    <p>Se aggiungi la tua chiave Google Gemini nelle impostazioni, il testo della guida da leggere ad alta voce viene inviato a Google con la tua chiave per usare voci naturali. È facoltativo.</p>
+  </section>
+  <section>
+    <h2>Coach nel cloud (richiede un account)</h2>
+    <p>Se hai effettuato l’accesso, puoi usare il coach nel cloud nella scheda Coach. I messaggi che gli scrivi (gli ultimi messaggi e la tua lingua) vengono inviati al nostro server e da lì al servizio di IA di OpenAI per generare la risposta. Secondo la politica sui dati dell’API di OpenAI, i contenuti inviati tramite l’API non vengono usati per addestrare i suoi modelli.</p>
+    <p>ODA non conserva i tuoi messaggi né le risposte del coach e non ne tiene un registro. Conserviamo solo un contatore mensile dei messaggi (quanti ne hai usati) e una cache di breve durata del tuo livello di abbonamento, entrambi collegati al tuo account. Per confermare il livello, l’ID del tuo account viene inviato a RevenueCat.</p>
+    <p>Nel livello più alto, se attivi «Consenti al coach di leggere la decisione di oggi e le ultime righe del quaderno», vengono inviate con il messaggio anche la decisione di oggi, le decisioni mantenute di recente e alcune brevi righe del quaderno. Questa opzione è disattivata per impostazione predefinita e puoi disattivarla in qualsiasi momento.</p>
+    <p>Il coach nel cloud è un’IA, non un terapeuta né un servizio di emergenza. Se un messaggio menziona autolesionismo, abusi o un pericolo immediato, il coach interrompe il coaching e ti invita a contattare i servizi di emergenza locali (911 negli Stati Uniti, 112 in Türkiye). Non serve mai un account per usare il coach sul dispositivo e gli strumenti offline.</p>
+  </section>
+  <section>
+    <h2>Immagini</h2>
+    <p>Le foto dei corsi vengono caricate da Unsplash. Come per qualsiasi richiesta web, Unsplash vede il tuo indirizzo IP per poterti inviare la foto.</p>
+  </section>
+  <section>
+    <h2>Acquisti</h2>
+    <p>Gli abbonamenti ODA (Essentials, Pro, Pro Coach) si acquistano tramite Apple; non vediamo mai i tuoi dati di pagamento. Usiamo RevenueCat per confermare lo stato dell’abbonamento; RevenueCat tratta un ID utente anonimo dell’app e i dati degli acquisti.</p>
+  </section>
+  <section>
+    <h2>Conservazione e i tuoi diritti</h2>
+    <p>I dati nel cloud vengono conservati finché esiste il tuo account e cancellati quando lo elimini. I dati sul dispositivo restano lì finché non elimini l’app o i dati.</p>
+    <p>Per esercitare i diritti di accesso, rettifica, cancellazione, portabilità o opposizione previsti dal GDPR e dalla KVKK turca, scrivi a ufrldk13@gmail.com. Il titolare del trattamento è Ümit Fırıldak, che opera con il nome Yahya Labs.</p>
+  </section>
+  <section>
+    <h2>Minori</h2>
+    <p>ODA non è rivolta ai minori di 13 anni e non raccogliamo consapevolmente i loro dati.</p>
+  </section>
+  <section>
+    <h2>Modifiche e contatti</h2>
+    <p>Se modifichiamo questa informativa, aggiorniamo la data sopra e annunciamo i cambiamenti importanti nell’app. Per domande: ufrldk13@gmail.com</p>
+  </section>
+  <p class="other"><a href="terms.html#it">Termini di utilizzo</a></p>
 </article>
 </main>
 </body>
