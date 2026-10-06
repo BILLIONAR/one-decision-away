@@ -9,6 +9,9 @@
     if (dark) root.classList.add('dark');
     root.style.colorScheme = dark ? 'dark' : 'light';
     var meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', dark ? '#120C0C' : '#F3DDA8');
+    var tone = localStorage.getItem('oda_tone');
+    if (tone === 'champagne' || tone === 'ivory') root.setAttribute('data-tone', tone);
+    var bars = { champagne: '#F5E2B4', ivory: '#F8EDD0' };
+    if (meta) meta.setAttribute('content', dark ? '#120C0C' : (bars[tone] || '#F3DDA8'));
   } catch (e) {}
 })();
