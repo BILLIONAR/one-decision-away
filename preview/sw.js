@@ -1,7 +1,7 @@
 /* One Decision Away — each deployment owns its own offline shell and caches. */
 const BASE = new URL(self.registration.scope);
 const CACHE_PREFIX = `oda:${encodeURIComponent(BASE.pathname)}:`;
-const SHELL_CACHE = `${CACHE_PREFIX}v6`;
+const SHELL_CACHE = `${CACHE_PREFIX}v7`;
 const MEDIA_CACHE = `${SHELL_CACHE}:media`;
 const INDEX_URL = new URL('index.html', BASE).href;
 const MANIFEST_URL = new URL('manifest.webmanifest', BASE).href;
@@ -69,7 +69,8 @@ self.addEventListener('fetch', event => {
       const hit = await cache.match(request);
       if (hit) return hit;
       const response = await fetch(request);
-      if (response.ok) await cache.put(request, response.clone());
+      // Video range requests return 206, which Cache.put rejects. Stream them uncached.
+      if (response.ok && response.status !== 206) await cache.put(request, response.clone());
       return response;
     })());
     return;
