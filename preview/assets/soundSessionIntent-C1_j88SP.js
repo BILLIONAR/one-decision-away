@@ -1,0 +1,1 @@
+let s=null;function o(n){const t=new URLSearchParams(n.split("?")[1]??""),e=t.get("session");if(!e||!["calm","breathe","relax","sleep","focus"].includes(e))return null;const u=Number(t.get("min")??2);return[2,5,10,20,30,60].includes(u)?{section:e==="calm"?"breathe":e,minutes:u}:null}function r(n){s=o(n)}function i(){const n=s;return s=null,n}export{i as c,o as p,r};
