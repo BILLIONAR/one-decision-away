@@ -1,0 +1,1 @@
+import{j as r}from"./react-5GCfeWye.js";import{dy as u,m as E,dI as d,dJ as i}from"./index-DBjtYye1.js";function C({courseId:s,eager:a=!1,className:e="",layout:t="catalogue",sizes:c}){const o=u(s);return r.jsx("span",{className:`oda-course-cover oda-course-photo ${e}`,"data-art-slot":o.slot,children:r.jsx(E,{art:o,sizes:c??(t==="overview"?d:i),eager:a,decorative:!0})})}export{C};
