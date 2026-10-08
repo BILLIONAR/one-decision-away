@@ -1,0 +1,1 @@
+import{j as i}from"./react-5GCfeWye.js";function s({rating:e,label:a}){return i.jsx("span",{className:"oda-checkin-shape","data-state":e,role:a?"img":void 0,"aria-label":a,"aria-hidden":a?void 0:!0})}export{s as C};
