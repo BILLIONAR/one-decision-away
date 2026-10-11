@@ -59,12 +59,13 @@ p{max-width:68ch;margin:12px 0}
 .other a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;max-width:100%;padding:10px 20px;border-radius:999px;background:var(--accent);color:#1A0F08;font-size:14px;font-weight:700;line-height:1.5;text-align:center;text-decoration:none}
 .other a:hover{text-decoration:underline;text-decoration-thickness:2px}
 .eula a{display:inline-flex;align-items:center;min-height:44px}
+.actions{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:24px}.actions a{display:inline-flex;align-items:center;min-height:44px}
 </style>
 </head>
 <body>
-<main>
-<header class="site-header"><a class="brand" href="../"><img src="../../brand/domino8/oda-app-domino8-v1-192.png" width="40" height="40" alt=""><span>ODA</span></a></header>
-<nav aria-label="Türkçe"><a href="../../en/privacy/" lang="en">English</a><a href="../../tr/privacy/" lang="tr" aria-current="page">Türkçe</a><a href="../../es/privacy/" lang="es">Español</a><a href="../../fr/privacy/" lang="fr">Français</a><a href="../../de/privacy/" lang="de">Deutsch</a><a href="../../it/privacy/" lang="it">Italiano</a></nav>
+<main id="content">
+<header class="site-header"><a class="brand" href="../../tr/"><img src="../../brand/domino8/oda-app-domino8-v1-192.png" width="40" height="40" alt=""><span>ODA</span></a></header>
+<nav aria-label="Dil"><a href="../../legal/en/privacy.html" lang="en">English</a><a href="../../legal/tr/privacy.html" lang="tr" aria-current="page">Türkçe</a><a href="../../legal/es/privacy.html" lang="es">Español</a><a href="../../legal/fr/privacy.html" lang="fr">Français</a><a href="../../legal/de/privacy.html" lang="de">Deutsch</a><a href="../../legal/it/privacy.html" lang="it">Italiano</a></nav>
 
 <article id="tr" lang="tr">
   <p class="kicker">One Decision Away · Yahya Labs</p>
@@ -101,13 +102,14 @@ p{max-width:68ch;margin:12px 0}
   </section>
   <section>
     <h2>Bulut koçu (hesap gerekir)</h2>
+    <p>Bulut yapay zekâ sohbeti ve doğal bulut sesi, 18 yaşını doldurmuş, uygun ve korumalı olmayan profili bulunan yetişkinler içindir. Giriş yapman, gerekli Koç erişimine sahip olman ve bulut yapay zekâsına ayrıca izin vermen gerekir. İstekler sunucumuz üzerinden Google Gemini’ye gönderilir; sunucu, yapılandırıldığında OpenAI’ı da destekler. Yaş aralığın ve korumalı profil durumun sunucuda kontrol edilir. Yalnızca ayrıca açtığın veri kategorileri eklenir; hepsi başlangıçta kapalıdır. HealthKit verileri koça gönderilmez.</p>
     <p>Bulut AI sohbeti ve ses için aktif Coach erişimi ve giriş gerekir. Gönderdiğin konuşma (son mesajlar ve dil seçimi) yanıt oluşturmak için sunucumuza, ardından yapılandırılmış AI sağlayıcısına (Google Gemini veya OpenAI) gönderilir. Sağlayıcının veri işleme koşulları geçerlidir.</p>
     <p>Bir yanıtı geliştirme amacıyla paylaşmayı açıkça seçmediğin veya isteğe bağlı hesap eşitlemesine dahil edilen bir değerlendirmeyi kaydetmediğin sürece ODA mesajlarını ve koçun yanıtlarını sunucuda saklamaz ve kayıt tutmaz. Bunun dışında yalnızca aylık mesaj sayacını (kaç mesaj kullandığını), doğal bulut sesi için aylık karakter sayacını (seslendirilen metnin karakter sayısını) ve seviyeni doğrulamak için abonelik doğrulama kaydını hesabınla birlikte tutar. Seviyeni doğrulamak için hesap kimliğin RevenueCat’e gönderilir.</p>
     <p>Uygulama verilerinden yalnızca “Koç neleri görebilir?” bölümünde açtığın kategoriler yanıt oluşturmak için mesajınla birlikte yapay zekâ sağlayıcısına gönderilir. Kategoriler; adın, bugünün kararı ve durumu, karar serin ve bu hafta tuttuğun günler, açık veya kaçırılan işler, kurs ilerlemen, hayal başlıkların ve varsa önceki ve sonraki hislerinle son meditasyon veya ses oturumlarındır. Gönderilecek sınırlı özeti aynı bölümde önizleyebilirsin.</p>
     <p>Tüm kategoriler varsayılan olarak kapalıdır. Defter satırları yalnızca ayrı defter seçeneğini açarsan dahil edilir; bu seçenek de varsayılan olarak kapalıdır. Her kategoriyi istediğin an kapatabilirsin. Koçu açınca görünen ilk mesaj cihazında oluşturulur; bunun için yapay zekâ hizmetine istek gönderilmez.</p>
     <p>Bulut koçu bir yapay zekâdır; terapist ya da acil yardım hizmeti değildir. Kendine zarar verme, istismar veya acil tehlike belirten mesajlarda koçluğu bırakır ve yerel acil servisleri (Türkiye’de 112) aramanı önerir. Cihaz içi koça ve çevrimdışı işlemlere erişim de abonelik seviyene bağlıdır.</p>
     <p>Günlük ruh hali puanların uygulama verilerinde tutulur; dışa aktarılan yedeklere ve isteğe bağlı hesap eşitlemesine dahil edilir. Koçla ruh hali paylaşımı varsayılan olarak kapalıdır. Ruh hali seçeneğini açarsan son yedi günün puanları önizleyebildiğin özetle gönderilebilir. Ruh halini yürüyüşle karşılaştırmak için Kanıtlar paylaşımının da açık olması gerekir. Bu gözlenen örüntüler bir neden göstermez.</p>
-    <p>İzninle ODA, son konuşmanı, seçili dili, koç adını ve tarzını, ayrıca yalnızca ayrı olarak açtığın uygulama bağlamını önce Supabase sunucumuza, sonra yanıt üretmek için Google Gemini veya OpenAI’a gönderir. Yapay zekâ yanılabilir; tıbbi bakım veya acil yardım sunmaz. HealthKit verileri gönderilmez. Reddedersen cihaz içi araçları kullanabilirsin. İznini burada dilediğin an geri alabilirsin; daha önce işlenen veri geri çağrılamaz.</p>
+    <p>İzninle ODA, son konuşmanı, seçili dili, koç adını ve tarzını, ayrıca yalnızca ayrı olarak açtığın uygulama bağlamını önce Supabase sunucumuza, sonra yanıt üretmek için Google Gemini veya OpenAI’a gönderir. Yapay zekâ yanılabilir; tıbbi bakım veya acil yardım sunmaz. HealthKit verileri gönderilmez. Reddedersen cihaz içi araçları kullanabilirsin. İznini burada dilediğin an geri alabilirsin; daha önce işlenen veri geri çağrılamaz. Yaş uygunluğunu kontrol etmek için ODA, beyan ettiğin yaş grubunu ve korumalı profil durumunu Supabase hesabında özel olarak saklar. Bu beyan yaş doğrulaması sayılmaz.</p>
     <p>Koç, günlük hayat ve kişisel gelişim için bir yapay zekâdır. ODA kararların ve ilerlemenin yanı sıra ilişkiler, aile, iş stresi, arkadaşlıklar, kendinden şüphe etme, ayrılıklar veya çatışmalar hakkında konuşabilirsin. Farklı bakış açıları ve küçük bir sonraki adım sunar; terapi, tıbbi tavsiye, ilaç önerisi, hukuki veya mali danışmanlık vermez. Hayatındaki insanların yerini tutmaz. İstismar, şiddet veya tehlike anlattığında güvenliğine ve yerel acil servislere ya da güvendiğin birine ulaşmana odaklanır.</p>
     <p>Koç başlığından veya Ayarlar’dan koçuna isim verebilir, Beast modu, Dengeli veya Yumuşak üslubunu seçebilirsin. İsim ve üslup bulut istekleriyle gönderilir. Hakkımda; hayatın, hedeflerin, güçlü ve zorlandığın yönler, önemli kişiler, değerlerin veya inancın hakkında kısa alanlardan oluşan isteğe bağlı bir profildir. Koç neleri görebilir? bölümündeki varsayılan olarak kapalı ayrı kategorisini açmadıkça koç isteklerine eklenmez. Gönderilecek bilgileri önizleyebilirsin. Kısa örüntüler yalnızca paylaşmayı seçtiğin kategorilerden cihazında hesaplanır. Koçun gözünden ben yalnızca paylaşılan verileri kullanır ve düzeltebileceğin geçici bir değerlendirme sunar. Kaydettiğin düzeltmeler cihazında hafıza notu olur ve yalnızca Koç hafızası paylaşımı açıkken sonraki koç isteklerine eklenir. Koçunun adı, üslubu, profilin ve açıkça kaydettiğin değerlendirmeler cihazında saklanır; dışa aktarılan yedeklere ve diğer uygulama verilerin gibi isteğe bağlı hesap eşitlemesine dahil edilir.</p>
     <p>Sesli konuşma isteğe bağlıdır. iPhone’da tanıma cihaz içinde yapılır; mikrofon sesi cihazında kalır. Web sürümünde tarayıcının konuşma hizmeti sesi kendi koşullarına göre sunucularında işleyebilir. ODA sesini koça göndermez ve ses kaydı saklamaz. Koça yalnızca yazıya çevrilen metin, yazdığın bir mesaj gibi gönderilir. Varsayılan Cihaz sesi, cihazının veya tarayıcının konuşma hizmetini kullanır; bazı sesler sağlayıcının sunucularını kullanabilir. Ayarlar’dan Doğal bulut sesi seçeneğini açarsan koçun yanıt metni, konuşma oluşturmak için sunucumuz üzerinden Google Gemini’ye gönderilir. Bu seslendirme için mikrofon sesin Google’a gönderilmez. Yanıtları seslendir varsayılan olarak kapalıdır. Sesli konuşmayı bitirmek için Bitir seçeneğini kullan; yazılı sohbette okumayı durdurmak için Yanıtları seslendir seçeneğini kapat.</p>
@@ -122,8 +124,8 @@ p{max-width:68ch;margin:12px 0}
     <p>Kurslardaki fotoğraflar Unsplash’tan yüklenir. Her web isteğinde olduğu gibi Unsplash, fotoğrafı gönderebilmek için IP adresini görür.</p>
   </section>
   <section>
-    <h2>Satın alımlar</h2>
-    <p>Abonelikler Apple üzerinden satın alınır ve RevenueCat ile işlenir. Kart bilgilerini almayız. RevenueCat satın alma kayıtlarını ve uygulama kullanıcı kimliğini işler; giriş yapan üyelerde bu, sunucu doğrulamasının cihazlar arasında erişimi geri getirmesi için ODA hesap kimliğidir. RevenueCat bu satın alma kayıtlarını gelir ve yenilemeler gibi abonelik analizleri için de kullanır. Bu, faturalandırmanın parçasıdır ve isteğe bağlı uygulama kullanım ölçümünden ayrıdır.</p>
+    <h2>App Store ve Google Play</h2>
+    <p>App Store ödemelerini Apple, Google Play ödemelerini Google işler. RevenueCat, aboneliğini doğrulamak ve erişimini geri getirmek için satın alma kayıtlarını ve uygulama kullanıcı kimliğini işler. Giriş yaptıysan bu kimlik ODA hesap kimliğindir. Web ödemesi sunulduğunda RevenueCat Web Billing ve Stripe; hesap, e-posta, ödeme ve abonelik kayıtlarını işler. Kart bilgilerini ödeme sağlayıcıları işler; ODA kartının tüm bilgilerini almaz. Gerekli faturalandırma kayıtları isteğe bağlı ürün analizinden ayrıdır ve ödeme veya yasal yükümlülükler için saklanabilir.</p>
     <p>Uygulama, üye kimliğine bağlı bir çıkış teklifi uygunluk kaydı tutar; teklifin gösterildiği zaman ve varsa son geçerlilik zamanı buna dahildir. Karar veya defter metni içermez. Aboneliğin iptali veya sona ermesi kayıtlarını silmez. Dışa aktarma ve hesap silme ödeme yapmadan erişilebilir.</p>
   </section>
   <section>
@@ -132,8 +134,10 @@ p{max-width:68ch;margin:12px 0}
   </section>
   <section>
     <h2>Saklama süresi ve hakların</h2>
-    <p>Bulut verin, hesabın açık olduğu sürece saklanır ve hesabını sildiğinde silinir. Cihazındaki veri, uygulamayı silene veya verileri silene kadar cihazında kalır.</p>
-    <p>KVKK ve GDPR kapsamındaki erişim, düzeltme, silme, taşıma ve itiraz haklarını kullanmak için ufrldk13@gmail.com adresine yazabilirsin. Veri sorumlusu, Yahya Labs adıyla çalışan Ümit Fırıldak’tır.</p>
+    <p>Veri sorumlusu, Yahya Labs adıyla çalışan Ümit Fırıldak’tır. Hesap ve ödeme verileri sözleşmenin yürütülmesi, güvenlik ve kötüye kullanımın önlenmesi meşru menfaat, kanunen gerekli kayıtlar yasal yükümlülük için işlenir. İsteğe bağlı analiz ve bulut yapay zekâsı için ayrıca izin verirsin. Gelecekteki işlemler için iznini Ayarlar’dan ödeme yapmadan geri çekebilirsin.</p>
+    <p>Ayarlar’dan ödeme yapmadan uygulama yedeğini dışa aktarabilirsin. Yedek, desteklenen kayıtlı uygulama verilerini içerir; her taslağı, indirdiğin dosyayı veya ödeme kaydını içermez. GDPR veya KVKK kapsamındaki erişim, düzeltme, silme, taşıma, işleme sınırı ve itiraz taleplerin için support@yahyalabs.com adresine yaz. Koşulları oluştuğunda Kişisel Verileri Koruma Kurumu dahil yetkili veri koruma makamına şikâyet edebilirsin.</p>
+    <p>Sunucu hesap silmeyi doğruladığında hesabına bağlı aktif kayıtlar kaldırılır. Altyapı yedeklerindeki kopyalar yapılandırılmış saklama süresi dolana kadar kalabilir; ödeme sağlayıcıları kanunen gerekli işlem kayıtlarını saklayabilir. Cihazındaki kopyalar ve dışa aktardığın yedekler sen silene kadar kalır. Analiz etkinlikleri ODA hesabına bağlı değildir ve ayrı saklama süresine tabidir. Geçerli süreleri destekten isteyebilirsin.</p>
+    <p>Supabase, RevenueCat, Apple, Google ve burada açıklanan diğer sağlayıcılar, ABD dahil yaşadığın ülkenin dışında veri işleyebilir. İşleme yerleri ve geçerli aktarım güvenceleri için desteğe yaz. Kişisel verini satmayız, reklam kimliği kullanmayız ve uygulamalar arasında seni izlemeyiz. İsteğe bağlı ürün analizi sen açana kadar kapalıdır.</p>
   </section>
   <section>
     <h2>Çocuklar</h2>
@@ -141,9 +145,28 @@ p{max-width:68ch;margin:12px 0}
   </section>
   <section>
     <h2>Değişiklikler ve iletişim</h2>
-    <p>Bu politikayı değiştirirsek güncelleme tarihini yenileriz; önemli değişiklikleri uygulamada duyururuz. Sorun için: ufrldk13@gmail.com</p>
+    <p>Bu politikayı değiştirirsek güncelleme tarihini yenileriz; önemli değişiklikleri uygulamada duyururuz. Sorun için: support@yahyalabs.com</p>
   </section>
-  <p class="other"><a href="../terms/">Kullanım Koşulları</a></p>
+  <section>
+    <h2>Antrenman geçmişin ve yaş aralığın</h2>
+    <p>Kaydettiğin antrenman geçmişinde hareketler, tamamladığın setler, tekrarlar veya belirli bir süre koruduğun pozisyonlar, ağırlıklar, antrenman zamanı ve süresi, toplamlar ve varsa kaydedilmiş program bilgisi bulunur. Bu geçmiş dışa aktardığın yedeğe eklenir; hesap yedeğini veya eşitlemeyi kullandığında Supabase’e gönderilir. Kaydetmediğin antrenman taslakları ve ayrı saklanan programlara katılım kayıtların bu yedeğe eklenmez. Antrenmanla birlikte kaydedilen program bilgisi ise dahildir.</p>
+    <p>Belirttiğin yaş aralığı ve profilinin korumalı olup olmadığı profilinle birlikte kaydedilir; dışa aktardığın yedeğe ve isteğe bağlı hesap eşitlemesine dahil edilir. Kaydedilmiş çalışma planın da dahildir. Anket taslağın ve ayrı plan önbelleği cihazında kalır, bu yedeğe eklenmez. Doğum tarihini toplamayız.</p>
+    <p>Anketi tamamladıysan ve bulut koçunu kullanmaya uygun bir yetişkinsen, Koç neleri görebilir? bölümünden Koç hafızası paylaşımını açabilirsin. Böylece yaş aralığın ve hedeflerin, alışkanlıkların, zorlandığın konular ve uyku seçimlerin gibi seçilmiş plan bilgileri bulut koçuna gönderdiğin mesajlara eklenebilir. Bu bilgiler mesajınla birlikte ODA’da kullanılan yapay zekâ sağlayıcısına (Google Gemini veya OpenAI) gönderilir. Bunun için bulut yapay zekâsına ayrıca izin vermen gerekir. Hafıza paylaşımı varsayılan olarak kapalıdır ve hesap yedeğinden bağımsızdır. Anketteki cinsiyet ve ODA’yı nereden bulduğunla ilgili yanıtların otomatik plan özetine eklenmez.</p>
+  </section>
+  <section>
+    <h2>Web abonelikleri</h2>
+    <p>App Store ödemelerini Apple, Google Play ödemelerini Google işler. RevenueCat, aboneliğini doğrulamak ve erişimini geri getirmek için satın alma kayıtlarını ve uygulama kullanıcı kimliğini işler. Giriş yaptıysan bu kimlik ODA hesap kimliğindir. Web ödemesi sunulduğunda RevenueCat Web Billing ve Stripe; hesap, e-posta, ödeme ve abonelik kayıtlarını işler. Kart bilgilerini ödeme sağlayıcıları işler; ODA kartının tüm bilgilerini almaz. Gerekli faturalandırma kayıtları isteğe bağlı ürün analizinden ayrıdır ve ödeme veya yasal yükümlülükler için saklanabilir.</p>
+  </section>
+  <section>
+    <h2>Çerezler ve tarayıcıdaki veriler</h2>
+    <p>ODA; dilini, görünüm tercihini, giriş oturumunu ve kayıtlı uygulama verilerini hatırlamak için tarayıcıda veri saklar. Bunlar istediğin özelliklerin çalışmasını sağlar. Harici giriş ve ödeme sayfaları da kendi hizmetlerini güvenli sunmak için gerekli verileri saklayabilir. ODA reklam çerezi veya uygulamalar arasında takip kullanmaz.</p>
+    <p>Kullanım ölçümü, sen paylaşmayı seçene kadar kapalıdır. Web sitesi ve uygulama bu tarayıcıda aynı analiz tercihini kullanır. Ölçüme izin vermen bulut yedeğine, bulut yapay zekâsına veya pazarlamaya izin vermez. Reddedip siteyi kullanmaya devam edebilirsin. Seçimini Gizlilik tercihleri ya da Ayarlar &gt; Gizlilik bölümünden değiştirebilirsin.</p>
+    <p>Tercihin, sen değiştirene veya tarayıcıdaki verileri temizleyene kadar bu tarayıcıda kalır. Ölçümü kapatınca bekleyen istekler durur, cihazındaki analiz kimliği ve olay kuyruğu silinir. Analiz hizmetinin daha önce aldığı olaylar, yapılandırılmış saklama süresine tabidir; ayrıntı için desteğe yazabilirsin. Diğer tarayıcı ve cihazlarda tercihini ayrıca seçersin.</p>
+  </section>
+
+
+  <p><a href="mailto:support@yahyalabs.com">support@yahyalabs.com</a></p>
+  <nav aria-label="ODA politikaları"><a href="../../legal/tr/terms.html">Kullanım Koşulları</a><a href="../../legal/tr/refunds.html">İade ve abonelik iptali</a><a href="../../legal/tr/imprint.html">Yasal bilgiler ve iletişim</a><a href="../../legal/tr/account-deletion.html">ODA hesabını sil</a><a href="../../?lang=tr&amp;privacy=choices">Gizlilik tercihleri</a></nav>
 
 </article>
 </main>

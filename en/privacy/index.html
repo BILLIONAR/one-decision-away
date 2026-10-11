@@ -59,12 +59,13 @@ p{max-width:68ch;margin:12px 0}
 .other a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;max-width:100%;padding:10px 20px;border-radius:999px;background:var(--accent);color:#1A0F08;font-size:14px;font-weight:700;line-height:1.5;text-align:center;text-decoration:none}
 .other a:hover{text-decoration:underline;text-decoration-thickness:2px}
 .eula a{display:inline-flex;align-items:center;min-height:44px}
+.actions{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:24px}.actions a{display:inline-flex;align-items:center;min-height:44px}
 </style>
 </head>
 <body>
-<main>
+<main id="content">
 <header class="site-header"><a class="brand" href="../../"><img src="../../brand/domino8/oda-app-domino8-v1-192.png" width="40" height="40" alt=""><span>ODA</span></a></header>
-<nav aria-label="English"><a href="../../en/privacy/" lang="en" aria-current="page">English</a><a href="../../tr/privacy/" lang="tr">Türkçe</a><a href="../../es/privacy/" lang="es">Español</a><a href="../../fr/privacy/" lang="fr">Français</a><a href="../../de/privacy/" lang="de">Deutsch</a><a href="../../it/privacy/" lang="it">Italiano</a></nav>
+<nav aria-label="Language"><a href="../../legal/en/privacy.html" lang="en" aria-current="page">English</a><a href="../../legal/tr/privacy.html" lang="tr">Türkçe</a><a href="../../legal/es/privacy.html" lang="es">Español</a><a href="../../legal/fr/privacy.html" lang="fr">Français</a><a href="../../legal/de/privacy.html" lang="de">Deutsch</a><a href="../../legal/it/privacy.html" lang="it">Italiano</a></nav>
 
 <article id="en" lang="en">
   <p class="kicker">One Decision Away · Yahya Labs</p>
@@ -101,13 +102,14 @@ p{max-width:68ch;margin:12px 0}
   </section>
   <section>
     <h2>Cloud coach (account required)</h2>
+    <p>Cloud AI chat and natural cloud voice are for adults aged 18 or over with an eligible, unprotected profile, sign-in, the required Coach entitlement and separate cloud AI consent. Google Gemini receives requests through our server; the server also supports OpenAI when configured. Age band and protected-profile status are checked on the server. Only context categories you separately enable are added; all are off by default. HealthKit data is never sent to the coach.</p>
     <p>Cloud AI chat and voice require an active Coach entitlement and sign-in. The conversation you send (recent messages and language choice) goes to our server and the configured AI provider (Google Gemini or OpenAI) to generate a reply. The provider’s processing terms apply.</p>
     <p>ODA does not store your messages or the coach’s replies on its server or log them unless you explicitly share a reply for improvement or save a reflection that is included in optional account sync. Otherwise, we keep monthly usage counters for messages (how many you have used) and natural cloud voice characters (the length of text submitted for speech) and a subscription verification snapshot, tied to your account. To confirm your level, your account ID is sent to RevenueCat.</p>
     <p>Only the app data categories you switch on in “What the coach can see” are sent with your message to the AI provider to generate a reply. Categories cover your name, today’s decision and its status, your streak and days kept this week, open or missed items, course progress, dream titles, and recent meditation or sound sessions with before and after feelings when recorded. You can preview the exact capped snapshot in that sheet.</p>
     <p>All categories are off by default. Notebook lines are included only if you turn on the separate notebook toggle, which is also off by default. You can turn off any category at any time. The opening message is generated on your device when you open the coach; it makes no request to an AI service.</p>
     <p>The cloud coach is an AI, not a therapist or an emergency service. If a message mentions self-harm, abuse or immediate danger, the coach stops coaching and encourages you to contact local emergency services (911 in the US, 112 in Türkiye). Access to on-device coaching and offline actions also follows your subscription level.</p>
     <p>Daily mood ratings stay with your app data and are included in exported backups and optional account sync. Mood sharing with the coach is off by default. If you enable Mood, the last seven days of ratings can be sent in the previewed snapshot. Comparing mood with walks also requires Evidence consent. These observed patterns do not establish a cause.</p>
-    <p>With your permission, ODA sends your recent conversation, selected language, coach name and style, and only the app context you separately enable to our Supabase server and then Google Gemini or OpenAI to generate replies. AI can make mistakes. It does not provide medical care or emergency help. HealthKit data is never sent. Declining keeps the local tools available. You can withdraw permission here at any time; data already processed cannot be recalled.</p>
+    <p>With your permission, ODA sends your recent conversation, selected language, coach name and style, and only the app context you separately enable to our Supabase server and then Google Gemini or OpenAI to generate replies. AI can make mistakes. It does not provide medical care or emergency help. HealthKit data is never sent. Declining keeps the local tools available. You can withdraw permission here at any time; data already processed cannot be recalled. To check age eligibility, ODA saves your declared age range and protected-profile status privately with your Supabase account. Your declaration is not independently verified.</p>
     <p>The coach is an AI for everyday life and personal growth. You can talk about relationships, family, work stress, friendships, self-doubt, breakups or conflicts, as well as your ODA decisions and progress. It offers perspectives and one small next step, not therapy or medical, medication, legal or financial advice. It is not a replacement for people in your life. If you describe abuse, violence or danger, it focuses on safety and reaching local emergency services or someone you trust.</p>
     <p>You can name your coach and choose Beast mode, Balanced or Gentle in the coach header or Settings. The name and style are sent with cloud requests. About me is an optional profile with short fields about your life, goals, strengths, challenges, important people and values or faith. It stays out of coach requests unless you switch on its separate category in What the coach can see, which is off by default. You can preview what will be sent. Short patterns are calculated on your device only from categories you choose to share. Coach’s read on me uses only shared data and offers a tentative reflection you can correct. Corrections you save become local memory notes and are included in future coach requests only when Coach memory sharing is on. Your coach name, style, profile and explicitly saved reflections are stored on your device, included in exported backups and included in optional account sync like your other app data.</p>
     <p>Voice is optional. On iPhone, transcription requires on-device speech recognition, so microphone audio stays on your device. On the web, your browser speech service may process audio on its servers under its terms. ODA does not send your audio to the coach or store an audio recording. Only the transcript is sent to the coach, like a typed message. Device voice is the default and uses your device or browser speech service; some voices may use the provider’s servers. If you choose Natural cloud voice in Settings, the coach reply text is sent through our server to Google Gemini to create speech. Your microphone audio is not sent to Google for this readout. Speak replies is off by default. Use End to leave voice mode, or turn off Speak replies to stop readout in text chat.</p>
@@ -122,8 +124,8 @@ p{max-width:68ch;margin:12px 0}
     <p>Course photos load from Unsplash. As with any web request, Unsplash sees your IP address in order to deliver the photo.</p>
   </section>
   <section>
-    <h2>Purchases</h2>
-    <p>Subscriptions are bought through Apple and processed by RevenueCat. We never receive card details. RevenueCat processes purchase records and an app user identifier; for signed-in members it is the ODA account ID so server verification can restore access across devices. RevenueCat also uses these purchase records for subscription analytics, such as revenue and renewals. This is part of billing and separate from optional app usage statistics.</p>
+    <h2>App Store and Google Play</h2>
+    <p>Apple processes App Store payments; Google processes Google Play payments. RevenueCat processes purchase records and the app user identifier to verify subscriptions and restore access. For signed-in members this identifier is the ODA account ID. When web checkout is available, RevenueCat Web Billing and Stripe process account, email, payment and subscription records. The payment providers handle card details; ODA does not receive full card details. Necessary billing and subscription records are separate from optional product analytics and may be retained for billing or legal obligations.</p>
     <p>The app retains an exit-offer eligibility record, including when an offer was shown and any expiry, with the member identifier. It contains no decision or notebook text. Subscription cancellation or expiry does not erase your entries. Export and account deletion remain available without paying.</p>
   </section>
   <section>
@@ -132,8 +134,10 @@ p{max-width:68ch;margin:12px 0}
   </section>
   <section>
     <h2>Retention and your rights</h2>
-    <p>Cloud data is kept while your account exists and is deleted when you delete your account. Data on your device stays there until you delete the app or the data.</p>
-    <p>To exercise your rights to access, correct, delete, port or object under GDPR and Turkey’s KVKK, write to ufrldk13@gmail.com. The data controller is Ümit Fırıldak, trading as Yahya Labs.</p>
+    <p>Ümit Fırıldak, trading as Yahya Labs, is the data controller. Account and billing data support the contract; security and abuse prevention support legitimate interests; legally required records support legal obligations. Optional analytics and cloud AI require your separate consent. You can withdraw consent for future processing in Settings without paying.</p>
+    <p>You can export the app backup from Settings without paying. The backup contains the supported saved app records, not every draft, downloaded file or billing record. For access, correction, deletion, portability, restriction or objection under GDPR or KVKK, email support@yahyalabs.com. You can complain to your competent data protection authority, including the Turkish Personal Data Protection Authority where applicable.</p>
+    <p>Active account records are removed when the server confirms account deletion. Infrastructure backups may retain copies until their configured retention expires; billing providers may retain legally required transaction records. Device copies and exported backups remain until you erase them. Analytics events are not linked to your ODA account and follow their separate configured retention. Ask support for the applicable retention periods.</p>
+    <p>Supabase, RevenueCat, Apple, Google and other providers described here may process data outside your country, including in the United States. Contact support for processing locations and applicable transfer safeguards. We do not sell personal data, use advertising identifiers or track you across apps. Optional product analytics stays off until you enable it.</p>
   </section>
   <section>
     <h2>Children</h2>
@@ -141,9 +145,28 @@ p{max-width:68ch;margin:12px 0}
   </section>
   <section>
     <h2>Changes and contact</h2>
-    <p>If we change this policy we update the date above and announce important changes in the app. Questions: ufrldk13@gmail.com</p>
+    <p>If we change this policy we update the date above and announce important changes in the app. Questions: support@yahyalabs.com</p>
   </section>
-  <p class="other"><a href="../terms/">Terms of Use</a></p>
+  <section>
+    <h2>Workout history and age bands</h2>
+    <p>Your saved workout history includes exercises, completed sets, repetitions or timed holds, loads, session times and duration, totals and any saved program reference. It is included in exported backups and sent to Supabase when you use account backup or sync. Unsaved workout drafts and separately stored program enrollments are not included in that backup. A program reference saved with a workout is included.</p>
+    <p>Your declared age band and whether your profile is protected are saved with your profile and included in exported backups and optional account sync. Your saved work schedule is also included. Your survey draft and the separate plan cache stay on your device and are not included in that backup. We do not collect a date of birth.</p>
+    <p>If you are an adult eligible to use the cloud coach and have completed the survey, you can turn on Coach memory in What the coach can see. This allows your age band and selected plan summaries, including goals, habits, obstacles and sleep choices, to be sent with a cloud coach request to the configured provider, Google Gemini or OpenAI. Separate cloud AI permission is also required. Memory sharing is off by default and is independent of account backup. Your survey answers about gender and how you found ODA are not added to the automatic plan summary.</p>
+  </section>
+  <section>
+    <h2>Web subscriptions</h2>
+    <p>Apple processes App Store payments; Google processes Google Play payments. RevenueCat processes purchase records and the app user identifier to verify subscriptions and restore access. For signed-in members this identifier is the ODA account ID. When web checkout is available, RevenueCat Web Billing and Stripe process account, email, payment and subscription records. The payment providers handle card details; ODA does not receive full card details. Necessary billing and subscription records are separate from optional product analytics and may be retained for billing or legal obligations.</p>
+  </section>
+  <section>
+    <h2>Cookies and browser storage</h2>
+    <p>ODA uses browser storage to remember your language, appearance, sign-in session and saved app records. These support the features you request. Hosted sign-in and payment pages may also use storage needed to secure their own services. ODA does not use advertising cookies or tracking across apps.</p>
+    <p>Optional usage statistics stay off until you choose to share. The website and app use the same analytics preference for this browser. Accepting statistics does not permit cloud backup, cloud AI or marketing. You can decline and keep using the site, or change your choice through Privacy choices or Settings &gt; Privacy.</p>
+    <p>Your preference stays in this browser until you change it or clear its storage. Turning statistics off cancels pending requests and removes the local analytics identifier and queued events. Events already received by the analytics service follow its configured retention; contact support for details. Other browsers and devices have their own preference.</p>
+  </section>
+
+
+  <p><a href="mailto:support@yahyalabs.com">support@yahyalabs.com</a></p>
+  <nav aria-label="ODA policies"><a href="../../legal/en/terms.html">Terms of Use</a><a href="../../legal/en/refunds.html">Refunds and cancellation</a><a href="../../legal/en/imprint.html">Imprint and contact</a><a href="../../legal/en/account-deletion.html">Delete your ODA account</a><a href="../../?lang=en&amp;privacy=choices">Privacy choices</a></nav>
 
 </article>
 </main>

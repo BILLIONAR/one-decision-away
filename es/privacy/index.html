@@ -59,12 +59,13 @@ p{max-width:68ch;margin:12px 0}
 .other a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;max-width:100%;padding:10px 20px;border-radius:999px;background:var(--accent);color:#1A0F08;font-size:14px;font-weight:700;line-height:1.5;text-align:center;text-decoration:none}
 .other a:hover{text-decoration:underline;text-decoration-thickness:2px}
 .eula a{display:inline-flex;align-items:center;min-height:44px}
+.actions{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:24px}.actions a{display:inline-flex;align-items:center;min-height:44px}
 </style>
 </head>
 <body>
-<main>
-<header class="site-header"><a class="brand" href="../"><img src="../../brand/domino8/oda-app-domino8-v1-192.png" width="40" height="40" alt=""><span>ODA</span></a></header>
-<nav aria-label="Español"><a href="../../en/privacy/" lang="en">English</a><a href="../../tr/privacy/" lang="tr">Türkçe</a><a href="../../es/privacy/" lang="es" aria-current="page">Español</a><a href="../../fr/privacy/" lang="fr">Français</a><a href="../../de/privacy/" lang="de">Deutsch</a><a href="../../it/privacy/" lang="it">Italiano</a></nav>
+<main id="content">
+<header class="site-header"><a class="brand" href="../../es/"><img src="../../brand/domino8/oda-app-domino8-v1-192.png" width="40" height="40" alt=""><span>ODA</span></a></header>
+<nav aria-label="Idioma"><a href="../../legal/en/privacy.html" lang="en">English</a><a href="../../legal/tr/privacy.html" lang="tr">Türkçe</a><a href="../../legal/es/privacy.html" lang="es" aria-current="page">Español</a><a href="../../legal/fr/privacy.html" lang="fr">Français</a><a href="../../legal/de/privacy.html" lang="de">Deutsch</a><a href="../../legal/it/privacy.html" lang="it">Italiano</a></nav>
 
 <article id="es" lang="es">
   <p class="kicker">One Decision Away · Yahya Labs</p>
@@ -101,13 +102,14 @@ p{max-width:68ch;margin:12px 0}
   </section>
   <section>
     <h2>Coach en la nube (requiere cuenta)</h2>
+    <p>El chat de IA y la voz natural en la nube son para mayores de 18 años con un perfil apto y no protegido, sesión iniciada, acceso Coach y consentimiento separado para la IA. Google Gemini recibe las solicitudes a través de nuestro servidor, que también admite OpenAI si se configura. El servidor comprueba la franja de edad y la protección del perfil. Solo se añaden las categorías que activas por separado; todas están desactivadas por defecto. Los datos de HealthKit nunca se envían al coach.</p>
     <p>El chat y la voz con IA en la nube requieren acceso activo a Coach e iniciar sesión. La conversación enviada (mensajes recientes e idioma) llega a nuestro servidor y al proveedor de IA configurado (Google Gemini u OpenAI) para crear una respuesta. Se aplican las condiciones de tratamiento del proveedor.</p>
     <p>ODA no guarda tus mensajes ni las respuestas del coach en el servidor, ni registra su contenido, salvo que compartas expresamente una respuesta para mejorar el coach o guardes una reflexión incluida en la sincronización opcional de la cuenta. Aparte de eso, guardamos contadores mensuales de mensajes (cuántos has usado) y de caracteres de la voz natural en la nube (la longitud del texto enviado para crear la voz) y un registro de verificación de tu suscripción, vinculados a tu cuenta. Para confirmar tu nivel, el identificador de tu cuenta se envía a RevenueCat.</p>
     <p>Solo las categorías de datos de la app que actives en “Qué puede ver el coach” se envían con tu mensaje al proveedor de IA para generar una respuesta. Incluyen tu nombre, la decisión de hoy y su estado, tu racha y los días cumplidos esta semana, tareas abiertas o pendientes, progreso en cursos, títulos de sueños y sesiones recientes de meditación o sonido con sensaciones antes y después, si están registradas. Puedes ver una vista previa exacta del resumen limitado en ese panel.</p>
     <p>Todas las categorías están desactivadas por defecto. Las líneas del cuaderno solo se incluyen si activas su interruptor independiente, también desactivado por defecto. Puedes desactivar cualquier categoría cuando quieras. El mensaje inicial se genera en tu dispositivo al abrir el coach; no envía ninguna solicitud a un servicio de IA.</p>
     <p>El coach en la nube es una IA, no un terapeuta ni un servicio de emergencias. Si un mensaje menciona autolesiones, abuso o peligro inmediato, el coach deja de hacer coaching y te anima a contactar con los servicios de emergencia locales (112 en Türkiye y en España, 911 en EE. UU.). El acceso al coach en el dispositivo y a las acciones sin conexión también depende de tu nivel de suscripción.</p>
     <p>Las puntuaciones diarias de ánimo se guardan con tus datos e integran las copias exportadas y la sincronización opcional de la cuenta. Compartirlas con el coach está desactivado por defecto. Si activas Ánimo, las puntuaciones de los últimos siete días pueden enviarse en el resumen que puedes revisar. Comparar el ánimo con las caminatas también requiere el consentimiento para Evidencias. Estos patrones observados no demuestran una causa.</p>
-    <p>Con tu permiso, ODA envía la conversación reciente, el idioma, el nombre y estilo del coach, y solo el contexto que activas por separado a nuestro servidor Supabase y después a Google Gemini u OpenAI para generar respuestas. La IA puede equivocarse; no ofrece atención médica ni ayuda de emergencia. Nunca se envían datos de HealthKit. Puedes usar herramientas locales sin aceptar y retirar el permiso aquí. Los datos ya procesados no se pueden recuperar.</p>
+    <p>Con tu permiso, ODA envía la conversación reciente, el idioma, el nombre y estilo del coach, y solo el contexto que activas por separado a nuestro servidor Supabase y después a Google Gemini u OpenAI para generar respuestas. La IA puede equivocarse; no ofrece atención médica ni ayuda de emergencia. Nunca se envían datos de HealthKit. Puedes usar herramientas locales sin aceptar y retirar el permiso aquí. Los datos ya procesados no se pueden recuperar. Para comprobar si cumples el requisito de edad, ODA guarda de forma privada en tu cuenta de Supabase el rango de edad que declaras y el estado de tu perfil protegido. Esta declaración no verifica tu edad.</p>
     <p>El coach es una IA para la vida cotidiana y el crecimiento personal. Puedes hablar de relaciones, familia, estrés laboral, amistades, inseguridades, rupturas o conflictos, además de tus decisiones y avances en ODA. Ofrece perspectivas y un pequeño siguiente paso, no terapia ni consejos médicos, sobre medicamentos, legales o financieros. No sustituye a las personas de tu vida. Si describes abuso, violencia o peligro, se centra en tu seguridad y en contactar con los servicios de emergencia locales o alguien de confianza.</p>
     <p>Puedes ponerle nombre al coach y elegir Modo bestia, Equilibrado o Suave desde la cabecera del coach o los ajustes. El nombre y el estilo se envían con las solicitudes a la nube. Sobre mí es un perfil opcional con campos breves sobre tu vida, objetivos, fortalezas, dificultades, personas importantes y valores o fe. No se incluye en las solicitudes al coach salvo que actives su categoría independiente en Qué puede ver el coach, desactivada por defecto. Puedes ver lo que se enviará. Los patrones breves se calculan en tu dispositivo solo a partir de las categorías que eliges compartir. Cómo me ve mi coach usa solo datos compartidos y ofrece una reflexión provisional que puedes corregir. Las correcciones que guardas se convierten en notas de memoria locales y solo se incluyen en futuras solicitudes al coach si está activada la opción de compartir Memoria del coach. El nombre y estilo del coach, el perfil y las reflexiones que guardas expresamente se almacenan en tu dispositivo, se incluyen en las copias exportadas y en la sincronización opcional de la cuenta, como los demás datos de la app.</p>
     <p>La voz es opcional. En iPhone la transcripción requiere reconocimiento en el dispositivo y el audio del micrófono se queda en él. En la web el servicio del navegador puede procesar audio en sus servidores según sus condiciones. ODA no envía tu audio al coach ni guarda una grabación. Solo se envía la transcripción al coach, como un mensaje escrito. La voz del dispositivo es la opción predeterminada y usa el servicio de voz del dispositivo o navegador; algunas voces pueden usar los servidores del proveedor. Si eliges Voz natural en la nube en Ajustes, el texto de la respuesta del coach se envía a Google Gemini a través de nuestro servidor para crear la voz. El audio del micrófono no se envía a Google para esta lectura. Leer respuestas en voz alta está desactivado por defecto. Usa Terminar para salir del modo de voz o desactiva Leer respuestas en voz alta para detener la lectura en el chat de texto.</p>
@@ -122,8 +124,8 @@ p{max-width:68ch;margin:12px 0}
     <p>Las fotos de los cursos se cargan desde Unsplash. Como en cualquier solicitud web, Unsplash ve tu dirección IP para poder enviar la foto.</p>
   </section>
   <section>
-    <h2>Compras</h2>
-    <p>Las suscripciones se compran a través de Apple y se procesan con RevenueCat. No recibimos datos de tarjeta. RevenueCat procesa compras y un identificador de usuario de la app; para quienes inician sesión es el ID de la cuenta ODA, para verificar y restaurar el acceso entre dispositivos. RevenueCat también utiliza estos registros de compra para analizar suscripciones, como ingresos y renovaciones. Es parte de la facturación y es independiente de las estadísticas opcionales de uso de la app.</p>
+    <h2>App Store y Google Play</h2>
+    <p>Apple procesa los pagos del App Store y Google los de Google Play. RevenueCat procesa los registros de compra y el identificador de usuario para verificar las suscripciones y restaurar el acceso. Si has iniciado sesión, se utiliza el identificador de tu cuenta de ODA. Cuando hay pago web, RevenueCat Web Billing y Stripe procesan datos de cuenta, correo, pago y suscripción. Los proveedores gestionan la tarjeta; ODA no recibe sus datos completos. Los registros necesarios de facturación son independientes de la analítica opcional y pueden conservarse por obligaciones legales o de pago.</p>
     <p>La app conserva un registro de elegibilidad para la oferta al salir, con la fecha en que se mostró y su caducidad, asociado al identificador del miembro. No incluye decisiones ni texto del cuaderno. Cancelar o dejar caducar la suscripción no borra tus entradas. Exportar y eliminar la cuenta siguen disponibles sin pagar.</p>
   </section>
   <section>
@@ -132,8 +134,10 @@ p{max-width:68ch;margin:12px 0}
   </section>
   <section>
     <h2>Conservación y tus derechos</h2>
-    <p>Los datos en la nube se conservan mientras exista tu cuenta y se borran cuando la eliminas. Los datos del dispositivo se quedan ahí hasta que borres la app o los datos.</p>
-    <p>Para ejercer tus derechos de acceso, rectificación, supresión, portabilidad u oposición según el RGPD y la KVKK de Turquía, escribe a ufrldk13@gmail.com. El responsable del tratamiento es Ümit Fırıldak, que opera como Yahya Labs.</p>
+    <p>Ümit Fırıldak, bajo el nombre comercial Yahya Labs, es el responsable del tratamiento. Los datos de cuenta y facturación sirven para ejecutar el contrato; la seguridad y prevención de abusos se basan en intereses legítimos; los registros exigidos por ley, en obligaciones legales. La analítica opcional y la IA en la nube requieren tu consentimiento separado, que puedes retirar para futuros tratamientos en Ajustes sin pagar.</p>
+    <p>Puedes exportar la copia de seguridad desde Ajustes sin pagar. Incluye los registros guardados compatibles, no todos los borradores, archivos descargados ni datos de facturación. Para ejercer acceso, rectificación, supresión, portabilidad, limitación u oposición según el RGPD o la KVKK, escribe a support@yahyalabs.com. Puedes reclamar ante la autoridad de protección de datos competente, incluida la autoridad turca cuando corresponda.</p>
+    <p>Los registros activos de la cuenta se borran cuando el servidor confirma su eliminación. Las copias de infraestructura pueden persistir hasta vencer su plazo configurado; los proveedores de pago pueden conservar transacciones exigidas por ley. Las copias locales y exportadas quedan hasta que las borres. Los eventos analíticos no están vinculados a tu cuenta de ODA y tienen una conservación separada. Pide a soporte los plazos aplicables.</p>
+    <p>Supabase, RevenueCat, Apple, Google y los demás proveedores descritos pueden tratar datos fuera de tu país, incluido Estados Unidos. Pide a soporte los lugares de tratamiento y las garantías de transferencia aplicables. No vendemos datos personales, usamos identificadores publicitarios ni te rastreamos entre apps. La analítica opcional permanece desactivada hasta que la actives.</p>
   </section>
   <section>
     <h2>Menores</h2>
@@ -141,9 +145,28 @@ p{max-width:68ch;margin:12px 0}
   </section>
   <section>
     <h2>Cambios y contacto</h2>
-    <p>Si cambiamos esta política actualizamos la fecha y anunciamos los cambios importantes en la app. Preguntas: ufrldk13@gmail.com</p>
+    <p>Si cambiamos esta política actualizamos la fecha y anunciamos los cambios importantes en la app. Preguntas: support@yahyalabs.com</p>
   </section>
-  <p class="other"><a href="../terms/">Términos de uso</a></p>
+  <section>
+    <h2>Historial de entrenamiento y franja de edad</h2>
+    <p>Tu historial de entrenamiento guardado incluye ejercicios, series completadas, repeticiones o posiciones mantenidas durante un tiempo, cargas, fechas y duración de las sesiones, totales y cualquier referencia de programa guardada. Se incluye en las copias de seguridad exportadas y se envía a Supabase cuando usas la copia de seguridad o la sincronización de la cuenta. Los borradores de entrenamiento sin guardar y las inscripciones en programas que se almacenan por separado no se incluyen en esa copia. La referencia de programa guardada con un entrenamiento sí se incluye.</p>
+    <p>La franja de edad que indicas y si tu perfil está protegido se guardan con tu perfil y se incluyen en las copias de seguridad exportadas y la sincronización opcional de la cuenta. Tu plan de trabajo guardado también se incluye. El borrador de la encuesta y la caché separada del plan quedan en tu dispositivo y no se incluyen en esa copia de seguridad. No recogemos tu fecha de nacimiento.</p>
+    <p>Si eres una persona adulta que cumple los requisitos para usar el coach en la nube y has completado la encuesta, puedes activar Memoria del coach en Qué puede ver el coach. Esto permite enviar tu franja de edad y resúmenes seleccionados del plan, como objetivos, hábitos, dificultades y preferencias de sueño, junto con un mensaje al coach en la nube. Se envían al proveedor configurado, Google Gemini u OpenAI. También hace falta tu permiso separado para la IA en la nube. Compartir la memoria está desactivado por defecto y es independiente de la copia de seguridad de la cuenta. Las respuestas de la encuesta sobre género y cómo encontraste ODA no se añaden al resumen automático del plan.</p>
+  </section>
+  <section>
+    <h2>Suscripciones web</h2>
+    <p>Apple procesa los pagos del App Store y Google los de Google Play. RevenueCat procesa los registros de compra y el identificador de usuario para verificar las suscripciones y restaurar el acceso. Si has iniciado sesión, se utiliza el identificador de tu cuenta de ODA. Cuando hay pago web, RevenueCat Web Billing y Stripe procesan datos de cuenta, correo, pago y suscripción. Los proveedores gestionan la tarjeta; ODA no recibe sus datos completos. Los registros necesarios de facturación son independientes de la analítica opcional y pueden conservarse por obligaciones legales o de pago.</p>
+  </section>
+  <section>
+    <h2>Cookies y almacenamiento del navegador</h2>
+    <p>ODA guarda datos en el navegador para recordar tu idioma, apariencia, sesión y registros de la app. Permiten usar las funciones que solicitas. Las páginas externas de acceso y pago también pueden usar almacenamiento necesario para proteger sus servicios. ODA no utiliza cookies publicitarias ni seguimiento entre apps.</p>
+    <p>Las estadísticas de uso están desactivadas hasta que decidas compartirlas. La web y la app utilizan la misma preferencia de análisis en este navegador. Aceptarlas no autoriza copias en la nube, IA en la nube ni marketing. Puedes rechazarlas y seguir usando el sitio. Cambia tu elección en Preferencias de privacidad o Ajustes &gt; Privacidad.</p>
+    <p>La elección permanece en este navegador hasta que la cambies o borres su almacenamiento. Desactivar las estadísticas detiene las solicitudes pendientes y elimina el identificador local y la cola de eventos. Los eventos ya recibidos siguen el plazo de conservación configurado en el servicio de análisis; consulta a soporte. Otros navegadores y dispositivos tienen su propia preferencia.</p>
+  </section>
+
+
+  <p><a href="mailto:support@yahyalabs.com">support@yahyalabs.com</a></p>
+  <nav aria-label="Políticas de ODA"><a href="../../legal/es/terms.html">Términos de uso</a><a href="../../legal/es/refunds.html">Reembolsos y cancelación</a><a href="../../legal/es/imprint.html">Aviso legal y contacto</a><a href="../../legal/es/account-deletion.html">Eliminar tu cuenta de ODA</a><a href="../../?lang=es&amp;privacy=choices">Preferencias de privacidad</a></nav>
 
 </article>
 </main>
