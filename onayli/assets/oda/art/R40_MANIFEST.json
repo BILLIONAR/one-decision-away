@@ -1,0 +1,252 @@
+{
+  "round": "R40",
+  "created_date": "2026-10-08",
+  "provenance": {
+    "generator": "built-in image_gen__imagegen",
+    "tool_mode": "built-in",
+    "source_format": "PNG",
+    "external_content": "No external stock content or paid API used for these generated assets."
+  },
+  "art_direction": {
+    "guide": "~/oda-push/art-style-v3.md including v3.1 tonal balance",
+    "content_rules": "~/oda-push/content-rules.md",
+    "story": "Cold first step on signup to brighter open arrival on paywall. UI supplies all text.",
+    "selection": "Candidate A portrait and wide for both screens"
+  },
+  "contact_sheet_path": "/tmp/oda-r40-art/contact-sheet.png",
+  "import_pipeline": {
+    "script": "scripts/import-art.mjs",
+    "source_dir": "/tmp/oda-r40-art",
+    "recipe": "webp-q82-v1",
+    "max_widths": [
+      1200,
+      960,
+      600
+    ],
+    "preserves_complete_source_frame": true,
+    "never_enlarges_source": true,
+    "metadata_stripped": true
+  },
+  "assets": [
+    {
+      "id": "signup-a-portrait",
+      "screen": "signup",
+      "theme": "the first step",
+      "candidate": "A",
+      "orientation": "portrait",
+      "selected": true,
+      "prompt": "Use case: photorealistic-natural. Generate one photographic hero asset, vertical 9:16 aspect ratio, 1080x1920 or larger exact 9:16. ODA premium motivation app, theme THE FIRST STEP. At cold first light, a woman in plain charcoal training clothes seen from behind has just risen from a low concrete doorstep and is taking her first step up an outdoor urban stairway. Medium-wide environmental film still, person at horizontal 40%, upper-middle frame, entirely within central 76% with at least 12% safe margins from every edge. Foreground damp concrete and worn step edges, midground ascending stairway and person, distant pale steel-blue dawn sky and city shapes give clear depth. One small directional warm gold practical lamp above the doorway casts light on the shoulders and a strip of the steps, ONLY one warm source, accent gold #F0A43A, restrained. Palette cool slate grey and dawn blue, deep charcoal shadows but visible texture and readable midtones, not all black. Grit, resolve, real effort rather than spa mood. Lower half quiet textured shadow suitable for UI overlay, no painted or baked text. Photographic realism, subtle natural film grain. Subject's arms relaxed near sides, hands mostly hidden, anatomically accurate body. No visible faces, no text, letters, numbers, signs, logos, brands, watermarks, borders, UI, fantasy, neon, sunset postcard or render look. Leave generous 12%+ image-safe margins for slow zoom and pan.",
+      "scene": "Woman taking the first step up an outdoor urban stairway at cold first light",
+      "palette": "cold steel dawn blue, slate grey, charcoal shadows with readable midtones, restrained warm gold practical-light accent",
+      "shot": "portrait medium-wide environmental back view",
+      "source_png_name": "signup-a-portrait.png",
+      "tmp_source_path": "/tmp/oda-r40-art/signup-a-portrait.png",
+      "generated_source_path": "/Users/umitfirildak/.codex/generated_images/01a11a41-4b01-7f92-853a-4639530cec97/exec-d30d0934-7879-42d8-96f2-3b98e3602f7d.png",
+      "dimensions": {
+        "width": 941,
+        "height": 1672
+      },
+      "source_sha256": "f7642726e171a1ddbeec263d60749a5a2b99adcd30bb354c530bc2b17ce914d8",
+      "inspection": {
+        "method": "visual inspection of generated PNG and candidate contact sheet",
+        "findings": "No visible text, letters, logos or watermark; natural full-body anatomy; no close-up face; strong depth and subject clear of crop margins.",
+        "selection_note": "Selected: strongest recognizable city and stair first-step story, visible steel dawn, one restrained warm lamp, textured midtones and deep image layers."
+      },
+      "import_source_path": "/tmp/oda-r40-art/auth/signup.png",
+      "imported_webp": {
+        "main": {
+          "repo_path": "public/assets/oda/art/auth/signup.webp",
+          "public_path": "/assets/oda/art/auth/signup.webp",
+          "dimensions": {
+            "width": 941,
+            "height": 1672
+          },
+          "sha256": "f38f7270536629466a36a65b30af8097777530c58d34de86dd5a5f686b71870a"
+        },
+        "960": {
+          "repo_path": "public/assets/oda/art/auth/signup-960.webp",
+          "public_path": "/assets/oda/art/auth/signup-960.webp",
+          "dimensions": {
+            "width": 941,
+            "height": 1672
+          },
+          "sha256": "f38f7270536629466a36a65b30af8097777530c58d34de86dd5a5f686b71870a"
+        },
+        "600": {
+          "repo_path": "public/assets/oda/art/auth/signup-600.webp",
+          "public_path": "/assets/oda/art/auth/signup-600.webp",
+          "dimensions": {
+            "width": 600,
+            "height": 1066
+          },
+          "sha256": "e3af5be0eb4a14d7c0ebce60877d85b9c7482cf781b57d5bf474e4c16d28fe9e"
+        }
+      }
+    },
+    {
+      "id": "signup-a-wide",
+      "screen": "signup",
+      "theme": "the first step",
+      "candidate": "A",
+      "orientation": "wide",
+      "selected": true,
+      "prompt": "Use case: photorealistic-natural. One cinematic photographic hero for ODA motivation app, THE FIRST STEP. Photographic realism, real damp stone/concrete texture, subtle film grain, contrast. Cold steel-blue first light, charcoal foreground shadows with readable midtones and clearly visible sky, not all black. ONLY ONE warm gold #F0A43A practical lamp casts a restrained strip of light, gold never whole frame. A person starting moving forward just after getting up, full body back view, no recognizable face, relaxed hands mostly obscured, entirely within central 76% of frame with at least 12% safe crop margins in ALL directions. Clear foreground/midground/background depth for slow zoom and pan. Lower half quiet textured dark negative space for UI copy. No text, letters, numbers, logos, brands, signs, watermarks, borders, UI, cartoon, fantasy, render look, postcard sunset, or spa mood. Landscape 16:9 exact aspect ratio at least 1920x1080. A woman in plain charcoal training clothes on the LEFT THIRD has just risen from a low concrete doorstep and is taking her first step up an outdoor urban stairway. Foreground worn damp steps, midground ascending stairway and woman, distant pale steel-blue dawn sky and unbranded city buildings. One warm lamp on the stone doorway far left. Wide environmental shot. Leave the RIGHT half quiet and dark for overlay copy. Frame loose enough to crop 12% edges without losing subject.",
+      "scene": "Woman taking the first step up an outdoor urban stairway at cold first light",
+      "palette": "cold steel dawn blue, slate grey, charcoal shadows with readable midtones, restrained warm gold practical-light accent",
+      "shot": "landscape wide environmental back view",
+      "source_png_name": "signup-a-wide.png",
+      "tmp_source_path": "/tmp/oda-r40-art/signup-a-wide.png",
+      "generated_source_path": "/Users/umitfirildak/.codex/generated_images/01a11a41-4b01-7f92-853a-4639530cec97/exec-135071af-f4ef-40be-9ff2-7d062dc19e3f.png",
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      },
+      "source_sha256": "8a43028a240eb2c83e2f549d148219a49fe9a1edb72ca0076ecc1c10407dea2b",
+      "inspection": {
+        "method": "visual inspection of generated PNG and candidate contact sheet",
+        "findings": "No visible text, letters, logos or watermark; natural full-body anatomy; no close-up face; strong depth and subject clear of crop margins.",
+        "selection_note": "Selected: strongest recognizable city and stair first-step story, visible steel dawn, one restrained warm lamp, textured midtones and deep image layers."
+      },
+      "import_source_path": "/tmp/oda-r40-art/auth/signup-wide.png",
+      "imported_webp": {
+        "main": {
+          "repo_path": "public/assets/oda/art/auth/signup-wide.webp",
+          "public_path": "/assets/oda/art/auth/signup-wide.webp",
+          "dimensions": {
+            "width": 1200,
+            "height": 675
+          },
+          "sha256": "4e90714eecdd2737eceb0b2c795b796824b0290d7d12e06b64f74594142476bc"
+        },
+        "960": {
+          "repo_path": "public/assets/oda/art/auth/signup-wide-960.webp",
+          "public_path": "/assets/oda/art/auth/signup-wide-960.webp",
+          "dimensions": {
+            "width": 960,
+            "height": 540
+          },
+          "sha256": "7972e7df30eaf16d40785c25c4036b1ed77f347413f3d521f47df83eeb8b3095"
+        },
+        "600": {
+          "repo_path": "public/assets/oda/art/auth/signup-wide-600.webp",
+          "public_path": "/assets/oda/art/auth/signup-wide-600.webp",
+          "dimensions": {
+            "width": 600,
+            "height": 338
+          },
+          "sha256": "e00c2044ab2aa0e3c5278664d99a050d4f6af40a228096ba43d325a9f6b9dee7"
+        }
+      }
+    },
+    {
+      "id": "paywall-a-portrait",
+      "screen": "paywall",
+      "theme": "where this leads",
+      "candidate": "A",
+      "orientation": "portrait",
+      "selected": true,
+      "prompt": "Use case: photorealistic-natural. Asset: portrait 9:16 hero photograph for a premium motivation app's paywall, 1080x1920 composition. Theme: where this leads, the payoff of steady small decisions. Scene: at a rough stone lookout after an uphill morning walk, a woman in her late 30s wearing a plain dark slate jacket and practical trousers stands quietly with her back to the camera, overlooking a vast green valley and distant blue ridgelines. She has arrived by her own effort, relaxed but grounded. No triumphant arms or staged yoga pose. Subject small, in upper middle-right of frame, all anatomy natural and hands relaxed at her sides. Camera at waist height from behind at a generous environmental distance. Foreground wet textured stone and dark green grasses, midground sunlit valley, background pale cool blue morning sky with thin broken clouds. Natural morning light from out of frame, clear daylight and real deep forest greens, steel blue distant mountains, neutral grey stone; a little warm cream light on the shoulder and horizon. Clearly bright and hopeful, but cinematic contrast, dark textured foreground, real photographic realism and slight film grain. Not postcard, not golden-hour sunset, not pastel stock. Keep at least 12 percent safe crop margin on every edge and clean darker stone/grass negative space across the bottom 35 percent for separate UI overlay copy. No text whatsoever, no letters, numbers, logos, branding, signage, watermark, frames or borders. No close-up face; no strange or extra limbs, no distorted hands. Output one finished standalone vertical image only, no collage.",
+      "scene": "Woman at a rough mountain lookout over a green valley and lake",
+      "palette": "forest green, steel blue, neutral grey, cream morning light",
+      "shot": "portrait wide environmental back view",
+      "source_png_name": "paywall-a-portrait.png",
+      "tmp_source_path": "/tmp/oda-r40-art/paywall-a-portrait.png",
+      "generated_source_path": "/Users/umitfirildak/.codex/generated_images/01a11a42-166e-72b2-a50d-75e71ad62464/exec-fb7d3498-7fa1-4fbc-b53e-17d0dee48cf2.png",
+      "dimensions": {
+        "width": 941,
+        "height": 1672
+      },
+      "source_sha256": "e2ca57dd19ffc74a8d41f549d26128b99fd21fe3a2136c542aa35cc5aebe5771",
+      "inspection": {
+        "method": "individual PNG visual inspection and candidate contact sheet",
+        "findings": "Individually visually inspected: no visible text, letters, logos or watermark; natural full-body anatomy and hand placement; no close-up face; realistic daylight and palette; subject clear of crop margins.",
+        "selection_note": "Strongest open arrival scene, layered rough stone foreground to natural green valley and cool blue morning horizon. Realistic effort clothing and calm body language. Lighter than sign-up, clean bottom negative space, coherent pair. B adds city density and ambiguous stair direction; C reads quieter and more coastal than a chosen ascent."
+      },
+      "import_source_path": "/tmp/oda-r40-art/auth/paywall.png",
+      "imported_webp": {
+        "main": {
+          "repo_path": "public/assets/oda/art/auth/paywall.webp",
+          "public_path": "/assets/oda/art/auth/paywall.webp",
+          "dimensions": {
+            "width": 941,
+            "height": 1672
+          },
+          "sha256": "eb647783fe9f6ff536c0e275ebed38630645cee450724bc38d3705937dd37460"
+        },
+        "960": {
+          "repo_path": "public/assets/oda/art/auth/paywall-960.webp",
+          "public_path": "/assets/oda/art/auth/paywall-960.webp",
+          "dimensions": {
+            "width": 941,
+            "height": 1672
+          },
+          "sha256": "eb647783fe9f6ff536c0e275ebed38630645cee450724bc38d3705937dd37460"
+        },
+        "600": {
+          "repo_path": "public/assets/oda/art/auth/paywall-600.webp",
+          "public_path": "/assets/oda/art/auth/paywall-600.webp",
+          "dimensions": {
+            "width": 600,
+            "height": 1066
+          },
+          "sha256": "fc3e5203903dcd7ee8d0a363c0f4cb32352fce25053204a23764ca01e5af5b18"
+        }
+      }
+    },
+    {
+      "id": "paywall-a-wide",
+      "screen": "paywall",
+      "theme": "where this leads",
+      "candidate": "A",
+      "orientation": "wide",
+      "selected": true,
+      "prompt": "Use case: photorealistic-natural. Asset: landscape 16:9 hero photograph for a premium motivation app's paywall, 1920x1080 composition. Theme: where this leads, the payoff of steady small decisions. Scene: at a rough stone lookout after an uphill morning walk, a woman in her late 30s wearing a plain dark slate jacket and practical trousers stands quietly with her back to the camera, overlooking a vast green valley, a winding lake and distant blue ridgelines. She has arrived by her own effort, relaxed but grounded. No triumphant arms or staged yoga pose. Subject small at the right third, natural body and hands relaxed at her sides. Wide camera view at waist height from behind at a generous environmental distance. Foreground wet textured stone and dark green grasses, midground sunlit valley, background pale cool blue morning sky with thin broken clouds. Natural morning light from out of frame, clear daylight and real deep forest greens, steel blue distant mountains, neutral grey stone; a little warm cream light on the shoulder and horizon. Clearly bright and hopeful, but cinematic contrast, dark textured foreground, real photographic realism and slight film grain. Not postcard, not golden-hour sunset, not pastel stock. Keep at least 12 percent safe crop margin on every edge; clean darker stone and grass negative space across lower third and left half for separate UI overlay copy. No text whatsoever, no letters, numbers, logos, branding, signage, watermark, frames or borders. No close-up face; no strange or extra limbs, no distorted hands. Output one finished standalone horizontal image only, no collage.",
+      "scene": "Woman at a rough mountain lookout over a green valley and lake",
+      "palette": "forest green, steel blue, neutral grey, cream morning light",
+      "shot": "landscape wide environmental back view",
+      "source_png_name": "paywall-a-wide.png",
+      "tmp_source_path": "/tmp/oda-r40-art/paywall-a-wide.png",
+      "generated_source_path": "/Users/umitfirildak/.codex/generated_images/01a11a42-166e-72b2-a50d-75e71ad62464/exec-bc39e90d-cae1-4945-8385-a7aea6e5c023.png",
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      },
+      "source_sha256": "6022fccc22851a07f86aa79231dd41b64c4e4e15bec43acce028271d5ea9fc3d",
+      "inspection": {
+        "method": "individual PNG visual inspection and candidate contact sheet",
+        "findings": "Individually visually inspected: no visible text, letters, logos or watermark; natural full-body anatomy and hand placement; no close-up face; realistic daylight and palette; subject clear of crop margins.",
+        "selection_note": "Strongest open arrival scene, layered rough stone foreground to natural green valley and cool blue morning horizon. Realistic effort clothing and calm body language. Lighter than sign-up, clean bottom negative space, coherent pair. B adds city density and ambiguous stair direction; C reads quieter and more coastal than a chosen ascent."
+      },
+      "import_source_path": "/tmp/oda-r40-art/auth/paywall-wide.png",
+      "imported_webp": {
+        "main": {
+          "repo_path": "public/assets/oda/art/auth/paywall-wide.webp",
+          "public_path": "/assets/oda/art/auth/paywall-wide.webp",
+          "dimensions": {
+            "width": 1200,
+            "height": 675
+          },
+          "sha256": "efffd61c516b3242118b3c97458416f70f6bcae3e59d6f7005feff635d79ce30"
+        },
+        "960": {
+          "repo_path": "public/assets/oda/art/auth/paywall-wide-960.webp",
+          "public_path": "/assets/oda/art/auth/paywall-wide-960.webp",
+          "dimensions": {
+            "width": 960,
+            "height": 540
+          },
+          "sha256": "7dc5d670af1d3f738514ae51ec4a8cfcd0b8042c7e57fba763217d7d34013593"
+        },
+        "600": {
+          "repo_path": "public/assets/oda/art/auth/paywall-wide-600.webp",
+          "public_path": "/assets/oda/art/auth/paywall-wide-600.webp",
+          "dimensions": {
+            "width": 600,
+            "height": 338
+          },
+          "sha256": "e75e9c4bfc5f184a494cf3e474c2264701db7bd229af723b81f30c0774d35e35"
+        }
+      }
+    }
+  ]
+}
