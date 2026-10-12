@@ -1,0 +1,51 @@
+# ODA artwork
+
+These images were generated for ODA using the built-in image tool and the owner's art workflow. R40 signup and paywall compositions were generated for this task; their prompts and selection notes are in R40_MANIFEST.json.
+
+WebP files preserve the complete source frame, use quality 82, and strip metadata. Main files are at most 1200 pixels wide; native delivery uses the 960 pixel variant. Backdrops and welcome include an 800 pixel variant; course, sound and account art include a 600 pixel variant. Account signup, signin and paywall also have independent wide compositions for desktop. Smaller sources are never enlarged. Account art falls back to the supplied welcome image; paywall art uses an existing licensed photograph as its fallback. Existing licensed fallbacks retain their source and license notes in assets/oda/delivery/quotes/SOURCES.md and assets/oda/landing/SOURCES.md.
+
+- covers/turning-day
+- covers/procrastination
+- covers/confidence
+- covers/adhd
+- covers/motivation
+- covers/faith
+- covers/manifest
+- covers/focus
+- covers/sleep
+- covers/calm
+- covers/meditation
+- covers/suggestion
+- covers/identity
+- covers/state
+- covers/optimism
+- covers/meaning
+- covers/stoic
+- covers/compassion
+- backdrops/today-dawn
+- backdrops/today-day
+- backdrops/today-evening
+- backdrops/today-night
+- backdrops/dreams
+- backdrops/notebook
+- backdrops/coach
+- backdrops/me
+- backdrops/courses
+- backdrops/evidence
+- backdrops/sound
+- backdrops/settings
+- sound/racing-mind
+- sound/sleep
+- sound/hard-day
+- sound/focus
+- sound/self-kindness
+- sound/morning
+- sound/hero
+- welcome/welcome
+- auth/signup
+- auth/signin
+- auth/reset
+- auth/signup-wide
+- auth/signin-wide
+- auth/paywall
+- auth/paywall-wide

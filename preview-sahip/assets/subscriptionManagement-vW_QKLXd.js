@@ -1,0 +1,1 @@
+function s(n){if(typeof n!="string")return null;try{const t=new URL(n),e=t.hostname,r=["revenuecat.com","rev.cat"].some(o=>e===o||e.endsWith(`.${o}`))||["billing.stripe.com","apps.apple.com","play.google.com"].includes(e);return t.protocol==="https:"&&!t.username&&!t.password&&!t.port&&r?t.href:null}catch{return null}}export{s};
