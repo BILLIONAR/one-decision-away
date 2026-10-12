@@ -1,12 +1,30 @@
-/* One Decision Away — each deployment owns its own offline shell and caches. */
+/* One Decision Away: each deployment owns its own offline shell and caches. */
 const BASE = new URL(self.registration.scope);
 const CACHE_PREFIX = `oda:${encodeURIComponent(BASE.pathname)}:`;
-const SHELL_CACHE = `${CACHE_PREFIX}v7`;
+const BUILD_ID = "build-2a36d984-f97e-468b-89c9-f9d2a75fd52c";
+const SHELL_CACHE = `${CACHE_PREFIX}${BUILD_ID}`;
 const MEDIA_CACHE = `${SHELL_CACHE}:media`;
+const ART_CACHE = `${SHELL_CACHE}:art`;
+const ART_CACHE_LIMIT = 300;
+const ART_PATHS = ['assets/oda/art/lessons/', 'assets/oda/art/covers/', 'assets/oda/course-covers/', 'assets/oda/delivery/course-covers/', 'assets/oda/delivery/quotes/'];
 const INDEX_URL = new URL('index.html', BASE).href;
 const MANIFEST_URL = new URL('manifest.webmanifest', BASE).href;
 const SHELL = ['', 'index.html', 'support.html', 'theme-init.js', 'intro.js', 'intro.css', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-192-maskable.png', 'icon-512-maskable.png', 'apple-touch-icon.png', 'brand/domino8/oda-mark-domino8-v1-256.png', 'brand/domino8/oda-app-domino8-v1-192.png', 'brand/domino8/oda-app-domino8-v1-512.png', 'brand/domino8/oda-app-domino8-v1-maskable-192.png', 'brand/domino8/oda-app-domino8-v1-maskable-512.png', 'brand/domino8/oda-apple-domino8-v1-180.png', 'brand/domino8/oda-favicon-domino8-v1-32.png'].map(path => new URL(path, BASE).href);
 const inScope = url => url.origin === BASE.origin && url.pathname.startsWith(BASE.pathname);
+
+// Serialize mutations so simultaneous image requests cannot race eviction.
+let artWrites = Promise.resolve();
+function saveArt(cache, request, response) {
+  const write = artWrites.then(async () => {
+    // Reinsert hits and refreshed images at the newest end of Cache.keys().
+    await cache.delete(request);
+    await cache.put(request, response);
+    const keys = await cache.keys();
+    for (const oldest of keys.slice(0, Math.max(0, keys.length - ART_CACHE_LIMIT))) await cache.delete(oldest);
+  });
+  artWrites = write.catch(() => undefined);
+  return write;
+}
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(SHELL_CACHE).then(cache => cache.addAll(SHELL)).then(() => self.skipWaiting()));
@@ -15,7 +33,7 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys => Promise.all(keys.filter(key => {
-      const obsoleteScopedCache = key.startsWith(CACHE_PREFIX) && key !== SHELL_CACHE && key !== MEDIA_CACHE;
+      const obsoleteScopedCache = key.startsWith(CACHE_PREFIX) && key !== SHELL_CACHE && key !== MEDIA_CACHE && key !== ART_CACHE;
       const legacyRootCache = BASE.pathname === '/' && (key === 'oda-v1' || key === 'oda-v1-media');
       return obsoleteScopedCache || legacyRootCache;
     }).map(key => caches.delete(key)))).then(() => self.clients.claim())
@@ -45,6 +63,32 @@ self.addEventListener('fetch', event => {
         return (await cache.match(documentUrl)) || Response.error();
       }
     })());
+    return;
+  }
+
+  const coursePhoto = url.hostname === 'images.unsplash.com' && url.pathname.startsWith('/photo-');
+  const artAsset = coursePhoto || (inScope(url)
+    && ART_PATHS.some(path => url.pathname.startsWith(`${BASE.pathname}${path}`))
+    && /\.(?:avif|gif|jpe?g|png|svg|webp)$/i.test(url.pathname));
+  if (artAsset) {
+    const cache = caches.open(ART_CACHE);
+    const cached = cache.then(store => store.match(request));
+    const refresh = (async () => {
+      const store = await cache;
+      const hit = await cached;
+      // Touch even offline hits so recently visited lessons survive eviction.
+      if (hit) await saveArt(store, request, hit.clone()).catch(() => undefined);
+      try {
+        // Revalidate the HTTP cache as well as the service worker cache.
+        const response = await fetch(request, { cache: 'no-cache' });
+        if ((response.ok || response.type === 'opaque') && response.status !== 206) {
+          await saveArt(store, request, response.clone()).catch(() => undefined);
+        }
+        return response;
+      } catch { return undefined; }
+    })();
+    event.waitUntil(refresh.then(() => undefined));
+    event.respondWith(cached.then(async hit => hit || (await refresh) || Response.error()));
     return;
   }
 
