@@ -59,7 +59,7 @@ p{max-width:68ch;margin:12px 0}
 .other a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;max-width:100%;padding:10px 20px;border-radius:999px;background:var(--accent);color:#1A0F08;font-size:14px;font-weight:700;line-height:1.5;text-align:center;text-decoration:none}
 .other a:hover{text-decoration:underline;text-decoration-thickness:2px}
 .eula a{display:inline-flex;align-items:center;min-height:44px}
-.actions{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:24px}.actions a{display:inline-flex;align-items:center;min-height:44px}
+.actions{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:24px}.actions a{display:inline-flex;align-items:center;min-height:44px}.actions .withdrawal-primary{padding:12px 20px;border:1px solid var(--accent);border-radius:8px;font-weight:700}
 .actions .deletion-primary{justify-content:center;max-width:100%;padding:12px 24px;border-radius:8px;background:var(--accent);color:#1A0F08;font-weight:700;text-align:center;text-decoration:none}.deletion-primary:hover{text-decoration:underline}
 </style>
 </head>
@@ -71,8 +71,9 @@ p{max-width:68ch;margin:12px 0}
 <article id="tr" lang="tr">
   <p class="kicker">One Decision Away · Yahya Labs</p>
   <h1>ODA hesabını sil</h1>
-  <p class="meta">Son güncelleme: 11 Ekim 2026</p>
+  <p class="meta">Son güncelleme: 12 Ekim 2026</p>
   <p class="intro">Yahya Labs. Bu açık sayfa, ODA hesabını iOS ve Android’de nasıl sileceğini ve erişimini kaybettiğinde nasıl yardım isteyeceğini anlatır. Sayfayı okumak veya e-postayla talep göndermek için giriş yapman ya da abone olman gerekmez.</p>
+  <div class="actions"><a data-withdrawal-guidance href="mailto:support@yahyalabs.com?subject=Cayma%20beyan%C4%B1">Cayma beyanını e-postayla gönder</a></div>
 <div class="actions"><a class="deletion-primary" data-deletion-request href="mailto:support@yahyalabs.com?subject=ODA%20hesab%C4%B1n%C4%B1%20sil">Desteğe yaz: support@yahyalabs.com</a></div>
   <section>
     <h2>iPhone ve Android</h2>
@@ -88,11 +89,11 @@ p{max-width:68ch;margin:12px 0}
   </section>
   <section>
     <h2>Silme ne zaman gerçekleşir?</h2>
-    <p>Uygulamadaki talebin, onaylanan sunucu işlemi sırasında giriş hesabını ve ona bağlı aktif bulut kayıtlarını kaldırır. Başarı doğrulandıktan sonra ODA, talebi gönderdiğin cihazdaki kişisel uygulama verilerini temizler. İşlem başarısızsa veya çevrimdışıysan silme tamamlanmaz; yeniden dene ya da desteğe yaz. E-posta talebinde destek önce hesabın sana ait olduğunu doğrular, ardından sonucu bildirir. Burada sabit bir tamamlanma süresi vaat etmiyoruz.</p>
+    <p>Uygulamadaki talebin, onaylanan sunucu işlemi sırasında giriş hesabını ve ona bağlı aktif bulut kayıtlarını kaldırır. Başarı doğrulandıktan sonra ODA, talebi gönderdiğin cihazdaki kişisel uygulama verilerini temizler. Ancak ODA bu cihazdaki verileri yükleyemediyse hesabın ve bulut yedeğin silinir, okunamayan cihaz kopyası ise kurtarman veya silmen için olduğu gibi bırakılır. Silmeden önce bir kurtarma kopyası indirmeyi dene. Yerel kopyayı silmek için tarayıcı ayarlarından ODA’nın site verilerini temizle; Android’de sistem ayarlarından ODA’nın uygulama verilerini temizle; iPhone veya iPad’de ODA için Uygulamayı Sil seçeneğini kullan. Sunucu silmeyi doğrulayamıyorsa veya çevrimdışıysan hesap silme tamamlanmaz; yeniden dene ya da desteğe yaz. E-posta talebinde destek önce hesabın sana ait olduğunu doğrular, ardından sonucu bildirir. Burada sabit bir tamamlanma süresi vaat etmiyoruz.</p>
   </section>
   <section>
     <h2>Neler kalır, neyi iptal etmelisin?</h2>
-    <p>Hesabını silmek Apple veya Google Play aboneliğini iptal etmez. Aboneliğini satın aldığın mağazadan ayrıca iptal et. RevenueCat dahil ödeme sağlayıcıları, faturalandırma veya yasal yükümlülükler için satın alma kayıtlarını saklayabilir. Altyapı yedeklerindeki kopyalar normal saklama süresi dolana kadar kalabilir. Dışa aktardığın yedekler ve diğer cihazlardaki yerel kopyalar, sen silene kadar kalır.</p>
+    <p>Hesabını silmek Apple veya Google Play aboneliğini iptal etmez. Aboneliğini satın aldığın mağazadan ayrıca iptal et. RevenueCat dahil ödeme sağlayıcıları, faturalandırma veya yasal yükümlülükler için satın alma kayıtlarını saklayabilir. Altyapı yedeklerindeki kopyalar normal saklama süresi dolana kadar kalabilir. Dışa aktardığın yedekler ve diğer cihazlardaki yerel kopyalar, sen silene kadar kalır. ODA hesabını silmen, sunucuda saklanan cayma beyanını, hazırlanmış alındı e-postasını veya istek sınırı için tutulan güvenlik kayıtlarını otomatik olarak silmez. Beyanın ve hazırlanmış e-postanın otomatik olarak silineceği bir tarih belirlenmiş değil. Güvenlik kayıtları yalnızca geçerli bir gönderim veritabanına ulaştığında temizlenir; yeniden denemeler de buna dahil. Saatlik dönemi içinde bulunulan saatin başlangıcından iki saatten daha önce başlayan kayıtlar silinir. Yeni gönderim gelmezse kayıtlar kalabilir. Cayma kayıtlarının ve yeni gönderim gelmediğinde kalan güvenlik kayıtlarının ne kadar saklanacağı veya nasıl silineceği henüz belirlenmiş değil. Silme hakkın için desteğe yazabilirsin. “Bu cihazdaki belgeyi temizle” yalnızca bu cihazdaki kopyayı siler.</p>
     <p>iPhone Ayarlar &gt; adın / Apple ID &gt; Abonelikler &gt; ODA yolundan aboneliğini yönetebilir veya iptal edebilirsin. App Store faturalandırmasını ve iade kararlarını kendi iade politikasına göre Apple yürütür. İade için Apple’ın Sorun Bildir hizmetini kullan. İptal ettiğinde normalde ödediğin dönem sonuna kadar erişimin sürer; önceki ödemeler kendiliğinden iade edilmez.</p>
     <p>Android’de satın alımlar Google Play üzerinden yapılır. Onay verdiğinde ücret Google hesabından tahsil edilir. Aboneliğin, açıklanan ücret ve ödeme dönemiyle sen iptal edene kadar otomatik yenilenir. Sonraki yenilemeden önce Play Store &gt; profil simgen &gt; Ödemeler ve abonelikler &gt; Abonelikler &gt; ODA yolundan iptal et. Normalde ödediğin dönem bitene kadar erişimin sürer.</p>
     <p>Web’den satın aldıysan hesabındaki abonelik yönetiminden ödeme portalını aç veya satın alma e-postandaki yönetim bağlantısını kullan. Sonraki yenilemeden önce iptal et. Normalde ödediğin dönem sonuna kadar erişimin sürer; onaylanan bir iade erişimini daha erken bitirebilir. Portala ulaşamıyorsan veya hesabına erişimini kaybettiysen support@yahyalabs.com adresine yaz. Hesabını ya da uygulamayı silmek hiçbir aboneliği iptal etmez.</p>

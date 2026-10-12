@@ -59,7 +59,7 @@ p{max-width:68ch;margin:12px 0}
 .other a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;max-width:100%;padding:10px 20px;border-radius:999px;background:var(--accent);color:#1A0F08;font-size:14px;font-weight:700;line-height:1.5;text-align:center;text-decoration:none}
 .other a:hover{text-decoration:underline;text-decoration-thickness:2px}
 .eula a{display:inline-flex;align-items:center;min-height:44px}
-.actions{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:24px}.actions a{display:inline-flex;align-items:center;min-height:44px}
+.actions{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:24px}.actions a{display:inline-flex;align-items:center;min-height:44px}.actions .withdrawal-primary{padding:12px 20px;border:1px solid var(--accent);border-radius:8px;font-weight:700}
 .actions .deletion-primary{justify-content:center;max-width:100%;padding:12px 24px;border-radius:8px;background:var(--accent);color:#1A0F08;font-weight:700;text-align:center;text-decoration:none}.deletion-primary:hover{text-decoration:underline}
 </style>
 </head>
@@ -71,12 +71,13 @@ p{max-width:68ch;margin:12px 0}
 <article id="it" lang="it">
   <p class="kicker">One Decision Away · Yahya Labs</p>
   <h1>Elimina il tuo account ODA</h1>
-  <p class="meta">Ultimo aggiornamento: 11 ottobre 2026</p>
+  <p class="meta">Ultimo aggiornamento: 12 ottobre 2026</p>
   <p class="intro">Yahya Labs. Questa pagina pubblica spiega come eliminare l’account ODA su iOS e Android e chiedere aiuto se hai perso l’accesso. Per leggerla o inviare una richiesta via e-mail non servono accesso né abbonamento.</p>
+  <div class="actions"><a data-withdrawal-guidance href="mailto:support@yahyalabs.com?subject=Dichiarazione%20di%20recesso">Invia la dichiarazione via e-mail</a></div>
 <div class="actions"><a class="deletion-primary" data-deletion-request href="mailto:support@yahyalabs.com?subject=Elimina%20il%20tuo%20account%20ODA">Contatta l’assistenza: support@yahyalabs.com</a></div>
   <section>
     <h2>iPhone e Android</h2>
-    <p>Apri ODA &gt; Io &gt; Account &gt; Elimina il mio account. Accedi all’account da eliminare e conferma. Non viene cancellato nulla prima della conferma. Non devi pagare né annullare prima l’abbonamento.</p>
+    <p>Apri ODA &gt; Io &gt; Account &gt; Eliminal mio account. Accedi all’account da eliminare e conferma. Non viene cancellato nulla prima della conferma. Non devi pagare né annullare prima l’abbonamento.</p>
   </section>
   <section>
     <h2>Non riesci ad accedere?</h2>
@@ -88,11 +89,11 @@ p{max-width:68ch;margin:12px 0}
   </section>
   <section>
     <h2>Quando avviene l’eliminazione</h2>
-    <p>La richiesta nell’app rimuove l’account di accesso e i dati attivi associati nel cloud durante l’operazione confermata dal server. Dopo il successo confermato, ODA cancella i dati personali dell’app dal dispositivo richiedente. In caso di errore o senza connessione, non è completata: riprova o contatta l’assistenza. Per richieste via e-mail, l’assistenza verifica prima la titolarità dell’account e conferma poi il risultato; qui non promettiamo una durata fissa.</p>
+    <p>La richiesta nell’app rimuove l’account di accesso e i dati attivi associati nel cloud durante l’operazione confermata dal server. Dopo il successo confermato, ODA cancella i dati personali dell’app dal dispositivo richiedente, salvo se non ha potuto leggere i dati salvati. In quel caso, il tuo account e il suo backup nel cloud vengono eliminati, ma la copia illeggibile sul dispositivo resta invariata perché tu possa provare a recuperarla o rimuoverla. Prima di rimuoverla, prova a scaricare una copia di recupero. Per rimuovere la copia locale, cancella i dati del sito ODA dalle impostazioni del browser; su Android, cancella i dati dell’app ODA dalle impostazioni di sistema; su iPhone o iPad, scegli Elimina app per ODA. Se il server non può confermare l’eliminazione o sei offline, l’eliminazione dell’account non è completata: riprova o contatta l’assistenza. Per richieste via e-mail, l’assistenza verifica prima la titolarità dell’account e conferma poi il risultato; qui non promettiamo una durata fissa.</p>
   </section>
   <section>
     <h2>Cosa resta e cosa devi annullare</h2>
-    <p>Eliminare l’account non annulla un abbonamento Apple o Google Play. Annullalo separatamente nello store in cui ti sei abbonato. I fornitori di pagamento, incluso RevenueCat, possono conservare i dati degli acquisti per obblighi contabili o di legge. Le copie nei backup dei server possono restare fino alla scadenza del periodo di conservazione previsto. I backup esportati e i dati locali sugli altri dispositivi restano finché non li cancelli.</p>
+    <p>Eliminare l’account non annulla un abbonamento Apple o Google Play. Annullalo separatamente nello store in cui ti sei abbonato. I fornitori di pagamento, incluso RevenueCat, possono conservare i dati degli acquisti per obblighi contabili o di legge. Le copie nei backup dei server possono restare fino alla scadenza del periodo di conservazione previsto. I backup esportati e i dati locali sugli altri dispositivi restano finché non li cancelli. Eliminare il tuo account ODA non elimina automaticamente la tua dichiarazione di recesso, l’e-mail di conferma preparata o i dati di sicurezza per il limite delle richieste conservati sul server di ODA. Non è impostata una data di cancellazione automatica per la dichiarazione o l’e-mail preparata. I dati di sicurezza vengono ripuliti solo quando un invio valido raggiunge il database, anche in caso di nuovo tentativo. Vengono eliminate le righe la cui finestra oraria è iniziata più di due ore prima dell’inizio dell’ora attuale; senza altri invii, possono restare. Non sono ancora definiti la durata o i criteri di conservazione e le modalità di cancellazione dei dati di recesso e dei dati di sicurezza che restano quando non arrivano altri invii. Contatta l’assistenza per i tuoi diritti di cancellazione. “Cancella la copia da questo dispositivo” elimina solo la copia locale.</p>
     <p>Gestisci o annulla in Impostazioni iPhone &gt; il tuo nome / Apple ID &gt; Abbonamenti &gt; ODA. Apple gestisce la fatturazione App Store e decide i rimborsi secondo la propria politica. Richiedili tramite il servizio Apple Segnala un problema. Di norma conservi l’accesso fino alla fine del periodo pagato; annullare non rimborsa automaticamente i pagamenti precedenti.</p>
     <p>Gli acquisti Android usano la fatturazione Google Play. L’addebito avviene sul tuo account Google alla conferma. L’abbonamento si rinnova automaticamente al prezzo e con la frequenza indicati fino all’annullamento. Annulla prima del rinnovo in Play Store &gt; icona del profilo &gt; Pagamenti e abbonamenti &gt; Abbonamenti &gt; ODA. Di norma l’accesso continua fino alla fine del periodo pagato.</p>
     <p>Per un acquisto web, apri la gestione dell’abbonamento dal tuo account per raggiungere il portale di fatturazione, oppure usa il link nell’e-mail di acquisto. Annulla prima del rinnovo successivo. Di norma l’accesso continua fino alla fine del periodo pagato; un rimborso approvato può terminarlo prima. Se il portale non è disponibile o hai perso l’accesso, scrivi a support@yahyalabs.com. Eliminare l’account o disinstallare ODA non annulla alcun abbonamento.</p>

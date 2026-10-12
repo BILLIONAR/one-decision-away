@@ -59,7 +59,7 @@ p{max-width:68ch;margin:12px 0}
 .other a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;max-width:100%;padding:10px 20px;border-radius:999px;background:var(--accent);color:#1A0F08;font-size:14px;font-weight:700;line-height:1.5;text-align:center;text-decoration:none}
 .other a:hover{text-decoration:underline;text-decoration-thickness:2px}
 .eula a{display:inline-flex;align-items:center;min-height:44px}
-.actions{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:24px}.actions a{display:inline-flex;align-items:center;min-height:44px}
+.actions{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:24px}.actions a{display:inline-flex;align-items:center;min-height:44px}.actions .withdrawal-primary{padding:12px 20px;border:1px solid var(--accent);border-radius:8px;font-weight:700}
 </style>
 </head>
 <body>
@@ -70,8 +70,9 @@ p{max-width:68ch;margin:12px 0}
 <article id="tr" lang="tr">
   <p class="kicker">One Decision Away · Yahya Labs</p>
   <h1>İade ve abonelik iptali</h1>
-  <p class="meta">Son güncelleme: 11 Ekim 2026</p>
+  <p class="meta">Son güncelleme: 12 Ekim 2026</p>
   <p class="intro">Yahya Labs, ODA aboneliğinin yenilenmesini nasıl durduracağını ve ödemen için nasıl yardım isteyeceğini anlatır.</p>
+  <div class="actions"><a data-withdrawal-guidance href="mailto:support@yahyalabs.com?subject=Cayma%20beyan%C4%B1">Cayma beyanını e-postayla gönder</a></div>
   <section>
     <h2>App Store</h2>
     <p>App Store aboneliğinin ücretini, satın almayı onayladığında Apple hesabından (Apple ID) Apple tahsil eder. Dönem bitmeden en az 24 saat önce iptal etmezsen aboneliğin otomatik yenilenir. Apple yenileme ücretini son 24 saat içinde tahsil edebilir. Onay vermeden önce abonelik süresini, toplam fiyatı ve varsa başlangıç teklifinin koşullarını satın alma ekranında görürsün.</p>
@@ -84,7 +85,7 @@ p{max-width:68ch;margin:12px 0}
   </section>
   <section>
     <h2>Web abonelikleri</h2>
-    <p>Web uygulaması ve web ödeme ekranı kullanıma açıldığında ODA, Stripe ödeme altyapısıyla RevenueCat Web Billing kullanır. Onaylamadan önce planını, para birimini, toplam ücreti, ödeme dönemini ve yenileme koşullarını görürsün. Satın alımda ve sen iptal edene kadar her otomatik yenilemede ödeme alınır. GitHub Pages’teki açık web sitesi şu anda bilgi ve destek sunar; web hesabı veya ödeme ekranı sunmaz.</p>
+    <p>Web’den ödeme sunulduğunda onaylamadan önce planını, para birimini, toplam fiyatı, ödeme dönemini ve yenileme koşullarını görürsün. Aboneliğin sen iptal edene kadar otomatik yenilenir.</p>
     <p>Web’den satın aldıysan hesabındaki abonelik yönetiminden ödeme portalını aç veya satın alma e-postandaki yönetim bağlantısını kullan. Sonraki yenilemeden önce iptal et. Normalde ödediğin dönem sonuna kadar erişimin sürer; onaylanan bir iade erişimini daha erken bitirebilir. Portala ulaşamıyorsan veya hesabına erişimini kaybettiysen support@yahyalabs.com adresine yaz. Hesabını ya da uygulamayı silmek hiçbir aboneliği iptal etmez.</p>
     <p>Satın alma sırasında kullandığın e-posta adresinden support@yahyalabs.com adresine yaz. Makbuzunu veya işlem referansını ve incelenmesini istediğin ödemeyi ekle. Kart bilgilerini, parolanı veya giriş kodunu gönderme. Talebini geçerli tüketici mevzuatına göre değerlendirip sonucu açıklarız. İptal, ödemeyi kendiliğinden iade etmez; onaylanan iade ücretli erişimini sonlandırabilir.</p>
   </section>
@@ -94,6 +95,11 @@ p{max-width:68ch;margin:12px 0}
     <p>Fiziksel bir ortam olmadan hemen sunulan dijital içerikte cayma hakkının kaybı ancak hukukun izin verdiği durumda, içerik sunulmaya başladıktan sonra ve hemen sunulması için önceden ayrı, açık onay verip cayma hakkını kaybedeceğini kabul ettiğinde uygulanır. Gerekli sözleşme teyidi de sağlanmalıdır. Bu koşulları kabul etmen tek başına o onay yerine geçmez.</p>
     <p>Devam eden bir dijital hizmette erişimin başlaması, AB’deki cayma hakkını tek başına kaldırmaz. Cayma süresi içinde hizmetin başlamasını açıkça istersen, o ana kadar sunulan hizmet için hukuka uygun, orantılı bir ücret söz konusu olabilir. Tamamı ifa edilmiş hizmette hakkın kaybı, kanunun istediği onay ve kabul şartlarına bağlıdır. Türkiye’deki zorunlu hakların ve daha elverişli yerel kurallar saklıdır.</p>
     <p>Özel bir form gerekmez. Şunu kullanabilirsin: “ODA satın alımımdan cayıyorum. Hesap e-postam: [...]. Satın alım / makbuz numaram: [...]. Satın alım tarihi: [...]. Adım: [...]. Tarih: [...].” Kart bilgilerini veya giriş kodunu gönderme. Ayıplı ya da açıklamaya uymayan dijital içerik ve hizmetlerdeki hakların, tüketici hakem heyetine veya yetkili mahkemeye başvurma hakkın bu koşullarla sınırlanmaz.</p>
+  </section>
+  <section>
+    <h2>Hizmetin hemen başlaması ve çevrimiçi cayma</h2>
+    <p>ODA abonelikleri devam eden bir hizmet sunar. Ödemeden önce hizmetin 14 günlük cayma süresi içinde başlamasını açıkça istersin. Erişimin başlaması, aboneliğine ilişkin cayma hakkını ortadan kaldırmaz. Cayarsan, bildirimine kadar sunulan hizmet için kanunun izin verdiği orantılı tutar alınabilir. Aboneliğin tamamı için dijital içerik gerekçesiyle cayma hakkından vazgeçme onayı alınmaz.</p>
+    <p>“Sözleşmeden cay” yolundan adını, sözleşme veya satın alım bilgini ve beyan için e-posta adresini yaz; beyanını gözden geçirip “Caymayı onayla” seçeneğine bas. Yeni satın alımlar kapalıyken de ödeme, giriş veya hesap silme gerektirmeden bu yolu kullanabilirsin. Geçerli süren dolmadan support@yahyalabs.com adresine açık bir cayma beyanı da gönderebilirsin. Alındı belgesi, beyanını ve sunucudaki gönderim zamanını içerir; indirebildiğin kopyayı sakla. İade ve bunun sonucundaki faturalandırma değişiklikleri geçerli hukuka göre yürütülür.</p>
   </section>
 <div class="actions"><a href="mailto:support@yahyalabs.com?subject=%C4%B0ade%20ve%20abonelik%20iptali">E-postayla iade iste</a><a href="https://support.apple.com/tr-tr/118428">Apple aboneliğini iptal et</a><a href="https://support.apple.com/118223">Apple’dan iade iste</a><a href="https://support.google.com/googleplay/answer/7018481?hl=tr">Google Play aboneliğini iptal et</a><a href="https://support.google.com/googleplay/answer/2479637?hl=tr">Google Play iadeleri</a></div>
 
