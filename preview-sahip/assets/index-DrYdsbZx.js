@@ -1,1 +1,0 @@
-import{e as n}from"./index-CxaT7gqB.js";var a;(function(t){t.Dark="DARK",t.Light="LIGHT",t.Default="DEFAULT"})(a||(a={}));var r;(function(t){t.None="NONE",t.Slide="SLIDE",t.Fade="FADE"})(r||(r={}));const s=r,e=a,u=n("StatusBar");export{r as Animation,u as StatusBar,s as StatusBarAnimation,e as StatusBarStyle,a as Style};

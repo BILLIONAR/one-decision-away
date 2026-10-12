@@ -1,1 +1,0 @@
-import{r}from"./react-BKeWhvB3.js";import{A as o}from"./atmosphere-Cg0KzAQG.js";function n(){const t=r.useContext(o);if(!t)throw new Error("Public pages require an app context.");return t}export{n as u};
