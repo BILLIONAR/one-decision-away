@@ -8,6 +8,8 @@
     var w = window;
     var cap = w.Capacitor;
     var native = !!(cap && cap.isNativePlatform && cap.isNativePlatform());
+    // AppOpening owns the app's first-run film. Keep the public splash separate.
+    if (native || /(?:^|\/)app(?:\/|$)/.test(w.location.pathname) || /^#\/app(?:[/?#]|$)/.test(w.location.hash)) return;
     var standalone = w.matchMedia && w.matchMedia('(display-mode: standalone)').matches || w.navigator.standalone === true;
     var params = new URLSearchParams(w.location.search);
     var forced = params.has('intro');
