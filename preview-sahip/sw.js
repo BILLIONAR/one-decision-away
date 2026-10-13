@@ -1,16 +1,29 @@
 /* One Decision Away: each deployment owns its own offline shell and caches. */
 const BASE = new URL(self.registration.scope);
 const CACHE_PREFIX = `oda:${encodeURIComponent(BASE.pathname)}:`;
-const BUILD_ID = "build-dc243776-3de9-48d4-80af-fdeadd6ed357";
+const BUILD_ID = "build-f7d20c8c-76b4-43be-9de1-d2b3f48eb8c1";
 const SHELL_CACHE = `${CACHE_PREFIX}${BUILD_ID}`;
 const MEDIA_CACHE = `${SHELL_CACHE}:media`;
 const ART_CACHE = `${SHELL_CACHE}:art`;
 const ART_CACHE_LIMIT = 300;
+const MEDIA_CACHE_LIMIT = 100;
 const ART_PATHS = ['assets/oda/art/lessons/', 'assets/oda/art/covers/', 'assets/oda/course-covers/', 'assets/oda/delivery/course-covers/', 'assets/oda/delivery/quotes/'];
 const INDEX_URL = new URL('index.html', BASE).href;
 const MANIFEST_URL = new URL('manifest.webmanifest', BASE).href;
+const DOCUMENTS = ['', 'index.html', 'support.html', 'legal/privacy.html', 'legal/terms.html'].map(path => new URL(path, BASE).href);
 const SHELL = ['', 'index.html', 'support.html', 'theme-init.js', 'intro.js', 'intro.css', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-192-maskable.png', 'icon-512-maskable.png', 'apple-touch-icon.png', 'brand/domino8/oda-mark-domino8-v1-256.png', 'brand/domino8/oda-app-domino8-v1-192.png', 'brand/domino8/oda-app-domino8-v1-512.png', 'brand/domino8/oda-app-domino8-v1-maskable-192.png', 'brand/domino8/oda-app-domino8-v1-maskable-512.png', 'brand/domino8/oda-apple-domino8-v1-180.png', 'brand/domino8/oda-favicon-domino8-v1-32.png'].map(path => new URL(path, BASE).href);
 const inScope = url => url.origin === BASE.origin && url.pathname.startsWith(BASE.pathname);
+const imageRequest = (request, url) => request.destination === 'image'
+  || (!request.destination && (/\.(?:avif|gif|jpe?g|png|svg|webp)$/i.test(url.pathname) || url.pathname.startsWith('/photo-')));
+const cacheable = (response, allowOpaque = false) => response.status !== 206
+  && !response.redirected
+  && !/(?:^|,)\s*(?:private|no-store)(?:\s|,|=|$)/i.test(response.headers.get('cache-control') || '')
+  && (response.ok || (allowOpaque && response.type === 'opaque'));
+// Only the explicit art revision parameter may vary a local static asset.
+// Never collapse arbitrary query responses into a trusted canonical cache key.
+const staticQuery = url => !url.search || (url.search.length <= 80
+  && [...url.searchParams].length === 1
+  && [...url.searchParams].every(([key, value]) => key === 'revision' && /^[a-zA-Z0-9._-]{1,64}$/.test(value)));
 
 // Serialize mutations so simultaneous image requests cannot race eviction.
 let artWrites = Promise.resolve();
@@ -23,6 +36,18 @@ function saveArt(cache, request, response) {
     for (const oldest of keys.slice(0, Math.max(0, keys.length - ART_CACHE_LIMIT))) await cache.delete(oldest);
   });
   artWrites = write.catch(() => undefined);
+  return write;
+}
+
+let mediaWrites = Promise.resolve();
+function saveMedia(cache, request, response) {
+  const write = mediaWrites.then(async () => {
+    await cache.delete(request);
+    await cache.put(request, response);
+    const keys = await cache.keys();
+    for (const oldest of keys.slice(0, Math.max(0, keys.length - MEDIA_CACHE_LIMIT))) await cache.delete(oldest);
+  });
+  mediaWrites = write.catch(() => undefined);
   return write;
 }
 
@@ -42,7 +67,7 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   const request = event.request;
-  if (request.method !== 'GET') return;
+  if (request.method !== 'GET' || request.headers?.has('authorization')) return;
   const url = new URL(request.url);
 
   // A hash route never goes to the host. Root history deployments still use
@@ -51,11 +76,12 @@ self.addEventListener('fetch', event => {
     event.respondWith((async () => {
       const cache = await caches.open(SHELL_CACHE);
       // Standalone support/legal documents must never replace the app shell.
-      const documentUrl = url.pathname.endsWith('.html') && url.href !== INDEX_URL ? url.href : INDEX_URL;
+      const canonicalUrl = new URL(url.pathname, BASE).href;
+      const documentUrl = url.pathname.endsWith('.html') && canonicalUrl !== INDEX_URL ? canonicalUrl : INDEX_URL;
       try {
         const response = await fetch(request);
         if (response.ok && response.headers.get('content-type')?.includes('text/html')) {
-          await cache.put(documentUrl, response.clone());
+          if (!url.search && DOCUMENTS.includes(url.href) && cacheable(response)) await cache.put(documentUrl, response.clone());
           return response;
         }
         return (await cache.match(documentUrl)) || response;
@@ -66,7 +92,10 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  const coursePhoto = url.hostname === 'images.unsplash.com' && url.pathname.startsWith('/photo-');
+  if (inScope(url) && !staticQuery(url)) return;
+
+  const coursePhoto = url.protocol === 'https:' && url.hostname === 'images.unsplash.com'
+    && url.pathname.startsWith('/photo-') && imageRequest(request, url);
   const artAsset = coursePhoto || (inScope(url)
     && ART_PATHS.some(path => url.pathname.startsWith(`${BASE.pathname}${path}`))
     && /\.(?:avif|gif|jpe?g|png|svg|webp)$/i.test(url.pathname));
@@ -81,7 +110,7 @@ self.addEventListener('fetch', event => {
       try {
         // Revalidate the HTTP cache as well as the service worker cache.
         const response = await fetch(request, { cache: 'no-cache' });
-        if ((response.ok || response.type === 'opaque') && response.status !== 206) {
+        if (cacheable(response, coursePhoto)) {
           await saveArt(store, request, response.clone()).catch(() => undefined);
         }
         return response;
@@ -98,7 +127,10 @@ self.addEventListener('fetch', event => {
       const cache = await caches.open(SHELL_CACHE);
       try {
         const response = await fetch(request, { cache: 'no-cache' });
-        if (response.ok) { await cache.put(request, response.clone()); return response; }
+        if (response.ok) {
+          if (cacheable(response)) await cache.put(request, response.clone());
+          return response;
+        }
         return (await cache.match(request)) || response;
       } catch { return (await cache.match(request)) || Response.error(); }
     })());
@@ -114,18 +146,22 @@ self.addEventListener('fetch', event => {
       if (hit) return hit;
       const response = await fetch(request);
       // Video range requests return 206, which Cache.put rejects. Stream them uncached.
-      if (response.ok && response.status !== 206) await cache.put(request, response.clone());
+      if (cacheable(response)) await cache.put(request, response.clone());
       return response;
     })());
     return;
   }
 
-  const mediaHost = url.hostname === 'unsplash.com' || url.hostname.endsWith('.unsplash.com') || url.hostname === 'fonts.gstatic.com' || url.hostname === 'fonts.googleapis.com';
+  const mediaHost = url.protocol === 'https:' && (
+    (['images.unsplash.com', 'plus.unsplash.com', 'unsplash.com'].includes(url.hostname) && imageRequest(request, url))
+    || (url.hostname === 'fonts.gstatic.com' && request.destination === 'font')
+    || (url.hostname === 'fonts.googleapis.com' && request.destination === 'style')
+  );
   if (mediaHost) {
     const refresh = caches.open(MEDIA_CACHE).then(async cache => {
       try {
         const response = await fetch(request);
-        if (response.ok || response.type === 'opaque') await cache.put(request, response.clone());
+        if (cacheable(response, imageRequest(request, url))) await saveMedia(cache, request, response.clone()).catch(() => undefined);
         return response;
       } catch { return undefined; }
     });
