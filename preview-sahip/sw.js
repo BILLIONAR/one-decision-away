@@ -1,7 +1,7 @@
 /* One Decision Away: each deployment owns its own offline shell and caches. */
 const BASE = new URL(self.registration.scope);
 const CACHE_PREFIX = `oda:${encodeURIComponent(BASE.pathname)}:`;
-const BUILD_ID = "build-60d51d29-5138-46d5-8954-38289ed9dd82";
+const BUILD_ID = "build-3347bfe5-d24b-443c-a1a5-e086503620b5";
 const SHELL_CACHE = `${CACHE_PREFIX}${BUILD_ID}`;
 const MEDIA_CACHE = `${SHELL_CACHE}:media`;
 const ART_CACHE = `${SHELL_CACHE}:art`;
